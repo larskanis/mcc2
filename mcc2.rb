@@ -16,10 +16,6 @@ $stderr.sync = true
 basedir = File.dirname(__FILE__)
 $: << basedir
 
-#*****************************************************************************
-# Konstanten-Definition
-TAB = 9.chr
-
 
 #*****************************************************************************
 # Require
@@ -36,6 +32,8 @@ rescue LoadError
 end
 include Fox
 
+require 'constants'
+
 require 'mcc2_mainwin' # die GUI mit FoxGUI-Builder erstellt
 
 require 'layout'         # das Kartenlayout
@@ -48,8 +46,12 @@ require 'text_object'    # grafische Text-Objekte
 require 'magstripe'      # Magnetstreifen
 require 'chip'           # Chip
 
-require 'printer'        # die Basisklasse f�r die Printer
+require 'ruby_print'     # vorläufig
+include Win32
+
+require 'printer'        # die Basisklasse für die Printer
 require 'printer_xid'    # die XID-Printer-Klasse
+
 
 #*****************************************************************************
 class MCC2GUI < MainWindow
@@ -83,7 +85,6 @@ class MCC2GUI < MainWindow
       @mcmd_exit.connect(SEL_COMMAND){ @app.stop }
       @topwin.accelTable.addAccel(fxparseAccel("Alt F4"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
       # ......................................................................
-      
       
   end
   
