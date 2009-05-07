@@ -13,13 +13,151 @@ class MainWindow
 			w.wdg_name='mainWindow'
 			w.width=500
 			w.shown=true
-			w.y=427
+			w.y=335
 			w.height=400
-			w.x=256
+			w.x=60
+			FX::MenuBar.new(@mainWindow){|w|
+				@menubar=w
+				w.wdg_name='menubar'
+				w.width=500
+				w.height=22
+				FX::MenuTitle.new(@menubar){|w|
+					@menutitle_datei=w
+					w.wdg_name='menutitle_datei'
+					w.text="Datei"
+					w.width=37
+					w.y=2
+					w.height=17
+					w.x=3
+					FX::MenuPane.new(@menutitle_datei){|w|
+						@menupane_datei=w
+						w.wdg_name='menupane_datei'
+						w.width=128
+						w.y=354
+						w.height=114
+						w.x=62
+						FX::MenuCommand.new(@menupane_datei){|w|
+							@mcmd_new=w
+							w.wdg_name='mcmd_new'
+							w.text="Neu"
+							w.width=124
+							w.y=2
+							w.height=18
+							w.accelText="Strg+N"
+							w.x=2
+						}
+						FX::MenuCommand.new(@menupane_datei){|w|
+							@mcmd_open=w
+							w.wdg_name='mcmd_open'
+							w.text="\303\226ffnen"
+							w.width=124
+							w.y=20
+							w.height=18
+							w.accelText="Strg+O"
+							w.x=2
+						}
+						FX::MenuCommand.new(@menupane_datei){|w|
+							@mcmd_close=w
+							w.wdg_name='mcmd_close'
+							w.text="Schlie\303\237en"
+							w.width=124
+							w.y=38
+							w.height=18
+							w.x=2
+						}
+						FX::MenuCommand.new(@menupane_datei){|w|
+							@mcmd_save=w
+							w.wdg_name='mcmd_save'
+							w.text="Speichern"
+							w.width=124
+							w.y=56
+							w.height=18
+							w.accelText="Strg+S"
+							w.x=2
+						}
+						FX::MenuCommand.new(@menupane_datei){|w|
+							@mcmd_save_as=w
+							w.wdg_name='mcmd_save_as'
+							w.text="Speichern unter"
+							w.width=124
+							w.y=74
+							w.height=18
+							w.x=2
+						}
+						FX::MenuSeparator.new(@menupane_datei){|w|
+							@menuseparator1=w
+							w.wdg_name='menuseparator1'
+							w.width=124
+							w.y=92
+							w.height=2
+							w.x=2
+						}
+						FX::MenuCommand.new(@menupane_datei){|w|
+							@mcmd_exit=w
+							w.wdg_name='mcmd_exit'
+							w.text="Beenden"
+							w.width=124
+							w.y=94
+							w.height=18
+							w.accelText="Alt+F4"
+							w.x=2
+						}
+					}
+				}
+				FX::MenuCommand.new(@menubar){|w|
+					@mcmd_druck=w
+					w.wdg_name='mcmd_druck'
+					w.text="Drucken"
+					w.width=116
+					w.y=2
+					w.height=18
+					w.accelText="Strg+P"
+					w.x=44
+				}
+			}
+			FX::MDIClient.new(@mainWindow){|w|
+				@mdiclient_layout=w
+				w.wdg_name='mdiclient_layout'
+				w.enabled=false
+				w.width=500
+				w.shown=false
+				w.y=30
+				w.height=370
+			}
+			FX::StatusBar.new(@mainWindow){|w|
+				@statusbar=w
+				w.wdg_name='statusbar'
+				w.width=500
+				w.y=377
+				w.height=23
+				w.layoutHints=1025
+			}
+			FX::StatusLine.new(@mainWindow){|w|
+				@statusline=w
+				w.wdg_name='statusline'
+				w.width=500
+				w.y=354
+				w.height=19
+				w.layoutHints=1041
+			}
 		}
 	end
 	attr_reader :topwin
 	attr_reader :mainWindow
+	attr_reader :menubar
+	attr_reader :menutitle_datei
+	attr_reader :menupane_datei
+	attr_reader :mcmd_new
+	attr_reader :mcmd_open
+	attr_reader :mcmd_close
+	attr_reader :mcmd_save
+	attr_reader :mcmd_save_as
+	attr_reader :menuseparator1
+	attr_reader :mcmd_exit
+	attr_reader :mcmd_druck
+	attr_reader :mdiclient_layout
+	attr_reader :statusbar
+	attr_reader :statusline
 end
 
 #unit test
