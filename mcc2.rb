@@ -40,7 +40,7 @@ require 'mcc2_mainwin' # die GUI mit FoxGUI-Builder erstellt
 
 require 'layout'         # das Kartenlayout
 
-require 'graphic_object' # die Basisklasse f�r die grafischen Objekte
+require 'graphic_object' # die Basisklasse für die grafischen Objekte
 require 'barcode_object' # grafische Barcode-Objekte
 require 'picture_object' # grafische Bild-Objekte
 require 'text_object'    # grafische Text-Objekte
@@ -58,10 +58,29 @@ class MCC2GUI < MainWindow
     @app = parent
     super
       # ......................................................................
-      # die Menue-Eintr�ge modifizieren
+      # die Menue-Einträge modifizieren
+      @menutitle_datei.text = "&Datei"
+      
       @mcmd_exit.text = "&Beenden"
       @mcmd_exit.connect(SEL_COMMAND){ @app.stop }
       @topwin.accelTable.addAccel(fxparseAccel("Alt F4"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
+      
+      @mcmd_open.text = "&Öffnen"
+#      @mcmd_open.connect(SEL_COMMAND){  }
+#      @topwin.accelTable.addAccel(fxparseAccel("Ctrl O"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
+      
+      @mcmd_close.text = "Schließ&en"
+#      @mcmd_close.connect(SEL_COMMAND){  }
+
+      @mcmd_save.text = "&Speichern"
+#      @topwin.accelTable.addAccel(fxparseAccel("Ctrl S"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
+#      @mcmd_save.connect(SEL_COMMAND){  }
+
+      @mcmd_save_as.text = "Speichern &als"
+#      @mcmd_save_as.connect(SEL_COMMAND){  }
+      # ......................................................................
+      
+      
   end
   
 end
