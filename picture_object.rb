@@ -7,9 +7,17 @@ end
 
 
 class PictureObject < GraphicObject
-
+  def initialize
+    p "PictureObject::Initialize"
+    super
+    @go_attributes[GOA_TYP].attr_value = PICTUREOBJECT
+    add_attr(@go_attributes, GOA_STRETCH, Integer, false)
+    add_attr(@go_attributes, GOA_PRINTABLE, Integer, true)
+  end
 end
 
 
 if __FILE__ == $0
+  po = PictureObject.new
+  po.go_attributes.each{|e| p e}
 end
