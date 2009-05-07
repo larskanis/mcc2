@@ -52,6 +52,20 @@ require 'printer'        # die Basisklasse für die Printer
 require 'printer_xid'    # die XID-Printer-Klasse
 
 #*****************************************************************************
+class MCC2GUI < MainWindow
+
+  def initialize(parent)
+    @app = parent
+    super
+      # ......................................................................
+      # die Menue-Einträge modifizieren
+      @mcmd_exit.text = "&Beenden"
+      @mcmd_exit.connect(SEL_COMMAND){ @app.stop }
+      @topwin.accelTable.addAccel(fxparseAccel("Alt F4"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
+  end
+  
+end
+#*****************************************************************************
 # Main
 
 if __FILE__==$0
@@ -59,7 +73,7 @@ if __FILE__==$0
 	require 'libguib16.rb'
   app = FX::App.new("MCC2", "ComCard")
 	
-	w = MainWindow.new(app)
+	w = MCC2GUI.new(app)
   w.topwin.show(Fox::PLACEMENT_SCREEN)
   
 	app.create
