@@ -2,11 +2,12 @@
 
 if __FILE__ == $0
   require 'rubygems'
+  require 'ruby_print'
+  include Win32
 end
 
 
-class Printer
-
+class Printer < TextPrinterControl
 end
 
 
