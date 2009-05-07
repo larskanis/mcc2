@@ -61,9 +61,9 @@ class MCC2GUI < MainWindow
       # die Menue-Einträge modifizieren
       @menutitle_datei.text = "&Datei"
       
-      @mcmd_exit.text = "&Beenden"
-      @mcmd_exit.connect(SEL_COMMAND){ @app.stop }
-      @topwin.accelTable.addAccel(fxparseAccel("Alt F4"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
+      @mcmd_new.text = "&Neu"
+#      @mcmd_new.connect(SEL_COMMAND){  }
+      @topwin.accelTable.addAccel(fxparseAccel("Ctrl N"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
       
       @mcmd_open.text = "&Öffnen"
 #      @mcmd_open.connect(SEL_COMMAND){  }
@@ -78,6 +78,10 @@ class MCC2GUI < MainWindow
 
       @mcmd_save_as.text = "Speichern &als"
 #      @mcmd_save_as.connect(SEL_COMMAND){  }
+
+      @mcmd_exit.text = "&Beenden"
+      @mcmd_exit.connect(SEL_COMMAND){ @app.stop }
+      @topwin.accelTable.addAccel(fxparseAccel("Alt F4"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
       # ......................................................................
       
       
