@@ -1,0 +1,27 @@
+#*****************************************************************************
+# Konstanten-Definition
+TAB = 9.chr
+
+GOA_NAME = "object_name"
+GOA_TYP  = "object_typ"
+GOA_SORTORDER = "sortorder"
+GOA_FONT_HEIGHT = "font_height"
+GOA_FONT_TYP = "font_typ"
+GOA_FONT_COLOR = "font_color"
+GOA_BACK_COLOR = "back_color"
+GOA_FONT_WEIGHT = "font_weight"
+GOA_JUSTIFICATION = "justification"
+GOA_WIDTH = "width"
+GOA_HEIGHT = "height"
+GOA_ROTATION = "rotation"
+GOA_ID = "id"
+GOA_BC_TYP = "bc_typ"
+GOA_HUMAN_READABLE = "human_readable"
+GOA_STRETCH = "stretch"
+GOA_PRINTABLE = "printable"
+GOA_DATA = "data"
+
+GRAPHICOBJECT = 0
+TEXTOBJECT = 1
+BARCODEOBJECT = 2
+PICTUREOBJECT = 3
