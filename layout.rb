@@ -23,7 +23,7 @@ class Layout
   end
   
   	# ---------------------------------------------------------------------------------------------------------
-	# l�dt das INI-File und initialisiert die entsprechenden Variablen
+	# lädt das INI-File und initialisiert die entsprechenden Variablen
 	def load_from_ini
 		oIni = MyIniFile::new(@inifile_name)
 #    oIni.get_or_create(section, key, default)
@@ -32,7 +32,7 @@ class Layout
       print "[#{s}]\n"
       oIni[s].each { |k, v|
         print "  #{k} = #{v}\n"
-        # je nach Graphicobjekt-Typ die Attribute eines frischen Graphicobjectes durchlaufen diese in das Object laden und falls nicht vorhanden, dann neu anlegen
+        # je nach Graphicobjekt-Typ die Attribute eines Graphicobjectes durchlaufen diese in das Object laden und falls nicht vorhanden, dann neu anlegen
         
       }
     }
@@ -56,32 +56,42 @@ class Layout
     oIni.save
   end
   
-  def add_text
-    o = TextObject.new
+  # fügt ein GraphicObjekt zur Objektliste hinzu
+  def add_object(typ)
+    p "*"*50
+    if typ == TEXTOBJECT then o = TextObject.new
+    elsif typ == BARCODEOBJECT then o = BarcodeObject.new
+    elsif typ == PICTUREOBJECT then o = PictureObject.new
+    end
+    id = get_new_id
+    o.go_attributes[GOA_ID].attr_value = id
     #~ o.go_attributes.each{|e| p e}
-    @graphic_objects["#{o.go_attributes[GOA_TYP].attr_value}_1"] = o
+    @graphic_objects["#{o.go_attributes[GOA_TYP].attr_value}_#{id}"] = o
   end
-
-  def add_picture
-    o = PictureObject.new
-    #~ o.go_attributes.each{|e| p e}
-    @graphic_objects["#{o.go_attributes[GOA_TYP].attr_value}_1"] = o
+  
+  # ermittelt die nächst höhere ID (beeinflusst die Darstellungsebene)
+  def get_new_id
+    id = 0
+    @graphic_objects.each_pair{|go_name, go|
+      p "go: #{go.inspect}"
+      go.go_attributes[GOA_ID].attr_value
+      id = (go.go_attributes[GOA_ID].attr_value)+1 if go.go_attributes[GOA_ID].attr_value >= id
+    }
+    p "ID: #{id}"
+    id
   end
-
-  def add_barcode
-    o = BarcodeObject.new
-    #~ o.go_attributes.each{|e| p e}
-    @graphic_objects["#{o.go_attributes[GOA_TYP].attr_value}_1"] = o
-  end
-
+  
 end
 
 
 if __FILE__ == $0
   lay = Layout.new("test.ini")
-  lay.add_text
-  lay.add_barcode
-  lay.add_picture
+  lay.add_object(TEXTOBJECT)  
+  lay.add_object(BARCODEOBJECT)  
+  lay.add_object(PICTUREOBJECT)  
+  lay.add_object(TEXTOBJECT)  
+  lay.add_object(BARCODEOBJECT)  
+  lay.add_object(TEXTOBJECT)  
   lay.store_to_ini
   #~ lay.load_from_ini
 end
