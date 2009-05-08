@@ -1,14 +1,14 @@
 # -*- coding: UTF-8 -*-
-require 'inifile'
 
 if __FILE__ == $0
-  require 'rubygems'
-  require 'graphic_object'
+  require 'mcc2'
 end
 
 
-class TextObject < GraphicObject
-
+class Magstripe
+  attr_accessor :data
+  def initialize
+  end
 end
 
 
