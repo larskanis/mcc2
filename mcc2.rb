@@ -52,9 +52,12 @@ require 'ruby_print'     # vorläufig
 include Win32
 
 require 'printer'        # die Basisklasse für die Printer
+require 'card_printer'   # die Basisklasse für alle CardPrinter
 require 'printer_xid'    # die XID-Printer-Klasse
 
 require 'myinifile'
+
+$pr = PrinterXID.new # todo, muss später vom Anwender ausgewählt werden
 
 #*****************************************************************************
 class MCC2GUI < MainWindow
