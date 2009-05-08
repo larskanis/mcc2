@@ -2,16 +2,18 @@
 require 'inifile'
 
 if __FILE__ == $0
-  require 'rubygems'
-  require 'graphic_object' # die Basisklasse für die grafischen Objekte
-  require 'barcode_object' # grafische Barcode-Objekte
-  require 'picture_object' # grafische Bild-Objekte
-  require 'text_object'    # grafische Text-Objekte
+  require 'mcc2'
 end
 
 
 class Layout
   attr_accessor :graphic_objects
+  attr_accessor :duplex
+  attr_accessor :chip
+  attr_accessor :magstripe
+  attr_accessor :height
+  attr_accessor :width
+  
   def initialize(inifile_name)
     @inifile_name = inifile_name
     @graphic_objects = {}
@@ -31,6 +33,7 @@ class Layout
       oIni[s].each { |k, v|
         print "  #{k} = #{v}\n"
         # je nach Graphicobjekt-Typ die Attribute eines frischen Graphicobjectes durchlaufen diese in das Object laden und falls nicht vorhanden, dann neu anlegen
+        
       }
     }
 
@@ -38,7 +41,7 @@ class Layout
 	end
   
 	def store_to_ini
-		oIni = MyIniFile::new(inifile_name)
+		oIni = MyIniFile::new(@inifile_name)
     
     # alle Graphicobjekte durchlaufen und speichern
     @graphic_objects.each_pair{|graphic_object_name, graphic_object_attributes|
@@ -56,19 +59,19 @@ class Layout
   def add_text
     o = TextObject.new
     #~ o.go_attributes.each{|e| p e}
-    @graphic_objects["#{o.get_human_readable_typ}_1"] = o
+    @graphic_objects["#{o.go_attributes[GOA_TYP].attr_value}_1"] = o
   end
 
   def add_picture
     o = PictureObject.new
     #~ o.go_attributes.each{|e| p e}
-    @graphic_objects["#{o.get_human_readable_typ}_1"] = o
+    @graphic_objects["#{o.go_attributes[GOA_TYP].attr_value}_1"] = o
   end
 
   def add_barcode
     o = BarcodeObject.new
     #~ o.go_attributes.each{|e| p e}
-    @graphic_objects["#{o.get_human_readable_typ}_1"] = o
+    @graphic_objects["#{o.go_attributes[GOA_TYP].attr_value}_1"] = o
   end
 
 end
@@ -76,9 +79,9 @@ end
 
 if __FILE__ == $0
   lay = Layout.new("test.ini")
-  #~ lay.add_text
-  #~ lay.add_barcode
-  #~ lay.add_picture
-  #~ lay.store_to_ini
-  lay.load_from_ini
+  lay.add_text
+  lay.add_barcode
+  lay.add_picture
+  lay.store_to_ini
+  #~ lay.load_from_ini
 end
