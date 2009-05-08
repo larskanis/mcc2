@@ -38,6 +38,8 @@ require 'mcc2_mainwin' # die GUI mit FoxGUI-Builder erstellt
 
 require 'layout'         # das Kartenlayout
 
+require 'go_attribut'    # die Attribut-Klasse für die grafischen Objekte
+
 require 'graphic_object' # die Basisklasse für die grafischen Objekte
 require 'barcode_object' # grafische Barcode-Objekte
 require 'picture_object' # grafische Bild-Objekte
@@ -52,6 +54,7 @@ include Win32
 require 'printer'        # die Basisklasse für die Printer
 require 'printer_xid'    # die XID-Printer-Klasse
 
+require 'myinifile'
 
 #*****************************************************************************
 class MCC2GUI < MainWindow
