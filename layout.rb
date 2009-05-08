@@ -21,6 +21,8 @@ class Layout
     @duplex = false
     @height = $pr.default_height
     @width = $pr.default_width
+    @chip = Chip.new
+    @magstripe = Magstripe.new
   end
   
  	# ---------------------------------------------------------------------------------------------------------
@@ -34,14 +36,18 @@ class Layout
     @width = oIni.get_or_create(S_LAYOUT, S_WIDTH, $pr.default_width)
     
     # die CHIP-Optionen laden
+    @chip = Chip.new
+    @chip.params.each_with_index{|param, index|
+      @chip.params[index] = oIni.get_or_create(S_CHIP, "#{S_PARAM}_#{index}", "")
+    }
     
     # die Magnetstreifen-Optionen laden
     
     # alle Graphicobjekte laden
     oIni.sections.each{|s|
-      print "*"*50
-      print "\n"
-      print "[#{s}]\n"
+      #~ print "*"*50
+      #~ print "\n"
+      #~ print "[#{s}]\n"
       a = s.split("_")
       typ = a[0]
       id = a[1].to_i
@@ -78,6 +84,9 @@ class Layout
     oIni.store(S_LAYOUT, S_WIDTH, @width)
     
     # die CHIP-Optionen speichern
+    @chip.params.each_with_index{|param, index|
+      oIni.store(S_CHIP, "#{S_PARAM}_#{index}", param)
+    }
     
     # die Magnetstreifen-Optionen speichern
     
@@ -135,6 +144,7 @@ end
 
 if __FILE__ == $0
   lay = Layout.new("test.ini")
+  
   lay.add_object(TEXTOBJECT)  
   lay.add_object(BARCODEOBJECT)  
   lay.add_object(PICTUREOBJECT)  
