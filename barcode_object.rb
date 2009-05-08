@@ -1,8 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 if __FILE__ == $0
-  require 'rubygems'
-  require 'graphic_object'
+  require 'mcc2'
 end
 
 
