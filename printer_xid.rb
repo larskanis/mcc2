@@ -10,7 +10,7 @@ end
 
 require 'Win32API'
 
-class PrinterXID < Printer
+class PrinterXID < CardPrinter
 
   prnsc_wrapper = 't:\Project\XID\prnsc_wrapper\prnsc_wrapper.dll'
 #  @@loadCard = Win32API.new(prnsc_wrapper, 'LoadCard', ['N','N','N','N','P','N'],  'N')
@@ -25,6 +25,7 @@ class PrinterXID < Printer
   ERR_bad_param_count = 4
 
   def initialize
+    super
 #    @sc_printer = 't:\Project\XID\Delphi\Prj_xid_test.exe' # wurde durch die nächste Zeile ersetzt
     @sc_printer = 't:\Project\XID\XID_Card_Loader\XID_Card_Loader.exe'
   end
