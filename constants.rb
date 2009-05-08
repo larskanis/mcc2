@@ -4,7 +4,7 @@ TAB = 9.chr
 
 GOA_NAME = "object_name"
 GOA_TYP  = "object_typ"
-GOA_SORTORDER = "sortorder"
+GOA_FRONTSIDE = "frontside"
 GOA_FONT_HEIGHT = "font_height"
 GOA_FONT_TYP = "font_typ"
 GOA_FONT_COLOR = "font_color"
@@ -21,7 +21,8 @@ GOA_STRETCH = "stretch"
 GOA_PRINTABLE = "printable"
 GOA_DATA = "data"
 
-GRAPHICOBJECT = 0
-TEXTOBJECT = 1
-BARCODEOBJECT = 2
-PICTUREOBJECT = 3
+GRAPHICOBJECT = "GraphicObject"
+TEXTOBJECT = "TextObject"
+BARCODEOBJECT = "BarcodeObject"
+PICTUREOBJECT = "PictureObject"
+
