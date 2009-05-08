@@ -11,15 +11,15 @@ class MainWindow
 		FX::MainWindow.new(parent){|w|
 			@mainWindow=w
 			w.wdg_name='mainWindow'
-			w.width=500
+			w.width=580
 			w.shown=true
-			w.y=335
+			w.y=337
 			w.height=400
-			w.x=60
+			w.x=79
 			FX::MenuBar.new(@mainWindow){|w|
 				@menubar=w
 				w.wdg_name='menubar'
-				w.width=500
+				w.width=580
 				w.height=22
 				FX::MenuTitle.new(@menubar){|w|
 					@menutitle_datei=w
@@ -115,19 +115,10 @@ class MainWindow
 					w.x=44
 				}
 			}
-			FX::MDIClient.new(@mainWindow){|w|
-				@mdiclient_layout=w
-				w.wdg_name='mdiclient_layout'
-				w.enabled=false
-				w.width=500
-				w.shown=false
-				w.y=30
-				w.height=370
-			}
 			FX::StatusBar.new(@mainWindow){|w|
 				@statusbar=w
 				w.wdg_name='statusbar'
-				w.width=500
+				w.width=580
 				w.y=377
 				w.height=23
 				w.layoutHints=1025
@@ -135,10 +126,17 @@ class MainWindow
 			FX::StatusLine.new(@mainWindow){|w|
 				@statusline=w
 				w.wdg_name='statusline'
-				w.width=500
+				w.width=580
 				w.y=354
 				w.height=19
 				w.layoutHints=1041
+			}
+			FX::MDIClient.new(@mainWindow){|w|
+				@mdiclient=w
+				w.wdg_name='mdiclient'
+				w.width=580
+				w.y=26
+				w.height=324
 			}
 		}
 	end
@@ -155,9 +153,9 @@ class MainWindow
 	attr_reader :menuseparator1
 	attr_reader :mcmd_exit
 	attr_reader :mcmd_druck
-	attr_reader :mdiclient_layout
 	attr_reader :statusbar
 	attr_reader :statusline
+	attr_reader :mdiclient
 end
 
 #unit test
