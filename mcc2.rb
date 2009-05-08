@@ -37,6 +37,7 @@ require 'constants'
 require 'mcc2_mainwin' # die GUI mit FoxGUI-Builder erstellt
 
 require 'layout'         # das Kartenlayout
+require 'layout_win.rb'     # der Kartenlayout-Windows
 
 require 'go_attribut'    # die Attribut-Klasse für die grafischen Objekte
 
@@ -71,7 +72,8 @@ class MCC2GUI < MainWindow
       
       @mcmd_new.text = "&Neu"
 #      @mcmd_new.connect(SEL_COMMAND){  }
-      @topwin.accelTable.addAccel(fxparseAccel("Ctrl N"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
+      #~ @topwin.accelTable.addAccel(fxparseAccel("Ctrl N"), @app, new_layout)
+      @mcmd_new.connect(SEL_COMMAND){ new_layout }
       
       @mcmd_open.text = "&Öffnen"
 #      @mcmd_open.connect(SEL_COMMAND){  }
@@ -92,6 +94,17 @@ class MCC2GUI < MainWindow
       @topwin.accelTable.addAccel(fxparseAccel("Alt F4"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
       # ......................................................................
       
+  end
+  
+  def new_layout
+    mdichild = FXMDIChild.new(@mdiclient, "Child", nil, nil, 0, 0, 0, 300, 300)
+    LayoutFrame.new mdichild
+    mdichild.create
+    mdichild.show
+    mdichild.recalc
+  #    p mdichild.methods.sort!.each{|e| p e}
+
+    
   end
   
 end
