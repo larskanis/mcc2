@@ -2,11 +2,12 @@
 require 'inifile'
 
 if __FILE__ == $0
-  require 'rubygems'
+  require 'mcc2'
 end
 
 
 class Chip
+  attr_accessor :params
 
 end
 
