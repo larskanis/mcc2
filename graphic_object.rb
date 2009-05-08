@@ -1,25 +1,8 @@
 # -*- coding: UTF-8 -*-
 
-require 'myinifile'
 
 if __FILE__ == $0
-  require 'rubygems'
-end
-
-require 'constants'
-
-# GraphicObject-Attribut
-class GO_Attribut 
-  attr_accessor :attr_name
-  attr_accessor :attr_typ
-  attr_accessor :attr_value
-  
-  def initialize(attr_name, attr_typ, attr_default_value)
-    @attr_name = attr_name
-    @attr_typ = attr_typ
-    @attr_value = attr_default_value
-  end
-  
+  require 'mcc2'
 end
 
 class GraphicObject
@@ -29,12 +12,12 @@ class GraphicObject
     @go_attributes = {}
     add_attr(@go_attributes, GOA_ID, Integer, 0)
     add_attr(@go_attributes, GOA_DATA, String, "Muster")
-    add_attr(@go_attributes, GOA_NAME, String, GRAPHICOBJECT)
-    add_attr(@go_attributes, GOA_TYP, Integer, 0)
+    add_attr(@go_attributes, GOA_NAME, String, GRAPHICOBJECT) # bekommen erst einmal alle den gleichen Namen, können später durch den Anwender geändert werden
+    add_attr(@go_attributes, GOA_TYP, String, GRAPHICOBJECT)
     add_attr(@go_attributes, GOA_WIDTH, Integer, 100)
     add_attr(@go_attributes, GOA_HEIGHT, Integer, 100)
     add_attr(@go_attributes, GOA_ROTATION, Integer, 0)
-    add_attr(@go_attributes, GOA_SORTORDER, Integer, 0)
+    add_attr(@go_attributes, GOA_FRONTSIDE, Integer, 0)
   end
   
   def add_attr(dest, attr_name, attr_typ, attr_default_value)
@@ -42,15 +25,6 @@ class GraphicObject
     dest[attr.attr_name] = attr
   end
   
-  def get_human_readable_typ
-    if @go_attributes[GOA_TYP].attr_value == BARCODEOBJECT then "BarcodeObject"
-    elsif @go_attributes[GOA_TYP].attr_value == BARCODEOBJECT then "BarcodeObject"
-    elsif @go_attributes[GOA_TYP].attr_value == GRAPHICOBJECT then "GraphicObject"
-    elsif @go_attributes[GOA_TYP].attr_value == TEXTOBJECT then "TextObject"
-    elsif @go_attributes[GOA_TYP].attr_value == PICTUREOBJECT then "PictureObject"
-    else "unknown_object"
-    end
-  end
 end
 
 
