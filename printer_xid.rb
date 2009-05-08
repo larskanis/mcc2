@@ -5,10 +5,7 @@ begin
 $: << File.dirname(__FILE__)
 
 if __FILE__ == $0
-  require 'rubygems'
-  require 'ruby_print'
-  include Win32
-  require 'printer'
+  require 'mcc2'
 end
 
 require 'Win32API'
