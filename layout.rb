@@ -18,14 +18,26 @@ class Layout
   def initialize(inifile_name)
     @inifile_name = inifile_name
     @graphic_objects = {}
+    @duplex = false
+    @height = $pr.default_height
+    @width = $pr.default_width
   end
   
  	# ---------------------------------------------------------------------------------------------------------
-	# lädt das INI-File und initialisiert die entsprechenden Variablen
+	# lädt das INI-File und initialisiert die entsprechenden Variablen und Objekte
 	def load_from_ini
 		oIni = MyIniFile::new(@inifile_name)
-#    oIni.get_or_create(section, key, default)
-			
+    
+    # die Layout-Optionen laden
+    @duplex = oIni.get_or_create(S_LAYOUT, S_DUPLEX, false)
+    @height = oIni.get_or_create(S_LAYOUT, S_HEIGHT, $pr.default_height)
+    @width = oIni.get_or_create(S_LAYOUT, S_WIDTH, $pr.default_width)
+    
+    # die CHIP-Optionen laden
+    
+    # die Magnetstreifen-Optionen laden
+    
+    # alle Graphicobjekte laden
     oIni.sections.each{|s|
       print "*"*50
       print "\n"
@@ -33,6 +45,8 @@ class Layout
       a = s.split("_")
       typ = a[0]
       id = a[1].to_i
+      next if typ != TEXTOBJECT && typ != BARCODEOBJECT && typ != PICTUREOBJECT # hier nur GraphikObjekte laden
+
       o = get_object_by_typ(typ)
       o.go_attributes[GOA_ID].attr_value = id
       # je nach Graphicobjekt-Typ die Attribute eines Graphicobjectes durchlaufen diese in das Object laden und falls nicht vorhanden, dann neu anlegen
@@ -54,9 +68,18 @@ class Layout
 	end
   
  	# ---------------------------------------------------------------------------------------------------------
-  # speichert alle GraphicObjekte im INI-File
+  # speichert alle GraphicObjekte und Layout-Einstellungen im INI-File
 	def store_to_ini
 		oIni = MyIniFile::new(@inifile_name)
+    
+    # die Layout-Optionen speichern
+    oIni.store(S_LAYOUT, S_DUPLEX, @duplex)
+    oIni.store(S_LAYOUT, S_HEIGHT, @height)
+    oIni.store(S_LAYOUT, S_WIDTH, @width)
+    
+    # die CHIP-Optionen speichern
+    
+    # die Magnetstreifen-Optionen speichern
     
     # alle Graphicobjekte durchlaufen und speichern
     @graphic_objects.each_pair{|graphic_object_name, graphic_object_attributes|
@@ -112,12 +135,12 @@ end
 
 if __FILE__ == $0
   lay = Layout.new("test.ini")
-  #~ lay.add_object(TEXTOBJECT)  
-  #~ lay.add_object(BARCODEOBJECT)  
-  #~ lay.add_object(PICTUREOBJECT)  
-  #~ lay.add_object(TEXTOBJECT)  
-  #~ lay.add_object(BARCODEOBJECT)  
-  #~ lay.add_object(TEXTOBJECT)  
-  #~ lay.store_to_ini
-  lay.load_from_ini
+  lay.add_object(TEXTOBJECT)  
+  lay.add_object(BARCODEOBJECT)  
+  lay.add_object(PICTUREOBJECT)  
+  lay.add_object(TEXTOBJECT)  
+  lay.add_object(BARCODEOBJECT)  
+  lay.add_object(TEXTOBJECT)  
+  lay.store_to_ini
+  #~ lay.load_from_ini
 end
