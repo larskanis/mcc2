@@ -15,9 +15,19 @@ class Layout
 #  attr_accessor :width
   
  	# ---------------------------------------------------------------------------------------------------------
-  def initialize(xmlfile_name)
+  def initialize(parent)
     @xml = MyXML.new
-    @xmlfile_name = xmlfile_name
+#    @xmlfile_name = xmlfile_name
+    
+    @lf = LayoutFrame.new parent
+    @lf.iconlist_objects.appendHeader("ID", nil, 50)
+    @lf.iconlist_objects.appendHeader("Name", nil, 100)
+    @lf.iconlist_objects.appendHeader("Typ", nil, 100)
+    
+    #~ setSplit(index, size)   
+    @lf.splitter10.setSplit(0, 400)   
+    @lf.splitter11.setSplit(0, 250)   
+    @lf.splitter12.setSplit(0, 100)
     #~ @graphic_objects = {}
     #~ @duplex = false
     #~ @height = $pr.default_height
@@ -137,9 +147,20 @@ class Layout
         go << XML::Node.new(go_attribute.attr_name, go_attribute.attr_value.to_s)
       end
     }
-
+    fill_objectlist
   end
   
+ 	# ---------------------------------------------------------------------------------------------------------
+  # 
+  def fill_objectlist
+    @lf.iconlist_objects.clearItems
+		@xml.doc.find("//Root/GraphicObjects/#{GRAPHICOBJECT}").each{|go|
+      id = go.find(GOA_ID).first.content
+      name = go.find(GOA_NAME).first.content
+      typ = go.find(GOA_TYP).first.content
+      @lf.iconlist_objects.appendItem([id, name, typ].join("\t"))
+    }
+  end
  	# ---------------------------------------------------------------------------------------------------------
   # ermittelt die nächst höhere ID (beeinflusst die Darstellungsebene)
   def get_new_id
