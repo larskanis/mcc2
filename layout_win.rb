@@ -11,24 +11,29 @@ class LayoutFrame
 		FX::HorizontalFrame.new(parent){|w|
 			@LayoutFrame=w
 			w.wdg_name='LayoutFrame'
-			w.width=402
-			w.height=193
+			w.width=800
+			w.height=449
+			w.layoutHints=768
 			FX::Splitter.new(@LayoutFrame){|w|
 				@splitter10=w
 				w.wdg_name='splitter10'
-				w.width=402
-				w.height=193
+				w.width=160
+				w.height=449
+				w.barSize=2
+				w.layoutHints=3084
 				FX::Splitter.new(@splitter10){|w|
 					@splitter11=w
 					w.wdg_name='splitter11'
-					w.width=104
-					w.height=193
+					w.width=102
+					w.height=449
 					w.splitterStyle=32768
+					w.barSize=2
 					FX::Splitter.new(@splitter11){|w|
 						@splitter12=w
 						w.wdg_name='splitter12'
-						w.width=104
+						w.width=102
 						w.height=90
+						w.barSize=2
 						FX::VerticalFrame.new(@splitter12){|w|
 							@verticalframe_steuerung=w
 							w.wdg_name='verticalframe_steuerung'
@@ -66,7 +71,7 @@ class LayoutFrame
 							w.frameStyle=16384
 							w.width=56
 							w.height=90
-							w.x=48
+							w.x=46
 							FX::IconList.new(@verticalframe_objectlist){|w|
 								@iconlist_objects=w
 								w.wdg_name='iconlist_objects'
@@ -81,18 +86,26 @@ class LayoutFrame
 						@horizontalframe_attributes=w
 						w.wdg_name='horizontalframe_attributes'
 						w.frameStyle=16384
-						w.width=104
-						w.y=94
-						w.height=99
+						w.width=102
+						w.y=92
+						w.height=357
 					}
 				}
 				FX::VerticalFrame.new(@splitter10){|w|
 					@verticalframe_right=w
 					w.wdg_name='verticalframe_right'
 					w.frameStyle=16384
-					w.width=294
-					w.height=193
-					w.x=108
+					w.width=56
+					w.height=449
+					w.x=104
+					FX::ScrollWindow.new(@verticalframe_right){|w|
+						@scrollwindow_preview=w
+						w.wdg_name='scrollwindow_preview'
+						w.width=52
+						w.y=2
+						w.height=445
+						w.x=2
+					}
 				}
 			}
 		}
@@ -110,6 +123,7 @@ class LayoutFrame
 	attr_reader :iconlist_objects
 	attr_reader :horizontalframe_attributes
 	attr_reader :verticalframe_right
+	attr_reader :scrollwindow_preview
 end
 
 #unit test
