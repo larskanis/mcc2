@@ -21,16 +21,19 @@ $: << basedir
 # Require
 require "rubygems"
 
-begin
-  require 'fox16'
-  require 'fox16/colors'
-  require 'fox16/responder'
-rescue LoadError
-  require 'fox12'
-  require 'fox12/colors'
-  $enable_fox12_workaround = true
+
+if __FILE__ == $0
+  begin
+    require 'fox16'
+    require 'fox16/colors'
+    require 'fox16/responder'
+  rescue LoadError
+    require 'fox12'
+    require 'fox12/colors'
+    $enable_fox12_workaround = true
+  end
+  include Fox
 end
-include Fox
 
 require 'constants'
 
@@ -56,7 +59,8 @@ require 'printer'        # die Basisklasse für die Printer
 require 'card_printer'   # die Basisklasse für alle CardPrinter
 require 'printer_xid'    # die XID-Printer-Klasse
 
-require 'myinifile'
+require 'myxml'          # enthält das Layout inklusive aller graphischen Objekte
+#require 'myinifile'
 
 $pr = PrinterXID.new # todo, muss später vom Anwender ausgewählt werden
 
@@ -98,12 +102,11 @@ class MCC2GUI < MainWindow
   
   def new_layout
     mdichild = FXMDIChild.new(@mdiclient, "Child", nil, nil, 0, 0, 0, 300, 300)
-    LayoutFrame.new mdichild
+    @lf = LayoutFrame.new mdichild
     mdichild.create
     mdichild.show
     mdichild.recalc
-  #    p mdichild.methods.sort!.each{|e| p e}
-
+    @lf.iconlist_objects.addItem
     
   end
   
