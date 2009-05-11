@@ -7,6 +7,8 @@ end
 
 class Layout
   attr_accessor :xml
+  attr_accessor :filename
+  
 #  attr_accessor :graphic_objects
 #  attr_accessor :duplex
 #  attr_accessor :chip
@@ -15,9 +17,13 @@ class Layout
 #  attr_accessor :width
   
  	# ---------------------------------------------------------------------------------------------------------
-  def initialize(parent)
-    @xml = MyXML.new
-#    @xmlfile_name = xmlfile_name
+  def initialize(parent, app)
+    @parent = parent
+    @app = app
+    @xml = MyXML.new # erzeugt ein neue Layout-Objekt
+    @xml.create      # füllt das Layoutobjekt mit der Grundstruktur
+    
+    @filename = nil
     
     @lf = LayoutFrame.new parent
     @lf.iconlist_objects.appendHeader("ID", nil, 50)
@@ -28,6 +34,9 @@ class Layout
     @lf.splitter10.setSplit(0, 400)   
     @lf.splitter11.setSplit(0, 250)   
     @lf.splitter12.setSplit(0, 100)
+
+    draw_card
+    
     #~ @graphic_objects = {}
     #~ @duplex = false
     #~ @height = $pr.default_height
@@ -35,14 +44,85 @@ class Layout
     #~ @chip = Chip.new
     #~ @magstripe = Magstripe.new
   end
-  
+ 	# ---------------------------------------------------------------------------------------------------------
+  def draw_card
+
+    @dpi = 72
+#		@image = Image.new(@width * @scale, @height * @scale)
+		@image = Image.new(200 * 1, 200 * 1)
+# 		@image.format = "PCX"
+		@image.background_color = 'white'
+		@image.border_color = 'red'
+		@image.units = PixelsPerInchResolution
+		@image.x_resolution = @dpi
+		@image.y_resolution = @dpi
+
+#    @lf.canvas_card.drawRoundRectangle(10, 10, 100, 100, 5, 5)
+#    @lf.scrollarea_preview
+
+    	#Gibt die Pixeldaten des erzeugten PCX-Bildes zurück.
+    #with_margins:: true - Rand wird mit ausgegeben
+    
+    with_margins = true
+    image = @image.copy
+    
+    #Rand zeichnen 
+    if with_margins
+      draw = Magick::Draw.new	
+      draw.fill_opacity(0)
+      draw.stroke('black')
+      draw.stroke_antialias(false)
+      #~ draw.rectangle(@x, @y, @max_x, @max_y)
+      draw.rectangle(100, 100, 25, 25)
+      draw.draw(image)
+    end
+    
+#    image = image.rotate(@rotation)
+#    image = image.quantize(2, Magick::RGBColorspace, false)
+    
+    #print_image_info(image)
+    data = image.to_blob{
+      self.format = "PNG"
+    }
+    
+		#~ if icon.width <= 1
+			#~ raise PreviewError.new("PCXIcon konnte nicht korrekt erzeugt werden (kann unter Linux an veralteter ImageMagick-Verion liegen, wenn das Bild mit RMagick erzeugt wurde)")
+		#~ end
+    
+		icon = FXPNGIcon.new(@app, data)
+    FXLabel.new(@lf.scrollwindow_preview, "", icon)
+    #~ FXLabel.new(@lf.verticalframe_right, "", icon)
+    
+		@xml.doc.find("//Root/GraphicObjects/#{GRAPHICOBJECT}").each{|go|
+      if go.find(GOA_TYP).first.content = TEXTOBJECT
+        text = go.find(GOA_DATA).first.content
+        FXLabel.new(@lf.scrollwindow_preview, text, nil){|label|
+#          label.
+        }
+      end
+    }
+    
+  end
  	# ---------------------------------------------------------------------------------------------------------
 # lädt das INI-File und initialisiert die entsprechenden Variablen und Objekte
 	def load_from_xml
+    fn = FXFileDialog.getOpenFilename(@parent, "Speichern", ".", patterns="*.XML", initial=0)
+    @filename = fn
+    @xml = MyXML.new # erzeugt ein neue Layout-Objekt
+    @xml.load(@filename)
+    fill_objectlist
   end
  	# ---------------------------------------------------------------------------------------------------------
   # speichert alle GraphicObjekte und Layout-Einstellungen im INI-File
 	def store_to_xml
+    unless @filename
+      fn = FXFileDialog.getSaveFilename(@parent, "Speichern", ".", patterns="*.XML", initial=0)
+      unless fn.split(".")[-1].downcase == "xml"
+        fn = [fn, 'XML'].join(".")
+      end
+      @filename = fn
+    end
+    @xml.doc.save(@filename)
   end
  	# ---------------------------------------------------------------------------------------------------------
 	# lädt das INI-File und initialisiert die entsprechenden Variablen und Objekte
@@ -148,6 +228,7 @@ class Layout
       end
     }
     fill_objectlist
+    draw_card
   end
   
  	# ---------------------------------------------------------------------------------------------------------
@@ -175,15 +256,16 @@ end
 
 
 if __FILE__ == $0
-  lay = Layout.new("layout_test.xml")
+  system("ruby mcc2.rb")
+  #~ lay = Layout.new("layout_test.xml", nil)
   
-  lay.add_object(TEXTOBJECT)  
-  lay.add_object(BARCODEOBJECT)  
-  lay.add_object(PICTUREOBJECT)  
-  lay.add_object(TEXTOBJECT)  
-  lay.add_object(BARCODEOBJECT)  
-  lay.add_object(TEXTOBJECT)  
-  print lay.xml.doc.to_s
+  #~ lay.add_object(TEXTOBJECT)  
+  #~ lay.add_object(BARCODEOBJECT)  
+  #~ lay.add_object(PICTUREOBJECT)  
+  #~ lay.add_object(TEXTOBJECT)  
+  #~ lay.add_object(BARCODEOBJECT)  
+  #~ lay.add_object(TEXTOBJECT)  
+  #~ print lay.xml.doc.to_s
 #  lay.store_to_ini
   #~ lay.load_from_ini
 end
