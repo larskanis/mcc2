@@ -11,15 +11,15 @@ class MainWindow
 		FX::MainWindow.new(parent){|w|
 			@mainWindow=w
 			w.wdg_name='mainWindow'
-			w.width=580
+			w.width=848
 			w.shown=true
-			w.y=337
-			w.height=400
-			w.x=79
+			w.y=52
+			w.height=767
+			w.x=16
 			FX::MenuBar.new(@mainWindow){|w|
 				@menubar=w
 				w.wdg_name='menubar'
-				w.width=580
+				w.width=848
 				w.height=22
 				FX::MenuTitle.new(@menubar){|w|
 					@menutitle_datei=w
@@ -33,9 +33,9 @@ class MainWindow
 						@menupane_datei=w
 						w.wdg_name='menupane_datei'
 						w.width=128
-						w.y=354
+						w.y=534
 						w.height=114
-						w.x=62
+						w.x=885
 						FX::MenuCommand.new(@menupane_datei){|w|
 							@mcmd_new=w
 							w.wdg_name='mcmd_new'
@@ -114,29 +114,69 @@ class MainWindow
 					w.accelText="Strg+P"
 					w.x=44
 				}
+				FX::MenuTitle.new(@menubar){|w|
+					@menutitle_object=w
+					w.wdg_name='menutitle_object'
+					w.text="Objekt"
+					w.width=44
+					w.y=2
+					w.height=17
+					w.x=164
+					FX::MenuPane.new(@menutitle_object){|w|
+						@menupane_object=w
+						w.wdg_name='menupane_object'
+						FX::MenuCommand.new(@menupane_object){|w|
+							@mcmd_text=w
+							w.wdg_name='mcmd_text'
+							w.text="Text"
+							w.width=0
+							w.y=2
+							w.height=18
+							w.x=2
+						}
+						FX::MenuCommand.new(@menupane_object){|w|
+							@mcmd_barcode=w
+							w.wdg_name='mcmd_barcode'
+							w.text="Barcode"
+							w.width=0
+							w.y=20
+							w.height=18
+							w.x=2
+						}
+						FX::MenuCommand.new(@menupane_object){|w|
+							@mcmd_picture=w
+							w.wdg_name='mcmd_picture'
+							w.text="Bild"
+							w.width=0
+							w.y=38
+							w.height=18
+							w.x=2
+						}
+					}
+				}
 			}
 			FX::StatusBar.new(@mainWindow){|w|
 				@statusbar=w
 				w.wdg_name='statusbar'
-				w.width=580
-				w.y=377
+				w.width=848
+				w.y=744
 				w.height=23
 				w.layoutHints=1025
 			}
 			FX::StatusLine.new(@mainWindow){|w|
 				@statusline=w
 				w.wdg_name='statusline'
-				w.width=580
-				w.y=354
+				w.width=848
+				w.y=721
 				w.height=19
 				w.layoutHints=1041
 			}
 			FX::MDIClient.new(@mainWindow){|w|
 				@mdiclient=w
 				w.wdg_name='mdiclient'
-				w.width=580
+				w.width=848
 				w.y=26
-				w.height=324
+				w.height=691
 			}
 		}
 	end
@@ -153,6 +193,11 @@ class MainWindow
 	attr_reader :menuseparator1
 	attr_reader :mcmd_exit
 	attr_reader :mcmd_druck
+	attr_reader :menutitle_object
+	attr_reader :menupane_object
+	attr_reader :mcmd_text
+	attr_reader :mcmd_barcode
+	attr_reader :mcmd_picture
 	attr_reader :statusbar
 	attr_reader :statusline
 	attr_reader :mdiclient
