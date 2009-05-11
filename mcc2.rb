@@ -62,6 +62,9 @@ require 'printer_xid'    # die XID-Printer-Klasse
 require 'myxml'          # enthält das Layout inklusive aller graphischen Objekte
 #require 'myinifile'
 
+require 'RMagick'
+include Magick
+
 $pr = PrinterXID.new # todo, muss später vom Anwender ausgewählt werden
 
 #*****************************************************************************
@@ -80,7 +83,7 @@ class MCC2GUI < MainWindow
       @mcmd_new.connect(SEL_COMMAND){ new_layout }
       
       @mcmd_open.text = "&Öffnen"
-#      @mcmd_open.connect(SEL_COMMAND){  }
+      @mcmd_open.connect(SEL_COMMAND){ open_layout }
 #      @topwin.accelTable.addAccel(fxparseAccel("Ctrl O"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
       
       @mcmd_close.text = "Schließ&en"
@@ -88,7 +91,7 @@ class MCC2GUI < MainWindow
 
       @mcmd_save.text = "&Speichern"
 #      @topwin.accelTable.addAccel(fxparseAccel("Ctrl S"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
-#      @mcmd_save.connect(SEL_COMMAND){  }
+      @mcmd_save.connect(SEL_COMMAND){ save_layout }
 
       @mcmd_save_as.text = "Speichern &als"
 #      @mcmd_save_as.connect(SEL_COMMAND){  }
@@ -116,18 +119,32 @@ class MCC2GUI < MainWindow
   def new_object(typ)
     child = @mdiclient.activeChild
     if child
-      #~ p child.userData.inspect
-      #~ child.methods.sort!.each{|m| p m}
       child.userData.add_object(typ)
     end
   end
 	# ---------------------------------------------------------------------------------------------------------
+  def save_layout
+    child = @mdiclient.activeChild
+    if child
+      child.userData.store_to_xml
+    end
+  end
+	# ---------------------------------------------------------------------------------------------------------
   def new_layout
-    @mdichild = FXMDIChild.new(@mdiclient, "Layout", nil, nil, 0, 0, 0, 800, 600)
-    @mdichild.userData = Layout.new @mdichild
-    @mdichild.create
-    @mdichild.show
-    @mdichild.recalc
+    child = FXMDIChild.new(@mdiclient, "Layout", nil, nil, 0, 0, 0, 800, 600)
+    child.userData = Layout.new(child, @app)
+    child.create
+    child.show
+    child.recalc
+  end
+	# ---------------------------------------------------------------------------------------------------------
+  def open_layout
+    child = FXMDIChild.new(@mdiclient, "Layout", nil, nil, 0, 0, 0, 800, 600)
+    child.userData = Layout.new(child, @app)
+    child.create
+    child.show
+    child.recalc
+    child.userData.load_from_xml
   end
   
 end
