@@ -14,7 +14,8 @@ end
 
 class MyXML
   attr_accessor :doc
-  def initialize
+	# ---------------------------------------------------------------------------------------------------------
+  def create
     @doc = LibXML::XML::Document.new
     @doc.encoding = XML::Encoding::UTF_8
     @doc.root = XML::Node.new("Root")
@@ -46,6 +47,10 @@ class MyXML
 #    print @xmldoc.to_s
     @xmldoc.save(xmlfilename)
     file.close
+  end
+	# ---------------------------------------------------------------------------------------------------------
+  def load(filename)
+    @doc = LibXML::XML::Document.file(filename)
   end
 end
 # ==============================================================================================
