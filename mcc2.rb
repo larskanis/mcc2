@@ -96,18 +96,38 @@ class MCC2GUI < MainWindow
       @mcmd_exit.text = "&Beenden"
       @mcmd_exit.connect(SEL_COMMAND){ @app.stop }
       @topwin.accelTable.addAccel(fxparseAccel("Alt F4"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
+      
+      @menutitle_object.text = "&Objekt"
+      
+      @mcmd_text.connect(SEL_COMMAND){ new_object(TEXTOBJECT) }
+      
+      @mcmd_barcode.connect(SEL_COMMAND){ new_object(BARCODEOBJECT) }
+      
+      @mcmd_picture.connect(SEL_COMMAND){ new_object(PICTUREOBJECT) }
+      
+      @topwin.width = 1024
+      @topwin.height = 768
+      
       # ......................................................................
       
   end
   
+	# ---------------------------------------------------------------------------------------------------------
+  def new_object(typ)
+    child = @mdiclient.activeChild
+    if child
+      #~ p child.userData.inspect
+      #~ child.methods.sort!.each{|m| p m}
+      child.userData.add_object(typ)
+    end
+  end
+	# ---------------------------------------------------------------------------------------------------------
   def new_layout
-    mdichild = FXMDIChild.new(@mdiclient, "Child", nil, nil, 0, 0, 0, 300, 300)
-    @lf = LayoutFrame.new mdichild
-    mdichild.create
-    mdichild.show
-    mdichild.recalc
-    @lf.iconlist_objects.addItem
-    
+    @mdichild = FXMDIChild.new(@mdiclient, "Layout", nil, nil, 0, 0, 0, 800, 600)
+    @mdichild.userData = Layout.new @mdichild
+    @mdichild.create
+    @mdichild.show
+    @mdichild.recalc
   end
   
 end
