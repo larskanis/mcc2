@@ -1,5 +1,4 @@
 # -*- coding: UTF-8 -*-
-require 'inifile'
 
 if __FILE__ == $0
   require 'mcc2'
@@ -7,24 +6,34 @@ end
 
 
 class Layout
-  attr_accessor :graphic_objects
-  attr_accessor :duplex
-  attr_accessor :chip
-  attr_accessor :magstripe
-  attr_accessor :height
-  attr_accessor :width
+  attr_accessor :xml
+#  attr_accessor :graphic_objects
+#  attr_accessor :duplex
+#  attr_accessor :chip
+#  attr_accessor :magstripe
+#  attr_accessor :height
+#  attr_accessor :width
   
  	# ---------------------------------------------------------------------------------------------------------
-  def initialize(inifile_name)
-    @inifile_name = inifile_name
-    @graphic_objects = {}
-    @duplex = false
-    @height = $pr.default_height
-    @width = $pr.default_width
-    @chip = Chip.new
-    @magstripe = Magstripe.new
+  def initialize(xmlfile_name)
+    @xml = MyXML.new
+    @xmlfile_name = xmlfile_name
+    #~ @graphic_objects = {}
+    #~ @duplex = false
+    #~ @height = $pr.default_height
+    #~ @width = $pr.default_width
+    #~ @chip = Chip.new
+    #~ @magstripe = Magstripe.new
   end
   
+ 	# ---------------------------------------------------------------------------------------------------------
+# lädt das INI-File und initialisiert die entsprechenden Variablen und Objekte
+	def load_from_xml
+  end
+ 	# ---------------------------------------------------------------------------------------------------------
+  # speichert alle GraphicObjekte und Layout-Einstellungen im INI-File
+	def store_to_xml
+  end
  	# ---------------------------------------------------------------------------------------------------------
 	# lädt das INI-File und initialisiert die entsprechenden Variablen und Objekte
 	def load_from_ini
@@ -117,25 +126,27 @@ class Layout
  	# ---------------------------------------------------------------------------------------------------------
   # fügt ein GraphicObjekt zur Objektliste hinzu
   def add_object(typ)
-    #~ p "*"*50
     o = get_object_by_typ(typ)
     id = get_new_id
-    o.go_attributes[GOA_ID].attr_value = id
-    typ = o.go_attributes[GOA_TYP].attr_value
-    #~ o.go_attributes.each{|e| p e}
-    @graphic_objects["#{typ}_#{id}"] = o
+ 		node = @xml.doc.find_first("//Root/GraphicObjects")
+    node << go = XML::Node.new(GRAPHICOBJECT)
+    go << XML::Node.new(GOA_TYP, typ)
+    go << XML::Node.new(GOA_ID, id.to_s)
+    o.go_attributes.each_pair{|goa_name, go_attribute|
+      unless go_attribute.attr_name == GOA_ID
+        go << XML::Node.new(go_attribute.attr_name, go_attribute.attr_value.to_s)
+      end
+    }
+
   end
   
  	# ---------------------------------------------------------------------------------------------------------
   # ermittelt die nächst höhere ID (beeinflusst die Darstellungsebene)
   def get_new_id
     id = 0
-    @graphic_objects.each_pair{|go_name, go|
-      #~ p "go: #{go.inspect}"
-      go.go_attributes[GOA_ID].attr_value
-      id = (go.go_attributes[GOA_ID].attr_value)+1 if go.go_attributes[GOA_ID].attr_value >= id
+		@xml.doc.find("//Root/GraphicObjects/#{GRAPHICOBJECT}").each{|go|
+      id = go.find(GOA_ID).first.content.to_i+1 if go.find(GOA_ID).first.content.to_i >= id
     }
-    #~ p "ID: #{id}"
     id
   end
   
@@ -143,7 +154,7 @@ end
 
 
 if __FILE__ == $0
-  lay = Layout.new("test.ini")
+  lay = Layout.new("layout_test.xml")
   
   lay.add_object(TEXTOBJECT)  
   lay.add_object(BARCODEOBJECT)  
@@ -151,6 +162,7 @@ if __FILE__ == $0
   lay.add_object(TEXTOBJECT)  
   lay.add_object(BARCODEOBJECT)  
   lay.add_object(TEXTOBJECT)  
-  lay.store_to_ini
+  print lay.xml.doc.to_s
+#  lay.store_to_ini
   #~ lay.load_from_ini
 end
