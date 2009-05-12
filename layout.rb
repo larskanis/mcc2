@@ -18,31 +18,31 @@ class Layout
   
  	# ---------------------------------------------------------------------------------------------------------
   def initialize(parent, app)
+    @filename = nil
     @parent = parent
     @app = app
     
-    @filename = nil
-    
-    @lf = LayoutFrame.new parent
-    @lf.iconlist_objects.appendHeader('ID', nil, 50)
-    @lf.iconlist_objects.appendHeader('Name', nil, 100)
-    @lf.iconlist_objects.appendHeader('Typ', nil, 100)
-    
-    #~ setSplit(index, size)   
-    @lf.splitter10.setSplit(0, 400)   
-    @lf.splitter11.setSplit(0, 250)   
-    @lf.splitter12.setSplit(0, 100)
-    
-    #~ @graphic_objects = {}
-    #~ @duplex = false
-    #~ @height = $pr.default_height
-    #~ @width = $pr.default_width
-    #~ @chip = Chip.new
-    #~ @magstripe = Magstripe.new
+    if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
+      
+      @lf = LayoutFrame.new parent
+      @lf.iconlist_objects.appendHeader('ID', nil, 50)
+      @lf.iconlist_objects.appendHeader('Name', nil, 100)
+      @lf.iconlist_objects.appendHeader('Typ', nil, 100)
+      
+      @lf.splitter10.setSplit(0, 400)   
+      @lf.splitter11.setSplit(0, 250)   
+      @lf.splitter12.setSplit(0, 100)
+      
+      #~ @graphic_objects = {}
+      #~ @duplex = false
+      #~ @height = $pr.default_height
+      #~ @width = $pr.default_width
+      #~ @chip = Chip.new
+      #~ @magstripe = Magstripe.new
+    end
   end
  	# ---------------------------------------------------------------------------------------------------------
   def draw_card
-
     # allgemeine Einstellungen des Image vornehmen
     dpi = 90
     scale = 3
@@ -87,7 +87,7 @@ class Layout
         canvas.background_fill = 'yellow'
         canvas.desc = "Example text01 - 'Hello, out there' in blue"
     @xml.doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
-      if go.find(GOA_TYP).first.content = TEXTOBJECT
+      if go.find(GOA_TYP).first.content == TEXTOBJECT
         p 'draw text'
         text = go.find(GOA_DATA).first.content
 #        canvas.text(10, 10, 'Hello, out there').
@@ -124,8 +124,6 @@ class Layout
     # das erzeugte Bild als Icon anzeigen
 		icon = FXPNGIcon.new(@app, data)
     FXLabel.new(@lf.scrollwindow_preview, "", icon)
-    
-    
   end
  	# ---------------------------------------------------------------------------------------------------------
   # lädt das INI-File und initialisiert die entsprechenden Variablen und Objekte
@@ -143,9 +141,11 @@ class Layout
     @xml = MyXML.new # erzeugt ein neue Layout-Objekt
     return nil if @filename == ""
     @xml.load(@filename)
-    fill_objectlist
-    draw_card
-    set_title
+    if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
+      fill_objectlist 
+      draw_card
+      set_title
+    end
     @filename
     #~ print @xml.doc.to_s
   end
@@ -216,7 +216,6 @@ class Layout
 
     oIni.save
 	end
-  
  	# ---------------------------------------------------------------------------------------------------------
   # speichert alle GraphicObjekte und Layout-Einstellungen im INI-File
 	def store_to_ini
@@ -249,14 +248,11 @@ class Layout
     
     oIni.save
   end
-
-  
  	# ---------------------------------------------------------------------------------------------------------
   # fügt ein GraphicObjekt zur Objektliste hinzu
   def add_object(typ)
     p "add: #{typ}"
     o = GraphicObject.get_object_by_typ(typ)
-    p o.inspect
     id = get_new_id
  		node = @xml.doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}")
     node << go = XML::Node.new(GRAPHICOBJECT)
@@ -268,9 +264,12 @@ class Layout
         go << XML::Node.new(go_attribute.attr_name, go_attribute.attr_value.to_s)
       end
     }
+    
     print @xml.doc.to_s
-    fill_objectlist
-    draw_card
+    if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
+      fill_objectlist
+      draw_card
+    end
   end
   
  	# ---------------------------------------------------------------------------------------------------------
@@ -301,12 +300,14 @@ end
 
 if __FILE__ == $0
   system('ruby mcc2.rb')
-  #~ lay = Layout.new("layout_test.xml", nil)
+  exit
+  lay = Layout.new(nil, nil)
+  lay.create_xml
   
   #~ lay.add_object(TEXTOBJECT)  
-  #~ lay.add_object(BARCODEOBJECT)  
-  #~ lay.add_object(PICTUREOBJECT)  
-  #~ lay.add_object(TEXTOBJECT)  
+  lay.add_object(BARCODEOBJECT)  
+  lay.add_object(PICTUREOBJECT)  
+  lay.add_object(TEXTOBJECT)  
   #~ lay.add_object(BARCODEOBJECT)  
   #~ lay.add_object(TEXTOBJECT)  
   #~ print lay.xml.doc.to_s
