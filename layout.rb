@@ -33,6 +33,8 @@ class Layout
       @lf.splitter11.setSplit(0, 250)   
       @lf.splitter12.setSplit(0, 100)
       
+      @image_view = FXImageView.new(@lf.verticalframe_right, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y)
+      
       #~ @graphic_objects = {}
       #~ @duplex = false
       #~ @height = $pr.default_height
@@ -48,59 +50,52 @@ class Layout
     scale = 3
     width =  @xml.doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_WIDTH}").first.content.to_f
     height = @xml.doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_HEIGHT}").first.content.to_f
-#		image = Image.new(width * scale, height * scale)
-		image = Image.new(1000 * 1, 1000 * 1)
-# 		@image.format = "PCX"
-		image.background_color = 'lightgreen'
-		image.border_color = 'blue'
-		image.units = PixelsPerInchResolution
-		image.x_resolution = dpi
-		image.y_resolution = dpi
-
-#    @lf.canvas_card.drawRoundRectangle(10, 10, 100, 100, 5, 5)
-#    @lf.scrollarea_preview
-
-    	#Gibt die Pixeldaten des erzeugten PCX-Bildes zurück.
-    #with_margins:: true - Rand wird mit ausgegeben
     
-    #~ with_margins = true
-    with_margins = false
+    Magick::RVG.dpi = dpi
+    rvg = Magick::RVG.new(8.cm, 5.cm).viewbox(0,0,400,250) do |canvas|
+      # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
+      canvas.background_fill = 'yellow'
+#      canvas.desc = "Example text01 - 'Hello, out there' in blue"
 
-    # ..........................................................................................
-    # Rand zeichnen (für Vorschau)
-    if with_margins
-      draw = Magick::Draw.new	
-      draw.fill_opacity(50)
-      draw.stroke('green')
-      draw.stroke_antialias(false)
-      #~ draw.rectangle(@x, @y, @max_x, @max_y)
-#      draw.rectangle(100, 100, 25, 25)
-      draw.draw(image)
-    end
-    
-    # ..........................................................................................
-    # die graphischen Elemnte zeichnen
-	
-    Magick::RVG.dpi = 90
+      #with_margins:: true - Rand wird mit ausgegeben
+      
+      with_margins = true
+      #~ with_margins = false
 
-    rvg = Magick::RVG.new(8.cm, 5.cm).viewbox(0,0,200,300) do |canvas|
-        canvas.background_fill = 'yellow'
-        canvas.desc = "Example text01 - 'Hello, out there' in blue"
-    @xml.doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
-      if go.find(GOA_TYP).first.content == TEXTOBJECT
-        p 'draw text'
-        text = go.find(GOA_DATA).first.content
-#        canvas.text(10, 10, 'Hello, out there').
-        canvas.text(10, 10, text).
-          styles(:font_family=>'Verdana', :font_size=>15, :fill=>'blue', :font_weight=>'normal', :font_style=>'normal')
+      # ..........................................................................................
+      # Rand zeichnen (für Vorschau)
+      if with_margins
+        canvas.rect(290, 290).styles(:fill=>'none', :stroke=>'blue')
+=begin
+        draw = Magick::Draw.new	
+        draw.fill_opacity(50)
+        draw.stroke('green')
+        draw.stroke_antialias(false)
+        #~ draw.rectangle(@x, @y, @max_x, @max_y)
+  #      draw.rectangle(100, 100, 25, 25)
+        draw.draw(image)
+=end
       end
-#            canvas.circle(5, 250, 150).styles(:fill=>'red')
-            # Show outline of canvas using 'rect' element
-           canvas.rect(90, 290).styles(:fill=>'none', :stroke=>'blue')
-        }
+      
+      # ..........................................................................................
+      # die graphischen Elemnte zeichnen
+    
+
+      @xml.doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
+        if go.find(GOA_TYP).first.content == TEXTOBJECT
+          text = go.find(GOA_DATA).first.content
+          x = go.find(GOA_X).first.content
+          y = go.find(GOA_Y).first.content
+          canvas.text(x, y, text).styles(
+            :font_family=>'Verdana', 
+            :font_size=>15, 
+            :fill=>'blue', 
+            :font_weight=>'normal', 
+            :font_style=>'normal')
+        end
+      }
     end
-    #~ image = rvg.draw
-    rvg.draw.write('test.gif')
+    #~ image.draw.write('test.gif')
     
     # ..........................................................................................
     # weitere Bearbeitungen (drehen, stretchen, etc.)
@@ -112,18 +107,17 @@ class Layout
     
     # ..........................................................................................
     # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
-    data = image.to_blob{
+    data = rvg.draw.to_blob{
       self.format = 'PNG'
     }
     
-		#~ if icon.width <= 1
-			#~ raise PreviewError.new("PCXIcon konnte nicht korrekt erzeugt werden (kann unter Linux an veralteter ImageMagick-Verion liegen, wenn das Bild mit RMagick erzeugt wurde)")
-		#~ end
-
     # ..........................................................................................
     # das erzeugte Bild als Icon anzeigen
-		icon = FXPNGIcon.new(@app, data)
-    FXLabel.new(@lf.scrollwindow_preview, "", icon)
+    fx_image = FXPNGImage.new(@app, data)
+    fx_image.create
+    @image_view.image = fx_image
+    @image_view.show
+    @image_view.recalc
   end
  	# ---------------------------------------------------------------------------------------------------------
   # lädt das INI-File und initialisiert die entsprechenden Variablen und Objekte
@@ -251,12 +245,10 @@ class Layout
  	# ---------------------------------------------------------------------------------------------------------
   # fügt ein GraphicObjekt zur Objektliste hinzu
   def add_object(typ)
-    p "add: #{typ}"
     o = GraphicObject.get_object_by_typ(typ)
     id = get_new_id
  		node = @xml.doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}")
     node << go = XML::Node.new(GRAPHICOBJECT)
-    p "typ: #{typ}"
     go << XML::Node.new(GOA_TYP, typ)
     go << XML::Node.new(GOA_ID, id.to_s)
     o.go_attributes.each_pair{|goa_name, go_attribute|
@@ -265,13 +257,12 @@ class Layout
       end
     }
     
-    print @xml.doc.to_s
+    #~ print @xml.doc.to_s
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       fill_objectlist
       draw_card
     end
   end
-  
  	# ---------------------------------------------------------------------------------------------------------
   # 
   def fill_objectlist
