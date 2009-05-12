@@ -17,7 +17,7 @@ class LayoutFrame
 			FX::Splitter.new(@LayoutFrame){|w|
 				@splitter10=w
 				w.wdg_name='splitter10'
-				w.width=160
+				w.width=108
 				w.height=449
 				w.barSize=2
 				w.layoutHints=3084
@@ -95,17 +95,9 @@ class LayoutFrame
 					@verticalframe_right=w
 					w.wdg_name='verticalframe_right'
 					w.frameStyle=16384
-					w.width=56
+					w.width=4
 					w.height=449
 					w.x=104
-					FX::ScrollWindow.new(@verticalframe_right){|w|
-						@scrollwindow_preview=w
-						w.wdg_name='scrollwindow_preview'
-						w.width=52
-						w.y=2
-						w.height=445
-						w.x=2
-					}
 				}
 			}
 		}
@@ -123,7 +115,6 @@ class LayoutFrame
 	attr_reader :iconlist_objects
 	attr_reader :horizontalframe_attributes
 	attr_reader :verticalframe_right
-	attr_reader :scrollwindow_preview
 end
 
 #unit test
