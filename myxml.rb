@@ -81,10 +81,7 @@ class MyXML
 	# ---------------------------------------------------------------------------------------------------------
   def get_objectnode_by_id(id)
     @doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
-      p "struct_id: #{go_struct.find(GOA_ID).first.content}"
-      p "needed_id: #{id.inspect}"
       if go_struct.find(GOA_ID).first.content.to_i == id
-        p "found"
         return go_struct
       end
     }

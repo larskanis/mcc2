@@ -62,9 +62,9 @@ class Layout
   # ---------------------------------------------------------------------------------------------------------
   def object_selection_changed
     item_ID = @lf.iconlist_objects.currentItem
-    id = @lf.iconlist_objects.getItemData(item_ID)
-    p "id #{id} selektiert"
-    node = @xml.get_objectnode_by_id(id.to_i)
+    @selected_object_id = @lf.iconlist_objects.getItemData(item_ID).to_i
+    #~ p "id #{@selected_object_id} selektiert"
+    node = @xml.get_objectnode_by_id(@selected_object_id)
     
     # allgemeine Attribute auslesen
     @lf.textfield_name.text = node.find(GOA_NAME).first.content
@@ -118,15 +118,25 @@ class Layout
 
       @xml.doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
         if go.find(GOA_TYP).first.content == TEXTOBJECT
+          id = go.find(GOA_ID).first.content.to_i
           text = go.find(GOA_DATA).first.content
           x = go.find(GOA_X).first.content
           y = go.find(GOA_Y).first.content
+          width = go.find(GOA_WIDTH).first.content
+          height = go.find(GOA_HEIGHT).first.content
           canvas.text(x, y, text).styles(
             :font_family=>'Verdana', 
             :font_size=>15, 
             :fill=>'blue', 
             :font_weight=>'normal', 
             :font_style=>'normal')
+            
+          if @selected_object_id == id
+            canvas.g.translate(x, y).rotate(-90) do |body|
+              body.rect(width, height ).styles(:fill=>'none', :stroke=>'red')
+            end
+          end
+            
         end
       }
     end
