@@ -147,7 +147,8 @@ class MCC2GUI < MainWindow
     child.create
     child.show
     child.recalc
-    child.userData.load_from_xml
+    filename = child.userData.load_from_xml
+    child.close unless filename
   end
   
 end
