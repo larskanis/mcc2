@@ -65,6 +65,8 @@ require 'myxml'          # enthält das Layout inklusive aller graphischen Objek
 require 'RMagick'
 include Magick
 
+require 'rvg/rvg'        # für RMagick
+
 $pr = PrinterXID.new # todo, muss später vom Anwender ausgewählt werden
 
 #*****************************************************************************
@@ -133,6 +135,7 @@ class MCC2GUI < MainWindow
   def new_layout
     child = FXMDIChild.new(@mdiclient, "Layout", nil, nil, 0, 0, 0, 800, 600)
     child.userData = Layout.new(child, @app)
+    child.userData.create_xml
     child.create
     child.show
     child.recalc
