@@ -38,12 +38,19 @@ class Layout
       
       @image_view = FXImageView.new(@lf.verticalframe_right, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y)
 
+      # .............................................................................................
+      # die Aktionen definieren, die ausgeführt werden, wenn am Layout irgend etwas gearbeitet wird
       @lf.dial_zoom.connect(SEL_CHANGED){ set_zoom }
       @lf.dial_zoom.connect(SEL_LEFTBUTTONRELEASE){ draw_card }
       
       @lf.dial_zoom.value = 100
       set_zoom
 
+      @lf.iconlist_objects.connect(SEL_SELECTED){ object_selection_changed }
+      
+      
+      
+      
       #~ @graphic_objects = {}
       #~ @duplex = false
       #~ @height = $pr.default_height
@@ -51,6 +58,21 @@ class Layout
       #~ @chip = Chip.new
       #~ @magstripe = Magstripe.new
     end
+  end
+  # ---------------------------------------------------------------------------------------------------------
+  def object_selection_changed
+    item_ID = @lf.iconlist_objects.currentItem
+    id = @lf.iconlist_objects.getItemData(item_ID)
+    p "id #{id} selektiert"
+    node = @xml.get_objectnode_by_id(id.to_i)
+    
+    # allgemeine Attribute auslesen
+    @lf.textfield_name.text = node.find(GOA_NAME).first.content
+    
+    # Typ-spezifische Attribute auslesen
+    
+    
+    draw_card
   end
   # ---------------------------------------------------------------------------------------------------------
   def set_zoom
@@ -69,8 +91,6 @@ class Layout
     Magick::RVG.dpi = dpi
     rvg = Magick::RVG.new(width.mm * @zoom, 2 * height.mm * @zoom).viewbox(0, 0, width * @scale, 2 * height * @scale) do |canvas|
 #    rvg = Magick::RVG.new(width.mm * @zoom, 2 * height.mm * @zoom) do |canvas|
-      #~ canvas.x = 0
-      #~ canvas.y = 0
       # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
       canvas.background_fill = 'yellow'
 #      canvas.desc = "Example text01 - 'Hello, out there' in blue"
@@ -83,16 +103,13 @@ class Layout
       # ..........................................................................................
       # Rand zeichnen (für Vorschau)
       if with_margins
-        canvas.rect(width.mm, height.mm ).styles(:fill=>'none', :stroke=>'blue')
-=begin
-        draw = Magick::Draw.new	
-        draw.fill_opacity(50)
-        draw.stroke('green')
-        draw.stroke_antialias(false)
-        #~ draw.rectangle(@x, @y, @max_x, @max_y)
-  #      draw.rectangle(100, 100, 25, 25)
-        draw.draw(image)
-=end
+        rx = 10
+        canvas.g.translate(0, 0) do |body|
+          body.rect(width.mm, height.mm ).round(rx).styles(:fill=>'none', :stroke=>'blue')
+        end
+        canvas.g.translate(0, height.mm) do |body|
+          body.rect(width.mm, height.mm ).round(rx).styles(:fill=>'none', :stroke=>'blue')
+        end
       end
       
       # ..........................................................................................
@@ -289,7 +306,7 @@ class Layout
       id = go.find(GOA_ID).first.content
       name = go.find(GOA_NAME).first.content
       typ = go.find(GOA_TYP).first.content
-      @lf.iconlist_objects.appendItem([id, name, typ].join("\t"))
+      @lf.iconlist_objects.appendItem([id, name, typ].join("\t"), nil, nil, id)
     }
   end
  	# ---------------------------------------------------------------------------------------------------------
