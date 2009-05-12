@@ -8,6 +8,8 @@ end
 class Layout
   attr_accessor :xml
   attr_accessor :filename
+  attr_accessor :zoom
+  attr_accessor :scale
   
 #  attr_accessor :graphic_objects
 #  attr_accessor :duplex
@@ -22,6 +24,7 @@ class Layout
     @parent = parent
     @app = app
     
+
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       
       @lf = LayoutFrame.new parent
@@ -34,7 +37,13 @@ class Layout
       @lf.splitter12.setSplit(0, 100)
       
       @image_view = FXImageView.new(@lf.verticalframe_right, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y)
+
+      @lf.dial_zoom.connect(SEL_CHANGED){ set_zoom }
+      @lf.dial_zoom.connect(SEL_LEFTBUTTONRELEASE){ draw_card }
       
+      @lf.dial_zoom.value = 100
+      set_zoom
+
       #~ @graphic_objects = {}
       #~ @duplex = false
       #~ @height = $pr.default_height
@@ -43,16 +52,25 @@ class Layout
       #~ @magstripe = Magstripe.new
     end
   end
- 	# ---------------------------------------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------------------------------------
+  def set_zoom
+    @zoom = (@lf.dial_zoom.value + 1).to_f / 100
+    @scale = 3.6
+    #~ p "@zoom: #{@zoom}"
+    #~ p "@scale: #{@scale}"
+  end
+  # ---------------------------------------------------------------------------------------------------------
   def draw_card
     # allgemeine Einstellungen des Image vornehmen
     dpi = 90
-    scale = 3
     width =  @xml.doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_WIDTH}").first.content.to_f
     height = @xml.doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_HEIGHT}").first.content.to_f
     
     Magick::RVG.dpi = dpi
-    rvg = Magick::RVG.new(8.cm, 5.cm).viewbox(0,0,400,250) do |canvas|
+    rvg = Magick::RVG.new(width.mm * @zoom, 2 * height.mm * @zoom).viewbox(0, 0, width * @scale, 2 * height * @scale) do |canvas|
+#    rvg = Magick::RVG.new(width.mm * @zoom, 2 * height.mm * @zoom) do |canvas|
+      #~ canvas.x = 0
+      #~ canvas.y = 0
       # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
       canvas.background_fill = 'yellow'
 #      canvas.desc = "Example text01 - 'Hello, out there' in blue"
@@ -65,7 +83,7 @@ class Layout
       # ..........................................................................................
       # Rand zeichnen (für Vorschau)
       if with_margins
-        canvas.rect(290, 290).styles(:fill=>'none', :stroke=>'blue')
+        canvas.rect(width.mm, height.mm ).styles(:fill=>'none', :stroke=>'blue')
 =begin
         draw = Magick::Draw.new	
         draw.fill_opacity(50)
