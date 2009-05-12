@@ -141,10 +141,12 @@ class Layout
 #    XML.default_keep_blanks = false
     XML.indent_tree_output = true
     @xml = MyXML.new # erzeugt ein neue Layout-Objekt
+    return nil if @filename == ""
     @xml.load(@filename)
     fill_objectlist
     draw_card
     set_title
+    @filename
     #~ print @xml.doc.to_s
   end
  	# ---------------------------------------------------------------------------------------------------------
