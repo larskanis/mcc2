@@ -52,7 +52,8 @@ class MyXML
   end
 	# ---------------------------------------------------------------------------------------------------------
   def load(filename)
-    @doc = LibXML::XML::Document.file(filename, :options => XML::Parser::Options::NOBLANKS | XML::Parser::Options::PEDANTIC | XML::Parser::Options::COMPACT)
+#    @doc = LibXML::XML::Document.file(filename, :options => XML::Parser::Options::NOBLANKS | XML::Parser::Options::PEDANTIC | XML::Parser::Options::COMPACT)
+    @doc = LibXML::XML::Document.file(filename, :options => XML::Parser::Options::NOBLANKS )
    
     # kontrollieren, ob alle Nodes des Layouts existieren, ansonsten anlegen und als 'changed' markieren
     # todo
