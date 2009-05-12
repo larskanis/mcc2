@@ -17,21 +17,21 @@ class LayoutFrame
 			FX::Splitter.new(@LayoutFrame){|w|
 				@splitter10=w
 				w.wdg_name='splitter10'
-				w.width=108
+				w.width=160
 				w.height=449
 				w.barSize=2
 				w.layoutHints=3084
 				FX::Splitter.new(@splitter10){|w|
 					@splitter11=w
 					w.wdg_name='splitter11'
-					w.width=102
+					w.width=205
 					w.height=449
 					w.splitterStyle=32768
 					w.barSize=2
 					FX::Splitter.new(@splitter11){|w|
 						@splitter12=w
 						w.wdg_name='splitter12'
-						w.width=102
+						w.width=205
 						w.height=90
 						w.barSize=2
 						FX::VerticalFrame.new(@splitter12){|w|
@@ -57,11 +57,15 @@ class LayoutFrame
 								w.x=2
 							}
 							FX::Dial.new(@verticalframe_steuerung){|w|
-								@dial1=w
-								w.wdg_name='dial1'
-								w.width=16
+								@dial_zoom=w
+								w.wdg_name='dial_zoom'
+								w.value=3
+								w.tipText="Zoom"
+								w.width=44
+								w.helpText="Zoom"
 								w.y=44
-								w.height=44
+								w.height=16
+								w.dialStyle=32768
 								w.x=2
 							}
 						}
@@ -69,15 +73,16 @@ class LayoutFrame
 							@verticalframe_objectlist=w
 							w.wdg_name='verticalframe_objectlist'
 							w.frameStyle=16384
-							w.width=56
+							w.width=159
 							w.height=90
 							w.x=46
 							FX::IconList.new(@verticalframe_objectlist){|w|
 								@iconlist_objects=w
 								w.wdg_name='iconlist_objects'
-								w.width=52
+								w.width=155
 								w.y=2
 								w.height=86
+								w.iconListStyle=1048576
 								w.x=2
 							}
 						}
@@ -86,18 +91,264 @@ class LayoutFrame
 						@horizontalframe_attributes=w
 						w.wdg_name='horizontalframe_attributes'
 						w.frameStyle=16384
-						w.width=102
+						w.width=205
 						w.y=92
 						w.height=357
+						FX::TabBook.new(@horizontalframe_attributes){|w|
+							@tabbook_objectattributes=w
+							w.wdg_name='tabbook_objectattributes'
+							w.width=201
+							w.y=2
+							w.height=353
+							w.x=2
+							FX::TabItem.new(@tabbook_objectattributes){|w|
+								@tabitem_allgemein=w
+								w.wdg_name='tabitem_allgemein'
+								w.text="Allgemein"
+								w.width=53
+								w.y=4
+								w.height=21
+								w.x=4
+							}
+							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
+								@verticalframe_allgemein=w
+								w.wdg_name='verticalframe_allgemein'
+								w.width=193
+								w.y=23
+								w.height=326
+								w.x=4
+								FX::Matrix.new(@verticalframe_allgemein){|w|
+									@matrix1=w
+									w.wdg_name='matrix1'
+									w.numRows=2
+									w.width=193
+									w.height=326
+									w.matrixStyle=131072
+									w.numColumns=2
+									FX::Label.new(@matrix1){|w|
+										@label9=w
+										w.wdg_name='label9'
+										w.text="Name"
+										w.width=31
+										w.y=4
+										w.height=17
+										w.x=4
+									}
+									FX::TextField.new(@matrix1){|w|
+										@textfield_name=w
+										w.wdg_name='textfield_name'
+										w.width=66
+										w.y=4
+										w.height=19
+										w.numColumns=10
+										w.layoutHints=1024
+										w.x=41
+									}
+									FX::Label.new(@matrix1){|w|
+										@label10=w
+										w.wdg_name='label10'
+										w.text="Daten"
+										w.width=33
+										w.y=27
+										w.height=17
+										w.x=4
+									}
+									FX::TextField.new(@matrix1){|w|
+										@textfield9=w
+										w.wdg_name='textfield9'
+										w.width=66
+										w.y=27
+										w.height=19
+										w.numColumns=10
+										w.layoutHints=1024
+										w.x=41
+									}
+								}
+							}
+							FX::TabItem.new(@tabbook_objectattributes){|w|
+								@tabitem_posit=w
+								w.wdg_name='tabitem_posit'
+								w.text="Position"
+								w.width=45
+								w.y=6
+								w.height=21
+								w.x=56
+							}
+							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
+								@verticalframe_posit=w
+								w.wdg_name='verticalframe_posit'
+								w.width=193
+								w.shown=false
+								w.y=23
+								w.height=326
+								w.x=4
+								FX::HorizontalFrame.new(@verticalframe_posit){|w|
+									@horizontalframe22=w
+									w.wdg_name='horizontalframe22'
+									w.width=193
+									w.height=19
+									w.layoutHints=1024
+									FX::Label.new(@horizontalframe22){|w|
+										@label5=w
+										w.wdg_name='label5'
+										w.text="X"
+										w.width=10
+										w.height=17
+									}
+									FX::Spinner.new(@horizontalframe22){|w|
+										@spinner1=w
+										w.wdg_name='spinner1'
+										w.range=-2147483648..2147483647
+										w.width=38
+										w.height=19
+										w.numColumns=3
+										w.x=10
+									}
+								}
+								FX::HorizontalFrame.new(@verticalframe_posit){|w|
+									@horizontalframe23=w
+									w.wdg_name='horizontalframe23'
+									w.width=193
+									w.y=19
+									w.height=19
+									w.layoutHints=1024
+									FX::Label.new(@horizontalframe23){|w|
+										@label6=w
+										w.wdg_name='label6'
+										w.text="Y"
+										w.width=10
+										w.height=17
+									}
+									FX::Spinner.new(@horizontalframe23){|w|
+										@spinner2=w
+										w.wdg_name='spinner2'
+										w.range=-2147483648..2147483647
+										w.width=38
+										w.height=19
+										w.numColumns=3
+										w.x=10
+									}
+								}
+								FX::HorizontalFrame.new(@verticalframe_posit){|w|
+									@horizontalframe24=w
+									w.wdg_name='horizontalframe24'
+									w.width=193
+									w.y=38
+									w.height=19
+									w.layoutHints=1024
+									FX::Label.new(@horizontalframe24){|w|
+										@label7=w
+										w.wdg_name='label7'
+										w.text="Breite"
+										w.width=32
+										w.height=17
+									}
+									FX::Spinner.new(@horizontalframe24){|w|
+										@spinner3=w
+										w.wdg_name='spinner3'
+										w.range=-2147483648..2147483647
+										w.width=38
+										w.height=19
+										w.numColumns=3
+										w.x=32
+									}
+								}
+								FX::HorizontalFrame.new(@verticalframe_posit){|w|
+									@horizontalframe25=w
+									w.wdg_name='horizontalframe25'
+									w.width=193
+									w.y=57
+									w.height=19
+									w.layoutHints=1024
+									FX::Label.new(@horizontalframe25){|w|
+										@label8=w
+										w.wdg_name='label8'
+										w.text="H\303\266he"
+										w.width=29
+										w.height=17
+									}
+									FX::Spinner.new(@horizontalframe25){|w|
+										@spinner4=w
+										w.wdg_name='spinner4'
+										w.range=-2147483648..2147483647
+										w.width=38
+										w.height=19
+										w.numColumns=3
+										w.x=29
+									}
+								}
+							}
+							FX::TabItem.new(@tabbook_objectattributes){|w|
+								@tabitem_font=w
+								w.wdg_name='tabitem_font'
+								w.text="Schrift"
+								w.width=39
+								w.y=6
+								w.height=21
+								w.x=101
+							}
+							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
+								@verticalframe_font=w
+								w.wdg_name='verticalframe_font'
+								w.width=193
+								w.shown=false
+								w.y=23
+								w.height=326
+								w.x=4
+								FX::HorizontalFrame.new(@verticalframe_font){|w|
+									@horizontalframe20=w
+									w.wdg_name='horizontalframe20'
+									w.width=193
+									w.height=238
+									FX::Label.new(@horizontalframe20){|w|
+										@font=w
+										w.wdg_name='font'
+										w.text="Schriftart"
+										w.width=49
+										w.height=17
+									}
+									FX::IconList.new(@horizontalframe20){|w|
+										@iconlist_fonts=w
+										w.wdg_name='iconlist_fonts'
+										w.width=144
+										w.height=52
+										w.layoutHints=1024
+										w.x=49
+									}
+								}
+								FX::HorizontalFrame.new(@verticalframe_font){|w|
+									@horizontalframe21=w
+									w.wdg_name='horizontalframe21'
+									w.width=193
+									w.y=238
+									w.height=88
+									FX::Label.new(@horizontalframe21){|w|
+										@label3=w
+										w.wdg_name='label3'
+										w.text="Schriftgr\303\266\303\237e"
+										w.width=63
+										w.height=17
+									}
+									FX::TextField.new(@horizontalframe21){|w|
+										@textfield_fontheight=w
+										w.wdg_name='textfield_fontheight'
+										w.width=66
+										w.height=19
+										w.numColumns=10
+										w.x=63
+									}
+								}
+							}
+						}
 					}
 				}
 				FX::VerticalFrame.new(@splitter10){|w|
 					@verticalframe_right=w
 					w.wdg_name='verticalframe_right'
 					w.frameStyle=16384
-					w.width=4
+					w.width=0
 					w.height=449
-					w.x=104
+					w.x=207
 				}
 			}
 		}
@@ -110,10 +361,40 @@ class LayoutFrame
 	attr_reader :verticalframe_steuerung
 	attr_reader :button3
 	attr_reader :button2
-	attr_reader :dial1
+	attr_reader :dial_zoom
 	attr_reader :verticalframe_objectlist
 	attr_reader :iconlist_objects
 	attr_reader :horizontalframe_attributes
+	attr_reader :tabbook_objectattributes
+	attr_reader :tabitem_allgemein
+	attr_reader :verticalframe_allgemein
+	attr_reader :matrix1
+	attr_reader :label9
+	attr_reader :textfield_name
+	attr_reader :label10
+	attr_reader :textfield9
+	attr_reader :tabitem_posit
+	attr_reader :verticalframe_posit
+	attr_reader :horizontalframe22
+	attr_reader :label5
+	attr_reader :spinner1
+	attr_reader :horizontalframe23
+	attr_reader :label6
+	attr_reader :spinner2
+	attr_reader :horizontalframe24
+	attr_reader :label7
+	attr_reader :spinner3
+	attr_reader :horizontalframe25
+	attr_reader :label8
+	attr_reader :spinner4
+	attr_reader :tabitem_font
+	attr_reader :verticalframe_font
+	attr_reader :horizontalframe20
+	attr_reader :font
+	attr_reader :iconlist_fonts
+	attr_reader :horizontalframe21
+	attr_reader :label3
+	attr_reader :textfield_fontheight
 	attr_reader :verticalframe_right
 end
 
