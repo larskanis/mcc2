@@ -57,19 +57,36 @@ class Layout
       set_zoom
 
       @lf.iconlist_objects.connect(SEL_SELECTED){ object_selection_changed }
+      
+      @lf.textfield_name.connect(SEL_COMMAND){ textfield_name_exit }
 
+      # .............................................................................................
       # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
       @lf.matrix1.numColumns = 2 
       @lf.matrix2.numColumns = 2 
       @lf.matrix3.numColumns = 2 
-      
-      #~ @graphic_objects = {}
-      #~ @duplex = false
-      #~ @chip = Chip.new
-      #~ @magstripe = Magstripe.new
     end
   end
-  
+  # ---------------------------------------------------------------------------------------------------------
+  def textfield_name_exit
+    node = get_objectnode_by_id(@selected_object_id)
+#    node['object_name'] = "Test" # Attribute lesen und schreiben
+#    p node.debug
+    orig_name = node.find(GOA_NAME)
+    if @lf.textfield_name.text != orig_name.first.content
+      orig_name.first.content = @lf.textfield_name.text
+      changed_attributes
+      fill_objectlist
+    end
+  end
+  # ---------------------------------------------------------------------------------------------------------
+  # kann jedesmal dann aufgerufen werden, wenn ein Attribut des Layouts geändert wurde
+  # es wird das changed-Flag gesetzt und der Titel aktualisiert und die Vorschau neu gezeichnet
+  def changed_attributes
+    @changed = true
+    draw_card
+    set_title
+  end
   # ---------------------------------------------------------------------------------------------------------
   def add_attr(name, typ, default)
     attr = GO_Attribut.new(name, typ, default) 
