@@ -47,9 +47,11 @@ class Layout
       set_zoom
 
       @lf.iconlist_objects.connect(SEL_SELECTED){ object_selection_changed }
-      
-      
-      
+
+      # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
+      @lf.matrix1.numColumns = 2 
+      @lf.matrix2.numColumns = 2 
+      @lf.matrix3.numColumns = 2 
       
       #~ @graphic_objects = {}
       #~ @duplex = false
@@ -89,56 +91,33 @@ class Layout
     height = @xml.doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_HEIGHT}").first.content.to_f
     
     Magick::RVG.dpi = dpi
-    rvg = Magick::RVG.new(width.mm * @zoom, 2 * height.mm * @zoom).viewbox(0, 0, width * @scale, 2 * height * @scale) do |canvas|
-#    rvg = Magick::RVG.new(width.mm * @zoom, 2 * height.mm * @zoom) do |canvas|
-      # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
-      canvas.background_fill = 'yellow'
-#      canvas.desc = "Example text01 - 'Hello, out there' in blue"
-
-      #with_margins:: true - Rand wird mit ausgegeben
-      
-      with_margins = true
-      #~ with_margins = false
-
-      # ..........................................................................................
-      # Rand zeichnen (für Vorschau)
-      if with_margins
-        rx = 10
-        canvas.g.translate(0, 0) do |body|
-          body.rect(width.mm, height.mm ).round(rx).styles(:fill=>'none', :stroke=>'blue')
-        end
-        canvas.g.translate(0, height.mm) do |body|
-          body.rect(width.mm, height.mm ).round(rx).styles(:fill=>'none', :stroke=>'blue')
-        end
-      end
-      
-      # ..........................................................................................
-      # die graphischen Elemnte zeichnen
     
+    preview = true
+    
+#    $pr.card_margin_bottom
 
-      @xml.doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
-        if go.find(GOA_TYP).first.content == TEXTOBJECT
-          id = go.find(GOA_ID).first.content.to_i
-          text = go.find(GOA_DATA).first.content
-          x = go.find(GOA_X).first.content
-          y = go.find(GOA_Y).first.content
-          width = go.find(GOA_WIDTH).first.content
-          height = go.find(GOA_HEIGHT).first.content
-          canvas.text(x, y, text).styles(
-            :font_family=>'Verdana', 
-            :font_size=>15, 
-            :fill=>'blue', 
-            :font_weight=>'normal', 
-            :font_style=>'normal')
-            
-          if @selected_object_id == id
-            canvas.g.translate(x, y).rotate(-90) do |body|
-              body.rect(width, height ).styles(:fill=>'none', :stroke=>'red')
-            end
-          end
-            
-        end
-      }
+    width_with_margins = width + $pr.card_margin_left + $pr.card_margin_right
+    height_with_margins = height + $pr.card_margin_bottom + $pr.card_margin_top
+    
+    image_width = (width_with_margins * @zoom).mm
+    image_height = ((2 * height_with_margins) * @zoom ).mm
+    
+    scale_width = width_with_margins * @scale 
+    scale_height = 2 * height_with_margins * @scale
+    
+    rvg = Magick::RVG.new(image_width, image_height).viewbox(0, 0, scale_width, scale_height) do |canvas|
+      # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
+    
+      drwa_pos_x = $pr.card_margin_left.mm
+      
+      drwa_pos_y = $pr.card_margin_top.mm
+      Page.draw(canvas, drwa_pos_x, drwa_pos_y, 0, @xml, preview) # Seite 1 drucken
+      
+      drwa_pos_y = ($pr.card_margin_top + height_with_margins).mm
+      Page.draw(canvas, drwa_pos_x, drwa_pos_y, 1, @xml, preview) # Seite 2 drucken
+      
+      #~ canvas.background_fill = 'yellow'
+      
     end
     #~ image.draw.write('test.gif')
     
