@@ -111,10 +111,10 @@ class Layout
       drwa_pos_x = $pr.card_margin_left.mm
       
       drwa_pos_y = $pr.card_margin_top.mm
-      Page.draw(canvas, drwa_pos_x, drwa_pos_y, 0, @xml, preview) # Seite 1 drucken
+      Page.draw(canvas, drwa_pos_x, drwa_pos_y, 0, @xml, preview, @selected_object_id) # Seite 1 drucken
       
       drwa_pos_y = ($pr.card_margin_top + height_with_margins).mm
-      Page.draw(canvas, drwa_pos_x, drwa_pos_y, 1, @xml, preview) # Seite 2 drucken
+      Page.draw(canvas, drwa_pos_x, drwa_pos_y, 1, @xml, preview, @selected_object_id) # Seite 2 drucken
       
       #~ canvas.background_fill = 'yellow'
       
