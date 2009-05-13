@@ -108,40 +108,29 @@ class Layout
     
     preview = true
     
-#    $pr.card_margin_bottom
-
-    width_with_margins = width + $pr.card_margin_left + $pr.card_margin_right
-    height_with_margins = height + $pr.card_margin_bottom + $pr.card_margin_top
+    card_offset = 10
     
-    image_width = (width_with_margins * @zoom).mm
-    image_height = ((2 * height_with_margins) * @zoom ).mm
+    image_width = (Page.width_with_margins(width) * @zoom).mm
+    image_height = ((2 * Page.height_with_margins(height) + card_offset) * @zoom ).mm
     
-    scale_width = width_with_margins * @scale 
-    scale_height = 2 * height_with_margins * @scale
+    scale_width = Page.width_with_margins(width) * @scale 
+    scale_height = (2 * Page.height_with_margins(height) + card_offset) * @scale
     
     rvg = Magick::RVG.new(image_width, image_height).viewbox(0, 0, scale_width, scale_height) do |canvas|
       # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
     
-      drwa_pos_x = $pr.card_margin_left.mm
-      
-      drwa_pos_y = $pr.card_margin_top.mm
+      drwa_pos_x = 0
+      drwa_pos_y = 0
       Page.draw(canvas, drwa_pos_x, drwa_pos_y, 0, @xml_doc, preview, @selected_object_id) # Seite 1 drucken
       
-      drwa_pos_y = ($pr.card_margin_top + height_with_margins).mm
+      drwa_pos_y = (Page.height_with_margins(height) + card_offset).mm
       Page.draw(canvas, drwa_pos_x, drwa_pos_y, 1, @xml_doc, preview, @selected_object_id) # Seite 2 drucken
       
-      #~ canvas.background_fill = 'yellow'
+      canvas.background_fill = 'white'
+      #~ canvas.background_fill = 'gray'
       
     end
     #~ image.draw.write('test.gif')
-    
-    # ..........................................................................................
-    # weitere Bearbeitungen (drehen, stretchen, etc.)
-    
-#    image = image.rotate(@rotation)
-#    image = image.quantize(2, Magick::RGBColorspace, false)
-    
-    #print_image_info(image)
     
     # ..........................................................................................
     # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
