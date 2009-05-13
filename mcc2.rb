@@ -19,15 +19,17 @@ $: << basedir
 
 #*****************************************************************************
 # Require
-require "rubygems"
 
+require "rubygems"
 
 if __FILE__ == $0
   begin
     require 'fox16'
     require 'fox16/colors'
     require 'fox16/responder'
+    p "loading fox16"
   rescue LoadError
+    p "Error loading fox16 try fox12"
     require 'fox12'
     require 'fox12/colors'
     $enable_fox12_workaround = true
@@ -58,6 +60,8 @@ include Win32
 require 'printer'        # die Basisklasse für die Printer
 require 'card_printer'   # die Basisklasse für alle CardPrinter
 require 'printer_xid'    # die XID-Printer-Klasse
+
+require 'page'           # die Klasse, die eine Druckseite einer Karte definiert
 
 require 'myxml'          # enthält das Layout inklusive aller graphischen Objekte
 #require 'myinifile'
@@ -150,13 +154,16 @@ class MCC2GUI < MainWindow
     filename = child.userData.load_from_xml
     child.close unless filename
   end
-  
 end
 #*****************************************************************************
 # Main
 
 if __FILE__==$0
 
+  #~ set_trace_func proc { |event, file, line, id, binding, classname|
+    #~ printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
+  #~ }
+  
 	require 'libguib16.rb'
   app = FX::App.new("MCC2", "ComCard")
 	
