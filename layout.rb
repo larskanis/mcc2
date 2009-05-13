@@ -58,8 +58,14 @@ class Layout
 
       @lf.iconlist_objects.connect(SEL_SELECTED){ object_selection_changed }
       
+      
       @lf.textfield_name.connect(SEL_COMMAND){ textfield_name_exit }
-
+      text_field_trigger = SEL_COMMAND
+#      text_field_trigger = SEL_CHANGED # geht sehr langsam und macht bei Barcode und Bild Probleme
+      @lf.textfield_data_non_text.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_DATA) }
+      @lf.textfield_data.connect(SEL_CHANGED){|sender, sel, event| textfield_exit(sender, GOA_DATA) }
+      @lf.textfield_sample_data.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_SAMPLE_DATA) }
+      
       # .............................................................................................
       # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
       @lf.matrix1.numColumns = 2 
@@ -68,11 +74,19 @@ class Layout
     end
   end
   # ---------------------------------------------------------------------------------------------------------
-  def textfield_name_exit
-    node = get_objectnode_by_id(@selected_object_id)
 #    node['object_name'] = "Test" # Attribute lesen und schreiben
 #    p node.debug
-    orig_name = node.find(GOA_NAME)
+  # ---------------------------------------------------------------------------------------------------------
+  def textfield_exit(sender, attr_name)
+    node = get_objectnode_by_id(@selected_object_id).find(attr_name)
+    if sender.text != node.first.content
+      node.first.content = sender.text
+      changed_attributes
+    end
+  end
+  # ---------------------------------------------------------------------------------------------------------
+  def textfield_name_exit
+    orig_name = get_objectnode_by_id(@selected_object_id).find(GOA_NAME)
     if @lf.textfield_name.text != orig_name.first.content
       orig_name.first.content = @lf.textfield_name.text
       changed_attributes
@@ -101,6 +115,9 @@ class Layout
     
     # allgemeine Attribute auslesen
     @lf.textfield_name.text = node.find(GOA_NAME).first.content
+    @lf.textfield_data_non_text.text = node.find(GOA_DATA).first.content
+    @lf.textfield_data.text = node.find(GOA_DATA).first.content
+    @lf.textfield_sample_data.text = node.find(GOA_SAMPLE_DATA).first.content
     
     # Typ-spezifische Attribute auslesen
 
@@ -260,7 +277,7 @@ class Layout
   end
  	# ---------------------------------------------------------------------------------------------------------
   def set_title
-    p "set_title changed: #{@changed.inspect}"
+    #~ p "set_title changed: #{@changed.inspect}"
     @parent.title = "#{@filename}#{@changed ? ' *' : '' }"
   end
  	# ---------------------------------------------------------------------------------------------------------
