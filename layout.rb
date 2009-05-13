@@ -86,8 +86,8 @@ class Layout
     @lf.textfield_name.text = node.find(GOA_NAME).first.content
     
     # Typ-spezifische Attribute auslesen
-    
-    
+
+
     draw_card
   end
   # ---------------------------------------------------------------------------------------------------------
@@ -180,7 +180,7 @@ class Layout
     # Magstripe definieren
     @xml_doc.root << node = XML::Node.new(S_MAGSTRIPE)
     
-    # Container für die Chip definieren definieren
+    # Container für die GraphikObjekte definieren definieren
     @xml_doc.root << node = XML::Node.new(GRAPHICOBJECTS)
     
     draw_card
@@ -188,16 +188,24 @@ class Layout
  	# ---------------------------------------------------------------------------------------------------------
 # lädt das XML-File und initialisiert die entsprechenden Variablen und Objekte
 	def load_from_xml
-    fn = FXFileDialog.getOpenFilename(@parent, 'Laden', '.', patterns = '*.XML', initial = 0)
-    @filename = fn
+    if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
+      fn = FXFileDialog.getOpenFilename(@parent, 'Laden', '.', patterns = '*.XML', initial = 0)
+      @filename = fn
+    end
     XML.indent_tree_output = true
     return nil if @filename == ""
     
 #    @xml_doc = LibXML::XML::Document.file(filename, :options => XML::Parser::Options::NOBLANKS | XML::Parser::Options::PEDANTIC | XML::Parser::Options::COMPACT)
     @xml_doc = LibXML::XML::Document.file(@filename, :options => XML::Parser::Options::NOBLANKS )
-   
     # kontrollieren, ob alle Nodes des Layouts existieren, ansonsten anlegen und als 'changed' markieren
-    # todo
+    lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
+    @attributes.each_pair{|attr_bez, attr|
+      element = lay_attrs.find_first(attr.attr_name)
+      unless element
+        lay_attrs << XML::Node.new(attr.attr_name, attr.attr_value.to_s)
+        @changed = true
+      end
+    }
     
     # kontrollieren, ob alle Nodes des Chips existieren, ansonsten anlegen und als 'changed' markieren
     # todo
@@ -206,7 +214,6 @@ class Layout
     # todo
     
     # kontrollieren, ob alle Nodes der GraphicObjects existieren, ansonsten anlegen und als 'changed' markieren
-    # 
     @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
       typ = go_struct.find(GOA_TYP).first.content
       go = GraphicObject.get_object_by_typ(typ)
@@ -387,15 +394,22 @@ if __FILE__ == $0
   system('ruby mcc2.rb')
   exit
   lay = Layout.new(nil, nil)
-  lay.create_xml
+  
+  # ...........................................................
+  # Test für das Erstellen einer neune XML-Datei
+  lay.filename = 't:\Project\MCC2a\trunk\layouts\Test1.XML'
+  lay.load_from_xml
+  # ...........................................................
+  # Test für das Erstellen einer neune XML-Datei
+  #~ lay.create_xml
   
   #~ lay.add_object(TEXTOBJECT)  
-  lay.add_object(BARCODEOBJECT)  
-  lay.add_object(PICTUREOBJECT)  
-  lay.add_object(TEXTOBJECT)  
+  #~ lay.add_object(BARCODEOBJECT)  
+  #~ lay.add_object(PICTUREOBJECT)  
+  #~ lay.add_object(TEXTOBJECT)  
   #~ lay.add_object(BARCODEOBJECT)  
   #~ lay.add_object(TEXTOBJECT)  
-  #~ print lay.xml_doc.to_s
-#  lay.store_to_ini
-  #~ lay.load_from_ini
+  
+  
+  print lay.xml_doc.to_s
 end
