@@ -14,6 +14,10 @@ class CardPrinter < Printer
     @default_height = 53.98
   end
   
+  def dpi
+    300
+  end
+  
   # die Ränder außerhalb der Karte, auf den maximal gedruckt werden darf (für vollflächige Bilder notwendig)
   def card_margin_left
     10
