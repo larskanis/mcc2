@@ -13,6 +13,24 @@ class CardPrinter < Printer
     @default_width = 85.6
     @default_height = 53.98
   end
+  
+  # die Ränder außerhalb der Karte, auf den maximal gedruckt werden darf (für vollflächige Bilder notwendig)
+  def card_margin_left
+    10
+  end
+
+  def card_margin_right
+    10
+  end
+  
+  def card_margin_top
+    10
+  end
+
+  def card_margin_bottom
+    10
+  end
+
 end
 
 
