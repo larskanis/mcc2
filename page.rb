@@ -8,10 +8,10 @@ end
 class Page
   
  	# ---------------------------------------------------------------------------------------------------------
-  def self.draw(canvas, drwa_paos_x, drwa_paos_y, page_nr, xml, preview, selected_object_id)
+  def self.draw(canvas, drwa_paos_x, drwa_paos_y, page_nr, xml_doc, preview, selected_object_id)
     canvas.g.translate(drwa_paos_x, drwa_paos_y) do |canvas1|
-      width =  xml.doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_WIDTH}").first.content.to_f
-      height = xml.doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_HEIGHT}").first.content.to_f
+      width =  xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_WIDTH}").first.content.to_f
+      height = xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_HEIGHT}").first.content.to_f
       # ..........................................................................................
       # Rand zeichnen (für Vorschau)
       if preview
@@ -23,7 +23,7 @@ class Page
       # die graphischen Elemnte zeichnen
     
       # Text-Objekte
-      xml.doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
+      xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
         # nur die Objekte zeichnen, die auf diese Seite sollen
         if go.find(GOA_PAGE_NR).first.content.to_i == page_nr
           if go.find(GOA_TYP).first.content == TEXTOBJECT 
