@@ -17,7 +17,7 @@ class LayoutFrame
 			FX::Splitter.new(@LayoutFrame){|w|
 				@splitter10=w
 				w.wdg_name='splitter10'
-				w.width=163
+				w.width=217
 				w.height=449
 				w.barSize=2
 				w.layoutHints=3084
@@ -140,11 +140,11 @@ class LayoutFrame
 									FX::TextField.new(@matrix1){|w|
 										@textfield_name=w
 										w.wdg_name='textfield_name'
-										w.width=66
+										w.width=150
 										w.y=4
 										w.height=19
 										w.numColumns=10
-										w.layoutHints=1024
+										w.layoutHints=256
 										w.x=41
 									}
 									FX::Label.new(@matrix1){|w|
@@ -159,7 +159,7 @@ class LayoutFrame
 									FX::TextField.new(@matrix1){|w|
 										@textfield_daten=w
 										w.wdg_name='textfield_daten'
-										w.width=66
+										w.width=150
 										w.y=27
 										w.height=19
 										w.numColumns=10
@@ -361,7 +361,7 @@ class LayoutFrame
 					@verticalframe_right=w
 					w.wdg_name='verticalframe_right'
 					w.frameStyle=16384
-					w.width=0
+					w.width=10
 					w.height=449
 					w.x=207
 				}
