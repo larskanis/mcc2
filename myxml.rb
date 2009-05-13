@@ -29,6 +29,7 @@ class MyXML
       node << XML::Node.new(S_DUPLEX, '0')
       node << XML::Node.new(S_WIDTH,$pr.default_width.to_s)
       node << XML::Node.new(S_HEIGHT,$pr.default_height.to_s)
+      node << XML::Node.new(S_DATASOURCE,"")
     
     # Chip definieren
     @doc.root << node = XML::Node.new(S_CHIP)
