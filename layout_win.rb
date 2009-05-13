@@ -17,7 +17,7 @@ class LayoutFrame
 			FX::Splitter.new(@LayoutFrame){|w|
 				@splitter10=w
 				w.wdg_name='splitter10'
-				w.width=217
+				w.width=301
 				w.height=449
 				w.barSize=2
 				w.layoutHints=3084
@@ -121,7 +121,7 @@ class LayoutFrame
 								FX::Matrix.new(@verticalframe_allgemein){|w|
 									@matrix1=w
 									w.wdg_name='matrix1'
-									w.numRows=2
+									w.numRows=4
 									w.width=189
 									w.y=2
 									w.height=322
@@ -140,12 +140,12 @@ class LayoutFrame
 									FX::TextField.new(@matrix1){|w|
 										@textfield_name=w
 										w.wdg_name='textfield_name'
-										w.width=150
+										w.width=200
 										w.y=4
 										w.height=19
 										w.numColumns=10
 										w.layoutHints=256
-										w.x=41
+										w.x=75
 									}
 									FX::Label.new(@matrix1){|w|
 										@label10=w
@@ -156,15 +156,61 @@ class LayoutFrame
 										w.height=17
 										w.x=4
 									}
-									FX::TextField.new(@matrix1){|w|
-										@textfield_daten=w
-										w.wdg_name='textfield_daten'
-										w.width=150
+									FX::VerticalFrame.new(@matrix1){|w|
+										@verticalframe44=w
+										w.wdg_name='verticalframe44'
+										w.frameStyle=4096
+										w.width=200
 										w.y=27
+										w.height=54
+										w.x=75
+										FX::Text.new(@verticalframe44){|w|
+											@textfield_data=w
+											w.wdg_name='textfield_data'
+											w.width=198
+											w.y=1
+											w.height=52
+											w.x=1
+										}
+									}
+									FX::Label.new(@matrix1){|w|
+										@label29=w
+										w.wdg_name='label29'
+										w.text="Daten"
+										w.width=33
+										w.y=85
+										w.height=17
+										w.x=4
+									}
+									FX::TextField.new(@matrix1){|w|
+										@textfield_data_non_text=w
+										w.wdg_name='textfield_data_non_text'
+										w.text="Daten"
+										w.width=200
+										w.y=85
 										w.height=19
 										w.numColumns=10
 										w.layoutHints=1024
-										w.x=41
+										w.x=75
+									}
+									FX::Label.new(@matrix1){|w|
+										@label27=w
+										w.wdg_name='label27'
+										w.text="Beispieldaten"
+										w.width=67
+										w.y=108
+										w.height=17
+										w.x=4
+									}
+									FX::TextField.new(@matrix1){|w|
+										@textfield_sample_data=w
+										w.wdg_name='textfield_sample_data'
+										w.width=200
+										w.y=108
+										w.height=19
+										w.numColumns=10
+										w.layoutHints=1024
+										w.x=75
 									}
 								}
 							}
@@ -361,7 +407,7 @@ class LayoutFrame
 					@verticalframe_right=w
 					w.wdg_name='verticalframe_right'
 					w.frameStyle=16384
-					w.width=10
+					w.width=94
 					w.height=449
 					w.x=207
 				}
@@ -387,7 +433,12 @@ class LayoutFrame
 	attr_reader :label9
 	attr_reader :textfield_name
 	attr_reader :label10
-	attr_reader :textfield_daten
+	attr_reader :verticalframe44
+	attr_reader :textfield_data
+	attr_reader :label29
+	attr_reader :textfield_data_non_text
+	attr_reader :label27
+	attr_reader :textfield_sample_data
 	attr_reader :tabitem_posit
 	attr_reader :verticalframe_posit
 	attr_reader :matrix2
