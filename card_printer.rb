@@ -20,19 +20,19 @@ class CardPrinter < Printer
   
   # die Ränder außerhalb der Karte, auf den maximal gedruckt werden darf (für vollflächige Bilder notwendig)
   def card_margin_left
-    10
+    5
   end
 
   def card_margin_right
-    10
+    5
   end
   
   def card_margin_top
-    10
+    5
   end
 
   def card_margin_bottom
-    10
+    5
   end
 
 end
