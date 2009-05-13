@@ -6,10 +6,13 @@ end
 
 
 class Layout
-  attr_accessor :xml
+  attr_accessor :changed
+  attr_accessor :xml_doc
   attr_accessor :filename
   attr_accessor :zoom
   attr_accessor :scale
+  
+  attr_accessor :attributes
   
 #  attr_accessor :graphic_objects
 #  attr_accessor :duplex
@@ -24,6 +27,13 @@ class Layout
     @parent = parent
     @app = app
     
+    @attributes = {}
+    add_attr(S_DUPLEX, Integer, 0)
+    add_attr(S_WIDTH, Integer, $pr.default_width)
+    add_attr(S_HEIGHT, Integer, $pr.default_height)
+    add_attr(S_DATASOURCE, String, "")
+    
+    @changed = false
 
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       
@@ -55,18 +65,22 @@ class Layout
       
       #~ @graphic_objects = {}
       #~ @duplex = false
-      #~ @height = $pr.default_height
-      #~ @width = $pr.default_width
       #~ @chip = Chip.new
       #~ @magstripe = Magstripe.new
     end
+  end
+  
+  # ---------------------------------------------------------------------------------------------------------
+  def add_attr(name, typ, default)
+    attr = GO_Attribut.new(name, typ, default) 
+    @attributes[attr.attr_name] = attr
   end
   # ---------------------------------------------------------------------------------------------------------
   def object_selection_changed
     item_ID = @lf.iconlist_objects.currentItem
     @selected_object_id = @lf.iconlist_objects.getItemData(item_ID).to_i
     #~ p "id #{@selected_object_id} selektiert"
-    node = @xml.get_objectnode_by_id(@selected_object_id)
+    node = get_objectnode_by_id(@selected_object_id)
     
     # allgemeine Attribute auslesen
     @lf.textfield_name.text = node.find(GOA_NAME).first.content
@@ -87,8 +101,8 @@ class Layout
   def draw_card
     # allgemeine Einstellungen des Image vornehmen
     dpi = 90
-    width =  @xml.doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_WIDTH}").first.content.to_f
-    height = @xml.doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_HEIGHT}").first.content.to_f
+    width =  @xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_WIDTH}").first.content.to_f
+    height = @xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_HEIGHT}").first.content.to_f
     
     Magick::RVG.dpi = dpi
     
@@ -111,10 +125,10 @@ class Layout
       drwa_pos_x = $pr.card_margin_left.mm
       
       drwa_pos_y = $pr.card_margin_top.mm
-      Page.draw(canvas, drwa_pos_x, drwa_pos_y, 0, @xml, preview, @selected_object_id) # Seite 1 drucken
+      Page.draw(canvas, drwa_pos_x, drwa_pos_y, 0, @xml_doc, preview, @selected_object_id) # Seite 1 drucken
       
       drwa_pos_y = ($pr.card_margin_top + height_with_margins).mm
-      Page.draw(canvas, drwa_pos_x, drwa_pos_y, 1, @xml, preview, @selected_object_id) # Seite 2 drucken
+      Page.draw(canvas, drwa_pos_x, drwa_pos_y, 1, @xml_doc, preview, @selected_object_id) # Seite 2 drucken
       
       #~ canvas.background_fill = 'yellow'
       
@@ -146,34 +160,89 @@ class Layout
  	# ---------------------------------------------------------------------------------------------------------
   # lädt das INI-File und initialisiert die entsprechenden Variablen und Objekte
 	def create_xml
-    @xml = MyXML.new # erzeugt ein neue Layout-Objekt
-    @xml.create      # füllt das Layoutobjekt mit der Grundstruktur
+    @xml_doc = LibXML::XML::Document.new
+    @xml_doc.encoding = XML::Encoding::UTF_8
+    @xml_doc.root = XML::Node.new(S_ROOT)
+    
+    # Layout dfinieren
+    @xml_doc.root << node = XML::Node.new(S_LAYOUT)
+      attributes.each_pair{|attr_name, attr|
+        node << XML::Node.new(attr.attr_name, attr.attr_value.to_s)
+      }
+    
+    # Chip definieren
+    @xml_doc.root << node = XML::Node.new(S_CHIP)
+    chip = Chip.new
+    (1..chip.anz_params).each{|i|
+      node << param = XML::Node.new("#{S_PARAM}_#{i}", "")
+    }
+    
+    # Magstripe definieren
+    @xml_doc.root << node = XML::Node.new(S_MAGSTRIPE)
+    
+    # Container für die Chip definieren definieren
+    @xml_doc.root << node = XML::Node.new(GRAPHICOBJECTS)
+    
+    draw_card
   end
  	# ---------------------------------------------------------------------------------------------------------
-# lädt das INI-File und initialisiert die entsprechenden Variablen und Objekte
+# lädt das XML-File und initialisiert die entsprechenden Variablen und Objekte
 	def load_from_xml
     fn = FXFileDialog.getOpenFilename(@parent, 'Laden', '.', patterns = '*.XML', initial = 0)
     @filename = fn
-#    XML.default_keep_blanks = false
     XML.indent_tree_output = true
-    @xml = MyXML.new # erzeugt ein neue Layout-Objekt
     return nil if @filename == ""
-    @xml.load(@filename)
+    
+#    @xml_doc = LibXML::XML::Document.file(filename, :options => XML::Parser::Options::NOBLANKS | XML::Parser::Options::PEDANTIC | XML::Parser::Options::COMPACT)
+    @xml_doc = LibXML::XML::Document.file(@filename, :options => XML::Parser::Options::NOBLANKS )
+   
+    # kontrollieren, ob alle Nodes des Layouts existieren, ansonsten anlegen und als 'changed' markieren
+    # todo
+    
+    # kontrollieren, ob alle Nodes des Chips existieren, ansonsten anlegen und als 'changed' markieren
+    # todo
+    
+    # kontrollieren, ob alle Nodes des Magstripes existieren, ansonsten anlegen und als 'changed' markieren
+    # todo
+    
+    # kontrollieren, ob alle Nodes der GraphicObjects existieren, ansonsten anlegen und als 'changed' markieren
+    # 
+    @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
+      typ = go_struct.find(GOA_TYP).first.content
+      go = GraphicObject.get_object_by_typ(typ)
+      go.go_attributes.each_pair{|go_attrname, go_attr|
+        element = go_struct.find_first(go_attr.attr_name)
+        unless element
+          go_struct << XML::Node.new(go_attr.attr_name, go_attr.attr_value.to_s)
+          @changed = true
+        end
+      }
+    }
+    
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       fill_objectlist 
       draw_card
       set_title
     end
     @filename
-    #~ print @xml.doc.to_s
+    #~ print @xml_doc.to_s
+  end
+	# ---------------------------------------------------------------------------------------------------------
+  def get_objectnode_by_id(id)
+    @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
+      if go_struct.find(GOA_ID).first.content.to_i == id
+        return go_struct
+      end
+    }
+    nil
   end
  	# ---------------------------------------------------------------------------------------------------------
   def set_title
-    p "set_title changed: #{@xml.changed.inspect}"
-    @parent.title = "#{@filename}#{@xml.changed ? ' *' : '' }"
+    p "set_title changed: #{@changed.inspect}"
+    @parent.title = "#{@filename}#{@changed ? ' *' : '' }"
   end
  	# ---------------------------------------------------------------------------------------------------------
-  # speichert alle GraphicObjekte und Layout-Einstellungen im INI-File
+  # speichert alle GraphicObjekte und Layout-Einstellungen im XML-File
 	def store_to_xml
     unless @filename
       fn = FXFileDialog.getSaveFilename(@parent, 'Speichern', '.', patterns = '*.XML', initial = 0)
@@ -182,9 +251,10 @@ class Layout
       end
       @filename = fn
     end
-#    @xml.indent_tree_output = true
-    @xml.doc.save(@filename, :indent => true)
-    @xml.changed = false
+    file = File.new(@filename,'w')
+    @xml_doc.save(@filename)
+    file.close
+    @changed = false
     set_title
   end
  	# ---------------------------------------------------------------------------------------------------------
@@ -271,7 +341,7 @@ class Layout
   def add_object(typ)
     o = GraphicObject.get_object_by_typ(typ)
     id = get_new_id
- 		node = @xml.doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}")
+ 		node = @xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}")
     node << go = XML::Node.new(GRAPHICOBJECT)
     go << XML::Node.new(GOA_TYP, typ)
     go << XML::Node.new(GOA_ID, id.to_s)
@@ -281,7 +351,7 @@ class Layout
       end
     }
     
-    #~ print @xml.doc.to_s
+    #~ print @xml_doc.to_s
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       fill_objectlist
       draw_card
@@ -291,7 +361,7 @@ class Layout
   # 
   def fill_objectlist
     @lf.iconlist_objects.clearItems
-		@xml.doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
+		@xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
       id = go.find(GOA_ID).first.content
       name = go.find(GOA_NAME).first.content
       typ = go.find(GOA_TYP).first.content
@@ -302,7 +372,7 @@ class Layout
   # ermittelt die nächst höhere ID (beeinflusst die Darstellungsebene)
   def get_new_id
     id = 0
-		@xml.doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
+		@xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
       id = go.find(GOA_ID).first.content.to_i+1 if go.find(GOA_ID).first.content.to_i >= id
     }
     id
@@ -325,7 +395,7 @@ if __FILE__ == $0
   lay.add_object(TEXTOBJECT)  
   #~ lay.add_object(BARCODEOBJECT)  
   #~ lay.add_object(TEXTOBJECT)  
-  #~ print lay.xml.doc.to_s
+  #~ print lay.xml_doc.to_s
 #  lay.store_to_ini
   #~ lay.load_from_ini
 end
