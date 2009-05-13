@@ -4,7 +4,7 @@
     <Duplex>0</Duplex>
     <Width>85.6</Width>
     <Height>53.98</Height>
-    <datasource/>
+    <datasource></datasource>
   </Layout>
   <Chip>
     <Param_1/>
@@ -30,7 +30,7 @@
     <Param_21/>
     <Param_22/>
   </Chip>
-  <Magstripe/>
+  <Magstripe></Magstripe>
   <GraphicObjects>
     <GraphicObject>
       <id>0</id>
@@ -103,20 +103,14 @@
       <font_weight>0</font_weight>
       <font_color>0</font_color>
       <font_typ>Arial</font_typ>
-<<<<<<< .mine
       <width>50</width>
       <data>Marià</data>
       <page_nr>0</page_nr>
       <sample_data>Muster</sample_data>
-=======
-      <width>50</width>
-      <data>Marià</data>
->>>>>>> .r90
     </GraphicObject>
     <GraphicObject>
       <id>4</id>
       <back_color>0</back_color>
-<<<<<<< .mine
       <object_name>Nachname</object_name>
       <rotation>-20</rotation>
       <x>10</x>
@@ -143,29 +137,16 @@
       <page_nr>0</page_nr>
       <x>10</x>
       <y>10</y>
-=======
-      <object_name>Nachname</object_name>
-      <rotation>-20</rotation>
-      <x>10</x>
-      <y>40</y>
-      <object_typ>TextObject</object_typ>
->>>>>>> .r90
-      <font_height>15</font_height>
+      <font_height>10</font_height>
       <human_readable>true</human_readable>
       <justification>0</justification>
-      <height>30</height>
+      <height>100</height>
       <font_weight>0</font_weight>
       <font_color>0</font_color>
-<<<<<<< .mine
       <font_typ>Arial</font_typ>
       <sample_data>Muster</sample_data>
       <width>100</width>
       <data>Daten</data>
-=======
-      <font_typ>Verdana</font_typ>
-      <width>70</width>
-      <data>Musterfrau</data>
->>>>>>> .r90
     </GraphicObject>
     <GraphicObject>
       <object_typ>TextObject</object_typ>
