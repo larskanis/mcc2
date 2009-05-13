@@ -39,16 +39,15 @@
       <bc_typ>2O5I</bc_typ>
       <x>10</x>
       <y>10</y>
-      <frontside>0</frontside>
       <object_typ>BarcodeObject</object_typ>
       <font_height>10</font_height>
       <human_readable>true</human_readable>
       <justification>0</justification>
-      <height>100</height>
+      <height>10</height>
       <font_weight>0</font_weight>
       <font_color>0</font_color>
       <font_typ>Arial</font_typ>
-      <width>100</width>
+      <width>20</width>
       <data>Muster</data>
     </GraphicObject>
     <GraphicObject>
@@ -59,16 +58,15 @@
       <bc_typ>2O5I</bc_typ>
       <x>10</x>
       <y>10</y>
-      <frontside>0</frontside>
       <object_typ>BarcodeObject</object_typ>
       <font_height>10</font_height>
       <human_readable>true</human_readable>
       <justification>0</justification>
-      <height>100</height>
+      <height>10</height>
       <font_weight>0</font_weight>
       <font_color>0</font_color>
       <font_typ>Arial</font_typ>
-      <width>100</width>
+      <width>30</width>
       <data>Muster</data>
     </GraphicObject>
     <GraphicObject>
@@ -78,48 +76,45 @@
       <rotation>0</rotation>
       <x>10</x>
       <y>10</y>
-      <frontside>0</frontside>
       <object_typ>PictureObject</object_typ>
       <stretch>false</stretch>
-      <height>100</height>
-      <width>100</width>
+      <height>30</height>
+      <width>40</width>
       <data>Muster</data>
     </GraphicObject>
     <GraphicObject>
       <id>3</id>
       <back_color>0</back_color>
-      <object_name>GraphicObject</object_name>
+      <object_name>Vorname</object_name>
       <rotation>0</rotation>
       <x>10</x>
       <y>10</y>
-      <frontside>0</frontside>
       <object_typ>TextObject</object_typ>
       <font_height>10</font_height>
       <justification>0</justification>
-      <height>100</height>
+      <height>15</height>
       <font_weight>0</font_weight>
       <font_color>0</font_color>
       <font_typ>Arial</font_typ>
-      <width>100</width>
-      <data>Muster</data>
+      <width>50</width>
+      <data>Marià</data>
     </GraphicObject>
     <GraphicObject>
       <id>4</id>
       <back_color>0</back_color>
-      <object_name>GraphicObject</object_name>
-      <rotation>0</rotation>
-      <x>100</x>
-      <y>100</y>
-      <frontside>0</frontside>
+      <object_name>Nachname</object_name>
+      <rotation>-20</rotation>
+      <x>10</x>
+      <y>40</y>
       <object_typ>TextObject</object_typ>
-      <font_height>10</font_height>
+      <font_height>15</font_height>
       <justification>0</justification>
-      <height>100</height>
+      <height>30</height>
       <font_weight>0</font_weight>
       <font_color>0</font_color>
-      <font_typ>Arial</font_typ>
-      <width>100</width>
-      <data>Muster</data>
+      <font_typ>Verdana</font_typ>
+      <width>70</width>
+      <data>Musterfrau</data>
     </GraphicObject>
   </GraphicObjects>
 </Root>
