@@ -63,8 +63,7 @@ require 'printer_xid'    # die XID-Printer-Klasse
 
 require 'page'           # die Klasse, die eine Druckseite einer Karte definiert
 
-require 'myxml'          # enthält das Layout inklusive aller graphischen Objekte
-#require 'myinifile'
+require 'xml'            # für die Layout-Struktur
 
 require 'RMagick'
 include Magick
