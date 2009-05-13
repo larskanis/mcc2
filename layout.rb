@@ -158,13 +158,13 @@ class Layout
     @image_view.recalc
   end
  	# ---------------------------------------------------------------------------------------------------------
-  # lädt das INI-File und initialisiert die entsprechenden Variablen und Objekte
+  # erzeugt eine neue XML-Datei und initialisiert die entsprechenden Variablen und Objekte
 	def create_xml
     @xml_doc = LibXML::XML::Document.new
     @xml_doc.encoding = XML::Encoding::UTF_8
     @xml_doc.root = XML::Node.new(S_ROOT)
     
-    # Layout dfinieren
+    # Layout definieren
     @xml_doc.root << node = XML::Node.new(S_LAYOUT)
       attributes.each_pair{|attr_name, attr|
         node << XML::Node.new(attr.attr_name, attr.attr_value.to_s)
@@ -186,7 +186,7 @@ class Layout
     draw_card
   end
  	# ---------------------------------------------------------------------------------------------------------
-# lädt das XML-File und initialisiert die entsprechenden Variablen und Objekte
+  # lädt das XML-File und initialisiert die entsprechenden Variablen und Objekte
 	def load_from_xml
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       fn = FXFileDialog.getOpenFilename(@parent, 'Laden', '.', patterns = '*.XML', initial = 0)
@@ -208,7 +208,16 @@ class Layout
     }
     
     # kontrollieren, ob alle Nodes des Chips existieren, ansonsten anlegen und als 'changed' markieren
-    # todo
+    chip = Chip.new
+    chip_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
+    (1..chip.anz_params).each{|i|
+      attr_name = "#{S_PARAM}_#{i}"
+      element = chip_attrs.find_first(attr_name)
+      unless element
+        chip_attrs << param = XML::Node.new(attr_name , "")
+        @changed = true
+      end
+    }
     
     # kontrollieren, ob alle Nodes des Magstripes existieren, ansonsten anlegen und als 'changed' markieren
     # todo
@@ -263,85 +272,6 @@ class Layout
     file.close
     @changed = false
     set_title
-  end
- 	# ---------------------------------------------------------------------------------------------------------
-	# lädt das INI-File und initialisiert die entsprechenden Variablen und Objekte
-	def load_from_ini
-		oIni = MyIniFile::new(@inifile_name)
-    
-    # die Layout-Optionen laden
-    @duplex = oIni.get_or_create(S_LAYOUT, S_DUPLEX, false)
-    @height = oIni.get_or_create(S_LAYOUT, S_HEIGHT, $pr.default_height)
-    @width = oIni.get_or_create(S_LAYOUT, S_WIDTH, $pr.default_width)
-    
-    # die CHIP-Optionen laden
-    @chip = Chip.new
-    @chip.params.each_with_index{|param, index|
-      @chip.params[index] = oIni.get_or_create(S_CHIP, "#{S_PARAM}_#{index}", "")
-    }
-    
-    # die Magnetstreifen-Optionen laden
-    
-    # alle Graphicobjekte laden
-    oIni.sections.each{|s|
-      #~ print "*"*50
-      #~ print "\n"
-      #~ print "[#{s}]\n"
-      a = s.split('_')
-      typ = a[0]
-      id = a[1].to_i
-      next if typ != TEXTOBJECT && typ != BARCODEOBJECT && typ != PICTUREOBJECT # hier nur GraphikObjekte laden
-
-      o = GraphicObject.get_object_by_typ(typ)
-      o.go_attributes[GOA_ID].attr_value = id
-      # je nach Graphicobjekt-Typ die Attribute eines Graphicobjectes durchlaufen diese in das Object laden und falls nicht vorhanden, dann neu anlegen
-      o.go_attributes.each_pair{|go_attribute_name, go_attribute|
-        unless go_attribute.attr_name == GOA_TYP || go_attribute.attr_name == GOA_ID
-          v = oIni.get_or_create(s, go_attribute_name, go_attribute.attr_value)
-          o.go_attributes[go_attribute_name].attr_value = v
-        end
-      }
-      #~ oIni[s].each { |k, v|
-        #~ print "  #{k} = #{v}\n"
-      #~ }
-#      o.go_attributes.each{|e| p e }
-
-      o.go_attributes.each_pair{|k, v| print "#{v.attr_name}: #{v.attr_value} \n" }
-    }
-
-    oIni.save
-	end
- 	# ---------------------------------------------------------------------------------------------------------
-  # speichert alle GraphicObjekte und Layout-Einstellungen im INI-File
-	def store_to_ini
-		oIni = MyIniFile::new(@inifile_name)
-    
-    # die Layout-Optionen speichern
-    oIni.store(S_LAYOUT, S_DUPLEX, @duplex)
-    oIni.store(S_LAYOUT, S_HEIGHT, @height)
-    oIni.store(S_LAYOUT, S_WIDTH, @width)
-    
-    # die CHIP-Optionen speichern
-    @chip.params.each_with_index{|param, index|
-      oIni.store(S_CHIP, "#{S_PARAM}_#{index}", param)
-    }
-    
-    # die Magnetstreifen-Optionen speichern
-    
-    # alle Graphicobjekte durchlaufen und speichern
-    @graphic_objects.each_pair{|graphic_object_name, graphic_object_attributes|
-      graphic_object_attributes.go_attributes.each_pair{|go_attribute_name, go_attribute|
-        # alle Attribute, außer Typ und ID (diese stehen schon im Sektor) im INI-File speichern
-        unless go_attribute.attr_name == GOA_TYP || go_attribute.attr_name == GOA_ID
-          section = graphic_object_name
-          key = go_attribute.attr_name
-          value = go_attribute.attr_value
-          oIni.store(section, key, value)
-        end
-      }
-    }
-    
-    oIni.save
   end
  	# ---------------------------------------------------------------------------------------------------------
   # fügt ein GraphicObjekt zur Objektliste hinzu
