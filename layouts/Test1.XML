@@ -4,30 +4,31 @@
     <Duplex>0</Duplex>
     <Width>85.6</Width>
     <Height>53.98</Height>
+    <datasource/>
   </Layout>
   <Chip>
-    <Param_1></Param_1>
-    <Param_2></Param_2>
-    <Param_3></Param_3>
-    <Param_4></Param_4>
-    <Param_5></Param_5>
-    <Param_6></Param_6>
-    <Param_7></Param_7>
-    <Param_8></Param_8>
-    <Param_9></Param_9>
-    <Param_10></Param_10>
-    <Param_11></Param_11>
-    <Param_12></Param_12>
-    <Param_13></Param_13>
-    <Param_14></Param_14>
-    <Param_15></Param_15>
-    <Param_16></Param_16>
-    <Param_17></Param_17>
-    <Param_18></Param_18>
-    <Param_19></Param_19>
-    <Param_20></Param_20>
-    <Param_21></Param_21>
-    <Param_22></Param_22>
+    <Param_1/>
+    <Param_2/>
+    <Param_3/>
+    <Param_4/>
+    <Param_5/>
+    <Param_6/>
+    <Param_7/>
+    <Param_8/>
+    <Param_9/>
+    <Param_10/>
+    <Param_11/>
+    <Param_12/>
+    <Param_13/>
+    <Param_14/>
+    <Param_15/>
+    <Param_16/>
+    <Param_17/>
+    <Param_18/>
+    <Param_19/>
+    <Param_20/>
+    <Param_21/>
+    <Param_22/>
   </Chip>
   <Magstripe/>
   <GraphicObjects>
@@ -49,6 +50,8 @@
       <font_typ>Arial</font_typ>
       <width>20</width>
       <data>Muster</data>
+      <page_nr>0</page_nr>
+      <sample_data>Muster</sample_data>
     </GraphicObject>
     <GraphicObject>
       <id>1</id>
@@ -68,6 +71,8 @@
       <font_typ>Arial</font_typ>
       <width>30</width>
       <data>Muster</data>
+      <page_nr>0</page_nr>
+      <sample_data>Muster</sample_data>
     </GraphicObject>
     <GraphicObject>
       <id>2</id>
@@ -81,6 +86,8 @@
       <height>30</height>
       <width>40</width>
       <data>Muster</data>
+      <page_nr>0</page_nr>
+      <sample_data>Muster</sample_data>
     </GraphicObject>
     <GraphicObject>
       <id>3</id>
@@ -96,12 +103,20 @@
       <font_weight>0</font_weight>
       <font_color>0</font_color>
       <font_typ>Arial</font_typ>
+<<<<<<< .mine
       <width>50</width>
       <data>Marià</data>
+      <page_nr>0</page_nr>
+      <sample_data>Muster</sample_data>
+=======
+      <width>50</width>
+      <data>Marià</data>
+>>>>>>> .r90
     </GraphicObject>
     <GraphicObject>
       <id>4</id>
       <back_color>0</back_color>
+<<<<<<< .mine
       <object_name>Nachname</object_name>
       <rotation>-20</rotation>
       <x>10</x>
@@ -115,6 +130,61 @@
       <font_typ>Verdana</font_typ>
       <width>70</width>
       <data>Musterfrau</data>
+      <page_nr>0</page_nr>
+      <sample_data>Muster</sample_data>
+    </GraphicObject>
+    <GraphicObject>
+      <object_typ>BarcodeObject</object_typ>
+      <id>5</id>
+      <back_color>0</back_color>
+      <object_name>GraphicObject</object_name>
+      <rotation>0</rotation>
+      <bc_typ>2O5I</bc_typ>
+      <page_nr>0</page_nr>
+      <x>10</x>
+      <y>10</y>
+=======
+      <object_name>Nachname</object_name>
+      <rotation>-20</rotation>
+      <x>10</x>
+      <y>40</y>
+      <object_typ>TextObject</object_typ>
+>>>>>>> .r90
+      <font_height>15</font_height>
+      <human_readable>true</human_readable>
+      <justification>0</justification>
+      <height>30</height>
+      <font_weight>0</font_weight>
+      <font_color>0</font_color>
+<<<<<<< .mine
+      <font_typ>Arial</font_typ>
+      <sample_data>Muster</sample_data>
+      <width>100</width>
+      <data>Daten</data>
+=======
+      <font_typ>Verdana</font_typ>
+      <width>70</width>
+      <data>Musterfrau</data>
+>>>>>>> .r90
+    </GraphicObject>
+    <GraphicObject>
+      <object_typ>TextObject</object_typ>
+      <id>6</id>
+      <back_color>0</back_color>
+      <object_name>Text außerhalb</object_name>
+      <rotation>0</rotation>
+      <page_nr>0</page_nr>
+      <x>-3</x>
+      <y>-3</y>
+      <font_height>10</font_height>
+      <justification>0</justification>
+      <height>10</height>
+      <font_weight>0</font_weight>
+      <font_color>0</font_color>
+      <font_typ>Arial</font_typ>
+      <sample_data>außerhalb</sample_data>
+      <width>30</width>
+      <data>außerhalb</data>
     </GraphicObject>
   </GraphicObjects>
 </Root>
