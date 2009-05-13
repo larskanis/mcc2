@@ -17,8 +17,8 @@ class GraphicObject
     add_attr(@go_attributes, GOA_TYP, String, GRAPHICOBJECT)
     add_attr(@go_attributes, GOA_X, Integer, 10)
     add_attr(@go_attributes, GOA_Y, Integer, 10)
-    add_attr(@go_attributes, GOA_WIDTH, Integer, 100)
-    add_attr(@go_attributes, GOA_HEIGHT, Integer, 100)
+    add_attr(@go_attributes, GOA_WIDTH, Integer, 30)
+    add_attr(@go_attributes, GOA_HEIGHT, Integer, 10)
     add_attr(@go_attributes, GOA_ROTATION, Integer, 0)
     add_attr(@go_attributes, GOA_PAGE_NR, Integer, 0)
   end
