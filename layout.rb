@@ -48,31 +48,44 @@ class Layout
       
       @image_view = FXImageView.new(@lf.verticalframe_right, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y)
 
+
       # .............................................................................................
       # die Aktionen definieren, die ausgeführt werden, wenn am Layout irgend etwas gearbeitet wird
+      
+      text_field_trigger = SEL_COMMAND
+#      text_field_trigger = SEL_CHANGED # geht sehr langsam und macht bei Barcode und Bild Probleme
+      
+      # Zoom
       @lf.dial_zoom.connect(SEL_CHANGED){ set_zoom }
       @lf.dial_zoom.connect(SEL_LEFTBUTTONRELEASE){ draw_card }
-      
       @lf.dial_zoom.value = 100
       set_zoom
 
+      # Objektliste
       @lf.iconlist_objects.connect(SEL_SELECTED){ object_selection_changed }
       @lf.iconlist_objects.connect(SEL_DESELECTED){ object_deselected }
 #      @lf.iconlist_objects.connect(SEL_CHANGED){ object_selection_changed }  # wenn der Cursor in der Liste bewegt wird
       
-      
+      # die allgemeinen Objektattribute
       @lf.textfield_name.connect(SEL_COMMAND){ textfield_name_exit }
-      text_field_trigger = SEL_COMMAND
-#      text_field_trigger = SEL_CHANGED # geht sehr langsam und macht bei Barcode und Bild Probleme
+      
+      # die Daten-Attribute
       @lf.textfield_data_non_text.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_DATA) }
-      
       @lf.textfield_data.connect(SEL_CHANGED){|sender, sel, event| textfield_exit(sender, GOA_DATA) }
-      
       @lf.textfield_sample_data.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_SAMPLE_DATA) }
 
+      # die Font-Attribute
       @lf.textfield_text_color.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_FONT_COLOR) }
       @lf.button_text_color.connect(text_field_trigger){ text_color_dialog }
+      @lf.radiomutex_justify.on_event_selected{|r| radiomutex_justify_changed(r) }
 
+      # die Positions-Attribute
+      @lf.textfield_x.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_X) }
+      @lf.textfield_y.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_Y) }
+      @lf.textfield_width.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_WIDTH) }
+      @lf.textfield_height.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_HEIGHT) }
+      @lf.textfield_rotation.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_ROTATION) }
+      
       # .............................................................................................
       # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
       @lf.matrix1.numColumns = 2 
@@ -95,6 +108,14 @@ class Layout
       node.first.content = @lf.textfield_text_color.text
       changed_attributes
       draw_card
+    end
+  end
+  # ---------------------------------------------------------------------------------------------------------
+  def radiomutex_justify_changed(r)
+    node = get_objectnode_by_id(@selected_object_id).find(GOA_JUSTIFICATION)
+    if r.to_s != node.first.content
+      node.first.content = r.to_s
+      changed_attributes
     end
   end
   # ---------------------------------------------------------------------------------------------------------
@@ -146,13 +167,23 @@ class Layout
     node = get_objectnode_by_id(@selected_object_id)
     
     # allgemeine Attribute auslesen
-    @lf.tabitem_object.shown = true
-    @lf.tabitem_posit.shown = true
+      # 
+      @lf.tabitem_object.shown = true
+      @lf.tabitem_posit.shown = true
+      
+      # Daten-Attribute
+      @lf.textfield_name.text = node.find(GOA_NAME).first.content
+      @lf.textfield_sample_data.text = node.find(GOA_SAMPLE_DATA).first.content
+      @lf.textfield_data.text = node.find(GOA_DATA).first.content
+      @lf.textfield_data_non_text.text = node.find(GOA_DATA).first.content
     
-    @lf.textfield_name.text = node.find(GOA_NAME).first.content
-    @lf.textfield_sample_data.text = node.find(GOA_SAMPLE_DATA).first.content
-    @lf.textfield_data.text = node.find(GOA_DATA).first.content
-    @lf.textfield_data_non_text.text = node.find(GOA_DATA).first.content
+      # Positionsattribute
+      @lf.textfield_x.text = node.find(GOA_X).first.content
+      @lf.textfield_y.text = node.find(GOA_Y).first.content
+      @lf.textfield_width.text = node.find(GOA_WIDTH).first.content
+      @lf.textfield_height.text = node.find(GOA_HEIGHT).first.content
+      @lf.textfield_rotation.text = node.find(GOA_ROTATION).first.content
+#      @lf.iconlist_justify.connect(SEL_CHANGED){iconlist_justify_exit } # todo
     
     # Typ-spezifische Attribute auslesen
       # Attribute, die Barcode und Texte haben
@@ -212,12 +243,12 @@ class Layout
     rvg = Magick::RVG.new(image_width, image_height).viewbox(0, 0, scale_width, scale_height) do |canvas|
       # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
     
-      drwa_pos_x = 0
-      drwa_pos_y = 0
-      Page.draw(canvas, drwa_pos_x, drwa_pos_y, 0, @xml_doc, preview, @selected_object_id) # Seite 1 drucken
+      draw_pos_x = 0
+      draw_pos_y = 0
+      Page.draw(canvas, draw_pos_x, draw_pos_y, 0, @xml_doc, preview, @selected_object_id) # Seite 1 drucken
       
-      drwa_pos_y = (Page.height_with_margins(height) + card_offset).mm
-      Page.draw(canvas, drwa_pos_x, drwa_pos_y, 1, @xml_doc, preview, @selected_object_id) # Seite 2 drucken
+      draw_pos_y = (Page.height_with_margins(height) + card_offset).mm
+      Page.draw(canvas, draw_pos_x, draw_pos_y, 1, @xml_doc, preview, @selected_object_id) # Seite 2 drucken
       
       canvas.background_fill = 'white'
       #~ canvas.background_fill = 'gray'
