@@ -56,7 +56,7 @@ class Layout
       @lf.dial_zoom.value = 100
       set_zoom
 
-      @lf.iconlist_objects.connect(SEL_SELECTED){ object_selected }
+      @lf.iconlist_objects.connect(SEL_SELECTED){ object_selection_changed }
       @lf.iconlist_objects.connect(SEL_DESELECTED){ object_deselected }
 #      @lf.iconlist_objects.connect(SEL_CHANGED){ object_selection_changed }  # wenn der Cursor in der Liste bewegt wird
       
@@ -134,28 +134,30 @@ class Layout
     @selected_object_id = nil
   end
   # ---------------------------------------------------------------------------------------------------------
-  def object_selected
-    activate_object_tabs
+  def object_selection_changed
+    # erst einmal alle Objekt-Tabs deaktivieren, damit sicher gestellt ist, dass nur die Objekt-typischen angezeigt werden
+    deactivate_object_tabs
+    
+    
     item_ID = @lf.iconlist_objects.currentItem
     @selected_object_id = @lf.iconlist_objects.getItemData(item_ID).to_i
-    object_selection_changed
-  end
-  # ---------------------------------------------------------------------------------------------------------
-  def object_selection_changed
-    #~ p "@lf.iconlist_objects.currentItem #{@lf.iconlist_objects.currentItem}"
-    #~ p "@lf.iconlist_objects.anchorItem #{@lf.iconlist_objects.anchorItem}"
-    
     
     #~ p "id #{@selected_object_id} selektiert"
     node = get_objectnode_by_id(@selected_object_id)
     
     # allgemeine Attribute auslesen
+    @lf.tabitem_object.shown = true
+    @lf.tabitem_posit.shown = true
+    
     @lf.textfield_name.text = node.find(GOA_NAME).first.content
     @lf.textfield_sample_data.text = node.find(GOA_SAMPLE_DATA).first.content
+    @lf.textfield_data.text = node.find(GOA_DATA).first.content
+    @lf.textfield_data_non_text.text = node.find(GOA_DATA).first.content
     
     # Typ-spezifische Attribute auslesen
       # Attribute, die Barcode und Texte haben
       if node.find(GOA_TYP).first.content == TEXTOBJECT || node.find(GOA_TYP).first.content == BARCODEOBJECT
+        @lf.tabitem_font.shown = true
         @lf.textfield_text_color.text = node.find(GOA_FONT_COLOR).first.content
       end
       
@@ -165,7 +167,6 @@ class Layout
         @lf.label_textblock.shown = true
         @lf.textfield_data_non_text.shown = false
         @lf.label_textfield.shown = false
-        @lf.textfield_data.text = node.find(GOA_DATA).first.content
       end
       
       # Attribute, die nur Barcodes haben
@@ -174,7 +175,6 @@ class Layout
         @lf.label_textblock.shown = false
         @lf.textfield_data_non_text.shown = true
         @lf.label_textfield.shown = true
-        @lf.textfield_data_non_text.text = node.find(GOA_DATA).first.content
       end
       
       # Attribute, die nur Bilder haben
@@ -402,13 +402,6 @@ class Layout
     @lf.tabitem_object.shown = false
     @lf.tabitem_posit.shown = false
     @lf.tabitem_font.shown = false
-  end
- 	# ---------------------------------------------------------------------------------------------------------
-  # aktivieren der Anzeige der Objektattribute, wenn ein Objekt selektiert ist
-  def activate_object_tabs
-    @lf.tabitem_object.shown = true
-    @lf.tabitem_posit.shown = true
-    @lf.tabitem_font.shown = true
   end
 end
 
