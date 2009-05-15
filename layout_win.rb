@@ -97,7 +97,7 @@ class LayoutFrame
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
-							w.current=3
+							w.current=4
 							w.width=300
 							w.y=2
 							w.height=353
@@ -164,15 +164,16 @@ class LayoutFrame
 								w.wdg_name='tabitem_object'
 								w.text="Objekt"
 								w.width=40
-								w.y=4
+								w.y=6
 								w.height=21
-								w.x=167
+								w.x=169
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_object=w
 								w.wdg_name='verticalframe_object'
 								w.frameStyle=16384
 								w.width=292
+								w.shown=false
 								w.y=23
 								w.height=326
 								w.x=4
@@ -277,23 +278,22 @@ class LayoutFrame
 								w.wdg_name='tabitem_posit'
 								w.text="Position"
 								w.width=45
-								w.y=6
+								w.y=4
 								w.height=21
-								w.x=206
+								w.x=207
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_posit=w
 								w.wdg_name='verticalframe_posit'
 								w.frameStyle=16384
 								w.width=292
-								w.shown=false
 								w.y=23
 								w.height=326
 								w.x=4
 								FX::Matrix.new(@verticalframe_posit){|w|
 									@matrix2=w
 									w.wdg_name='matrix2'
-									w.numRows=5
+									w.numRows=6
 									w.width=288
 									w.y=2
 									w.height=322
@@ -310,8 +310,8 @@ class LayoutFrame
 										w.x=4
 									}
 									FX::TextField.new(@matrix2){|w|
-										@textfield26=w
-										w.wdg_name='textfield26'
+										@textfield_x=w
+										w.wdg_name='textfield_x'
 										w.width=66
 										w.y=4
 										w.height=19
@@ -329,8 +329,8 @@ class LayoutFrame
 										w.x=4
 									}
 									FX::TextField.new(@matrix2){|w|
-										@textfield27=w
-										w.wdg_name='textfield27'
+										@textfield_y=w
+										w.wdg_name='textfield_y'
 										w.width=66
 										w.y=27
 										w.height=19
@@ -348,8 +348,8 @@ class LayoutFrame
 										w.x=4
 									}
 									FX::TextField.new(@matrix2){|w|
-										@textfield28=w
-										w.wdg_name='textfield28'
+										@textfield_width=w
+										w.wdg_name='textfield_width'
 										w.width=66
 										w.y=50
 										w.height=19
@@ -367,8 +367,8 @@ class LayoutFrame
 										w.x=4
 									}
 									FX::TextField.new(@matrix2){|w|
-										@textfield29=w
-										w.wdg_name='textfield29'
+										@textfield_height=w
+										w.wdg_name='textfield_height'
 										w.width=66
 										w.y=73
 										w.height=19
@@ -385,12 +385,55 @@ class LayoutFrame
 										w.height=17
 										w.x=4
 									}
-									FX::IconList.new(@matrix2){|w|
-										@iconlist9=w
-										w.wdg_name='iconlist9'
-										w.width=66
+									FX::RadioMutex.new(@matrix2){|w|
+										@radiomutex_justify=w
+										w.wdg_name='radiomutex_justify'
+										w.width=54
 										w.y=96
-										w.height=52
+										w.height=51
+										w.x=69
+										FX::RadioButton.new(@radiomutex_justify){|w|
+											@radiobutton1=w
+											w.wdg_name='radiobutton1'
+											w.text="links"
+											w.width=41
+											w.height=17
+											w.state=true
+										}
+										FX::RadioButton.new(@radiomutex_justify){|w|
+											@radiobutton2=w
+											w.wdg_name='radiobutton2'
+											w.text="Miite"
+											w.width=43
+											w.y=17
+											w.height=17
+										}
+										FX::RadioButton.new(@radiomutex_justify){|w|
+											@radiobutton3=w
+											w.wdg_name='radiobutton3'
+											w.text="Rechts"
+											w.width=54
+											w.y=34
+											w.height=17
+										}
+									}
+									FX::Label.new(@matrix2){|w|
+										@label58=w
+										w.wdg_name='label58'
+										w.text="Drehung"
+										w.width=45
+										w.y=151
+										w.height=17
+										w.x=4
+									}
+									FX::TextField.new(@matrix2){|w|
+										@textfield_rotation=w
+										w.wdg_name='textfield_rotation'
+										w.width=66
+										w.y=151
+										w.height=19
+										w.textFieldTextStyle=2097152
+										w.numColumns=10
 										w.x=69
 									}
 								}
@@ -555,15 +598,20 @@ class LayoutFrame
 	attr_reader :verticalframe_posit
 	attr_reader :matrix2
 	attr_reader :label11
-	attr_reader :textfield26
+	attr_reader :textfield_x
 	attr_reader :label12
-	attr_reader :textfield27
+	attr_reader :textfield_y
 	attr_reader :label13
-	attr_reader :textfield28
+	attr_reader :textfield_width
 	attr_reader :label14
-	attr_reader :textfield29
+	attr_reader :textfield_height
 	attr_reader :label15
-	attr_reader :iconlist9
+	attr_reader :radiomutex_justify
+	attr_reader :radiobutton1
+	attr_reader :radiobutton2
+	attr_reader :radiobutton3
+	attr_reader :label58
+	attr_reader :textfield_rotation
 	attr_reader :tabitem_font
 	attr_reader :verticalframe_font
 	attr_reader :matrix3
