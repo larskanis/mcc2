@@ -151,8 +151,6 @@ class Layout
     
     # allgemeine Attribute auslesen
     @lf.textfield_name.text = node.find(GOA_NAME).first.content
-    @lf.textfield_data_non_text.text = node.find(GOA_DATA).first.content
-    @lf.textfield_data.text = node.find(GOA_DATA).first.content
     @lf.textfield_sample_data.text = node.find(GOA_SAMPLE_DATA).first.content
     
     # Typ-spezifische Attribute auslesen
@@ -163,10 +161,20 @@ class Layout
       
       # Attribute, die nur Texte haben
       if node.find(GOA_TYP).first.content == TEXTOBJECT
+        @lf.textfield_data.shown = true
+        @lf.label_textblock.shown = true
+        @lf.textfield_data_non_text.shown = false
+        @lf.label_textfield.shown = false
+        @lf.textfield_data.text = node.find(GOA_DATA).first.content
       end
       
       # Attribute, die nur Barcodes haben
-      if node.find(GOA_TYP).first.content == TEXTOBJECT || node.find(GOA_TYP).first.content == BARCODEOBJECT
+      if node.find(GOA_TYP).first.content == BARCODEOBJECT
+        @lf.textfield_data.shown = false
+        @lf.label_textblock.shown = false
+        @lf.textfield_data_non_text.shown = true
+        @lf.label_textfield.shown = true
+        @lf.textfield_data_non_text.text = node.find(GOA_DATA).first.content
       end
       
       # Attribute, die nur Bilder haben
