@@ -97,7 +97,7 @@ class LayoutFrame
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
-							w.current=5
+							w.current=3
 							w.width=300
 							w.y=2
 							w.height=353
@@ -164,16 +164,15 @@ class LayoutFrame
 								w.wdg_name='tabitem_object'
 								w.text="Objekt"
 								w.width=40
-								w.y=6
+								w.y=4
 								w.height=21
-								w.x=169
+								w.x=167
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_object=w
 								w.wdg_name='verticalframe_object'
 								w.frameStyle=16384
 								w.width=292
-								w.shown=false
 								w.y=23
 								w.height=326
 								w.x=4
@@ -207,8 +206,8 @@ class LayoutFrame
 										w.x=75
 									}
 									FX::Label.new(@matrix1){|w|
-										@label10=w
-										w.wdg_name='label10'
+										@label_textblock=w
+										w.wdg_name='label_textblock'
 										w.text="Daten"
 										w.width=33
 										w.y=27
@@ -233,8 +232,8 @@ class LayoutFrame
 										}
 									}
 									FX::Label.new(@matrix1){|w|
-										@label29=w
-										w.wdg_name='label29'
+										@label_textfield=w
+										w.wdg_name='label_textfield'
 										w.text="Daten"
 										w.width=33
 										w.y=85
@@ -280,7 +279,7 @@ class LayoutFrame
 								w.width=45
 								w.y=6
 								w.height=21
-								w.x=209
+								w.x=206
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_posit=w
@@ -401,15 +400,16 @@ class LayoutFrame
 								w.wdg_name='tabitem_font'
 								w.text="Schrift"
 								w.width=39
-								w.y=4
+								w.y=6
 								w.height=21
-								w.x=252
+								w.x=251
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_font=w
 								w.wdg_name='verticalframe_font'
 								w.frameStyle=16384
 								w.width=292
+								w.shown=false
 								w.y=23
 								w.height=326
 								w.x=4
@@ -544,10 +544,10 @@ class LayoutFrame
 	attr_reader :matrix1
 	attr_reader :label9
 	attr_reader :textfield_name
-	attr_reader :label10
+	attr_reader :label_textblock
 	attr_reader :verticalframe44
 	attr_reader :textfield_data
-	attr_reader :label29
+	attr_reader :label_textfield
 	attr_reader :textfield_data_non_text
 	attr_reader :label27
 	attr_reader :textfield_sample_data
