@@ -528,15 +528,15 @@ class LayoutFrame
 											w.text="Links"
 											w.width=44
 											w.height=17
-											w.state=true
 										}
 										FX::RadioButton.new(@radiomutex_justify){|w|
 											@radiobutton_just_m=w
 											w.wdg_name='radiobutton_just_m'
-											w.text="Miite"
-											w.width=43
+											w.text="Mitte"
+											w.width=45
 											w.y=17
 											w.height=17
+											w.state=true
 										}
 										FX::RadioButton.new(@radiomutex_justify){|w|
 											@radiobutton_just_r=w
