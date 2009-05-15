@@ -56,32 +56,54 @@ class Layout
       @lf.dial_zoom.value = 100
       set_zoom
 
-      @lf.iconlist_objects.connect(SEL_SELECTED){ object_selection_changed }
+      @lf.iconlist_objects.connect(SEL_SELECTED){ object_selected }
+      @lf.iconlist_objects.connect(SEL_DESELECTED){ object_deselected }
+#      @lf.iconlist_objects.connect(SEL_CHANGED){ object_selection_changed }  # wenn der Cursor in der Liste bewegt wird
       
       
       @lf.textfield_name.connect(SEL_COMMAND){ textfield_name_exit }
       text_field_trigger = SEL_COMMAND
 #      text_field_trigger = SEL_CHANGED # geht sehr langsam und macht bei Barcode und Bild Probleme
       @lf.textfield_data_non_text.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_DATA) }
-      @lf.textfield_data.connect(SEL_CHANGED){|sender, sel, event| textfield_exit(sender, GOA_DATA) }
-      @lf.textfield_sample_data.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_SAMPLE_DATA) }
       
+      @lf.textfield_data.connect(SEL_CHANGED){|sender, sel, event| textfield_exit(sender, GOA_DATA) }
+      
+      @lf.textfield_sample_data.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_SAMPLE_DATA) }
+
+      @lf.textfield_text_color.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_FONT_COLOR) }
+      @lf.button_text_color.connect(text_field_trigger){ text_color_dialog }
+
       # .............................................................................................
       # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
       @lf.matrix1.numColumns = 2 
       @lf.matrix2.numColumns = 2 
-      @lf.matrix3.numColumns = 2 
+      @lf.matrix3.numColumns = 3 
+      deactivate_object_tabs
     end
   end
   # ---------------------------------------------------------------------------------------------------------
 #    node['object_name'] = "Test" # Attribute lesen und schreiben
 #    p node.debug
   # ---------------------------------------------------------------------------------------------------------
+  def text_color_dialog
+    cdlg = FXColorDialog.new(@parent, "Textfarbe")
+    cdlg.execute
+    if @lf.textfield_text_color.text != cdlg.rgba
+      node = get_objectnode_by_id(@selected_object_id).find(GOA_FONT_COLOR)
+      s = cdlg.rgba.to_i.to_s(16)
+      @lf.textfield_text_color.text = [s[6,2], s[4,2], s[2,2], s[0,2]].join
+      node.first.content = @lf.textfield_text_color.text
+      changed_attributes
+      draw_card
+    end
+  end
+  # ---------------------------------------------------------------------------------------------------------
   def textfield_exit(sender, attr_name)
     node = get_objectnode_by_id(@selected_object_id).find(attr_name)
     if sender.text != node.first.content
       node.first.content = sender.text
       changed_attributes
+      #~ print @xml_doc.to_s
     end
   end
   # ---------------------------------------------------------------------------------------------------------
@@ -107,9 +129,23 @@ class Layout
     @attributes[attr.attr_name] = attr
   end
   # ---------------------------------------------------------------------------------------------------------
-  def object_selection_changed
+  def object_deselected
+    deactivate_object_tabs
+    @selected_object_id = nil
+  end
+  # ---------------------------------------------------------------------------------------------------------
+  def object_selected
+    activate_object_tabs
     item_ID = @lf.iconlist_objects.currentItem
     @selected_object_id = @lf.iconlist_objects.getItemData(item_ID).to_i
+    object_selection_changed
+  end
+  # ---------------------------------------------------------------------------------------------------------
+  def object_selection_changed
+    #~ p "@lf.iconlist_objects.currentItem #{@lf.iconlist_objects.currentItem}"
+    #~ p "@lf.iconlist_objects.anchorItem #{@lf.iconlist_objects.anchorItem}"
+    
+    
     #~ p "id #{@selected_object_id} selektiert"
     node = get_objectnode_by_id(@selected_object_id)
     
@@ -120,8 +156,23 @@ class Layout
     @lf.textfield_sample_data.text = node.find(GOA_SAMPLE_DATA).first.content
     
     # Typ-spezifische Attribute auslesen
-
-
+      # Attribute, die Barcode und Texte haben
+      if node.find(GOA_TYP).first.content == TEXTOBJECT || node.find(GOA_TYP).first.content == BARCODEOBJECT
+        @lf.textfield_text_color.text = node.find(GOA_FONT_COLOR).first.content
+      end
+      
+      # Attribute, die nur Texte haben
+      if node.find(GOA_TYP).first.content == TEXTOBJECT
+      end
+      
+      # Attribute, die nur Barcodes haben
+      if node.find(GOA_TYP).first.content == TEXTOBJECT || node.find(GOA_TYP).first.content == BARCODEOBJECT
+      end
+      
+      # Attribute, die nur Bilder haben
+      if node.find(GOA_TYP).first.content == PICTUREOBJECT
+      end
+    
     draw_card
   end
   # ---------------------------------------------------------------------------------------------------------
@@ -337,7 +388,20 @@ class Layout
     }
     id
   end
-  
+ 	# ---------------------------------------------------------------------------------------------------------
+  # deaktivieren der Anzeige der Objektattribute, wenn kein Objekt selektiert ist
+  def deactivate_object_tabs
+    @lf.tabitem_object.shown = false
+    @lf.tabitem_posit.shown = false
+    @lf.tabitem_font.shown = false
+  end
+ 	# ---------------------------------------------------------------------------------------------------------
+  # aktivieren der Anzeige der Objektattribute, wenn ein Objekt selektiert ist
+  def activate_object_tabs
+    @lf.tabitem_object.shown = true
+    @lf.tabitem_posit.shown = true
+    @lf.tabitem_font.shown = true
+  end
 end
 
 #*****************************************************************************
