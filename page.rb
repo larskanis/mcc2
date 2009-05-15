@@ -10,12 +10,10 @@ class Page
   def self.width_with_margins(width)
     width + $pr.card_margin_left + $pr.card_margin_right
   end
-  
  	# ---------------------------------------------------------------------------------------------------------
   def self.height_with_margins(height)
     height + $pr.card_margin_bottom + $pr.card_margin_top
   end
-
  	# ---------------------------------------------------------------------------------------------------------
   def self.draw(canvas, draw_pos_x, draw_pos_y, page_nr, xml_doc, preview, selected_object_id)
     width =  xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_WIDTH}").first.content.to_f
@@ -44,6 +42,7 @@ class Page
         # nur die Objekte zeichnen, die auf diese Seite sollen
         if go.find(GOA_PAGE_NR).first.content.to_i == page_nr
           if go.find(GOA_TYP).first.content == TEXTOBJECT 
+          
             id = go.find(GOA_ID).first.content.to_i
             text = go.find(GOA_DATA).first.content
             x = go.find(GOA_X).first.content.to_f.mm
@@ -53,10 +52,14 @@ class Page
             font = go.find(GOA_FONT_TYP).first.content
             fontsize = go.find(GOA_FONT_HEIGHT).first.content.to_f
             rotation = go.find(GOA_ROTATION).first.content.to_f
+            font_color = ["#", go.find(GOA_FONT_COLOR).first.content].join
+            font_color = Page.check_color_definition(font_color)
+            
+            
             canvas1.text(x, y, text).styles(
               :font_family => font, 
               :font_size => fontsize, 
-              :fill=>'blue', 
+              :fill => font_color, 
               :font_weight=>'normal', 
               :font_style=>'normal').rotate(rotation)
             
@@ -74,8 +77,30 @@ class Page
       # Bild-Objekte
       
       # Barcode-Objekte
+      
     end
+  end
+ 	# ---------------------------------------------------------------------------------------------------------
+  def self.check_color_definition(color)
+    # erstellt einen Dummy-Text, um zu testen, ob die Farbdefinition gültig ist
+    # liefert die Farbe zurück, wenn sie gültig ist, ansonsten liefert sie vorläufig schwarz als Standard zurück
     
+    begin
+      rvg = Magick::RVG.new(1, 1) do |canvas|
+        canvas.text(1, 1, "1").styles(
+          :font_family => "Arial", 
+          :font_size => 10, 
+          :fill => color, 
+          :font_weight=>'normal', 
+          :font_style=>'normal')
+      end
+      rvg.draw.to_blob{
+        self.format = 'PNG'
+      }
+    rescue => e
+      return "#000000FF"
+    end
+    color
   end
 end
 
