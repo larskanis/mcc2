@@ -20,13 +20,13 @@ class Page
     height = xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_HEIGHT}").first.content.to_f
     
     if preview
-      canvas.g.translate(draw_pos_x, draw_pos_y) do |canvas1|
+      canvas.g.translate(draw_pos_x.mm, draw_pos_y.mm) do |canvas1|
         rx = 10
         canvas1.rect(Page.width_with_margins(width).mm, Page.height_with_margins(height).mm ).styles(:fill=>'none', :stroke=>'black')
       end
     end
 
-    canvas.g.translate(draw_pos_x + $pr.card_margin_left.mm, draw_pos_y + $pr.card_margin_top.mm) do |canvas1|
+    canvas.g.translate((draw_pos_x + $pr.card_margin_left).mm, (draw_pos_y + $pr.card_margin_top).mm) do |canvas1|
       # ..........................................................................................
       # Rand zeichnen (für Vorschau)
       if preview
@@ -47,8 +47,8 @@ class Page
             text = go.find(GOA_DATA).first.content
             x = go.find(GOA_X).first.content.to_f
             y = go.find(GOA_Y).first.content.to_f
-            go_width = go.find(GOA_WIDTH).first.content.to_f.mm
-            go_height = go.find(GOA_HEIGHT).first.content.to_f.mm
+            go_width = go.find(GOA_WIDTH).first.content.to_f
+            go_height = go.find(GOA_HEIGHT).first.content.to_f
             font = go.find(GOA_FONT_TYP).first.content
             fontsize = go.find(GOA_FONT_HEIGHT).first.content.to_f
             rotation = go.find(GOA_ROTATION).first.content.to_f
@@ -65,8 +65,8 @@ class Page
               just == 'start' # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
             end
             
-            canvas1.g.translate(x, y).rotate(rotation) do |body|
-              body.text(x, y, text).styles(
+            canvas1.g.translate(x.mm, y.mm).rotate(rotation) do |body|
+              body.text(0, 0, text).styles(
                 :font_family => font, 
                 :font_size => fontsize, 
                 :fill => font_color, 
@@ -77,7 +77,7 @@ class Page
             
               # in Vorschau einen Rahmen um das selektierte Objekt zeichnen
               if preview && selected_object_id == id 
-                body.rect(go_width, 2 * go_height).styles(:fill=>'none', :stroke=>'red')
+                body.rect(go_width.mm, go_height.mm).styles(:fill=>'none', :stroke=>'red')
               end
             end
               
