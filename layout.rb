@@ -234,20 +234,20 @@ class Layout
     
     card_offset = 10
     
-    image_width = (Page.width_with_margins(width) * @zoom).mm
-    image_height = ((2 * Page.height_with_margins(height) + card_offset) * @zoom ).mm
+    image_width = (Page.width_with_margins(width) * @zoom)
+    image_height = ((2 * Page.height_with_margins(height) + card_offset) * @zoom )
     
     scale_width = Page.width_with_margins(width) * @scale 
     scale_height = (2 * Page.height_with_margins(height) + card_offset) * @scale
     
-    rvg = Magick::RVG.new(image_width, image_height).viewbox(0, 0, scale_width, scale_height) do |canvas|
+    rvg = Magick::RVG.new(image_width.mm, image_height.mm).viewbox(0, 0, scale_width, scale_height) do |canvas|
       # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
     
       draw_pos_x = 0
       draw_pos_y = 0
       Page.draw(canvas, draw_pos_x, draw_pos_y, 0, @xml_doc, preview, @selected_object_id) # Seite 1 drucken
       
-      draw_pos_y = (Page.height_with_margins(height) + card_offset).mm
+      draw_pos_y = (Page.height_with_margins(height) + card_offset)
       Page.draw(canvas, draw_pos_x, draw_pos_y, 1, @xml_doc, preview, @selected_object_id) # Seite 2 drucken
       
       canvas.background_fill = 'white'
