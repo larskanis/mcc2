@@ -45,8 +45,8 @@ class Page
           
             id = go.find(GOA_ID).first.content.to_i
             text = go.find(GOA_DATA).first.content
-            x = go.find(GOA_X).first.content.to_f.mm
-            y = go.find(GOA_Y).first.content.to_f.mm
+            x = go.find(GOA_X).first.content.to_f
+            y = go.find(GOA_Y).first.content.to_f
             go_width = go.find(GOA_WIDTH).first.content.to_f.mm
             go_height = go.find(GOA_HEIGHT).first.content.to_f.mm
             font = go.find(GOA_FONT_TYP).first.content
@@ -54,19 +54,30 @@ class Page
             rotation = go.find(GOA_ROTATION).first.content.to_f
             font_color = ["#", go.find(GOA_FONT_COLOR).first.content].join
             font_color = Page.check_color_definition(font_color)
+            just = go.find(GOA_JUSTIFICATION).first.content.downcase
+            if just == "links"
+              just == 'start'
+            elsif just == "mitte"
+              just == 'middle'
+            elsif just == "rechts"
+              just == 'end'
+            else 
+              just == 'start' # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
+            end
             
+            canvas1.g.translate(x, y).rotate(rotation) do |body|
+              body.text(x, y, text).styles(
+                :font_family => font, 
+                :font_size => fontsize, 
+                :fill => font_color, 
+                :font_weight => 'normal', 
+                :font_style => 'normal'
+#                :text_anchor => just
+              )
             
-            canvas1.text(x, y, text).styles(
-              :font_family => font, 
-              :font_size => fontsize, 
-              :fill => font_color, 
-              :font_weight=>'normal', 
-              :font_style=>'normal').rotate(rotation)
-            
-            # in Vorschau einen Rahmen um das selektierte Objekt zeichnen
-            if preview && selected_object_id == id 
-              canvas1.g.translate(x, y - go_height) do |body|
-                body.rect(go_width, go_height ).styles(:fill=>'none', :stroke=>'red')
+              # in Vorschau einen Rahmen um das selektierte Objekt zeichnen
+              if preview && selected_object_id == id 
+                body.rect(go_width, 2 * go_height).styles(:fill=>'none', :stroke=>'red')
               end
             end
               
