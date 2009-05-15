@@ -97,7 +97,7 @@ class LayoutFrame
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
-							w.current=4
+							w.current=5
 							w.width=300
 							w.y=2
 							w.height=353
@@ -278,22 +278,23 @@ class LayoutFrame
 								w.wdg_name='tabitem_posit'
 								w.text="Position"
 								w.width=45
-								w.y=4
+								w.y=6
 								w.height=21
-								w.x=207
+								w.x=209
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_posit=w
 								w.wdg_name='verticalframe_posit'
 								w.frameStyle=16384
 								w.width=292
+								w.shown=false
 								w.y=23
 								w.height=326
 								w.x=4
 								FX::Matrix.new(@verticalframe_posit){|w|
 									@matrix2=w
 									w.wdg_name='matrix2'
-									w.numRows=6
+									w.numRows=5
 									w.width=288
 									w.y=2
 									w.height=322
@@ -317,7 +318,7 @@ class LayoutFrame
 										w.height=19
 										w.textFieldTextStyle=2097152
 										w.numColumns=10
-										w.x=69
+										w.x=53
 									}
 									FX::Label.new(@matrix2){|w|
 										@label12=w
@@ -336,7 +337,7 @@ class LayoutFrame
 										w.height=19
 										w.textFieldTextStyle=2097152
 										w.numColumns=10
-										w.x=69
+										w.x=53
 									}
 									FX::Label.new(@matrix2){|w|
 										@label13=w
@@ -355,7 +356,7 @@ class LayoutFrame
 										w.height=19
 										w.textFieldTextStyle=2097152
 										w.numColumns=10
-										w.x=69
+										w.x=53
 									}
 									FX::Label.new(@matrix2){|w|
 										@label14=w
@@ -374,55 +375,14 @@ class LayoutFrame
 										w.height=19
 										w.textFieldTextStyle=2097152
 										w.numColumns=10
-										w.x=69
-									}
-									FX::Label.new(@matrix2){|w|
-										@label15=w
-										w.wdg_name='label15'
-										w.text="Ausrichtung"
-										w.width=61
-										w.y=96
-										w.height=17
-										w.x=4
-									}
-									FX::RadioMutex.new(@matrix2){|w|
-										@radiomutex_justify=w
-										w.wdg_name='radiomutex_justify'
-										w.width=54
-										w.y=96
-										w.height=51
-										w.x=69
-										FX::RadioButton.new(@radiomutex_justify){|w|
-											@radiobutton1=w
-											w.wdg_name='radiobutton1'
-											w.text="links"
-											w.width=41
-											w.height=17
-											w.state=true
-										}
-										FX::RadioButton.new(@radiomutex_justify){|w|
-											@radiobutton2=w
-											w.wdg_name='radiobutton2'
-											w.text="Miite"
-											w.width=43
-											w.y=17
-											w.height=17
-										}
-										FX::RadioButton.new(@radiomutex_justify){|w|
-											@radiobutton3=w
-											w.wdg_name='radiobutton3'
-											w.text="Rechts"
-											w.width=54
-											w.y=34
-											w.height=17
-										}
+										w.x=53
 									}
 									FX::Label.new(@matrix2){|w|
 										@label58=w
 										w.wdg_name='label58'
 										w.text="Drehung"
 										w.width=45
-										w.y=151
+										w.y=96
 										w.height=17
 										w.x=4
 									}
@@ -430,11 +390,11 @@ class LayoutFrame
 										@textfield_rotation=w
 										w.wdg_name='textfield_rotation'
 										w.width=66
-										w.y=151
+										w.y=96
 										w.height=19
 										w.textFieldTextStyle=2097152
 										w.numColumns=10
-										w.x=69
+										w.x=53
 									}
 								}
 							}
@@ -443,23 +403,22 @@ class LayoutFrame
 								w.wdg_name='tabitem_font'
 								w.text="Schrift"
 								w.width=39
-								w.y=6
+								w.y=4
 								w.height=21
-								w.x=251
+								w.x=252
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_font=w
 								w.wdg_name='verticalframe_font'
 								w.frameStyle=16384
 								w.width=292
-								w.shown=false
 								w.y=23
 								w.height=326
 								w.x=4
 								FX::Matrix.new(@verticalframe_font){|w|
 									@matrix3=w
 									w.wdg_name='matrix3'
-									w.numRows=3
+									w.numRows=4
 									w.width=288
 									w.y=2
 									w.height=322
@@ -547,6 +506,47 @@ class LayoutFrame
 										w.height=21
 										w.x=141
 									}
+									FX::Label.new(@matrix3){|w|
+										@label59=w
+										w.wdg_name='label59'
+										w.text="Ausrichtung"
+										w.width=61
+										w.y=108
+										w.height=17
+										w.x=4
+									}
+									FX::RadioMutex.new(@matrix3){|w|
+										@radiomutex_justify=w
+										w.wdg_name='radiomutex_justify'
+										w.width=54
+										w.y=108
+										w.height=51
+										w.x=71
+										FX::RadioButton.new(@radiomutex_justify){|w|
+											@radiobutton_just_l=w
+											w.wdg_name='radiobutton_just_l'
+											w.text="Links"
+											w.width=44
+											w.height=17
+											w.state=true
+										}
+										FX::RadioButton.new(@radiomutex_justify){|w|
+											@radiobutton_just_m=w
+											w.wdg_name='radiobutton_just_m'
+											w.text="Miite"
+											w.width=43
+											w.y=17
+											w.height=17
+										}
+										FX::RadioButton.new(@radiomutex_justify){|w|
+											@radiobutton_just_r=w
+											w.wdg_name='radiobutton_just_r'
+											w.text="Rechts"
+											w.width=54
+											w.y=34
+											w.height=17
+										}
+									}
 								}
 							}
 						}
@@ -605,11 +605,6 @@ class LayoutFrame
 	attr_reader :textfield_width
 	attr_reader :label14
 	attr_reader :textfield_height
-	attr_reader :label15
-	attr_reader :radiomutex_justify
-	attr_reader :radiobutton1
-	attr_reader :radiobutton2
-	attr_reader :radiobutton3
 	attr_reader :label58
 	attr_reader :textfield_rotation
 	attr_reader :tabitem_font
@@ -624,6 +619,11 @@ class LayoutFrame
 	attr_reader :label41
 	attr_reader :textfield_text_color
 	attr_reader :button_text_color
+	attr_reader :label59
+	attr_reader :radiomutex_justify
+	attr_reader :radiobutton_just_l
+	attr_reader :radiobutton_just_m
+	attr_reader :radiobutton_just_r
 	attr_reader :verticalframe_right
 end
 
