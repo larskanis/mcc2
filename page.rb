@@ -7,6 +7,7 @@ end
 
 class Page
   attr_accessor :page_nr
+  
   def initialize(page_nr)
     @page_nr = page_nr
   end
@@ -19,7 +20,7 @@ class Page
     height + $pr.card_margin_bottom + $pr.card_margin_top
   end
  	# ---------------------------------------------------------------------------------------------------------
-  def draw(canvas, draw_pos_x, draw_pos_y, xml_doc, sorted_id_list, preview, selected_object_id)
+  def draw(canvas, draw_pos_x, draw_pos_y, xml_doc, sorted_id_list, preview, selected_object_id, row)
     width =  xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_WIDTH}").first.content.to_f
     height = xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_HEIGHT}").first.content.to_f
     
@@ -55,7 +56,7 @@ class Page
           go_height = go.find(GOA_HEIGHT).first.content.to_f
           rotation = go.find(GOA_ROTATION).first.content.to_f
           typ = go.find(GOA_TYP).first.content
-          data = replace_variables(go.find(GOA_DATA).first.content)
+          data = replace_variables(go.find(GOA_DATA).first.content, row)
           
           canvas1.g.translate(x.mm, y.mm).rotate(rotation) do |body|
             # ............................................................................................................
@@ -118,8 +119,14 @@ class Page
     end
   end
  	# ---------------------------------------------------------------------------------------------------------
-  def replace_variables(data)
-    data
+  def replace_variables(data, row)
+    pattern = /\{ *(.*)\[ *(\d{0,3}) *, *(\d{0,3}) *\] *\}/
+    data.gsub(pattern){
+      feld = $1
+      von = $2.to_i
+      anz = $3.to_i
+      row[feld.intern][von, anz]
+    }
   end
  	# ---------------------------------------------------------------------------------------------------------
   def self.check_color_definition(color)
