@@ -106,36 +106,27 @@ class Layout
 #    p node.debug
   # ---------------------------------------------------------------------------------------------------------
   def object_move_up_down(dest)
-    p "."*50
     if @selected_object_id
       get_objectnode_by_id(@selected_object_id)
       
       # erst einmal eine sortierte Liste aller ID's der Grafikobjekte holen
       obj_arr = sorted_id_list
-      obj_arr.each{|e| p e}
       
       # dann das entsprechende Objekt verschieben
-      p "@selected_object_id #{@selected_object_id}"
       pos = obj_arr.index(@selected_object_id)
-      p "pos #{pos}"
       if dest == UP
         obj_arr[pos], obj_arr[pos - 1] = obj_arr[pos - 1], obj_arr[pos] 
       elsif dest == DOWN
         obj_arr[pos], obj_arr[pos + 1] = obj_arr[pos + 1], obj_arr[pos] 
       end
       
-      obj_arr.each{|e| p e}
-      
       # dann die ID's im XML entsprechend des ARRAY-Indexes über die alte ID setzen (ist automatisch eine Re-Indizierung zum Entfernen von Löschern
       # dabei alle Objekte durchlaufen und im Array die Position der alten ID suchen und in die ID schreiben
       # dies muss so getan werden
       # wenn es anders herum versucht wird, d.h. das Array durchlaufen und dann das Objekt im XML gesucht, dann werden die ID's schon verändert und die Suche schlägt dann fehl
       @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
-        p "+"*50
         id = go_struct.find(GOA_ID).first.content.to_i
         new_id = obj_arr.index(id)
-        p "id: #{id}"
-        p "new_id: #{new_id}"
         go_struct.find(GOA_ID).first.content = new_id.to_s
       }
       
@@ -145,6 +136,16 @@ class Layout
       # Objekt-Liste aktualisieren
       fill_objectlist
       
+      notify = true
+      if dest == UP
+        @lf.iconlist_objects.setCurrentItem(@selected_object_id - 1, notify)
+        @lf.iconlist_objects.selectItem(@selected_object_id - 1, notify)
+      elsif dest == DOWN
+        @lf.iconlist_objects.setCurrentItem(@selected_object_id + 1, notify)
+        @lf.iconlist_objects.selectItem(@selected_object_id + 1, notify)
+      end
+    
+    
     end
   end
   # ---------------------------------------------------------------------------------------------------------
@@ -215,14 +216,12 @@ class Layout
     # erst einmal alle Objekt-Tabs deaktivieren, damit sicher gestellt ist, dass nur die Objekt-typischen angezeigt werden
     deactivate_object_tabs
 
-    max_id = 10
-
     item_ID = @lf.iconlist_objects.currentItem
     @selected_object_id = @lf.iconlist_objects.getItemData(item_ID).to_i
     
     # die Buttons für das Ändern der Reihenfolge aktivieren
     @lf.button_up.enabled = (@selected_object_id > 0)
-    @lf.button_down.enabled = (@selected_object_id < max_id)
+    @lf.button_down.enabled = (@selected_object_id < (sorted_id_list.length - 1)) 
     
     #~ p "id #{@selected_object_id} selektiert"
     node = get_objectnode_by_id(@selected_object_id)
@@ -487,10 +486,8 @@ class Layout
     @lf.iconlist_objects.clearItems
     
     # Array mit sortierten Objekt-ID's holen
-    #~ obj_arr = sorted_id_list
-		#~ go = @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}")
-		@xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
-      id = go.find(GOA_ID).first.content
+    sorted_id_list.each{|id|
+      go = @xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
       name = go.find(GOA_NAME).first.content
       typ = go.find(GOA_TYP).first.content
       @lf.iconlist_objects.appendItem([id, name, typ].join("\t"), nil, nil, id)
