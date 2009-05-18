@@ -90,6 +90,8 @@ class Layout
       @lf.textfield_height.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_HEIGHT) }
       @lf.textfield_rotation.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_ROTATION) }
       
+      # die Checkbox, ob der Inhalt des Feldes in der Liste des Druckdialogs mit angezeigt werden soll
+      @lf.checkbutton_printlist.connect(SEL_COMMAND ){ change_chkbtn_printlist }
       # .............................................................................................
       # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
       @lf.matrix1.numColumns = 2 
@@ -104,6 +106,14 @@ class Layout
   # ---------------------------------------------------------------------------------------------------------
 #    node['object_name'] = "Test" # Attribute lesen und schreiben
 #    p node.debug
+  # ---------------------------------------------------------------------------------------------------------
+  def change_chkbtn_printlist
+    node = get_objectnode_by_id(@selected_object_id).find(GOA_PRINTLIST)
+    if @lf.checkbutton_printlist.state != node.first.content
+      node.first.content = @lf.checkbutton_printlist.state.to_s
+      changed_attributes
+    end
+  end
   # ---------------------------------------------------------------------------------------------------------
   def object_move_up_down(dest)
     if @selected_object_id
@@ -244,6 +254,12 @@ class Layout
       @lf.textfield_height.text = node.find(GOA_HEIGHT).first.content
       @lf.textfield_rotation.text = node.find(GOA_ROTATION).first.content
 #      @lf.iconlist_justify.connect(SEL_CHANGED){iconlist_justify_exit } # todo
+
+      if node.find(GOA_PRINTLIST).first.content == 'false' || node.find(GOA_PRINTLIST).first.content == '0'
+        @lf.checkbutton_printlist.state = false 
+      else
+        @lf.checkbutton_printlist.state = true
+      end
     
     # Typ-spezifische Attribute auslesen
       # Attribute, die Barcode und Texte haben
@@ -310,17 +326,26 @@ class Layout
     scale_width = Page.width_with_margins(width) * @scale 
     scale_height = (2 * Page.height_with_margins(height) + card_offset) * @scale
     
+#   puts "\nFile: #{ fname }  #{csv.length} Datensätze"  
+#   puts "Erster : #{ csv[0][:vorname] } #{ csv[0][:name] }"  
+    row = nil
+    datasource =  @xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_DATASOURCE}").first.content
+    if datasource && FileTest.exists?(datasource.strip)
+      csv = FasterCSV.read(datasource, :col_sep=>';', :headers=>true, :header_converters=>:symbol)
+      row = csv[0]
+    end
+    
     rvg = Magick::RVG.new(image_width.mm, image_height.mm).viewbox(0, 0, scale_width, scale_height) do |canvas|
       # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
     
       draw_pos_x = 0
       draw_pos_y = 0
       page = Page.new(0)
-      page.draw(canvas, draw_pos_x, draw_pos_y, @xml_doc, sorted_id_list, preview, @selected_object_id) # Seite 1 drucken
+      page.draw(canvas, draw_pos_x, draw_pos_y, @xml_doc, sorted_id_list, preview, @selected_object_id, row) # Seite 1 drucken
       
       page = Page.new(1)
       draw_pos_y = (Page.height_with_margins(height) + card_offset)
-      page.draw(canvas, draw_pos_x, draw_pos_y, @xml_doc, sorted_id_list, preview, @selected_object_id) # Seite 2 drucken
+      page.draw(canvas, draw_pos_x, draw_pos_y, @xml_doc, sorted_id_list, preview, @selected_object_id, row) # Seite 2 drucken
       
       canvas.background_fill = 'white'
       #~ canvas.background_fill = 'gray'
