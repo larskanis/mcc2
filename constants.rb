@@ -26,6 +26,7 @@ GOA_STRETCH = 'stretch'
 GOA_PRINTABLE = 'printable'
 GOA_DATA = 'data'
 GOA_SAMPLE_DATA = 'sample_data'
+GOA_PRINTLIST = 'view_in_printlist'
 
 GRAPHICOBJECTS = 'GraphicObjects'
 GRAPHICOBJECT = 'GraphicObject'
