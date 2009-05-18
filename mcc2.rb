@@ -39,10 +39,14 @@ end
 
 require 'constants'
 
-require 'mcc2_mainwin' # die GUI mit FoxGUI-Builder erstellt
+# die GUI's, alle mit FoxGUI-Builder erstellt
+require 'mcc2_mainwin'   # das Main-GUI 
+require 'layout_win.rb'  # die GUI der Kartenlayout-Windows
+require 'print_dlg'      # der Print-Dialog
 
 require 'layout'         # das Kartenlayout
-require 'layout_win.rb'     # der Kartenlayout-Windows
+
+require 'my_print_dlg'   # die Ableitung des Print-Dialogs
 
 require 'go_attribut'    # die Attribut-Klasse für die grafischen Objekte
 
@@ -84,35 +88,37 @@ class MCC2GUI < MainWindow
       # die Menue-Einträge modifizieren
       @menutitle_datei.text = "&Datei"
       
-      @mcmd_new.text = "&Neu"
-#      @mcmd_new.connect(SEL_COMMAND){  }
-      #~ @topwin.accelTable.addAccel(fxparseAccel("Ctrl N"), @app, new_layout)
-      @mcmd_new.connect(SEL_COMMAND){ new_layout }
+        @mcmd_new.text = "&Neu"
+  #      @mcmd_new.connect(SEL_COMMAND){  }
+        #~ @topwin.accelTable.addAccel(fxparseAccel("Ctrl N"), @app, new_layout)
+        @mcmd_new.connect(SEL_COMMAND){ new_layout }
+        
+        @mcmd_open.text = "&Öffnen"
+        @mcmd_open.connect(SEL_COMMAND){ open_layout }
+  #      @topwin.accelTable.addAccel(fxparseAccel("Ctrl O"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
+        
+        @mcmd_close.text = "Schließ&en"
+  #      @mcmd_close.connect(SEL_COMMAND){  }
+
+        @mcmd_save.text = "&Speichern"
+  #      @topwin.accelTable.addAccel(fxparseAccel("Ctrl S"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
+        @mcmd_save.connect(SEL_COMMAND){ save_layout }
+
+        @mcmd_save_as.text = "Speichern &als"
+  #      @mcmd_save_as.connect(SEL_COMMAND){  }
+
+        @mcmd_exit.text = "&Beenden"
+        @mcmd_exit.connect(SEL_COMMAND){ @app.stop }
+        @topwin.accelTable.addAccel(fxparseAccel("Alt F4"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
       
-      @mcmd_open.text = "&Öffnen"
-      @mcmd_open.connect(SEL_COMMAND){ open_layout }
-#      @topwin.accelTable.addAccel(fxparseAccel("Ctrl O"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
-      
-      @mcmd_close.text = "Schließ&en"
-#      @mcmd_close.connect(SEL_COMMAND){  }
-
-      @mcmd_save.text = "&Speichern"
-#      @topwin.accelTable.addAccel(fxparseAccel("Ctrl S"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
-      @mcmd_save.connect(SEL_COMMAND){ save_layout }
-
-      @mcmd_save_as.text = "Speichern &als"
-#      @mcmd_save_as.connect(SEL_COMMAND){  }
-
-      @mcmd_exit.text = "&Beenden"
-      @mcmd_exit.connect(SEL_COMMAND){ @app.stop }
-      @topwin.accelTable.addAccel(fxparseAccel("Alt F4"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
+      @mcmd_druck.text = "Dr&ucken"
+      @mcmd_druck.connect(SEL_COMMAND){ print_cards }
+#      @topwin.accelTable.addAccel(fxparseAccel("Strg P"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
       
       @menutitle_object.text = "&Objekt"
       
       @mcmd_text.connect(SEL_COMMAND){ new_object(TEXTOBJECT) }
-      
       @mcmd_barcode.connect(SEL_COMMAND){ new_object(BARCODEOBJECT) }
-      
       @mcmd_picture.connect(SEL_COMMAND){ new_object(PICTUREOBJECT) }
       
       @topwin.width = 1024
@@ -154,6 +160,16 @@ class MCC2GUI < MainWindow
     child.recalc
     filename = child.userData.load_from_xml
     child.close unless filename
+  end
+	# ---------------------------------------------------------------------------------------------------------
+  def print_cards
+    p "print"
+    child = @mdiclient.activeChild
+    if child
+      pr_dlg = MyPrintDialogBox.new(@app, child.userData)
+      pr_dlg.topwin.show(Fox::PLACEMENT_SCREEN)
+      pr_dlg.topwin.execute
+    end
   end
 end
 #*****************************************************************************
