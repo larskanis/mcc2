@@ -41,19 +41,23 @@ class LayoutFrame
 							w.width=48
 							w.height=62
 							FX::Button.new(@verticalframe_steuerung){|w|
-								@button3=w
-								w.wdg_name='button3'
+								@button_up=w
+								w.wdg_name='button_up'
+								w.text="hoch"
 								w.width=40
 								w.y=2
 								w.height=21
+								w.layoutHints=256
 								w.x=2
 							}
 							FX::Button.new(@verticalframe_steuerung){|w|
-								@button2=w
-								w.wdg_name='button2'
+								@button_down=w
+								w.wdg_name='button_down'
+								w.text="runter"
 								w.width=40
 								w.y=23
 								w.height=21
+								w.layoutHints=256
 								w.x=2
 							}
 						}
@@ -586,8 +590,8 @@ class LayoutFrame
 	attr_reader :splitter11
 	attr_reader :splitter12
 	attr_reader :verticalframe_steuerung
-	attr_reader :button3
-	attr_reader :button2
+	attr_reader :button_up
+	attr_reader :button_down
 	attr_reader :verticalframe_objectlist
 	attr_reader :iconlist_objects
 	attr_reader :horizontalframe_attributes
