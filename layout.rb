@@ -254,10 +254,12 @@ class Layout
     
       draw_pos_x = 0
       draw_pos_y = 0
-      Page.draw(canvas, draw_pos_x, draw_pos_y, 0, @xml_doc, preview, @selected_object_id) # Seite 1 drucken
+      page = Page.new(0)
+      page.draw(canvas, draw_pos_x, draw_pos_y, @xml_doc, preview, @selected_object_id) # Seite 1 drucken
       
+      page = Page.new(1)
       draw_pos_y = (Page.height_with_margins(height) + card_offset)
-      Page.draw(canvas, draw_pos_x, draw_pos_y, 1, @xml_doc, preview, @selected_object_id) # Seite 2 drucken
+      page.draw(canvas, draw_pos_x, draw_pos_y, @xml_doc, preview, @selected_object_id) # Seite 2 drucken
       
       canvas.background_fill = 'white'
       #~ canvas.background_fill = 'gray'
