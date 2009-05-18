@@ -92,6 +92,8 @@ class Layout
       @lf.matrix2.numColumns = 2 
       @lf.matrix3.numColumns = 3 
       deactivate_object_tabs
+      
+      @lf.dial_zoom.range = [49,359]
     end
   end
   # ---------------------------------------------------------------------------------------------------------
@@ -227,6 +229,7 @@ class Layout
   def set_zoom
     @zoom = (@lf.dial_zoom.value + 1).to_f / 100
     @scale = 3.6
+    @lf.label_zoom.text = "Zoom: #{@zoom}"
     #~ p "@zoom: #{@zoom}"
     #~ p "@scale: #{@scale}"
   end
