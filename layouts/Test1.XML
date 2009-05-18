@@ -42,7 +42,6 @@
       <object_typ>BarcodeObject</object_typ>
       <font_height>10</font_height>
       <human_readable>true</human_readable>
-      <justification>0</justification>
       <height>10</height>
       <font_weight>0</font_weight>
       <font_typ>Arial</font_typ>
@@ -52,9 +51,10 @@
       <sample_data>Muster</sample_data>
       <back_color>FFFFFFFF</back_color>
       <font_color>000000FF</font_color>
+      <justification>0</justification>
     </GraphicObject>
     <GraphicObject>
-      <id>1</id>
+      <id>2</id>
       <object_name>GraphicObject</object_name>
       <rotation>0</rotation>
       <bc_typ>2O5I</bc_typ>
@@ -63,7 +63,6 @@
       <object_typ>BarcodeObject</object_typ>
       <font_height>10</font_height>
       <human_readable>true</human_readable>
-      <justification>0</justification>
       <height>10</height>
       <font_weight>0</font_weight>
       <font_typ>Arial</font_typ>
@@ -73,19 +72,20 @@
       <sample_data>Muster</sample_data>
       <back_color>FFFFFFFF</back_color>
       <font_color>000000FF</font_color>
+      <justification>0</justification>
     </GraphicObject>
     <GraphicObject>
-      <id>2</id>
+      <id>1</id>
       <printable>true</printable>
       <object_name>GraphicObject</object_name>
       <rotation>0</rotation>
-      <x>10</x>
-      <y>10</y>
+      <x>-1</x>
+      <y>-1</y>
       <object_typ>PictureObject</object_typ>
       <stretch>false</stretch>
-      <height>30</height>
-      <width>40</width>
-      <data>Mustermann aaa</data>
+      <height>56</height>
+      <width>87.5</width>
+      <data>l:\XID\Golf\Platzreife\platzreife_quer.jpg</data>
       <page_nr>0</page_nr>
       <sample_data>Muster</sample_data>
     </GraphicObject>
@@ -93,41 +93,43 @@
       <id>3</id>
       <object_name>Vorname</object_name>
       <rotation>0</rotation>
-      <x>10</x>
-      <y>10</y>
+      <x>15</x>
+      <y>15</y>
       <object_typ>TextObject</object_typ>
       <font_height>10</font_height>
-      <justification>0</justification>
       <height>15</height>
       <font_weight>0</font_weight>
       <font_typ>Arial</font_typ>
-      <width>50</width>
+      <width>55</width>
       <data>Marià</data>
       <page_nr>0</page_nr>
       <sample_data>Muster</sample_data>
       <back_color>FFFFFFFF</back_color>
       <font_color>000000FF</font_color>
+      <justification>Links</justification>
     </GraphicObject>
     <GraphicObject>
       <id>4</id>
       <object_name>Nachname</object_name>
       <rotation>-20</rotation>
       <x>10</x>
-      <y>40</y>
+      <y>20</y>
       <object_typ>TextObject</object_typ>
       <font_height>15</font_height>
-      <justification>0</justification>
-      <height>30</height>
+      <height>20</height>
       <font_weight>0</font_weight>
       <font_color>ff0000ff</font_color>
       <font_typ>Verdana</font_typ>
-      <width>70</width>
+      <width>70.5</width>
       <data>Musterfrau mit
 mehreren
-Zeilen</data>
+Zeilen
+und Scrollbalken
+im Textblock</data>
       <page_nr>0</page_nr>
       <sample_data>Muster</sample_data>
       <back_color>FFFFFFFF</back_color>
+      <justification>Rechts</justification>
     </GraphicObject>
     <GraphicObject>
       <object_typ>BarcodeObject</object_typ>
@@ -140,7 +142,6 @@ Zeilen</data>
       <y>10</y>
       <font_height>10</font_height>
       <human_readable>true</human_readable>
-      <justification>0</justification>
       <height>100</height>
       <font_weight>0</font_weight>
       <font_typ>Arial</font_typ>
@@ -149,6 +150,7 @@ Zeilen</data>
       <data>Daten</data>
       <back_color>FFFFFFFF</back_color>
       <font_color>000000FF</font_color>
+      <justification>0</justification>
     </GraphicObject>
     <GraphicObject>
       <object_typ>TextObject</object_typ>
@@ -159,15 +161,30 @@ Zeilen</data>
       <x>-3</x>
       <y>-3</y>
       <font_height>10</font_height>
-      <justification>0</justification>
       <height>10</height>
       <font_weight>0</font_weight>
       <font_typ>Arial</font_typ>
       <sample_data>außerhalb</sample_data>
       <width>30</width>
-      <data>Text außerhalb des offizielden Druckbereiches</data>
+      <data>Text außerhalb des offiziellen Druckbereiches</data>
       <back_color>FFFFFFFF</back_color>
       <font_color>000000FF</font_color>
+      <justification>Links</justification>
+    </GraphicObject>
+    <GraphicObject>
+      <object_typ>PictureObject</object_typ>
+      <id>7</id>
+      <printable>true</printable>
+      <object_name>GraphicObject</object_name>
+      <rotation>0</rotation>
+      <page_nr>0</page_nr>
+      <x>64</x>
+      <y>31.5</y>
+      <stretch>false</stretch>
+      <height>15</height>
+      <sample_data>Muster</sample_data>
+      <width>15</width>
+      <data>l:\XID\Golf\Platzreife\dgv-42.jpeg</data>
     </GraphicObject>
   </GraphicObjects>
 </Root>
