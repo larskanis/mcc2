@@ -65,6 +65,8 @@ require 'page'           # die Klasse, die eine Druckseite einer Karte definiert
 
 require 'xml'            # für die Layout-Struktur
 
+require 'fastercsv'
+
 require 'RMagick'
 include Magick
 
