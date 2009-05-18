@@ -17,7 +17,7 @@ class LayoutFrame
 			FX::Splitter.new(@LayoutFrame){|w|
 				@splitter10=w
 				w.wdg_name='splitter10'
-				w.width=494
+				w.width=525
 				w.height=449
 				w.barSize=2
 				w.layoutHints=3084
@@ -89,7 +89,7 @@ class LayoutFrame
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
-							w.current=5
+							w.current=3
 							w.width=300
 							w.y=2
 							w.height=381
@@ -156,23 +156,22 @@ class LayoutFrame
 								w.wdg_name='tabitem_object'
 								w.text="Objekt"
 								w.width=40
-								w.y=6
+								w.y=4
 								w.height=21
-								w.x=169
+								w.x=167
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_object=w
 								w.wdg_name='verticalframe_object'
 								w.frameStyle=16384
 								w.width=292
-								w.shown=false
 								w.y=23
 								w.height=354
 								w.x=4
 								FX::Matrix.new(@verticalframe_object){|w|
 									@matrix1=w
 									w.wdg_name='matrix1'
-									w.numRows=4
+									w.numRows=5
 									w.width=288
 									w.y=2
 									w.height=350
@@ -196,7 +195,7 @@ class LayoutFrame
 										w.height=19
 										w.numColumns=10
 										w.layoutHints=256
-										w.x=75
+										w.x=115
 									}
 									FX::Label.new(@matrix1){|w|
 										@label_textblock=w
@@ -214,7 +213,7 @@ class LayoutFrame
 										w.width=200
 										w.y=27
 										w.height=54
-										w.x=75
+										w.x=115
 										FX::Text.new(@verticalframe44){|w|
 											@textfield_data=w
 											w.wdg_name='textfield_data'
@@ -242,7 +241,7 @@ class LayoutFrame
 										w.height=19
 										w.numColumns=10
 										w.layoutHints=1024
-										w.x=75
+										w.x=115
 									}
 									FX::Label.new(@matrix1){|w|
 										@label27=w
@@ -261,7 +260,25 @@ class LayoutFrame
 										w.height=19
 										w.numColumns=10
 										w.layoutHints=1024
-										w.x=75
+										w.x=115
+									}
+									FX::Label.new(@matrix1){|w|
+										@label61=w
+										w.wdg_name='label61'
+										w.text="in Druckliste anzeigen"
+										w.width=107
+										w.y=131
+										w.height=17
+										w.x=4
+									}
+									FX::CheckButton.new(@matrix1){|w|
+										@checkbutton_printlist=w
+										w.wdg_name='checkbutton_printlist'
+										w.text=""
+										w.width=17
+										w.y=131
+										w.height=17
+										w.x=115
 									}
 								}
 							}
@@ -272,7 +289,7 @@ class LayoutFrame
 								w.width=45
 								w.y=6
 								w.height=21
-								w.x=209
+								w.x=206
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_posit=w
@@ -395,15 +412,16 @@ class LayoutFrame
 								w.wdg_name='tabitem_font'
 								w.text="Schrift"
 								w.width=39
-								w.y=4
+								w.y=6
 								w.height=21
-								w.x=252
+								w.x=251
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_font=w
 								w.wdg_name='verticalframe_font'
 								w.frameStyle=16384
 								w.width=292
+								w.shown=false
 								w.y=23
 								w.height=354
 								w.x=4
@@ -548,13 +566,13 @@ class LayoutFrame
 					@verticalframe_right=w
 					w.wdg_name='verticalframe_right'
 					w.frameStyle=16384
-					w.width=188
+					w.width=219
 					w.height=449
 					w.x=306
 					FX::HorizontalFrame.new(@verticalframe_right){|w|
 						@horizontalframe32=w
 						w.wdg_name='horizontalframe32'
-						w.width=184
+						w.width=215
 						w.y=2
 						w.height=20
 						w.layoutHints=1024
@@ -614,6 +632,8 @@ class LayoutFrame
 	attr_reader :textfield_data_non_text
 	attr_reader :label27
 	attr_reader :textfield_sample_data
+	attr_reader :label61
+	attr_reader :checkbutton_printlist
 	attr_reader :tabitem_posit
 	attr_reader :verticalframe_posit
 	attr_reader :matrix2
