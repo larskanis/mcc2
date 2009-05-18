@@ -52,6 +52,10 @@ class Layout
       # .............................................................................................
       # die Aktionen definieren, die ausgeführt werden, wenn am Layout irgend etwas gearbeitet wird
       
+      # die Buttons für das Ändern der Objektreihenfolge
+      @lf.button_up.connect(SEL_COMMAND){ object_move_up_down(UP) }
+      @lf.button_down.connect(SEL_COMMAND){ object_move_up_down(DOWN) }
+      
       text_field_trigger = SEL_COMMAND
 #      text_field_trigger = SEL_CHANGED # geht sehr langsam und macht bei Barcode und Bild Probleme
       
@@ -93,12 +97,56 @@ class Layout
       @lf.matrix3.numColumns = 3 
       deactivate_object_tabs
       
-      @lf.dial_zoom.range = [49,359]
+      deactivat_up_down
+      @lf.dial_zoom.range = (49..359)
     end
   end
   # ---------------------------------------------------------------------------------------------------------
 #    node['object_name'] = "Test" # Attribute lesen und schreiben
 #    p node.debug
+  # ---------------------------------------------------------------------------------------------------------
+  def object_move_up_down(dest)
+    p "."*50
+    if @selected_object_id
+      get_objectnode_by_id(@selected_object_id)
+      
+      # erst einmal eine sortierte Liste aller ID's der Grafikobjekte holen
+      obj_arr = sorted_id_list
+      obj_arr.each{|e| p e}
+      
+      # dann das entsprechende Objekt verschieben
+      p "@selected_object_id #{@selected_object_id}"
+      pos = obj_arr.index(@selected_object_id)
+      p "pos #{pos}"
+      if dest == UP
+        obj_arr[pos], obj_arr[pos - 1] = obj_arr[pos - 1], obj_arr[pos] 
+      elsif dest == DOWN
+        obj_arr[pos], obj_arr[pos + 1] = obj_arr[pos + 1], obj_arr[pos] 
+      end
+      
+      obj_arr.each{|e| p e}
+      
+      # dann die ID's im XML entsprechend des ARRAY-Indexes über die alte ID setzen (ist automatisch eine Re-Indizierung zum Entfernen von Löschern
+      # dabei alle Objekte durchlaufen und im Array die Position der alten ID suchen und in die ID schreiben
+      # dies muss so getan werden
+      # wenn es anders herum versucht wird, d.h. das Array durchlaufen und dann das Objekt im XML gesucht, dann werden die ID's schon verändert und die Suche schlägt dann fehl
+      @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
+        p "+"*50
+        id = go_struct.find(GOA_ID).first.content.to_i
+        new_id = obj_arr.index(id)
+        p "id: #{id}"
+        p "new_id: #{new_id}"
+        go_struct.find(GOA_ID).first.content = new_id.to_s
+      }
+      
+      # changed-Flag setzen
+      changed_attributes
+      
+      # Objekt-Liste aktualisieren
+      fill_objectlist
+      
+    end
+  end
   # ---------------------------------------------------------------------------------------------------------
   def text_color_dialog
     cdlg = FXColorDialog.new(@parent, "Textfarbe")
@@ -152,18 +200,29 @@ class Layout
     @attributes[attr.attr_name] = attr
   end
   # ---------------------------------------------------------------------------------------------------------
+  def deactivat_up_down
+    @lf.button_up.enabled = false
+    @lf.button_down.enabled = false
+  end
+  # ---------------------------------------------------------------------------------------------------------
   def object_deselected
     deactivate_object_tabs
     @selected_object_id = nil
+    deactivat_up_down
   end
   # ---------------------------------------------------------------------------------------------------------
   def object_selection_changed
     # erst einmal alle Objekt-Tabs deaktivieren, damit sicher gestellt ist, dass nur die Objekt-typischen angezeigt werden
     deactivate_object_tabs
-    
-    
+
+    max_id = 10
+
     item_ID = @lf.iconlist_objects.currentItem
     @selected_object_id = @lf.iconlist_objects.getItemData(item_ID).to_i
+    
+    # die Buttons für das Ändern der Reihenfolge aktivieren
+    @lf.button_up.enabled = (@selected_object_id > 0)
+    @lf.button_down.enabled = (@selected_object_id < max_id)
     
     #~ p "id #{@selected_object_id} selektiert"
     node = get_objectnode_by_id(@selected_object_id)
@@ -424,7 +483,12 @@ class Layout
  	# ---------------------------------------------------------------------------------------------------------
   # 
   def fill_objectlist
+    # Objekt-Liste leeren
     @lf.iconlist_objects.clearItems
+    
+    # Array mit sortierten Objekt-ID's holen
+    #~ obj_arr = sorted_id_list
+		#~ go = @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}")
 		@xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
       id = go.find(GOA_ID).first.content
       name = go.find(GOA_NAME).first.content
@@ -447,6 +511,12 @@ class Layout
     @lf.tabitem_object.shown = false
     @lf.tabitem_posit.shown = false
     @lf.tabitem_font.shown = false
+  end
+ 	# ---------------------------------------------------------------------------------------------------------
+  def sorted_id_list
+    @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").collect{|go_struct|
+      go_struct.find(GOA_ID).first.content.to_i
+    }.sort!
   end
 end
 
