@@ -17,7 +17,7 @@ class LayoutFrame
 			FX::Splitter.new(@LayoutFrame){|w|
 				@splitter10=w
 				w.wdg_name='splitter10'
-				w.width=310
+				w.width=494
 				w.height=449
 				w.barSize=2
 				w.layoutHints=3084
@@ -32,14 +32,14 @@ class LayoutFrame
 						@splitter12=w
 						w.wdg_name='splitter12'
 						w.width=304
-						w.height=90
+						w.height=62
 						w.barSize=2
 						FX::VerticalFrame.new(@splitter12){|w|
 							@verticalframe_steuerung=w
 							w.wdg_name='verticalframe_steuerung'
 							w.frameStyle=16384
 							w.width=48
-							w.height=90
+							w.height=62
 							FX::Button.new(@verticalframe_steuerung){|w|
 								@button3=w
 								w.wdg_name='button3'
@@ -56,32 +56,20 @@ class LayoutFrame
 								w.height=21
 								w.x=2
 							}
-							FX::Dial.new(@verticalframe_steuerung){|w|
-								@dial_zoom=w
-								w.wdg_name='dial_zoom'
-								w.value=3
-								w.tipText="Zoom"
-								w.width=44
-								w.helpText="Zoom"
-								w.y=44
-								w.height=16
-								w.dialStyle=32768
-								w.x=2
-							}
 						}
 						FX::VerticalFrame.new(@splitter12){|w|
 							@verticalframe_objectlist=w
 							w.wdg_name='verticalframe_objectlist'
 							w.frameStyle=16384
 							w.width=254
-							w.height=90
+							w.height=62
 							w.x=50
 							FX::IconList.new(@verticalframe_objectlist){|w|
 								@iconlist_objects=w
 								w.wdg_name='iconlist_objects'
 								w.width=250
 								w.y=2
-								w.height=86
+								w.height=58
 								w.iconListStyle=1048576
 								w.x=2
 							}
@@ -92,15 +80,15 @@ class LayoutFrame
 						w.wdg_name='horizontalframe_attributes'
 						w.frameStyle=16384
 						w.width=304
-						w.y=92
-						w.height=357
+						w.y=64
+						w.height=385
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
 							w.current=5
 							w.width=300
 							w.y=2
-							w.height=353
+							w.height=381
 							w.x=2
 							FX::TabItem.new(@tabbook_objectattributes){|w|
 								@tabitem_allgemein=w
@@ -118,7 +106,7 @@ class LayoutFrame
 								w.width=292
 								w.shown=false
 								w.y=23
-								w.height=326
+								w.height=354
 								w.x=4
 							}
 							FX::TabItem.new(@tabbook_objectattributes){|w|
@@ -137,7 +125,7 @@ class LayoutFrame
 								w.width=292
 								w.shown=false
 								w.y=23
-								w.height=326
+								w.height=354
 								w.x=4
 							}
 							FX::TabItem.new(@tabbook_objectattributes){|w|
@@ -156,7 +144,7 @@ class LayoutFrame
 								w.width=292
 								w.shown=false
 								w.y=23
-								w.height=326
+								w.height=354
 								w.x=4
 							}
 							FX::TabItem.new(@tabbook_objectattributes){|w|
@@ -175,7 +163,7 @@ class LayoutFrame
 								w.width=292
 								w.shown=false
 								w.y=23
-								w.height=326
+								w.height=354
 								w.x=4
 								FX::Matrix.new(@verticalframe_object){|w|
 									@matrix1=w
@@ -183,7 +171,7 @@ class LayoutFrame
 									w.numRows=4
 									w.width=288
 									w.y=2
-									w.height=322
+									w.height=350
 									w.matrixStyle=131072
 									w.numColumns=2
 									w.x=2
@@ -289,7 +277,7 @@ class LayoutFrame
 								w.width=292
 								w.shown=false
 								w.y=23
-								w.height=326
+								w.height=354
 								w.x=4
 								FX::Matrix.new(@verticalframe_posit){|w|
 									@matrix2=w
@@ -297,7 +285,7 @@ class LayoutFrame
 									w.numRows=5
 									w.width=288
 									w.y=2
-									w.height=322
+									w.height=350
 									w.matrixStyle=131072
 									w.numColumns=2
 									w.x=2
@@ -413,7 +401,7 @@ class LayoutFrame
 								w.frameStyle=16384
 								w.width=292
 								w.y=23
-								w.height=326
+								w.height=354
 								w.x=4
 								FX::Matrix.new(@verticalframe_font){|w|
 									@matrix3=w
@@ -421,7 +409,7 @@ class LayoutFrame
 									w.numRows=4
 									w.width=288
 									w.y=2
-									w.height=322
+									w.height=350
 									w.matrixStyle=131072
 									w.numColumns=3
 									w.x=2
@@ -556,9 +544,38 @@ class LayoutFrame
 					@verticalframe_right=w
 					w.wdg_name='verticalframe_right'
 					w.frameStyle=16384
-					w.width=4
+					w.width=188
 					w.height=449
 					w.x=306
+					FX::HorizontalFrame.new(@verticalframe_right){|w|
+						@horizontalframe32=w
+						w.wdg_name='horizontalframe32'
+						w.width=184
+						w.y=2
+						w.height=20
+						w.layoutHints=1024
+						w.x=2
+						FX::Label.new(@horizontalframe32){|w|
+							@label_zoom=w
+							w.wdg_name='label_zoom'
+							w.text="Zoom:"
+							w.width=34
+							w.height=17
+						}
+						FX::Dial.new(@horizontalframe32){|w|
+							@dial_zoom=w
+							w.wdg_name='dial_zoom'
+							w.value=3
+							w.padLeft=20
+							w.tipText="Zoom"
+							w.width=150
+							w.helpText="Zoom"
+							w.height=20
+							w.dialStyle=32768
+							w.layoutHints=768
+							w.x=34
+						}
+					}
 				}
 			}
 		}
@@ -571,7 +588,6 @@ class LayoutFrame
 	attr_reader :verticalframe_steuerung
 	attr_reader :button3
 	attr_reader :button2
-	attr_reader :dial_zoom
 	attr_reader :verticalframe_objectlist
 	attr_reader :iconlist_objects
 	attr_reader :horizontalframe_attributes
@@ -625,6 +641,9 @@ class LayoutFrame
 	attr_reader :radiobutton_just_m
 	attr_reader :radiobutton_just_r
 	attr_reader :verticalframe_right
+	attr_reader :horizontalframe32
+	attr_reader :label_zoom
+	attr_reader :dial_zoom
 end
 
 #unit test
