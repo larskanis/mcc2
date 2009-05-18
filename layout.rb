@@ -194,25 +194,34 @@ class Layout
       
       # Attribute, die nur Texte haben
       if node.find(GOA_TYP).first.content == TEXTOBJECT
-        @lf.textfield_data.shown = true
-        @lf.label_textblock.shown = true
-        @lf.textfield_data_non_text.shown = false
-        @lf.label_textfield.shown = false
+        data_block_shown
       end
       
       # Attribute, die nur Barcodes haben
       if node.find(GOA_TYP).first.content == BARCODEOBJECT
-        @lf.textfield_data.shown = false
-        @lf.label_textblock.shown = false
-        @lf.textfield_data_non_text.shown = true
-        @lf.label_textfield.shown = true
+        data_shown
       end
       
       # Attribute, die nur Bilder haben
       if node.find(GOA_TYP).first.content == PICTUREOBJECT
+        data_shown
       end
     
     draw_card
+  end
+  # ---------------------------------------------------------------------------------------------------------
+  def data_shown
+    @lf.textfield_data.shown = false
+    @lf.label_textblock.shown = false
+    @lf.textfield_data_non_text.shown = true
+    @lf.label_textfield.shown = true
+  end
+  # ---------------------------------------------------------------------------------------------------------
+  def data_block_shown
+    @lf.textfield_data.shown = true
+    @lf.label_textblock.shown = true
+    @lf.textfield_data_non_text.shown = false
+    @lf.label_textfield.shown = false
   end
   # ---------------------------------------------------------------------------------------------------------
   def set_zoom
