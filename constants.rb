@@ -42,3 +42,6 @@ S_WIDTH = 'Width'
 S_PARAM = 'Param'
 S_ROOT = 'Root'
 S_DATASOURCE = 'datasource'
+
+UP = 0
+DOWN = 1
