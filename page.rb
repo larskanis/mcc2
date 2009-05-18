@@ -6,6 +6,10 @@ end
 
 
 class Page
+  attr_accessor :page_nr
+  def initialize(page_nr)
+    @page_nr = page_nr
+  end
  	# ---------------------------------------------------------------------------------------------------------
   def self.width_with_margins(width)
     width + $pr.card_margin_left + $pr.card_margin_right
@@ -15,7 +19,7 @@ class Page
     height + $pr.card_margin_bottom + $pr.card_margin_top
   end
  	# ---------------------------------------------------------------------------------------------------------
-  def self.draw(canvas, draw_pos_x, draw_pos_y, page_nr, xml_doc, preview, selected_object_id)
+  def draw(canvas, draw_pos_x, draw_pos_y, xml_doc, preview, selected_object_id)
     width =  xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_WIDTH}").first.content.to_f
     height = xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_HEIGHT}").first.content.to_f
     
@@ -27,46 +31,52 @@ class Page
     end
 
     canvas.g.translate((draw_pos_x + $pr.card_margin_left).mm, (draw_pos_y + $pr.card_margin_top).mm) do |canvas1|
+      rx = 10
       # ..........................................................................................
-      # Rand zeichnen (für Vorschau)
+      # Kartenhintergrund füllen (für Vorschau)
       if preview
-        rx = 10
-        canvas1.rect(width.mm, height.mm ).round(rx).styles(:fill=>'yellow', :stroke=>'blue')
+        canvas1.rect(width.mm, height.mm ).round(rx).styles(:fill=>'yellow', :stroke=>'none')
       end
-      
       # ..........................................................................................
       # die graphischen Elemnte zeichnen
     
       # Text-Objekte
       xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
         # nur die Objekte zeichnen, die auf diese Seite sollen
-        if go.find(GOA_PAGE_NR).first.content.to_i == page_nr
-          if go.find(GOA_TYP).first.content == TEXTOBJECT 
+        if go.find(GOA_PAGE_NR).first.content.to_i == @page_nr
+        
+          # die allgemeinen Attribute ermitteln
+          id = go.find(GOA_ID).first.content.to_i
+          x = go.find(GOA_X).first.content.to_f
+          y = go.find(GOA_Y).first.content.to_f
+          go_width = go.find(GOA_WIDTH).first.content.to_f
+          go_height = go.find(GOA_HEIGHT).first.content.to_f
+          rotation = go.find(GOA_ROTATION).first.content.to_f
+          typ = go.find(GOA_TYP).first.content
+          data = replace_variables(go.find(GOA_DATA).first.content)
           
-            id = go.find(GOA_ID).first.content.to_i
-            text = go.find(GOA_DATA).first.content
-            x = go.find(GOA_X).first.content.to_f
-            y = go.find(GOA_Y).first.content.to_f
-            go_width = go.find(GOA_WIDTH).first.content.to_f
-            go_height = go.find(GOA_HEIGHT).first.content.to_f
-            font = go.find(GOA_FONT_TYP).first.content
-            fontsize = go.find(GOA_FONT_HEIGHT).first.content.to_f
-            rotation = go.find(GOA_ROTATION).first.content.to_f
-            font_color = ["#", go.find(GOA_FONT_COLOR).first.content].join
-            font_color = Page.check_color_definition(font_color)
-            just = go.find(GOA_JUSTIFICATION).first.content.downcase
-            if just == "links"
-              just == 'start'
-            elsif just == "mitte"
-              just == 'middle'
-            elsif just == "rechts"
-              just == 'end'
-            else 
-              just == 'start' # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
-            end
+          canvas1.g.translate(x.mm, y.mm).rotate(rotation) do |body|
+            # ............................................................................................................
+            # die Objekt-spezifischen Attribute ermitteln
+            # Textobjekt
+            if typ == TEXTOBJECT 
             
-            canvas1.g.translate(x.mm, y.mm).rotate(rotation) do |body|
-              body.text(0, 0, text).styles(
+              font = go.find(GOA_FONT_TYP).first.content
+              fontsize = go.find(GOA_FONT_HEIGHT).first.content.to_f
+              font_color = ["#", go.find(GOA_FONT_COLOR).first.content].join
+              font_color = Page.check_color_definition(font_color)
+              just = go.find(GOA_JUSTIFICATION).first.content.downcase
+              if just == "links"
+                just == 'start'
+              elsif just == "mitte"
+                just == 'middle'
+              elsif just == "rechts"
+                just == 'end'
+              else 
+                just == 'start' # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
+              end
+            
+              body.text(0, 0, data).styles(
                 :font_family => font, 
                 :font_size => fontsize, 
                 :fill => font_color, 
@@ -75,10 +85,18 @@ class Page
 #                :text_anchor => just
               )
             
-              # in Vorschau einen Rahmen um das selektierte Objekt zeichnen
-              if preview && selected_object_id == id 
-                body.rect(go_width.mm, go_height.mm).styles(:fill=>'none', :stroke=>'red')
+            # Bildobjekt
+            elsif typ == PICTUREOBJECT 
+              if FileTest.exists?(data)
+                go_image = ::Magick::Image.read(data).first
+                body.image(go_image, go_width.mm, go_height.mm)
               end
+            end
+            # ............................................................................................................
+            
+            # in Vorschau einen Rahmen um das selektierte Objekt zeichnen
+            if preview && selected_object_id == id 
+              body.rect(go_width.mm, go_height.mm).styles(:fill=>'none', :stroke=>'red')
             end
               
           end
@@ -89,7 +107,17 @@ class Page
       
       # Barcode-Objekte
       
+      # ..........................................................................................
+      # Rand zeichnen (für Vorschau)
+      if preview
+        canvas1.rect(width.mm, height.mm ).round(rx).styles(:fill=>'none', :stroke=>'blue')
+      end
+      
     end
+  end
+ 	# ---------------------------------------------------------------------------------------------------------
+  def replace_variables(data)
+    data
   end
  	# ---------------------------------------------------------------------------------------------------------
   def self.check_color_definition(color)
