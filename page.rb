@@ -19,7 +19,7 @@ class Page
     height + $pr.card_margin_bottom + $pr.card_margin_top
   end
  	# ---------------------------------------------------------------------------------------------------------
-  def draw(canvas, draw_pos_x, draw_pos_y, xml_doc, preview, selected_object_id)
+  def draw(canvas, draw_pos_x, draw_pos_y, xml_doc, sorted_id_list, preview, selected_object_id)
     width =  xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_WIDTH}").first.content.to_f
     height = xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_HEIGHT}").first.content.to_f
     
@@ -41,7 +41,9 @@ class Page
       # die graphischen Elemnte zeichnen
     
       # Text-Objekte
-      xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
+      sorted_id_list.each{|id|
+        go = xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
+      #~ xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
         # nur die Objekte zeichnen, die auf diese Seite sollen
         if go.find(GOA_PAGE_NR).first.content.to_i == @page_nr
         
