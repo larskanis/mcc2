@@ -2,21 +2,27 @@ if __FILE__ == $0
   require 'Win32API'
 end
 
+require "my_winspool"
+
 module Win32
   class TextPrinterControl
     #API FUNCTIONS
     @@PrintDlg = Win32API.new("comdlg32", "PrintDlg", ['P'], 'N')
     @@GlobalLock = Win32API.new('kernel32', 'GlobalLock', ['N'], 'N')
     @@GlobalFree = Win32API.new('kernel32', 'GlobalFree', ['N'], 'N')
+    @@GetLastError = Win32API.new('kernel32', 'GetLastError', [],  'N')
+    @@FormatMessage = Win32API.new('kernel32', 'FormatMessage', ['N','P','N','N','P','N','P'], 'N')
+    
     @@OpenPrinter = Win32API.new('winspool.drv', 'OpenPrinter', ['P','P','P'],  'N')
     @@ClosePrinter = Win32API.new('winspool.drv', 'ClosePrinter', ['N'], 'N')
+    @@AbortPrinter = Win32API.new('winspool.drv', 'AbortPrinter', ['N'], 'N')
     @@StartDocPrinter = Win32API.new('winspool.drv', 'StartDocPrinter', ['N','N','P'],  'N')
     @@EndDocPrinter = Win32API.new('winspool.drv', 'EndDocPrinter', ['N'], 'N')
     @@StartPagePrinter = Win32API.new('winspool.drv', 'StartPagePrinter', ['N'],  'N')
     @@EndPagePrinter = Win32API.new('winspool.drv', 'EndPagePrinter', ['N'], 'N')
     @@WritePrinter = Win32API.new('winspool.drv', 'WritePrinter', ['N','P','N','P'],  'N')
-    @@GetLastError = Win32API.new('kernel32', 'GetLastError', [],  'N')
-    @@FormatMessage = Win32API.new('kernel32', 'FormatMessage', ['N','P','N','N','P','N','P'], 'N')
+    #~ @@StretchBlt = Win32API.new('kernel32', 'FormatMessage', ['N','P','N','N','P','N','P'], 'N')
+#    PrintRectBox:=StretchBlt(phdc, LClientNew.Left, LClientNew.Top, LClientNew.Right-LClientNew.Left, LClientNew.Bottom-LClientNew.Top, rc.RectBitmap.Canvas.Handle, 0, 0, rc.RectBitmap.Width, rc.RectBitmap.Height, SRCAND);  //MERGECOPY
     
     #the functions that wrap the Win32API calls enforce type checking on arguments
     # (through #check). This is to be consistent with the Win32API which will assume
@@ -37,6 +43,53 @@ module Win32
       api_call(@@GlobalFree, hMovableMemory)
     end
     
+    @@EnumPrinters = Win32API.new('winspool.drv', 'EnumPrinters', ['N', 'P', 'N', 'P', 'N', 'P', 'P'], 'N')
+    #~ @@EnumPrinters = Win32API.new('winspool.drv', 'EnumPrinters', ['N', 'P', 'N', 'P', 'N', 'N', 'N'], 'N')
+    
+    def enum_printers()
+        #~ __in   DWORD Flags,
+        #~ __in   LPTSTR Name,
+        #~ __in   DWORD Level,
+        #~ __out  LPBYTE pPrinterEnum,
+        #~ __in   DWORD cbBuf,
+        #~ __out  LPDWORD pcbNeeded,
+        #~ __out  LPDWORD pcReturned
+#      EnumPrinters( PRINTER_ENUM_LOCAL, Nil, 2, Nil, 0, cbBuf, cReturned );
+      pcbNeeded = "\0" * 4
+      pcReturned = "\0" * 4
+      pr = 
+      PRINTER_ENUM_DEFAULT |
+      PRINTER_ENUM_LOCAL |
+      #~ PRINTER_ENUM_CONNECTIONS |
+      #~ PRINTER_ENUM_FAVORITE |
+      #~ PRINTER_ENUM_NAME |
+      #~ PRINTER_ENUM_REMOTE |
+      #~ PRINTER_ENUM_SHARED |
+      #~ PRINTER_ENUM_NETWORK |
+      #~ PRINTER_ENUM_EXPAND |
+      #~ PRINTER_ENUM_CONTAINER |
+      #~ PRINTER_ENUM_ICONMASK |
+      0 # Dummy
+      # erst einmal ermittel, wieveil Speichjer gebaraucht wird
+      cbBuf = 0
+      pPrinterEnum = "\0" * cbBuf # Buffer
+      p api_call(@@EnumPrinters, pr, nil, 5, pPrinterEnum, 0, pcbNeeded, pcReturned)
+      cbBuf = xxx2i(pcbNeeded) + 1
+      pPrinterEnum = "\0" * cbBuf # Buffer
+      p api_call(@@EnumPrinters, pr, nil, 5, pPrinterEnum, cbBuf, pcbNeeded, pcReturned)
+      p "definierte Rueckgabelaenge: #{cbBuf}"
+      p "benoetigte Bytes: #{xxx2i(pcbNeeded)}"
+      p "zurueckgegebene Bytes: #{xxx2i(pcReturned)}"
+      if xxx2i(pcReturned) > 0
+        p pPrinterEnum
+      end
+    end
+    
+    def xxx2i(x)
+      # dreht alle Zeichen herum macht dann einen Hexstring daraus und anschlieﬂend eine Zahl
+      x.unpack("h8")[0].reverse.hex
+    end
+    
     def open_printer(pPrinterName, phPrinter, pDefault)
       check(pPrinterName,String)
       check(phPrinter,String) #handle to string.. return value
@@ -48,6 +101,11 @@ module Win32
     def close_printer(hPrinter)
       check(hPrinter,Integer)
       api_call(@@ClosePrinter, hPrinter)
+    end
+    
+    def abort_printer(hPrinter)
+      check(hPrinter,Integer)
+      api_call(@@AbortPrinter, hPrinter)
     end
     
     def start_doc_printer(hPrinter, level, pDocInfo)
@@ -194,7 +252,7 @@ module Win32
           end
           #flush last page
           write_printer(hPrinter, "\f", 1, written)
-          end_page_printer(hPrinter)
+          #~ end_page_printer(hPrinter)
         end
       end      
     end
@@ -208,11 +266,12 @@ end
 
 if __FILE__ == $0
   p = Win32::TextPrinterControl.new
-  devicename = '\\\COMFILE1\P004'
+  devicename = '\\\COMFILE1\P0049'
   docString =<<EOF
 This is a test.
 Should be on a different line.
 Should be 3 lines in total, with a y at the end.
 EOF
-  p.print_doc_from_dialog(docString, devicename)
+  #~ p.print_doc(docString, devicename)
+  p.enum_printers
 end
