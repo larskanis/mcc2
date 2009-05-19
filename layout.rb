@@ -27,11 +27,14 @@ class Layout
     @parent = parent
     @app = app
     
+    close_dataman
+    
     @attributes = {}
     add_attr(S_DUPLEX, Integer, 0)
     add_attr(S_WIDTH, Integer, $pr.default_width)
     add_attr(S_HEIGHT, Integer, $pr.default_height)
     add_attr(S_DATASOURCE, String, "")
+    add_attr(S_DATASOURCETYP, String, NONE)
     
     @changed = false
 
@@ -101,6 +104,23 @@ class Layout
       
       deactivat_up_down
       @lf.dial_zoom.range = (49..359)
+    end
+  end
+  # ---------------------------------------------------------------------------------------------------------
+  def close_dataman
+    @dataman = nil
+  end
+  # ---------------------------------------------------------------------------------------------------------
+  def open_dataman
+    datamantyp =  @xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_DATASOURCETYP}").first.content
+    datasource =  xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_DATASOURCE}").first.content
+    
+    if datamantyp == DATABASE
+      @dataman = DataManDatabase.new(datasource)
+    elsif datamantyp == CSV
+      @dataman = DataManCSV.new(datasource)
+    else
+      @dataman = nil
     end
   end
   # ---------------------------------------------------------------------------------------------------------
@@ -326,14 +346,7 @@ class Layout
     scale_width = Page.width_with_margins(width) * @scale 
     scale_height = (2 * Page.height_with_margins(height) + card_offset) * @scale
     
-#   puts "\nFile: #{ fname }  #{csv.length} Datensätze"  
-#   puts "Erster : #{ csv[0][:vorname] } #{ csv[0][:name] }"  
-    row = nil
-    datasource =  @xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_DATASOURCE}").first.content
-    if datasource && FileTest.exists?(datasource.strip)
-      csv = FasterCSV.read(datasource, :col_sep=>';', :headers=>true, :header_converters=>:symbol)
-      row = csv[0]
-    end
+    @dataman ? row = @dataman.row(0) : row = nil
     
     rvg = Magick::RVG.new(image_width.mm, image_height.mm).viewbox(0, 0, scale_width, scale_height) do |canvas|
       # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
@@ -397,13 +410,18 @@ class Layout
   end
  	# ---------------------------------------------------------------------------------------------------------
   # lädt das XML-File und initialisiert die entsprechenden Variablen und Objekte
-	def load_from_xml
+	def load_from_xml(filename)
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
-      fn = FXFileDialog.getOpenFilename(@parent, 'Laden', '.', patterns = '*.XML', initial = 0)
-      @filename = fn
+      if filename && FileTest.exists?(filename)
+        @filename = filename
+      else
+        fn = FXFileDialog.getOpenFilename(@parent, 'Laden', '.', patterns = '*.XML', initial = 0)
+        @filename = fn
+      end
     end
     XML.indent_tree_output = true
     return nil if @filename == ""
+    
     
 #    @xml_doc = LibXML::XML::Document.file(filename, :options => XML::Parser::Options::NOBLANKS | XML::Parser::Options::PEDANTIC | XML::Parser::Options::COMPACT)
     @xml_doc = LibXML::XML::Document.file(@filename, :options => XML::Parser::Options::NOBLANKS )
@@ -445,11 +463,14 @@ class Layout
       }
     }
     
+    open_dataman
+    
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       fill_objectlist 
       draw_card
       set_title
     end
+    
     @filename
     #~ print @xml_doc.to_s
   end
@@ -546,7 +567,7 @@ end
 # Main
 
 if __FILE__ == $0
-  system('ruby mcc2.rb')
+  system("ruby mcc2.rb #{ARGV}")
   exit
   lay = Layout.new(nil, nil)
   
