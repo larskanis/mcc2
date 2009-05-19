@@ -120,6 +120,7 @@ class Page
   end
  	# ---------------------------------------------------------------------------------------------------------
   def replace_variables(data, row)
+    return data unless row
     pattern = /\{ *(.*)\[ *(\d{0,3}) *, *(\d{0,3}) *\] *\}/
     data.gsub(pattern){
       feld = $1
