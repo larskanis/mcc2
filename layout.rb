@@ -14,6 +14,8 @@ class Layout
   
   attr_accessor :attributes
   
+  attr_accessor :dataman
+  
 #  attr_accessor :graphic_objects
 #  attr_accessor :duplex
 #  attr_accessor :chip
@@ -389,9 +391,9 @@ class Layout
     
     # Layout definieren
     @xml_doc.root << node = XML::Node.new(S_LAYOUT)
-      attributes.each_pair{|attr_name, attr|
-        node << XML::Node.new(attr.attr_name, attr.attr_value.to_s)
-      }
+    attributes.each_pair{|attr_name, attr|
+      node << XML::Node.new(attr.attr_name, attr.attr_value.to_s)
+    }
     
     # Chip definieren
     @xml_doc.root << node = XML::Node.new(S_CHIP)
