@@ -172,7 +172,6 @@ class MCC2GUI < MainWindow
   end
 	# ---------------------------------------------------------------------------------------------------------
   def print_cards
-    p "print"
     child = @mdiclient.activeChild
     if child
       pr_dlg = MyPrintDialogBox.new(@app, child.userData)
