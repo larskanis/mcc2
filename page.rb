@@ -78,15 +78,17 @@ class Page
               else 
                 just == 'start' # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
               end
-            
-              body.text(0, 0, data).styles(
-                :font_family => font, 
-                :font_size => fontsize, 
-                :fill => font_color, 
-                :font_weight => 'normal', 
-                :font_style => 'normal'
-#                :text_anchor => just
-              )
+              
+              if data != ""
+                body.text(0, 0, data).styles(
+                  :font_family => font, 
+                  :font_size => fontsize, 
+                  :fill => font_color, 
+                  :font_weight => 'normal', 
+                  :font_style => 'normal'
+  #                :text_anchor => just
+                )
+              end
             
             # Bildobjekt
             elsif typ == PICTUREOBJECT 
@@ -120,13 +122,13 @@ class Page
   end
  	# ---------------------------------------------------------------------------------------------------------
   def replace_variables(data, row)
-    return data unless row
-    pattern = /\{ *(.*)\[ *(\d{0,3}) *, *(\d{0,3}) *\] *\}/
+    return data unless row # die unveränderten Daten zurückgeben, wenn kein Datensatz übergeben wurde
+    pattern = /\{ *([-\._\w]*)\[ *(\d{1,3}) *, *(\d{1,3}) *\] *\}/
     data.gsub(pattern){
       feld = $1
       von = $2.to_i
       anz = $3.to_i
-      row[feld.intern][von, anz]
+      row[feld.intern].to_s[von, anz]
     }
   end
  	# ---------------------------------------------------------------------------------------------------------
