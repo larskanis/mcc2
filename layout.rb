@@ -16,6 +16,8 @@ class Layout
   
   attr_accessor :dataman
   
+  attr_accessor :row_nr
+  
 #  attr_accessor :graphic_objects
 #  attr_accessor :duplex
 #  attr_accessor :chip
@@ -28,6 +30,7 @@ class Layout
     @filename = nil
     @parent = parent
     @app = app
+    @row_nr = 0
     
     close_dataman
     
@@ -348,7 +351,7 @@ class Layout
     scale_width = Page.width_with_margins(width) * @scale 
     scale_height = (2 * Page.height_with_margins(height) + card_offset) * @scale
     
-    @dataman ? row = @dataman.row(0) : row = nil
+    @dataman ? row = @dataman.row(@row_nr) : row = nil
     
     rvg = Magick::RVG.new(image_width.mm, image_height.mm).viewbox(0, 0, scale_width, scale_height) do |canvas|
       # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
