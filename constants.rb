@@ -43,6 +43,11 @@ S_WIDTH = 'Width'
 S_PARAM = 'Param'
 S_ROOT = 'Root'
 S_DATASOURCE = 'datasource'
+S_DATASOURCETYP = 'datasource_typ'
 
 UP = 0
 DOWN = 1
+
+NONE = 'none'
+CSV = 'csv'
+DATABASE = 'database'
