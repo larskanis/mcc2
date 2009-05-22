@@ -1,4 +1,4 @@
-$: << 'win32'
+$: << '../win32'
 
 if __FILE__ == $0
   require 'Win32API'
@@ -254,20 +254,65 @@ class RubyPrinting
   end                   
   # --------------------------------------------------------------------------------------------------------------
   def print_graphic(devicename, datatype)
-    img = Magick::RVG.new(85, 65) do |canvas|
-      canvas.text(0, 0, "Test").styles(
+    img = Magick::RVG.new(850, 650) do |canvas|
+      canvas.text(10, 10, "das ist ein ganz neuer Test Test"*100).styles(
         :font_family => "Arial", 
-        :font_size => 10, 
+        :font_size => 100, 
         :fill => "black", 
-        :font_weight => 'normal', 
+        :font_weight => 'bold', 
         :font_style => 'normal')
     end
     data = img.draw.to_blob{
-      self.format = 'PNG'
+      #~ self.format = 'PNG'
       self.format = 'BMP'
     }
+    #~ p [data].pack("a*")
+    #~ bm_header = [data].pack("a*").struct!(["SLSSL","LLLSSLLLLLL","CCCC"].join,
+        #~ # = data[0,200].unpack("SLSSLLLLH*")
+        #~ # BitmapFileHeader
+        #~ :bfType,
+        #~ :bfSize,
+        #~ :bfReserved1,
+        #~ :bfReserved2,
+        #~ :bfOffBits,
+        
+        #~ # BITMAPINFOHEADER
+        #~ :biSize,
+        #~ :biWidth,
+        #~ :biHeight,
+        #~ :biPlanes,
+        #~ :biBitCount,
+        #~ :biCompression,
+        #~ :biSizeImage,
+        #~ :biXPelsPerMeter,
+        #~ :biYPelsPerMeter,
+        #~ :biClrUsed,
+        #~ :biClrImportant,
+        
+        #~ # RGBQUAD
+        #~ :rgbBlue,
+        #~ :rgbGreen,
+        #~ :rgbRed,
+        #~ :rgbReserved)
+
+    p img.height
+    p img.width
+    p data.size
+    bm_header = data.unpack(["SLSSL","LLLSSLLLLLL","CCCC"].join)
+    p bm_header
+    p bmdata_offs = bm_header[4]
+    p bmdata_width = bm_header[6]
+    p bmdata_heigth = bm_header[7]
+    p bmdata_planes = bm_header[8]
+    p bmdata_pixel_per_pel = bm_header[9]
+    p bmdata_anz = bm_header[11]
+    bmdata = data[bmdata_offs, bmdata_anz]
     
-    p hDC = @w32gdi.create_dc( nil, devicename, nil, nil);
+    
+    #~ p bmdata[0..500]
+    #~ bits = bm_header[
+    
+    hDC = @w32gdi.create_dc( nil, devicename, nil, nil);
     hPrinter = hDC
     #~ devMode, dc = show_print_dialog
     #~ devicename, orient, duplex, formname = parse_devmode(devMode)
@@ -280,9 +325,22 @@ class RubyPrinting
     
     with_doc("Test", hPrinter) do
       with_page(hPrinter) do
-    
-        hBmp = @w32user.load_image( 0, 't:\Project\MCC2a\trunk\Image-FastArrowRight.bmp ', IMAGE_BITMAP, 
-          0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION );          
+
+        # funktioniert zwar, aber wo kommen dann die Bilddaten hin?
+        #~ memDC = @w32gdi.create_compatible_dc( hPrinter )
+        #~ hBmp = @w32gdi.create_compatible_bitmap(hPrinter, bmdata_width, bmdata_heigth)
+        #~ @w32gdi.select_object( memDC, hBmp )
+        
+        # funktioniert, aber wird nicht gedruckt
+        #~ hBmp = @w32gdi.create_bitmap(bmdata_width, bmdata_heigth, bmdata_planes, bmdata_pixel_per_pel, bmdata)
+        
+        #~ hBmp = @w32user.load_image( 0, 't:\Project\MCC2a\trunk\Image-FastArrowRight.bmp', IMAGE_BITMAP, 
+          #~ 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION );          
+          
+        #~ hBmp = @w32user.load_image( 0, '???', IMAGE_BITMAP, 
+          #~ 0, 0, LR_COPYFROMRESOURCE | LR_CREATEDIBSECTION ); # ist nicht geeignet, da Windows-Resource gemeint sind (DLL o.ä.)          
+          
+        p "hBmp: #{hBmp}"
         
         tmpDC = @w32gdi.create_compatible_dc(hPrinter)
         
