@@ -53,18 +53,6 @@ class PrinterXID < CardPrinter
     ruby_printer.api_call(@@unloadCard, ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
   end
 
-  def unload_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
-    ruby_printer = TextPrinterControl.new
-    check(ic_type, Integer)
-    check(hwndSender, Integer)
-    check(nSCSI_ID, Integer)
-    check(nHost_ID, Integer)
-    check(fEject, Integer)
-    check(fCardFlip, Integer)
-    check(reserved1, Integer)
-    ruby_printer.api_call(@@unloadCard, ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
-  end
-  
   def test_LC
     p "*"*50
     p "test_LC"
@@ -105,10 +93,32 @@ class PrinterXID < CardPrinter
     end
   end
   
+  def print(child, row)
+    p row
+    #~ Page.draw(canvas, draw_pos_x, draw_pos_y, xml_doc, sorted_id_list, preview, selected_object_id, row)
+      page_nr = 0
+      page = Page.new(page_nr)
+      
+      # Drucker-Canvas
+      canvas = nil
+      
+      draw_pos_x = 0
+      draw_pos_y = 0
+      xml_doc = child.xml_doc
+      sorted_id_list = child.sorted_id_list
+      preview = false
+      selected_object_id = nil
+      p "page.draw"
+      #~ page.draw(canvas, draw_pos_x, draw_pos_y, xml_doc, sorted_id_list, preview, selected_object_id, row)
+  end
+  
 end
 
 if __FILE__ == $0
 
+  system("ruby mcc2.rb #{ARGV}")
+  exit
+  
 
 #~ GetDesktopWindow = Win32API.new("user32", "GetDesktopWindow", [], 'L')
 #~ GetActiveWindow = Win32API.new("user32", "GetActiveWindow", [], 'L')
