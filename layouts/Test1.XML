@@ -5,6 +5,7 @@
     <Width>85.6</Width>
     <Height>53.98</Height>
     <datasource>l:\XID\Golf\Platzreife\dgv-29420.cs2</datasource>
+    <datasource_typ>csv</datasource_typ>
   </Layout>
   <Chip>
     <Param_1/>
