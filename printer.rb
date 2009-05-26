@@ -51,8 +51,8 @@ class Printer
     Magick::RVG.dpi = @dpi
 
     # todo zentralen Offset einbauen
-    draw_pos_x = 0
-    draw_pos_y = 0
+    draw_pos_x = -5
+    draw_pos_y = -5
 
     # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
       selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
@@ -87,8 +87,8 @@ class Printer
           tmpDC = @w32gdi.create_compatible_dc(hPrinter)
           oldBmp = @w32gdi.select_object( tmpDC, hBmp )
           
-          nXDest = 500
-          nYDest = 500+row_idx
+          nXDest = 0
+          nYDest = 0 + row_idx
           hdcSrc = tmpDC
           nXSrc = 0
           nYSrc = 0
