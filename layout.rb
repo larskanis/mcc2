@@ -56,7 +56,8 @@ class Layout
       
       @image_view = FXImageView.new(@lf.verticalframe_right, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y)
 
-
+      create_chipparam_fields
+      
       # .............................................................................................
       # die Aktionen definieren, die ausgeführt werden, wenn am Layout irgend etwas gearbeitet wird
       
@@ -105,12 +106,54 @@ class Layout
       @lf.matrix1.numColumns = 2 
       @lf.matrix2.numColumns = 2 
       @lf.matrix3.numColumns = 3 
+      #~ @lf.matrix_chipparams.numColumns = 2
       deactivate_object_tabs
       
       deactivat_up_down
       @lf.dial_zoom.range = (49..359)
     end
   end
+  # ---------------------------------------------------------------------------------------------------------
+  def create_chipparam_fields
+    p "create_chipparam_fields"
+    @chip = Chip.new 
+    @chipparam_textfields = []
+    
+    scrl_w = FX::ScrollWindow.new(@lf.verticalframe_chip, LAYOUT_FILL_X | LAYOUT_FILL_Y)
+    matrix_chipparams = FX::Matrix.new(scrl_w){|w|
+      @matrix3=w
+      w.wdg_name='matrix_xyz'
+      w.numRows=4
+      w.width=650
+      w.y=2
+      w.height=0
+      #~ w.matrixStyle=131072 
+      w.matrixStyle = MATRIX_BY_COLUMNS | LAYOUT_FILL_X | LAYOUT_FILL_Y
+      #~ w.numColumns = 2
+      w.x=2
+    }
+    matrix_chipparams.numColumns = 2
+      
+    (0..(@chip.anz_params-1)).each{|i|
+			FX::Label.new(matrix_chipparams){|w|
+				w.wdg_name = "label_chipparam_#{i}"
+        w.text = ['Parameter', i+1].join(' ')
+				w.font=FX::Font.new.from_s('Arial|80|40|5|0|0|0').to_FXFont
+			}
+			tf = FX::TextField.new(matrix_chipparams){|w|
+				#~ @textfield41 = w
+        w.textFieldTextStyle = LAYOUT_FIX_WIDTH
+        #~ w.textFieldTextStyle = LAYOUT_FILL_X
+				w.wdg_name = "textfield_chipparam_#{i}"
+				w.font = FX::Font.new.from_s('Arial|80|40|5|0|0|0').to_FXFont
+        w.width = 200
+				w.numColumns=10
+			}
+      tf.width = 800
+      @chipparam_textfields << tf
+    }
+  end
+  
   # ---------------------------------------------------------------------------------------------------------
   def close_dataman
     @dataman = nil
@@ -369,7 +412,6 @@ class Layout
       #~ canvas.background_fill = 'gray'
       
     end
-    #~ image.draw.write('test.gif')
     
     # ..........................................................................................
     # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
