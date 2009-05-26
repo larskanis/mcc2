@@ -82,7 +82,7 @@ class Page
               if data != ""
                 body.text(0, 0, data).styles(
                   :font_family => font, 
-                  :font_size => fontsize, 
+                  :font_size => fontsize.pt, 
                   :fill => font_color, 
                   :font_weight => 'normal', 
                   :font_style => 'normal'
