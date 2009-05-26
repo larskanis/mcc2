@@ -19,6 +19,7 @@ if __FILE__ == $0
   require 'rvg/rvg'        # für RMagick
 
   #~ require 'cstruct'
+  require "tempfile" 
   
 end
 
@@ -52,9 +53,7 @@ class RubyPrinting
         #~ pdefaults = [datatype, devmode.to_s, 0x8].pack('ppL')
         pdefaults = [datatype, devmode.to_s, PRINTER_ACCESS_USE].pack('ppL')
       end
-      if (open_printer(devicename, printer, pdefaults) == 0) 
-        show_error
-      end
+      open_printer(devicename, printer, pdefaults)
       hprinter = printer.unpack('L')[0]
       yield hprinter
     ensure
@@ -254,124 +253,80 @@ class RubyPrinting
   end                   
   # --------------------------------------------------------------------------------------------------------------
   def print_graphic(devicename, datatype)
-    img = Magick::RVG.new(850, 650) do |canvas|
-      canvas.text(10, 10, "das ist ein ganz neuer Test Test"*100).styles(
+ 
+    # den Pfad ermitteln, wo das temporäre File abgelegt werden soll
+    tf = Tempfile.new("afile") 
+    temp_path = File.join(tf.path.split("/")[0..-2])
+    tf.close(true)            # #<File:0x4016e3c0>\n0x40187c30 
+
+    # 
+    Magick::RVG.dpi = 600
+    crd_width = 85
+    crd_height = 55
+
+    img = Magick::RVG.new((crd_width+10).mm, (crd_height+10).mm) do |canvas|
+      canvas.background_fill = 'white'
+      
+      canvas.rect(crd_width.mm, crd_height.mm, 5.mm, 5.mm).styles(:fill=>'none', :stroke=>'black')
+      canvas.text(200, 200, "das ist ein ganz neuer Test Test").styles(
         :font_family => "Arial", 
-        :font_size => 100, 
-        :fill => "black", 
+        :font_size => 20.pt, 
+        :fill => 'black', 
+        :font_weight => 'bold', 
+        :font_style => 'normal')
+        
+      canvas.text(100, 100, "Blue 15").styles(
+        :font_family => "Arial", 
+        :font_size => 15.pt, 
+        :fill => 'blue', 
         :font_weight => 'bold', 
         :font_style => 'normal')
     end
-    data = img.draw.to_blob{
-      #~ self.format = 'PNG'
-      self.format = 'BMP'
-    }
-    #~ p [data].pack("a*")
-    #~ bm_header = [data].pack("a*").struct!(["SLSSL","LLLSSLLLLLL","CCCC"].join,
-        #~ # = data[0,200].unpack("SLSSLLLLH*")
-        #~ # BitmapFileHeader
-        #~ :bfType,
-        #~ :bfSize,
-        #~ :bfReserved1,
-        #~ :bfReserved2,
-        #~ :bfOffBits,
-        
-        #~ # BITMAPINFOHEADER
-        #~ :biSize,
-        #~ :biWidth,
-        #~ :biHeight,
-        #~ :biPlanes,
-        #~ :biBitCount,
-        #~ :biCompression,
-        #~ :biSizeImage,
-        #~ :biXPelsPerMeter,
-        #~ :biYPelsPerMeter,
-        #~ :biClrUsed,
-        #~ :biClrImportant,
-        
-        #~ # RGBQUAD
-        #~ :rgbBlue,
-        #~ :rgbGreen,
-        #~ :rgbRed,
-        #~ :rgbReserved)
-
-    p img.height
-    p img.width
-    p data.size
-    bm_header = data.unpack(["SLSSL","LLLSSLLLLLL","CCCC"].join)
-    p bm_header
-    p bmdata_offs = bm_header[4]
-    p bmdata_width = bm_header[6]
-    p bmdata_heigth = bm_header[7]
-    p bmdata_planes = bm_header[8]
-    p bmdata_pixel_per_pel = bm_header[9]
-    p bmdata_anz = bm_header[11]
-    bmdata = data[bmdata_offs, bmdata_anz]
+    pic = img.draw
+    p pic
     
     
-    #~ p bmdata[0..500]
-    #~ bits = bm_header[
-    
+    # create_dc(lpszDriver, lpszDevice, lpszOutput, lpInitData)
     hDC = @w32gdi.create_dc( nil, devicename, nil, nil);
+    
     hPrinter = hDC
+    
     #~ devMode, dc = show_print_dialog
     #~ devicename, orient, duplex, formname = parse_devmode(devMode)
     written = ""
     devMode = 0
     datatype = (devMode == 0) ? nil : "TEXT"
       
-    info = DL.malloc(DL.sizeof("LLLLHHP"))
-    info.struct!('LLLLHHP', :bmType, :bmWidth, :bmHeight, :bmWidthBytes, :bmPlanes, :bmBitsPixel, :bmBits)
-    
     with_doc("Test", hPrinter) do
       with_page(hPrinter) do
-
-        # funktioniert zwar, aber wo kommen dann die Bilddaten hin?
-        #~ memDC = @w32gdi.create_compatible_dc( hPrinter )
-        #~ hBmp = @w32gdi.create_compatible_bitmap(hPrinter, bmdata_width, bmdata_heigth)
-        #~ @w32gdi.select_object( memDC, hBmp )
+      
+        bmdata = pic.to_blob{
+          self.format='rgb'
+          self.depth = 8
+        }
+        puts "size: #{bmdata.length}"
         
-        # funktioniert, aber wird nicht gedruckt
-        #~ hBmp = @w32gdi.create_bitmap(bmdata_width, bmdata_heigth, bmdata_planes, bmdata_pixel_per_pel, bmdata)
-        
-        #~ hBmp = @w32user.load_image( 0, 't:\Project\MCC2a\trunk\Image-FastArrowRight.bmp', IMAGE_BITMAP, 
-          #~ 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION );          
+        (0 ... pic.rows).each{|row_idx|
+          hBmp = @w32gdi.create_bitmap(pic.columns, 1, 1, 24, bmdata[3*row_idx*pic.columns, 3*pic.columns])
+          #~ p "hBmp: #{hBmp}"
           
-        #~ hBmp = @w32user.load_image( 0, '???', IMAGE_BITMAP, 
-          #~ 0, 0, LR_COPYFROMRESOURCE | LR_CREATEDIBSECTION ); # ist nicht geeignet, da Windows-Resource gemeint sind (DLL o.ä.)          
+          tmpDC = @w32gdi.create_compatible_dc(hPrinter)
           
-        p "hBmp: #{hBmp}"
-        
-        tmpDC = @w32gdi.create_compatible_dc(hPrinter)
-        
-        oldBmp = @w32gdi.select_object( tmpDC, hBmp )
-        
-        @w32gdi.get_object(hBmp, info.size, info)
-        
-        #~ p info
-        #~ p info[:bmWidth]
-        #~ p info[:bmHeight]
-        #~ p info[:bmType]
-        #~ p info[:bmWidthBytes]
-        #~ p info[:bmPlanes]
-        #~ p info[:bmBitsPixel]
-        #~ p info[:bmBits]
-        
-        nXDest = 100
-        nYDest = 100
-        nWidth = info[:bmWidth]
-        nHeight = info[:bmHeight]
-        hdcSrc = tmpDC
-        nXSrc = 0
-        nYSrc = 0
-        dwRop = SRCCOPY
-        @w32gdi.bit_blt(hPrinter, nXDest, nYDest, nWidth, nHeight, hdcSrc, nXSrc, nYSrc, dwRop)
-        
-        @w32gdi.select_object( tmpDC, oldBmp );
-        
+          oldBmp = @w32gdi.select_object( tmpDC, hBmp )
+          
+          nXDest = 500
+          nYDest = 500+row_idx
+          hdcSrc = tmpDC
+          nXSrc = 0
+          nYSrc = 0
+          dwRop = SRCCOPY
+          @w32gdi.bit_blt(hPrinter, nXDest, nYDest, pic.columns, 1, hdcSrc, nXSrc, nYSrc, dwRop)
+          
+          @w32gdi.select_object( tmpDC, oldBmp )
+        }
+          
         s = "Teststring"
         @w32gdi.text_out(hPrinter, 10, 10, s, s.length)
-        
       end
     end
   end
@@ -384,6 +339,7 @@ if __FILE__ == $0
   rp = RubyPrinting.new
   devicename = "Jaws PDF Creator"
   #~ devicename = '\\\COMFILE1\P0049'
+  #~ devicename = "XeroxPhaser7750DN PS"
   #~ rp.enum_printers
   rp.print_graphic(devicename, "RAW")
   
