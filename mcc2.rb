@@ -15,6 +15,7 @@ $stderr.sync = true
 
 basedir = File.dirname(__FILE__)
 $: << basedir
+$: << 'win32'
 
 
 #*****************************************************************************
@@ -62,8 +63,6 @@ require 'text_object'       # grafische Text-Objekte
 require 'magstripe'         # Magnetstreifen
 require 'chip'              # Chip
 
-require 'ruby_print'        # vorläufig
-include Win32
 
 require 'printer'           # die Basisklasse für die Printer
 require 'card_printer'      # die Basisklasse für alle CardPrinter
@@ -75,10 +74,24 @@ require 'xml'               # für die Layout-Struktur
 
 require 'fastercsv'
 
-require 'RMagick'
+require 'RMagick'           # für das Erzeugen der Druckbilder
 include Magick
+require 'rvg/rvg'           # für RMagick die Vektorgraphik-Bibliothek
 
-require 'rvg/rvg'        # für RMagick
+require "tempfile" 
+
+# die win32api Wrapper laden
+require 'Win32API'
+#~ include Win32
+require "dl"
+
+require 'win32api_base'
+#~ require 'win32api_comdlg'
+require 'win32api_gdi'
+#~ require 'win32api_kernel'
+require 'win32api_user'
+#~ require 'win32api_winspool'
+
 
 $pr = PrinterXID.new # todo, muss später vom Anwender ausgewählt werden
 
