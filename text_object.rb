@@ -7,7 +7,6 @@ end
 
 class TextObject < GraphicObject
   def initialize
-    p "TextObject::Initialize"
     super
     @go_attributes[GOA_TYP].attr_value = TEXTOBJECT
     add_attr(@go_attributes, GOA_FONT_HEIGHT, Integer, 10)

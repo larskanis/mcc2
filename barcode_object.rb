@@ -7,7 +7,6 @@ end
 
 class BarcodeObject < GraphicObject
   def initialize
-    p "BarcodeObject::Initialize"
     super
     @go_attributes[GOA_TYP].attr_value = BARCODEOBJECT
     add_attr(@go_attributes, GOA_BC_TYP, String, "2O5I")

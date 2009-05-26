@@ -7,7 +7,6 @@ end
 
 class PictureObject < GraphicObject
   def initialize
-    p "PictureObject::Initialize"
     super
     @go_attributes[GOA_TYP].attr_value = PICTUREOBJECT
     add_attr(@go_attributes, GOA_STRETCH, Integer, false)
