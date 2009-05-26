@@ -10,11 +10,11 @@ end
 
 class PrinterXID < CardPrinter
 
-  prnsc_wrapper = 't:\Project\XID\prnsc_wrapper\prnsc_wrapper.dll'
+  #~ prnsc_wrapper = 't:\Project\XID\prnsc_wrapper\prnsc_wrapper.dll'
 #  @@loadCard = Win32API.new(prnsc_wrapper, 'LoadCard', ['N','N','N','N','P','N'],  'N')
 #  @@unloadCard = Win32API.new(prnsc_wrapper, 'UnloadCard', ['N','N','N','N','N','N','N'],  'N')
-  @@test_LoadCard = Win32API.new(prnsc_wrapper, 'test_LoadCard', [],  'N')
-  @@test_UnloadCard = Win32API.new(prnsc_wrapper, 'test_UnloadCard', [],  'N')
+  #~ @@test_LoadCard = Win32API.new(prnsc_wrapper, 'test_LoadCard', [],  'N')
+  #~ @@test_UnloadCard = Win32API.new(prnsc_wrapper, 'test_UnloadCard', [],  'N')
   
   ERR_NO = 0
   ERR_bad_modus = 1
@@ -27,36 +27,52 @@ class PrinterXID < CardPrinter
 #    @sc_printer = 't:\Project\XID\Delphi\Prj_xid_test.exe' # wurde durch die nächste Zeile ersetzt
     @sc_printer = 't:\Project\XID\XID_Card_Loader\XID_Card_Loader.exe'
   end
+
+  # wenn es denn mal funktionieren würde, wäre dies Methode effizienter
+  #~ def load_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
+    #~ ruby_printer = TextPrinterControl.new
+    #~ check(ic_type, Integer)
+    #~ check(hwndSender, Integer)
+    #~ check(nSCSI_ID, Integer)
+    #~ check(nHost_ID, Integer)
+    #~ check(szPrnName, String)
+    #~ check(reserved1, Integer)
+    #~ ruby_printer.api_call(@@loadCard, ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
+  #~ end
   
-  def load_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
-    ruby_printer = TextPrinterControl.new
-    check(ic_type, Integer)
-    check(hwndSender, Integer)
-    check(nSCSI_ID, Integer)
-    check(nHost_ID, Integer)
-    check(szPrnName, String)
-    check(reserved1, Integer)
-    ruby_printer.api_call(@@loadCard, ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
-  end
+  #~ def unload_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
+    #~ ruby_printer = TextPrinterControl.new
+    #~ check(ic_type, Integer)
+    #~ check(hwndSender, Integer)
+    #~ check(nSCSI_ID, Integer)
+    #~ check(nHost_ID, Integer)
+    #~ check(fEject, Integer)
+    #~ check(fCardFlip, Integer)
+    #~ check(reserved1, Integer)
+    #~ ruby_printer.api_call(@@unloadCard, ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
+  #~ end
   
-  def unload_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
-    ruby_printer = TextPrinterControl.new
-    check(ic_type, Integer)
-    check(hwndSender, Integer)
-    check(nSCSI_ID, Integer)
-    check(nHost_ID, Integer)
-    check(fEject, Integer)
-    check(fCardFlip, Integer)
-    check(reserved1, Integer)
-    ruby_printer.api_call(@@unloadCard, ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
+  def load_card
+    reserved1 = '1'
+    ic_type = 'contactless'
+    flip = 'no_flip'
+    system([@sc_printer, 'load', ic_type, flip].join(" "))
+    $?.exitstatus
   end
 
+  def unload_card
+    ic_type = 'contactless'
+    flip = 'no_flip'
+    system([@sc_printer, 'unload', ic_type, flip].join(" "))
+    $?.exitstatus
+  end
+  
   def test_LC
     p "*"*50
     p "test_LC"
     #~ ruby_printer = TextPrinterControl.new
     #~ erg = ruby_printer.api_call(@@test_LoadCard)
-    p system("#{@sc_printer} load contactless no_flip 1")
+    p system("#{@sc_printer} load contactless no_flip")
     status = $?.exitstatus
     p "erg: #{human_status(status)}"
   end
@@ -101,7 +117,23 @@ class PrinterXID < CardPrinter
     preview = false
     selected_object_id = nil
     
-    devicename = "Jaws PDF Creator" # nur für Tests
+    #~ devicename = "Jaws PDF Creator" # nur für Tests
+    devicename = "DIGID XID440\0" # todo aus Druckerauswahl übernehmen und in Einstellungen speichern
+    chip = true
+    if chip
+      # Karte in Leser einziehen
+      #~ load_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
+      load_card
+      
+      # Kartenpersonalisierung
+      sleep 5
+      
+      # Karte vom Leser zum Drucken weiter schicken
+      #~ unload_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
+      unload_card
+    end
+    
+    
     
     page_width = default_width + card_margin_left + card_margin_right # vorläufig todo
     page_height = default_height + card_margin_top + card_margin_bottom # vorläufig todo 
@@ -114,8 +146,8 @@ end
 
 if __FILE__ == $0
 
-  system("ruby mcc2.rb #{ARGV}")
-  exit
+  #~ system("ruby mcc2.rb #{ARGV}")
+  #~ exit
   
 
 #~ GetDesktopWindow = Win32API.new("user32", "GetDesktopWindow", [], 'L')
@@ -124,9 +156,9 @@ if __FILE__ == $0
 
   pr = PrinterXID.new
   pr.test_LC
-  #~ pr.test_ULC
   sleep 5
-  pr.test_RLC
+  pr.test_ULC
+  #~ pr.test_RLC
   exit
   
   # die folgenden Zeilen sind durch das Einziehen der Karten über den XID_Card_Loader obsolet geworden
