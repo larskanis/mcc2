@@ -8,8 +8,6 @@ if __FILE__ == $0
   require 'mcc2'
 end
 
-require 'Win32API'
-
 class PrinterXID < CardPrinter
 
   prnsc_wrapper = 't:\Project\XID\prnsc_wrapper\prnsc_wrapper.dll'
@@ -94,22 +92,22 @@ class PrinterXID < CardPrinter
   end
   
   def print(child, row)
-    p row
-    #~ Page.draw(canvas, draw_pos_x, draw_pos_y, xml_doc, sorted_id_list, preview, selected_object_id, row)
-      page_nr = 0
-      page = Page.new(page_nr)
-      
-      # Drucker-Canvas
-      canvas = nil
-      
-      draw_pos_x = 0
-      draw_pos_y = 0
-      xml_doc = child.xml_doc
-      sorted_id_list = child.sorted_id_list
-      preview = false
-      selected_object_id = nil
-      p "page.draw"
-      #~ page.draw(canvas, draw_pos_x, draw_pos_y, xml_doc, sorted_id_list, preview, selected_object_id, row)
+    page_nr = 0
+    
+    draw_pos_x = 0
+    draw_pos_y = 0
+    xml_doc = child.xml_doc
+    sorted_id_list = child.sorted_id_list
+    preview = false
+    selected_object_id = nil
+    
+    devicename = "Jaws PDF Creator" # nur für Tests
+    
+    page_width = default_width + card_margin_left + card_margin_right # vorläufig todo
+    page_height = default_height + card_margin_top + card_margin_bottom # vorläufig todo 
+    
+    # print_page(devicename, xml_doc, sorted_id_list, row, page_width = default_width, page_height = default_height, page_nr )
+    print_page(devicename, xml_doc, sorted_id_list, row, page_nr, page_width , page_height )
   end
   
 end
