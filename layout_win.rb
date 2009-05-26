@@ -17,7 +17,7 @@ class LayoutFrame
 			FX::Splitter.new(@LayoutFrame){|w|
 				@splitter10=w
 				w.wdg_name='splitter10'
-				w.width=525
+				w.width=292
 				w.height=449
 				w.barSize=2
 				w.layoutHints=3084
@@ -32,14 +32,14 @@ class LayoutFrame
 						@splitter12=w
 						w.wdg_name='splitter12'
 						w.width=304
-						w.height=62
+						w.height=56
 						w.barSize=2
 						FX::VerticalFrame.new(@splitter12){|w|
 							@verticalframe_steuerung=w
 							w.wdg_name='verticalframe_steuerung'
 							w.frameStyle=16384
-							w.width=48
-							w.height=62
+							w.width=44
+							w.height=56
 							FX::Button.new(@verticalframe_steuerung){|w|
 								@button_up=w
 								w.wdg_name='button_up'
@@ -65,15 +65,15 @@ class LayoutFrame
 							@verticalframe_objectlist=w
 							w.wdg_name='verticalframe_objectlist'
 							w.frameStyle=16384
-							w.width=254
-							w.height=62
-							w.x=50
+							w.width=258
+							w.height=56
+							w.x=46
 							FX::IconList.new(@verticalframe_objectlist){|w|
 								@iconlist_objects=w
 								w.wdg_name='iconlist_objects'
-								w.width=250
+								w.width=254
 								w.y=2
-								w.height=58
+								w.height=52
 								w.iconListStyle=1048576
 								w.x=2
 							}
@@ -84,15 +84,15 @@ class LayoutFrame
 						w.wdg_name='horizontalframe_attributes'
 						w.frameStyle=16384
 						w.width=304
-						w.y=64
-						w.height=385
+						w.y=58
+						w.height=391
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
-							w.current=3
+							w.current=1
 							w.width=300
 							w.y=2
-							w.height=381
+							w.height=387
 							w.x=2
 							FX::TabItem.new(@tabbook_objectattributes){|w|
 								@tabitem_allgemein=w
@@ -110,7 +110,7 @@ class LayoutFrame
 								w.width=292
 								w.shown=false
 								w.y=23
-								w.height=354
+								w.height=360
 								w.x=4
 							}
 							FX::TabItem.new(@tabbook_objectattributes){|w|
@@ -118,28 +118,28 @@ class LayoutFrame
 								w.wdg_name='tabitem_chip'
 								w.text="Chip"
 								w.width=29
-								w.y=6
+								w.y=4
 								w.height=21
-								w.x=59
+								w.x=57
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
-								@verticalframe53=w
-								w.wdg_name='verticalframe53'
+								@verticalframe_chip=w
+								w.wdg_name='verticalframe_chip'
 								w.frameStyle=16384
 								w.width=292
-								w.shown=false
 								w.y=23
-								w.height=354
+								w.height=360
 								w.x=4
 							}
 							FX::TabItem.new(@tabbook_objectattributes){|w|
 								@tabitem_magstripe=w
 								w.wdg_name='tabitem_magstripe'
 								w.text="Magnetstreifen"
-								w.width=81
-								w.y=6
-								w.height=21
-								w.x=88
+								w.width=292
+								w.shown=false
+								w.y=54
+								w.height=329
+								w.x=4
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe54=w
@@ -156,15 +156,17 @@ class LayoutFrame
 								w.wdg_name='tabitem_object'
 								w.text="Objekt"
 								w.width=40
-								w.y=4
+								w.shown=false
+								w.y=6
 								w.height=21
-								w.x=167
+								w.x=166
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_object=w
 								w.wdg_name='verticalframe_object'
 								w.frameStyle=16384
 								w.width=292
+								w.shown=false
 								w.y=23
 								w.height=354
 								w.x=4
@@ -287,6 +289,7 @@ class LayoutFrame
 								w.wdg_name='tabitem_posit'
 								w.text="Position"
 								w.width=45
+								w.shown=false
 								w.y=6
 								w.height=21
 								w.x=206
@@ -412,6 +415,7 @@ class LayoutFrame
 								w.wdg_name='tabitem_font'
 								w.text="Schrift"
 								w.width=39
+								w.shown=false
 								w.y=6
 								w.height=21
 								w.x=251
@@ -420,18 +424,18 @@ class LayoutFrame
 								@verticalframe_font=w
 								w.wdg_name='verticalframe_font'
 								w.frameStyle=16384
-								w.width=292
+								w.width=0
 								w.shown=false
 								w.y=23
-								w.height=354
+								w.height=0
 								w.x=4
 								FX::Matrix.new(@verticalframe_font){|w|
 									@matrix3=w
 									w.wdg_name='matrix3'
 									w.numRows=4
-									w.width=288
+									w.width=0
 									w.y=2
-									w.height=350
+									w.height=0
 									w.matrixStyle=131072
 									w.numColumns=3
 									w.x=2
@@ -566,13 +570,13 @@ class LayoutFrame
 					@verticalframe_right=w
 					w.wdg_name='verticalframe_right'
 					w.frameStyle=16384
-					w.width=219
+					w.width=0
 					w.height=449
 					w.x=306
 					FX::HorizontalFrame.new(@verticalframe_right){|w|
 						@horizontalframe32=w
 						w.wdg_name='horizontalframe32'
-						w.width=215
+						w.width=0
 						w.y=2
 						w.height=20
 						w.layoutHints=1024
@@ -617,7 +621,7 @@ class LayoutFrame
 	attr_reader :tabitem_allgemein
 	attr_reader :verticalframe52
 	attr_reader :tabitem_chip
-	attr_reader :verticalframe53
+	attr_reader :verticalframe_chip
 	attr_reader :tabitem_magstripe
 	attr_reader :verticalframe54
 	attr_reader :tabitem_object
