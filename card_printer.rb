@@ -1,22 +1,20 @@
 # -*- coding: UTF-8 -*-
 
+# diese Klasse dient als Basis für die Printer, es macht keinen Sinn direkt ein Objekt von dieser Klasse zu erzeugen
+
 if __FILE__ == $0
   require 'mcc2'
 end
 
 
 class CardPrinter < Printer
-  attr_reader :default_width
-  attr_reader :default_height
   def initialize
     super
     @default_width = 85.6
     @default_height = 53.98
+    @dpi = 300
   end
   
-  def dpi
-    300
-  end
   
   # die Ränder außerhalb der Karte, auf den maximal gedruckt werden darf (für vollflächige Bilder notwendig)
   def card_margin_left
