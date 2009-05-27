@@ -4,18 +4,30 @@ if __FILE__ == $0
   require 'mcc2'
 end
 
-
+# definiert ein Clientfenster mit allen Einstellungen und Attributen, die für ein bestimmtes Kartenlayout benötigt werden
 class Layout
+  # definiert, ob an den Einstellungen seit dem letzten speichern oder laden etwas geändert wurde
   attr_accessor :changed
+  
+  # enthält die kompletten Einstellungen des Kartenlayouts
   attr_accessor :xml_doc
+  
+  # der Dateiname der verbundenen Datendatei (=nil, wenn keine geladen wurde)
   attr_accessor :filename
+  
+  # die aktuelle Zoom-Stufe der Anzeige
   attr_accessor :zoom
+  
+  # ???
   attr_accessor :scale
   
+  # ???
   attr_accessor :attributes
-  
+
+  # der Datamanager
   attr_accessor :dataman
   
+  # enthält die ID des aktuellen Datensatzes
   attr_accessor :row_nr
   
 #  attr_accessor :graphic_objects
@@ -25,7 +37,14 @@ class Layout
 #  attr_accessor :height
 #  attr_accessor :width
   
- 	# ---------------------------------------------------------------------------------------------------------
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  # initialisiert zusätzliche Elemente im Layout-Dialog, die nicht oder schlecht im Fox-GUI-Builder erzeugt werden können
+  # setzt Parameter bei Dialog-Elementen
+  # definiert die Aktionen, welche bei bestimmten Ereignissen auf bestimmten Elementen des Dialogs ausgeführt werden sollen
+  # ==== Parameter
+  # +parent+:: ??
+  # +app+::    die Applikation
   def initialize(parent, app)
     @filename = nil
     @parent = parent
@@ -56,8 +75,6 @@ class Layout
       
       @image_view = FXImageView.new(@lf.verticalframe_right, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y)
 
-      create_chipparam_fields
-      
       # .............................................................................................
       # die Aktionen definieren, die ausgeführt werden, wenn am Layout irgend etwas gearbeitet wird
       
@@ -65,7 +82,7 @@ class Layout
       @lf.button_up.connect(SEL_COMMAND){ object_move_up_down(UP) }
       @lf.button_down.connect(SEL_COMMAND){ object_move_up_down(DOWN) }
       
-      text_field_trigger = SEL_COMMAND
+      @text_field_trigger = SEL_COMMAND
 #      text_field_trigger = SEL_CHANGED # geht sehr langsam und macht bei Barcode und Bild Probleme
       
       # Zoom
@@ -83,25 +100,28 @@ class Layout
       @lf.textfield_name.connect(SEL_COMMAND){ textfield_name_exit }
       
       # die Daten-Attribute
-      @lf.textfield_data_non_text.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_DATA) }
+      @lf.textfield_data_non_text.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_DATA) }
       @lf.textfield_data.connect(SEL_CHANGED){|sender, sel, event| textfield_exit(sender, GOA_DATA) }
-      @lf.textfield_sample_data.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_SAMPLE_DATA) }
+      @lf.textfield_sample_data.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_SAMPLE_DATA) }
 
       # die Font-Attribute
-      @lf.textfield_text_color.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_FONT_COLOR) }
-      @lf.button_text_color.connect(text_field_trigger){ text_color_dialog }
+      @lf.textfield_text_color.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_FONT_COLOR) }
+      @lf.button_text_color.connect(@text_field_trigger){ text_color_dialog }
       @lf.radiomutex_justify.on_event_selected{|r| radiomutex_justify_changed(r) }
 
       # die Positions-Attribute
-      @lf.textfield_x.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_X) }
-      @lf.textfield_y.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_Y) }
-      @lf.textfield_width.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_WIDTH) }
-      @lf.textfield_height.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_HEIGHT) }
-      @lf.textfield_rotation.connect(text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_ROTATION) }
+      @lf.textfield_x.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_X) }
+      @lf.textfield_y.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_Y) }
+      @lf.textfield_width.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_WIDTH) }
+      @lf.textfield_height.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_HEIGHT) }
+      @lf.textfield_rotation.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_ROTATION) }
       
       # die Checkbox, ob der Inhalt des Feldes in der Liste des Druckdialogs mit angezeigt werden soll
       @lf.checkbutton_printlist.connect(SEL_COMMAND ){ change_chkbtn_printlist }
       # .............................................................................................
+      
+      create_chipparam_fields
+      
       # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
       @lf.matrix1.numColumns = 2 
       @lf.matrix2.numColumns = 2 
@@ -113,9 +133,12 @@ class Layout
       @lf.dial_zoom.range = (49..359)
     end
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # erzeugt Textfelder für die Eingabe der Chip-Parameter
+  # erzeugt so viele Felder, wie in der Methode anz_params der Klasse Chip definiert sind
+  # erzeugt ein Array, in welchem alle Felder gespeichert sind
   def create_chipparam_fields
-    p "create_chipparam_fields"
     @chip = Chip.new 
     @chipparam_textfields = []
     
@@ -149,16 +172,20 @@ class Layout
         w.width = 200
 				w.numColumns=10
 			}
+      tf.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_CHIPPARAMS) }
       tf.width = 800
       @chipparam_textfields << tf
     }
   end
+  #---------------------------------------------------------------------------------------------------------
   
-  # ---------------------------------------------------------------------------------------------------------
+  # schließt den Datenmanager
   def close_dataman
     @dataman = nil
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # erzeugt einen Datenmanager abhängig davon welcher Datensourcetyp im Layout definiert ist (momentan DATABASE oder CSV)
   def open_dataman
     datamantyp =  @xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_DATASOURCETYP}").first.content
     datasource =  xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_DATASOURCE}").first.content
@@ -171,10 +198,14 @@ class Layout
       @dataman = nil
     end
   end
-  # ---------------------------------------------------------------------------------------------------------
+  
+  #---------------------------------------------------------------------------------------------------------
 #    node['object_name'] = "Test" # Attribute lesen und schreiben
 #    p node.debug
-  # ---------------------------------------------------------------------------------------------------------
+
+  #---------------------------------------------------------------------------------------------------------
+  
+  # ???
   def change_chkbtn_printlist
     node = get_objectnode_by_id(@selected_object_id).find(GOA_PRINTLIST)
     if @lf.checkbutton_printlist.state != node.first.content
@@ -182,7 +213,13 @@ class Layout
       changed_attributes
     end
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # mit dieser Methode kann ein Objekt in der Liste der Objekte nach oben oder unten verschoben werden
+  # die Position hat einen Einfluss auf das Druckbild, wird zum Beispiel ein Bild gedruckt werden Objekte, 
+  # die weiter oben stehen, hinter diesem Bild gedruckt
+  # ==== Parameter
+  # +dest+:: die Richtung (UP, oder DOWN)
   def object_move_up_down(dest)
     if @selected_object_id
       get_objectnode_by_id(@selected_object_id)
@@ -222,11 +259,13 @@ class Layout
         @lf.iconlist_objects.setCurrentItem(@selected_object_id + 1, notify)
         @lf.iconlist_objects.selectItem(@selected_object_id + 1, notify)
       end
-    
-    
     end
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # öffnet einen Dialog, mit dem die Textfarbe gewählt werden kann und
+  # trägt diese in das Textfeld für die Farbangabe ein 
+  # zeichnet anschließend die Vorschau neu
   def text_color_dialog
     cdlg = FXColorDialog.new(@parent, "Textfarbe")
     cdlg.execute
@@ -239,7 +278,11 @@ class Layout
       draw_card
     end
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # die Aktion, welche ausgeführt wird, wenn die Auswahl der Textausrichtung geändert wurde
+  # ==== Parameter
+  # +r+:: das Radio-Mutex-Objekt
   def radiomutex_justify_changed(r)
     node = get_objectnode_by_id(@selected_object_id).find(GOA_JUSTIFICATION)
     if r.to_s != node.first.content
@@ -247,16 +290,39 @@ class Layout
       changed_attributes
     end
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # händelt für bestimmte Textfelder das Eintragen des Textes in das jeweilige Attribut in der XML-Struktur
+  # setzt das changed-Flag
+  # ==== Parameter
+  # +sender+::    das Objekt, welches das Ereignis gesendet hat
+  # +attr_name+:: der Name des Attributs
   def textfield_exit(sender, attr_name)
-    node = get_objectnode_by_id(@selected_object_id).find(attr_name)
-    if sender.text != node.first.content
-      node.first.content = sender.text
+    if attr_name == S_CHIPPARAMS
+      # aus dem Namen des Textfeldes die ID ermitteln (sind durchnummeriert)
+      id = sender.wdg_name.split("_")[-1].to_i
+      
+      # die die Route zu den Chipparams suchen
+      chip_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
+      
+      # den entsprechenden Parameter suchen
+      attr_name = "#{S_PARAM}_#{id+1}"
+      node = chip_attrs.find(attr_name).first
+    else
+      # das Attribut suchen
+      node = get_objectnode_by_id(@selected_object_id).find(attr_name).first
+    end
+    
+    # nur wenn im Textfeld etwas geändert wurde, den Text in das Attribut schreiben und das changed-Flag setzen
+    if sender.text != node.content
+      node.content = sender.text
       changed_attributes
       #~ print @xml_doc.to_s
     end
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # schreibt den Text der im Textfeld eingegeben wurde in das Attribut 'name' des graphischen Objekts und aktualisiert die Objektliste
   def textfield_name_exit
     orig_name = get_objectnode_by_id(@selected_object_id).find(GOA_NAME)
     if @lf.textfield_name.text != orig_name.first.content
@@ -265,31 +331,45 @@ class Layout
       fill_objectlist
     end
   end
-  # ---------------------------------------------------------------------------------------------------------
-  # kann jedesmal dann aufgerufen werden, wenn ein Attribut des Layouts geändert wurde
+  #---------------------------------------------------------------------------------------------------------
+  
+  # sollte jedesmal dann aufgerufen werden, wenn ein Attribut des Layouts geändert wurde
   # es wird das changed-Flag gesetzt und der Titel aktualisiert und die Vorschau neu gezeichnet
   def changed_attributes
     @changed = true
     draw_card
     set_title
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # fügt ein neues Atrtribut zur Liste der Attribute (@attributes) hinzu 
+  # ==== Parameter
+  # +name+::    der Name, den das Attribut erhalten soll
+  # +typ+::     der Typ 
+  # +default+:: der Wert, mit dem das Attribut vorinitialisiert werden soll
   def add_attr(name, typ, default)
     attr = GO_Attribut.new(name, typ, default) 
     @attributes[attr.attr_name] = attr
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # deaktiviert die Buttons für das Verschieben der Objekte in der Objektliste (zum Beispiel, wenn kein Objekt selektiert ist)
   def deactivat_up_down
     @lf.button_up.enabled = false
     @lf.button_down.enabled = false
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # deaktiviert die Tabs im Layout-Dialog, welche Objekt-spezifisch sind
   def object_deselected
     deactivate_object_tabs
     @selected_object_id = nil
     deactivat_up_down
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # wenn in der Objektliste ein anderes Objekt selektiert wird, dann werden mit dieser Methode die Anzeigen aktualisiert, 
+  # z.Bsp, nur die Tabs aktiviert, die zum Objekttyp passen, usw.
   def object_selection_changed
     # erst einmal alle Objekt-Tabs deaktivieren, damit sicher gestellt ist, dass nur die Objekt-typischen angezeigt werden
     deactivate_object_tabs
@@ -353,21 +433,27 @@ class Layout
     
     draw_card
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # aktiviert ein einzeiliges Textfeld für die Eingabe der Daten (wird für Barcode und Bilder gebraucht)
   def data_shown
     @lf.textfield_data.shown = false
     @lf.label_textblock.shown = false
     @lf.textfield_data_non_text.shown = true
     @lf.label_textfield.shown = true
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # aktiviert ein mehrzeiliges Textfeld für die Eingabe der Daten (wird für Text gebraucht)
   def data_block_shown
     @lf.textfield_data.shown = true
     @lf.label_textblock.shown = true
     @lf.textfield_data_non_text.shown = false
     @lf.label_textfield.shown = false
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # verändert die Zoomstufe, wenn am Rädchen gedreht wird
   def set_zoom
     @zoom = (@lf.dial_zoom.value + 1).to_f / 100
     @scale = 3.6
@@ -375,7 +461,11 @@ class Layout
     #~ p "@zoom: #{@zoom}"
     #~ p "@scale: #{@scale}"
   end
-  # ---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
+  
+  # zeichnet die Vorschau im Layout-Modus
+  # hier ist noch einiges zu tun, im speziellen sind einige Werte "hart" kodiert, 
+  # die z.Bsp abhängig von anderen Einstellungen sein sollten
   def draw_card
     # allgemeine Einstellungen des Image vornehmen
     dpi = 90
@@ -410,7 +500,6 @@ class Layout
       
       canvas.background_fill = 'white'
       #~ canvas.background_fill = 'gray'
-      
     end
     
     # ..........................................................................................
@@ -427,7 +516,8 @@ class Layout
     @image_view.show
     @image_view.recalc
   end
- 	# ---------------------------------------------------------------------------------------------------------
+ 	#---------------------------------------------------------------------------------------------------------
+  
   # erzeugt eine neue XML-Datei und initialisiert die entsprechenden Variablen und Objekte
 	def create_xml
     @xml_doc = LibXML::XML::Document.new
@@ -455,8 +545,11 @@ class Layout
     
     draw_card
   end
- 	# ---------------------------------------------------------------------------------------------------------
+ 	#---------------------------------------------------------------------------------------------------------
+  
   # lädt das XML-File und initialisiert die entsprechenden Variablen und Objekte
+  # ==== Parameter
+  # +filename+:: der NAme des XML-Files in welchem die Layout-Spezifikation gespeichert werden soll
 	def load_from_xml(filename)
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       if filename && FileTest.exists?(filename)
@@ -493,6 +586,11 @@ class Layout
         @changed = true
       end
     }
+    chip_attrs.each{|chip_attr|
+      idx = chip_attr.name.split("_")[-1].to_i-1
+      @chipparam_textfields[idx].text = chip_attr.content 
+    }
+    
     
     # kontrollieren, ob alle Nodes des Magstripes existieren, ansonsten anlegen und als 'changed' markieren
     # todo
@@ -521,7 +619,11 @@ class Layout
     @filename
     #~ print @xml_doc.to_s
   end
-	# ---------------------------------------------------------------------------------------------------------
+	#---------------------------------------------------------------------------------------------------------
+  
+  # holt den Zweig mit den Einstellungen eines graphischen Objekts aus dem XML-File mit der Layout-Spezifikation
+  # ==== Parameter
+  # +id+:: die Nummer, unter welcher das Attribut gespeichert ist
   def get_objectnode_by_id(id)
     @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
       if go_struct.find(GOA_ID).first.content.to_i == id
@@ -530,12 +632,19 @@ class Layout
     }
     nil
   end
- 	# ---------------------------------------------------------------------------------------------------------
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  # aktualisiert den Titel des Layout-Fensters
+  # es werden eingetragen
+  # * der Dateiname des Layouts
+  # * die verbunden Datenquelle (coming soon)
+  # * ein Zeichen *, ob das Layout seit dem letzten Laden oder Speichern geändert wurde
   def set_title
     #~ p "set_title changed: #{@changed.inspect}"
     @parent.title = "#{@filename}#{@changed ? ' *' : '' }"
   end
- 	# ---------------------------------------------------------------------------------------------------------
+ 	#---------------------------------------------------------------------------------------------------------
+  
   # speichert alle GraphicObjekte und Layout-Einstellungen im XML-File
 	def store_to_xml
     unless @filename
@@ -551,8 +660,11 @@ class Layout
     @changed = false
     set_title
   end
- 	# ---------------------------------------------------------------------------------------------------------
-  # fügt ein GraphicObjekt zur Objektliste hinzu
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  # fügt ein GraphicObjekt zur Objektliste hinzu und zeichnet die Vorschau und die Objektliste neu
+  # ==== Parameter
+  # +typ+:: der Typ des Objekts (Bild, Text, Barcode)
   def add_object(typ)
     o = GraphicObject.get_object_by_typ(typ)
     id = get_new_id
@@ -572,8 +684,9 @@ class Layout
       draw_card
     end
   end
- 	# ---------------------------------------------------------------------------------------------------------
-  # 
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  # füllt die Objektliste des Layout-Dialogs mit den Name der graphischen Objekte
   def fill_objectlist
     # Objekt-Liste leeren
     @lf.iconlist_objects.clearItems
@@ -586,7 +699,8 @@ class Layout
       @lf.iconlist_objects.appendItem([id, name, typ].join("\t"), nil, nil, id)
     }
   end
- 	# ---------------------------------------------------------------------------------------------------------
+ 	#---------------------------------------------------------------------------------------------------------
+  
   # ermittelt die nächst höhere ID (beeinflusst die Darstellungsebene)
   def get_new_id
     id = 0
@@ -595,14 +709,20 @@ class Layout
     }
     id
   end
- 	# ---------------------------------------------------------------------------------------------------------
+ 	#---------------------------------------------------------------------------------------------------------
+  
   # deaktivieren der Anzeige der Objektattribute, wenn kein Objekt selektiert ist
   def deactivate_object_tabs
     @lf.tabitem_object.shown = false
     @lf.tabitem_posit.shown = false
     @lf.tabitem_font.shown = false
   end
- 	# ---------------------------------------------------------------------------------------------------------
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  # ließt die ID's der graphischen Objekte aus der Layout-Definition (XML) aus und
+  # sortiert sie
+  # ==== Return
+  # die sortierte Liste mit ID's [Array]
   def sorted_id_list
     @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").collect{|go_struct|
       go_struct.find(GOA_ID).first.content.to_i
