@@ -171,20 +171,30 @@ class PrinterXID < CardPrinter
     preview = false
     selected_object_id = nil
     
+    # 
+    # der Chip-Teil
     #~ devicename = "Jaws PDF Creator" # nur für Tests
     devicename = "DIGID XID440\0" # todo aus Druckerauswahl übernehmen und in Einstellungen speichern
-    chip = true
-    if chip
-      # Karte in Leser einziehen
-      #~ load_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
-      load_card
-      
-      # Kartenpersonalisierung
-      sleep 5
-      
-      # Karte vom Leser zum Drucken weiter schicken
-      #~ unload_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
-      unload_card
+    pers_chip = true
+    if pers_chip
+      begin
+        # Karte in Leser einziehen
+        #~ load_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
+        load_card
+        
+        sleep 2
+        
+        # Kartenpersonalisierung
+        chip = Chip.new
+        chip.pers_card(xml_doc, row)
+        
+        # Karte vom Leser zum Drucken weiter schicken
+        #~ unload_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
+        unload_card
+      rescue => e
+        reject_card # im Fehlerfall die Karte auswerfen, sonst muss man jedes Mal ein Druckerreset machen
+				raise "Fehler bei Kartenpersonalisierung \n #{e.class} #{e} #{e.backtrace}"
+      end
     end
     
     page_width = default_width + card_margin_left + card_margin_right # vorläufig todo
