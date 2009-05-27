@@ -5,6 +5,7 @@ TAB = 9.chr
 FRONT = 0
 BACK = 1
 
+# das sind die Bezeichner von Attributen, die ein grafisches Objekt haben kann
 GOA_NAME = 'object_name'
 GOA_TYP  = 'object_typ'
 GOA_PAGE_NR = 'page_nr'
@@ -28,11 +29,13 @@ GOA_DATA = 'data'
 GOA_SAMPLE_DATA = 'sample_data'
 GOA_PRINTLIST = 'view_in_printlist'
 
+# das sind die Objektbezeichner
 GRAPHICOBJECTS = 'GraphicObjects'
 GRAPHICOBJECT = 'GraphicObject'
 TEXTOBJECT = 'TextObject'
 BARCODEOBJECT = 'BarcodeObject'
 PICTUREOBJECT = 'PictureObject'
+
 
 S_LAYOUT = 'Layout'
 S_DUPLEX = 'Duplex'
@@ -44,7 +47,7 @@ S_PARAM = 'Param'
 S_ROOT = 'Root'
 S_DATASOURCE = 'datasource'
 S_DATASOURCETYP = 'datasource_typ'
-
+S_CHIPPARAMS = 'chipparams'
 UP = 0
 DOWN = 1
 
