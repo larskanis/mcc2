@@ -11,15 +11,15 @@ class Page
   def initialize(page_nr)
     @page_nr = page_nr
   end
- 	# ---------------------------------------------------------------------------------------------------------
+ 	#---------------------------------------------------------------------------------------------------------
   def self.width_with_margins(width)
     width + $pr.card_margin_left + $pr.card_margin_right
   end
- 	# ---------------------------------------------------------------------------------------------------------
+ 	#---------------------------------------------------------------------------------------------------------
   def self.height_with_margins(height)
     height + $pr.card_margin_bottom + $pr.card_margin_top
   end
- 	# ---------------------------------------------------------------------------------------------------------
+ 	#---------------------------------------------------------------------------------------------------------
   def draw(canvas, draw_pos_x, draw_pos_y, xml_doc, sorted_id_list, preview, selected_object_id, row)
     width =  xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_WIDTH}").first.content.to_f
     height = xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_HEIGHT}").first.content.to_f
@@ -120,7 +120,7 @@ class Page
       
     end
   end
- 	# ---------------------------------------------------------------------------------------------------------
+ 	#---------------------------------------------------------------------------------------------------------
   def replace_variables(data, row)
     return data unless row # die unveränderten Daten zurückgeben, wenn kein Datensatz übergeben wurde
     pattern = /\{ *([-\._\w]*)\[ *(\d{1,3}) *, *(\d{1,3}) *\] *\}/
@@ -131,7 +131,7 @@ class Page
       row[feld.intern].to_s[von, anz]
     }
   end
- 	# ---------------------------------------------------------------------------------------------------------
+ 	#---------------------------------------------------------------------------------------------------------
   def self.check_color_definition(color)
     # erstellt einen Dummy-Text, um zu testen, ob die Farbdefinition gültig ist
     # liefert die Farbe zurück, wenn sie gültig ist, ansonsten liefert sie vorläufig schwarz als Standard zurück
