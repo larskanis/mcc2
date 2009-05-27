@@ -4,6 +4,8 @@ if __FILE__ == $0
   require 'mcc2'
 end
 
+require 'dataman'
+
 
 class Page
   attr_accessor :page_nr
@@ -56,7 +58,7 @@ class Page
           go_height = go.find(GOA_HEIGHT).first.content.to_f
           rotation = go.find(GOA_ROTATION).first.content.to_f
           typ = go.find(GOA_TYP).first.content
-          data = replace_variables(go.find(GOA_DATA).first.content, row)
+          data = DataMan.replace_variables(go.find(GOA_DATA).first.content, row)
           
           canvas1.g.translate(x.mm, y.mm).rotate(rotation) do |body|
             # ............................................................................................................
@@ -121,17 +123,7 @@ class Page
     end
   end
  	#---------------------------------------------------------------------------------------------------------
-  def replace_variables(data, row)
-    return data unless row # die unveränderten Daten zurückgeben, wenn kein Datensatz übergeben wurde
-    pattern = /\{ *([-\._\w]*)\[ *(\d{1,3}) *, *(\d{1,3}) *\] *\}/
-    data.gsub(pattern){
-      feld = $1
-      von = $2.to_i
-      anz = $3.to_i
-      row[feld.intern].to_s[von, anz]
-    }
-  end
- 	#---------------------------------------------------------------------------------------------------------
+  
   def self.check_color_definition(color)
     # erstellt einen Dummy-Text, um zu testen, ob die Farbdefinition gültig ist
     # liefert die Farbe zurück, wenn sie gültig ist, ansonsten liefert sie vorläufig schwarz als Standard zurück
