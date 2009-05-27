@@ -17,7 +17,7 @@ class Printer
     @w32gdi = Win32ApiGDI.new
     @w32user = Win32ApiUser.new
   end 
-  # --------------------------------------------------------------------------------------------------------------
+  #--------------------------------------------------------------------------------------------------------------
   def with_doc(documentName, handleToPrinter)
     begin
       documentName << "\0"
@@ -28,7 +28,7 @@ class Printer
       @w32gdi.end_doc(handleToPrinter)
     end
   end
-  # --------------------------------------------------------------------------------------------------------------
+  #--------------------------------------------------------------------------------------------------------------
   def with_page(hPrinter)
     begin
       @w32gdi.start_page(hPrinter)
@@ -37,7 +37,7 @@ class Printer
       @w32gdi.end_page(hPrinter)
     end
   end
-  # --------------------------------------------------------------------------------------------------------------
+  #--------------------------------------------------------------------------------------------------------------
   def print_page(devicename, xml_doc, sorted_id_list, row, page_nr , page_width = default_width, page_height = default_height)
   
     #~ page_width ||= default_width
