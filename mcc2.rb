@@ -46,6 +46,8 @@ end
 
 require 'constants'
 
+require "dl"
+
 # die GUI's, alle mit FoxGUI-Builder erstellt
 require 'mcc2_mainwin'      # das Main-GUI 
 require 'layout_win.rb'     # die GUI der Kartenlayout-Windows
@@ -67,7 +69,6 @@ require 'picture_object'    # grafische Bild-Objekte
 require 'text_object'       # grafische Text-Objekte
 
 require 'magstripe'         # Magnetstreifen
-require 'chip'              # Chip
 
 
 require 'printer'           # die Basisklasse für die Printer
@@ -89,7 +90,6 @@ require "tempfile"
 # die win32api Wrapper laden
 require 'Win32API'
 #~ include Win32
-require "dl"
 
 require 'win32api_base'
 #~ require 'win32api_comdlg'
@@ -98,6 +98,7 @@ require 'win32api_gdi'
 require 'win32api_user'
 #~ require 'win32api_winspool'
 
+require 'chipobjekt'              # Chip
 
 $pr = PrinterXID.new # todo, muss später vom Anwender ausgewählt werden
 
