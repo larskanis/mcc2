@@ -8,6 +8,7 @@ if __FILE__ == $0
   require 'mcc2'
 end
 
+# diese Klasse definiert einen XID-Drucker
 class PrinterXID < CardPrinter
 
   #~ prnsc_wrapper = 't:\Project\XID\prnsc_wrapper\prnsc_wrapper.dll'
@@ -16,12 +17,22 @@ class PrinterXID < CardPrinter
   #~ @@test_LoadCard = Win32API.new(prnsc_wrapper, 'test_LoadCard', [],  'N')
   #~ @@test_UnloadCard = Win32API.new(prnsc_wrapper, 'test_UnloadCard', [],  'N')
   
+  # kein Fehler
   ERR_NO = 0
+  
+  # falscher Modus angegeben
   ERR_bad_modus = 1
+  
+  # falscher IC-Modus angegeben ('contactless' oder 'contact')
   ERR_bad_ic = 2
+  
+  # falscher Flip-Modus ('flip' oder 'no_flip')
   ERR_bad_flip = 3
+  
+  # falsche Anzahl übergener Parameter
   ERR_bad_param_count = 4
 
+  # 
   def initialize
     super
 #    @sc_printer = 't:\Project\XID\Delphi\Prj_xid_test.exe' # wurde durch die nächste Zeile ersetzt
@@ -52,6 +63,11 @@ class PrinterXID < CardPrinter
     #~ ruby_printer.api_call(@@unloadCard, ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
   #~ end
   
+  # lädt eine Karte in das SmartCard-Modul des Druckers
+  # wird momentan über ein externes Programm ausgeführt
+  # momentan fest definiert: contactless, no_flip
+  # === Return
+  # Ausführungsstatus (kann mit human_status in Klartext überetzt werden) [Integer]
   def load_card
     reserved1 = '1'
     ic_type = 'contactless'
@@ -59,15 +75,36 @@ class PrinterXID < CardPrinter
     system([@sc_printer, 'load', ic_type, flip].join(" "))
     $?.exitstatus
   end
-
+  #--------------------------------------------------------------------------------------------------------------
+  
+  # entlädt die Karte aus dem SmartCard-Modul des Druckers und transportiert sie zum Druckmodul
+  # wird momentan über ein externes Programm ausgeführt
+  # momentan fest definiert: contactless, no_flip
+  # === Return
+  # Ausführungsstatus (kann mit human_status in Klartext überetzt werden) [Integer]
   def unload_card
     ic_type = 'contactless'
     flip = 'no_flip'
     system([@sc_printer, 'unload', ic_type, flip].join(" "))
     $?.exitstatus
   end
+  #--------------------------------------------------------------------------------------------------------------
   
-  def test_LC
+  # entlädt die Karte aus dem SmartCard-Modul des Druckers und wirft sie in das Ausschussfach aus
+  # wird momentan über ein externes Programm ausgeführt
+  # momentan fest definiert: contactless, no_flip
+  # === Return
+  # Ausführungsstatus (kann mit human_status in Klartext überetzt werden) [Integer]
+  def reject_card
+    ic_type = 'contactless'
+    flip = 'no_flip'
+    system([@sc_printer, 'reject', ic_type, flip].join(" "))
+    $?.exitstatus
+  end
+  #--------------------------------------------------------------------------------------------------------------
+
+  # nur zum Testen
+  def test_LC #:nodoc:
     p "*"*50
     p "test_LC"
     #~ ruby_printer = TextPrinterControl.new
@@ -76,8 +113,10 @@ class PrinterXID < CardPrinter
     status = $?.exitstatus
     p "erg: #{human_status(status)}"
   end
+  #--------------------------------------------------------------------------------------------------------------
   
-  def test_ULC
+  # nur zum Testen
+  def test_ULC #:nodoc:
     p "*"*50
     p "test_ULC"
     #~ ruby_printer = TextPrinterControl.new
@@ -86,8 +125,10 @@ class PrinterXID < CardPrinter
     status = $?.exitstatus
     p "erg: #{human_status(status)}"
   end
+  #--------------------------------------------------------------------------------------------------------------
   
-  def test_RLC
+  # nur zum Testen
+  def test_RLC #:nodoc:
     p "*"*50
     p "test_ULC"
     #~ ruby_printer = TextPrinterControl.new
@@ -96,7 +137,13 @@ class PrinterXID < CardPrinter
     status = $?.exitstatus
     p "erg: #{human_status(status)}"
   end
+  #--------------------------------------------------------------------------------------------------------------
   
+  # ermittelt aus dem Rückkehrcode einen Klartext für die Fehleranzeige
+  # === Return
+  # den Klartext [String]
+  # === Parameter
+  # +status+:: der von load_card, unload_card oder reject_card zurückgelieferte Status [Integer]
   def human_status(status)
     if status == ERR_NO then "ok"
     elsif status == ERR_bad_modus then "unbekannte Modus '#{status}' (load, unload, reject)"
@@ -106,7 +153,14 @@ class PrinterXID < CardPrinter
     else "unbekannte Fehlernummer #{status}"
     end
   end
+  #--------------------------------------------------------------------------------------------------------------
   
+  # startet das Drucken 
+  # === Return
+  # -
+  # === Parameter
+  # +child+:: das selektierte Layout
+  # +row+:: momentan ein CSV-Row-Objekt
   def print(child, row)
     page_nr = 0
     
@@ -132,8 +186,6 @@ class PrinterXID < CardPrinter
       #~ unload_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
       unload_card
     end
-    
-    
     
     page_width = default_width + card_margin_left + card_margin_right # vorläufig todo
     page_height = default_height + card_margin_top + card_margin_bottom # vorläufig todo 
