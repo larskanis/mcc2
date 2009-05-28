@@ -59,7 +59,7 @@ class Printer
       preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
       img = Magick::RVG.new(page_width.mm, page_height.mm) do |canvas|
         canvas.background_fill = 'white'
-        Page.new(page_nr).draw(canvas, draw_pos_x, draw_pos_y, child.xml_doc, sorted_id_list, preview, selected_object_id, row)
+        Page.new(page_nr).draw(canvas, draw_pos_x, draw_pos_y, child, sorted_id_list, preview, selected_object_id, row)
       end
     
     # das VRG in ein Bitmap konvertieren
