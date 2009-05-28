@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 
 ##############################################################################
 
@@ -7,20 +8,18 @@ class FXFehlerAuswahlDialog < FXDialogBox
   
   def initialize(owner, message, buttonlist)
     # Invoke base class initialize function first
-    super(owner, "Modusauswahl (bitte unterstrichenen Buchstabe drücken)", DECOR_TITLE|DECOR_BORDER)
+    super(owner, "Modusauswahl (bitte unterstrichenen Buchstabe drÃ¼cken)", DECOR_TITLE|DECOR_BORDER)
     
     # Bottom buttons
     FXVerticalFrame.new(self,
                         LAYOUT_SIDE_BOTTOM|FRAME_NONE|LAYOUT_FILL_X|PACK_UNIFORM_WIDTH,
                         0, 0, 0, 0, 40, 40, 20, 20) do |vf|
       
-      @l = FXLabel.new(vf,message)
+      @l = FXLabel.new(vf, message)
       
       buttonsfr = FXHorizontalFrame.new(vf,
                                         FRAME_NONE|LAYOUT_FILL_X|PACK_UNIFORM_WIDTH,
-                                        0, 0, 0, 0, 40, 40, 20, 20)
-      
-      
+                                        0, 0, 0, 0, 40, 40, 20, 40)
       
       
       
