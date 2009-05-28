@@ -4,6 +4,9 @@ if __FILE__ == $0
   require 'mcc2'
 end
 
+require 'cc_dialogbox'
+
+
 # definiert ein Clientfenster mit allen Einstellungen und Attributen, die für ein bestimmtes Kartenlayout benötigt werden
 class Layout
   # definiert, ob an den Einstellungen seit dem letzten speichern oder laden etwas geändert wurde
@@ -59,6 +62,7 @@ class Layout
     add_attr(S_HEIGHT, Integer, $pr.default_height)
     add_attr(S_DATASOURCE, String, "")
     add_attr(S_DATASOURCETYP, String, NONE)
+    add_attr(S_DATASOURCEENCODING, String, ENC_IBM850)
     
     @changed = false
 
@@ -187,15 +191,20 @@ class Layout
   
   # erzeugt einen Datenmanager abhängig davon welcher Datensourcetyp im Layout definiert ist (momentan DATABASE oder CSV)
   def open_dataman
-    datamantyp =  @xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_DATASOURCETYP}").first.content
-    datasource =  xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_DATASOURCE}").first.content
+    
+    datamantyp =  get_attr_value(S_DATASOURCETYP)
+    datasource =  get_attr_value(S_DATASOURCE)
+    
+    datamantyp
     
     if datamantyp == DATABASE
       @dataman = DataManDatabase.new(datasource)
     elsif datamantyp == CSV
       @dataman = DataManCSV.new(datasource)
-    else
+    elsif datamantyp == NONE
       @dataman = nil
+    else
+      raise "falscher datasourcetyp '#{datamantyp}' angegeben!"
     end
   end
   
@@ -469,8 +478,8 @@ class Layout
   def draw_card
     # allgemeine Einstellungen des Image vornehmen
     dpi = 90
-    width =  @xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_WIDTH}").first.content.to_f
-    height = @xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_HEIGHT}").first.content.to_f
+    width =  get_attr_value(S_WIDTH).to_f
+    height = get_attr_value(S_HEIGHT).to_f
     
     Magick::RVG.dpi = dpi
     
@@ -492,11 +501,11 @@ class Layout
       draw_pos_x = 0
       draw_pos_y = 0
       page = Page.new(0)
-      page.draw(canvas, draw_pos_x, draw_pos_y, @xml_doc, sorted_id_list, preview, @selected_object_id, row) # Seite 1 drucken
+      page.draw(canvas, draw_pos_x, draw_pos_y, self, sorted_id_list, preview, @selected_object_id, row) # Seite 1 drucken
       
       page = Page.new(1)
       draw_pos_y = (Page.height_with_margins(height) + card_offset)
-      page.draw(canvas, draw_pos_x, draw_pos_y, @xml_doc, sorted_id_list, preview, @selected_object_id, row) # Seite 2 drucken
+      page.draw(canvas, draw_pos_x, draw_pos_y, self, sorted_id_list, preview, @selected_object_id, row) # Seite 2 drucken
       
       canvas.background_fill = 'white'
       #~ canvas.background_fill = 'gray'
@@ -562,9 +571,9 @@ class Layout
     XML.indent_tree_output = true
     return nil if @filename == ""
     
-    
 #    @xml_doc = LibXML::XML::Document.file(filename, :options => XML::Parser::Options::NOBLANKS | XML::Parser::Options::PEDANTIC | XML::Parser::Options::COMPACT)
     @xml_doc = LibXML::XML::Document.file(@filename, :options => XML::Parser::Options::NOBLANKS )
+    
     # kontrollieren, ob alle Nodes des Layouts existieren, ansonsten anlegen und als 'changed' markieren
     lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
     @attributes.each_pair{|attr_bez, attr|
@@ -574,6 +583,16 @@ class Layout
         @changed = true
       end
     }
+    
+    # kontrollieren, ob die Datenquelle eine gültige Angabe ist, wenn nicht, dann den Benutzer informieren und auf Standard setzen
+    check_valid_datasourcetyp
+    
+    # wenn bei Datensourectyp nicht 'none' eingetrage ist, also eine Datenquelle verwendet wird
+    # kontrollieren, ob das eingestellte Encoding eine gültige Angabe ist, wenn nicht, dann den Benutzer informieren und auf Standard setzen
+    
+    unless get_attr_value(S_DATASOURCETYP) == NONE
+      check_valid_encoding
+    end
     
     # kontrollieren, ob alle Nodes des Chips existieren, ansonsten anlegen und als 'changed' markieren
     chip = Chip.new
@@ -728,8 +747,86 @@ class Layout
       go_struct.find(GOA_ID).first.content.to_i
     }.sort!
   end
-end
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  # ermittelt den Inhalt eines Attributes des Layout-Abschnittes
+  # ==== Return
+  # den Inhalt des Attributes [String]
+  # ==== Parameter
+  # +attr_name+:: der Name des Attributes z.Bsp. 'datasource' Bitte vorwiegend Konstanten verwenden z. Bsp. S_DATASOURCE [String]
+  def get_attr_value(attr_name)
+    lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
+    attr = lay_attrs.find_first(attr_name)
+    attr ? attr.content : nil
+  end
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  # setzt den Inhalt eines Attributes des Layout-Abschnittes
+  # ==== Return
+  # true, wenn erfolgreich, ansonsten false
+  # ==== Parameter
+  # +attr_name+:: der Name des Attributes z.Bsp. 'datasource' Bitte vorwiegend Konstanten verwenden z. Bsp. S_DATASOURCE [String]
+  # +value+:: der Wert der geschrieben werden soll [String]
+  def set_attr_value(attr_name, value)
+    lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
+    attr = lay_attrs.find_first(attr_name)
+    if attr 
+      attr.content = value
+      return true
+    end
+    return false
+  end
+ 	#---------------------------------------------------------------------------------------------------------
 
+  # überprüft, ob der Wert Datasourcetyp in der Layoutdefinition ein gültiger Wert ist.
+  # Wenn nicht, wird ein Fehlerdialog angezeigt und der Standardwert gesetzt und das changed-Flag gesetzt
+  def check_valid_datasourcetyp
+    datasourcetyp = get_attr_value(S_DATASOURCETYP)
+    unless DataMan.valid_datasourcetyp?(datasourcetyp)
+      default = @attributes[S_DATASOURCETYP].attr_value
+      set_attr_value(S_DATASOURCETYP, default)
+      changed_attributes 
+s = <<-EOTXT
+      Der eingestellte Datenquellentyp '#{datasourcetyp}' ist ungültig.
+      
+      Gültige Werte sind '#{VALID_DATASOURCES.join("', '")}'.
+      
+      Der Wert wird jetzt auf den Standardwert '#{default}'  gesetzt.
+      
+      Bitte stellen Sie in den Layouteigenschaften den korrekten Datenquellentyp
+      ein und speichern Sie die Einstellungen.
+EOTXT
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, s, 'ok')
+      error_WahlMessage.execute
+      # error_WahlMessage.selection # enthält die Nummer der gewählten Taste
+    end
+  end
+ 	#---------------------------------------------------------------------------------------------------------
+
+  # überprüft, ob der Wert Datasourcencoding in der Layoutdefinition ein gültiger Wert ist.
+  # Wenn nicht, wird ein Fehlerdialog angezeigt und der Standardwert gesetzt und das changed-Flag gesetzt
+  def check_valid_encoding
+    datasource_encoding = get_attr_value(S_DATASOURCEENCODING)
+    unless DataMan.valid_datasource_encoding?(datasource_encoding)
+      default = @attributes[S_DATASOURCEENCODING].attr_value
+      set_attr_value(S_DATASOURCEENCODING, default)
+      changed_attributes 
+s = <<-EOTXT
+      Das eingestellte Encoding der Datenquelle '#{datasource_encoding}' ist ungültig.
+      
+      Gültige Werte sind '#{VALID_ENCODINGS.join("', '")}'.
+      
+      Der Wert wird jetzt auf den Standardwert '#{default}'  gesetzt.
+      
+      Bitte stellen Sie in den Layouteigenschaften das korrekte Encoding
+      ein und speichern Sie die Einstellungen.
+EOTXT
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, s, 'ok')
+      error_WahlMessage.execute
+      # error_WahlMessage.selection # enthält die Nummer der gewählten Taste
+    end
+  end
+end
 #*****************************************************************************
 # Main
 
