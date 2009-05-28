@@ -22,9 +22,10 @@ class Page
     height + $pr.card_margin_bottom + $pr.card_margin_top
   end
  	#---------------------------------------------------------------------------------------------------------
-  def draw(canvas, draw_pos_x, draw_pos_y, xml_doc, sorted_id_list, preview, selected_object_id, row)
-    width =  xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_WIDTH}").first.content.to_f
-    height = xml_doc.find("//#{S_ROOT}/#{S_LAYOUT}/#{S_HEIGHT}").first.content.to_f
+  def draw(canvas, draw_pos_x, draw_pos_y, child, sorted_id_list, preview, selected_object_id, row)
+    width =  child.get_attr_value(S_WIDTH).to_f
+    height = child.get_attr_value(S_HEIGHT).to_f
+    encoding = child.get_attr_value(S_DATASOURCEENCODING)
     
     if preview
       canvas.g.translate(draw_pos_x.mm, draw_pos_y.mm) do |canvas1|
@@ -45,8 +46,8 @@ class Page
     
       # Text-Objekte
       sorted_id_list.each{|id|
-        go = xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
-      #~ xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
+        go = child.xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
+      #~ child.xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
         # nur die Objekte zeichnen, die auf diese Seite sollen
         if go.find(GOA_PAGE_NR).first.content.to_i == @page_nr
         
@@ -58,7 +59,7 @@ class Page
           go_height = go.find(GOA_HEIGHT).first.content.to_f
           rotation = go.find(GOA_ROTATION).first.content.to_f
           typ = go.find(GOA_TYP).first.content
-          data = DataMan.replace_variables(go.find(GOA_DATA).first.content, row)
+          data = DataMan.replace_variables(go.find(GOA_DATA).first.content, row, encoding)
           
           canvas1.g.translate(x.mm, y.mm).rotate(rotation) do |body|
             # ............................................................................................................
