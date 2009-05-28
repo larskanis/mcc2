@@ -4,6 +4,7 @@ if __FILE__ == $0
   require 'mcc2'
 end
 
+require 'iconv'
 
 class MyPrintDialogBox < PrintDialogBox
   def initialize(app, child)
@@ -16,24 +17,29 @@ class MyPrintDialogBox < PrintDialogBox
       #~ name = objekt.find(GOA_NAME).first.content
     #~ }
     felder = []
-    child.dataman.row(0).each{|e| 
-      #~ p e[0].to_s
-      feldname = e[0].to_s
-      @iconlist_data.appendHeader(feldname, nil, 30)
-      felder << feldname
-    }
-    big_icon = nil
-    mini_icon = nil
-    child.dataman.rows.each{|row|
-      @iconlist_data.appendItem(felder.collect{|feld|
-        row[feld.intern]
-      }.join("\t"),
-        big_icon,
-        mini_icon,
-        row
-      )
-      #~ p row
-    }
+    if child.dataman
+      child.dataman.row(0).each{|e| 
+        #~ p e[0].to_s
+        feldname = e[0].to_s
+        @iconlist_data.appendHeader(feldname, nil, 30)
+        felder << feldname
+      }
+      big_icon = nil
+      mini_icon = nil
+      child.dataman.rows.each{|row|
+        @iconlist_data.appendItem(felder.collect{|feld|
+          data = row[feld.intern]
+          coding = child.get_attr_value(S_DATASOURCEENCODING)
+          encoding = Iconv.new('UTF-8', coding)
+          encoding.iconv(data)
+        }.join("\t"),
+          big_icon,
+          mini_icon,
+          row
+        )
+        #~ p row
+      }
+    end
     
     # .............................................................................................
     # alle Aktionen definieren
