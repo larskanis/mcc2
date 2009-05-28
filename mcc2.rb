@@ -100,7 +100,7 @@ require 'win32api_user'
 
 require 'chipobjekt'              # Chip
 
-$pr = PrinterXID.new # todo, muss später vom Anwender ausgewählt werden
+require 'cc_dialogbox.rb'
 
 
 # *****************************************************************************
@@ -218,6 +218,8 @@ if __FILE__==$0
   
 	require 'libguib16.rb'
   app = FX::App.new("MCC2", "ComCard")
+    
+  $pr = PrinterXID.new(app) # todo, muss später vom Anwender ausgewählt werden
 	
 	w = MCC2GUI.new(app)
   w.topwin.show(Fox::PLACEMENT_SCREEN)
