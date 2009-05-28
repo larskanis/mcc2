@@ -45,8 +45,11 @@ S_HEIGHT = 'Height'
 S_WIDTH = 'Width'
 S_PARAM = 'Param'
 S_ROOT = 'Root'
+
 S_DATASOURCE = 'datasource'
 S_DATASOURCETYP = 'datasource_typ'
+S_DATASOURCEENCODING = 'datasource_encoding'
+
 S_CHIPPARAMS = 'chipparams'
 UP = 0
 DOWN = 1
@@ -54,3 +57,10 @@ DOWN = 1
 NONE = 'none'
 CSV = 'csv'
 DATABASE = 'database'
+
+ENC_UTF8 = 'UTF-8'
+ENC_IBM850 = 'IBM850'
+ENC_LATIN1 = 'LATIN1'
+
+VALID_ENCODINGS = [ENC_UTF8, ENC_IBM850, ENC_LATIN1]
+VALID_DATASOURCES = [DATABASE, CSV, NONE]
