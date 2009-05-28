@@ -166,7 +166,6 @@ class PrinterXID < CardPrinter
     
     draw_pos_x = 0
     draw_pos_y = 0
-    xml_doc = child.xml_doc
     sorted_id_list = child.sorted_id_list
     preview = false
     selected_object_id = nil
@@ -186,7 +185,7 @@ class PrinterXID < CardPrinter
         
         # Kartenpersonalisierung
         chip = Chip.new
-        chip.pers_card(xml_doc, row)
+        chip.pers_card(child, row)
         
         # Karte vom Leser zum Drucken weiter schicken
         #~ unload_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
@@ -201,7 +200,7 @@ class PrinterXID < CardPrinter
     page_height = default_height + card_margin_top + card_margin_bottom # vorläufig todo 
     
     # print_page(devicename, xml_doc, sorted_id_list, row, page_width = default_width, page_height = default_height, page_nr )
-    print_page(devicename, xml_doc, sorted_id_list, row, page_nr, page_width , page_height )
+    print_page(devicename, child, sorted_id_list, row, page_nr, page_width , page_height )
   end
   
 end
