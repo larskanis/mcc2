@@ -33,8 +33,9 @@ class PrinterXID < CardPrinter
   ERR_bad_param_count = 4
 
   # 
-  def initialize
-    super
+  def initialize(app)
+    @app = app
+    super()
 #    @sc_printer = 't:\Project\XID\Delphi\Prj_xid_test.exe' # wurde durch die nächste Zeile ersetzt
     @sc_printer = 't:\Project\XID\XID_Card_Loader\XID_Card_Loader.exe'
   end
@@ -161,7 +162,7 @@ class PrinterXID < CardPrinter
   # === Parameter
   # +child+:: das selektierte Layout
   # +row+:: momentan ein CSV-Row-Objekt
-  def print(child, row)
+  def print(child, row, chip)
     page_nr = 0
     
     draw_pos_x = 0
@@ -174,8 +175,7 @@ class PrinterXID < CardPrinter
     # der Chip-Teil
     #~ devicename = "Jaws PDF Creator" # nur für Tests
     devicename = "DIGID XID440\0" # todo aus Druckerauswahl übernehmen und in Einstellungen speichern
-    pers_chip = true
-    if pers_chip
+    if chip
       begin
         # Karte in Leser einziehen
         #~ load_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
@@ -184,7 +184,6 @@ class PrinterXID < CardPrinter
         sleep 2
         
         # Kartenpersonalisierung
-        chip = Chip.new
         chip.pers_card(child, row)
         
         # Karte vom Leser zum Drucken weiter schicken
@@ -192,7 +191,10 @@ class PrinterXID < CardPrinter
         unload_card
       rescue => e
         reject_card # im Fehlerfall die Karte auswerfen, sonst muss man jedes Mal ein Druckerreset machen
-				raise "Fehler bei Kartenpersonalisierung \n #{e.class} #{e} #{e.backtrace}"
+				s = "Fehler bei Kartenpersonalisierung!" + (["Exception in #{__FILE__}: #{e.to_s}"]+e.backtrace).join("\n")
+        error_WahlMessage = FXFehlerAuswahlDialog.new(@app, s, 'ok')
+        error_WahlMessage.execute
+        return false
       end
     end
     
