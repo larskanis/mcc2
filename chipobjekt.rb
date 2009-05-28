@@ -23,11 +23,16 @@ class Chip
     (1..anz_params).each{|i|
       @params << ""
     }
-    
-    
   end
 	#---------------------------------------------------------------------------------------------------------
-
+  
+  #
+  def  close_reader
+    @chip_obj.close if @chip_obj
+    @chip_obj = nil
+  end
+	#---------------------------------------------------------------------------------------------------------
+  
   # liefert die Anzahl der Parameter zurück, die für Chip-Objekte gespeichert werden sollen
   def anz_params
     23
@@ -42,7 +47,7 @@ class Chip
     # die Chip-Parameter auslesen
     # erst ein leeres Array anlegen
     params = []
-    encoding = child.get_attribute(S_SOURCEENCODING)
+    encoding = child.get_attr_value(S_DATASOURCEENCODING)
     
     # un dann die Parameter aus dem XML auslesen und entsprechend ihrer  ID in das Array schreiben
     chip_attrs = child.xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
@@ -53,11 +58,10 @@ class Chip
     
     # die Personalisierung durchführen
     if params[7] =~ /^RUBY;(.*)/
-      chip_obj = Chip32n::ClassLoader.load($1)
+      @chip_obj ||= Chip32n::ClassLoader.load($1)
     end
      
-    chip_obj.personalize(params)
-    chip_obj.close
+    @chip_obj.personalize(params)
     
     #~ sleep 5
     
