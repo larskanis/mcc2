@@ -65,10 +65,13 @@ class MyPrintDialogBox < PrintDialogBox
   def print_selected
     printer = $pr 
     anzahl = @iconlist_data.numRows
+    pers_chip = true
+    pers_chip ? chip = Chip.new : chip = nil
     (0..(anzahl-1)).each{|i|
       item = @iconlist_data.getItem(i)
-      printer.print(@child, @iconlist_data.getItemData(i)) if @iconlist_data.itemSelected?(i)
+      printer.print(@child, @iconlist_data.getItemData(i), chip) if @iconlist_data.itemSelected?(i)
     }
+    chip.close_reader
   end
  	#---------------------------------------------------------------------------------------------------------
   def print_all
