@@ -10,10 +10,10 @@ end
 
 # diese Klasse definiert einen XID-Drucker
 class PrinterXID < CardPrinter
-
+  # falls doch noch auf Aufruf über DLL umgebaut wird, werden folgende Zeilen benötigt
   #~ prnsc_wrapper = 't:\Project\XID\prnsc_wrapper\prnsc_wrapper.dll'
-#  @@loadCard = Win32API.new(prnsc_wrapper, 'LoadCard', ['N','N','N','N','P','N'],  'N')
-#  @@unloadCard = Win32API.new(prnsc_wrapper, 'UnloadCard', ['N','N','N','N','N','N','N'],  'N')
+  #~ @@loadCard = Win32API.new(prnsc_wrapper, 'LoadCard', ['N','N','N','N','P','N'],  'N')
+  #~ @@unloadCard = Win32API.new(prnsc_wrapper, 'UnloadCard', ['N','N','N','N','N','N','N'],  'N')
   #~ @@test_LoadCard = Win32API.new(prnsc_wrapper, 'test_LoadCard', [],  'N')
   #~ @@test_UnloadCard = Win32API.new(prnsc_wrapper, 'test_UnloadCard', [],  'N')
   
@@ -36,7 +36,6 @@ class PrinterXID < CardPrinter
   def initialize(app)
     @app = app
     super()
-#    @sc_printer = 't:\Project\XID\Delphi\Prj_xid_test.exe' # wurde durch die nächste Zeile ersetzt
     @sc_printer = 't:\Project\XID\XID_Card_Loader\XID_Card_Loader.exe'
   end
 
@@ -165,9 +164,6 @@ class PrinterXID < CardPrinter
   def print(child, row, chip)
     page_nr = 0
     
-    draw_pos_x = 0
-    draw_pos_y = 0
-    sorted_id_list = child.sorted_id_list
     preview = false
     selected_object_id = nil
     
@@ -178,16 +174,16 @@ class PrinterXID < CardPrinter
     if chip
       begin
         # Karte in Leser einziehen
-        #~ load_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
+        #~ load_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1) # siehe DLL_Benutzung
         load_card
         
-        sleep 2
+        #~ sleep 2 mal probieren, ob es auch so geht
         
         # Kartenpersonalisierung
         chip.pers_card(child, row)
         
         # Karte vom Leser zum Drucken weiter schicken
-        #~ unload_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
+        #~ unload_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1) # siehe DLL_Benutzung
         unload_card
       rescue => e
         reject_card # im Fehlerfall die Karte auswerfen, sonst muss man jedes Mal ein Druckerreset machen
@@ -198,11 +194,11 @@ class PrinterXID < CardPrinter
       end
     end
     
-    page_width = default_width + card_margin_left + card_margin_right # vorläufig todo
-    page_height = default_height + card_margin_top + card_margin_bottom # vorläufig todo 
+    page_width = default_width + card_margin_left + card_margin_right # vorläufig todo ??? warum eigentlich vorläufig?
+    page_height = default_height + card_margin_top + card_margin_bottom # vorläufig todo  ??? warum eigentlich vorläufig?
     
-    # print_page(devicename, xml_doc, sorted_id_list, row, page_width = default_width, page_height = default_height, page_nr )
-    print_page(devicename, child, sorted_id_list, row, page_nr, page_width , page_height )
+    print_page(devicename, child, row, page_nr, page_width , page_height )
+    return true
   end
   
 end
