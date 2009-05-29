@@ -4,21 +4,24 @@
     <Duplex>0</Duplex>
     <Width>85.6</Width>
     <Height>53.98</Height>
-    <datasource>l:\XID\Golf\Platzreife\dgv-29420.cs2</datasource>
+    <datasource>l:\XID\Golf\Platzreife\dgv-31380.cs2</datasource>
     <datasource_typ>csv</datasource_typ>
+    <datasource_encoding>IBM850</datasource_encoding>
+    <x_offset>-4.5</x_offset>
+    <y_offset>-4</y_offset>
   </Layout>
   <Chip>
     <Param_1>ohne</Param_1>
-    <Param_2></Param_2>
+    <Param_2/>
     <Param_3/>
-    <Param_4/>
-    <Param_5/>
+    <Param_4>{batch_id[0,20]}</Param_4>
+    <Param_5>{card_id[0,20]}</Param_5>
     <Param_6/>
     <Param_7/>
-    <Param_8/>
+    <Param_8>RUBY;i:/THERMO/golf/GOLF_MIF_PLATZREIFE.RB</Param_8>
     <Param_9/>
     <Param_10/>
-    <Param_11/>
+    <Param_11>ffffffffffff</Param_11>
     <Param_12/>
     <Param_13/>
     <Param_14/>
@@ -29,21 +32,22 @@
     <Param_19/>
     <Param_20/>
     <Param_21/>
-    <Param_22>acg</Param_22>
+    <Param_22/>
+    <Param_23>feigusb</Param_23>
   </Chip>
   <Magstripe/>
   <GraphicObjects>
     <GraphicObject>
       <id>0</id>
       <printable>true</printable>
-      <object_name>GraphicObject</object_name>
+      <object_name>Hintergrund</object_name>
       <rotation>0</rotation>
-      <x>-1</x>
-      <y>-1</y>
+      <x>-0.5</x>
+      <y>-0.5</y>
       <object_typ>PictureObject</object_typ>
       <stretch>false</stretch>
-      <height>56</height>
-      <width>87.5</width>
+      <height>54.6</height>
+      <width>87</width>
       <data>l:\XID\Golf\Platzreife\platzreife_quer.jpg</data>
       <page_nr>0</page_nr>
       <sample_data>Muster</sample_data>
@@ -53,8 +57,8 @@
       <id>3</id>
       <object_name>Name</object_name>
       <rotation>90</rotation>
-      <x>35</x>
-      <y>7.5</y>
+      <x>34.5</x>
+      <y>7.9</y>
       <object_typ>TextObject</object_typ>
       <font_height>8</font_height>
       <height>15</height>
@@ -74,7 +78,7 @@
       <object_name>Titel</object_name>
       <rotation>90</rotation>
       <x>38</x>
-      <y>7.5</y>
+      <y>7.9</y>
       <object_typ>TextObject</object_typ>
       <font_height>8</font_height>
       <height>20</height>
@@ -97,12 +101,12 @@
       <rotation>0</rotation>
       <page_nr>0</page_nr>
       <x>64</x>
-      <y>31.5</y>
+      <y>32</y>
       <stretch>false</stretch>
       <height>15</height>
       <sample_data>Muster</sample_data>
       <width>15</width>
-      <data>l:\XID\Golf\Platzreife\dgv-42.jpeg</data>
+      <data>l:\XID\Golf\Platzreife\{logo_name[0,50]}</data>
       <view_in_printlist>0</view_in_printlist>
     </GraphicObject>
   </GraphicObjects>
