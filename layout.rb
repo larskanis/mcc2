@@ -33,13 +33,6 @@ class Layout
   # enthält die ID des aktuellen Datensatzes
   attr_accessor :row_nr
   
-#  attr_accessor :graphic_objects
-#  attr_accessor :duplex
-#  attr_accessor :chip
-#  attr_accessor :magstripe
-#  attr_accessor :height
-#  attr_accessor :width
-  
  	#---------------------------------------------------------------------------------------------------------
   
   # initialisiert zusätzliche Elemente im Layout-Dialog, die nicht oder schlecht im Fox-GUI-Builder erzeugt werden können
@@ -60,6 +53,8 @@ class Layout
     add_attr(S_DUPLEX, Integer, 0)
     add_attr(S_WIDTH, Integer, $pr.default_width)
     add_attr(S_HEIGHT, Integer, $pr.default_height)
+    add_attr(S_X_OFFSET, Integer, $pr.default_x_offset)
+    add_attr(S_Y_OFFSET, Integer, $pr.default_y_offset)
     add_attr(S_DATASOURCE, String, "")
     add_attr(S_DATASOURCETYP, String, NONE)
     add_attr(S_DATASOURCEENCODING, String, ENC_IBM850)
@@ -98,7 +93,6 @@ class Layout
       # Objektliste
       @lf.iconlist_objects.connect(SEL_SELECTED){ object_selection_changed }
       @lf.iconlist_objects.connect(SEL_DESELECTED){ object_deselected }
-#      @lf.iconlist_objects.connect(SEL_CHANGED){ object_selection_changed }  # wenn der Cursor in der Liste bewegt wird
       
       # die allgemeinen Objektattribute
       @lf.textfield_name.connect(SEL_COMMAND){ textfield_name_exit }
@@ -122,15 +116,20 @@ class Layout
       
       # die Checkbox, ob der Inhalt des Feldes in der Liste des Druckdialogs mit angezeigt werden soll
       @lf.checkbutton_printlist.connect(SEL_COMMAND ){ change_chkbtn_printlist }
+      
+      
+      @lf.textfield_x_offset.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_X_OFFSET) }
+      @lf.textfield_y_offset.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_Y_OFFSET) }
+      
       # .............................................................................................
       
       create_chipparam_fields
       
       # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
       @lf.matrix1.numColumns = 2 
-      @lf.matrix2.numColumns = 2 
+      @lf.matrix2.numColumns = 3
       @lf.matrix3.numColumns = 3 
-      #~ @lf.matrix_chipparams.numColumns = 2
+      @lf.matrix_layout_attrs.numColumns = 3
       deactivate_object_tabs
       
       deactivat_up_down
@@ -148,16 +147,14 @@ class Layout
     
     scrl_w = FX::ScrollWindow.new(@lf.verticalframe_chip, LAYOUT_FILL_X | LAYOUT_FILL_Y)
     matrix_chipparams = FX::Matrix.new(scrl_w){|w|
-      @matrix3=w
-      w.wdg_name='matrix_xyz'
-      w.numRows=4
-      w.width=650
-      w.y=2
-      w.height=0
-      #~ w.matrixStyle=131072 
+      @matrix3 = w
+      w.wdg_name = 'matrix_xyz'
+      w.numRows = 4 
+      w.width = 650
+      w.y = 2
+      w.height = 0
       w.matrixStyle = MATRIX_BY_COLUMNS | LAYOUT_FILL_X | LAYOUT_FILL_Y
-      #~ w.numColumns = 2
-      w.x=2
+      w.x = 2
     }
     matrix_chipparams.numColumns = 2
       
@@ -168,9 +165,7 @@ class Layout
 				w.font=FX::Font.new.from_s('Arial|80|40|5|0|0|0').to_FXFont
 			}
 			tf = FX::TextField.new(matrix_chipparams){|w|
-				#~ @textfield41 = w
         w.textFieldTextStyle = LAYOUT_FIX_WIDTH
-        #~ w.textFieldTextStyle = LAYOUT_FILL_X
 				w.wdg_name = "textfield_chipparam_#{i}"
 				w.font = FX::Font.new.from_s('Arial|80|40|5|0|0|0').to_FXFont
         w.width = 200
@@ -207,11 +202,6 @@ class Layout
       raise "falscher datasourcetyp '#{datamantyp}' angegeben!"
     end
   end
-  
-  #---------------------------------------------------------------------------------------------------------
-#    node['object_name'] = "Test" # Attribute lesen und schreiben
-#    p node.debug
-
   #---------------------------------------------------------------------------------------------------------
   
   # ???
@@ -316,7 +306,13 @@ class Layout
       
       # den entsprechenden Parameter suchen
       attr_name = "#{S_PARAM}_#{id+1}"
-      node = chip_attrs.find(attr_name).first
+      node = chip_attrs.find_first(attr_name)
+    elsif attr_name == S_Y_OFFSET
+      lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
+      node = lay_attrs.find_first(S_Y_OFFSET)
+    elsif attr_name == S_X_OFFSET
+      lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
+      node = lay_attrs.find_first(S_X_OFFSET)
     else
       # das Attribut suchen
       node = get_objectnode_by_id(@selected_object_id).find(attr_name).first
@@ -326,7 +322,6 @@ class Layout
     if sender.text != node.content
       node.content = sender.text
       changed_attributes
-      #~ print @xml_doc.to_s
     end
   end
   #---------------------------------------------------------------------------------------------------------
@@ -390,7 +385,6 @@ class Layout
     @lf.button_up.enabled = (@selected_object_id > 0)
     @lf.button_down.enabled = (@selected_object_id < (sorted_id_list.length - 1)) 
     
-    #~ p "id #{@selected_object_id} selektiert"
     node = get_objectnode_by_id(@selected_object_id)
     
     # allgemeine Attribute auslesen
@@ -501,14 +495,13 @@ class Layout
       draw_pos_x = 0
       draw_pos_y = 0
       page = Page.new(0)
-      page.draw(canvas, draw_pos_x, draw_pos_y, self, sorted_id_list, preview, @selected_object_id, row) # Seite 1 drucken
+      page.draw(canvas, draw_pos_x, draw_pos_y, self, preview, @selected_object_id, row) # Seite 1 drucken
       
       page = Page.new(1)
       draw_pos_y = (Page.height_with_margins(height) + card_offset)
-      page.draw(canvas, draw_pos_x, draw_pos_y, self, sorted_id_list, preview, @selected_object_id, row) # Seite 2 drucken
+      page.draw(canvas, draw_pos_x, draw_pos_y, self, preview, @selected_object_id, row) # Seite 2 drucken
       
       canvas.background_fill = 'white'
-      #~ canvas.background_fill = 'gray'
     end
     
     # ..........................................................................................
@@ -571,8 +564,10 @@ class Layout
     XML.indent_tree_output = true
     return nil if @filename == ""
     
-#    @xml_doc = LibXML::XML::Document.file(filename, :options => XML::Parser::Options::NOBLANKS | XML::Parser::Options::PEDANTIC | XML::Parser::Options::COMPACT)
     @xml_doc = LibXML::XML::Document.file(@filename, :options => XML::Parser::Options::NOBLANKS )
+    
+    # ................................................................................................................................
+    # die allgemeine Layout-Einstellungen auslesen
     
     # kontrollieren, ob alle Nodes des Layouts existieren, ansonsten anlegen und als 'changed' markieren
     lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
@@ -589,10 +584,14 @@ class Layout
     
     # wenn bei Datensourectyp nicht 'none' eingetrage ist, also eine Datenquelle verwendet wird
     # kontrollieren, ob das eingestellte Encoding eine gültige Angabe ist, wenn nicht, dann den Benutzer informieren und auf Standard setzen
-    
     unless get_attr_value(S_DATASOURCETYP) == NONE
       check_valid_encoding
     end
+    
+    fill_layout_attr_tab
+    
+    # ................................................................................................................................
+    # die Chip-Einstellungen auslesen
     
     # kontrollieren, ob alle Nodes des Chips existieren, ansonsten anlegen und als 'changed' markieren
     chip = Chip.new
@@ -610,9 +609,14 @@ class Layout
       @chipparam_textfields[idx].text = chip_attr.content 
     }
     
+    # ................................................................................................................................
+    # die Magnetstreifen-Einstellungen auslesen
     
     # kontrollieren, ob alle Nodes des Magstripes existieren, ansonsten anlegen und als 'changed' markieren
     # todo
+    
+    # ................................................................................................................................
+    # die Einstellungen der graphischen Objekte auslesen
     
     # kontrollieren, ob alle Nodes der GraphicObjects existieren, ansonsten anlegen und als 'changed' markieren
     @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
@@ -626,7 +630,9 @@ class Layout
         end
       }
     }
-    
+
+    # ................................................................................................................................
+  
     open_dataman
     
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
@@ -636,7 +642,6 @@ class Layout
     end
     
     @filename
-    #~ print @xml_doc.to_s
   end
 	#---------------------------------------------------------------------------------------------------------
   
@@ -659,7 +664,6 @@ class Layout
   # * die verbunden Datenquelle (coming soon)
   # * ein Zeichen *, ob das Layout seit dem letzten Laden oder Speichern geändert wurde
   def set_title
-    #~ p "set_title changed: #{@changed.inspect}"
     @parent.title = "#{@filename}#{@changed ? ' *' : '' }"
   end
  	#---------------------------------------------------------------------------------------------------------
@@ -697,7 +701,6 @@ class Layout
       end
     }
     
-    #~ print @xml_doc.to_s
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       fill_objectlist
       draw_card
@@ -825,6 +828,13 @@ EOTXT
       error_WahlMessage.execute
       # error_WahlMessage.selection # enthält die Nummer der gewählten Taste
     end
+  end
+ 	#---------------------------------------------------------------------------------------------------------
+
+  # diese Methode liest die allgemeinen Einstellungen des Layouts aus dem XML aus und befüllt damit die Bearbeitungsfelder im Tab 'Allgemein'
+  def fill_layout_attr_tab
+    @lf.textfield_x_offset.text = get_attr_value(S_X_OFFSET)
+    @lf.textfield_y_offset.text = get_attr_value(S_Y_OFFSET)
   end
 end
 #*****************************************************************************
