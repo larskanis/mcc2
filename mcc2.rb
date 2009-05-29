@@ -115,28 +115,27 @@ class MCC2GUI < MainWindow
       # die Menue-Einträge modifizieren
       @menutitle_datei.text = "&Datei"
       
-        @mcmd_new.text = "&Neu"
-  #      @mcmd_new.connect(SEL_COMMAND){  }
-        #~ @topwin.accelTable.addAccel(fxparseAccel("Ctrl N"), @app, new_layout)
-        @mcmd_new.connect(SEL_COMMAND){ new_layout }
-        
-        @mcmd_open.text = "&Öffnen"
-        @mcmd_open.connect(SEL_COMMAND){ open_layout }
-  #      @topwin.accelTable.addAccel(fxparseAccel("Ctrl O"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
-        
-        @mcmd_close.text = "Schließ&en"
-  #      @mcmd_close.connect(SEL_COMMAND){  }
+      @mcmd_new.text = "&Neu"
+      @mcmd_new.connect(SEL_COMMAND){ new_layout }
+      #~ @topwin.accelTable.addAccel(fxparseAccel("Ctrl N"), @app, new_layout)
+      
+      @mcmd_open.text = "&Öffnen"
+      @mcmd_open.connect(SEL_COMMAND){ open_layout }
+#      @topwin.accelTable.addAccel(fxparseAccel("Ctrl O"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
+      
+      @mcmd_close.text = "Schließ&en"
+#      @mcmd_close.connect(SEL_COMMAND){  }
 
-        @mcmd_save.text = "&Speichern"
-  #      @topwin.accelTable.addAccel(fxparseAccel("Ctrl S"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
-        @mcmd_save.connect(SEL_COMMAND){ save_layout }
+      @mcmd_save.text = "&Speichern"
+      @mcmd_save.connect(SEL_COMMAND){ save_layout }
+#      @topwin.accelTable.addAccel(fxparseAccel("Ctrl S"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
 
-        @mcmd_save_as.text = "Speichern &als"
-  #      @mcmd_save_as.connect(SEL_COMMAND){  }
+      @mcmd_save_as.text = "Speichern &als"
+#      @mcmd_save_as.connect(SEL_COMMAND){  }
 
-        @mcmd_exit.text = "&Beenden"
-        @mcmd_exit.connect(SEL_COMMAND){ @app.stop }
-        @topwin.accelTable.addAccel(fxparseAccel("Alt F4"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
+      @mcmd_exit.text = "&Beenden"
+      @mcmd_exit.connect(SEL_COMMAND){ @app.stop }
+      @topwin.accelTable.addAccel(fxparseAccel("Alt F4"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
       
       @mcmd_druck.text = "Dr&ucken"
       @mcmd_druck.connect(SEL_COMMAND){ print_cards }
@@ -175,7 +174,6 @@ class MCC2GUI < MainWindow
       child.userData.store_to_xml
     end
   end
-  
 	#---------------------------------------------------------------------------------------------------------
   
   def new_layout
@@ -187,6 +185,7 @@ class MCC2GUI < MainWindow
     child.recalc
   end
 	#---------------------------------------------------------------------------------------------------------
+  
   def open_layout(filename=nil)
     child = FXMDIChild.new(@mdiclient, "Layout", nil, nil, 0, 0, 0, 800, 600)
     child.userData = Layout.new(child, @app)
@@ -197,12 +196,22 @@ class MCC2GUI < MainWindow
     child.close unless filename
   end
 	#---------------------------------------------------------------------------------------------------------
+  
   def print_cards
     child = @mdiclient.activeChild
     if child
-      pr_dlg = MyPrintDialogBox.new(@app, child.userData)
-      pr_dlg.topwin.show(Fox::PLACEMENT_SCREEN)
-      pr_dlg.topwin.execute
+      unless child.userData.get_attr_value(S_DATASOURCE) == ""
+        pr_dlg = MyPrintDialogBox.new(@app, child.userData)
+        pr_dlg.topwin.show(Fox::PLACEMENT_SCREEN)
+        pr_dlg.topwin.execute
+      else
+        printer = $pr 
+        #~ pers_chip = true
+        pers_chip = false
+        pers_chip ? chip = Chip.new : chip = nil
+        printer.print(child.userData, nil, chip)
+        chip.close_reader if chip
+      end
     end
   end
 end
