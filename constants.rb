@@ -45,6 +45,8 @@ S_HEIGHT = 'Height'
 S_WIDTH = 'Width'
 S_PARAM = 'Param'
 S_ROOT = 'Root'
+S_X_OFFSET = 'x_offset'
+S_Y_OFFSET = 'y_offset'
 
 S_DATASOURCE = 'datasource'
 S_DATASOURCETYP = 'datasource_typ'
