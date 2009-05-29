@@ -26,7 +26,7 @@ class Chip
   end
 	#---------------------------------------------------------------------------------------------------------
   
-  #
+  # Schließen des Chip-Objekts
   def  close_reader
     @chip_obj.close if @chip_obj
     @chip_obj = nil
@@ -62,9 +62,6 @@ class Chip
     end
      
     @chip_obj.personalize(params)
-    
-    #~ sleep 5
-    
     
   end
   
