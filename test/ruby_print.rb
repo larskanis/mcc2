@@ -281,6 +281,18 @@ class RubyPrinting
         :fill => 'blue', 
         :font_weight => 'bold', 
         :font_style => 'normal')
+      canvas.text(500, 100, "Green 15").styles(
+        :font_family => "Arial", 
+        :font_size => 15.pt, 
+        :fill => 'green', 
+        :font_weight => 'bold', 
+        :font_style => 'normal')
+      canvas.text(900, 100, "Red 15").styles(
+        :font_family => "Arial", 
+        :font_size => 15.pt, 
+        :fill => 'red', 
+        :font_weight => 'bold', 
+        :font_style => 'normal')
     end
     pic = img.draw
     p pic
@@ -305,9 +317,11 @@ class RubyPrinting
           self.depth = 8
         }
         puts "size: #{bmdata.length}"
-        
+
         (0 ... pic.rows).each{|row_idx|
-          hBmp = @w32gdi.create_bitmap(pic.columns, 1, 1, 24, bmdata[3*row_idx*pic.columns, 3*pic.columns])
+          linedata = bmdata[3*row_idx*pic.columns, 3*pic.columns]
+          linedata = linedata.unpack('a3'*pic.columns).map{|a| a.reverse! }.pack('a3'*pic.columns)
+          hBmp = @w32gdi.create_bitmap(pic.columns, 1, 1, 24, linedata)
           #~ p "hBmp: #{hBmp}"
           
           tmpDC = @w32gdi.create_compatible_dc(hPrinter)
