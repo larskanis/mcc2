@@ -513,7 +513,7 @@ class LayoutFrame
 								FX::Matrix.new(@verticalframe_posit){|w|
 									@matrix2=w
 									w.wdg_name='matrix2'
-									w.numRows=5
+									w.numRows=6
 									w.width=280
 									w.y=2
 									w.height=356
@@ -664,6 +664,35 @@ class LayoutFrame
 										w.height=17
 										w.x=123
 										w.justify=32768
+									}
+									FX::Label.new(@matrix2){|w|
+										@label141=w
+										w.wdg_name='label141'
+										w.text="Seite"
+										w.width=28
+										w.y=119
+										w.height=17
+										w.x=4
+									}
+									FX::Spinner.new(@matrix2){|w|
+										@spinner_seiten_nr=w
+										w.wdg_name='spinner_seiten_nr'
+										w.value=1
+										w.range=-2147483648..2147483647
+										w.width=38
+										w.y=119
+										w.height=19
+										w.numColumns=3
+										w.x=53
+									}
+									FX::Label.new(@matrix2){|w|
+										@label142=w
+										w.wdg_name='label142'
+										w.text=""
+										w.width=4
+										w.y=119
+										w.height=4
+										w.x=123
 									}
 								}
 							}
@@ -935,6 +964,9 @@ class LayoutFrame
 	attr_reader :label58
 	attr_reader :textfield_rotation
 	attr_reader :label140
+	attr_reader :label141
+	attr_reader :spinner_seiten_nr
+	attr_reader :label142
 	attr_reader :tabitem_font
 	attr_reader :verticalframe_font
 	attr_reader :matrix3
