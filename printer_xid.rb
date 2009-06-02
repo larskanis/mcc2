@@ -200,6 +200,12 @@ class PrinterXID < CardPrinter
     print_page(devicename, child, row, page_nr, page_width , page_height )
     return true
   end
+  #--------------------------------------------------------------------------------------------------------------
+  
+  # definiert, dass der Drucker duplex drucken kann
+  def can_duplex?
+    true
+  end
   
 end
 

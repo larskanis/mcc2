@@ -122,9 +122,12 @@ class Layout
       @lf.textfield_y_offset.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_Y_OFFSET) }
       
       # die Auswahl auf welche Seite das Objekt soll
-      #~ @lf.spinner_seiten_nr.connect(SEL_CHANGED){ seiten_nr_changed }
       @lf.spinner_seiten_nr.connect(SEL_COMMAND){ seiten_nr_changed }
       @lf.spinner_seiten_nr.range = (1..$pr.max_pages)
+      
+      # der Checkbutton für die Einstellung Simplex/Duplex
+      @lf.checkbutton_duplex.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_DUPLEX) }
+      
       # .............................................................................................
       
       create_chipparam_fields
@@ -208,6 +211,21 @@ class Layout
   end
   #---------------------------------------------------------------------------------------------------------
   
+  # die Reaktion, wenn der Status eines Checkbuttons geänderrt wurde
+  # setzt das changed-Flag
+  # ==== Parameter
+  # +sender+::    das Objekt, welches das Ereignis gesendet hat
+  # +attr_name+:: der Name des Attributs
+  def change_chkbtn(sender, attr_name)
+    lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
+    node = lay_attrs.find_first(attr_name)
+    if sender.state != node.first.content
+      node.first.content = sender.state.to_s
+      changed_attributes
+    end
+  end
+  #---------------------------------------------------------------------------------------------------------
+  
   # ???
   def change_chkbtn_printlist
     node = get_objectnode_by_id(@selected_object_id).find(GOA_PRINTLIST)
@@ -281,8 +299,19 @@ class Layout
       draw_card
     end
   end
+  #~ #---------------------------------------------------------------------------------------------------------
+  
+  #~ # die Aktion, welche ausgeführt wird, wenn die Auswahl der Seitennummer geändert wurde, auf welcher das Objekt ausgegeben werden soll
+  #~ def duplex_changed
+    #~ seite = @lf.checkbutton_duplex.state - 1
+    #~ node = get_objectnode_by_id(@selected_object_id).find(GOA_PAGE_NR)
+    #~ if seite != node.first.content.to_i
+      #~ node.first.content = seite.to_s
+      #~ changed_attributes
+    #~ end
+  #~ end
   #---------------------------------------------------------------------------------------------------------
-
+  
   # die Aktion, welche ausgeführt wird, wenn die Auswahl der Seitennummer geändert wurde, auf welcher das Objekt ausgegeben werden soll
   def seiten_nr_changed
     seite = @lf.spinner_seiten_nr.value - 1
@@ -852,6 +881,20 @@ EOTXT
   def fill_layout_attr_tab
     @lf.textfield_x_offset.text = get_attr_value(S_X_OFFSET)
     @lf.textfield_y_offset.text = get_attr_value(S_Y_OFFSET)
+    unless $pr.can_duplex?
+      p "simplex"
+      @lf.checkbutton_duplex.state = false
+      @lf.checkbutton_duplex.enabled = false
+    else
+      p "duplex"
+      @lf.checkbutton_duplex.enabled = true
+      duplex = get_attr_value(S_DUPLEX)
+      if duplex == 'false' || duplex == '0'
+        @lf.checkbutton_duplex.state = false 
+      else
+        @lf.checkbutton_duplex.state = true
+      end
+    end
   end
 end
 #*****************************************************************************

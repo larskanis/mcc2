@@ -89,7 +89,6 @@ class LayoutFrame
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
-							w.current=1
 							w.width=292
 							w.y=2
 							w.height=387
@@ -99,16 +98,15 @@ class LayoutFrame
 								w.wdg_name='tabitem_allgemein'
 								w.text="Allgemein"
 								w.width=53
-								w.y=6
+								w.y=4
 								w.height=21
-								w.x=6
+								w.x=4
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe52=w
 								w.wdg_name='verticalframe52'
 								w.frameStyle=16384
 								w.width=284
-								w.shown=false
 								w.y=23
 								w.height=360
 								w.x=4
@@ -116,7 +114,7 @@ class LayoutFrame
 									@matrix_layout_attrs=w
 									w.wdg_name='matrix_layout_attrs'
 									w.packingHints=65536
-									w.numRows=7
+									w.numRows=8
 									w.width=280
 									w.y=2
 									w.height=356
@@ -318,6 +316,34 @@ class LayoutFrame
 										w.x=188
 										w.justify=32768
 									}
+									FX::Label.new(@matrix_layout_attrs){|w|
+										@label143=w
+										w.wdg_name='label143'
+										w.text="Duplexdruck"
+										w.width=88
+										w.y=159
+										w.height=17
+										w.x=4
+									}
+									FX::CheckButton.new(@matrix_layout_attrs){|w|
+										@checkbutton_duplex=w
+										w.wdg_name='checkbutton_duplex'
+										w.text=""
+										w.width=88
+										w.y=159
+										w.height=17
+										w.x=96
+										w.justify=32768
+									}
+									FX::Label.new(@matrix_layout_attrs){|w|
+										@label144=w
+										w.wdg_name='label144'
+										w.text=""
+										w.width=88
+										w.y=159
+										w.height=4
+										w.x=188
+									}
 								}
 							}
 							FX::TabItem.new(@tabbook_objectattributes){|w|
@@ -325,15 +351,16 @@ class LayoutFrame
 								w.wdg_name='tabitem_chip'
 								w.text="Chip"
 								w.width=29
-								w.y=4
+								w.y=6
 								w.height=21
-								w.x=57
+								w.x=56
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_chip=w
 								w.wdg_name='verticalframe_chip'
 								w.frameStyle=16384
 								w.width=284
+								w.shown=false
 								w.y=23
 								w.height=360
 								w.x=4
@@ -928,6 +955,9 @@ class LayoutFrame
 	attr_reader :label128
 	attr_reader :textfield_y_offset
 	attr_reader :label135
+	attr_reader :label143
+	attr_reader :checkbutton_duplex
+	attr_reader :label144
 	attr_reader :tabitem_chip
 	attr_reader :verticalframe_chip
 	attr_reader :tabitem_magstripe

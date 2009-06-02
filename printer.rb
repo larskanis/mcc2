@@ -118,6 +118,10 @@ class Printer
     1
   end
   
+  def can_duplex?
+    false
+  end
+  
 end
 
 
