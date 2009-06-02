@@ -114,6 +114,10 @@ class Printer
     @w32gdi.delete_dc(hPrinter)
   end
   
+  def max_pages
+    1
+  end
+  
 end
 
 
