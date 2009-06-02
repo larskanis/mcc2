@@ -37,6 +37,10 @@ class CardPrinter < Printer
     5
   end
 
+  def max_pages
+    2
+  end
+  
 end
 
 
