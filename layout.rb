@@ -121,6 +121,10 @@ class Layout
       @lf.textfield_x_offset.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_X_OFFSET) }
       @lf.textfield_y_offset.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_Y_OFFSET) }
       
+      # die Auswahl auf welche Seite das Objekt soll
+      #~ @lf.spinner_seiten_nr.connect(SEL_CHANGED){ seiten_nr_changed }
+      @lf.spinner_seiten_nr.connect(SEL_COMMAND){ seiten_nr_changed }
+      @lf.spinner_seiten_nr.range = (1..$pr.max_pages)
       # .............................................................................................
       
       create_chipparam_fields
@@ -278,7 +282,18 @@ class Layout
     end
   end
   #---------------------------------------------------------------------------------------------------------
-  
+
+  # die Aktion, welche ausgeführt wird, wenn die Auswahl der Seitennummer geändert wurde, auf welcher das Objekt ausgegeben werden soll
+  def seiten_nr_changed
+    seite = @lf.spinner_seiten_nr.value - 1
+    node = get_objectnode_by_id(@selected_object_id).find(GOA_PAGE_NR)
+    if seite != node.first.content.to_i
+      node.first.content = seite.to_s
+      changed_attributes
+    end
+  end
+  #---------------------------------------------------------------------------------------------------------
+
   # die Aktion, welche ausgeführt wird, wenn die Auswahl der Textausrichtung geändert wurde
   # ==== Parameter
   # +r+:: das Radio-Mutex-Objekt
@@ -404,6 +419,8 @@ class Layout
       @lf.textfield_width.text = node.find(GOA_WIDTH).first.content
       @lf.textfield_height.text = node.find(GOA_HEIGHT).first.content
       @lf.textfield_rotation.text = node.find(GOA_ROTATION).first.content
+      @lf.textfield_rotation.text = node.find(GOA_ROTATION).first.content
+      @lf.spinner_seiten_nr.value = node.find(GOA_PAGE_NR).first.content.to_i + 1
 #      @lf.iconlist_justify.connect(SEL_CHANGED){iconlist_justify_exit } # todo
 
       if node.find(GOA_PRINTLIST).first.content == 'false' || node.find(GOA_PRINTLIST).first.content == '0'
