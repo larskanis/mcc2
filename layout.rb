@@ -131,7 +131,9 @@ class Layout
       # der Button auf den Objektattributen, mit dem die Daten erweitert bearbeitet werden können (Variablen aus der Datenquelle verwenden usw.)
       @lf.button_enhanced_data_edit.connect(SEL_COMMAND){ enhanced_data_edit }
       @lf.button_enhanced_data_text_edit.connect(SEL_COMMAND){ enhanced_data_edit }
-
+      
+      # der Button zum Auswählen der Schriftart
+      @lf.button_font_select.connect(SEL_COMMAND){ sel_font_button_pressed }
       # .............................................................................................
       
       create_chipparam_fields
@@ -149,6 +151,36 @@ class Layout
   end
   #---------------------------------------------------------------------------------------------------------
   
+  #
+  def sel_font_button_pressed
+    p "sel_font_button_pressed"
+    
+    fontdlg = FXFontDialog.new(@parent, "Change Font", DECOR_BORDER|DECOR_TITLE)
+    node = get_objectnode_by_id(@selected_object_id)
+    fontdesc = FXFontDesc.new
+    fontdesc.size = node.find_first(GOA_FONT_HEIGHT).content.to_i*10
+    fontdesc.face = node.find_first(GOA_FONT_TYP).content
+    w = Font_weight.index(node.find_first(GOA_FONT_WEIGHT).content)
+    w ? fontdesc.weight = w : fontdesc.weight = 0
+    st = Font_style.index(node.find_first(GOA_FONT_STYLE).content)
+    st ? fontdesc.slant = st : fontdesc.slant = 0
+    str = Font_stretch.index(node.find_first(GOA_FONT_STRETCH).content)
+    str ? fontdesc.setwidth = str : fontdesc.setwidth = 0
+    fontdesc.encoding = 0 # keine Vorauswahl treffen
+    fontdlg.fontSelection = fontdesc
+    if fontdlg.execute() != 0
+      fontdesc = fontdlg.fontSelection
+      node.find_first(GOA_FONT_HEIGHT).content = (fontdesc.size.to_f/10).to_s
+      node.find_first(GOA_FONT_TYP).content = fontdesc.face
+      node.find_first(GOA_FONT_WEIGHT).content = Font_weight[fontdesc.weight]
+      node.find_first(GOA_FONT_STYLE).content = Font_style[fontdesc.slant]
+      node.find_first(GOA_FONT_STRETCH).content = Font_stretch[fontdesc.setwidth]
+      fill_font_fields(node)
+      changed_attributes
+    end
+  end
+  #---------------------------------------------------------------------------------------------------------
+
   # erzeugt Textfelder für die Eingabe der Chip-Parameter
   # erzeugt so viele Felder, wie in der Methode anz_params der Klasse Chip definiert sind
   # erzeugt ein Array, in welchem alle Felder gespeichert sind
@@ -198,7 +230,6 @@ class Layout
   # 
   def enhanced_data_edit
     typ = get_objectnode_by_id(@selected_object_id).find_first(GOA_TYP).content
-    p "typ: #{typ}"
     if typ == PICTUREOBJECT
       s = FXFileDialog.getOpenFilename(@parent, "Bild auswählen", ".", patterns="*", initial=0)   
       @lf.textfield_data_non_text.text = @lf.textfield_data_non_text.text + s
@@ -478,6 +509,7 @@ class Layout
       if node.find(GOA_TYP).first.content == TEXTOBJECT || node.find(GOA_TYP).first.content == BARCODEOBJECT
         @lf.tabitem_font.shown = true
         @lf.textfield_text_color.text = node.find(GOA_FONT_COLOR).first.content
+        fill_font_fields(node)
       end
       
       # Attribute, die nur Texte haben
@@ -496,6 +528,15 @@ class Layout
       end
     
     draw_card
+  end
+  #---------------------------------------------------------------------------------------------------------
+  
+  def fill_font_fields(node)
+    @lf.textfield_font_face.text = node.find_first(GOA_FONT_TYP).content
+    @lf.textfield_font_size.text = node.find_first(GOA_FONT_HEIGHT).content
+    @lf.textfield_font_weight.text = node.find_first(GOA_FONT_WEIGHT).content
+    @lf.textfield_font_style.text = node.find_first(GOA_FONT_STYLE).content
+    @lf.textfield_font_width.text = node.find_first(GOA_FONT_STRETCH).content
   end
   #---------------------------------------------------------------------------------------------------------
   
@@ -692,6 +733,15 @@ class Layout
         unless element
           go_struct << XML::Node.new(go_attr.attr_name, go_attr.attr_value.to_s)
           @changed = true
+        else
+          # fals in den Font-Attributen ungültige Werte stehen, dann diese mit den Normalwerten belegen
+          if go_attr.attr_name == GOA_FONT_WEIGHT
+            element.content = Font_weight[0] unless Font_weight[element.content]
+          elsif go_attr.attr_name == GOA_FONT_STYLE
+            element.content = Font_style[0] unless Font_style[element.content]
+          elsif go_attr.attr_name == GOA_FONT_STRETCH
+            element.content = Font_stretch[0] unless Font_stretch[element.content]
+          end
         end
       }
     }
