@@ -17,21 +17,21 @@ class LayoutFrame
 			FX::Splitter.new(@LayoutFrame){|w|
 				@splitter10=w
 				w.wdg_name='splitter10'
-				w.width=486
+				w.width=549
 				w.height=449
 				w.barSize=2
 				w.layoutHints=3084
 				FX::Splitter.new(@splitter10){|w|
 					@splitter11=w
 					w.wdg_name='splitter11'
-					w.width=296
+					w.width=355
 					w.height=449
 					w.splitterStyle=32768
 					w.barSize=2
 					FX::Splitter.new(@splitter11){|w|
 						@splitter12=w
 						w.wdg_name='splitter12'
-						w.width=296
+						w.width=355
 						w.height=56
 						w.barSize=2
 						FX::VerticalFrame.new(@splitter12){|w|
@@ -65,13 +65,13 @@ class LayoutFrame
 							@verticalframe_objectlist=w
 							w.wdg_name='verticalframe_objectlist'
 							w.frameStyle=16384
-							w.width=250
+							w.width=309
 							w.height=56
 							w.x=46
 							FX::IconList.new(@verticalframe_objectlist){|w|
 								@iconlist_objects=w
 								w.wdg_name='iconlist_objects'
-								w.width=246
+								w.width=305
 								w.y=2
 								w.height=52
 								w.iconListStyle=1048576
@@ -83,13 +83,14 @@ class LayoutFrame
 						@horizontalframe_attributes=w
 						w.wdg_name='horizontalframe_attributes'
 						w.frameStyle=16384
-						w.width=296
+						w.width=355
 						w.y=58
 						w.height=391
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
-							w.width=292
+							w.current=3
+							w.width=351
 							w.y=2
 							w.height=387
 							w.x=2
@@ -98,15 +99,16 @@ class LayoutFrame
 								w.wdg_name='tabitem_allgemein'
 								w.text="Allgemein"
 								w.width=53
-								w.y=4
+								w.y=6
 								w.height=21
-								w.x=4
+								w.x=6
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe52=w
 								w.wdg_name='verticalframe52'
 								w.frameStyle=16384
-								w.width=284
+								w.width=343
+								w.shown=false
 								w.y=23
 								w.height=360
 								w.x=4
@@ -115,7 +117,7 @@ class LayoutFrame
 									w.wdg_name='matrix_layout_attrs'
 									w.packingHints=65536
 									w.numRows=8
-									w.width=280
+									w.width=339
 									w.y=2
 									w.height=356
 									w.matrixStyle=131072
@@ -353,13 +355,13 @@ class LayoutFrame
 								w.width=29
 								w.y=6
 								w.height=21
-								w.x=56
+								w.x=59
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_chip=w
 								w.wdg_name='verticalframe_chip'
 								w.frameStyle=16384
-								w.width=284
+								w.width=343
 								w.shown=false
 								w.y=23
 								w.height=360
@@ -390,17 +392,15 @@ class LayoutFrame
 								w.wdg_name='tabitem_object'
 								w.text="Objekt"
 								w.width=40
-								w.shown=false
-								w.y=6
+								w.y=4
 								w.height=21
-								w.x=88
+								w.x=86
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_object=w
 								w.wdg_name='verticalframe_object'
 								w.frameStyle=16384
-								w.width=284
-								w.shown=false
+								w.width=343
 								w.y=23
 								w.height=360
 								w.x=4
@@ -408,11 +408,11 @@ class LayoutFrame
 									@matrix1=w
 									w.wdg_name='matrix1'
 									w.numRows=5
-									w.width=280
+									w.width=339
 									w.y=2
 									w.height=356
 									w.matrixStyle=131072
-									w.numColumns=2
+									w.numColumns=3
 									w.x=2
 									FX::Label.new(@matrix1){|w|
 										@label9=w
@@ -432,6 +432,15 @@ class LayoutFrame
 										w.numColumns=10
 										w.layoutHints=256
 										w.x=115
+									}
+									FX::Label.new(@matrix1){|w|
+										@label185=w
+										w.wdg_name='label185'
+										w.text=""
+										w.width=4
+										w.y=4
+										w.height=4
+										w.x=319
 									}
 									FX::Label.new(@matrix1){|w|
 										@label_textblock=w
@@ -459,6 +468,15 @@ class LayoutFrame
 											w.x=1
 										}
 									}
+									FX::Button.new(@matrix1){|w|
+										@button_enhanced_data_text_edit=w
+										w.wdg_name='button_enhanced_data_text_edit'
+										w.text="..."
+										w.width=20
+										w.y=27
+										w.height=21
+										w.x=319
+									}
 									FX::Label.new(@matrix1){|w|
 										@label_textfield=w
 										w.wdg_name='label_textfield'
@@ -479,12 +497,21 @@ class LayoutFrame
 										w.layoutHints=1024
 										w.x=115
 									}
+									FX::Button.new(@matrix1){|w|
+										@button_enhanced_data_edit=w
+										w.wdg_name='button_enhanced_data_edit'
+										w.text="..."
+										w.width=20
+										w.y=85
+										w.height=21
+										w.x=319
+									}
 									FX::Label.new(@matrix1){|w|
 										@label27=w
 										w.wdg_name='label27'
 										w.text="Beispieldaten"
 										w.width=67
-										w.y=108
+										w.y=110
 										w.height=17
 										w.x=4
 									}
@@ -492,18 +519,27 @@ class LayoutFrame
 										@textfield_sample_data=w
 										w.wdg_name='textfield_sample_data'
 										w.width=200
-										w.y=108
+										w.y=110
 										w.height=19
 										w.numColumns=10
 										w.layoutHints=1024
 										w.x=115
 									}
 									FX::Label.new(@matrix1){|w|
+										@label188=w
+										w.wdg_name='label188'
+										w.text=""
+										w.width=4
+										w.y=110
+										w.height=4
+										w.x=319
+									}
+									FX::Label.new(@matrix1){|w|
 										@label61=w
 										w.wdg_name='label61'
 										w.text="in Druckliste anzeigen"
 										w.width=107
-										w.y=131
+										w.y=133
 										w.height=17
 										w.x=4
 									}
@@ -512,7 +548,7 @@ class LayoutFrame
 										w.wdg_name='checkbutton_printlist'
 										w.text=""
 										w.width=17
-										w.y=131
+										w.y=133
 										w.height=17
 										w.x=115
 									}
@@ -883,13 +919,13 @@ class LayoutFrame
 					@verticalframe_right=w
 					w.wdg_name='verticalframe_right'
 					w.frameStyle=16384
-					w.width=188
+					w.width=192
 					w.height=449
-					w.x=298
+					w.x=357
 					FX::HorizontalFrame.new(@verticalframe_right){|w|
 						@horizontalframe32=w
 						w.wdg_name='horizontalframe32'
-						w.width=184
+						w.width=188
 						w.y=2
 						w.height=20
 						w.layoutHints=1024
@@ -967,13 +1003,17 @@ class LayoutFrame
 	attr_reader :matrix1
 	attr_reader :label9
 	attr_reader :textfield_name
+	attr_reader :label185
 	attr_reader :label_textblock
 	attr_reader :verticalframe44
 	attr_reader :textfield_data
+	attr_reader :button_enhanced_data_text_edit
 	attr_reader :label_textfield
 	attr_reader :textfield_data_non_text
+	attr_reader :button_enhanced_data_edit
 	attr_reader :label27
 	attr_reader :textfield_sample_data
+	attr_reader :label188
 	attr_reader :label61
 	attr_reader :checkbutton_printlist
 	attr_reader :tabitem_posit
