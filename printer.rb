@@ -6,6 +6,8 @@ if __FILE__ == $0
   require 'mcc2'
 end
 
+require 'win32api_winspool'
+
 
 class Printer
   attr_reader :default_width
