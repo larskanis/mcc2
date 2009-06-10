@@ -128,12 +128,16 @@ class Layout
       # der Checkbutton für die Einstellung Simplex/Duplex
       @lf.checkbutton_duplex.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_DUPLEX) }
       
+      # der Button auf den Objektattributen, mit dem die Daten erweitert bearbeitet werden können (Variablen aus der Datenquelle verwenden usw.)
+      @lf.button_enhanced_data_edit.connect(SEL_COMMAND){ enhanced_data_edit }
+      @lf.button_enhanced_data_text_edit.connect(SEL_COMMAND){ enhanced_data_edit }
+
       # .............................................................................................
       
       create_chipparam_fields
       
       # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
-      @lf.matrix1.numColumns = 2 
+      @lf.matrix1.numColumns = 3
       @lf.matrix2.numColumns = 3
       @lf.matrix3.numColumns = 3 
       @lf.matrix_layout_attrs.numColumns = 3
@@ -191,6 +195,17 @@ class Layout
   end
   #---------------------------------------------------------------------------------------------------------
   
+  # 
+  def enhanced_data_edit
+    typ = get_objectnode_by_id(@selected_object_id).find_first(GOA_TYP).content
+    p "typ: #{typ}"
+    if typ == PICTUREOBJECT
+      s = FXFileDialog.getOpenFilename(@parent, "Bild auswählen", ".", patterns="*", initial=0)   
+      @lf.textfield_data_non_text.text = @lf.textfield_data_non_text.text + s
+    end
+  end
+  #---------------------------------------------------------------------------------------------------------
+
   # erzeugt einen Datenmanager abhängig davon welcher Datensourcetyp im Layout definiert ist (momentan DATABASE oder CSV)
   def open_dataman
     
@@ -490,6 +505,8 @@ class Layout
     @lf.label_textblock.shown = false
     @lf.textfield_data_non_text.shown = true
     @lf.label_textfield.shown = true
+    @lf.button_enhanced_data_edit.shown = true
+    @lf.button_enhanced_data_text_edit.shown = false
   end
   #---------------------------------------------------------------------------------------------------------
   
@@ -499,6 +516,8 @@ class Layout
     @lf.label_textblock.shown = true
     @lf.textfield_data_non_text.shown = false
     @lf.label_textfield.shown = false
+    @lf.button_enhanced_data_edit.shown = false
+    @lf.button_enhanced_data_text_edit.shown = true
   end
   #---------------------------------------------------------------------------------------------------------
   
