@@ -94,7 +94,6 @@ require 'win32api_base'
 require 'win32api_gdi'
 #~ require 'win32api_kernel'
 require 'win32api_user'
-#~ require 'win32api_winspool'
 
 require 'chipobjekt'              # Chip
 
@@ -111,6 +110,7 @@ class MCC2GUI < MainWindow
     super
       # ......................................................................
       # die Menue-Einträge modifizieren
+      
       @menutitle_datei.text = "&Datei"
       
       @mcmd_new.text = "&Neu"
