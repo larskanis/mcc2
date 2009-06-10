@@ -19,6 +19,7 @@ class Printer
     @dpi = 300
     @w32gdi = Win32ApiGDI.new
     @w32user = Win32ApiUser.new
+    @w32printer = Winspool.new
     @default_x_offset = 0
     @default_y_offset = 0
   end 
@@ -49,7 +50,7 @@ class Printer
   #--------------------------------------------------------------------------------------------------------------
   
   #
-  def print_page(devicename, child, row, page_nr , page_width = default_width, page_height = default_height)
+  def print_page(hPrinter, child, row, page_nr , page_width = default_width, page_height = default_height)
   
     # den Pfad ermitteln, wo das temporäre File abgelegt werden soll
     tf = Tempfile.new("afile") 
@@ -73,45 +74,39 @@ class Printer
     # das VRG in ein Bitmap konvertieren
     pic = img.draw
     
-    # einen DeviceContext für den Drucker erzeugen
-    hPrinter = @w32gdi.create_dc( nil, devicename, nil, nil);
+    with_page(hPrinter) do
     
-    with_doc("Test", hPrinter) do  # todo aussagekräftigen Dokumentnamen übergeben
-      with_page(hPrinter) do
+      bmdata = pic.to_blob{
+        self.format='rgb'
+        self.depth = 8
+      }
       
-        bmdata = pic.to_blob{
-          self.format='rgb'
-          self.depth = 8
-        }
+      pack_rgb2bgr = 'a3'*pic.columns
+      
+      # das Bild zeilenweise drucken, da es ein Problem mit dem Drucken von Bildern > 4MB gibt # todo Problem beseitigen und mit einem Mal drucken
+      (0 ... pic.rows).each{|row_idx|
         
-        pack_rgb2bgr = 'a3'*pic.columns
+        linedata = bmdata[3*row_idx*pic.columns, 3*pic.columns]
+        # RGB -> BGR wandeln
+        linedata = linedata.unpack(pack_rgb2bgr).map{|a| a.reverse! }.pack(pack_rgb2bgr)
+        # Windows-Bitmap erzeugen
+        hBmp = @w32gdi.create_bitmap(pic.columns, 1, 1, 24, linedata)
         
-        # das Bild zeilenweise drucken, da es ein Problem mit dem Drucken von Bildern > 4MB gibt # todo Problem beseitigen und mit einem Mal drucken
-        (0 ... pic.rows).each{|row_idx|
-          
-          linedata = bmdata[3*row_idx*pic.columns, 3*pic.columns]
-          # RGB -> BGR wandeln
-          linedata = linedata.unpack(pack_rgb2bgr).map{|a| a.reverse! }.pack(pack_rgb2bgr)
-          # Windows-Bitmap erzeugen
-          hBmp = @w32gdi.create_bitmap(pic.columns, 1, 1, 24, linedata)
-          
-          tmpDC = @w32gdi.create_compatible_dc(hPrinter)
-          oldBmp = @w32gdi.select_object( tmpDC, hBmp )
-          
-          nXDest = 0
-          nYDest = 0 + row_idx
-          hdcSrc = tmpDC
-          nXSrc = 0
-          nYSrc = 0
-          dwRop = SRCCOPY
-          @w32gdi.bit_blt(hPrinter, nXDest, nYDest, pic.columns, 1, hdcSrc, nXSrc, nYSrc, dwRop)
-          
-          @w32gdi.select_object( tmpDC, oldBmp )
-          @w32gdi.delete_dc(tmpDC)
-        }
-      end
+        tmpDC = @w32gdi.create_compatible_dc(hPrinter)
+        oldBmp = @w32gdi.select_object( tmpDC, hBmp )
+        
+        nXDest = 0
+        nYDest = 0 + row_idx
+        hdcSrc = tmpDC
+        nXSrc = 0
+        nYSrc = 0
+        dwRop = SRCCOPY
+        @w32gdi.bit_blt(hPrinter, nXDest, nYDest, pic.columns, 1, hdcSrc, nXSrc, nYSrc, dwRop)
+        
+        @w32gdi.select_object( tmpDC, oldBmp )
+        @w32gdi.delete_dc(tmpDC)
+      }
     end
-    @w32gdi.delete_dc(hPrinter)
   end
   
   def max_pages
@@ -120,6 +115,26 @@ class Printer
   
   def can_duplex?
     false
+  end
+  
+  def set_duplex(hPrinter, state)
+      #~ __in   HANDLE hPrinter,
+      #~ __in   DWORD Level,
+      #~ __out  LPBYTE pPrinter,
+      #~ __in   DWORD cbBuf,
+      #~ __out  LPDWORD pcbNeeded
+    level = PRINTER_INFO_2
+      
+    # erst einmal ermitteln, wieviel Speicher gebraucht wird
+    cbBuf = 0
+    pPrinter = "\0" * cbBuf # Buffer
+    @w32printer.get_printer(hPrinter, Level, pPrinter, cbBuf, pcbNeeded)
+    
+    # und dann die Infos holen
+    cbBuf = pcbNeeded.unpack("V")[0] + 1
+    pPrinterEnum = "\0" * cbBuf # Buffer für die Datenübergabe aufbereiten
+    @w32printer.get_printer(hPrinter, Level, pPrinter, cbBuf, pcbNeeded)
+    
   end
   
 end
