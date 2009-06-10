@@ -107,6 +107,8 @@ class Printer
         
         @w32gdi.select_object( tmpDC, oldBmp )
         @w32gdi.delete_dc(tmpDC)
+          @w32gdi.delete_object(hBmp)
+          @w32gdi.delete_object(oldBmp)
       }
     end
   end
