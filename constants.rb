@@ -11,9 +11,11 @@ GOA_TYP  = 'object_typ'
 GOA_PAGE_NR = 'page_nr'
 GOA_FONT_HEIGHT = 'font_height'
 GOA_FONT_TYP = 'font_typ'
+GOA_FONT_WEIGHT = 'font_weight'
+GOA_FONT_STYLE = 'font_style'
+GOA_FONT_STRETCH = 'font_stretch'
 GOA_FONT_COLOR = 'font_color'
 GOA_BACK_COLOR = 'back_color'
-GOA_FONT_WEIGHT = 'font_weight'
 GOA_JUSTIFICATION = 'justification'
 GOA_X = 'x'
 GOA_Y = 'y'
@@ -66,3 +68,38 @@ ENC_LATIN1 = 'LATIN1'
 
 VALID_ENCODINGS = [ENC_UTF8, ENC_IBM850, ENC_LATIN1]
 VALID_DATASOURCES = [DATABASE, CSV, NONE]
+
+Font_stretch = {
+  0, 'normal',
+  FXFont::UltraCondensed, 'ultra_condensed',
+  FXFont::ExtraCondensed, 'extra_condensed',
+  FXFont::Condensed, 'condensed',
+  FXFont::SemiCondensed, 'semi_condensed',
+  FXFont::NonExpanded, 'normal',
+  FXFont::SemiExpanded, 'semi_expanded',
+  FXFont::Expanded, 'expanded',
+  FXFont::ExtraExpanded, 'extra_expanded',
+  FXFont::UltraExpanded, 'ultra_expanded'
+}
+  
+Font_style = {
+  0, 'normal',
+  FXFont::ReverseOblique, 'normal', # wird von Imagemagic derzeit nicht unterstützt
+  FXFont::ReverseItalic, 'normal', # wird von Imagemagic derzeit nicht unterstützt
+  FXFont::Straight, 'normal',
+  FXFont::Italic, 'italic',
+  FXFont::Oblique, 'oblique'
+ }
+
+Font_weight = {
+  0, 'normal',
+  FXFont::Thin, 'lighter',
+  FXFont::ExtraLight, 'lighter',
+  FXFont::Light, 'lighter',
+  FXFont::Normal, 'normal',
+  FXFont::Medium, 'normal',
+  FXFont::DemiBold, 'bold',
+  FXFont::Bold, 'bold',
+  FXFont::ExtraBold, 'bolder',
+  FXFont::Black, 'bolder'
+}
