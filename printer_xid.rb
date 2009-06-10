@@ -162,7 +162,6 @@ class PrinterXID < CardPrinter
   # +child+:: das selektierte Layout
   # +row+:: momentan ein CSV-Row-Objekt
   def print(child, row, chip)
-    page_nr = 0
     
     preview = false
     selected_object_id = nil
@@ -196,8 +195,27 @@ class PrinterXID < CardPrinter
     
     page_width = default_width + card_margin_left + card_margin_right # vorläufig todo ??? warum eigentlich vorläufig?
     page_height = default_height + card_margin_top + card_margin_bottom # vorläufig todo  ??? warum eigentlich vorläufig?
+
+    datasourcename = child.get_attr_value(S_DATASOURCE)
+    duplex = child.get_attr_value(S_DUPLEX) == 'true'
     
-    print_page(devicename, child, row, page_nr, page_width , page_height )
+    # einen DeviceContext für den Drucker erzeugen
+    hPrinter = @w32gdi.create_dc( nil, devicename, nil, nil);
+    
+    # setzt den Durcker in den Duplex- oder Simplexmodus
+    set_duplex(hPrinter, duplex)
+    
+    with_doc("mcc2 - #{datasourcename} - Satz #{}", hPrinter) do  # todo aussagekräftigen Dokumentnamen übergeben
+      page_nr = 0
+      print_page(hPrinter, child, row, page_nr, page_width , page_height )
+      
+      if duplex
+        page_nr = 1
+        print_page(hPrinter, child, row, page_nr, page_width , page_height )
+      end
+      
+    end
+    @w32gdi.delete_dc(hPrinter)
     return true
   end
   #--------------------------------------------------------------------------------------------------------------
