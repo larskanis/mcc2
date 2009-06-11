@@ -153,8 +153,6 @@ class Layout
   
   #
   def sel_font_button_pressed
-    p "sel_font_button_pressed"
-    
     fontdlg = FXFontDialog.new(@parent, "Change Font", DECOR_BORDER|DECOR_TITLE)
     node = get_objectnode_by_id(@selected_object_id)
     fontdesc = FXFontDesc.new
@@ -970,6 +968,8 @@ end
 # Main
 
 if __FILE__ == $0
+  
+  
   system("ruby mcc2.rb #{ARGV}")
   exit
   lay = Layout.new(nil, nil)
