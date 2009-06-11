@@ -83,26 +83,29 @@ class Page
               font_color = Page.check_color_definition(font_color)
               just = go.find(GOA_JUSTIFICATION).first.content.downcase
               if just == "links"
-                just == 'start'
+                text_x = 0
+                just = 'start'
               elsif just == "mitte"
-                just == 'middle'
+                text_x = go_width.to_f / 2
+                just = 'middle'
               elsif just == "rechts"
-                just == 'end'
+                text_x = go_width
+                just = 'end'
               else 
-                just == 'start' # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
+                just = 'start' # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
               end
               
               if data != ""
-                body.text(0, 0, data).styles(
-#                  :font_family => font, 
-                  :font => font, 
+                body.text(text_x.mm, 0, data).styles(
+                  :font_family => font,
+#                  :font => ["'", font, "'"].join,
                   :font_size => fontsize.pt, 
                   :fill => font_color, 
                   :font_weight => fontweight, 
                   :font_style => fontstyle,
-                  :font_stretch => fontstretch
+                  :font_stretch => fontstretch,
                   # todo Ausrichtung einbauen
-  #                :text_anchor => just
+                  :text_anchor => just
                 )
               end
             
