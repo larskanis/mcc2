@@ -196,8 +196,17 @@ class MCC2GUI < MainWindow
     child.create
     child.show
     child.recalc
-    filename = child.userData.load_from_xml(filename)
-    child.close unless filename
+    if @app # für Tests ohne GUI kann parent und app nil gesetzt werden
+      unless filename && FileTest.exists?(filename)
+        fn = FXFileDialog.getOpenFilename(@parent, 'Laden', '.', patterns = '*.XML', initial = 0)
+        filename = fn
+      end
+    end
+    unless filename 
+      child.close
+      return 
+    end
+    child.userData.load_from_xml(filename)
   end
 	#---------------------------------------------------------------------------------------------------------
   
