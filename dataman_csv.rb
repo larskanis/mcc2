@@ -10,8 +10,11 @@ class DataManCSV < DataMan
 #   puts "\nFile: #{ fname }  #{csv.length} Datensätze"  
 #   puts "Erster : #{ csv[0][:vorname] } #{ csv[0][:name] }"  
     @csv = nil
-    if datasource && FileTest.exists?(datasource.strip)
-      @csv = FasterCSV.read(datasource, :col_sep=>';', :headers=>true, :header_converters=>:symbol)
+    
+    fn = datasource.strip
+    if datasource && FileTest.exists?(fn)
+      @csv = FasterCSV.read(fn, :col_sep=>';', :headers=>true)
+      @filename = fn
     end
   end
   
