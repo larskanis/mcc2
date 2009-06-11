@@ -11,6 +11,8 @@ class BadEncodingError < RuntimeError
 end
 
 class DataMan
+  attr_reader :filename
+  
  	#---------------------------------------------------------------------------------------------------------
   
   # ermittelt, ob der übergebene String eine erlaubtes Encoding ist
@@ -56,8 +58,8 @@ class DataMan
       feld = $1
       von = $2.to_i
       anz = $3.to_i
-      vardata = row[feld.intern].to_s[von, anz]
-      if vardata == "" || vardata == nil
+      vardata = row[feld].to_s[von, anz]
+      unless row.to_hash.has_key?(feld)
         $& # die unveränderten Daten zurückgeben, wenn kein passendes Feld im Datensatz gefunden wurde
       else
         DataMan.convert_encoding(vardata, encoding)
