@@ -57,7 +57,11 @@ class DataMan
       von = $2.to_i
       anz = $3.to_i
       vardata = row[feld.intern].to_s[von, anz]
-      DataMan.convert_encoding(vardata, encoding)
+      if vardata == "" || vardata == nil
+        $& # die unveränderten Daten zurückgeben, wenn kein passendes Feld im Datensatz gefunden wurde
+      else
+        DataMan.convert_encoding(vardata, encoding)
+      end
     }
   end
  	#---------------------------------------------------------------------------------------------------------
