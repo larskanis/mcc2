@@ -29,10 +29,10 @@ class Page
  	#---------------------------------------------------------------------------------------------------------
   
   #
-  def draw(canvas, draw_pos_x, draw_pos_y, child, preview, selected_object_id, row)
-    width =  child.get_attr_value(S_WIDTH).to_f
-    height = child.get_attr_value(S_HEIGHT).to_f
-    encoding = child.get_attr_value(S_DATASOURCEENCODING)
+  def draw(canvas, draw_pos_x, draw_pos_y, layout_file, preview, selected_object_id, row)
+    width =  layout_file.get_attr_value(S_WIDTH).to_f
+    height = layout_file.get_attr_value(S_HEIGHT).to_f
+    encoding = layout_file.get_attr_value(S_DATASOURCEENCODING)
     
     if preview
       canvas.g.translate(draw_pos_x.mm, draw_pos_y.mm) do |canvas1|
@@ -52,9 +52,9 @@ class Page
       # die graphischen Elemnte zeichnen
     
       # Text-Objekte
-      sorted_id_list = child.sorted_id_list
+      sorted_id_list = layout_file.sorted_id_list
       sorted_id_list.each{|id|
-        go = child.xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
+        go = layout_file.xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
         # nur die Objekte zeichnen, die auf diese Seite sollen
         if go.find(GOA_PAGE_NR).first.content.to_i == @page_nr
         
@@ -111,7 +111,7 @@ class Page
             
             # Bildobjekt
             elsif typ == PICTUREOBJECT 
-              if FileTest.exists?(data)
+              if FileTest.file?(data)
                 go_image = ::Magick::Image.read(data).first
                 body.image(go_image, go_width.mm, go_height.mm)
               end
