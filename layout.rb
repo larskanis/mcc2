@@ -5,7 +5,7 @@ if __FILE__ == $0
 end
 
 require 'cc_dialogbox'
-
+require 'layout_file'
 
 # definiert ein Clientfenster mit allen Einstellungen und Attributen, die für ein bestimmtes Kartenlayout benötigt werden
 class Layout
@@ -13,10 +13,7 @@ class Layout
   attr_accessor :changed
   
   # enthält die kompletten Einstellungen des Kartenlayouts
-  attr_accessor :xml_doc
-  
-  # der Dateiname der verbundenen Datendatei (=nil, wenn keine geladen wurde)
-  attr_accessor :filename
+  #~ attr_accessor :xml_doc
   
   # die aktuelle Zoom-Stufe der Anzeige
   attr_accessor :zoom
@@ -25,7 +22,6 @@ class Layout
   attr_accessor :scale
   
   # ???
-  attr_accessor :attributes
 
   # der Datamanager
   attr_accessor :dataman
@@ -42,22 +38,12 @@ class Layout
   # +parent+:: ??
   # +app+::    die Applikation
   def initialize(parent, app)
-    @filename = nil
     @parent = parent
     @app = app
     @row_nr = 0
     
     close_dataman
     
-    @attributes = {}
-    add_attr(S_DUPLEX, Integer, 0)
-    add_attr(S_WIDTH, Integer, $pr.default_width)
-    add_attr(S_HEIGHT, Integer, $pr.default_height)
-    add_attr(S_X_OFFSET, Integer, $pr.default_x_offset)
-    add_attr(S_Y_OFFSET, Integer, $pr.default_y_offset)
-    add_attr(S_DATASOURCE, String, "")
-    add_attr(S_DATASOURCETYP, String, NONE)
-    add_attr(S_DATASOURCEENCODING, String, ENC_IBM850)
     
     @changed = false
 
@@ -154,7 +140,7 @@ class Layout
   #
   def sel_font_button_pressed
     fontdlg = FXFontDialog.new(@parent, "Change Font", DECOR_BORDER|DECOR_TITLE)
-    node = get_objectnode_by_id(@selected_object_id)
+    node = @layout_file.get_objectnode_by_id(@selected_object_id)
     fontdesc = FXFontDesc.new
     fontdesc.size = node.find_first(GOA_FONT_HEIGHT).content.to_i*10
     fontdesc.face = node.find_first(GOA_FONT_TYP).content
@@ -227,7 +213,7 @@ class Layout
   
   # 
   def enhanced_data_edit
-    typ = get_objectnode_by_id(@selected_object_id).find_first(GOA_TYP).content
+    typ = @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_TYP).content
     if typ == PICTUREOBJECT
       s = FXFileDialog.getOpenFilename(@parent, "Bild auswählen", ".", patterns="*", initial=0)   
       @lf.textfield_data_non_text.text = @lf.textfield_data_non_text.text + s
@@ -238,8 +224,8 @@ class Layout
   # erzeugt einen Datenmanager abhängig davon welcher Datensourcetyp im Layout definiert ist (momentan DATABASE oder CSV)
   def open_dataman
     
-    datamantyp =  get_attr_value(S_DATASOURCETYP)
-    datasource =  get_attr_value(S_DATASOURCE)
+    datamantyp =  @layout_file.get_attr_value(S_DATASOURCETYP)
+    datasource =  @layout_file.get_attr_value(S_DATASOURCE)
     
     datamantyp
     
@@ -261,7 +247,7 @@ class Layout
   # +sender+::    das Objekt, welches das Ereignis gesendet hat
   # +attr_name+:: der Name des Attributs
   def change_chkbtn(sender, attr_name)
-    lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
+    lay_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
     node = lay_attrs.find_first(attr_name)
     if sender.state != node.first.content
       node.first.content = sender.state.to_s
@@ -272,7 +258,7 @@ class Layout
   
   # ???
   def change_chkbtn_printlist
-    node = get_objectnode_by_id(@selected_object_id).find(GOA_PRINTLIST)
+    node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_PRINTLIST)
     if @lf.checkbutton_printlist.state != node.first.content
       node.first.content = @lf.checkbutton_printlist.state.to_s
       changed_attributes
@@ -287,10 +273,10 @@ class Layout
   # +dest+:: die Richtung (UP, oder DOWN)
   def object_move_up_down(dest)
     if @selected_object_id
-      get_objectnode_by_id(@selected_object_id)
+      @layout_file.get_objectnode_by_id(@selected_object_id)
       
       # erst einmal eine sortierte Liste aller ID's der Grafikobjekte holen
-      obj_arr = sorted_id_list
+      obj_arr = @layout_file.sorted_id_list
       
       # dann das entsprechende Objekt verschieben
       pos = obj_arr.index(@selected_object_id)
@@ -304,7 +290,7 @@ class Layout
       # dabei alle Objekte durchlaufen und im Array die Position der alten ID suchen und in die ID schreiben
       # dies muss so getan werden
       # wenn es anders herum versucht wird, d.h. das Array durchlaufen und dann das Objekt im XML gesucht, dann werden die ID's schon verändert und die Suche schlägt dann fehl
-      @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
+      @layout_file.xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
         id = go_struct.find(GOA_ID).first.content.to_i
         new_id = obj_arr.index(id)
         go_struct.find(GOA_ID).first.content = new_id.to_s
@@ -335,7 +321,7 @@ class Layout
     cdlg = FXColorDialog.new(@parent, "Textfarbe")
     cdlg.execute
     if @lf.textfield_text_color.text != cdlg.rgba
-      node = get_objectnode_by_id(@selected_object_id).find(GOA_FONT_COLOR)
+      node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_FONT_COLOR)
       s = cdlg.rgba.to_i.to_s(16)
       @lf.textfield_text_color.text = [s[6,2], s[4,2], s[2,2], s[0,2]].join
       node.first.content = @lf.textfield_text_color.text
@@ -348,7 +334,7 @@ class Layout
   #~ # die Aktion, welche ausgeführt wird, wenn die Auswahl der Seitennummer geändert wurde, auf welcher das Objekt ausgegeben werden soll
   #~ def duplex_changed
     #~ seite = @lf.checkbutton_duplex.state - 1
-    #~ node = get_objectnode_by_id(@selected_object_id).find(GOA_PAGE_NR)
+    #~ node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_PAGE_NR)
     #~ if seite != node.first.content.to_i
       #~ node.first.content = seite.to_s
       #~ changed_attributes
@@ -359,7 +345,7 @@ class Layout
   # die Aktion, welche ausgeführt wird, wenn die Auswahl der Seitennummer geändert wurde, auf welcher das Objekt ausgegeben werden soll
   def seiten_nr_changed
     seite = @lf.spinner_seiten_nr.value - 1
-    node = get_objectnode_by_id(@selected_object_id).find(GOA_PAGE_NR)
+    node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_PAGE_NR)
     if seite != node.first.content.to_i
       node.first.content = seite.to_s
       changed_attributes
@@ -371,7 +357,7 @@ class Layout
   # ==== Parameter
   # +r+:: das Radio-Mutex-Objekt
   def radiomutex_justify_changed(r)
-    node = get_objectnode_by_id(@selected_object_id).find(GOA_JUSTIFICATION)
+    node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_JUSTIFICATION)
     if r.to_s != node.first.content
       node.first.content = r.to_s
       changed_attributes
@@ -390,20 +376,20 @@ class Layout
       id = sender.wdg_name.split("_")[-1].to_i
       
       # die die Route zu den Chipparams suchen
-      chip_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
+      chip_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
       
       # den entsprechenden Parameter suchen
       attr_name = "#{S_PARAM}_#{id+1}"
       node = chip_attrs.find_first(attr_name)
     elsif attr_name == S_Y_OFFSET
-      lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
+      lay_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
       node = lay_attrs.find_first(S_Y_OFFSET)
     elsif attr_name == S_X_OFFSET
-      lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
+      lay_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
       node = lay_attrs.find_first(S_X_OFFSET)
     else
       # das Attribut suchen
-      node = get_objectnode_by_id(@selected_object_id).find(attr_name).first
+      node = @layout_file.get_objectnode_by_id(@selected_object_id).find(attr_name).first
     end
     
     # nur wenn im Textfeld etwas geändert wurde, den Text in das Attribut schreiben und das changed-Flag setzen
@@ -416,7 +402,7 @@ class Layout
   
   # schreibt den Text der im Textfeld eingegeben wurde in das Attribut 'name' des graphischen Objekts und aktualisiert die Objektliste
   def textfield_name_exit
-    orig_name = get_objectnode_by_id(@selected_object_id).find(GOA_NAME)
+    orig_name = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_NAME)
     if @lf.textfield_name.text != orig_name.first.content
       orig_name.first.content = @lf.textfield_name.text
       changed_attributes
@@ -431,17 +417,6 @@ class Layout
     @changed = true
     draw_card
     set_title
-  end
-  #---------------------------------------------------------------------------------------------------------
-  
-  # fügt ein neues Atrtribut zur Liste der Attribute (@attributes) hinzu 
-  # ==== Parameter
-  # +name+::    der Name, den das Attribut erhalten soll
-  # +typ+::     der Typ 
-  # +default+:: der Wert, mit dem das Attribut vorinitialisiert werden soll
-  def add_attr(name, typ, default)
-    attr = GO_Attribut.new(name, typ, default) 
-    @attributes[attr.attr_name] = attr
   end
   #---------------------------------------------------------------------------------------------------------
   
@@ -471,9 +446,9 @@ class Layout
     
     # die Buttons für das Ändern der Reihenfolge aktivieren
     @lf.button_up.enabled = (@selected_object_id > 0)
-    @lf.button_down.enabled = (@selected_object_id < (sorted_id_list.length - 1)) 
+    @lf.button_down.enabled = (@selected_object_id < (@layout_file.sorted_id_list.length - 1)) 
     
-    node = get_objectnode_by_id(@selected_object_id)
+    node = @layout_file.get_objectnode_by_id(@selected_object_id)
     
     # allgemeine Attribute auslesen
       # 
@@ -574,200 +549,56 @@ class Layout
   # hier ist noch einiges zu tun, im speziellen sind einige Werte "hart" kodiert, 
   # die z.Bsp abhängig von anderen Einstellungen sein sollten
   def draw_card
-    # allgemeine Einstellungen des Image vornehmen
-    dpi = 90
-    width =  get_attr_value(S_WIDTH).to_f
-    height = get_attr_value(S_HEIGHT).to_f
-    
-    Magick::RVG.dpi = dpi
-    
-    preview = true
-    
-    card_offset = 10
-    
-    image_width = (Page.width_with_margins(width) * @zoom)
-    image_height = ((2 * Page.height_with_margins(height) + card_offset) * @zoom )
-    
-    scale_width = Page.width_with_margins(width) * @scale 
-    scale_height = (2 * Page.height_with_margins(height) + card_offset) * @scale
-    
-    @dataman ? row = @dataman.row(@row_nr) : row = nil
-    
-    rvg = Magick::RVG.new(image_width.mm, image_height.mm).viewbox(0, 0, scale_width, scale_height) do |canvas|
-      # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
-    
-      draw_pos_x = 0
-      draw_pos_y = 0
-      page = Page.new(0)
-      page.draw(canvas, draw_pos_x, draw_pos_y, self, preview, @selected_object_id, row) # Seite 1 drucken
-      
-      page = Page.new(1)
-      draw_pos_y = (Page.height_with_margins(height) + card_offset)
-      page.draw(canvas, draw_pos_x, draw_pos_y, self, preview, @selected_object_id, row) # Seite 2 drucken
-      
-      canvas.background_fill = 'white'
-    end
-    
-    # ..........................................................................................
-    # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
-    data = rvg.draw.to_blob{
-      self.format = 'PNG'
-    }
-    
-    # ..........................................................................................
-    # das erzeugte Bild als Icon anzeigen
-    fx_image = FXPNGImage.new(@app, data)
-    fx_image.create
-    @image_view.image = fx_image
-    @image_view.show
-    @image_view.recalc
-  end
- 	#---------------------------------------------------------------------------------------------------------
+    #~ Thread.new{
   
-  # erzeugt eine neue XML-Datei und initialisiert die entsprechenden Variablen und Objekte
-	def create_xml
-    @xml_doc = LibXML::XML::Document.new
-    @xml_doc.encoding = XML::Encoding::UTF_8
-    @xml_doc.root = XML::Node.new(S_ROOT)
-    
-    # Layout definieren
-    @xml_doc.root << node = XML::Node.new(S_LAYOUT)
-    attributes.each_pair{|attr_name, attr|
-      node << XML::Node.new(attr.attr_name, attr.attr_value.to_s)
-    }
-    
-    # Chip definieren
-    @xml_doc.root << node = XML::Node.new(S_CHIP)
-    chip = Chip.new
-    (1..chip.anz_params).each{|i|
-      node << param = XML::Node.new("#{S_PARAM}_#{i}", "")
-    }
-    
-    # Magstripe definieren
-    @xml_doc.root << node = XML::Node.new(S_MAGSTRIPE)
-    
-    # Container für die GraphikObjekte definieren definieren
-    @xml_doc.root << node = XML::Node.new(GRAPHICOBJECTS)
-    
-    draw_card
-  end
- 	#---------------------------------------------------------------------------------------------------------
-  
-  # lädt das XML-File und initialisiert die entsprechenden Variablen und Objekte
-  # ==== Parameter
-  # +filename+:: der NAme des XML-Files in welchem die Layout-Spezifikation gespeichert werden soll
-	def load_from_xml(filename)
-    if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
-      if filename && FileTest.exists?(filename)
-        @filename = filename
-      else
-        fn = FXFileDialog.getOpenFilename(@parent, 'Laden', '.', patterns = '*.XML', initial = 0)
-        @filename = fn
+      # allgemeine Einstellungen des Image vornehmen
+      dpi = 90
+      width =  @layout_file.get_attr_value(S_WIDTH).to_f
+      height = @layout_file.get_attr_value(S_HEIGHT).to_f
+      
+      Magick::RVG.dpi = dpi
+      
+      preview = true
+      
+      card_offset = 10
+      
+      image_width = (Page.width_with_margins(width) * @zoom)
+      image_height = ((2 * Page.height_with_margins(height) + card_offset) * @zoom )
+      
+      scale_width = Page.width_with_margins(width) * @scale 
+      scale_height = (2 * Page.height_with_margins(height) + card_offset) * @scale
+      
+      @dataman ? row = @dataman.row(@row_nr) : row = nil
+      
+      rvg = Magick::RVG.new(image_width.mm, image_height.mm).viewbox(0, 0, scale_width, scale_height) do |canvas|
+        # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
+      
+        draw_pos_x = 0
+        draw_pos_y = 0
+        page = Page.new(0)
+        page.draw(canvas, draw_pos_x, draw_pos_y, @layout_file, preview, @selected_object_id, row) # Seite 1 drucken
+        
+        page = Page.new(1)
+        draw_pos_y = (Page.height_with_margins(height) + card_offset)
+        page.draw(canvas, draw_pos_x, draw_pos_y, @layout_file, preview, @selected_object_id, row) # Seite 2 drucken
+        
+        canvas.background_fill = 'white'
       end
-    end
-    XML.indent_tree_output = true
-    return nil if @filename == ""
-    
-    @xml_doc = LibXML::XML::Document.file(@filename, :options => XML::Parser::Options::NOBLANKS )
-    
-    # ................................................................................................................................
-    # die allgemeine Layout-Einstellungen auslesen
-    
-    # kontrollieren, ob alle Nodes des Layouts existieren, ansonsten anlegen und als 'changed' markieren
-    lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
-    @attributes.each_pair{|attr_bez, attr|
-      element = lay_attrs.find_first(attr.attr_name)
-      unless element
-        lay_attrs << XML::Node.new(attr.attr_name, attr.attr_value.to_s)
-        @changed = true
-      end
-    }
-    
-    # kontrollieren, ob die Datenquelle eine gültige Angabe ist, wenn nicht, dann den Benutzer informieren und auf Standard setzen
-    check_valid_datasourcetyp
-    
-    # wenn bei Datensourectyp nicht 'none' eingetrage ist, also eine Datenquelle verwendet wird
-    # kontrollieren, ob das eingestellte Encoding eine gültige Angabe ist, wenn nicht, dann den Benutzer informieren und auf Standard setzen
-    unless get_attr_value(S_DATASOURCETYP) == NONE
-      check_valid_encoding
-    end
-    
-    fill_layout_attr_tab
-    
-    # ................................................................................................................................
-    # die Chip-Einstellungen auslesen
-    
-    # kontrollieren, ob alle Nodes des Chips existieren, ansonsten anlegen und als 'changed' markieren
-    chip = Chip.new
-    chip_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
-    (1..chip.anz_params).each{|i|
-      attr_name = "#{S_PARAM}_#{i}"
-      element = chip_attrs.find_first(attr_name)
-      unless element
-        chip_attrs << param = XML::Node.new(attr_name , "")
-        @changed = true
-      end
-    }
-    chip_attrs.each{|chip_attr|
-      idx = chip_attr.name.split("_")[-1].to_i-1
-      @chipparam_textfields[idx].text = chip_attr.content 
-    }
-    
-    # ................................................................................................................................
-    # die Magnetstreifen-Einstellungen auslesen
-    
-    # kontrollieren, ob alle Nodes des Magstripes existieren, ansonsten anlegen und als 'changed' markieren
-    # todo
-    
-    # ................................................................................................................................
-    # die Einstellungen der graphischen Objekte auslesen
-    
-    # kontrollieren, ob alle Nodes der GraphicObjects existieren, ansonsten anlegen und als 'changed' markieren
-    @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
-      typ = go_struct.find(GOA_TYP).first.content
-      go = GraphicObject.get_object_by_typ(typ)
-      go.go_attributes.each_pair{|go_attrname, go_attr|
-        element = go_struct.find_first(go_attr.attr_name)
-        unless element
-          go_struct << XML::Node.new(go_attr.attr_name, go_attr.attr_value.to_s)
-          @changed = true
-        else
-          # fals in den Font-Attributen ungültige Werte stehen, dann diese mit den Normalwerten belegen
-          if go_attr.attr_name == GOA_FONT_WEIGHT
-            element.content = Font_weight[0] unless Font_weight[element.content]
-          elsif go_attr.attr_name == GOA_FONT_STYLE
-            element.content = Font_style[0] unless Font_style[element.content]
-          elsif go_attr.attr_name == GOA_FONT_STRETCH
-            element.content = Font_stretch[0] unless Font_stretch[element.content]
-          end
-        end
+      
+      # ..........................................................................................
+      # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
+      data = rvg.draw.to_blob{
+        self.format = 'PNG'
       }
-    }
-
-    # ................................................................................................................................
-  
-    open_dataman
-    
-    if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
-      fill_objectlist 
-      draw_card
-      set_title
-    end
-    
-    @filename
-  end
-	#---------------------------------------------------------------------------------------------------------
-  
-  # holt den Zweig mit den Einstellungen eines graphischen Objekts aus dem XML-File mit der Layout-Spezifikation
-  # ==== Parameter
-  # +id+:: die Nummer, unter welcher das Attribut gespeichert ist
-  def get_objectnode_by_id(id)
-    @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
-      if go_struct.find(GOA_ID).first.content.to_i == id
-        return go_struct
-      end
-    }
-    nil
+      
+      # ..........................................................................................
+      # das erzeugte Bild als Icon anzeigen
+      fx_image = FXPNGImage.new(@app, data)
+      fx_image.create
+      @image_view.image = fx_image
+      @image_view.show
+      @image_view.recalc
+    #~ }
   end
  	#---------------------------------------------------------------------------------------------------------
   
@@ -777,22 +608,20 @@ class Layout
   # * die verbunden Datenquelle (coming soon)
   # * ein Zeichen *, ob das Layout seit dem letzten Laden oder Speichern geändert wurde
   def set_title
-    @parent.title = "#{@filename}#{@changed ? ' *' : '' }"
+    @parent.title = "#{@layout_file.filename} #{@dataman.filename}  #{@changed ? ' *' : '' }"
   end
  	#---------------------------------------------------------------------------------------------------------
   
   # speichert alle GraphicObjekte und Layout-Einstellungen im XML-File
 	def store_to_xml
-    unless @filename
+    unless @layout_file.filename
       fn = FXFileDialog.getSaveFilename(@parent, 'Speichern', '.', patterns = '*.XML', initial = 0)
       unless fn.split(".")[-1].downcase == 'xml'
         fn = [fn, 'XML'].join(".")
       end
       @filename = fn
     end
-    file = File.new(@filename,'w')
-    @xml_doc.save(@filename)
-    file.close
+    @layout_file.save
     @changed = false
     set_title
   end
@@ -802,17 +631,7 @@ class Layout
   # ==== Parameter
   # +typ+:: der Typ des Objekts (Bild, Text, Barcode)
   def add_object(typ)
-    o = GraphicObject.get_object_by_typ(typ)
-    id = get_new_id
- 		node = @xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}")
-    node << go = XML::Node.new(GRAPHICOBJECT)
-    go << XML::Node.new(GOA_TYP, typ)
-    go << XML::Node.new(GOA_ID, id.to_s)
-    o.go_attributes.each_pair{|goa_name, go_attribute|
-      if go_attribute.attr_name != GOA_ID && go_attribute.attr_name != GOA_TYP
-        go << XML::Node.new(go_attribute.attr_name, go_attribute.attr_value.to_s)
-      end
-    }
+    @layout_file.add_object(typ)
     
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       fill_objectlist
@@ -827,22 +646,12 @@ class Layout
     @lf.iconlist_objects.clearItems
     
     # Array mit sortierten Objekt-ID's holen
-    sorted_id_list.each{|id|
-      go = @xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
+    @layout_file.sorted_id_list.each{|id|
+      go = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
       name = go.find(GOA_NAME).first.content
       typ = go.find(GOA_TYP).first.content
       @lf.iconlist_objects.appendItem([id, name, typ].join("\t"), nil, nil, id)
     }
-  end
- 	#---------------------------------------------------------------------------------------------------------
-  
-  # ermittelt die nächst höhere ID (beeinflusst die Darstellungsebene)
-  def get_new_id
-    id = 0
-		@xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
-      id = go.find(GOA_ID).first.content.to_i+1 if go.find(GOA_ID).first.content.to_i >= id
-    }
-    id
   end
  	#---------------------------------------------------------------------------------------------------------
   
@@ -853,101 +662,11 @@ class Layout
     @lf.tabitem_font.shown = false
   end
  	#---------------------------------------------------------------------------------------------------------
-  
-  # ließt die ID's der graphischen Objekte aus der Layout-Definition (XML) aus und
-  # sortiert sie
-  # ==== Return
-  # die sortierte Liste mit ID's [Array]
-  def sorted_id_list
-    @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").collect{|go_struct|
-      go_struct.find(GOA_ID).first.content.to_i
-    }.sort!
-  end
- 	#---------------------------------------------------------------------------------------------------------
-  
-  # ermittelt den Inhalt eines Attributes des Layout-Abschnittes
-  # ==== Return
-  # den Inhalt des Attributes [String]
-  # ==== Parameter
-  # +attr_name+:: der Name des Attributes z.Bsp. 'datasource' Bitte vorwiegend Konstanten verwenden z. Bsp. S_DATASOURCE [String]
-  def get_attr_value(attr_name)
-    lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
-    attr = lay_attrs.find_first(attr_name)
-    attr ? attr.content : nil
-  end
- 	#---------------------------------------------------------------------------------------------------------
-  
-  # setzt den Inhalt eines Attributes des Layout-Abschnittes
-  # ==== Return
-  # true, wenn erfolgreich, ansonsten false
-  # ==== Parameter
-  # +attr_name+:: der Name des Attributes z.Bsp. 'datasource' Bitte vorwiegend Konstanten verwenden z. Bsp. S_DATASOURCE [String]
-  # +value+:: der Wert der geschrieben werden soll [String]
-  def set_attr_value(attr_name, value)
-    lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
-    attr = lay_attrs.find_first(attr_name)
-    if attr 
-      attr.content = value
-      return true
-    end
-    return false
-  end
- 	#---------------------------------------------------------------------------------------------------------
-
-  # überprüft, ob der Wert Datasourcetyp in der Layoutdefinition ein gültiger Wert ist.
-  # Wenn nicht, wird ein Fehlerdialog angezeigt und der Standardwert gesetzt und das changed-Flag gesetzt
-  def check_valid_datasourcetyp
-    datasourcetyp = get_attr_value(S_DATASOURCETYP)
-    unless DataMan.valid_datasourcetyp?(datasourcetyp)
-      default = @attributes[S_DATASOURCETYP].attr_value
-      set_attr_value(S_DATASOURCETYP, default)
-      changed_attributes 
-s = <<-EOTXT
-      Der eingestellte Datenquellentyp '#{datasourcetyp}' ist ungültig.
-      
-      Gültige Werte sind '#{VALID_DATASOURCES.join("', '")}'.
-      
-      Der Wert wird jetzt auf den Standardwert '#{default}'  gesetzt.
-      
-      Bitte stellen Sie in den Layouteigenschaften den korrekten Datenquellentyp
-      ein und speichern Sie die Einstellungen.
-EOTXT
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, s, 'ok')
-      error_WahlMessage.execute
-      # error_WahlMessage.selection # enthält die Nummer der gewählten Taste
-    end
-  end
- 	#---------------------------------------------------------------------------------------------------------
-
-  # überprüft, ob der Wert Datasourcencoding in der Layoutdefinition ein gültiger Wert ist.
-  # Wenn nicht, wird ein Fehlerdialog angezeigt und der Standardwert gesetzt und das changed-Flag gesetzt
-  def check_valid_encoding
-    datasource_encoding = get_attr_value(S_DATASOURCEENCODING)
-    unless DataMan.valid_datasource_encoding?(datasource_encoding)
-      default = @attributes[S_DATASOURCEENCODING].attr_value
-      set_attr_value(S_DATASOURCEENCODING, default)
-      changed_attributes 
-s = <<-EOTXT
-      Das eingestellte Encoding der Datenquelle '#{datasource_encoding}' ist ungültig.
-      
-      Gültige Werte sind '#{VALID_ENCODINGS.join("', '")}'.
-      
-      Der Wert wird jetzt auf den Standardwert '#{default}'  gesetzt.
-      
-      Bitte stellen Sie in den Layouteigenschaften das korrekte Encoding
-      ein und speichern Sie die Einstellungen.
-EOTXT
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, s, 'ok')
-      error_WahlMessage.execute
-      # error_WahlMessage.selection # enthält die Nummer der gewählten Taste
-    end
-  end
- 	#---------------------------------------------------------------------------------------------------------
 
   # diese Methode liest die allgemeinen Einstellungen des Layouts aus dem XML aus und befüllt damit die Bearbeitungsfelder im Tab 'Allgemein'
   def fill_layout_attr_tab
-    @lf.textfield_x_offset.text = get_attr_value(S_X_OFFSET)
-    @lf.textfield_y_offset.text = get_attr_value(S_Y_OFFSET)
+    @lf.textfield_x_offset.text = @layout_file.get_attr_value(S_X_OFFSET)
+    @lf.textfield_y_offset.text = @layout_file.get_attr_value(S_Y_OFFSET)
     unless $pr.can_duplex?
       p "simplex"
       @lf.checkbutton_duplex.state = false
@@ -955,13 +674,55 @@ EOTXT
     else
       p "duplex"
       @lf.checkbutton_duplex.enabled = true
-      duplex = get_attr_value(S_DUPLEX)
+      duplex = @layout_file.get_attr_value(S_DUPLEX)
       if duplex == 'false' || duplex == '0'
         @lf.checkbutton_duplex.state = false 
       else
         @lf.checkbutton_duplex.state = true
       end
     end
+  end
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  #
+  def load_from_xml(filename)
+    begin
+      @layout_file = LayoutFile.load_from_xml(filename)
+    rescue LayoutFile::WrongDataSourceEncoding, LayoutFile::WrongDataSourceType => e
+      changed_attributes 
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, e.to_s, 'ok')
+      error_WahlMessage.execute
+      # error_WahlMessage.selection # enthält die Nummer der gewählten Taste
+    end
+    open_dataman
+    
+    if @app # für Tests ohne GUI kann parent und app nil gesetzt werden
+      fill_objectlist 
+      draw_card
+      set_title
+      
+      fill_layout_attr_tab
+      
+      chip = Chip.new
+      chip_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
+      #~ (1..chip.anz_params).each{|i|
+        #~ attr_name = "#{S_PARAM}_#{i}"
+        #~ element = chip_attrs.find_first(attr_name)
+        #~ chip_attrs << param = XML::Node.new(attr_name , "")
+      #~ }
+      # diesen Teil getrennt vom oberen machen, damit die Reihenfolge der Chip-Params richtig bleibt, auch wenn sie im XML anders sind
+      chip_attrs.each{|chip_attr|
+        idx = chip_attr.name.split("_")[-1].to_i-1
+        @chipparam_textfields[idx].text = chip_attr.content 
+      }
+    end
+  end
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  #
+  def create_xml
+    @layout_file = LayoutFile.create_xml
+    draw_card
   end
 end
 #*****************************************************************************
