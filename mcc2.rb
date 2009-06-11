@@ -41,6 +41,12 @@ if __FILE__ == $0
   end
   include Fox
 end
+  #~ puts ["Name".ljust(30),"Encoding".rjust(20),"Flags".rjust(20),"setwidth".rjust(20),"size".rjust(20),"slant".rjust(20),"weight".rjust(20)].join
+  #~ FXFont.listFonts("").each{|font|
+    #~ puts [font.face.to_s.ljust(30), font.encoding.to_s.rjust(20),font.flags.to_s.rjust(20),font.setwidth.to_s.rjust(20),font.size.to_s.rjust(20),font.slant.to_s.rjust(20),font.weight.to_s.rjust(20)].join
+  #~ }
+  
+  #~ exit
 
 require 'constants'
 
@@ -224,6 +230,7 @@ if __FILE__==$0
   #~ }
   
 	require 'libguib16.rb'
+  
   app = FX::App.new("MCC2", "ComCard")
     
   $pr = PrinterXID.new(app) # todo, muss später vom Anwender ausgewählt werden
