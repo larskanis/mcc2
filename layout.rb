@@ -43,6 +43,7 @@ class Layout
     @app = app
     @row_nr = 0
     
+    
     close_dataman
     
     
@@ -104,9 +105,10 @@ class Layout
       # die Checkbox, ob der Inhalt des Feldes in der Liste des Druckdialogs mit angezeigt werden soll
       @lf.checkbutton_printlist.connect(SEL_COMMAND ){ change_chkbtn_printlist }
       
-      
+      # die Textfelder für die allgemeine Layoutoptionen
       @lf.textfield_x_offset.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_X_OFFSET) }
       @lf.textfield_y_offset.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_Y_OFFSET) }
+      @lf.textfield_datasource.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_DATASOURCE) }
       
       # die Auswahl auf welche Seite das Objekt soll
       @lf.spinner_seiten_nr.connect(SEL_COMMAND){ seiten_nr_changed }
@@ -118,6 +120,9 @@ class Layout
       # der Button auf den Objektattributen, mit dem die Daten erweitert bearbeitet werden können (Variablen aus der Datenquelle verwenden usw.)
       @lf.button_enhanced_data_edit.connect(SEL_COMMAND){ enhanced_data_edit }
       @lf.button_enhanced_data_text_edit.connect(SEL_COMMAND){ enhanced_data_edit }
+      
+      # der Button dür das Auswählen einer Datenquelle
+      @lf.button_datasource.connect(SEL_COMMAND){ datasource_button_pressed }
       
       # die Listbox zum Auswählen der Schriftart
       @lf.listbox_fonts.connect(SEL_COMMAND){ |sender, sel, event| sel_font_list_changed(sender) }
@@ -135,7 +140,6 @@ class Layout
       # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
       @lf.matrix1.numColumns = 3
       @lf.matrix2.numColumns = 3
-      @lf.matrix_layout_attrs.numColumns = 3
       deactivate_object_tabs
       
       deactivat_up_down
@@ -711,7 +715,8 @@ class Layout
   def fill_layout_attr_tab
     @lf.textfield_x_offset.text = @layout_file.get_attr_value(S_X_OFFSET)
     @lf.textfield_y_offset.text = @layout_file.get_attr_value(S_Y_OFFSET)
-    
+    @lf.textfield_datasource.text = @layout_file.get_attr_value(S_DATASOURCE)
+    @lf.textfield_datasource.tipText = @lf.textfield_datasource.text
     set_check_button('checkbutton_contactless', @layout_file.get_attr_value(S_CONTACTLESS), $pr.has_contactless_engine?)
     set_check_button('checkbutton_contact', @layout_file.get_attr_value(S_CONTACT), $pr.has_contact_engine?)
     set_check_button('checkbutton_magstripe', @layout_file.get_attr_value(S_MAGSTRIPE), $pr.has_magstripe_engine?)
@@ -779,7 +784,6 @@ class Layout
       rmfl << mf.name
     }
     return fontdesc if rmfl.index(fontdesc.face.gsub(" ","-").gsub("@",""))
-    fdlg = AlternateFontDialog.new()
     fdlg.execute
   end
  	#---------------------------------------------------------------------------------------------------------
@@ -799,6 +803,23 @@ class Layout
       pr_dlg.topwin.show(Fox::PLACEMENT_SCREEN)
       pr_dlg.topwin.execute
     end
+  end
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  #
+  def datasource_button_pressed
+    lds = @layout_file.get_attr_value(S_DATASOURCE)
+    ldsd = File.join(File.dirname(lds),'\\')
+    p ldsd
+    if FileTest.exists?(ldsd)
+      dest = ldsd
+    else
+      dest = "."
+    end
+    s = FXFileDialog.getOpenFilename(@parent, "Bild auswählen", dest, patterns="*", initial=0)   
+    changed_attributes if s != ""
+    @lf.textfield_datasource.text = @lf.textfield_datasource.text + s
+    @lf.textfield_datasource.tipText = @lf.textfield_datasource.text
   end
 end
 #*****************************************************************************
