@@ -76,9 +76,6 @@ class Page
             
               font = go.find(GOA_FONT_TYP).first.content
               fontsize = go.find(GOA_FONT_HEIGHT).first.content.to_f
-              fontweight = go.find(GOA_FONT_WEIGHT).first.content
-              fontstyle = go.find(GOA_FONT_STYLE).first.content
-              fontstretch = go.find(GOA_FONT_STRETCH).first.content
               font_color = ["#", go.find(GOA_FONT_COLOR).first.content].join
               font_color = Page.check_color_definition(font_color)
               just = go.find(GOA_JUSTIFICATION).first.content.downcase
@@ -97,14 +94,9 @@ class Page
               
               if data != ""
                 body.text(text_x.mm, 0, data).styles(
-                  :font_family => font,
-#                  :font => ["'", font, "'"].join,
+                  :font => ["'", font, "'"].join,
                   :font_size => fontsize.pt, 
                   :fill => font_color, 
-                  :font_weight => fontweight, 
-                  :font_style => fontstyle,
-                  :font_stretch => fontstretch,
-                  # todo Ausrichtung einbauen
                   :text_anchor => just
                 )
               end
