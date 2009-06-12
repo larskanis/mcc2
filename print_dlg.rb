@@ -13,20 +13,20 @@ class PrintDialogBox
 			w.wdg_name='printDialogBox'
 			w.width=797
 			w.shown=true
-			w.y=220
+			w.y=288
 			w.height=600
 			w.title="Druckdialog"
-			w.x=-194
+			w.x=-156
 			FX::Splitter.new(@printDialogBox){|w|
 				@splitter1=w
 				w.wdg_name='splitter1'
-				w.backColor=Fox::FXRGBA(128,128,0,255)
 				w.width=797
 				w.height=600
 				FX::VerticalFrame.new(@splitter1){|w|
 					@verticalframe_datalist=w
 					w.wdg_name='verticalframe_datalist'
-					w.width=160
+					w.frameStyle=16384
+					w.width=164
 					w.height=600
 					w.shadowColor=Fox::FXRGBA(139,137,132,255)
 					w.layoutHints=2304
@@ -35,17 +35,20 @@ class PrintDialogBox
 						w.wdg_name='iconlist_data'
 						w.font=FX::Font.new.from_s('Arial|90|40|5|0|0|0').to_FXFont
 						w.width=160
-						w.height=579
+						w.y=2
+						w.height=575
 						w.iconListStyle=3145728
+						w.x=2
 					}
 					FX::HorizontalFrame.new(@verticalframe_datalist){|w|
 						@horizontalframe4=w
 						w.wdg_name='horizontalframe4'
 						w.width=160
-						w.y=579
+						w.y=577
 						w.height=21
 						w.shadowColor=Fox::FXRGBA(139,137,132,255)
 						w.layoutHints=1024
+						w.x=2
 						FX::Button.new(@horizontalframe4){|w|
 							@button_top=w
 							w.wdg_name='button_top'
@@ -86,21 +89,21 @@ class PrintDialogBox
 				FX::HorizontalFrame.new(@splitter1){|w|
 					@horizontalframe1=w
 					w.wdg_name='horizontalframe1'
-					w.width=633
+					w.width=629
 					w.height=600
 					w.shadowColor=Fox::FXRGBA(139,137,132,255)
-					w.x=164
+					w.x=168
 					FX::Splitter.new(@horizontalframe1){|w|
 						@splitter2=w
 						w.wdg_name='splitter2'
-						w.backColor=Fox::FXRGBA(128,128,0,255)
-						w.width=633
+						w.width=629
 						w.height=600
 						w.splitterStyle=32768
 						FX::VerticalFrame.new(@splitter2){|w|
 							@verticalframe2=w
 							w.wdg_name='verticalframe2'
-							w.width=633
+							w.frameStyle=16384
+							w.width=629
 							w.height=385
 							w.shadowColor=Fox::FXRGBA(139,137,132,255)
 							FX::Matrix.new(@verticalframe2){|w|
@@ -108,12 +111,14 @@ class PrintDialogBox
 								w.wdg_name='matrix2'
 								w.numRows=6
 								w.padLeft=10
-								w.width=633
-								w.height=207
+								w.width=625
+								w.y=2
+								w.height=204
 								w.matrixStyle=131072
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.numColumns=3
 								w.padTop=40
+								w.x=2
 								FX::Label.new(@matrix2){|w|
 									@label12=w
 									w.wdg_name='label12'
@@ -320,11 +325,12 @@ class PrintDialogBox
 							FX::Packer.new(@verticalframe2){|w|
 								@packer13=w
 								w.wdg_name='packer13'
-								w.width=633
-								w.y=207
+								w.width=625
+								w.y=206
 								w.height=20
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=1536
+								w.x=2
 							}
 							FX::Button.new(@verticalframe2){|w|
 								@button_select_all=w
@@ -332,11 +338,11 @@ class PrintDialogBox
 								w.text="alle markieren"
 								w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 								w.width=200
-								w.y=227
+								w.y=226
 								w.height=23
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=296
-								w.x=216
+								w.x=214
 							}
 							FX::Button.new(@verticalframe2){|w|
 								@button_deselect_all=w
@@ -344,20 +350,21 @@ class PrintDialogBox
 								w.text="alle Markierungen entfernen"
 								w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 								w.width=200
-								w.y=250
+								w.y=249
 								w.height=23
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=296
-								w.x=216
+								w.x=214
 							}
 							FX::Packer.new(@verticalframe2){|w|
 								@packer6=w
 								w.wdg_name='packer6'
-								w.width=633
-								w.y=273
+								w.width=625
+								w.y=272
 								w.height=20
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=1536
+								w.x=2
 							}
 							FX::Button.new(@verticalframe2){|w|
 								@button_print_selected=w
@@ -365,11 +372,11 @@ class PrintDialogBox
 								w.text="markiert drucken"
 								w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 								w.width=200
-								w.y=293
+								w.y=292
 								w.height=23
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=296
-								w.x=216
+								w.x=214
 							}
 							FX::Button.new(@verticalframe2){|w|
 								@button_print_all=w
@@ -377,11 +384,11 @@ class PrintDialogBox
 								w.text="alle drucken"
 								w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 								w.width=200
-								w.y=316
+								w.y=314
 								w.height=23
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=296
-								w.x=216
+								w.x=214
 							}
 							FX::Button.new(@verticalframe2){|w|
 								@button_stop_printing=w
@@ -391,11 +398,11 @@ class PrintDialogBox
 								w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 								w.width=200
 								w.helpText="Druck anhalten"
-								w.y=339
+								w.y=337
 								w.height=23
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=296
-								w.x=216
+								w.x=214
 							}
 							FX::Button.new(@verticalframe2){|w|
 								@button_exit=w
@@ -405,17 +412,18 @@ class PrintDialogBox
 								w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 								w.width=200
 								w.helpText="Druckdialog schlie\303\237en"
-								w.y=362
+								w.y=360
 								w.height=23
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=296
-								w.x=216
+								w.x=214
 							}
 						}
 						FX::HorizontalFrame.new(@splitter2){|w|
 							@horizontalframe3=w
 							w.wdg_name='horizontalframe3'
-							w.width=633
+							w.frameStyle=16384
+							w.width=629
 							w.y=389
 							w.height=211
 							w.shadowColor=Fox::FXRGBA(139,137,132,255)
