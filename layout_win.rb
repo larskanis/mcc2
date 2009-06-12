@@ -24,14 +24,14 @@ class LayoutFrame
 				FX::Splitter.new(@splitter10){|w|
 					@splitter11=w
 					w.wdg_name='splitter11'
-					w.width=355
+					w.width=320
 					w.height=449
 					w.splitterStyle=32768
 					w.barSize=2
 					FX::Splitter.new(@splitter11){|w|
 						@splitter12=w
 						w.wdg_name='splitter12'
-						w.width=355
+						w.width=320
 						w.height=56
 						w.barSize=2
 						FX::VerticalFrame.new(@splitter12){|w|
@@ -44,6 +44,7 @@ class LayoutFrame
 								@button_up=w
 								w.wdg_name='button_up'
 								w.text="hoch"
+								w.tipText="Mit diesem Button wird das Objekt eine Zeile nach oben verschoben."
 								w.width=40
 								w.y=2
 								w.height=21
@@ -54,6 +55,7 @@ class LayoutFrame
 								@button_down=w
 								w.wdg_name='button_down'
 								w.text="runter"
+								w.tipText="Mit diesem Button wird das Objekt eine Zeile nach oben verschoben."
 								w.width=40
 								w.y=23
 								w.height=21
@@ -65,13 +67,13 @@ class LayoutFrame
 							@verticalframe_objectlist=w
 							w.wdg_name='verticalframe_objectlist'
 							w.frameStyle=16384
-							w.width=309
+							w.width=274
 							w.height=56
 							w.x=46
 							FX::IconList.new(@verticalframe_objectlist){|w|
 								@iconlist_objects=w
 								w.wdg_name='iconlist_objects'
-								w.width=305
+								w.width=270
 								w.y=2
 								w.height=52
 								w.iconListStyle=1048576
@@ -83,13 +85,13 @@ class LayoutFrame
 						@horizontalframe_attributes=w
 						w.wdg_name='horizontalframe_attributes'
 						w.frameStyle=16384
-						w.width=355
+						w.width=320
 						w.y=58
 						w.height=391
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
-							w.width=351
+							w.width=316
 							w.y=2
 							w.height=387
 							w.x=2
@@ -105,244 +107,260 @@ class LayoutFrame
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe52=w
 								w.wdg_name='verticalframe52'
-								w.frameStyle=16384
-								w.width=343
+								w.width=308
 								w.y=23
 								w.height=360
+								w.vSpacing=2
 								w.x=4
-								FX::Matrix.new(@verticalframe52){|w|
-									@matrix_layout_attrs=w
-									w.wdg_name='matrix_layout_attrs'
-									w.packingHints=65536
-									w.numRows=8
-									w.width=339
-									w.y=2
-									w.height=356
-									w.matrixStyle=131072
-									w.numColumns=3
-									w.x=2
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label122=w
-										w.wdg_name='label122'
+								FX::HorizontalFrame.new(@verticalframe52){|w|
+									@horizontalframe74=w
+									w.wdg_name='horizontalframe74'
+									w.width=308
+									w.height=31
+									w.padTop=10
+									w.layoutHints=1024
+									FX::Label.new(@horizontalframe74){|w|
+										@label409=w
+										w.wdg_name='label409'
 										w.text="Datenquelle"
-										w.width=88
-										w.y=4
+										w.width=65
+										w.y=10
 										w.height=17
-										w.x=4
+										w.layoutHints=256
 									}
-									FX::TextField.new(@matrix_layout_attrs){|w|
-										@textfield62=w
-										w.wdg_name='textfield62'
-										w.width=88
-										w.y=4
+									FX::TextField.new(@horizontalframe74){|w|
+										@textfield_datasource=w
+										w.wdg_name='textfield_datasource'
+										w.tipText="Hier wird die Datendatei angegeben. Wenn keine verwendet werden, kann das Feld leer bleiben."
+										w.width=223
+										w.y=10
 										w.height=19
 										w.numColumns=10
-										w.x=96
+										w.layoutHints=1024
+										w.x=65
 									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label129=w
-										w.wdg_name='label129'
-										w.text=" "
-										w.width=88
-										w.y=4
+									FX::Button.new(@horizontalframe74){|w|
+										@button_datasource=w
+										w.wdg_name='button_datasource'
+										w.text="..."
+										w.tipText="Hier klicken, um eine Datei auszuw\303\244hlen. Achtung der Dateiname wird an das Feld hinten angef\303\274gt. Wenn dies nicht erw\303\274nscht ist, dann das Feld vorher leeren."
+										w.width=20
+										w.y=10
+										w.height=21
+										w.layoutHints=256
+										w.x=288
+									}
+								}
+								FX::HorizontalFrame.new(@verticalframe52){|w|
+									@horizontalframe75=w
+									w.wdg_name='horizontalframe75'
+									w.width=308
+									w.y=33
+									w.height=19
+									w.layoutHints=1024
+									FX::Label.new(@horizontalframe75){|w|
+										@label411=w
+										w.wdg_name='label411'
+										w.text="Kodierung"
+										w.enabled=false
+										w.width=65
 										w.height=17
-										w.x=188
+										w.layoutHints=256
 									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label126=w
-										w.wdg_name='label126'
-										w.text="Zeichenkodierung"
-										w.width=88
-										w.y=27
-										w.height=17
-										w.x=4
-									}
-									FX::ListBox.new(@matrix_layout_attrs){|w|
-										@listbox1=w
-										w.wdg_name='listbox1'
-										w.width=88
-										w.y=27
+									FX::ListBox.new(@horizontalframe75){|w|
+										@listbox16=w
+										w.wdg_name='listbox16'
+										w.enabled=false
+										w.width=243
 										w.height=19
-										w.x=96
+										w.layoutHints=1024
+										w.x=65
 									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label130=w
-										w.wdg_name='label130'
-										w.text=" "
-										w.width=88
-										w.y=27
-										w.height=17
-										w.x=188
-									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label123=w
-										w.wdg_name='label123'
+								}
+								FX::HorizontalFrame.new(@verticalframe52){|w|
+									@horizontalframe76=w
+									w.wdg_name='horizontalframe76'
+									w.width=308
+									w.y=54
+									w.height=32
+									w.padTop=15
+									w.layoutHints=1024
+									FX::Label.new(@horizontalframe76){|w|
+										@label412=w
+										w.wdg_name='label412'
 										w.text="Kontaktlos"
-										w.width=88
-										w.y=50
+										w.width=85
+										w.y=15
 										w.height=17
-										w.x=4
+										w.layoutHints=256
+										w.justify=32768
 									}
-									FX::CheckButton.new(@matrix_layout_attrs){|w|
+									FX::CheckButton.new(@horizontalframe76){|w|
 										@checkbutton_contactless=w
 										w.wdg_name='checkbutton_contactless'
 										w.text=""
-										w.width=88
-										w.y=50
+										w.tipText="Aktivieren Sie dieses K\303\244stchen, wenn bei der Karte ein kontaktloser Chip personalisiert werden soll. "
+										w.width=17
+										w.y=15
 										w.height=17
-										w.x=96
+										w.x=85
 										w.justify=32768
 									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label131=w
-										w.wdg_name='label131'
-										w.text=" "
-										w.width=88
-										w.y=50
-										w.height=17
-										w.x=188
-									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label125=w
-										w.wdg_name='label125'
+								}
+								FX::HorizontalFrame.new(@verticalframe52){|w|
+									@horizontalframe77=w
+									w.wdg_name='horizontalframe77'
+									w.width=308
+									w.y=88
+									w.height=17
+									w.layoutHints=1024
+									FX::Label.new(@horizontalframe77){|w|
+										@label413=w
+										w.wdg_name='label413'
 										w.text="Chip"
-										w.width=88
-										w.y=71
+										w.width=85
 										w.height=17
-										w.x=4
+										w.layoutHints=256
+										w.justify=32768
 									}
-									FX::CheckButton.new(@matrix_layout_attrs){|w|
+									FX::CheckButton.new(@horizontalframe77){|w|
 										@checkbutton_contact=w
 										w.wdg_name='checkbutton_contact'
 										w.text=""
-										w.width=88
-										w.y=71
+										w.tipText="Aktivieren Sie dieses K\303\244stchen, wenn bei der Karte ein Kontakt-Chip personalisiert werden soll."
+										w.width=17
 										w.height=17
-										w.x=96
+										w.x=85
 										w.justify=32768
 									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label132=w
-										w.wdg_name='label132'
-										w.text=" "
-										w.width=88
-										w.y=71
-										w.height=17
-										w.x=188
-									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label124=w
-										w.wdg_name='label124'
+								}
+								FX::HorizontalFrame.new(@verticalframe52){|w|
+									@horizontalframe78=w
+									w.wdg_name='horizontalframe78'
+									w.width=308
+									w.y=107
+									w.height=17
+									w.layoutHints=1024
+									FX::Label.new(@horizontalframe78){|w|
+										@label414=w
+										w.wdg_name='label414'
 										w.text="Magnetstreifen"
-										w.width=88
-										w.y=92
+										w.width=85
 										w.height=17
-										w.x=4
+										w.layoutHints=256
 									}
-									FX::CheckButton.new(@matrix_layout_attrs){|w|
+									FX::CheckButton.new(@horizontalframe78){|w|
 										@checkbutton_magstripe=w
 										w.wdg_name='checkbutton_magstripe'
 										w.text=""
-										w.width=88
-										w.y=92
+										w.tipText="Aktivieren Sie dieses K\303\244stchen, wenn bei der Karte der Magnetstreifen kontaktloser personalisiert werden soll."
+										w.width=17
 										w.height=17
-										w.x=96
+										w.x=85
 										w.justify=32768
 									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label133=w
-										w.wdg_name='label133'
-										w.text=" "
-										w.width=88
-										w.y=92
-										w.height=17
-										w.x=188
-									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label127=w
-										w.wdg_name='label127'
+								}
+								FX::HorizontalFrame.new(@verticalframe52){|w|
+									@horizontalframe80=w
+									w.wdg_name='horizontalframe80'
+									w.width=308
+									w.y=126
+									w.height=34
+									w.padTop=15
+									w.layoutHints=1024
+									FX::Label.new(@horizontalframe80){|w|
+										@label415=w
+										w.wdg_name='label415'
 										w.text="X-Verschiebung"
-										w.width=88
-										w.y=113
+										w.width=85
+										w.y=15
 										w.height=17
-										w.x=4
+										w.layoutHints=256
+										w.justify=32768
 									}
-									FX::TextField.new(@matrix_layout_attrs){|w|
+									FX::TextField.new(@horizontalframe80){|w|
 										@textfield_x_offset=w
 										w.wdg_name='textfield_x_offset'
-										w.width=88
-										w.y=113
+										w.tipText="Mit diesem Wert wird das gesamte Druckbild um die X-Achse verschoben."
+										w.width=66
+										w.y=15
 										w.height=19
 										w.textFieldTextStyle=2097152
 										w.numColumns=10
-										w.x=96
+										w.x=85
 									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label134=w
-										w.wdg_name='label134'
+									FX::Label.new(@horizontalframe80){|w|
+										@label418=w
+										w.wdg_name='label418'
 										w.text=" mm"
-										w.width=88
-										w.y=113
+										w.width=23
+										w.y=15
 										w.height=17
-										w.x=188
+										w.x=151
 										w.justify=32768
 									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label128=w
-										w.wdg_name='label128'
+								}
+								FX::HorizontalFrame.new(@verticalframe52){|w|
+									@horizontalframe81=w
+									w.wdg_name='horizontalframe81'
+									w.width=308
+									w.y=162
+									w.height=19
+									w.layoutHints=1024
+									FX::Label.new(@horizontalframe81){|w|
+										@label416=w
+										w.wdg_name='label416'
 										w.text="Y-Verschiebung"
-										w.width=88
-										w.y=136
+										w.width=85
 										w.height=17
-										w.x=4
+										w.layoutHints=256
+										w.justify=32768
 									}
-									FX::TextField.new(@matrix_layout_attrs){|w|
+									FX::TextField.new(@horizontalframe81){|w|
 										@textfield_y_offset=w
 										w.wdg_name='textfield_y_offset'
-										w.width=88
-										w.y=136
+										w.tipText="Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben."
+										w.width=66
 										w.height=19
 										w.textFieldTextStyle=2097152
 										w.numColumns=10
-										w.x=96
+										w.x=85
 									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label135=w
-										w.wdg_name='label135'
+									FX::Label.new(@horizontalframe81){|w|
+										@label417=w
+										w.wdg_name='label417'
 										w.text=" mm"
-										w.width=88
-										w.y=136
+										w.width=23
 										w.height=17
-										w.x=188
+										w.x=151
 										w.justify=32768
 									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label143=w
-										w.wdg_name='label143'
+								}
+								FX::HorizontalFrame.new(@verticalframe52){|w|
+									@horizontalframe79=w
+									w.wdg_name='horizontalframe79'
+									w.width=308
+									w.y=183
+									w.height=17
+									w.layoutHints=1024
+									FX::Label.new(@horizontalframe79){|w|
+										@label419=w
+										w.wdg_name='label419'
 										w.text="Duplexdruck"
-										w.width=88
-										w.y=159
+										w.width=85
 										w.height=17
-										w.x=4
+										w.layoutHints=256
+										w.justify=32768
 									}
-									FX::CheckButton.new(@matrix_layout_attrs){|w|
+									FX::CheckButton.new(@horizontalframe79){|w|
 										@checkbutton_duplex=w
 										w.wdg_name='checkbutton_duplex'
 										w.text=""
-										w.width=88
-										w.y=159
+										w.tipText="Aktivieren Sie dieses K\303\244stchen, wenn die Karte Duplex personalisiert werden soll."
+										w.width=17
 										w.height=17
-										w.x=96
+										w.x=85
 										w.justify=32768
-									}
-									FX::Label.new(@matrix_layout_attrs){|w|
-										@label144=w
-										w.wdg_name='label144'
-										w.text=""
-										w.width=88
-										w.y=159
-										w.height=4
-										w.x=188
 									}
 								}
 							}
@@ -359,7 +377,7 @@ class LayoutFrame
 								@verticalframe_chip=w
 								w.wdg_name='verticalframe_chip'
 								w.frameStyle=16384
-								w.width=343
+								w.width=308
 								w.shown=false
 								w.y=23
 								w.height=360
@@ -772,7 +790,7 @@ class LayoutFrame
 								@verticalframe_font=w
 								w.wdg_name='verticalframe_font'
 								w.frameStyle=16384
-								w.width=343
+								w.width=308
 								w.shown=false
 								w.y=23
 								w.height=360
@@ -782,7 +800,7 @@ class LayoutFrame
 								FX::HorizontalFrame.new(@verticalframe_font){|w|
 									@horizontalframe54=w
 									w.wdg_name='horizontalframe54'
-									w.width=339
+									w.width=304
 									w.y=12
 									w.height=19
 									w.layoutHints=1024
@@ -810,7 +828,7 @@ class LayoutFrame
 								FX::HorizontalFrame.new(@verticalframe_font){|w|
 									@horizontalframe61=w
 									w.wdg_name='horizontalframe61'
-									w.width=339
+									w.width=304
 									w.y=35
 									w.height=19
 									w.layoutHints=1024
@@ -838,7 +856,7 @@ class LayoutFrame
 								FX::HorizontalFrame.new(@verticalframe_font){|w|
 									@horizontalframe63=w
 									w.wdg_name='horizontalframe63'
-									w.width=339
+									w.width=304
 									w.y=58
 									w.height=21
 									w.layoutHints=1024
@@ -872,7 +890,7 @@ class LayoutFrame
 								FX::HorizontalFrame.new(@verticalframe_font){|w|
 									@horizontalframe62=w
 									w.wdg_name='horizontalframe62'
-									w.width=339
+									w.width=304
 									w.y=83
 									w.height=51
 									w.layoutHints=1024
@@ -926,13 +944,13 @@ class LayoutFrame
 					@verticalframe_right=w
 					w.wdg_name='verticalframe_right'
 					w.frameStyle=16384
-					w.width=153
+					w.width=188
 					w.height=449
-					w.x=357
+					w.x=322
 					FX::HorizontalFrame.new(@verticalframe_right){|w|
 						@horizontalframe32=w
 						w.wdg_name='horizontalframe32'
-						w.width=149
+						w.width=184
 						w.y=2
 						w.height=20
 						w.layoutHints=1024
@@ -976,31 +994,33 @@ class LayoutFrame
 	attr_reader :tabbook_objectattributes
 	attr_reader :tabitem_allgemein
 	attr_reader :verticalframe52
-	attr_reader :matrix_layout_attrs
-	attr_reader :label122
-	attr_reader :textfield62
-	attr_reader :label129
-	attr_reader :label126
-	attr_reader :listbox1
-	attr_reader :label130
-	attr_reader :label123
+	attr_reader :horizontalframe74
+	attr_reader :label409
+	attr_reader :textfield_datasource
+	attr_reader :button_datasource
+	attr_reader :horizontalframe75
+	attr_reader :label411
+	attr_reader :listbox16
+	attr_reader :horizontalframe76
+	attr_reader :label412
 	attr_reader :checkbutton_contactless
-	attr_reader :label131
-	attr_reader :label125
+	attr_reader :horizontalframe77
+	attr_reader :label413
 	attr_reader :checkbutton_contact
-	attr_reader :label132
-	attr_reader :label124
+	attr_reader :horizontalframe78
+	attr_reader :label414
 	attr_reader :checkbutton_magstripe
-	attr_reader :label133
-	attr_reader :label127
+	attr_reader :horizontalframe80
+	attr_reader :label415
 	attr_reader :textfield_x_offset
-	attr_reader :label134
-	attr_reader :label128
+	attr_reader :label418
+	attr_reader :horizontalframe81
+	attr_reader :label416
 	attr_reader :textfield_y_offset
-	attr_reader :label135
-	attr_reader :label143
+	attr_reader :label417
+	attr_reader :horizontalframe79
+	attr_reader :label419
 	attr_reader :checkbutton_duplex
-	attr_reader :label144
 	attr_reader :tabitem_chip
 	attr_reader :verticalframe_chip
 	attr_reader :tabitem_magstripe
