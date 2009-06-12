@@ -27,7 +27,7 @@ class LayoutFile
   def initialize
     @xml_doc = nil
     @attributes = {}
-    add_attr(S_DUPLEX, Integer, 0)
+    add_attr(S_DUPLEX, String, FALSE)
     add_attr(S_WIDTH, Integer, $pr.default_width)
     add_attr(S_HEIGHT, Integer, $pr.default_height)
     add_attr(S_X_OFFSET, Integer, $pr.default_x_offset)
@@ -35,6 +35,9 @@ class LayoutFile
     add_attr(S_DATASOURCE, String, "")
     add_attr(S_DATASOURCETYP, String, NONE)
     add_attr(S_DATASOURCEENCODING, String, ENC_IBM850)
+    add_attr(S_CONTACTLESS, String, FALSE)
+    add_attr(S_CONTACT, String, FALSE)
+    add_attr(S_MAGSTRIPE, String, FALSE)
   end
   
  	#---------------------------------------------------------------------------------------------------------
@@ -63,7 +66,7 @@ class LayoutFile
     }
     
     # Magstripe definieren
-    @xml_doc.root << node = XML::Node.new(S_MAGSTRIPE)
+    @xml_doc.root << node = XML::Node.new(S_MAGSTRIPEPARAMS)
     
     # Container für die GraphikObjekte definieren definieren
     @xml_doc.root << node = XML::Node.new(GRAPHICOBJECTS)
@@ -102,8 +105,6 @@ class LayoutFile
     unless get_attr_value(S_DATASOURCETYP) == NONE
       check_valid_encoding
     end
-    
-    #~ fill_layout_attr_tab
     
     # ................................................................................................................................
     # die Chip-Einstellungen auslesen
