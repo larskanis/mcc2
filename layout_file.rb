@@ -138,15 +138,6 @@ class LayoutFile
         unless element
           go_struct << XML::Node.new(go_attr.attr_name, go_attr.attr_value.to_s)
           @changed = true
-        else
-          # fals in den Font-Attributen ungültige Werte stehen, dann diese mit den Normalwerten belegen
-          if go_attr.attr_name == GOA_FONT_WEIGHT
-            element.content = Font_weight[0] unless Font_weight[element.content]
-          elsif go_attr.attr_name == GOA_FONT_STYLE
-            element.content = Font_style[0] unless Font_style[element.content]
-          elsif go_attr.attr_name == GOA_FONT_STRETCH
-            element.content = Font_stretch[0] unless Font_stretch[element.content]
-          end
         end
       }
     }
