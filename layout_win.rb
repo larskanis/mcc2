@@ -17,7 +17,7 @@ class LayoutFrame
 			FX::Splitter.new(@LayoutFrame){|w|
 				@splitter10=w
 				w.wdg_name='splitter10'
-				w.width=486
+				w.width=510
 				w.height=449
 				w.barSize=2
 				w.layoutHints=3084
@@ -89,7 +89,7 @@ class LayoutFrame
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
-							w.current=1
+							w.current=5
 							w.width=351
 							w.y=2
 							w.height=387
@@ -353,15 +353,16 @@ class LayoutFrame
 								w.wdg_name='tabitem_chip'
 								w.text="Chip"
 								w.width=29
-								w.y=4
+								w.y=6
 								w.height=21
-								w.x=57
+								w.x=59
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_chip=w
 								w.wdg_name='verticalframe_chip'
 								w.frameStyle=16384
 								w.width=343
+								w.shown=false
 								w.y=23
 								w.height=360
 								w.x=4
@@ -765,276 +766,140 @@ class LayoutFrame
 								w.wdg_name='tabitem_font'
 								w.text="Schrift"
 								w.width=39
-								w.shown=false
-								w.y=6
+								w.y=4
 								w.height=21
-								w.x=85
+								w.x=86
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_font=w
 								w.wdg_name='verticalframe_font'
 								w.frameStyle=16384
 								w.width=343
-								w.shown=false
 								w.y=23
 								w.height=360
+								w.padTop=10
+								w.vSpacing=4
 								w.x=4
-								FX::Matrix.new(@verticalframe_font){|w|
-									@matrix3=w
-									w.wdg_name='matrix3'
-									w.numRows=9
+								FX::HorizontalFrame.new(@verticalframe_font){|w|
+									@horizontalframe54=w
+									w.wdg_name='horizontalframe54'
 									w.width=339
-									w.y=2
-									w.height=356
-									w.matrixStyle=131072
-									w.numColumns=3
+									w.y=12
+									w.height=19
+									w.layoutHints=1024
 									w.x=2
-									FX::Label.new(@matrix3){|w|
-										@label16=w
-										w.wdg_name='label16'
+									FX::Label.new(@horizontalframe54){|w|
+										@label358=w
+										w.wdg_name='label358'
 										w.text="Schriftart"
-										w.width=49
-										w.y=4
+										w.width=80
+										w.y=1
 										w.height=17
-										w.x=4
+										w.layoutHints=288
+										w.justify=32768
 									}
-									FX::TextField.new(@matrix3){|w|
-										@textfield_font_face=w
-										w.wdg_name='textfield_font_face'
-										w.enabled=false
-										w.width=200
-										w.y=4
+									FX::ListBox.new(@horizontalframe54){|w|
+										@listbox_fonts=w
+										w.wdg_name='listbox_fonts'
+										w.width=224
+										w.numVisible=30
 										w.height=19
+										w.layoutHints=288
+										w.x=80
+									}
+								}
+								FX::HorizontalFrame.new(@verticalframe_font){|w|
+									@horizontalframe61=w
+									w.wdg_name='horizontalframe61'
+									w.width=339
+									w.y=35
+									w.height=19
+									w.layoutHints=1024
+									w.x=2
+									FX::Label.new(@horizontalframe61){|w|
+										@label360=w
+										w.wdg_name='label360'
+										w.text="Schriftgr\303\266\303\237e"
+										w.width=80
+										w.height=17
+										w.layoutHints=256
+										w.justify=32768
+									}
+									FX::TextField.new(@horizontalframe61){|w|
+										@textfield_fontsize=w
+										w.wdg_name='textfield_fontsize'
+										w.width=50
+										w.height=19
+										w.textFieldTextStyle=2097152
 										w.numColumns=10
 										w.layoutHints=256
-										w.x=71
+										w.x=80
 									}
-									FX::Button.new(@matrix3){|w|
-										@button_font_select=w
-										w.wdg_name='button_font_select'
-										w.text="ausw\303\244hlen"
-										w.width=59
-										w.y=4
-										w.height=21
-										w.x=275
-									}
-									FX::Label.new(@matrix3){|w|
-										@label17=w
-										w.wdg_name='label17'
-										w.text="Schriftgr\303\266\303\237e"
-										w.width=63
-										w.y=29
-										w.height=17
-										w.x=4
-									}
-									FX::TextField.new(@matrix3){|w|
-										@textfield_font_size=w
-										w.wdg_name='textfield_font_size'
-										w.enabled=false
-										w.width=66
-										w.y=29
-										w.height=19
-										w.numColumns=10
-										w.x=71
-									}
-									FX::Label.new(@matrix3){|w|
-										@label43=w
-										w.wdg_name='label43'
-										w.text=""
-										w.width=4
-										w.y=29
-										w.height=4
-										w.x=275
-									}
-									FX::Label.new(@matrix3){|w|
-										@label236=w
-										w.wdg_name='label236'
-										w.text="Gewicht"
-										w.width=42
-										w.y=52
-										w.height=17
-										w.x=4
-									}
-									FX::TextField.new(@matrix3){|w|
-										@textfield_font_weight=w
-										w.wdg_name='textfield_font_weight'
-										w.enabled=false
-										w.width=66
-										w.y=52
-										w.height=19
-										w.numColumns=10
-										w.x=71
-									}
-									FX::Label.new(@matrix3){|w|
-										@label239=w
-										w.wdg_name='label239'
-										w.text=""
-										w.width=4
-										w.y=52
-										w.height=4
-										w.x=275
-									}
-									FX::Label.new(@matrix3){|w|
-										@label240=w
-										w.wdg_name='label240'
-										w.text="Style"
-										w.width=28
-										w.y=75
-										w.height=17
-										w.x=4
-									}
-									FX::TextField.new(@matrix3){|w|
-										@textfield_font_style=w
-										w.wdg_name='textfield_font_style'
-										w.enabled=false
-										w.width=66
-										w.y=75
-										w.height=19
-										w.numColumns=10
-										w.x=71
-									}
-									FX::Label.new(@matrix3){|w|
-										@label241=w
-										w.wdg_name='label241'
-										w.text=""
-										w.width=4
-										w.y=75
-										w.height=4
-										w.x=275
-									}
-									FX::Label.new(@matrix3){|w|
-										@label235=w
-										w.wdg_name='label235'
-										w.text="Laufweite"
-										w.width=51
-										w.y=98
-										w.height=17
-										w.x=4
-									}
-									FX::TextField.new(@matrix3){|w|
-										@textfield_font_width=w
-										w.wdg_name='textfield_font_width'
-										w.enabled=false
-										w.width=66
-										w.y=98
-										w.height=19
-										w.numColumns=10
-										w.x=71
-									}
-									FX::Label.new(@matrix3){|w|
-										@label242=w
-										w.wdg_name='label242'
-										w.text=""
-										w.width=4
-										w.y=98
-										w.height=4
-										w.x=275
-									}
-									FX::Label.new(@matrix3){|w|
-										@label233=w
-										w.wdg_name='label233'
-										w.text=""
-										w.width=4
-										w.y=121
-										w.height=20
-										w.layoutHints=512
-										w.x=4
-									}
-									FX::Label.new(@matrix3){|w|
-										@label249=w
-										w.wdg_name='label249'
-										w.text=""
-										w.width=4
-										w.y=121
-										w.height=4
-										w.x=71
-									}
-									FX::Label.new(@matrix3){|w|
-										@label248=w
-										w.wdg_name='label248'
-										w.text=""
-										w.width=4
-										w.y=121
-										w.height=4
-										w.x=275
-									}
-									FX::Label.new(@matrix3){|w|
-										@label41=w
-										w.wdg_name='label41'
+								}
+								FX::HorizontalFrame.new(@verticalframe_font){|w|
+									@horizontalframe63=w
+									w.wdg_name='horizontalframe63'
+									w.width=339
+									w.y=58
+									w.height=21
+									w.layoutHints=1024
+									w.x=2
+									FX::Label.new(@horizontalframe63){|w|
+										@label365=w
+										w.wdg_name='label365'
 										w.text="Textfarbe"
-										w.width=52
-										w.y=145
+										w.width=80
 										w.height=17
-										w.x=4
+										w.layoutHints=256
+										w.justify=32768
 									}
-									FX::TextField.new(@matrix3){|w|
+									FX::TextField.new(@horizontalframe63){|w|
 										@textfield_text_color=w
 										w.wdg_name='textfield_text_color'
 										w.width=66
-										w.y=145
 										w.height=19
 										w.numColumns=10
-										w.x=71
+										w.x=80
 									}
-									FX::Button.new(@matrix3){|w|
+									FX::Button.new(@horizontalframe63){|w|
 										@button_text_color=w
 										w.wdg_name='button_text_color'
 										w.text="ausw\303\244hlen"
 										w.width=59
-										w.y=145
 										w.height=21
-										w.x=275
+										w.x=146
 									}
-									FX::Label.new(@matrix3){|w|
-										@label246=w
-										w.wdg_name='label246'
-										w.text=""
-										w.width=4
-										w.y=170
-										w.height=20
-										w.layoutHints=512
-										w.x=4
-									}
-									FX::Label.new(@matrix3){|w|
-										@label245=w
-										w.wdg_name='label245'
-										w.text=""
-										w.width=4
-										w.y=170
-										w.height=4
-										w.x=71
-									}
-									FX::Label.new(@matrix3){|w|
-										@label244=w
-										w.wdg_name='label244'
-										w.text=""
-										w.width=4
-										w.y=170
-										w.height=4
-										w.x=275
-									}
-									FX::Label.new(@matrix3){|w|
-										@label59=w
-										w.wdg_name='label59'
+								}
+								FX::HorizontalFrame.new(@verticalframe_font){|w|
+									@horizontalframe62=w
+									w.wdg_name='horizontalframe62'
+									w.width=339
+									w.y=83
+									w.height=51
+									w.layoutHints=1024
+									w.x=2
+									FX::Label.new(@horizontalframe62){|w|
+										@label364=w
+										w.wdg_name='label364'
 										w.text="Ausrichtung"
-										w.width=61
-										w.y=194
+										w.width=80
 										w.height=17
-										w.x=4
+										w.layoutHints=256
+										w.justify=32768
 									}
-									FX::RadioMutex.new(@matrix3){|w|
+									FX::RadioMutex.new(@horizontalframe62){|w|
 										@radiomutex_justify=w
 										w.wdg_name='radiomutex_justify'
 										w.width=54
-										w.y=194
 										w.height=51
-										w.x=71
+										w.x=80
 										FX::RadioButton.new(@radiomutex_justify){|w|
 											@radiobutton_just_l=w
 											w.wdg_name='radiobutton_just_l'
 											w.text="Links"
 											w.width=44
 											w.height=17
+											w.state=true
 										}
 										FX::RadioButton.new(@radiomutex_justify){|w|
 											@radiobutton_just_m=w
@@ -1043,7 +908,6 @@ class LayoutFrame
 											w.width=45
 											w.y=17
 											w.height=17
-											w.state=true
 										}
 										FX::RadioButton.new(@radiomutex_justify){|w|
 											@radiobutton_just_r=w
@@ -1063,13 +927,13 @@ class LayoutFrame
 					@verticalframe_right=w
 					w.wdg_name='verticalframe_right'
 					w.frameStyle=16384
-					w.width=129
+					w.width=153
 					w.height=449
 					w.x=357
 					FX::HorizontalFrame.new(@verticalframe_right){|w|
 						@horizontalframe32=w
 						w.wdg_name='horizontalframe32'
-						w.width=125
+						w.width=149
 						w.y=2
 						w.height=20
 						w.layoutHints=1024
@@ -1183,32 +1047,18 @@ class LayoutFrame
 	attr_reader :label142
 	attr_reader :tabitem_font
 	attr_reader :verticalframe_font
-	attr_reader :matrix3
-	attr_reader :label16
-	attr_reader :textfield_font_face
-	attr_reader :button_font_select
-	attr_reader :label17
-	attr_reader :textfield_font_size
-	attr_reader :label43
-	attr_reader :label236
-	attr_reader :textfield_font_weight
-	attr_reader :label239
-	attr_reader :label240
-	attr_reader :textfield_font_style
-	attr_reader :label241
-	attr_reader :label235
-	attr_reader :textfield_font_width
-	attr_reader :label242
-	attr_reader :label233
-	attr_reader :label249
-	attr_reader :label248
-	attr_reader :label41
+	attr_reader :horizontalframe54
+	attr_reader :label358
+	attr_reader :listbox_fonts
+	attr_reader :horizontalframe61
+	attr_reader :label360
+	attr_reader :textfield_fontsize
+	attr_reader :horizontalframe63
+	attr_reader :label365
 	attr_reader :textfield_text_color
 	attr_reader :button_text_color
-	attr_reader :label246
-	attr_reader :label245
-	attr_reader :label244
-	attr_reader :label59
+	attr_reader :horizontalframe62
+	attr_reader :label364
 	attr_reader :radiomutex_justify
 	attr_reader :radiobutton_just_l
 	attr_reader :radiobutton_just_m
