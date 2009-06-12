@@ -199,18 +199,10 @@ class MCC2GUI < MainWindow
   def print_cards
     child = @mdiclient.activeChild
     if child
-      unless child.userData.get_attr_value(S_DATASOURCE) == ""
-        pr_dlg = MyPrintDialogBox.new(@app, child.userData)
-        pr_dlg.topwin.show(Fox::PLACEMENT_SCREEN)
-        pr_dlg.topwin.execute
-      else
-        printer = $pr 
-        #~ pers_chip = true
-        pers_chip = false
-        pers_chip ? chip = Chip.new : chip = nil
-        printer.print(child.userData, nil, chip)
-        chip.close_reader if chip
-      end
+      child.userData.print_cards
+    else
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, "Wählen Sie erst ein Layout und dann die Aktion, die Sie ausführen wollen!", 'ok')
+      error_WahlMessage.execute
     end
   end
 end
