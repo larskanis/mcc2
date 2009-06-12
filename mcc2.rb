@@ -28,25 +28,11 @@ $: << 'win32'
 require "rubygems"
 
 if __FILE__ == $0
-  begin
-    require 'fox16'
-    require 'fox16/colors'
-    require 'fox16/responder'
-    p "loading fox16"
-  rescue LoadError
-    p "Error loading fox16 try fox12"
-    require 'fox12'
-    require 'fox12/colors'
-    $enable_fox12_workaround = true
-  end
+  require 'fox16'
+  require 'fox16/colors'
+  require 'fox16/responder'
   include Fox
 end
-  #~ puts ["Name".ljust(30),"Encoding".rjust(20),"Flags".rjust(20),"setwidth".rjust(20),"size".rjust(20),"slant".rjust(20),"weight".rjust(20)].join
-  #~ FXFont.listFonts("").each{|font|
-    #~ puts [font.face.to_s.ljust(30), font.encoding.to_s.rjust(20),font.flags.to_s.rjust(20),font.setwidth.to_s.rjust(20),font.size.to_s.rjust(20),font.slant.to_s.rjust(20),font.weight.to_s.rjust(20)].join
-  #~ }
-  
-  #~ exit
 
 require 'constants'
 
@@ -198,7 +184,7 @@ class MCC2GUI < MainWindow
     child.recalc
     if @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       unless filename && FileTest.exists?(filename)
-        fn = FXFileDialog.getOpenFilename(@parent, 'Laden', '.', patterns = '*.XML', initial = 0)
+        fn = FXFileDialog.getOpenFilename(@topwin, 'Laden', '.', patterns = '*.XML', initial = 0)
         filename = fn
       end
     end
@@ -233,7 +219,7 @@ end
 # Main
 
 if __FILE__==$0
-
+  Thread.abort_on_exception = true
   #~ set_trace_func proc { |event, file, line, id, binding, classname|
     #~ printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
   #~ }
