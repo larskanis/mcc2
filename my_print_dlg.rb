@@ -8,9 +8,10 @@ require 'iconv'
 
 class MyPrintDialogBox < PrintDialogBox
 
-  def initialize(app, child)
+  def initialize(app, child, chip)
     super(app)
     @app = app
+    @chip = chip
     @matrix2.numColumns = 3
     @child = child
 
@@ -24,15 +25,15 @@ class MyPrintDialogBox < PrintDialogBox
     if child.dataman
       child.dataman.row(0).each{|e| 
         feldname = e[0].to_s
-        @iconlist_data.appendHeader(feldname, nil, 30)
+        @iconlist_data.appendHeader(feldname, nil, 100)
         felder << feldname
       }
       big_icon = nil
       mini_icon = nil
       child.dataman.rows.each{|row|
         @iconlist_data.appendItem(felder.collect{|feld|
-          data = row[feld.intern]
-          coding = child.get_attr_value(S_DATASOURCEENCODING)
+          data = row[feld]
+          coding = child.layout_file.get_attr_value(S_DATASOURCEENCODING)
           encoding = Iconv.new('UTF-8', coding)
           encoding.iconv(data)
         }.join("\t"),
@@ -40,7 +41,6 @@ class MyPrintDialogBox < PrintDialogBox
           mini_icon,
           row
         )
-        #~ p row
       }
     end
     
@@ -62,6 +62,9 @@ class MyPrintDialogBox < PrintDialogBox
     @button_print_all.enabled = true
     @button_exit.enabled = true
     @button_select_all.enabled = true
+    
+    @verticalframe_datalist.width = 500
+    @horizontalframe3.height = 0
 
   end
  	#---------------------------------------------------------------------------------------------------------
@@ -137,19 +140,16 @@ class MyPrintDialogBox < PrintDialogBox
     @printing = true
     printer = $pr 
     anzahl = @iconlist_data.numRows
-    pers_chip = true
-    #~ pers_chip = false
-    pers_chip ? chip = Chip.new : chip = nil
     (0..(anzahl-1)).each{|i|
       item = @iconlist_data.getItem(i)
       p [i, @iconlist_data.itemSelected?(i)].join(": ")
-      erg = printer.print(@child, @iconlist_data.getItemData(i), chip) if @iconlist_data.itemSelected?(i)
+      erg = printer.print(@child, @iconlist_data.getItemData(i), @chip) if @iconlist_data.itemSelected?(i)
       if !erg && !@printing
         # abbrechen, wenn ein Fehler aufgetreten ist
         break 
       end
     }
-    chip.close_reader if chip
+    @chip.close_reader if @chip
     @printing = false
     enable_all_buttons
     enable_disable_print_select_button
