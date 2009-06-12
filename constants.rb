@@ -49,6 +49,9 @@ S_PARAM = 'Param'
 S_ROOT = 'Root'
 S_X_OFFSET = 'x_offset'
 S_Y_OFFSET = 'y_offset'
+S_JUST_LEFT = 'Links'
+S_JUST_MID = 'Mitte'
+S_JUST_RIGHT = 'Rechts'
 
 S_DATASOURCE = 'datasource'
 S_DATASOURCETYP = 'datasource_typ'
@@ -69,37 +72,3 @@ ENC_LATIN1 = 'LATIN1'
 VALID_ENCODINGS = [ENC_UTF8, ENC_IBM850, ENC_LATIN1]
 VALID_DATASOURCES = [DATABASE, CSV, NONE]
 
-Font_stretch = {
-  0, 'normal',
-  FXFont::UltraCondensed, 'ultra_condensed',
-  FXFont::ExtraCondensed, 'extra_condensed',
-  FXFont::Condensed, 'condensed',
-  FXFont::SemiCondensed, 'semi_condensed',
-  FXFont::NonExpanded, 'normal',
-  FXFont::SemiExpanded, 'semi_expanded',
-  FXFont::Expanded, 'expanded',
-  FXFont::ExtraExpanded, 'extra_expanded',
-  FXFont::UltraExpanded, 'ultra_expanded'
-}
-  
-Font_style = {
-  0, 'normal',
-  FXFont::ReverseOblique, 'normal', # wird von Imagemagic derzeit nicht unterstützt
-  FXFont::ReverseItalic, 'normal', # wird von Imagemagic derzeit nicht unterstützt
-  FXFont::Straight, 'normal',
-  FXFont::Italic, 'italic',
-  FXFont::Oblique, 'oblique'
- }
-
-Font_weight = {
-  0, 'normal',
-  FXFont::Thin, 'lighter',
-  FXFont::ExtraLight, 'lighter',
-  FXFont::Light, 'lighter',
-  FXFont::Normal, 'normal',
-  FXFont::Medium, 'normal',
-  FXFont::DemiBold, 'bold',
-  FXFont::Bold, 'bold',
-  FXFont::ExtraBold, 'bolder',
-  FXFont::Black, 'bolder'
-}
