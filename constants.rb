@@ -41,8 +41,12 @@ PICTUREOBJECT = 'PictureObject'
 
 S_LAYOUT = 'Layout'
 S_DUPLEX = 'Duplex'
-S_CHIP = 'Chip'
+S_CONTACTLESS = 'Contactless'
+S_CONTACT = 'Contact'
 S_MAGSTRIPE = 'Magstripe'
+
+S_CHIP = 'Chip_Params'
+S_MAGSTRIPEPARAMS = 'Magstripe_Params'
 S_HEIGHT = 'Height'
 S_WIDTH = 'Width'
 S_PARAM = 'Param'
@@ -64,6 +68,12 @@ DOWN = 1
 NONE = 'none'
 CSV = 'csv'
 DATABASE = 'database'
+
+NO = 'no'
+YES = 'yes'
+
+S_FALSE = 'false'
+S_TRUE = 'true'
 
 ENC_UTF8 = 'UTF-8'
 ENC_IBM850 = 'IBM850'
