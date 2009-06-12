@@ -168,6 +168,9 @@ class PrinterXID < CardPrinter
     
     # 
     # der Chip-Teil
+    
+    #~ devicename = "DIGID XID440 an 192.168.253.157\0" # nur für Tests
+    #~ devicename = "DIGIDXID_on_DELL\0" # nur für Tests
     #~ devicename = "Jaws PDF Creator" # nur für Tests
     devicename = "DIGID XID440\0" # todo aus Druckerauswahl übernehmen und in Einstellungen speichern
     if chip
@@ -176,10 +179,8 @@ class PrinterXID < CardPrinter
         #~ load_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1) # siehe DLL_Benutzung
         load_card
         
-        #~ sleep 2 mal probieren, ob es auch so geht
-        
         # Kartenpersonalisierung
-        chip.pers_card(child, row)
+        chip.pers_card(child, row) 
         
         # Karte vom Leser zum Drucken weiter schicken
         #~ unload_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1) # siehe DLL_Benutzung
@@ -196,8 +197,8 @@ class PrinterXID < CardPrinter
     page_width = default_width + card_margin_left + card_margin_right # vorläufig todo ??? warum eigentlich vorläufig?
     page_height = default_height + card_margin_top + card_margin_bottom # vorläufig todo  ??? warum eigentlich vorläufig?
 
-    datasourcename = child.get_attr_value(S_DATASOURCE)
-    duplex = child.get_attr_value(S_DUPLEX) == 'true'
+    datasourcename = child.layout_file.get_attr_value(S_DATASOURCE)
+    duplex = child.layout_file.get_attr_value(S_DUPLEX) == S_TRUE
     
     # einen DeviceContext für den Drucker erzeugen
     hPrinter = @w32gdi.create_dc( nil, devicename, nil, nil);
@@ -223,6 +224,18 @@ class PrinterXID < CardPrinter
   # definiert, dass der Drucker duplex drucken kann
   def can_duplex?
     true
+  end
+  
+  def has_magstripe_engine?
+    false
+  end
+  
+  def has_contactless_engine?
+    true
+  end
+  
+  def has_contact_engine?
+    false
   end
   
 end
