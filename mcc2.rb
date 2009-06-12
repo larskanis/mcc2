@@ -219,6 +219,7 @@ if __FILE__==$0
 	require 'libguib16.rb'
   
   app = FX::App.new("MCC2", "ComCard")
+  FXToolTip.new(app)
     
   $pr = PrinterXID.new(app) # todo, muss später vom Anwender ausgewählt werden
 	
