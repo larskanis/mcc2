@@ -72,7 +72,7 @@ class Layout
       
       # Zoom
       @lf.dial_zoom.connect(SEL_CHANGED){ set_zoom }
-      @lf.dial_zoom.connect(SEL_LEFTBUTTONRELEASE){ draw_card }
+      @lf.dial_zoom.connect(SEL_LEFTBUTTONRELEASE){ draw_card(true) }
       @lf.dial_zoom.value = 100
       set_zoom
 
@@ -118,8 +118,11 @@ class Layout
       @lf.button_enhanced_data_edit.connect(SEL_COMMAND){ enhanced_data_edit }
       @lf.button_enhanced_data_text_edit.connect(SEL_COMMAND){ enhanced_data_edit }
       
-      # der Button zum Auswählen der Schriftart
-      @lf.button_font_select.connect(SEL_COMMAND){ sel_font_button_pressed }
+      # die Listbox zum Auswählen der Schriftart
+      @lf.listbox_fonts.connect(SEL_COMMAND){ |sender, sel, event| sel_font_list_changed(sender) }
+      
+      @lf.textfield_fontsize.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_FONT_HEIGHT) }
+      
       # .............................................................................................
       
       create_chipparam_fields
@@ -127,40 +130,11 @@ class Layout
       # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
       @lf.matrix1.numColumns = 3
       @lf.matrix2.numColumns = 3
-      @lf.matrix3.numColumns = 3 
       @lf.matrix_layout_attrs.numColumns = 3
       deactivate_object_tabs
       
       deactivat_up_down
       @lf.dial_zoom.range = (49..359)
-    end
-  end
-  #---------------------------------------------------------------------------------------------------------
-  
-  #
-  def sel_font_button_pressed
-    fontdlg = FXFontDialog.new(@parent, "Change Font", DECOR_BORDER|DECOR_TITLE)
-    node = @layout_file.get_objectnode_by_id(@selected_object_id)
-    fontdesc = FXFontDesc.new
-    fontdesc.size = node.find_first(GOA_FONT_HEIGHT).content.to_i*10
-    fontdesc.face = node.find_first(GOA_FONT_TYP).content
-    w = Font_weight.index(node.find_first(GOA_FONT_WEIGHT).content)
-    w ? fontdesc.weight = w : fontdesc.weight = 0
-    st = Font_style.index(node.find_first(GOA_FONT_STYLE).content)
-    st ? fontdesc.slant = st : fontdesc.slant = 0
-    str = Font_stretch.index(node.find_first(GOA_FONT_STRETCH).content)
-    str ? fontdesc.setwidth = str : fontdesc.setwidth = 0
-    fontdesc.encoding = 0 # keine Vorauswahl treffen
-    fontdlg.fontSelection = fontdesc
-    if fontdlg.execute() != 0
-      fontdesc = fontdlg.fontSelection
-      node.find_first(GOA_FONT_HEIGHT).content = (fontdesc.size.to_f/10).to_s
-      node.find_first(GOA_FONT_TYP).content = fontdesc.face
-      node.find_first(GOA_FONT_WEIGHT).content = Font_weight[fontdesc.weight]
-      node.find_first(GOA_FONT_STYLE).content = Font_style[fontdesc.slant]
-      node.find_first(GOA_FONT_STRETCH).content = Font_stretch[fontdesc.setwidth]
-      fill_font_fields(node)
-      changed_attributes
     end
   end
   #---------------------------------------------------------------------------------------------------------
@@ -326,7 +300,7 @@ class Layout
       @lf.textfield_text_color.text = [s[6,2], s[4,2], s[2,2], s[0,2]].join
       node.first.content = @lf.textfield_text_color.text
       changed_attributes
-      draw_card
+      draw_card(true)
     end
   end
   #~ #---------------------------------------------------------------------------------------------------------
@@ -388,6 +362,7 @@ class Layout
       lay_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
       node = lay_attrs.find_first(S_X_OFFSET)
     else
+      # in diesem Zweig werden alle Graphik-Objekte bearbeitet
       # das Attribut suchen
       node = @layout_file.get_objectnode_by_id(@selected_object_id).find(attr_name).first
     end
@@ -482,6 +457,22 @@ class Layout
       if node.find(GOA_TYP).first.content == TEXTOBJECT || node.find(GOA_TYP).first.content == BARCODEOBJECT
         @lf.tabitem_font.shown = true
         @lf.textfield_text_color.text = node.find(GOA_FONT_COLOR).first.content
+        
+        # den Radiobutton der Ausrichtung setzen
+        @lf.radiobutton_just_l.state = false
+        @lf.radiobutton_just_l.state = false
+        @lf.radiobutton_just_r.state = false
+        just = @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_JUSTIFICATION).content
+        p "just #{just}"
+        if just == S_JUST_LEFT
+          @lf.radiobutton_just_l.state = true
+        elsif just == S_JUST_MID
+          @lf.radiobutton_just_m.state = true
+        elsif just == S_JUST_RIGHT
+          @lf.radiobutton_just_r.state = true
+        end
+        
+        fill_font_list
         fill_font_fields(node)
       end
       
@@ -504,12 +495,55 @@ class Layout
   end
   #---------------------------------------------------------------------------------------------------------
   
+  def sel_font_list_changed(sender)
+    #~ node.find_first(GOA_FONT_HEIGHT).content = (fontdesc.size.to_f/10).to_s
+    
+    if sender.wdg_name == 'listbox_fonts'
+      id = @lf.listbox_fonts.getItemData(@lf.listbox_fonts.currentItem)
+      @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_FONT_TYP).content = id
+    else 
+      raise "unbekannter Sender. Eingriff des Programmierers nötig. :-("
+    end
+    changed_attributes
+  end
+  #---------------------------------------------------------------------------------------------------------
+  
+  def fill_font_list
+    # Font-Name
+    rmfl = []
+    Magick.fonts.each{|mf| 
+      rmfl << mf.name
+    }
+    rmfl.sort!
+    @lf.listbox_fonts.clearItems
+    rmfl.each_with_index{|rmf, idx|
+      @lf.listbox_fonts.appendItem(rmf.gsub("-"," ")) # die humanreadable
+      @lf.listbox_fonts.setItemData(idx, rmf)         # die Werte
+    }
+  end
+  #---------------------------------------------------------------------------------------------------------
+  
   def fill_font_fields(node)
-    @lf.textfield_font_face.text = node.find_first(GOA_FONT_TYP).content
-    @lf.textfield_font_size.text = node.find_first(GOA_FONT_HEIGHT).content
-    @lf.textfield_font_weight.text = node.find_first(GOA_FONT_WEIGHT).content
-    @lf.textfield_font_style.text = node.find_first(GOA_FONT_STYLE).content
-    @lf.textfield_font_width.text = node.find_first(GOA_FONT_STRETCH).content
+    # die Schriftgröße zurücklesen
+    @lf.textfield_fontsize.text = node.find_first(GOA_FONT_HEIGHT).content
+    
+    # den gewählten Parameter in den entsprechenden Listen markieren
+    set_listbox_value('listbox_fonts', node.find_first(GOA_FONT_TYP).content)
+  end
+  #---------------------------------------------------------------------------------------------------------
+  def set_listbox_value(listbox_name, value)
+    ft_idx = nil
+    idx = 0
+    @lf.send(listbox_name.intern).each{|t, i, d| 
+      if d == value
+        ft_idx = idx
+        break
+      end
+      idx += 1
+    }
+    if ft_idx
+      @lf.send(listbox_name.intern).currentItem = ft_idx
+    end
   end
   #---------------------------------------------------------------------------------------------------------
   
@@ -548,9 +582,16 @@ class Layout
   # zeichnet die Vorschau im Layout-Modus
   # hier ist noch einiges zu tun, im speziellen sind einige Werte "hart" kodiert, 
   # die z.Bsp abhängig von anderen Einstellungen sein sollten
-  def draw_card
-    #~ Thread.new{
+  def draw_card(immediately = false)
+    @last_change = Time.now
+    @last_change -= 5 if immediately
+    return if @thread && @thread.alive?
   
+    @thread = Thread.new{
+      while Time.now-@last_change < 1
+        sleep 0.1
+      end
+      
       # allgemeine Einstellungen des Image vornehmen
       dpi = 90
       width =  @layout_file.get_attr_value(S_WIDTH).to_f
@@ -598,7 +639,7 @@ class Layout
       @image_view.image = fx_image
       @image_view.show
       @image_view.recalc
-    #~ }
+    }
   end
  	#---------------------------------------------------------------------------------------------------------
   
@@ -635,7 +676,7 @@ class Layout
     
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       fill_objectlist
-      draw_card
+      draw_card(true)
     end
   end
  	#---------------------------------------------------------------------------------------------------------
@@ -698,7 +739,7 @@ class Layout
     
     if @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       fill_objectlist 
-      draw_card
+      draw_card(true)
       set_title
       
       fill_layout_attr_tab
@@ -722,7 +763,19 @@ class Layout
   #
   def create_xml
     @layout_file = LayoutFile.create_xml
-    draw_card
+    draw_card(true)
+  end
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  #
+  def check_if_font_exist(fontdesc)
+    rmfl = []
+    Magick.fonts.each{|mf| 
+      rmfl << mf.name
+    }
+    return fontdesc if rmfl.index(fontdesc.face.gsub(" ","-").gsub("@",""))
+    fdlg = AlternateFontDialog.new()
+    fdlg.execute
   end
 end
 #*****************************************************************************
