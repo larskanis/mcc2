@@ -14,6 +14,7 @@ class Layout
   
   # enthält die kompletten Einstellungen des Kartenlayouts
   #~ attr_accessor :xml_doc
+  attr_accessor :layout_file
   
   # die aktuelle Zoom-Stufe der Anzeige
   attr_accessor :zoom
@@ -123,6 +124,10 @@ class Layout
       
       @lf.textfield_fontsize.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_FONT_HEIGHT) }
       
+      # der Checkbuttons für die Einstellung, ob Magnestreifen, Kontaktchip und Kontaktlos personalisiert werden sollen
+      @lf.checkbutton_contactless.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_CONTACTLESS) }
+      @lf.checkbutton_contact.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_CONTACT) }
+      @lf.checkbutton_magstripe.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_MAGSTRIPE) }
       # .............................................................................................
       
       create_chipparam_fields
@@ -200,8 +205,6 @@ class Layout
     
     datamantyp =  @layout_file.get_attr_value(S_DATASOURCETYP)
     datasource =  @layout_file.get_attr_value(S_DATASOURCE)
-    
-    datamantyp
     
     if datamantyp == DATABASE
       @dataman = DataManDatabase.new(datasource)
@@ -708,20 +711,22 @@ class Layout
   def fill_layout_attr_tab
     @lf.textfield_x_offset.text = @layout_file.get_attr_value(S_X_OFFSET)
     @lf.textfield_y_offset.text = @layout_file.get_attr_value(S_Y_OFFSET)
-    unless $pr.can_duplex?
-      p "simplex"
-      @lf.checkbutton_duplex.state = false
-      @lf.checkbutton_duplex.enabled = false
+    
+    set_check_button('checkbutton_contactless', @layout_file.get_attr_value(S_CONTACTLESS), $pr.has_contactless_engine?)
+    set_check_button('checkbutton_contact', @layout_file.get_attr_value(S_CONTACT), $pr.has_contact_engine?)
+    set_check_button('checkbutton_magstripe', @layout_file.get_attr_value(S_MAGSTRIPE), $pr.has_magstripe_engine?)
+    set_check_button('checkbutton_duplex', @layout_file.get_attr_value(S_DUPLEX), $pr.can_duplex?)
+  end
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  #
+  def set_check_button(objectname, state, enabled)
+    if state == S_TRUE
+      @lf.send(objectname).state = true
     else
-      p "duplex"
-      @lf.checkbutton_duplex.enabled = true
-      duplex = @layout_file.get_attr_value(S_DUPLEX)
-      if duplex == 'false' || duplex == '0'
-        @lf.checkbutton_duplex.state = false 
-      else
-        @lf.checkbutton_duplex.state = true
-      end
+      @lf.send(objectname).state = false 
     end
+    @lf.send(objectname).enabled = enabled
   end
  	#---------------------------------------------------------------------------------------------------------
   
@@ -776,6 +781,24 @@ class Layout
     return fontdesc if rmfl.index(fontdesc.face.gsub(" ","-").gsub("@",""))
     fdlg = AlternateFontDialog.new()
     fdlg.execute
+  end
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  #
+  def print_cards
+    c = @layout_file.get_attr_value(S_CONTACTLESS) == S_TRUE || @layout_file.get_attr_value(S_CONTACT) == S_TRUE 
+    c ? chip = Chip.new : chip = nil
+    if @layout_file.get_attr_value(S_DATASOURCE) == ""
+      # nur eine Karte ohne Daten drucken
+      printer = $pr 
+      printer.print(self, nil, chip) # self ???
+      chip.close_reader if chip
+    else
+      # Printdialog um Drucken von Karten mit Daten öffnen
+      pr_dlg = MyPrintDialogBox.new(@app, self, chip)
+      pr_dlg.topwin.show(Fox::PLACEMENT_SCREEN)
+      pr_dlg.topwin.execute
+    end
   end
 end
 #*****************************************************************************
