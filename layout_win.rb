@@ -89,7 +89,6 @@ class LayoutFrame
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
-							w.current=5
 							w.width=351
 							w.y=2
 							w.height=387
@@ -99,16 +98,15 @@ class LayoutFrame
 								w.wdg_name='tabitem_allgemein'
 								w.text="Allgemein"
 								w.width=53
-								w.y=6
+								w.y=4
 								w.height=21
-								w.x=6
+								w.x=4
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe52=w
 								w.wdg_name='verticalframe52'
 								w.frameStyle=16384
 								w.width=343
-								w.shown=false
 								w.y=23
 								w.height=360
 								w.x=4
@@ -186,8 +184,8 @@ class LayoutFrame
 										w.x=4
 									}
 									FX::CheckButton.new(@matrix_layout_attrs){|w|
-										@checkbutton7=w
-										w.wdg_name='checkbutton7'
+										@checkbutton_contactless=w
+										w.wdg_name='checkbutton_contactless'
 										w.text=""
 										w.width=88
 										w.y=50
@@ -214,8 +212,8 @@ class LayoutFrame
 										w.x=4
 									}
 									FX::CheckButton.new(@matrix_layout_attrs){|w|
-										@checkbutton5=w
-										w.wdg_name='checkbutton5'
+										@checkbutton_contact=w
+										w.wdg_name='checkbutton_contact'
 										w.text=""
 										w.width=88
 										w.y=71
@@ -242,8 +240,8 @@ class LayoutFrame
 										w.x=4
 									}
 									FX::CheckButton.new(@matrix_layout_attrs){|w|
-										@checkbutton6=w
-										w.wdg_name='checkbutton6'
+										@checkbutton_magstripe=w
+										w.wdg_name='checkbutton_magstripe'
 										w.text=""
 										w.width=88
 										w.y=92
@@ -355,7 +353,7 @@ class LayoutFrame
 								w.width=29
 								w.y=6
 								w.height=21
-								w.x=59
+								w.x=56
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_chip=w
@@ -766,15 +764,16 @@ class LayoutFrame
 								w.wdg_name='tabitem_font'
 								w.text="Schrift"
 								w.width=39
-								w.y=4
+								w.y=6
 								w.height=21
-								w.x=86
+								w.x=85
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_font=w
 								w.wdg_name='verticalframe_font'
 								w.frameStyle=16384
 								w.width=343
+								w.shown=false
 								w.y=23
 								w.height=360
 								w.padTop=10
@@ -985,13 +984,13 @@ class LayoutFrame
 	attr_reader :listbox1
 	attr_reader :label130
 	attr_reader :label123
-	attr_reader :checkbutton7
+	attr_reader :checkbutton_contactless
 	attr_reader :label131
 	attr_reader :label125
-	attr_reader :checkbutton5
+	attr_reader :checkbutton_contact
 	attr_reader :label132
 	attr_reader :label124
-	attr_reader :checkbutton6
+	attr_reader :checkbutton_magstripe
 	attr_reader :label133
 	attr_reader :label127
 	attr_reader :textfield_x_offset
