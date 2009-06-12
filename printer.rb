@@ -62,15 +62,15 @@ class Printer
     Magick::RVG.dpi = @dpi
 
     # todo zentralen Offset einbauen
-    draw_pos_x  = child.get_attr_value(S_X_OFFSET).to_f
-    draw_pos_y  = child.get_attr_value(S_Y_OFFSET).to_f
+    draw_pos_x  = child.layout_file.get_attr_value(S_X_OFFSET).to_f
+    draw_pos_y  = child.layout_file.get_attr_value(S_Y_OFFSET).to_f
 
     # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
       selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
       preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
       img = Magick::RVG.new(page_width.mm, page_height.mm) do |canvas|
         canvas.background_fill = 'white'
-        Page.new(page_nr).draw(canvas, draw_pos_x, draw_pos_y, child, preview, selected_object_id, row)
+        Page.new(page_nr).draw(canvas, draw_pos_x, draw_pos_y, child.layout_file, preview, selected_object_id, row)
       end
     
     # das VRG in ein Bitmap konvertieren
@@ -121,7 +121,20 @@ class Printer
     false
   end
   
+  def has_magstripe_engine?
+    false
+  end
+  
+  def has_contactless_engine?
+    false
+  end
+  
+  def has_contact_engine?
+    false
+  end
+  
   def set_duplex(hPrinter, state)
+    return
       #~ __in   HANDLE hPrinter,
       #~ __in   DWORD Level,
       #~ __out  LPBYTE pPrinter,
