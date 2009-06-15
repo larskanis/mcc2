@@ -153,7 +153,7 @@ class MCC2GUI < MainWindow
   def new_object(typ)
     child = @mdiclient.activeChild
     if child
-      child.userData.add_object(typ)
+      child.userData.manage_objects(ADD, typ)
     end
   end
 	#---------------------------------------------------------------------------------------------------------
@@ -219,7 +219,7 @@ if __FILE__==$0
 	require 'libguib16.rb'
   
   app = FX::App.new("MCC2", "ComCard")
-  FXToolTip.new(app)
+  FXToolTip.new(app, TOOLTIP_PERMANENT)
     
   $pr = PrinterXID.new(app) # todo, muss später vom Anwender ausgewählt werden
 	
