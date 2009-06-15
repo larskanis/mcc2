@@ -159,7 +159,12 @@ class LayoutFile
     nil
   end
 	#---------------------------------------------------------------------------------------------------------
-  
+
+  # Fügt ein Graphik-Objekt zur Layout-Definition hinzu
+  # ==== Parameter
+  # +typ+:: Typ (Text, Barcode oder Bild)
+  # ==== Return
+  # Object [XML-Node]
   def  add_object(typ)
     o = GraphicObject.get_object_by_typ(typ)
     id = get_new_id
@@ -172,6 +177,7 @@ class LayoutFile
         go << XML::Node.new(go_attribute.attr_name, go_attribute.attr_value.to_s)
       end
     }
+    go
   end
  	#---------------------------------------------------------------------------------------------------------
   
@@ -282,5 +288,28 @@ class LayoutFile
         ein und speichern Sie die Einstellungen.
       EOTXT
     end
+  end
+ 	#---------------------------------------------------------------------------------------------------------
+
+  # ersetllt ein neues Graphik-Objekt und kopiert alle Attributte des übergebenen, außer ID, Typ und Name 
+  # ==== Parameter
+  # +node+:: die XML-Node des zu kopierenden Objekts, fals nil übergeben wurde, kehrt die Methode unverrichteter Dinge zurück
+  def copy_object(node)
+    return unless node
+    o = add_object(node.find_first(GOA_TYP).content)
+    node.each_element{|element|
+    #~ o.go_attributes.each_pair{|goa_name, go_attribute|
+      # alle Attribute, außer ID, Typ und Name kopieren, sofern sie vorhanden, ansonsten den Standard lassen
+      if element.name != GOA_ID && element.name != GOA_TYP && element.name != GOA_NAME
+        o.find_first(element.name).content = element.content
+      end
+    }
+  end
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  # löscht sie übergebene XML-Node aus dem Layout ohne Rückfrage, diese muss in der aufrufenden Methode durchgeführt werden
+  # ==== Parameter
+  def delete_object(node)
+    node.remove!
   end
 end
