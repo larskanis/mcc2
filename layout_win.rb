@@ -32,20 +32,20 @@ class LayoutFrame
 						@splitter12=w
 						w.wdg_name='splitter12'
 						w.width=320
-						w.height=56
+						w.height=98
 						w.barSize=2
 						FX::VerticalFrame.new(@splitter12){|w|
 							@verticalframe_steuerung=w
 							w.wdg_name='verticalframe_steuerung'
 							w.frameStyle=16384
-							w.width=44
-							w.height=56
+							w.width=54
+							w.height=98
 							FX::Button.new(@verticalframe_steuerung){|w|
 								@button_up=w
 								w.wdg_name='button_up'
-								w.text="hoch"
+								w.text="hoch ^"
 								w.tipText="Mit diesem Button wird das Objekt eine Zeile nach oben verschoben."
-								w.width=40
+								w.width=50
 								w.y=2
 								w.height=21
 								w.layoutHints=256
@@ -54,10 +54,41 @@ class LayoutFrame
 							FX::Button.new(@verticalframe_steuerung){|w|
 								@button_down=w
 								w.wdg_name='button_down'
-								w.text="runter"
+								w.text="runter v"
 								w.tipText="Mit diesem Button wird das Objekt eine Zeile nach oben verschoben."
-								w.width=40
+								w.width=50
 								w.y=23
+								w.height=21
+								w.layoutHints=256
+								w.x=2
+							}
+							FX::Packer.new(@verticalframe_steuerung){|w|
+								@packer1=w
+								w.wdg_name='packer1'
+								w.width=50
+								w.y=44
+								w.height=10
+								w.layoutHints=1536
+								w.x=2
+							}
+							FX::Button.new(@verticalframe_steuerung){|w|
+								@button_copy=w
+								w.wdg_name='button_copy'
+								w.text="kopieren"
+								w.tipText="kopiert das selektierte Objekt und \303\274bernimmt alle Eigenschaften, au\303\237er dem Namen"
+								w.width=50
+								w.y=54
+								w.height=21
+								w.layoutHints=256
+								w.x=2
+							}
+							FX::Button.new(@verticalframe_steuerung){|w|
+								@button_delete=w
+								w.wdg_name='button_delete'
+								w.text="l\303\266schen"
+								w.tipText="L\303\266scht das selektierte Objekt nach Best\303\244tigung einer Sicherheistabfrage."
+								w.width=50
+								w.y=75
 								w.height=21
 								w.layoutHints=256
 								w.x=2
@@ -67,15 +98,15 @@ class LayoutFrame
 							@verticalframe_objectlist=w
 							w.wdg_name='verticalframe_objectlist'
 							w.frameStyle=16384
-							w.width=274
-							w.height=56
-							w.x=46
+							w.width=264
+							w.height=98
+							w.x=56
 							FX::IconList.new(@verticalframe_objectlist){|w|
 								@iconlist_objects=w
 								w.wdg_name='iconlist_objects'
-								w.width=270
+								w.width=260
 								w.y=2
-								w.height=52
+								w.height=94
 								w.iconListStyle=1048576
 								w.x=2
 							}
@@ -86,19 +117,20 @@ class LayoutFrame
 						w.wdg_name='horizontalframe_attributes'
 						w.frameStyle=16384
 						w.width=320
-						w.y=58
-						w.height=391
+						w.y=100
+						w.height=349
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
 							w.width=316
 							w.y=2
-							w.height=387
+							w.height=345
 							w.x=2
 							FX::TabItem.new(@tabbook_objectattributes){|w|
 								@tabitem_allgemein=w
 								w.wdg_name='tabitem_allgemein'
 								w.text="Allgemein"
+								w.tipText="Hier werden alle allgemeinen Einstellungen vorgenommen, die das gesamte Layout betreffen."
 								w.width=53
 								w.y=4
 								w.height=21
@@ -109,7 +141,7 @@ class LayoutFrame
 								w.wdg_name='verticalframe52'
 								w.width=308
 								w.y=23
-								w.height=360
+								w.height=318
 								w.vSpacing=2
 								w.x=4
 								FX::HorizontalFrame.new(@verticalframe52){|w|
@@ -170,6 +202,7 @@ class LayoutFrame
 									FX::ListBox.new(@horizontalframe75){|w|
 										@listbox16=w
 										w.wdg_name='listbox16'
+										w.tipText="Auswahl der Zeichenkodierung der Daten in der Datenquelle."
 										w.enabled=false
 										w.width=243
 										w.height=19
@@ -368,6 +401,7 @@ class LayoutFrame
 								@tabitem_chip=w
 								w.wdg_name='tabitem_chip'
 								w.text="Chip"
+								w.tipText="Hier werden alle Chipparameter eingetragen, unabh\303\244ngig davon, ob dann tats\303\244chlich die Chipkodierung stattfindet"
 								w.width=29
 								w.y=6
 								w.height=21
@@ -380,13 +414,14 @@ class LayoutFrame
 								w.width=308
 								w.shown=false
 								w.y=23
-								w.height=360
+								w.height=318
 								w.x=4
 							}
 							FX::TabItem.new(@tabbook_objectattributes){|w|
 								@tabitem_magstripe=w
 								w.wdg_name='tabitem_magstripe'
 								w.text="Magnetstreifen"
+								w.tipText="Hier werden alle Magnetstreifeneinstellungen vorgenommen, unabh\303\244ngig davon, ob der Magnetstreifen tats\303\244chlich personalisiert wird."
 								w.width=292
 								w.shown=false
 								w.y=54
@@ -407,6 +442,7 @@ class LayoutFrame
 								@tabitem_object=w
 								w.wdg_name='tabitem_object'
 								w.text="Objekt"
+								w.tipText="Hier werden alle allgemeinen Einstellungen zum ausgew\303\244hlten Graphik-Objekt durchgef\303\274hrt."
 								w.width=40
 								w.shown=false
 								w.y=4
@@ -444,6 +480,7 @@ class LayoutFrame
 									FX::TextField.new(@matrix1){|w|
 										@textfield_name=w
 										w.wdg_name='textfield_name'
+										w.tipText="Der Name ist nur f\303\274r die Anzeige in der Objektliste und bei bestimmten Aktionen notwendig, sollte aber dennoch in einen aussagekr\303\244ftigen Namen ge\303\244ndert werden."
 										w.width=200
 										w.y=4
 										w.height=19
@@ -480,6 +517,7 @@ class LayoutFrame
 										FX::Text.new(@verticalframe44){|w|
 											@textfield_data=w
 											w.wdg_name='textfield_data'
+											w.tipText="Enth\303\244lt die Daten, welche sp\303\244ter auf der Karte gedruckt werden sollen. In diesem Feld k\303\266nnen mehrerer Zeilen eingegeben werden. Platzhalter aus einer Datenquelle werden nach der Syntax {feldname[anfang,laenge]} gebildet."
 											w.width=198
 											w.y=1
 											w.height=52
@@ -490,6 +528,7 @@ class LayoutFrame
 										@button_enhanced_data_text_edit=w
 										w.wdg_name='button_enhanced_data_text_edit'
 										w.text="..."
+										w.tipText="Dieser Button ist momentan noch nicht belegt."
 										w.width=20
 										w.y=27
 										w.height=21
@@ -508,6 +547,7 @@ class LayoutFrame
 										@textfield_data_non_text=w
 										w.wdg_name='textfield_data_non_text'
 										w.text="Daten"
+										w.tipText="Enth\303\244lt die Daten, welche sp\303\244ter auf der Karte gedruckt werden sollen. In diesem Feld kann nur 1 Zeile eingegeben werden. Platzhalter aus einer Datenquelle werden nach der Syntax {feldname[anfang,laenge]} gebildet."
 										w.width=200
 										w.y=85
 										w.height=19
@@ -519,6 +559,7 @@ class LayoutFrame
 										@button_enhanced_data_edit=w
 										w.wdg_name='button_enhanced_data_edit'
 										w.text="..."
+										w.tipText="Mit diesem Button k\303\266nnen Datenfelder aus einer Datenquelle oder ein Dateiname ausgew\303\244hlt werden."
 										w.width=20
 										w.y=85
 										w.height=21
@@ -536,6 +577,7 @@ class LayoutFrame
 									FX::TextField.new(@matrix1){|w|
 										@textfield_sample_data=w
 										w.wdg_name='textfield_sample_data'
+										w.tipText="Dieses Feld ist momentan ohne Funktion."
 										w.width=200
 										w.y=110
 										w.height=19
@@ -565,6 +607,7 @@ class LayoutFrame
 										@checkbutton_printlist=w
 										w.wdg_name='checkbutton_printlist'
 										w.text=""
+										w.tipText="Dieser Button ist momentan ohne Funktion."
 										w.width=17
 										w.y=133
 										w.height=17
@@ -576,6 +619,7 @@ class LayoutFrame
 								@tabitem_posit=w
 								w.wdg_name='tabitem_posit'
 								w.text="Position"
+								w.tipText="In diesem Tab werden alle Einstellungen zu Positionierung des Objekts vorgenommen."
 								w.width=45
 								w.shown=false
 								w.y=6
@@ -613,6 +657,7 @@ class LayoutFrame
 									FX::TextField.new(@matrix2){|w|
 										@textfield_x=w
 										w.wdg_name='textfield_x'
+										w.tipText="Dieser Wert bezeichnet den Abstand des Objekts von der linken Kartenseite."
 										w.width=66
 										w.y=4
 										w.height=19
@@ -642,6 +687,7 @@ class LayoutFrame
 									FX::TextField.new(@matrix2){|w|
 										@textfield_y=w
 										w.wdg_name='textfield_y'
+										w.tipText="Dieser Wert bezeichnet den Abstand des Objekts von der Oberkannte der Karte. Bei Textfeldern ist dieser Wert bezogen auf die Unterkante des Textes."
 										w.width=66
 										w.y=27
 										w.height=19
@@ -671,6 +717,7 @@ class LayoutFrame
 									FX::TextField.new(@matrix2){|w|
 										@textfield_width=w
 										w.wdg_name='textfield_width'
+										w.tipText="Dieser Wert bezeichnet die Breite des Objektes. Bei Textfeldern hat dieser Wert momentan nur einen Einfluss, wenn die Ausrichtung Mitte oder Rechts gew\303\244hlt wurde."
 										w.width=66
 										w.y=50
 										w.height=19
@@ -700,6 +747,7 @@ class LayoutFrame
 									FX::TextField.new(@matrix2){|w|
 										@textfield_height=w
 										w.wdg_name='textfield_height'
+										w.tipText="Dieser Wert ist die H\303\266he des Objekts. Er hat momentan nur bei Bildern einen Einfluss."
 										w.width=66
 										w.y=73
 										w.height=19
@@ -729,6 +777,7 @@ class LayoutFrame
 									FX::TextField.new(@matrix2){|w|
 										@textfield_rotation=w
 										w.wdg_name='textfield_rotation'
+										w.tipText="Dieser Wert kennzeichnet den Winkel, um den das Objekt gedreht werden soll. Es sind auch Realzahlen m\303\266glich (mit Punkt als Dezimaltrenner)."
 										w.width=66
 										w.y=96
 										w.height=19
@@ -760,6 +809,7 @@ class LayoutFrame
 										w.wdg_name='spinner_seiten_nr'
 										w.value=1
 										w.range=-2147483648..2147483647
+										w.tipText="Dieser Wert kennzeichnet, auf welche Seite das Objekt gedruckt werden soll. Bei Karten ist die Nr. 1 die Vorderseite und die Nr. 2 die R\303\274ckseite. Achtung! Wenn im Druckertreiber kein Duplex eingestellt ist, werden 2 Karten gedruckt."
 										w.width=38
 										w.y=119
 										w.height=19
@@ -781,6 +831,7 @@ class LayoutFrame
 								@tabitem_font=w
 								w.wdg_name='tabitem_font'
 								w.text="Schrift"
+								w.tipText="In diesem Tab k\303\266nnen die Einstellungen zur Schriftart vorgenommen werden."
 								w.width=39
 								w.y=6
 								w.height=21
@@ -793,7 +844,7 @@ class LayoutFrame
 								w.width=308
 								w.shown=false
 								w.y=23
-								w.height=360
+								w.height=318
 								w.padTop=10
 								w.vSpacing=4
 								w.x=4
@@ -818,6 +869,7 @@ class LayoutFrame
 									FX::ListBox.new(@horizontalframe54){|w|
 										@listbox_fonts=w
 										w.wdg_name='listbox_fonts'
+										w.tipText="Hier kann die Schriftart ausgew\303\244hlt werden."
 										w.width=224
 										w.numVisible=30
 										w.height=19
@@ -845,6 +897,7 @@ class LayoutFrame
 									FX::TextField.new(@horizontalframe61){|w|
 										@textfield_fontsize=w
 										w.wdg_name='textfield_fontsize'
+										w.tipText="Hier wird die Schriftgr\303\266\303\237e in Punkt eingestellt. Es ist auch die Angabe von Realzahlen m\303\266glich (Punkt als Dezimaltrenner)"
 										w.width=50
 										w.height=19
 										w.textFieldTextStyle=2097152
@@ -873,6 +926,7 @@ class LayoutFrame
 									FX::TextField.new(@horizontalframe63){|w|
 										@textfield_text_color=w
 										w.wdg_name='textfield_text_color'
+										w.tipText="Hier kann die Schriftfarbe als Hexadezimalwert eingetragen werden. Um eine Farbe auszuw\303\244hlen, nutzen Sie den Button rechts."
 										w.width=66
 										w.height=19
 										w.numColumns=10
@@ -882,6 +936,7 @@ class LayoutFrame
 										@button_text_color=w
 										w.wdg_name='button_text_color'
 										w.text="ausw\303\244hlen"
+										w.tipText="Hier kann mit Hilfe eines Dialogs eine Farbe ausgew\303\244hlt werden."
 										w.width=59
 										w.height=21
 										w.x=146
@@ -914,6 +969,7 @@ class LayoutFrame
 											@radiobutton_just_l=w
 											w.wdg_name='radiobutton_just_l'
 											w.text="Links"
+											w.tipText="Richtet den Text linksb\303\274ndig aus."
 											w.width=44
 											w.height=17
 											w.state=true
@@ -922,6 +978,7 @@ class LayoutFrame
 											@radiobutton_just_m=w
 											w.wdg_name='radiobutton_just_m'
 											w.text="Mitte"
+											w.tipText="Richtet den Text mittig zur Objektbreite aus."
 											w.width=45
 											w.y=17
 											w.height=17
@@ -930,6 +987,7 @@ class LayoutFrame
 											@radiobutton_just_r=w
 											w.wdg_name='radiobutton_just_r'
 											w.text="Rechts"
+											w.tipText="Richtet den Text rechtsb\303\274ndig zur Objektbreite aus."
 											w.width=54
 											w.y=34
 											w.height=17
@@ -959,6 +1017,7 @@ class LayoutFrame
 							@label_zoom=w
 							w.wdg_name='label_zoom'
 							w.text="Zoom:"
+							w.tipText="Hier kann die Anzeige vergr\303\266\303\237ert oder verkleinert werden. Achtung, bei vergr\303\266\303\237erter Anzeige werden viele Operationen deutlich langsamer ausgef\303\274hrt."
 							w.width=34
 							w.height=17
 						}
@@ -967,7 +1026,7 @@ class LayoutFrame
 							w.wdg_name='dial_zoom'
 							w.value=3
 							w.padLeft=20
-							w.tipText="Zoom"
+							w.tipText="Hier kann die Anzeige vergr\303\266\303\237ert oder verkleinert werden. Achtung, bei vergr\303\266\303\237erter Anzeige werden viele Operationen deutlich langsamer ausgef\303\274hrt."
 							w.width=150
 							w.helpText="Zoom"
 							w.height=20
@@ -988,6 +1047,9 @@ class LayoutFrame
 	attr_reader :verticalframe_steuerung
 	attr_reader :button_up
 	attr_reader :button_down
+	attr_reader :packer1
+	attr_reader :button_copy
+	attr_reader :button_delete
 	attr_reader :verticalframe_objectlist
 	attr_reader :iconlist_objects
 	attr_reader :horizontalframe_attributes
