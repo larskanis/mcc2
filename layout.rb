@@ -133,6 +133,13 @@ class Layout
       @lf.checkbutton_contactless.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_CONTACTLESS) }
       @lf.checkbutton_contact.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_CONTACT) }
       @lf.checkbutton_magstripe.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_MAGSTRIPE) }
+      
+      # die Checkbuttons für das Löschen und Kopieren von Graphik-Objekten
+      @lf.button_copy.enabled = false
+      @lf.button_copy.connect(SEL_COMMAND){ manage_objects(COPY) }
+      @lf.button_delete.enabled = false
+      @lf.button_delete.connect(SEL_COMMAND){ manage_objects(DELETE) }
+      
       # .............................................................................................
       
       create_chipparam_fields
@@ -414,6 +421,8 @@ class Layout
     deactivate_object_tabs
     @selected_object_id = nil
     deactivat_up_down
+    @lf.button_copy.enabled = false
+    @lf.button_delete.enabled = false
   end
   #---------------------------------------------------------------------------------------------------------
   
@@ -422,6 +431,9 @@ class Layout
   def object_selection_changed
     # erst einmal alle Objekt-Tabs deaktivieren, damit sicher gestellt ist, dass nur die Objekt-typischen angezeigt werden
     deactivate_object_tabs
+    
+    @lf.button_copy.enabled = true
+    @lf.button_delete.enabled = true
 
     item_ID = @lf.iconlist_objects.currentItem
     @selected_object_id = @lf.iconlist_objects.getItemData(item_ID).to_i
@@ -470,7 +482,6 @@ class Layout
         @lf.radiobutton_just_l.state = false
         @lf.radiobutton_just_r.state = false
         just = @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_JUSTIFICATION).content
-        p "just #{just}"
         if just == S_JUST_LEFT
           @lf.radiobutton_just_l.state = true
         elsif just == S_JUST_MID
@@ -678,10 +689,27 @@ class Layout
   # fügt ein GraphicObjekt zur Objektliste hinzu und zeichnet die Vorschau und die Objektliste neu
   # ==== Parameter
   # +typ+:: der Typ des Objekts (Bild, Text, Barcode)
-  def add_object(typ)
-    @layout_file.add_object(typ)
+  def manage_objects(action, typ = nil)
+    node = @layout_file.get_objectnode_by_id(@selected_object_id) if @selected_object_id
+    if action == ADD
+      @layout_file.add_object(typ)
+      changed_attributes 
+    elsif action == DELETE
+      nn = node.find_first(GOA_NAME).content
+      s = "Wollen Sie wirklich das Objekt '#{nn}' löschen? Dieser Vorgang lässt sich nicht rückgängig machen!"
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, s, ['löschen','abbrechen'])
+      error_WahlMessage.execute
+      if error_WahlMessage.selection == 0
+        @layout_file.delete_object(node)
+        changed_attributes 
+      end
+    elsif action == COPY
+      @layout_file.copy_object(node)
+      changed_attributes 
+    end
     
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
+      object_deselected      
       fill_objectlist
       draw_card(true)
     end
