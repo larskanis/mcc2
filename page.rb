@@ -6,6 +6,8 @@ end
 
 require 'dataman'
 
+class ResourceNotFoundError < RuntimeError
+end
 
 class Page
   attr_accessor :page_nr
@@ -40,6 +42,11 @@ class Page
         canvas1.rect(Page.width_with_margins(width).mm, Page.height_with_margins(height).mm ).styles(:fill=>'none', :stroke=>'black')
       end
     end
+    
+    rmfl = []
+    Magick.fonts.each{|mf| 
+      rmfl << mf.name
+    }
     
     canvas.g.translate((draw_pos_x + $pr.card_margin_left).mm, (draw_pos_y + $pr.card_margin_top).mm) do |canvas1|
       rx = 10
@@ -92,6 +99,10 @@ class Page
                 just = 'start' # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
               end
               
+              unless rmfl.index(font)
+                raise ResourceNotFoundError, "Die Schriftart '#{font}' konnte nicht gefunden werden. Der Druck wird angehalten."
+              end
+              
               if data != ""
                 body.text(text_x.mm, 0, data).styles(
                   :font => ["'", font, "'"].join,
@@ -104,8 +115,10 @@ class Page
             # Bildobjekt
             elsif typ == PICTUREOBJECT 
               if FileTest.file?(data)
-                go_image = ::Magick::Image.read(data).first
+                go_image = Magick::Image.read(data).first
                 body.image(go_image, go_width.mm, go_height.mm)
+              else
+                raise ResourceNotFoundError, "Das Bild '#{data}' konnte nicht gefunden werden. Der Druck wird angehalten."
               end
             end
             
