@@ -58,7 +58,7 @@ class DataMan
       feld = $1
       von = $2.to_i
       anz = $3.to_i
-      vardata = row[feld].to_s[von, anz]
+      vardata = row[feld].to_s[von, anz].strip
       unless row.to_hash.has_key?(feld)
         $& # die unveränderten Daten zurückgeben, wenn kein passendes Feld im Datensatz gefunden wurde
       else
