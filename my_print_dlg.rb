@@ -123,7 +123,6 @@ class MyPrintDialogBox < PrintDialogBox
   
   #
   def select_all
-    p @iconlist_data.numItems
     (1..@iconlist_data.numItems).each{|itemnr|
       @iconlist_data.selectItem(itemnr-1)
     }
@@ -140,15 +139,20 @@ class MyPrintDialogBox < PrintDialogBox
     @printing = true
     printer = $pr 
     anzahl = @iconlist_data.numRows
-    (0..(anzahl-1)).each{|i|
-      item = @iconlist_data.getItem(i)
-      p [i, @iconlist_data.itemSelected?(i)].join(": ")
-      erg = printer.print(@child, @iconlist_data.getItemData(i), @chip) if @iconlist_data.itemSelected?(i)
-      if !erg && !@printing
-        # abbrechen, wenn ein Fehler aufgetreten ist
-        break 
-      end
-    }
+    begin
+      (0..(anzahl-1)).each{|i|
+        item = @iconlist_data.getItem(i)
+        erg = printer.print(@child, @iconlist_data.getItemData(i), @chip) if @iconlist_data.itemSelected?(i)
+        if !erg && !@printing
+          # abbrechen, wenn ein Fehler aufgetreten ist
+          break 
+        end
+      }
+    rescue ResourceNotFoundError => e
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, e.to_s, 'ok')
+      error_WahlMessage.execute
+      @printing = false
+    end
     @chip.close_reader if @chip
     @printing = false
     enable_all_buttons
