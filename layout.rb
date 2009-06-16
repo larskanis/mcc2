@@ -508,8 +508,6 @@ class Layout
       if node.find(GOA_TYP).first.content == PICTUREOBJECT
         data_shown
       end
-    
-    draw_card
   end
   #---------------------------------------------------------------------------------------------------------
   
@@ -628,35 +626,40 @@ class Layout
       scale_height = (2 * Page.height_with_margins(height) + card_offset) * @scale
       
       @dataman ? row = @dataman.row(@row_nr) : row = nil
-      
-      rvg = Magick::RVG.new(image_width.mm, image_height.mm).viewbox(0, 0, scale_width, scale_height) do |canvas|
-        # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
-      
-        draw_pos_x = 0
-        draw_pos_y = 0
-        page = Page.new(0)
-        page.draw(canvas, draw_pos_x, draw_pos_y, @layout_file, preview, @selected_object_id, row) # Seite 1 drucken
+      begin
+        rvg = Magick::RVG.new(image_width.mm, image_height.mm).viewbox(0, 0, scale_width, scale_height) do |canvas|
+          # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
         
-        page = Page.new(1)
-        draw_pos_y = (Page.height_with_margins(height) + card_offset)
-        page.draw(canvas, draw_pos_x, draw_pos_y, @layout_file, preview, @selected_object_id, row) # Seite 2 drucken
+          draw_pos_x = 0
+          draw_pos_y = 0
+          page = Page.new(0)
+          page.draw(canvas, draw_pos_x, draw_pos_y, @layout_file, preview, @selected_object_id, row) # Seite 1 drucken
+          
+          page = Page.new(1)
+          draw_pos_y = (Page.height_with_margins(height) + card_offset)
+          page.draw(canvas, draw_pos_x, draw_pos_y, @layout_file, preview, @selected_object_id, row) # Seite 2 drucken
+          
+          canvas.background_fill = 'white'
+        end
+      
+        # ..........................................................................................
+        # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
+        data = rvg.draw.to_blob{
+          self.format = 'PNG'
+        }
         
-        canvas.background_fill = 'white'
+        # ..........................................................................................
+        # das erzeugte Bild als Icon anzeigen
+        fx_image = FXPNGImage.new(@app, data)
+        fx_image.create
+        @image_view.image = fx_image
+        @image_view.show
+        @image_view.recalc
+      rescue ResourceNotFoundError => e
+        error_WahlMessage = FXFehlerAuswahlDialog.new(@app, e.to_s, 'ok')
+        error_WahlMessage.execute
+        @printing = false
       end
-      
-      # ..........................................................................................
-      # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
-      data = rvg.draw.to_blob{
-        self.format = 'PNG'
-      }
-      
-      # ..........................................................................................
-      # das erzeugte Bild als Icon anzeigen
-      fx_image = FXPNGImage.new(@app, data)
-      fx_image.create
-      @image_view.image = fx_image
-      @image_view.show
-      @image_view.recalc
     }
   end
  	#---------------------------------------------------------------------------------------------------------
@@ -838,7 +841,6 @@ class Layout
   def datasource_button_pressed
     lds = @layout_file.get_attr_value(S_DATASOURCE)
     ldsd = File.join(File.dirname(lds),'\\')
-    p ldsd
     if FileTest.exists?(ldsd)
       dest = ldsd
     else
