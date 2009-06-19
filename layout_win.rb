@@ -122,6 +122,7 @@ class LayoutFrame
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
+							w.current=2
 							w.width=316
 							w.y=2
 							w.height=345
@@ -132,14 +133,15 @@ class LayoutFrame
 								w.text="Allgemein"
 								w.tipText="Hier werden alle allgemeinen Einstellungen vorgenommen, die das gesamte Layout betreffen."
 								w.width=53
-								w.y=4
+								w.y=6
 								w.height=21
-								w.x=4
+								w.x=6
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe52=w
 								w.wdg_name='verticalframe52'
 								w.width=308
+								w.shown=false
 								w.y=23
 								w.height=318
 								w.vSpacing=2
@@ -405,7 +407,7 @@ class LayoutFrame
 								w.width=29
 								w.y=6
 								w.height=21
-								w.x=56
+								w.x=59
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_chip=w
@@ -422,21 +424,124 @@ class LayoutFrame
 								w.wdg_name='tabitem_magstripe'
 								w.text="Magnetstreifen"
 								w.tipText="Hier werden alle Magnetstreifeneinstellungen vorgenommen, unabh\303\244ngig davon, ob der Magnetstreifen tats\303\244chlich personalisiert wird."
-								w.width=292
-								w.shown=false
-								w.y=54
-								w.height=329
-								w.x=4
+								w.width=81
+								w.y=4
+								w.height=21
+								w.x=86
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe54=w
 								w.wdg_name='verticalframe54'
 								w.frameStyle=16384
-								w.width=292
-								w.shown=false
+								w.width=308
 								w.y=23
-								w.height=354
+								w.height=318
+								w.padTop=4
+								w.vSpacing=4
+								w.layoutHints=1024
 								w.x=4
+								FX::HorizontalFrame.new(@verticalframe54){|w|
+									@horizontalframe112=w
+									w.wdg_name='horizontalframe112'
+									w.width=304
+									w.y=6
+									w.height=21
+									w.layoutHints=1024
+									w.x=2
+									FX::Label.new(@horizontalframe112){|w|
+										@label488=w
+										w.wdg_name='label488'
+										w.text="Spur1"
+										w.width=35
+										w.height=17
+										w.layoutHints=256
+									}
+									FX::TextField.new(@horizontalframe112){|w|
+										@textfield_spur1=w
+										w.wdg_name='textfield_spur1'
+										w.width=249
+										w.height=19
+										w.numColumns=10
+										w.layoutHints=1024
+										w.x=35
+									}
+									FX::Button.new(@horizontalframe112){|w|
+										@button_spur1=w
+										w.wdg_name='button_spur1'
+										w.text="..."
+										w.width=20
+										w.height=21
+										w.x=284
+									}
+								}
+								FX::HorizontalFrame.new(@verticalframe54){|w|
+									@horizontalframe113=w
+									w.wdg_name='horizontalframe113'
+									w.width=304
+									w.y=31
+									w.height=21
+									w.layoutHints=1024
+									w.x=2
+									FX::Label.new(@horizontalframe113){|w|
+										@label489=w
+										w.wdg_name='label489'
+										w.text="Spur2"
+										w.width=35
+										w.height=17
+										w.layoutHints=256
+									}
+									FX::TextField.new(@horizontalframe113){|w|
+										@textfield_spur2=w
+										w.wdg_name='textfield_spur2'
+										w.width=249
+										w.height=19
+										w.numColumns=10
+										w.layoutHints=1024
+										w.x=35
+									}
+									FX::Button.new(@horizontalframe113){|w|
+										@button_spur2=w
+										w.wdg_name='button_spur2'
+										w.text="..."
+										w.width=20
+										w.height=21
+										w.x=284
+									}
+								}
+								FX::HorizontalFrame.new(@verticalframe54){|w|
+									@horizontalframe114=w
+									w.wdg_name='horizontalframe114'
+									w.width=304
+									w.y=56
+									w.height=21
+									w.layoutHints=1024
+									w.x=2
+									FX::Label.new(@horizontalframe114){|w|
+										@label490=w
+										w.wdg_name='label490'
+										w.text="Spur3"
+										w.width=35
+										w.height=17
+										w.layoutHints=256
+									}
+									FX::TextField.new(@horizontalframe114){|w|
+										@textfield_spur3=w
+										w.wdg_name='textfield_spur3'
+										w.width=249
+										w.height=19
+										w.numColumns=10
+										w.layoutHints=1024
+										w.x=35
+									}
+									FX::Button.new(@horizontalframe114){|w|
+										@button_spur3=w
+										w.wdg_name='button_spur3'
+										w.text="..."
+										w.width=20
+										w.height=21
+										w.x=284
+									}
+								}
 							}
 							FX::TabItem.new(@tabbook_objectattributes){|w|
 								@tabitem_object=w
@@ -835,7 +940,7 @@ class LayoutFrame
 								w.width=39
 								w.y=6
 								w.height=21
-								w.x=85
+								w.x=166
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_font=w
@@ -1087,6 +1192,18 @@ class LayoutFrame
 	attr_reader :verticalframe_chip
 	attr_reader :tabitem_magstripe
 	attr_reader :verticalframe54
+	attr_reader :horizontalframe112
+	attr_reader :label488
+	attr_reader :textfield_spur1
+	attr_reader :button_spur1
+	attr_reader :horizontalframe113
+	attr_reader :label489
+	attr_reader :textfield_spur2
+	attr_reader :button_spur2
+	attr_reader :horizontalframe114
+	attr_reader :label490
+	attr_reader :textfield_spur3
+	attr_reader :button_spur3
 	attr_reader :tabitem_object
 	attr_reader :verticalframe_object
 	attr_reader :matrix1
