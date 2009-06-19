@@ -77,12 +77,20 @@ class Printer
     pic = img.draw
     
     with_page(hPrinter) do
-    
+      
+      # die Magnetstreifendaten für die Personalisierung aufbereiten
+      if (page_nr == 0) && (child.layout_file.get_attr_value(S_MAGSTRIPE) == S_TRUE)
+        personalize_ms(hPrinter)
+      end
+      
+      # die Bilddaten für die Seite aufbereiten
       bmdata = pic.to_blob{
         self.format='rgb'
         self.depth = 8
       }
-      
+      #~ now = Time.now
+      #~ pic.write("test_#{now.strftime("%H%M%S")}.png")
+      #~ break
       pack_rgb2bgr = 'a3'*pic.columns
       
       # das Bild zeilenweise drucken, da es ein Problem mit dem Drucken von Bildern > 4MB gibt # todo Problem beseitigen und mit einem Mal drucken
@@ -107,8 +115,8 @@ class Printer
         
         @w32gdi.select_object( tmpDC, oldBmp )
         @w32gdi.delete_dc(tmpDC)
-          @w32gdi.delete_object(hBmp)
-          @w32gdi.delete_object(oldBmp)
+        @w32gdi.delete_object(hBmp)
+        @w32gdi.delete_object(oldBmp)
       }
     end
   end
@@ -131,6 +139,12 @@ class Printer
   
   def has_contact_engine?
     false
+  end
+  #--------------------------------------------------------------------------------------------------------------
+  
+  # dies ist nur ein Platzhalter, die eigentlichen Methoden müssen bei den jeweiligen Druckern definiert werden
+  def personalize_ms(hPrinter)
+    # 
   end
   
   def set_duplex(hPrinter, state)
