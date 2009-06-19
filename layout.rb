@@ -140,6 +140,11 @@ class Layout
       @lf.button_delete.enabled = false
       @lf.button_delete.connect(SEL_COMMAND){ manage_objects(DELETE) }
       
+      # die Textfelder für die Magnetstreifenattribute
+      @lf.textfield_spur1.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_MSSPUR1) }
+      @lf.textfield_spur2.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_MSSPUR2) }
+      @lf.textfield_spur3.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_MSSPUR3) }
+      
       # .............................................................................................
       
       create_chipparam_fields
@@ -375,6 +380,18 @@ class Layout
     elsif attr_name == S_X_OFFSET
       lay_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
       node = lay_attrs.find_first(S_X_OFFSET)
+    elsif attr_name == S_MSSPUR1
+      node = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}/#{S_MSSPUR1}")
+    elsif attr_name == S_MSSPUR2
+      node = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}/#{S_MSSPUR2}")
+    elsif attr_name == S_MSSPUR3
+      node = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}/#{S_MSSPUR3}")
+    elsif attr_name == S_DATASOURCE
+      lay_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
+      node = lay_attrs.find_first(S_DATASOURCE)
+      close_dataman
+      open_dataman
+      p "new data"
     else
       # in diesem Zweig werden alle Graphik-Objekte bearbeitet
       # das Attribut suchen
@@ -383,6 +400,7 @@ class Layout
     
     # nur wenn im Textfeld etwas geändert wurde, den Text in das Attribut schreiben und das changed-Flag setzen
     if sender.text != node.content
+      p "change"
       node.content = sender.text
       changed_attributes
     end
@@ -404,6 +422,7 @@ class Layout
   # es wird das changed-Flag gesetzt und der Titel aktualisiert und die Vorschau neu gezeichnet
   def changed_attributes
     @changed = true
+    p "draw_card"
     draw_card
     set_title
   end
@@ -670,7 +689,7 @@ class Layout
   # * die verbunden Datenquelle (coming soon)
   # * ein Zeichen *, ob das Layout seit dem letzten Laden oder Speichern geändert wurde
   def set_title
-    @parent.title = "#{@layout_file.filename} #{@dataman.filename}  #{@changed ? ' *' : '' }"
+    @parent.title = "#{@layout_file.filename} #{@dataman.filename.to_s if @dataman}  #{@changed ? ' *' : '' }"
   end
  	#---------------------------------------------------------------------------------------------------------
   
@@ -681,7 +700,7 @@ class Layout
       unless fn.split(".")[-1].downcase == 'xml'
         fn = [fn, 'XML'].join(".")
       end
-      @filename = fn
+      @layout_file.filename = fn
     end
     @layout_file.save
     @changed = false
@@ -780,11 +799,11 @@ class Layout
     
     if @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       fill_objectlist 
-      draw_card(true)
-      set_title
       
+      # die allgemeinen Layout-Attribute
       fill_layout_attr_tab
       
+      # die Chip-Attribute
       chip = Chip.new
       chip_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
       #~ (1..chip.anz_params).each{|i|
@@ -797,6 +816,15 @@ class Layout
         idx = chip_attr.name.split("_")[-1].to_i-1
         @chipparam_textfields[idx].text = chip_attr.content 
       }
+      
+      # die Magnetstreifenattribute
+      mag_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}")
+      @lf.textfield_spur1.text = mag_attrs.find_first(S_MSSPUR1).content
+      @lf.textfield_spur2.text = mag_attrs.find_first(S_MSSPUR2).content
+      @lf.textfield_spur3.text = mag_attrs.find_first(S_MSSPUR3).content
+      
+      draw_card(true)
+      set_title
     end
   end
  	#---------------------------------------------------------------------------------------------------------
