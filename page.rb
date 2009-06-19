@@ -53,7 +53,7 @@ class Page
       # ..........................................................................................
       # Kartenhintergrund füllen (für Vorschau)
       if preview
-        canvas1.rect(width.mm, height.mm ).round(rx).styles(:fill=>'yellow', :stroke=>'none')
+        canvas1.rect(width.mm, height.mm ).round(rx).styles(:fill=>'lightgray', :stroke=>'none')
       end
       # ..........................................................................................
       # die graphischen Elemnte zeichnen
@@ -141,6 +141,32 @@ class Page
       # Rand zeichnen (für Vorschau)
       if preview
         canvas1.rect(width.mm, height.mm ).round(rx).styles(:fill=>'none', :stroke=>'blue')
+        if page_nr == 1 && layout_file.get_attr_value(S_MAGSTRIPE) == S_TRUE
+          canvas1.g.translate(0, 4.mm){|ms_rect|
+            ms_rect.rect(width.mm, 12.5.mm ).styles(:fill=>'black', :stroke=>'none', :opacity => 0.5)
+            ms_node = layout_file.xml_doc.find_first(S_MAGSTRIPEPARAMS)
+            (1..3).each{|spurnr|
+              spur_data = ms_node.find_first('ms_spur' + spurnr.to_s).content
+                ms_rect.text(3.mm, ((3.5 * spurnr) + 0.5).mm, "Spur #{spurnr}: #{spur_data}").styles(
+                  :font => "Courier-New-Bold",
+                  :font_size => 10.pt, 
+                  :fill => 'white'
+                )
+            }
+          }
+        end
+        if page_nr == 0 && layout_file.get_attr_value(S_CONTACTLESS) == S_TRUE
+          rx = 0.5.mm
+          canvas1.g.translate(3.mm, 3.mm).rect(5.mm, 5.mm ).round(rx).styles(:fill=>'gray', :stroke=>'none', :opacity => 0.5)
+          rx = 3.mm
+          canvas1.g.translate(4.mm, 4.mm).rect(75.mm, 45.mm ).round(rx).styles(:fill=>'none', :stroke=>'gray', :stroke_opacity => 0.5)
+          canvas1.g.translate(5.mm, 5.mm).rect(73.mm, 43.mm ).round(rx).styles(:fill=>'none', :stroke=>'gray', :stroke_opacity => 0.5)
+          canvas1.g.translate(6.mm, 6.mm).rect(71.mm, 41.mm ).round(rx).styles(:fill=>'none', :stroke=>'gray', :stroke_opacity => 0.5)
+        end
+        if page_nr == 0 && layout_file.get_attr_value(S_CONTACT) == S_TRUE
+          rx = 2.mm
+          canvas1.g.translate(8.mm, 18.mm).rect(13.mm, 12.mm ).round(rx).styles(:fill=>'yellow', :stroke=>'gray')
+        end
       end
       
     end
