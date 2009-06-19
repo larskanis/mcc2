@@ -85,3 +85,7 @@ VALID_DATASOURCES = [DATABASE, CSV, NONE]
 DELETE = 0
 COPY = 1
 ADD = 2
+
+S_MSSPUR1 = 'ms_spur1'
+S_MSSPUR2 = 'ms_spur2'
+S_MSSPUR3 = 'ms_spur3'
