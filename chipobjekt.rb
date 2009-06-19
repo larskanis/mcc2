@@ -47,10 +47,10 @@ class Chip
     # die Chip-Parameter auslesen
     # erst ein leeres Array anlegen
     params = []
-    encoding = child.get_attr_value(S_DATASOURCEENCODING)
+    encoding = child.layout_file.get_attr_value(S_DATASOURCEENCODING)
     
     # un dann die Parameter aus dem XML auslesen und entsprechend ihrer  ID in das Array schreiben
-    chip_attrs = child.xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
+    chip_attrs = child.layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
     (1..anz_params).each{|i|
       attr_name = "#{S_PARAM}_#{i}"
       params << DataMan.replace_variables(chip_attrs.find_first(attr_name).content, row, encoding)
