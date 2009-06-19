@@ -221,13 +221,44 @@ class PrinterXID < CardPrinter
   end
   #--------------------------------------------------------------------------------------------------------------
   
+  # 
+  def personalize_ms(hPrinter)
+    super
+    tmpDC = @w32gdi.create_compatible_dc(hPrinter)
+    font = @w32gdi.create_font(0, 0, 0, 0, 400, 0, 0, 0, 0, 0, 0, 0, 0, "Arial\0")
+    oldFont = @w32gdi.select_object( tmpDC, font )
+    @w32gdi.delete_dc(tmpDC)
+    @w32gdi.delete_object(font)
+    
+    ms_node = child.layout_file.xml_doc.find_first(S_MAGSTRIPEPARAMS)
+    (1..3).each{|spurnr|
+      if spurnr == 1
+        start_sentinel = '%'
+      elsif spurnr == 2
+        start_sentinel = ';'
+      elsif spurnr == 3
+        start_sentinel = '+'
+      end
+      ms_data = ['~', spurnr.to_s, start_sentinel, ms_node.find_first('ms_spur' + spurnr.to_s).content, "?\0\0\0\0\0"].join
+#          lpchText = DL.malloc(ms_data.length + 10) # sicherheitshalber 10 Byte mehr, obwohl laut MSDN max. 4 Byte mehr gebraucht werden
+      lpchText = ms_data
+      lpRect = DL.malloc(100)
+#        draw_text(hdc, lpchText, nCount, lpRect, uFormat)
+      p "draw_text"
+      p lpchText
+      #~ @w32user.draw_text(hPrinter, lpchText, -1, lpRect, 0)
+      @w32gdi.text_out(hPrinter, 0, 0, lpchText, lpchText.length)
+    }
+  end
+  #--------------------------------------------------------------------------------------------------------------
+  
   # definiert, dass der Drucker duplex drucken kann
   def can_duplex?
     true
   end
   
   def has_magstripe_engine?
-    false
+    true
   end
   
   def has_contactless_engine?
