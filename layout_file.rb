@@ -1,3 +1,6 @@
+# -*- coding: UTF-8 -*-
+
+# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
 
 class LayoutFile
   class WrongDataSourceEncoding  < RuntimeError
