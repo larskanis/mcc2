@@ -4,7 +4,7 @@ def list_revisions
   # alle SVN-Tags werden ersetzt und nach *.ver geschrieben
   rb_files = Dir[File.join("*.rb".gsub(/[a-z]/i){|c|"["+c.upcase+c.downcase+"]"})]
   rb_files.each{|file|
-    puts `SubWCRev.exe . #{file} versions/#{file}.ver`
+    `SubWCRev.exe . #{file} versions/#{file}.ver`
   }
 
   # alle ver-Files scannen und die Zeile mit "Revision ="  und die Datei revisions.txt schreiben
