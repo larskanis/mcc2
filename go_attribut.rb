@@ -1,5 +1,7 @@
 # -*- coding: UTF-8 -*-
 
+# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
+
 # GraphicObject-Attribut
 class GO_Attribut 
   attr_accessor :attr_name
