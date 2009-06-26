@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # -*- coding: UTF-8 -*-
 
+# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
+
 # *****************************************************************************
 
 # Projekt           : MCC2
@@ -61,8 +63,6 @@ require 'text_object'       # grafische Text-Objekte
 require 'magstripe'         # Magnetstreifen
 
 
-require 'printer'           # die Basisklasse für die Printer
-require 'card_printer'      # die Basisklasse für alle CardPrinter
 require 'printer_xid'       # die XID-Printer-Klasse
 
 require 'page'              # die Klasse, die eine Druckseite einer Karte definiert
@@ -71,25 +71,25 @@ require 'xml'               # für die Layout-Struktur
 
 require 'fastercsv'
 
+require 'ftools'
+
 require 'RMagick'           # für das Erzeugen der Druckbilder
 include Magick
 require 'rvg/rvg'           # für RMagick die Vektorgraphik-Bibliothek
 
 require "tempfile" 
 
-# die win32api Wrapper laden
-require 'Win32API'
-#~ include Win32
-
-require 'win32api_base'
-#~ require 'win32api_comdlg'
-require 'win32api_gdi'
-#~ require 'win32api_kernel'
-require 'win32api_user'
 
 require 'chipobjekt'              # Chip
 
 require 'cc_dialogbox.rb'
+
+require 'debug_tools'
+include DebugTools
+
+
+File.makedirs("./logs", true)
+File.makedirs("./versions", true)
 
 class Magick::RVG
   def draw
@@ -234,17 +234,29 @@ if __FILE__==$0
   
 	require 'libguib16.rb'
   
-  app = FX::App.new("MCC2", "ComCard")
-  FXToolTip.new(app, TOOLTIP_PERMANENT)
-    
-  $pr = PrinterXID.new(app) # todo, muss später vom Anwender ausgewählt werden
-	
-	w = MCC2GUI.new(app)
-  w.topwin.show(Fox::PLACEMENT_SCREEN)
+  # ermitteln der Versionsnummern und Einbinden in das Programm, damit beim Logging die Versionsnummern mit aufgeführt werden
+  require 'list_revisions'
+  list_revisions
+  require 'versions'
   
-	app.create
-	app.run
+  begin
+    app = FX::App.new("MCC2", "ComCard")
+    FXToolTip.new(app, TOOLTIP_PERMANENT)
+      
+    $pr = PrinterXID.new # todo, muss später vom Anwender ausgewählt werden
+    
+    w = MCC2GUI.new(app)
+    w.topwin.show(Fox::PLACEMENT_SCREEN)
+    
+    app.create
+    app.run
+  rescue Exception => e
+    file = File.basename(__FILE__, ".rb")
+    DebugTools::write_log_file('main', unkown_error_message(e))
+    puts(unkown_error_message(e))
+    exit -1
+  end	
 
-	exit 6
+	exit 0
 end
 
