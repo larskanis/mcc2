@@ -1,10 +1,24 @@
 # -*- coding: UTF-8 -*-
 
+# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
+
 # diese Klasse dient als Basis für die Printer, es macht keinen Sinn direkt ein Objekt von dieser Klasse zu erzeugen
 
-if __FILE__ == $0
-  require 'mcc2'
-end
+#~ if __FILE__ == $0
+  #~ require 'mcc2'
+#~ end
+
+$: << 'win32'
+
+# die win32api Wrapper laden
+require 'Win32API'
+#~ include Win32
+
+require 'win32api_base'
+#~ require 'win32api_comdlg'
+require 'win32api_gdi'
+#~ require 'win32api_kernel'
+require 'win32api_user'
 
 require 'win32api_winspool'
 
@@ -31,7 +45,9 @@ class Printer
   def with_doc(documentName, handleToPrinter)
     begin
       documentName << "\0"
+      #~ p "documentName #{documentName}"
       docinfo = [documentName].pack('px12')
+      #~ p "docinfo #{docinfo}"
       @w32gdi.start_doc(handleToPrinter, docinfo)
       yield
     ensure
@@ -52,7 +68,7 @@ class Printer
   #--------------------------------------------------------------------------------------------------------------
   
   #
-  def print_page(hPrinter, child, row, page_nr , page_width = default_width, page_height = default_height)
+  def print_page(hPrinter, layout_file, row, page_nr , page_width = default_width, page_height = default_height)
   
     # den Pfad ermitteln, wo das temporäre File abgelegt werden soll
     tf = Tempfile.new("afile") 
@@ -62,15 +78,15 @@ class Printer
     Magick::RVG.dpi = @dpi
 
     # todo zentralen Offset einbauen
-    draw_pos_x  = child.layout_file.get_attr_value(S_X_OFFSET).to_f
-    draw_pos_y  = child.layout_file.get_attr_value(S_Y_OFFSET).to_f
+    draw_pos_x  = layout_file.get_attr_value(S_X_OFFSET).to_f
+    draw_pos_y  = layout_file.get_attr_value(S_Y_OFFSET).to_f
 
     # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
       selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
       preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
       img = Magick::RVG.new(page_width.mm, page_height.mm) do |canvas|
         canvas.background_fill = 'white'
-        Page.new(page_nr).draw(canvas, draw_pos_x, draw_pos_y, child.layout_file, preview, selected_object_id, row)
+        Page.new(page_nr).draw(canvas, draw_pos_x, draw_pos_y, layout_file, preview, selected_object_id, row)
       end
     
     # das VRG in ein Bitmap konvertieren
@@ -79,7 +95,7 @@ class Printer
     with_page(hPrinter) do
       
       # die Magnetstreifendaten für die Personalisierung aufbereiten
-      if (page_nr == 0) && (child.layout_file.get_attr_value(S_MAGSTRIPE) == S_TRUE)
+      if (page_nr == 0) && (layout_file.get_attr_value(S_MAGSTRIPE) == S_TRUE)
         personalize_ms(hPrinter)
       end
       
@@ -132,10 +148,12 @@ class Printer
   def has_magstripe_engine?
     false
   end
+  #--------------------------------------------------------------------------------------------------------------
   
   def has_contactless_engine?
     false
   end
+  #--------------------------------------------------------------------------------------------------------------
   
   def has_contact_engine?
     false
@@ -146,6 +164,7 @@ class Printer
   def personalize_ms(hPrinter)
     # 
   end
+  #--------------------------------------------------------------------------------------------------------------
   
   def set_duplex(hPrinter, state)
     return
@@ -167,7 +186,6 @@ class Printer
     @w32printer.get_printer(hPrinter, Level, pPrinter, cbBuf, pcbNeeded)
     
   end
-  
 end
 
 
