@@ -1,10 +1,13 @@
 # -*- coding: UTF-8 -*-
 
+# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
+
 # diese Klasse dient als Basis für die Printer, es macht keinen Sinn direkt ein Objekt von dieser Klasse zu erzeugen
 
-if __FILE__ == $0
-  require 'mcc2'
-end
+#~ if __FILE__ == $0
+  #~ require 'mcc2'
+#~ end
+require 'printer'           # die Basisklasse für die Printer
 
 
 class CardPrinter < Printer
