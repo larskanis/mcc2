@@ -1,19 +1,38 @@
 # -*- coding: UTF-8 -*-
 
+# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
+
 begin
 
 $: << File.dirname(__FILE__)
 
-if __FILE__ == $0
-  require 'mcc2'
+#~ if __FILE__ == $0
+  #~ require 'mcc2'
+#~ end
+require 'card_printer'      # die Basisklasse für alle CardPrinter
+require 'win32/api'
+
+class ApiPr <Win32ApiBase
 end
 
 # diese Klasse definiert einen XID-Drucker
 class PrinterXID < CardPrinter
   # falls doch noch auf Aufruf über DLL umgebaut wird, werden folgende Zeilen benötigt
-  #~ prnsc_wrapper = 't:\Project\XID\prnsc_wrapper\prnsc_wrapper.dll'
+  
+  #~ PRNSC = DL.dlopen('prnsc.dll')
+  #~ @@LoadCard = PRNSC['_LoadCardSC@24', 'LLLLLPL']
+  #~ @@UnloadCard = PRNSC['_UnloadCardSC@28', 'LLLLLLLL']
+  
+  prnsc_wrapper = 't:\Project\XID\prnsc_wrapper\prnsc_wrapper.dll'
+  PRNSC = DL.dlopen(prnsc_wrapper)
+  @@LoadCard = PRNSC['LoadCard', 'LLLLLPL']
+  @@UnloadCard = PRNSC['UnloadCard', 'LLLLLLLL']
+  #~ @@LoadCard = PRNSC['test_LoadCard', 'LLLLLPL']
+  #~ @@UnloadCard = PRNSC['test_UnloadCard', 'LLLLLLLL']
+
   #~ @@loadCard = Win32API.new(prnsc_wrapper, 'LoadCard', ['N','N','N','N','P','N'],  'N')
   #~ @@unloadCard = Win32API.new(prnsc_wrapper, 'UnloadCard', ['N','N','N','N','N','N','N'],  'N')
+  
   #~ @@test_LoadCard = Win32API.new(prnsc_wrapper, 'test_LoadCard', [],  'N')
   #~ @@test_UnloadCard = Win32API.new(prnsc_wrapper, 'test_UnloadCard', [],  'N')
   
@@ -29,50 +48,53 @@ class PrinterXID < CardPrinter
   # falscher Flip-Modus ('flip' oder 'no_flip')
   ERR_bad_flip = 3
   
-  # falsche Anzahl übergener Parameter
+  # falsche Anzahl übergebener Parameter
   ERR_bad_param_count = 4
 
   # 
-  def initialize(app)
-    @app = app
-    super()
+  def initialize
+    super
     @sc_printer = 't:\Project\XID\XID_Card_Loader\XID_Card_Loader.exe'
   end
 
-  # wenn es denn mal funktionieren würde, wäre dies Methode effizienter
-  #~ def load_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
-    #~ ruby_printer = TextPrinterControl.new
-    #~ check(ic_type, Integer)
-    #~ check(hwndSender, Integer)
-    #~ check(nSCSI_ID, Integer)
-    #~ check(nHost_ID, Integer)
-    #~ check(szPrnName, String)
-    #~ check(reserved1, Integer)
-    #~ ruby_printer.api_call(@@loadCard, ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
-  #~ end
+  def w32printer
+    @w32printer
+  end
   
-  #~ def unload_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
-    #~ ruby_printer = TextPrinterControl.new
-    #~ check(ic_type, Integer)
-    #~ check(hwndSender, Integer)
-    #~ check(nSCSI_ID, Integer)
-    #~ check(nHost_ID, Integer)
-    #~ check(fEject, Integer)
-    #~ check(fCardFlip, Integer)
-    #~ check(reserved1, Integer)
-    #~ ruby_printer.api_call(@@unloadCard, ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
-  #~ end
+  # wenn es denn mal funktionieren würde, wäre dies Methode effizienter
+  def load_card1(ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
+    ruby_printer = ApiPr.new
+    #~ ruby_printer.check(ic_type, Integer)
+    #~ ruby_printer.check(hwndSender, Integer)
+    #~ ruby_printer.check(nSCSI_ID, Integer)
+    #~ ruby_printer.check(nHost_ID, Integer)
+    #~ ruby_printer.check(szPrnName, String)
+    #~ ruby_printer.check(reserved1, Integer)
+    p ruby_printer.api_call(@@LoadCard, ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
+  end
+  
+  def unload_card1(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
+    ruby_printer = ApiPr.new
+    #~ ruby_printer.check(ic_type, Integer)
+    #~ ruby_printer.check(hwndSender, Integer)
+    #~ ruby_printer.check(nSCSI_ID, Integer)
+    #~ ruby_printer.check(nHost_ID, Integer)
+    #~ ruby_printer.check(fEject, Integer)
+    #~ ruby_printer.check(fCardFlip, Integer)
+    #~ ruby_printer.check(reserved1, Integer)
+    p ruby_printer.api_call(@@UnloadCard, ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
+  end
   
   # lädt eine Karte in das SmartCard-Modul des Druckers
   # wird momentan über ein externes Programm ausgeführt
   # momentan fest definiert: contactless, no_flip
   # === Return
   # Ausführungsstatus (kann mit human_status in Klartext überetzt werden) [Integer]
-  def load_card
+  def load_card(nr, timeout)
     reserved1 = '1'
     ic_type = 'contactless'
     flip = 'no_flip'
-    system([@sc_printer, 'load', ic_type, flip].join(" "))
+    system([@sc_printer, 'load', ic_type, flip, nr, timeout].join(" "))
     $?.exitstatus
   end
   #--------------------------------------------------------------------------------------------------------------
@@ -82,10 +104,23 @@ class PrinterXID < CardPrinter
   # momentan fest definiert: contactless, no_flip
   # === Return
   # Ausführungsstatus (kann mit human_status in Klartext überetzt werden) [Integer]
-  def unload_card
+  def unload_card(nr, timeout)
     ic_type = 'contactless'
     flip = 'no_flip'
-    system([@sc_printer, 'unload', ic_type, flip].join(" "))
+    system([@sc_printer, 'unload', ic_type, flip, nr, timeout].join(" "))
+    $?.exitstatus
+  end
+  #--------------------------------------------------------------------------------------------------------------
+  
+  # entlädt die Karte aus dem SmartCard-Modul des Druckers und transportiert sie zum Druckmodul
+  # wird momentan über ein externes Programm ausgeführt
+  # momentan fest definiert: contactless, no_flip
+  # === Return
+  # Ausführungsstatus (kann mit human_status in Klartext überetzt werden) [Integer]
+  def wait_on_print_ready(nr, timeout)
+    ic_type = 'contactless' # dummy
+    flip = 'no_flip'        # dummy
+    system([@sc_printer, 'wait', ic_type, flip, nr, timeout].join(" "))
     $?.exitstatus
   end
   #--------------------------------------------------------------------------------------------------------------
@@ -95,47 +130,11 @@ class PrinterXID < CardPrinter
   # momentan fest definiert: contactless, no_flip
   # === Return
   # Ausführungsstatus (kann mit human_status in Klartext überetzt werden) [Integer]
-  def reject_card
+  def reject_card(nr, timeout)
     ic_type = 'contactless'
     flip = 'no_flip'
-    system([@sc_printer, 'reject', ic_type, flip].join(" "))
+    system([@sc_printer, 'reject', ic_type, flip, nr, timeout].join(" "))
     $?.exitstatus
-  end
-  #--------------------------------------------------------------------------------------------------------------
-
-  # nur zum Testen
-  def test_LC #:nodoc:
-    p "*"*50
-    p "test_LC"
-    #~ ruby_printer = TextPrinterControl.new
-    #~ erg = ruby_printer.api_call(@@test_LoadCard)
-    p system("#{@sc_printer} load contactless no_flip")
-    status = $?.exitstatus
-    p "erg: #{human_status(status)}"
-  end
-  #--------------------------------------------------------------------------------------------------------------
-  
-  # nur zum Testen
-  def test_ULC #:nodoc:
-    p "*"*50
-    p "test_ULC"
-    #~ ruby_printer = TextPrinterControl.new
-    #~ erg = ruby_printer.api_call(@@test_UnloadCard)
-    p system("#{@sc_printer} unload contactless no_flip")
-    status = $?.exitstatus
-    p "erg: #{human_status(status)}"
-  end
-  #--------------------------------------------------------------------------------------------------------------
-  
-  # nur zum Testen
-  def test_RLC #:nodoc:
-    p "*"*50
-    p "test_ULC"
-    #~ ruby_printer = TextPrinterControl.new
-    #~ erg = ruby_printer.api_call(@@test_UnloadCard)
-    p system("#{@sc_printer} reject contactless no_flip")
-    status = $?.exitstatus
-    p "erg: #{human_status(status)}"
   end
   #--------------------------------------------------------------------------------------------------------------
   
@@ -159,64 +158,76 @@ class PrinterXID < CardPrinter
   # === Return
   # -
   # === Parameter
-  # +child+:: das selektierte Layout
+  # +layout_file+:: 
   # +row+:: momentan ein CSV-Row-Objekt
-  def print(child, row, chip)
-    
+  def print(layout_file, row, chip)
+    #~ set_message_handler
     preview = false
     selected_object_id = nil
-    
-    # 
-    # der Chip-Teil
     
     #~ devicename = "DIGID XID440 an 192.168.253.157\0" # nur für Tests
     #~ devicename = "DIGIDXID_on_DELL\0" # nur für Tests
     #~ devicename = "Jaws PDF Creator" # nur für Tests
     devicename = "DIGID XID440\0" # todo aus Druckerauswahl übernehmen und in Einstellungen speichern
-    if chip
-      begin
-        # Karte in Leser einziehen
-        #~ load_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1) # siehe DLL_Benutzung
-        load_card
-        
-        # Kartenpersonalisierung
-        chip.pers_card(child, row) 
-        
-        # Karte vom Leser zum Drucken weiter schicken
-        #~ unload_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1) # siehe DLL_Benutzung
-        unload_card
-      rescue => e
-        reject_card # im Fehlerfall die Karte auswerfen, sonst muss man jedes Mal ein Druckerreset machen
-				s = "Fehler bei Kartenpersonalisierung!" + (["Exception in #{__FILE__}: #{e.to_s}"]+e.backtrace).join("\n")
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@app, s, 'ok')
-        error_WahlMessage.execute
-        return false
-      end
-    end
     
     page_width = default_width + card_margin_left + card_margin_right # vorläufig todo ??? warum eigentlich vorläufig?
     page_height = default_height + card_margin_top + card_margin_bottom # vorläufig todo  ??? warum eigentlich vorläufig?
-
-    datasourcename = child.layout_file.get_attr_value(S_DATASOURCE)
-    duplex = child.layout_file.get_attr_value(S_DUPLEX) == S_TRUE
+    
+    datasourcename = layout_file.get_attr_value(S_DATASOURCE)
+    duplex = layout_file.get_attr_value(S_DUPLEX) == S_TRUE
     
     # einen DeviceContext für den Drucker erzeugen
-    hPrinter = @w32gdi.create_dc( nil, devicename, nil, nil);
+    hPrinter = @w32gdi.create_dc( nil, devicename, nil, nil)
     
     # setzt den Durcker in den Duplex- oder Simplexmodus
     set_duplex(hPrinter, duplex)
     
-    with_doc("mcc2 - #{datasourcename} - Satz #{}", hPrinter) do  # todo aussagekräftigen Dokumentnamen übergeben
-      page_nr = 0
-      print_page(hPrinter, child, row, page_nr, page_width , page_height )
-      
-      if duplex
-        page_nr = 1
-        print_page(hPrinter, child, row, page_nr, page_width , page_height )
-      end
-      
+    documentName = "mcc2 - #{datasourcename} - Satz #{}\0"
+    #~ p "documentName #{documentName}"
+    docinfo = [documentName].pack('px120')
+    #~ p "docinfo #{docinfo}"
+    begin
+      @w32gdi.start_doc(hPrinter, docinfo)
+        page_nr = 0
+        print_page(hPrinter, layout_file, row, page_nr, page_width , page_height )
+        
+        if duplex
+          page_nr = 1
+          print_page(hPrinter, layout_file, row, page_nr, page_width , page_height )
+        end
+        
+        # ............................................................................................
+        # der Chip-Teil, er muss nach dem start_doc und den pages kommen, falls dort Fehler auftreten, wird dieser dan nicht ausgeführt, 
+        # und keine Karte eingezogen, dann gibt es weniger Probleme mit dem Entfernen von Karten aus dem Drucker, wenn ein Fehler aufgetreten ist
+        if chip
+          begin
+            nr = Time.now.hour * Time.now.min * Time.now.sec
+            timeout = 120
+            # Karte in Leser einziehen
+            load_card(nr, timeout)
+            
+            # Kartenpersonalisierung
+            chip.pers_card(layout_file, row) 
+            
+            # Karte vom Leser zum Drucken weiter schicken
+            unload_card(nr, timeout)
+          rescue => e
+            reject_card(nr, timeout) # im Fehlerfall die Karte auswerfen, sonst muss man jedes Mal ein Druckerreset machen
+            raise
+          end
+        end
+        # ............................................................................................
+        
+      #~ p "end_doc"
+      @w32gdi.end_doc(hPrinter)
+      wait_on_print_ready(nr, timeout)
+    rescue => e
+      # wenn ein Fehler aufgetreten ist, wird der Druckjob abgebrochen und somit aus der Warteschlange entfernt
+      @w32gdi.abort_doc(hPrinter)
+      raise
     end
     @w32gdi.delete_dc(hPrinter)
+    #~ unset_message_handler
     return true
   end
   #--------------------------------------------------------------------------------------------------------------
@@ -230,7 +241,7 @@ class PrinterXID < CardPrinter
     @w32gdi.delete_dc(tmpDC)
     @w32gdi.delete_object(font)
     
-    ms_node = child.layout_file.xml_doc.find_first(S_MAGSTRIPEPARAMS)
+    ms_node = layout_file.xml_doc.find_first(S_MAGSTRIPEPARAMS)
     (1..3).each{|spurnr|
       if spurnr == 1
         start_sentinel = '%'
@@ -256,17 +267,118 @@ class PrinterXID < CardPrinter
   def can_duplex?
     true
   end
+  #--------------------------------------------------------------------------------------------------------------
   
   def has_magstripe_engine?
     true
   end
+  #--------------------------------------------------------------------------------------------------------------
   
   def has_contactless_engine?
     true
   end
+  #--------------------------------------------------------------------------------------------------------------
   
   def has_contact_engine?
     false
+  end
+  #--------------------------------------------------------------------------------------------------------------
+  
+  def test_abort(devicename)
+    hPrinter = @w32gdi.create_dc( nil, devicename, nil, nil)
+    with_doc("abort", hPrinter) do  # todo aussagekräftigen Dokumentnamen übergeben
+      #~ with_page(hPrinter) do
+      #~ end
+    end
+  end
+  #--------------------------------------------------------------------------------------------------------------
+  
+  def test_abort1(devicename)
+    printer = "\0" * 4
+    pdefaults = 0
+    pr.w32printer
+    pr.w32printer.open_printer(devicename, printer, pdefaults)
+    hprinter = printer.unpack('L')[0]
+
+    level = 1
+    documentName ="reject_card\0"
+    docinfo = [documentName].pack('px120')
+    pr.w32printer.start_doc_printer(hprinter, level, docinfo)
+      pr.w32printer.start_page_printer(hprinter)
+        written =  "\0" * 4
+        pr.w32printer.write_printer(hprinter, "Test", 4, written)
+        pr.w32printer.write_printer(hprinter, "\f", 1, written)
+      pr.w32printer.end_page_printer(hprinter)
+    #~ pr.w32printer.abort_printer(hprinter)
+    pr.w32printer.end_doc_printer(hprinter)
+  end
+  #--------------------------------------------------------------------------------------------------------------
+  
+  #~ '2.  Add window message loop handler: 
+  def myWndProc(hwnd, wMsg, wResult, lDocID)
+   
+    p wMsg
+    if wMsg == WM_PRINT_RESULT
+      if wResult == DRV_PRINT_FAILED 
+          p "Card print failed."
+      elsif wResult == CARD_DONE
+          p "Card was printed successfylly."
+      end
+    end
+     
+#    myWndProc = CallWindowProc(oldWndProc, Hwnd, wMsg, wResult, lDocID) 
+#    myWndProc = call_window_proc(lpPrevWndFunc, hWnd, Msg, wParam, lParam)
+    return call_window_proc(oldWndProc, hwnd, wMsg, wResult, lDocID)
+   
+  end 
+  #--------------------------------------------------------------------------------------------------------------
+  
+  GWL_WNDPROC = - 4  
+  
+  #~ 'Printer driver sends this message with print results 
+  WM_PRINT_RESULT = 1024 + 6 
+   
+  #~ 'wParam values for wMsg = WM_PRINT_RESULT will be following: 
+  #~ 'printing failed 
+  DRV_PRINT_FAILED = 255 
+  
+  #~ 'Card was printed successfully 
+  CARD_DONE = 0 
+  #--------------------------------------------------------------------------------------------------------------
+  CB = DL.callback( "L myWndProc(L hwnd, L wMsg, L wResult, L lDocID)" )
+  #~ CB = DL.callback('LLLLL'){|*args|
+      #~ myWndProc(*args)
+  #~ }
+  
+  def set_message_handler
+    getDesktopWindow = Win32API.new("user32", "GetDesktopWindow", [], 'L')
+    hwnd = getDesktopWindow.Call
+    
+    #~ EnumDisplayMonitors = Win32::API.new('EnumDisplayMonitors', 'LPKL', 'B', 'user32') GetMonitorInfo = Win32::API.new('GetMonitorInfo', 'LP', 'B', 'user32')
+
+    #~ MyInfoEnumProc = Win32::API::Callback.new('LLPL','L'){|hMonitor,hdcMonitor,lprcMonitor,dwData|
+      #~ lpmi = [72].pack('L') + 0.chr * 68 
+      #~ GetMonitorInfo.call(hMonitor,lpmi) 
+      #~ info = lpmi.unpack('L10Z*') 
+      #~ puts "Name:#{info[10]}, Width:#{info[3]}, Height:#{info[4]} " 1 
+      #~ }
+
+    #~ EnumDisplayMonitors.call(0, nil, MyInfoEnumProc, 0) 
+    
+    #~ cb = Win32API::Callback.new('LLLL','L'){|*args|
+        #~ myWndProc.call(*args)
+    #~ }
+    
+    #~ CB = DL.callback('LLLLL'){|*args|
+        #~ myWndProc(*args)
+    #~ }
+    #~ p cb
+    @oldWndProc = @w32user.set_window_long(hwnd, GWL_WNDPROC, CB) 
+  end
+  #--------------------------------------------------------------------------------------------------------------
+  
+  def unset_message_handler
+    @w32user.set_window_long(hwnd, GWL_WNDPROC, @oldWndProc)
   end
   
 end
@@ -277,28 +389,38 @@ if __FILE__ == $0
   #~ exit
   
 
-#~ GetDesktopWindow = Win32API.new("user32", "GetDesktopWindow", [], 'L')
-#~ GetActiveWindow = Win32API.new("user32", "GetActiveWindow", [], 'L')
-#~ h = GetDesktopWindow.Call
 
+  #~ devicename = '\\\COMFILE1\P0049'
+  #~ devicename = "Jaws PDF Creator" # nur für Tests
+  devicename = "DIGID XID440\0" # todo aus Druckerauswahl übernehmen und in Einstellungen speichern
   pr = PrinterXID.new
-  pr.test_LC
-  sleep 5
-  pr.test_ULC
+  
+  #~ pr.test_abort1(devicename)
+  #~ pr.test_abort(devicename)
+  
+  #~ exit
+  
+  #~ pr.test_LC
+  #~ sleep 5
+  #~ pr.test_ULC
   #~ pr.test_RLC
-  exit
+  #~ exit
   
   # die folgenden Zeilen sind durch das Einziehen der Karten über den XID_Card_Loader obsolet geworden
-  #~ ic_type = 1     # contact – 0, contactless – 1
-  #~ nSCSI_ID = -1   # -1 erster verfügbarer Drucker
-  #~ nHost_ID = -1   # -1 erster verfügbarer Drucker
-  #~ fEject = 0      # 0 – don’t eject 1 – eject after card moved from smart chip position
-  #~ fCardFlip = 0   # 0 – no flip, 1 – flip card when card is moved from smart chip position
-  #~ reserved1 = 0
-  #~ szPrnName = "DIGID XID440\0"
-  #~ hwndSender = h
-  #~ pr.load_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
-  #~ pr.unload_card(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
+  ic_type = 1     # contact – 0, contactless – 1
+  nSCSI_ID = -1   # -1 erster verfügbarer Drucker
+  nHost_ID = -1   # -1 erster verfügbarer Drucker
+  fEject = 0      # 0 – don’t eject 1 – eject after card moved from smart chip position
+  fCardFlip = 0   # 0 – no flip, 1 – flip card when card is moved from smart chip position
+  reserved1 = 111
+  szPrnName = "DIGID XID440a\0"
+  GetDesktopWindow = Win32API.new("user32", "GetDesktopWindow", [], 'L')
+  GetActiveWindow = Win32API.new("user32", "GetActiveWindow", [], 'L')
+  h = GetDesktopWindow.Call
+  p h
+  hwndSender = h
+  pr.load_card1(ic_type, hwndSender, nSCSI_ID, nHost_ID, szPrnName, reserved1)
+  #~ pr.unload_card1(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
 end
 
 rescue Exception => e
