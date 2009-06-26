@@ -1,3 +1,7 @@
+# -*- coding: UTF-8 -*-
+
+# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
+
 #*****************************************************************************
 # Konstanten-Definition
 TAB = 9.chr
@@ -89,3 +93,6 @@ ADD = 2
 S_MSSPUR1 = 'ms_spur1'
 S_MSSPUR2 = 'ms_spur2'
 S_MSSPUR3 = 'ms_spur3'
+
+PRINT_FROM = 0
+PRINT_TO = 1
