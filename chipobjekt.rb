@@ -1,5 +1,8 @@
 # -*- coding: UTF-8 -*-
 
+# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
+
+
 $: << 'win32'
 
 require 'dataman'
@@ -43,14 +46,15 @@ class Chip
   # === Parameter
   # +xml_doc+::   die XML-Struktur mit den Definitionen des Kartenlayouts
   # +row+::       ein Datensatz im FasteCSV-Format
-  def pers_card(child, row)
+  def pers_card(layout_file, row)
+    p "pers_card #{row.inspect}"
     # die Chip-Parameter auslesen
     # erst ein leeres Array anlegen
     params = []
-    encoding = child.layout_file.get_attr_value(S_DATASOURCEENCODING)
+    encoding = layout_file.get_attr_value(S_DATASOURCEENCODING)
     
     # un dann die Parameter aus dem XML auslesen und entsprechend ihrer  ID in das Array schreiben
-    chip_attrs = child.layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
+    chip_attrs = layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
     (1..anz_params).each{|i|
       attr_name = "#{S_PARAM}_#{i}"
       params << DataMan.replace_variables(chip_attrs.find_first(attr_name).content, row, encoding)
