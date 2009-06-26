@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Root>
   <Layout>
-    <Duplex>0</Duplex>
+    <Duplex>false</Duplex>
     <Width>85.6</Width>
     <Height>53.98</Height>
     <datasource>l:\XID\Golf\Platzreife\dgv-29420.cs2</datasource>
     <datasource_typ>csv</datasource_typ>
+    <x_offset>0</x_offset>
+    <datasource_encoding>IBM850</datasource_encoding>
+    <y_offset>0</y_offset>
   </Layout>
-  <Chip>
+  <Chip_Params>
     <Param_1/>
     <Param_2/>
     <Param_3/>
@@ -30,7 +33,8 @@
     <Param_20/>
     <Param_21/>
     <Param_22/>
-  </Chip>
+    <Param_23/>
+  </Chip_Params>
   <Magstripe/>
   <GraphicObjects>
     <GraphicObject>
@@ -44,7 +48,6 @@
       <font_height>10</font_height>
       <human_readable>true</human_readable>
       <height>10</height>
-      <font_weight>0</font_weight>
       <font_typ>Arial</font_typ>
       <width>20</width>
       <data>Muster</data>
@@ -54,6 +57,7 @@
       <font_color>000000FF</font_color>
       <justification>0</justification>
       <view_in_printlist>0</view_in_printlist>
+      <font_weight>0</font_weight>
     </GraphicObject>
     <GraphicObject>
       <id>4</id>
@@ -66,7 +70,6 @@
       <font_height>10</font_height>
       <human_readable>true</human_readable>
       <height>10</height>
-      <font_weight>0</font_weight>
       <font_typ>Arial</font_typ>
       <width>30</width>
       <data>Muster</data>
@@ -76,6 +79,7 @@
       <font_color>000000FF</font_color>
       <justification>0</justification>
       <view_in_printlist>true</view_in_printlist>
+      <font_weight>0</font_weight>
     </GraphicObject>
     <GraphicObject>
       <id>0</id>
@@ -100,13 +104,15 @@
       <x>60</x>
       <y>7</y>
       <object_typ>TextObject</object_typ>
-      <font_height>10</font_height>
-      <height>15</height>
-      <font_weight>0</font_weight>
-      <font_typ>Arial</font_typ>
-      <width>55</width>
-      <data>{vorname[0,50]}</data>
-      <page_nr>0</page_nr>
+      <font_height>21</font_height>
+      <height>1</height>
+      <font_typ>ACaslonPro-Semibold</font_typ>
+      <width>35</width>
+      <data>{vorname[0,50]}
+{name[0,50]}
+{vname[0,50]}
+</data>
+      <page_nr>1</page_nr>
       <sample_data>Muster</sample_data>
       <back_color>FFFFFFFF</back_color>
       <font_color>000000FF</font_color>
@@ -115,14 +121,13 @@
     </GraphicObject>
     <GraphicObject>
       <id>5</id>
-      <object_name>Nachname</object_name>
+      <object_name>schräger Text</object_name>
       <rotation>-20</rotation>
       <x>10</x>
       <y>20</y>
       <object_typ>TextObject</object_typ>
       <font_height>15</font_height>
       <height>20</height>
-      <font_weight>0</font_weight>
       <font_color>ff0000ff</font_color>
       <font_typ>Verdana</font_typ>
       <width>70.5</width>
@@ -149,7 +154,6 @@ im Textblock</data>
       <font_height>10</font_height>
       <human_readable>true</human_readable>
       <height>100</height>
-      <font_weight>0</font_weight>
       <font_typ>Arial</font_typ>
       <sample_data>Muster</sample_data>
       <width>100</width>
@@ -158,6 +162,7 @@ im Textblock</data>
       <font_color>000000FF</font_color>
       <justification>0</justification>
       <view_in_printlist>0</view_in_printlist>
+      <font_weight>0</font_weight>
     </GraphicObject>
     <GraphicObject>
       <object_typ>TextObject</object_typ>
@@ -169,7 +174,6 @@ im Textblock</data>
       <y>-3</y>
       <font_height>10</font_height>
       <height>10</height>
-      <font_weight>0</font_weight>
       <font_typ>Arial</font_typ>
       <sample_data>außerhalb</sample_data>
       <width>30</width>
@@ -185,7 +189,7 @@ im Textblock</data>
       <printable>true</printable>
       <object_name>Logo</object_name>
       <rotation>0</rotation>
-      <page_nr>0</page_nr>
+      <page_nr>1</page_nr>
       <x>64</x>
       <y>31.5</y>
       <stretch>false</stretch>
@@ -194,6 +198,25 @@ im Textblock</data>
       <width>15</width>
       <data>l:\XID\Golf\Platzreife\dgv-42.jpeg</data>
       <view_in_printlist>0</view_in_printlist>
+    </GraphicObject>
+    <GraphicObject>
+      <object_typ>TextObject</object_typ>
+      <id>8</id>
+      <back_color>FFFFFFFF</back_color>
+      <object_name>Nachname</object_name>
+      <rotation>0</rotation>
+      <page_nr>1</page_nr>
+      <x>10</x>
+      <y>10</y>
+      <view_in_printlist>false</view_in_printlist>
+      <font_height>10</font_height>
+      <justification>Mitte</justification>
+      <height>10</height>
+      <font_color>000000FF</font_color>
+      <font_typ>Arial</font_typ>
+      <sample_data>Muster</sample_data>
+      <width>30</width>
+      <data>{name[0,50]}</data>
     </GraphicObject>
   </GraphicObjects>
 </Root>
