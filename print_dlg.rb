@@ -13,11 +13,11 @@ class PrintDialogBox
 			w.wdg_name='printDialogBox'
 			w.width=800
 			w.shown=true
-			w.y=400
+			w.y=315
 			w.height=600
 			w.title="Druckdialog"
 			w.layoutHints=768
-			w.x=84
+			w.x=-116
 			FX::Splitter.new(@printDialogBox){|w|
 				@splitter1=w
 				w.wdg_name='splitter1'
@@ -132,8 +132,8 @@ class PrintDialogBox
 									w.x=10
 								}
 								FX::TextField.new(@matrix2){|w|
-									@textfield4=w
-									w.wdg_name='textfield4'
+									@textfield_print_from=w
+									w.wdg_name='textfield_print_from'
 									w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 									w.width=76
 									w.y=40
@@ -166,8 +166,8 @@ class PrintDialogBox
 									w.x=10
 								}
 								FX::TextField.new(@matrix2){|w|
-									@textfield5=w
-									w.wdg_name='textfield5'
+									@textfield_print_to=w
+									w.wdg_name='textfield_print_to'
 									w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 									w.width=76
 									w.y=65
@@ -450,10 +450,10 @@ class PrintDialogBox
 	attr_reader :verticalframe2
 	attr_reader :matrix2
 	attr_reader :label12
-	attr_reader :textfield4
+	attr_reader :textfield_print_from
 	attr_reader :label13
 	attr_reader :label14
-	attr_reader :textfield5
+	attr_reader :textfield_print_to
 	attr_reader :label15
 	attr_reader :packer3
 	attr_reader :label16
