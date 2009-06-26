@@ -13,11 +13,11 @@ class PrintDialogBox
 			w.wdg_name='printDialogBox'
 			w.width=800
 			w.shown=true
-			w.y=315
+			w.y=651
 			w.height=600
 			w.title="Druckdialog"
 			w.layoutHints=768
-			w.x=-116
+			w.x=228
 			FX::Splitter.new(@printDialogBox){|w|
 				@splitter1=w
 				w.wdg_name='splitter1'
@@ -110,23 +110,51 @@ class PrintDialogBox
 							FX::Matrix.new(@verticalframe2){|w|
 								@matrix2=w
 								w.wdg_name='matrix2'
-								w.numRows=6
+								w.numRows=7
 								w.padLeft=10
 								w.width=628
 								w.y=2
-								w.height=204
+								w.height=216
 								w.matrixStyle=131072
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.numColumns=3
-								w.padTop=40
+								w.padTop=30
 								w.x=2
+								FX::Label.new(@matrix2){|w|
+									@label122=w
+									w.wdg_name='label122'
+									w.text="Datens\303\244tze:"
+									w.width=63
+									w.y=30
+									w.height=17
+									w.x=10
+								}
+								FX::Label.new(@matrix2){|w|
+									@label_rows=w
+									w.wdg_name='label_rows'
+									w.text=""
+									w.width=4
+									w.y=30
+									w.height=4
+									w.x=80
+								}
+								FX::Label.new(@matrix2){|w|
+									@label120=w
+									w.wdg_name='label120'
+									w.text=""
+									w.width=4
+									w.y=30
+									w.height=40
+									w.layoutHints=512
+									w.x=234
+								}
 								FX::Label.new(@matrix2){|w|
 									@label12=w
 									w.wdg_name='label12'
 									w.text="von"
 									w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 									w.width=23
-									w.y=40
+									w.y=74
 									w.height=19
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.x=10
@@ -136,7 +164,7 @@ class PrintDialogBox
 									w.wdg_name='textfield_print_from'
 									w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 									w.width=76
-									w.y=40
+									w.y=74
 									w.height=21
 									w.textFieldTextStyle=1048576
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
@@ -149,7 +177,7 @@ class PrintDialogBox
 									w.text=""
 									w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
 									w.width=4
-									w.y=40
+									w.y=74
 									w.height=4
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.x=234
@@ -160,7 +188,7 @@ class PrintDialogBox
 									w.text="bis"
 									w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 									w.width=21
-									w.y=65
+									w.y=99
 									w.height=19
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.x=10
@@ -170,7 +198,7 @@ class PrintDialogBox
 									w.wdg_name='textfield_print_to'
 									w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 									w.width=76
-									w.y=65
+									w.y=99
 									w.height=21
 									w.textFieldTextStyle=1048576
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
@@ -183,7 +211,7 @@ class PrintDialogBox
 									w.text=""
 									w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
 									w.width=4
-									w.y=65
+									w.y=99
 									w.height=4
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.x=234
@@ -192,7 +220,7 @@ class PrintDialogBox
 									@packer3=w
 									w.wdg_name='packer3'
 									w.width=66
-									w.y=90
+									w.y=124
 									w.height=40
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.layoutHints=1536
@@ -204,7 +232,7 @@ class PrintDialogBox
 									w.text=""
 									w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
 									w.width=4
-									w.y=90
+									w.y=124
 									w.height=4
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.x=80
@@ -215,7 +243,7 @@ class PrintDialogBox
 									w.text=""
 									w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
 									w.width=4
-									w.y=90
+									w.y=124
 									w.height=4
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.x=234
@@ -226,7 +254,7 @@ class PrintDialogBox
 									w.text="Suchbegriff"
 									w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 									w.width=66
-									w.y=134
+									w.y=168
 									w.height=19
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.x=10
@@ -238,7 +266,7 @@ class PrintDialogBox
 									w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 									w.width=150
 									w.helpText="hier einen Text eingeben und auf Suchen klicken. Dann wird in allen angezeigten Feldern gesucht"
-									w.y=134
+									w.y=168
 									w.height=21
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.numColumns=10
@@ -253,7 +281,7 @@ class PrintDialogBox
 									w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 									w.width=50
 									w.helpText="hier einen Text eingeben und auf Suchen klicken. Dann wird in allen angezeigten Feldern gesucht"
-									w.y=134
+									w.y=168
 									w.height=23
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.x=234
@@ -262,7 +290,7 @@ class PrintDialogBox
 									@packer4=w
 									w.wdg_name='packer4'
 									w.width=66
-									w.y=161
+									w.y=195
 									w.height=20
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.layoutHints=1536
@@ -274,7 +302,7 @@ class PrintDialogBox
 									w.text=""
 									w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
 									w.width=4
-									w.y=161
+									w.y=195
 									w.height=4
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.x=80
@@ -285,7 +313,7 @@ class PrintDialogBox
 									w.text=""
 									w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
 									w.width=4
-									w.y=161
+									w.y=195
 									w.height=4
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.x=234
@@ -296,7 +324,7 @@ class PrintDialogBox
 									w.text="Vorschau"
 									w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
 									w.width=56
-									w.y=185
+									w.y=219
 									w.height=18
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.x=10
@@ -308,7 +336,7 @@ class PrintDialogBox
 									w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
 									w.width=17
 									w.iconPosition=0
-									w.y=185
+									w.y=219
 									w.height=17
 									w.shadowColor=Fox::FXRGBA(139,137,132,255)
 									w.state=true
@@ -318,7 +346,7 @@ class PrintDialogBox
 									@label42=w
 									w.wdg_name='label42'
 									w.width=29
-									w.y=185
+									w.y=219
 									w.height=17
 									w.x=234
 								}
@@ -327,7 +355,7 @@ class PrintDialogBox
 								@packer13=w
 								w.wdg_name='packer13'
 								w.width=628
-								w.y=206
+								w.y=218
 								w.height=20
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=1536
@@ -339,7 +367,7 @@ class PrintDialogBox
 								w.text="alle markieren"
 								w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 								w.width=200
-								w.y=226
+								w.y=237
 								w.height=23
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=296
@@ -351,7 +379,7 @@ class PrintDialogBox
 								w.text="alle Markierungen entfernen"
 								w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 								w.width=200
-								w.y=249
+								w.y=258
 								w.height=23
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=296
@@ -361,7 +389,7 @@ class PrintDialogBox
 								@packer6=w
 								w.wdg_name='packer6'
 								w.width=628
-								w.y=272
+								w.y=280
 								w.height=20
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=1536
@@ -373,7 +401,7 @@ class PrintDialogBox
 								w.text="markierte drucken"
 								w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 								w.width=200
-								w.y=292
+								w.y=299
 								w.height=23
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=296
@@ -385,7 +413,7 @@ class PrintDialogBox
 								w.text="alle drucken"
 								w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 								w.width=200
-								w.y=314
+								w.y=319
 								w.height=23
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=296
@@ -399,7 +427,7 @@ class PrintDialogBox
 								w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 								w.width=200
 								w.helpText="Druck anhalten"
-								w.y=337
+								w.y=340
 								w.height=23
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=296
@@ -413,7 +441,7 @@ class PrintDialogBox
 								w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 								w.width=200
 								w.helpText="Druckdialog schlie\303\237en"
-								w.y=360
+								w.y=361
 								w.height=23
 								w.shadowColor=Fox::FXRGBA(139,137,132,255)
 								w.layoutHints=296
@@ -449,6 +477,9 @@ class PrintDialogBox
 	attr_reader :splitter2
 	attr_reader :verticalframe2
 	attr_reader :matrix2
+	attr_reader :label122
+	attr_reader :label_rows
+	attr_reader :label120
 	attr_reader :label12
 	attr_reader :textfield_print_from
 	attr_reader :label13
