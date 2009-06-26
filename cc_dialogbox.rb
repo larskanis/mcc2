@@ -1,5 +1,7 @@
 # -*- coding: UTF-8 -*-
 
+# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
+
 ##############################################################################
 
 # FehlerAuswahlDialog mit variablen Buttons zur Eingabe der Batchnummer
