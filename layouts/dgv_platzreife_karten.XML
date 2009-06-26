@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Root>
   <Layout>
-    <Duplex>0</Duplex>
+    <Duplex>false</Duplex>
     <Width>85.6</Width>
     <Height>53.98</Height>
-    <datasource>l:\XID\Golf\Platzreife\dgv-31380.cs2</datasource>
+    <datasource>l:\XID\Golf\Platzreife\dgv-36865.cs2</datasource>
     <datasource_typ>csv</datasource_typ>
     <datasource_encoding>IBM850</datasource_encoding>
     <x_offset>-4.5</x_offset>
     <y_offset>-4</y_offset>
+    <Magstripe>false</Magstripe>
+    <Contact>false</Contact>
+    <Contactless>true</Contactless>
   </Layout>
-  <Chip>
+  <Chip_Params>
     <Param_1>ohne</Param_1>
     <Param_2/>
     <Param_3/>
@@ -34,7 +37,7 @@
     <Param_21/>
     <Param_22/>
     <Param_23>feigusb</Param_23>
-  </Chip>
+  </Chip_Params>
   <Magstripe/>
   <GraphicObjects>
     <GraphicObject>
@@ -46,7 +49,7 @@
       <y>-0.5</y>
       <object_typ>PictureObject</object_typ>
       <stretch>false</stretch>
-      <height>54.6</height>
+      <height>54.9</height>
       <width>87</width>
       <data>l:\XID\Golf\Platzreife\platzreife_quer.jpg</data>
       <page_nr>0</page_nr>
@@ -62,7 +65,7 @@
       <object_typ>TextObject</object_typ>
       <font_height>8</font_height>
       <height>15</height>
-      <font_weight>0</font_weight>
+      <font_weight>normal</font_weight>
       <font_typ>Arial</font_typ>
       <width>40</width>
       <data>{vorname[0,50]} {name[0,50]}</data>
@@ -72,6 +75,8 @@
       <font_color>606060ff</font_color>
       <justification>Links</justification>
       <view_in_printlist>true</view_in_printlist>
+      <font_style>normal</font_style>
+      <font_stretch>normal</font_stretch>
     </GraphicObject>
     <GraphicObject>
       <id>2</id>
@@ -82,16 +87,18 @@
       <object_typ>TextObject</object_typ>
       <font_height>8</font_height>
       <height>20</height>
-      <font_weight>0</font_weight>
+      <font_weight>normal</font_weight>
       <font_color>606060ff</font_color>
-      <font_typ>Avalon</font_typ>
+      <font_typ>Arial</font_typ>
       <width>40</width>
       <data>{titel[0,50]}</data>
       <page_nr>0</page_nr>
       <sample_data>Muster</sample_data>
       <back_color>FFFFFFFF</back_color>
-      <justification>Rechts</justification>
+      <justification>Links</justification>
       <view_in_printlist>0</view_in_printlist>
+      <font_style>normal</font_style>
+      <font_stretch>normal</font_stretch>
     </GraphicObject>
     <GraphicObject>
       <object_typ>PictureObject</object_typ>
@@ -110,4 +117,9 @@
       <view_in_printlist>0</view_in_printlist>
     </GraphicObject>
   </GraphicObjects>
+  <Magstripe_Params>
+    <ms_spur1/>
+    <ms_spur2/>
+    <ms_spur3/>
+  </Magstripe_Params>
 </Root>
