@@ -391,9 +391,6 @@ class Layout
     elsif attr_name == S_DATASOURCE
       lay_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
       node = lay_attrs.find_first(S_DATASOURCE)
-      close_dataman
-      open_dataman
-      p "new data"
     else
       # in diesem Zweig werden alle Graphik-Objekte bearbeitet
       # das Attribut suchen
@@ -405,6 +402,12 @@ class Layout
       p "change"
       node.content = sender.text
       changed_attributes
+    end
+    if attr_name == S_DATASOURCE
+      # nachdem die Daten in das Layout eingetrage wurden, die neue Datei laden
+      close_dataman
+      open_dataman
+      p "new data"
     end
   end
   #---------------------------------------------------------------------------------------------------------
