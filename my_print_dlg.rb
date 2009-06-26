@@ -45,6 +45,8 @@ class MyPrintDialogBox < PrintDialogBox
       }
     end
     
+    @label_rows.text = child.dataman.rows.length.to_s
+    
     # .............................................................................................
     # alle Aktionen definieren
     
@@ -128,6 +130,7 @@ class MyPrintDialogBox < PrintDialogBox
   #
   def preview
     @child.row_nr = @iconlist_data.currentItem
+    @iconlist_data.makeItemVisible(@iconlist_data.currentItem)
     @child.draw_preview
   end
  	#---------------------------------------------------------------------------------------------------------
@@ -200,6 +203,11 @@ class MyPrintDialogBox < PrintDialogBox
     Thread.new{
       begin
         marked_items.each{|item|
+          it = @iconlist_data.findItemByData(item)
+          @iconlist_data.makeItemVisible(it)
+          notify = true
+          @iconlist_data.setFocus
+          @iconlist_data.setCurrentItem(it, notify)
           erg = printer.print(layout_file, item, @chip)
           if !erg || !@printing
             # abbrechen, wenn ein Fehler aufgetreten ist, oder wenn der Bediener es gefordert hat
