@@ -1,5 +1,7 @@
 # -*- coding: UTF-8 -*-
 
+# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
+
 if __FILE__ == $0
   require 'mcc2'
 end
@@ -74,7 +76,7 @@ class Layout
       
       # Zoom
       @lf.dial_zoom.connect(SEL_CHANGED){ set_zoom }
-      @lf.dial_zoom.connect(SEL_LEFTBUTTONRELEASE){ draw_card(true) }
+      @lf.dial_zoom.connect(SEL_LEFTBUTTONRELEASE){ draw_preview(true) }
       @lf.dial_zoom.value = 100
       set_zoom
 
@@ -319,7 +321,7 @@ class Layout
       @lf.textfield_text_color.text = [s[6,2], s[4,2], s[2,2], s[0,2]].join
       node.first.content = @lf.textfield_text_color.text
       changed_attributes
-      draw_card(true)
+      draw_preview(true)
     end
   end
   #~ #---------------------------------------------------------------------------------------------------------
@@ -423,7 +425,7 @@ class Layout
   def changed_attributes
     @changed = true
     p "draw_card"
-    draw_card
+    draw_preview
     set_title
   end
   #---------------------------------------------------------------------------------------------------------
@@ -617,68 +619,74 @@ class Layout
   # zeichnet die Vorschau im Layout-Modus
   # hier ist noch einiges zu tun, im speziellen sind einige Werte "hart" kodiert, 
   # die z.Bsp abhängig von anderen Einstellungen sein sollten
-  def draw_card(immediately = false)
+  def draw_preview(immediately = false)
     @last_change = Time.now
     @last_change -= 5 if immediately
     return if @thread && @thread.alive?
   
     @thread = Thread.new{
-      while Time.now-@last_change < 1
-        sleep 0.1
-      end
-      
-      # allgemeine Einstellungen des Image vornehmen
-      dpi = 90
-      width =  @layout_file.get_attr_value(S_WIDTH).to_f
-      height = @layout_file.get_attr_value(S_HEIGHT).to_f
-      
-      Magick::RVG.dpi = dpi
-      
-      preview = true
-      
-      card_offset = 10
-      
-      image_width = (Page.width_with_margins(width) * @zoom)
-      image_height = ((2 * Page.height_with_margins(height) + card_offset) * @zoom )
-      
-      scale_width = Page.width_with_margins(width) * @scale 
-      scale_height = (2 * Page.height_with_margins(height) + card_offset) * @scale
-      
-      @dataman ? row = @dataman.row(@row_nr) : row = nil
       begin
-        rvg = Magick::RVG.new(image_width.mm, image_height.mm).viewbox(0, 0, scale_width, scale_height) do |canvas|
-          # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
-        
-          draw_pos_x = 0
-          draw_pos_y = 0
-          page = Page.new(0)
-          page.draw(canvas, draw_pos_x, draw_pos_y, @layout_file, preview, @selected_object_id, row) # Seite 1 drucken
-          
-          page = Page.new(1)
-          draw_pos_y = (Page.height_with_margins(height) + card_offset)
-          page.draw(canvas, draw_pos_x, draw_pos_y, @layout_file, preview, @selected_object_id, row) # Seite 2 drucken
-          
-          canvas.background_fill = 'white'
+        while Time.now-@last_change < 1
+          sleep 0.1
         end
-      
-        # ..........................................................................................
-        # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
-        data = rvg.draw.to_blob{
-          self.format = 'PNG'
-        }
         
-        # ..........................................................................................
-        # das erzeugte Bild als Icon anzeigen
-        fx_image = FXPNGImage.new(@app, data)
-        fx_image.create
-        @image_view.image = fx_image
-        @image_view.show
-        @image_view.recalc
-      rescue ResourceNotFoundError => e
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@app, e.to_s, 'ok')
+        # allgemeine Einstellungen des Image vornehmen
+        dpi = 90
+        width =  @layout_file.get_attr_value(S_WIDTH).to_f
+        height = @layout_file.get_attr_value(S_HEIGHT).to_f
+        
+        Magick::RVG.dpi = dpi
+        
+        preview = true
+        
+        card_offset = 10
+        
+        image_width = (Page.width_with_margins(width) * @zoom)
+        image_height = ((2 * Page.height_with_margins(height) + card_offset) * @zoom )
+        
+        scale_width = Page.width_with_margins(width) * @scale 
+        scale_height = (2 * Page.height_with_margins(height) + card_offset) * @scale
+        
+        @dataman ? row = @dataman.row(@row_nr) : row = nil
+        begin
+          rvg = Magick::RVG.new(image_width.mm, image_height.mm).viewbox(0, 0, scale_width, scale_height) do |canvas|
+            # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
+          
+            draw_pos_x = 0
+            draw_pos_y = 0
+            page = Page.new(0)
+            page.draw(canvas, draw_pos_x, draw_pos_y, @layout_file, preview, @selected_object_id, row) # Seite 1 drucken
+            
+            page = Page.new(1)
+            draw_pos_y = (Page.height_with_margins(height) + card_offset)
+            page.draw(canvas, draw_pos_x, draw_pos_y, @layout_file, preview, @selected_object_id, row) # Seite 2 drucken
+            
+            canvas.background_fill = 'white'
+          end
+        
+          # ..........................................................................................
+          # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
+          data = rvg.draw.to_blob{
+            self.format = 'PNG'
+          }
+          
+          # ..........................................................................................
+          # das erzeugte Bild als Icon anzeigen
+          fx_image = FXPNGImage.new(@app, data)
+          fx_image.create
+          @image_view.image = fx_image
+          @image_view.show
+          @image_view.recalc
+        rescue ResourceNotFoundError => e
+          error_WahlMessage = FXFehlerAuswahlDialog.new(@app, e.to_s, 'ok')
+          error_WahlMessage.execute
+          @printing = false
+        end
+      rescue => e
+        DebugTools::write_log_file('draw_preview_thread', unkown_error_message(e))
+        error_WahlMessage = FXFehlerAuswahlDialog.new(@app, unkown_error_message(e), 'ok')
         error_WahlMessage.execute
-        @printing = false
-      end
+      end # rescue
     }
   end
  	#---------------------------------------------------------------------------------------------------------
@@ -733,7 +741,7 @@ class Layout
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       object_deselected      
       fill_objectlist
-      draw_card(true)
+      draw_preview(true)
     end
   end
  	#---------------------------------------------------------------------------------------------------------
@@ -823,7 +831,7 @@ class Layout
       @lf.textfield_spur2.text = mag_attrs.find_first(S_MSSPUR2).content
       @lf.textfield_spur3.text = mag_attrs.find_first(S_MSSPUR3).content
       
-      draw_card(true)
+      draw_preview(true)
       set_title
     end
   end
@@ -832,7 +840,7 @@ class Layout
   #
   def create_xml
     @layout_file = LayoutFile.create_xml
-    draw_card(true)
+    draw_preview(true)
   end
  	#---------------------------------------------------------------------------------------------------------
   
