@@ -316,6 +316,11 @@ class PrinterXID < CardPrinter
   
   #~ '2.  Add window message loop handler: 
   def myWndProc(hwnd, wMsg, wResult, lDocID)
+    #~ 132 32 513 243 514 243 533 132 32
+    if wMsg == 243
+      @quit = true
+    end
+
    
     p wMsg
     if wMsg == WM_PRINT_RESULT
@@ -326,9 +331,7 @@ class PrinterXID < CardPrinter
       end
     end
      
-#    myWndProc = CallWindowProc(oldWndProc, Hwnd, wMsg, wResult, lDocID) 
-#    myWndProc = call_window_proc(lpPrevWndFunc, hWnd, Msg, wParam, lParam)
-    return call_window_proc(oldWndProc, hwnd, wMsg, wResult, lDocID)
+    return @w32user.call_window_proc(@oldWndProc, hwnd, wMsg, wResult, lDocID)
    
   end 
   #--------------------------------------------------------------------------------------------------------------
@@ -345,42 +348,49 @@ class PrinterXID < CardPrinter
   #~ 'Card was printed successfully 
   CARD_DONE = 0 
   #--------------------------------------------------------------------------------------------------------------
-  CB = DL.callback( "L myWndProc(L hwnd, L wMsg, L wResult, L lDocID)" )
-  #~ CB = DL.callback('LLLLL'){|*args|
-      #~ myWndProc(*args)
-  #~ }
   
-  def set_message_handler
-    getDesktopWindow = Win32API.new("user32", "GetDesktopWindow", [], 'L')
-    hwnd = getDesktopWindow.Call
+  WS_VISIBLE = 0x10000000
+  
+  def create_dummy_window(name='dummy-window')
+    @w32user.create_window_ex(0, 'Button', name, WS_VISIBLE, 0,0,100,100, 0, 0, 0, 0)
+  end
+  
+  def set_message_handler(hwnd, &myWndProc)
+    cb = DL.callback('LLLLL', myWndProc)
+    @oldWndProc = @w32user.set_window_long(hwnd, GWL_WNDPROC, cb) 
     
-    #~ EnumDisplayMonitors = Win32::API.new('EnumDisplayMonitors', 'LPKL', 'B', 'user32') GetMonitorInfo = Win32::API.new('GetMonitorInfo', 'LP', 'B', 'user32')
+    #~ loop do
+      #~ Win32ApiUser.new.update_window(hwnd)
+    #~ end
+    
+    #~ typedef struct {
+        #~ HWND hwnd;
+        #~ UINT message;
+        #~ WPARAM wParam;
+        #~ LPARAM lParam;
+        #~ DWORD time;
+        #~ POINT pt;
+    #~ } MSG, *PMSG;
+    msg = DL.malloc(DL.sizeof('LIILLLL'))
 
-    #~ MyInfoEnumProc = Win32::API::Callback.new('LLPL','L'){|hMonitor,hdcMonitor,lprcMonitor,dwData|
-      #~ lpmi = [72].pack('L') + 0.chr * 68 
-      #~ GetMonitorInfo.call(hMonitor,lpmi) 
-      #~ info = lpmi.unpack('L10Z*') 
-      #~ puts "Name:#{info[10]}, Width:#{info[3]}, Height:#{info[4]} " 1 
-      #~ }
-
-    #~ EnumDisplayMonitors.call(0, nil, MyInfoEnumProc, 0) 
-    
-    #~ cb = Win32API::Callback.new('LLLL','L'){|*args|
-        #~ myWndProc.call(*args)
-    #~ }
-    
-    #~ CB = DL.callback('LLLLL'){|*args|
-        #~ myWndProc(*args)
-    #~ }
-    #~ p cb
-    @oldWndProc = @w32user.set_window_long(hwnd, GWL_WNDPROC, CB) 
+    while @w32user.get_message(msg,0,0,0) > 0 && !@quit
+      #~ {GetMessage will return True until it gets a WM_OUIT message. 
+      #~ So this program will keep running untill you Post a Quit Message}
+       
+      #~ {Translate any WM_KEYDOWN keyboard Msg to a WM_CHAR message} 
+      @w32user.translate_message(msg)
+                               
+      #~ {this Sends Msg to the address of the 
+       #~ "Window Procedure" set in the Resistered
+       #~ Window's Class for that window}
+      @w32user.dispatch_message(msg)
+    end
   end
   #--------------------------------------------------------------------------------------------------------------
   
-  def unset_message_handler
+  def unset_message_handler(hwnd)
     @w32user.set_window_long(hwnd, GWL_WNDPROC, @oldWndProc)
   end
-  
 end
 
 if __FILE__ == $0
@@ -388,6 +398,11 @@ if __FILE__ == $0
   #~ system("ruby mcc2.rb #{ARGV}")
   #~ exit
   
+  pr = PrinterXID.new
+  hwnd = pr.create_dummy_window
+  pr.set_message_handler(hwnd, &pr.method(:myWndProc))
+  pr.unset_message_handler(hwnd)
+  exit
 
 
   #~ devicename = '\\\COMFILE1\P0049'
