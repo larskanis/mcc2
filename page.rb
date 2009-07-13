@@ -116,9 +116,18 @@ class Page
             
             # Bildobjekt
             elsif typ == PICTUREOBJECT 
-              if FileTest.file?(data)
+              if data.nil? || data.empty?
+                # kein Bildname angegeben -> dieses Objekt ignorieren
+              elsif FileTest.file?(data)
                 go_image = Magick::Image.read(data).first
-                body.image(go_image, go_width.mm, go_height.mm)
+                p go_image
+                if go_image.density =~ /^(\d+)x(\d+)$/
+                  density_x, density_y = $1.to_f, $2.to_f
+                end
+                im_width = go_width==0 ? go_image.columns/density_x*25.4.mm : go_width.mm 
+                im_height = go_height==0 ? go_image.rows/density_y*25.4.mm : go_height.mm 
+                puts "w:#{im_width.inspect} h:#{im_height.inspect}"
+                body.image(go_image, im_width, im_height)
               else
                 raise ResourceNotFoundError, "Das Bild '#{data}' konnte nicht gefunden werden. Der Druck wird angehalten."
               end
