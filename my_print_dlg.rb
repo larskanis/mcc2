@@ -129,7 +129,6 @@ class MyPrintDialogBox < PrintDialogBox
   
   #
   def preview
-    @printing
     if @checkbutton2.state && !@printing # Vorschau nicht während dem Druck, da es sonst zu Druckfehlern kommt und der Druck länger dauert
       @child.row_nr = @iconlist_data.currentItem
       @iconlist_data.makeItemVisible(@iconlist_data.currentItem)
@@ -211,7 +210,7 @@ class MyPrintDialogBox < PrintDialogBox
           notify = true
           @iconlist_data.setFocus
           @iconlist_data.setCurrentItem(it, notify)
-          erg = printer.print(layout_file, item, @chip)
+          erg = printer.print_card(layout_file, item, @chip)
           if !erg || !@printing
             # abbrechen, wenn ein Fehler aufgetreten ist, oder wenn der Bediener es gefordert hat
             break 
