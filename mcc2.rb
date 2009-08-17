@@ -115,14 +115,17 @@ class MCC2GUI < MainWindow
   def initialize(parent)
     @app = parent
     super
-      # Achtung der Text in der nächsten Zeile ändert sich beim Einchechen
+      # Titel desHauptfensters mit Programmname und Version setzen
+      
+      # Achtung der Text in den nächsten Zeilen ändert sich beim Einchecken 
       # nicht manuell bearbeiten!
       "$Revision$" =~ /^\$Revision: (.*)\$$/
       revision_nr = $1.strip
       
       "$HeadURL$" =~ /^\$HeadURL: (.*)\$$/
       head_url = $1.strip.split('/')[-2]
-      @topwin.title = "mcc2 Version #{head_url} #{revision_nr}"
+      @topwin.title = "mcc2 Version: #{head_url} Revision: #{revision_nr}"
+      
       
       # ......................................................................
       # die Menue-Einträge modifizieren
