@@ -118,11 +118,11 @@ class MCC2GUI < MainWindow
       # Achtung der Text in der nächsten Zeile ändert sich beim Einchechen
       # nicht manuell bearbeiten!
       "$Revision$" =~ /^\$Revision: (.*)\$$/
-      revision_nr = $1.strip.split('/')[-2]
+      revision_nr = $1.strip
       
       "$HeadURL$" =~ /^\$HeadURL: (.*)\$$/
       head_url = $1.strip.split('/')[-2]
-      self.wdg_name = "mcc2 Version #{head_url} #{revision_nr}"
+      @topwin.title = "mcc2 Version #{head_url} #{revision_nr}"
       
       # ......................................................................
       # die Menue-Einträge modifizieren
