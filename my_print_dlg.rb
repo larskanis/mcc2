@@ -129,9 +129,12 @@ class MyPrintDialogBox < PrintDialogBox
   
   #
   def preview
-    @child.row_nr = @iconlist_data.currentItem
-    @iconlist_data.makeItemVisible(@iconlist_data.currentItem)
-    @child.draw_preview
+    @printing
+    if @checkbutton2.state && !@printing # Vorschau nicht während dem Druck, da es sonst zu Druckfehlern kommt und der Druck länger dauert
+      @child.row_nr = @iconlist_data.currentItem
+      @iconlist_data.makeItemVisible(@iconlist_data.currentItem)
+      @child.draw_preview
+    end
   end
  	#---------------------------------------------------------------------------------------------------------
   
@@ -292,7 +295,6 @@ class MyPrintDialogBox < PrintDialogBox
   def stop_printing
     @printing = false
   end
-  
  	#---------------------------------------------------------------------------------------------------------
   
 end
