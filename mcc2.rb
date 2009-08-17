@@ -14,8 +14,6 @@
 #
 
 # *****************************************************************************
-# $Id$
-# $HeadURL$
 
 $stdout.sync = true
 $stderr.sync = true
@@ -117,6 +115,15 @@ class MCC2GUI < MainWindow
   def initialize(parent)
     @app = parent
     super
+      # Achtung der Text in der nächsten Zeile ändert sich beim Einchechen
+      # nicht manuell bearbeiten!
+      "$Revision$" =~ /^\$Revision: (.*)\$$/
+      revision_nr = $1.strip.split('/')[-2]
+      
+      "$HeadURL$" =~ /^\$HeadURL: (.*)\$$/
+      head_url = $1.strip.split('/')[-2]
+      self.wdg_name = "mcc2 Version #{head_url} #{revision_nr}"
+      
       # ......................................................................
       # die Menue-Einträge modifizieren
       
