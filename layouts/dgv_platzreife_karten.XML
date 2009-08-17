@@ -4,11 +4,11 @@
     <Duplex>false</Duplex>
     <Width>85.6</Width>
     <Height>53.98</Height>
-    <datasource>l:\XID\Golf\Platzreife\dgv-36865.cs2</datasource>
+    <datasource>L:\XID\Golf\Platzreife\dgv-42595.cs2</datasource>
     <datasource_typ>csv</datasource_typ>
     <datasource_encoding>IBM850</datasource_encoding>
     <x_offset>-4.5</x_offset>
-    <y_offset>-4</y_offset>
+    <y_offset>-3.5</y_offset>
     <Magstripe>false</Magstripe>
     <Contact>false</Contact>
     <Contactless>true</Contactless>
@@ -36,7 +36,7 @@
     <Param_20/>
     <Param_21/>
     <Param_22/>
-    <Param_23>feigusb</Param_23>
+    <Param_23>acg</Param_23>
   </Chip_Params>
   <Magstripe/>
   <GraphicObjects>
