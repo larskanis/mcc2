@@ -1,11 +1,18 @@
+# -*- coding: UTF-8 -*-
 
 def list_revisions
+  
   # alle rb-Files durch SubWCRev.exe leiern
   # alle SVN-Tags werden ersetzt und nach *.ver geschrieben
   rb_files = Dir[File.join("*.rb".gsub(/[a-z]/i){|c|"["+c.upcase+c.downcase+"]"})]
-  rb_files.each{|file|
-    `SubWCRev.exe . #{file} versions/#{file}.ver`
-  }
+  file = nil
+  begin
+    rb_files.each{|file|
+      `SubWCRev.exe . #{file} versions/#{file}.ver`
+    }
+  rescue Errno::ENOENT
+    puts "SubWCRev.exe konnte nicht ausgefuehrt werden bei datei #{file.inspect}"
+  end
 
   # alle ver-Files scannen und die Zeile mit "Revision ="  und die Datei revisions.txt schreiben
   files = Dir[File.join("versions/*.ver".gsub(/[a-z]/i){|c|"["+c.upcase+c.downcase+"]"})]
