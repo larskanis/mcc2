@@ -2,6 +2,7 @@
 
 # Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
 
+p "printer_xid"
 begin
 
 $: << File.dirname(__FILE__)
@@ -23,10 +24,12 @@ class PrinterXID < CardPrinter
   #~ @@LoadCard = PRNSC['_LoadCardSC@24', 'LLLLLPL']
   #~ @@UnloadCard = PRNSC['_UnloadCardSC@28', 'LLLLLLLL']
   
+=begin
   prnsc_wrapper = 't:\Project\XID\prnsc_wrapper\prnsc_wrapper.dll'
   PRNSC = DL.dlopen(prnsc_wrapper)
   @@LoadCard = PRNSC['LoadCard', 'LLLLLPL']
   @@UnloadCard = PRNSC['UnloadCard', 'LLLLLLLL']
+=end
   #~ @@LoadCard = PRNSC['test_LoadCard', 'LLLLLPL']
   #~ @@UnloadCard = PRNSC['test_UnloadCard', 'LLLLLLLL']
 
@@ -54,7 +57,7 @@ class PrinterXID < CardPrinter
   # 
   def initialize
     super
-    @sc_printer = 't:\Project\XID\XID_Card_Loader\XID_Card_Loader.exe'
+    @sc_printer = 'XID_Card_Loader.exe'
   end
 
   def w32printer
@@ -160,7 +163,7 @@ class PrinterXID < CardPrinter
   # === Parameter
   # +layout_file+:: 
   # +row+:: momentan ein CSV-Row-Objekt
-  def print(layout_file, row, chip)
+  def print_card(layout_file, row, chip)
     #~ set_message_handler
     preview = false
     selected_object_id = nil
