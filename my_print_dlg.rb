@@ -8,12 +8,13 @@ require 'iconv'
 
 class MyPrintDialogBox < PrintDialogBox
 
-  def initialize(app, child, chip)
+def initialize(app, child, chip)
     super(app)
     @app = app
     @chip = chip
     @matrix2.numColumns = 3
     @child = child
+    @search_pos = 0
 
     # todo im Moment werden in der Liste der zu druckenden Datensätze alle Felder des Datensatzes angezeigt,
     # eigentlichh soll auswählbar sein, welche Felder angezeigt werden sollen, in den graphischen Objekten ist schon ein Feld vorgesehen, welches dieses Verhalten steuern sollen
@@ -53,6 +54,7 @@ class MyPrintDialogBox < PrintDialogBox
     @button_select_all.connect(SEL_COMMAND){ select_all }
     @button_deselect_all.connect(SEL_COMMAND){ deselect_all }
     @button_print_selected.connect(SEL_COMMAND){ print_selected }
+    @button_search.connect(SEL_COMMAND){ search }
     @button_print_all.connect(SEL_COMMAND){ print_all }
     @button_stop_printing.connect(SEL_COMMAND){ stop_printing }
 #    @button_exit.connect(SEL_COMMAND){ peng }
@@ -71,9 +73,10 @@ class MyPrintDialogBox < PrintDialogBox
     
     @verticalframe_datalist.width = 500
     @horizontalframe3.height = 0
-
+    @splitter2.setSplit(0, 500)
   end
  	#---------------------------------------------------------------------------------------------------------
+  
   def textfield_exit(sender, attr_name)
     anz = @child.dataman.rows.length
     if attr_name == PRINT_FROM || attr_name == PRINT_TO
@@ -111,6 +114,43 @@ class MyPrintDialogBox < PrintDialogBox
     else
       @button_print_selected.enabled = false
       @button_deselect_all.enabled = false
+    end
+  end
+ 	#---------------------------------------------------------------------------------------------------------
+  
+  # sucht in allen Feldern nach dem Text, der ins Suchfeld eingegeben wurde
+  def search
+    anz_items = @iconlist_data.numItems
+    @iconlist_data.setFocus
+    if anz_items > 0
+      # alte Suchposition sichern, damit nur 1 Runde gesucht wird, falls kein Ergebnis gefunden wird
+      old_search_pos = @search_pos
+    
+      while true
+        if @iconlist_data.getItemText(@search_pos) =~ /#{@textfield_search.text}/
+          # wenn gefunden
+          @iconlist_data.currentItem = @search_pos
+          @iconlist_data.makeItemVisible(@search_pos)
+          #~ @iconlist_data.anchorItem = @search_pos
+          @search_pos += 1
+          break
+        end
+        
+        if @search_pos < anz_items -1
+          # solange Tabelelnende noch nicht erreicht
+          @search_pos += 1
+        else
+          # wenn Tabelelnende erreicht, am Anfang fortsetzen
+          @search_pos = 0
+        end
+        
+        if @search_pos == old_search_pos
+          # Message ausgeben
+            error_WahlMessage = FXFehlerAuswahlDialog.new(@app, 'Der Suchbegriff wurde nicht gefunden.', 'ok')
+            error_WahlMessage.execute
+          break 
+        end
+      end
     end
   end
  	#---------------------------------------------------------------------------------------------------------
@@ -211,6 +251,9 @@ class MyPrintDialogBox < PrintDialogBox
           @iconlist_data.setFocus
           @iconlist_data.setCurrentItem(it, notify)
           erg = printer.print_card(layout_file, item, @chip)
+          # den aktuellen Datensatz deselektieren, wenn er erfolgreich gedruckt wurde
+          @iconlist_data.deselectItem(it) if erg
+          
           if !erg || !@printing
             # abbrechen, wenn ein Fehler aufgetreten ist, oder wenn der Bediener es gefordert hat
             break 
