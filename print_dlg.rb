@@ -13,11 +13,11 @@ class PrintDialogBox
 			w.wdg_name='printDialogBox'
 			w.width=800
 			w.shown=true
-			w.y=651
+			w.y=373
 			w.height=600
 			w.title="Druckdialog"
 			w.layoutHints=768
-			w.x=228
+			w.x=45
 			FX::Splitter.new(@printDialogBox){|w|
 				@splitter1=w
 				w.wdg_name='splitter1'
@@ -260,8 +260,8 @@ class PrintDialogBox
 									w.x=10
 								}
 								FX::TextField.new(@matrix2){|w|
-									@textfield6=w
-									w.wdg_name='textfield6'
+									@textfield_search=w
+									w.wdg_name='textfield_search'
 									w.tipText="hier einen Text eingeben und auf Suchen klicken. Dann wird in allen angezeigten Feldern gesucht"
 									w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 									w.width=150
@@ -274,8 +274,8 @@ class PrintDialogBox
 									w.x=80
 								}
 								FX::Button.new(@matrix2){|w|
-									@button3=w
-									w.wdg_name='button3'
+									@button_search=w
+									w.wdg_name='button_search'
 									w.text="Suchen"
 									w.tipText="hier einen Text eingeben und auf Suchen klicken. Dann wird in allen angezeigten Feldern gesucht"
 									w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
@@ -490,8 +490,8 @@ class PrintDialogBox
 	attr_reader :label16
 	attr_reader :label17
 	attr_reader :label18
-	attr_reader :textfield6
-	attr_reader :button3
+	attr_reader :textfield_search
+	attr_reader :button_search
 	attr_reader :packer4
 	attr_reader :label19
 	attr_reader :label20
