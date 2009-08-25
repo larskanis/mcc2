@@ -115,7 +115,7 @@ class MCC2GUI < MainWindow
   def initialize(parent)
     @app = parent
     super
-      # Titel desHauptfensters mit Programmname und Version setzen
+      # Titel des Hauptfensters mit Programmname und Version setzen
       
       # Achtung der Text in den nächsten Zeilen ändert sich beim Einchecken 
       # nicht manuell bearbeiten!
