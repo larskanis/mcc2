@@ -87,7 +87,8 @@ if __FILE__ == $0
   params[22] = 'feigusb'
   
   if params[7] =~ /^RUBY;(.*)/
-    chip_obj = Chip32n::ClassLoader.load($1)
+    basename = File.basename($1)
+    chip_obj = Chip32n::ClassLoader.load(basename)
   end
    
   chip_obj.personalize(params)
