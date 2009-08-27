@@ -126,7 +126,6 @@ class MCC2GUI < MainWindow
       head_url = $1.strip.split('/')[-2]
       @topwin.title = "mcc2 Version: #{head_url} Revision: #{revision_nr}"
       
-      
       # ......................................................................
       # die Menue-Einträge modifizieren
       
