@@ -122,7 +122,7 @@ class LayoutFrame
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
-							w.current=2
+							w.current=6
 							w.width=316
 							w.y=2
 							w.height=345
@@ -425,15 +425,16 @@ class LayoutFrame
 								w.text="Magnetstreifen"
 								w.tipText="Hier werden alle Magnetstreifeneinstellungen vorgenommen, unabh\303\244ngig davon, ob der Magnetstreifen tats\303\244chlich personalisiert wird."
 								w.width=81
-								w.y=4
+								w.y=6
 								w.height=21
-								w.x=86
+								w.x=88
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe54=w
 								w.wdg_name='verticalframe54'
 								w.frameStyle=16384
 								w.width=308
+								w.shown=false
 								w.y=23
 								w.height=318
 								w.padTop=4
@@ -940,7 +941,7 @@ class LayoutFrame
 								w.width=39
 								w.y=6
 								w.height=21
-								w.x=166
+								w.x=169
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_font=w
@@ -1097,6 +1098,88 @@ class LayoutFrame
 											w.y=34
 											w.height=17
 										}
+									}
+								}
+							}
+							FX::TabItem.new(@tabbook_objectattributes){|w|
+								@tabitem_barcode=w
+								w.wdg_name='tabitem_barcode'
+								w.text="Barcode"
+								w.width=47
+								w.y=4
+								w.height=21
+								w.x=206
+							}
+							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
+								@verticalframe_barcode=w
+								w.wdg_name='verticalframe_barcode'
+								w.frameStyle=16384
+								w.width=308
+								w.y=23
+								w.height=318
+								w.vSpacing=4
+								w.x=4
+								FX::HorizontalFrame.new(@verticalframe_barcode){|w|
+									@horizontalframe133=w
+									w.wdg_name='horizontalframe133'
+									w.width=304
+									w.y=2
+									w.height=29
+									w.padTop=10
+									w.vSpacing=4
+									w.layoutHints=1024
+									w.x=2
+									FX::Label.new(@horizontalframe133){|w|
+										@label528=w
+										w.wdg_name='label528'
+										w.text="Typ"
+										w.width=80
+										w.y=11
+										w.height=17
+										w.layoutHints=288
+										w.justify=32768
+									}
+									FX::ListBox.new(@horizontalframe133){|w|
+										@listbox_bc_typ=w
+										w.wdg_name='listbox_bc_typ'
+										w.tipText="Hier kann die Schriftart ausgew\303\244hlt werden."
+										w.width=224
+										w.numVisible=30
+										w.y=10
+										w.height=19
+										w.layoutHints=288
+										w.x=80
+									}
+								}
+								FX::HorizontalFrame.new(@verticalframe_barcode){|w|
+									@horizontalframe134=w
+									w.wdg_name='horizontalframe134'
+									w.width=304
+									w.y=35
+									w.height=29
+									w.padTop=10
+									w.vSpacing=4
+									w.layoutHints=1024
+									w.x=2
+									FX::Label.new(@horizontalframe134){|w|
+										@label529=w
+										w.wdg_name='label529'
+										w.text="Modul-Weite"
+										w.width=80
+										w.y=11
+										w.height=17
+										w.layoutHints=288
+										w.justify=32768
+									}
+									FX::Spinner.new(@horizontalframe134){|w|
+										@spinner_modul_width=w
+										w.wdg_name='spinner_modul_width'
+										w.range=-2147483648..2147483647
+										w.width=38
+										w.y=10
+										w.height=19
+										w.numColumns=3
+										w.x=80
 									}
 								}
 							}
@@ -1261,6 +1344,14 @@ class LayoutFrame
 	attr_reader :radiobutton_just_l
 	attr_reader :radiobutton_just_m
 	attr_reader :radiobutton_just_r
+	attr_reader :tabitem_barcode
+	attr_reader :verticalframe_barcode
+	attr_reader :horizontalframe133
+	attr_reader :label528
+	attr_reader :listbox_bc_typ
+	attr_reader :horizontalframe134
+	attr_reader :label529
+	attr_reader :spinner_modul_width
 	attr_reader :verticalframe_right
 	attr_reader :horizontalframe32
 	attr_reader :label_zoom
