@@ -9,6 +9,9 @@ end
 require 'cc_dialogbox'
 require 'layout_file'
 
+# Achtung! Nicht das Verzeichnis 'printer' in den Pfad einbinden. Dort befindet sich eine printer.rb, die nichts mit der printer.rb dieses Projektes zu tun hat.
+require 'libs/printer/tbarcode_api' 
+
 # definiert ein Clientfenster mit allen Einstellungen und Attributen, die für ein bestimmtes Kartenlayout benötigt werden
 class Layout
   # definiert, ob an den Einstellungen seit dem letzten speichern oder laden etwas geändert wurde
@@ -52,7 +55,6 @@ class Layout
     @changed = false
 
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
-      
       @lf = LayoutFrame.new parent
       @lf.iconlist_objects.appendHeader('ID', nil, 50)
       @lf.iconlist_objects.appendHeader('Name', nil, 100)
@@ -127,7 +129,7 @@ class Layout
       @lf.button_datasource.connect(SEL_COMMAND){ datasource_button_pressed }
       
       # die Listbox zum Auswählen der Schriftart
-      @lf.listbox_fonts.connect(SEL_COMMAND){ |sender, sel, event| sel_font_list_changed(sender) }
+      @lf.listbox_fonts.connect(SEL_COMMAND){ |sender, sel, event| sel_list_box_changed(sender) }
       
       @lf.textfield_fontsize.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_FONT_HEIGHT) }
       
@@ -147,6 +149,9 @@ class Layout
       @lf.textfield_spur2.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_MSSPUR2) }
       @lf.textfield_spur3.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_MSSPUR3) }
       
+      @barcodes = BarcodeAPI::bc_get_bc_list
+      @lf.listbox_bc_typ.connect(SEL_COMMAND){ |sender, sel, event| sel_list_box_changed(sender) }
+      @lf.spinner_modul_width.connect(SEL_COMMAND){ bc_modul_with_changed }
       # .............................................................................................
       
       create_chipparam_fields
@@ -399,7 +404,6 @@ class Layout
     
     # nur wenn im Textfeld etwas geändert wurde, den Text in das Attribut schreiben und das changed-Flag setzen
     if sender.text != node.content
-      p "change"
       node.content = sender.text
       changed_attributes
     end
@@ -427,7 +431,6 @@ class Layout
   # es wird das changed-Flag gesetzt und der Titel aktualisiert und die Vorschau neu gezeichnet
   def changed_attributes
     @changed = true
-    p "draw_card"
     draw_preview
     set_title
   end
@@ -525,6 +528,10 @@ class Layout
       
       # Attribute, die nur Barcodes haben
       if node.find(GOA_TYP).first.content == BARCODEOBJECT
+        @lf.tabitem_barcode.shown = true
+        @lf.spinner_modul_width.value = node.find(GOA_BC_MODUL_WIDTH).first.content.to_i + 1
+        fill_barcode_typ_list
+        fill_barcode_fields(node)
         data_shown
       end
       
@@ -535,12 +542,15 @@ class Layout
   end
   #---------------------------------------------------------------------------------------------------------
   
-  def sel_font_list_changed(sender)
+  def sel_list_box_changed(sender)
     #~ node.find_first(GOA_FONT_HEIGHT).content = (fontdesc.size.to_f/10).to_s
     
     if sender.wdg_name == 'listbox_fonts'
       id = @lf.listbox_fonts.getItemData(@lf.listbox_fonts.currentItem)
       @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_FONT_TYP).content = id
+    elsif sender.wdg_name == 'listbox_bc_typ'
+      bc = @lf.listbox_bc_typ.getItemText(@lf.listbox_bc_typ.currentItem)
+      @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_BC_TYP).content = bc
     else 
       raise "unbekannter Sender. Eingriff des Programmierers nötig. :-("
     end
@@ -548,6 +558,37 @@ class Layout
   end
   #---------------------------------------------------------------------------------------------------------
   
+  # die Aktion, welche ausgeführt wird, wenn die Auswahl der Modulbreite des Barcodes geändert wird
+  def bc_modul_with_changed
+    mw = @lf.spinner_modul_width.value
+    node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_BC_MODUL_WIDTH)
+    if mw != node.first.content.to_i
+      node.first.content = mw.to_s
+      changed_attributes
+    end
+  end
+  #---------------------------------------------------------------------------------------------------------
+  
+  # füllt die Barcode-Typ-Auswahlliste mit den möglichen Barcodes
+  def fill_barcode_typ_list
+    @barcodes.each{|bc|
+      @lf.listbox_bc_typ.appendItem(bc)
+    }
+  end
+  #---------------------------------------------------------------------------------------------------------
+  
+  # füllt die Barcode-spezifischen Felder mit den gewählten Optionen aus dem Layout
+  def fill_barcode_fields(node)
+    #~ p "#{self.class.name}::fill_barcode_fields"
+    # den gewählten Parameter in den entsprechenden Listen markieren
+    bc_typ = node.find_first(GOA_BC_TYP).content
+    bc_id = @barcodes.index(bc_typ)
+    error_WahlMessage = FXFehlerAuswahlDialog.new(@app, "Der Barcode-Typ #{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes.\ Der Wert wird auf 'NONE' gesetzt.", 'ok') unless bc_id
+    @lf.listbox_bc_typ.currentItem = bc_id
+  end
+  #---------------------------------------------------------------------------------------------------------
+  
+  # füllt die Font-Auswahlliste mit den möglichen Fonts
   def fill_font_list
     # Font-Name
     rmfl = []
@@ -563,6 +604,7 @@ class Layout
   end
   #---------------------------------------------------------------------------------------------------------
   
+  # füllt die Font-spezifischen Felder mit den gewählten Optionen aus dem Layout
   def fill_font_fields(node)
     # die Schriftgröße zurücklesen
     @lf.textfield_fontsize.text = node.find_first(GOA_FONT_HEIGHT).content
@@ -571,7 +613,11 @@ class Layout
     set_listbox_value('listbox_fonts', node.find_first(GOA_FONT_TYP).content)
   end
   #---------------------------------------------------------------------------------------------------------
+  
+  # selectiert in der über listbox_name angegebenen Listbox den Eintrag, der Value entspricht
+  # wird beim Laden benötigt, um aus den Layoutdaten die Einstellungen zu restaurieren
   def set_listbox_value(listbox_name, value)
+    #~ p "#{self.class.name}::set_listbox_value => listbox_name: #{listbox_name}; value: #{value.inspect}"
     ft_idx = nil
     idx = 0
     @lf.send(listbox_name.intern).each{|t, i, d| 
@@ -611,8 +657,7 @@ class Layout
   
   # verändert die Zoomstufe, wenn am Rädchen gedreht wird
   def set_zoom
-    @zoom = (@lf.dial_zoom.value + 1).to_f / 100
-    @scale = 3.6
+    @zoom = (@lf.dial_zoom.value).to_f / 100
     @lf.label_zoom.text = "Zoom: #{@zoom}"
     #~ p "@zoom: #{@zoom}"
     #~ p "@scale: #{@scale}"
@@ -647,8 +692,8 @@ class Layout
         image_width = (Page.width_with_margins(width) * @zoom)
         image_height = ((2 * Page.height_with_margins(height) + card_offset) * @zoom )
         
-        scale_width = Page.width_with_margins(width) * @scale 
-        scale_height = (2 * Page.height_with_margins(height) + card_offset) * @scale
+        scale_width = Page.width_with_margins(width).mm
+        scale_height = (2 * Page.height_with_margins(height) + card_offset).mm
         
         @dataman ? row = @dataman.row(@row_nr) : row = nil
         begin
@@ -769,6 +814,7 @@ class Layout
     @lf.tabitem_object.shown = false
     @lf.tabitem_posit.shown = false
     @lf.tabitem_font.shown = false
+    @lf.tabitem_barcode.shown = false
   end
  	#---------------------------------------------------------------------------------------------------------
 
@@ -809,6 +855,7 @@ class Layout
     open_dataman
     
     if @app # für Tests ohne GUI kann parent und app nil gesetzt werden
+      # füllt die Liste mit der Übersicht über die graphischen Objekte
       fill_objectlist 
       
       # die allgemeinen Layout-Attribute
