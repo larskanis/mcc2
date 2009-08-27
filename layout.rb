@@ -152,6 +152,7 @@ class Layout
       @barcodes = BarcodeAPI::bc_get_bc_list
       @lf.listbox_bc_typ.connect(SEL_COMMAND){ |sender, sel, event| sel_list_box_changed(sender) }
       @lf.spinner_modul_width.connect(SEL_COMMAND){ bc_modul_with_changed }
+      @lf.spinner_modul_width.range = (1..100)
       # .............................................................................................
       
       create_chipparam_fields
@@ -411,7 +412,6 @@ class Layout
       # nachdem die Daten in das Layout eingetrage wurden, die neue Datei laden
       close_dataman
       open_dataman
-      p "new data"
     end
   end
   #---------------------------------------------------------------------------------------------------------
@@ -529,7 +529,7 @@ class Layout
       # Attribute, die nur Barcodes haben
       if node.find(GOA_TYP).first.content == BARCODEOBJECT
         @lf.tabitem_barcode.shown = true
-        @lf.spinner_modul_width.value = node.find(GOA_BC_MODUL_WIDTH).first.content.to_i + 1
+        @lf.spinner_modul_width.value = node.find(GOA_BC_MODUL_WIDTH).first.content.to_i
         fill_barcode_typ_list
         fill_barcode_fields(node)
         data_shown
