@@ -2,7 +2,6 @@
 
 # Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
 
-p "printer_xid"
 begin
 
 $: << File.dirname(__FILE__)
