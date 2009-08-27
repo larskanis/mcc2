@@ -11,6 +11,9 @@ require 'dataman'
 class ResourceNotFoundError < RuntimeError
 end
 
+class BarcodeError < RuntimeError
+end
+
 class Page
   attr_accessor :page_nr
   
@@ -37,11 +40,12 @@ class Page
     width =  layout_file.get_attr_value(S_WIDTH).to_f
     height = layout_file.get_attr_value(S_HEIGHT).to_f
     encoding = layout_file.get_attr_value(S_DATASOURCEENCODING)
-    
+    barcodes = []
     if preview
       canvas.g.translate(draw_pos_x.mm, draw_pos_y.mm) do |canvas1|
         rx = 10
-        canvas1.rect(Page.width_with_margins(width).mm, Page.height_with_margins(height).mm ).styles(:fill=>'none', :stroke=>'black')
+        # todo -0.5, damit die rechten und unteren Ränder zu sehen sind, jetzt sitzt die Karte aber unsymetrisch auf dem Rechteck
+        canvas1.rect(Page.width_with_margins(width-0.5).mm, Page.height_with_margins(height-0.5).mm ).styles(:fill=>'none', :stroke=>'black')
       end
     end
     
@@ -76,8 +80,10 @@ class Page
           rotation = go.find_first(GOA_ROTATION).content.to_f
           typ = go.find_first(GOA_TYP).content
           data = DataMan.replace_variables(go.find_first(GOA_DATA).content, row, encoding)
+          sample_data = DataMan.replace_variables(go.find_first(GOA_SAMPLE_DATA).content, row, encoding)
           
           canvas1.g.translate(x.mm, y.mm).rotate(rotation) do |body|
+            #~ p "#{self.class.name}::draw => data: #{data} typ: #{typ}"
             # ............................................................................................................
             # die Objekt-spezifischen Attribute ermitteln
             # Textobjekt
@@ -120,20 +126,76 @@ class Page
                 # kein Bildname angegeben -> dieses Objekt ignorieren
               elsif FileTest.file?(data)
                 go_image = Magick::Image.read(data).first
-                p go_image
                 if go_image.density =~ /^(\d+)x(\d+)$/
                   density_x, density_y = $1.to_f, $2.to_f
                 end
-                im_width = go_width==0 ? go_image.columns/density_x*25.4.mm : go_width.mm 
-                im_height = go_height==0 ? go_image.rows/density_y*25.4.mm : go_height.mm 
-                puts "w:#{im_width.inspect} h:#{im_height.inspect}"
+                im_width = go_width == 0 ? go_image.columns/density_x*25.4.mm : go_width.mm 
+                im_height = go_height == 0 ? go_image.rows/density_y*25.4.mm : go_height.mm 
                 body.image(go_image, im_width, im_height)
               else
                 raise ResourceNotFoundError, "Das Bild '#{data}' konnte nicht gefunden werden. Der Druck wird angehalten."
               end
-            end
-            
+              
             # Barcode-Objekte
+            elsif typ == BARCODEOBJECT 
+              #~ p "#{self.class.name}::draw => barcode | data: #{data} "
+              
+              barcodes = BarcodeAPI::bc_get_bc_list if barcodes == [] # nur bei 1. Barcode initialisieren
+              
+              mw = go.find(GOA_BC_MODUL_WIDTH).first.content
+
+              bc_typ = go.find(GOA_BC_TYP).first.content
+              bc_typ_id = barcodes.index(bc_typ)
+              if (data.nil? || data.empty?) 
+                if (sample_data.nil? || sample_data.empty?)
+                  raise BarcodeError, "Beim Barcode wurden weder Daten noch Beispieldaten angegeben!"
+                else
+                  data = sample_data
+                end
+              end
+              optimize = true
+              dpi = Magick::RVG.dpi
+              bc = BarcodeAPI.new(bc_typ_id, data, optimize, dpi)
+              
+              # Modulweite und damit die Breite des Barcodes setzen
+              bc.set_module_width_pixel(mw)
+#              bc.bc_set_must_fit(true) # setzt, das der Barcode in das Feld passen muss
+              
+              # Font für die Klarschrift setzen
+              font = go.find(GOA_FONT_TYP).first.content
+              bc.set_font_name(font)
+              fontsize = go.find(GOA_FONT_HEIGHT).first.content.to_f
+              bc.set_font_size(fontsize)
+              
+              just = go.find(GOA_JUSTIFICATION).first.content.downcase
+              if just == "links"
+                just = EAlLeft
+              elsif just == "mitte"
+                just = EAlCenter
+              elsif just == "rechts"
+                just = EAlRight
+              else 
+                just = EAlCenter # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
+              end
+              bc.set_text_alignment(just)
+              
+              # versuchen, einen eindeutigen Dateinamen für das  temporäre Barcode-Image zu erzeugen
+              now = Time.now.strftime("%Y%m%d%H%M%S")
+              fn_ready = false
+              while !fn_ready
+                zufall = rand(10000)
+                img_name = File.join("temp", [now,zufall].join("_") + '.png')
+                fn_ready = true unless File.exist?(img_name)
+              end
+              
+              raise BarcodeError, "Das Prüfen der Barcodeeinstellungen hat einen Fehler gemeldet.\nBitte prüfen, ob die Daten für diesen Barcodetyp gültig sind!" unless bc.check_barcode == 0
+              img_width = go_width.mm
+              img_height = go_height.mm
+              bc.save_image(img_name, img_width, img_height, dpi)
+              bc_image = Magick::Image.read(img_name).first
+              body.image(bc_image, img_width, img_height)
+              File.delete(img_name)
+            end
             
             # ............................................................................................................
             
