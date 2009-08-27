@@ -11,7 +11,7 @@ class BarcodeObject < GraphicObject
   def initialize
     super
     @go_attributes[GOA_TYP].attr_value = BARCODEOBJECT
-    add_attr(@go_attributes, GOA_BC_TYP, String, "NONE")
+    add_attr(@go_attributes, GOA_BC_TYP, String, "None")
     add_attr(@go_attributes, GOA_HUMAN_READABLE, Integer, true)
     add_attr(@go_attributes, GOA_FONT_HEIGHT, Integer, 10)
     add_attr(@go_attributes, GOA_FONT_TYP, String, "Arial")
