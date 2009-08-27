@@ -214,8 +214,11 @@ class MCC2GUI < MainWindow
         filename = fn
       end
     end
-    unless filename 
+    if filename == nil || filename == "" 
       child.close
+    end
+    unless File.exist?(filename)
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, "Die Datei '#{}' wurde nicht gefunden. Das Layout wird nicht geöffnet.", 'ok')
       return 
     end
     child.userData.load_from_xml(filename)
