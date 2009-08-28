@@ -89,6 +89,7 @@ include DebugTools
 
 File.makedirs("./logs", true)
 File.makedirs("./versions", true)
+File.makedirs("./temp", true)
 
 class Magick::RVG
   def draw
