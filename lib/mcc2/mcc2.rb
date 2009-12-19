@@ -15,12 +15,8 @@
 
 # *****************************************************************************
 
-$stdout.sync = true
-$stderr.sync = true
-
 basedir = File.dirname(__FILE__)
 $: << basedir
-$: << 'win32'
 
 
 # *****************************************************************************
@@ -28,12 +24,11 @@ $: << 'win32'
 
 require "rubygems"
 
-if __FILE__ == $0
-  require 'fox16'
-  require 'fox16/colors'
-  require 'fox16/responder'
-  include Fox
-end
+require 'fox16'
+require 'fox16/colors'
+require 'fox16/responder'
+include Fox
+require 'libguib16'
 
 require 'constants'
 
@@ -60,9 +55,13 @@ require 'picture_object'    # grafische Bild-Objekte
 require 'text_object'       # grafische Text-Objekte
 
 require 'magstripe'         # Magnetstreifen
+require 'card_printer'           # die Basis-Printer-Klasse
 
-
-require 'printer_xid'       # die XID-Printer-Klasse
+begin
+  require 'printer_xid'       # die XID-Printer-Klasse
+rescue LoadError => e
+  puts "Loading XID-printer driver failed: #{e}"
+end
 
 require 'page'              # die Klasse, die eine Druckseite einer Karte definiert
 
@@ -113,18 +112,20 @@ end
 # die Haupklasse des Programms
 class MCC2GUI < MainWindow
 
-  def initialize(parent)
+  def initialize(parent, argv)
     @app = parent
-    super
+    super(parent)
       # Titel des Hauptfensters mit Programmname und Version setzen
       
       # Achtung der Text in den nächsten Zeilen ändert sich beim Einchecken 
       # nicht manuell bearbeiten!
-      "$Revision$" =~ /^\$Revision: (.*)\$$/
-      revision_nr = $1.strip
+      if "$Revision$" =~ /^\$Revision: (.*)\$$/
+        revision_nr = $1.strip
+      end
       
-      "$HeadURL$" =~ /^\$HeadURL: (.*)\$$/
-      head_url = $1.strip.split('/')[-2]
+      if "$HeadURL$" =~ /^\$HeadURL: (.*)\$$/
+        head_url = $1.strip.split('/')[-2]
+      end
       @topwin.title = "mcc2 Version: #{head_url} Revision: #{revision_nr}"
       
       # ......................................................................
@@ -169,8 +170,8 @@ class MCC2GUI < MainWindow
       
       # ......................................................................
       @app.addTimeout(1000) { |sender, sel, ptr|
-        if ARGV.length > 0
-          open_layout(ARGV[0])
+        argv.each do |arg|
+          open_layout(arg)
         end
       }    
       
@@ -211,7 +212,7 @@ class MCC2GUI < MainWindow
     child.recalc
     if @app # für Tests ohne GUI kann parent und app nil gesetzt werden
       unless filename && FileTest.exists?(filename)
-        fn = FXFileDialog.getOpenFilename(@topwin, 'Laden', '.', patterns = '*.XML', initial = 0)
+        fn = FXFileDialog.getOpenFilename(@topwin, 'Laden', '.', patterns = '*.xml', initial = 0)
         filename = fn
       end
     end
@@ -235,42 +236,37 @@ class MCC2GUI < MainWindow
       error_WahlMessage.execute
     end
   end
-end
 
-#*****************************************************************************
-# Main
+  def self.run(argv)
+    Thread.abort_on_exception = true
+    #~ set_trace_func proc { |event, file, line, id, binding, classname|
+      #~ printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
+    #~ }
 
-if __FILE__==$0
-  Thread.abort_on_exception = true
-  #~ set_trace_func proc { |event, file, line, id, binding, classname|
-    #~ printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
-  #~ }
-  
-	require 'libguib16.rb'
-  
-  # ermitteln der Versionsnummern und Einbinden in das Programm, damit beim Logging die Versionsnummern mit aufgeführt werden
-  require 'list_revisions'
-  list_revisions
-  require 'versions'
-  
-  begin
-    app = FX::App.new("MCC2", "ComCard")
-    FXToolTip.new(app, TOOLTIP_PERMANENT)
-      
-    $pr = PrinterXID.new # todo, muss später vom Anwender ausgewählt werden
-    
-    w = MCC2GUI.new(app)
-    w.topwin.show(Fox::PLACEMENT_SCREEN)
-    
-    app.create
-    app.run
-  rescue Exception => e
-    file = File.basename(__FILE__, ".rb")
-    DebugTools::write_log_file('main', unkown_error_message(e))
-    puts(unkown_error_message(e))
-    exit -1
-  end	
+    # ermitteln der Versionsnummern und Einbinden in das Programm, damit beim Logging die Versionsnummern mit aufgeführt werden
+    require 'list_revisions'
+    list_revisions
+    require 'versions'
 
-	exit 0
+    begin
+      app = FX::App.new("MCC2", "ComCard")
+      FXToolTip.new(app, TOOLTIP_PERMANENT)
+
+#       $pr = PrinterXID.new # todo, muss später vom Anwender ausgewählt werden
+      $pr = CardPrinter.new # todo, muss später vom Anwender ausgewählt werden
+
+      w = MCC2GUI.new(app, argv)
+      w.topwin.show(Fox::PLACEMENT_SCREEN)
+
+      app.create
+      app.run
+    rescue Exception => e
+      file = File.basename(__FILE__, ".rb")
+      DebugTools::write_log_file('main', unkown_error_message(e))
+      puts(unkown_error_message(e))
+      exit -1
+    end
+
+  end
 end
 

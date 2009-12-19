@@ -3,8 +3,6 @@
 # Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
 
 
-$: << 'win32'
-
 require 'dataman'
 
 
@@ -12,7 +10,6 @@ require 'dataman'
 class Chip
   # muss vor dem require 'chibbase' kommen
   ENV['CHIPBASE_ENV'] = 'chip32'
-  require 'libs/chipcoding/chipbase'
   
   # die Chip-Parameter
   attr_accessor :params
@@ -47,6 +44,8 @@ class Chip
   # +xml_doc+::   die XML-Struktur mit den Definitionen des Kartenlayouts
   # +row+::       ein Datensatz im FasteCSV-Format
   def pers_card(layout_file, row)
+    require 'libs/chipcoding/chipbase'
+    
     p "pers_card #{row.inspect}"
     # die Chip-Parameter auslesen
     # erst ein leeres Array anlegen

@@ -1,3 +1,11 @@
 #!/usr/bin/env ruby
+# -*- coding: UTF-8 -*-
 
-abort "you need to write me"
+$stdout.sync = true
+$stderr.sync = true
+
+
+require "rubygems"
+require "mcc2"
+
+MCC2GUI.run(ARGV)

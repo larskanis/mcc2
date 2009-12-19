@@ -9,9 +9,6 @@ end
 require 'cc_dialogbox'
 require 'layout_file'
 
-# Achtung! Nicht das Verzeichnis 'printer' in den Pfad einbinden. Dort befindet sich eine printer.rb, die nichts mit der printer.rb dieses Projektes zu tun hat.
-require 'libs/printer/tbarcode_api' 
-
 # definiert ein Clientfenster mit allen Einstellungen und Attributen, die für ein bestimmtes Kartenlayout benötigt werden
 class Layout
   # definiert, ob an den Einstellungen seit dem letzten speichern oder laden etwas geändert wurde
@@ -44,6 +41,13 @@ class Layout
   # +parent+:: ??
   # +app+::    die Applikation
   def initialize(parent, app)
+    begin
+      # Achtung! Nicht das Verzeichnis 'printer' in den Pfad einbinden. Dort befindet sich eine printer.rb, die nichts mit der printer.rb dieses Projektes zu tun hat.
+      require 'libs/printer/tbarcode_api'
+    rescue LoadError => e
+      puts "Loading barcode driver failed: #{e}"
+    end
+
     @parent = parent
     @app = app
     @row_nr = 0
@@ -148,8 +152,12 @@ class Layout
       @lf.textfield_spur1.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_MSSPUR1) }
       @lf.textfield_spur2.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_MSSPUR2) }
       @lf.textfield_spur3.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_MSSPUR3) }
-      
-      @barcodes = BarcodeAPI::bc_get_bc_list
+
+      @barcodes = if self.class.const_defined?(:BarcodeAPI)
+        BarcodeAPI::bc_get_bc_list
+      else
+        []
+      end
       @lf.listbox_bc_typ.connect(SEL_COMMAND){ |sender, sel, event| sel_list_box_changed(sender) }
       @lf.spinner_modul_width.connect(SEL_COMMAND){ bc_modul_with_changed }
       @lf.spinner_modul_width.range = (1..100)
@@ -752,9 +760,9 @@ class Layout
   # speichert alle GraphicObjekte und Layout-Einstellungen im XML-File
 	def store_to_xml
     unless @layout_file.filename
-      fn = FXFileDialog.getSaveFilename(@parent, 'Speichern', '.', patterns = '*.XML', initial = 0)
+      fn = FXFileDialog.getSaveFilename(@parent, 'Speichern', '.', patterns = '*.xml', initial = 0)
       unless fn.split(".")[-1].downcase == 'xml'
-        fn = [fn, 'XML'].join(".")
+        fn = [fn, 'xml'].join(".")
       end
       @layout_file.filename = fn
     end
@@ -950,7 +958,7 @@ if __FILE__ == $0
   
   # ...........................................................
   # Test für das Erstellen einer neune XML-Datei
-  lay.filename = 't:\Project\MCC2a\trunk\layouts\Test1.XML'
+  lay.filename = 't:\Project\MCC2a\trunk\layouts\test1.xml'
   lay.load_from_xml
   # ...........................................................
   # Test für das Erstellen einer neune XML-Datei

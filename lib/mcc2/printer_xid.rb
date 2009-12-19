@@ -2,21 +2,21 @@
 
 # Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
 
-begin
+# begin
 
 $: << File.dirname(__FILE__)
 
 #~ if __FILE__ == $0
   #~ require 'mcc2'
 #~ end
-require 'card_printer'      # die Basisklasse für alle CardPrinter
+require 'gdi_card_printer'      # die Basisklasse für alle CardPrinter
 require 'win32/api'
 
-class ApiPr <Win32ApiBase
+class ApiPr < Win32ApiBase
 end
 
 # diese Klasse definiert einen XID-Drucker
-class PrinterXID < CardPrinter
+class PrinterXID < GdiCardPrinter
   # falls doch noch auf Aufruf über DLL umgebaut wird, werden folgende Zeilen benötigt
   
   #~ PRNSC = DL.dlopen('prnsc.dll')
@@ -440,7 +440,7 @@ if __FILE__ == $0
   #~ pr.unload_card1(ic_type, hwndSender, nSCSI_ID, nHost_ID, fEject, fCardFlip, reserved1)
 end
 
-rescue Exception => e
-  puts "#{e} #{e.backtrace}"
-  sleep 3
-end
+# rescue Exception => e
+#   puts "#{e} #{e.backtrace}"
+#   sleep 3
+# end
