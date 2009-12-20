@@ -69,13 +69,13 @@ class LayoutFile
     # Magstripe definieren
     @xml_doc.root << node = XML::Node.new(S_MAGSTRIPEPARAMS)
     
-    # Container für die GraphikObjekte definieren definieren
+    # Container fÃ¼r die GraphikObjekte definieren definieren
     @xml_doc.root << node = XML::Node.new(GRAPHICOBJECTS)
     
   end
  	#---------------------------------------------------------------------------------------------------------
   
-  # lädt das XML-File und initialisiert die entsprechenden Variablen und Objekte
+  # lÃ¤dt das XML-File und initialisiert die entsprechenden Variablen und Objekte
   # ==== Parameter
   # +filename+:: der NAme des XML-Files in welchem die Layout-Spezifikation gespeichert werden soll
 	def load_from_xml(filename)
@@ -98,11 +98,11 @@ class LayoutFile
       end
     }
     
-    # kontrollieren, ob die Datenquelle eine gültige Angabe ist, wenn nicht, dann den Benutzer informieren und auf Standard setzen
+    # kontrollieren, ob die Datenquelle eine gÃ¼ltige Angabe ist, wenn nicht, dann den Benutzer informieren und auf Standard setzen
     check_valid_datasourcetyp
     
     # wenn bei Datensourectyp nicht 'none' eingetrage ist, also eine Datenquelle verwendet wird
-    # kontrollieren, ob das eingestellte Encoding eine gültige Angabe ist, wenn nicht, dann den Benutzer informieren und auf Standard setzen
+    # kontrollieren, ob das eingestellte Encoding eine gÃ¼ltige Angabe ist, wenn nicht, dann den Benutzer informieren und auf Standard setzen
     unless get_attr_value(S_DATASOURCETYP) == NONE
       check_valid_encoding
     end
@@ -177,7 +177,7 @@ class LayoutFile
   end
 	#---------------------------------------------------------------------------------------------------------
 
-  # Fügt ein Graphik-Objekt zur Layout-Definition hinzu
+  # FÃ¼gt ein Graphik-Objekt zur Layout-Definition hinzu
   # ==== Parameter
   # +typ+:: Typ (Text, Barcode oder Bild)
   # ==== Return
@@ -198,7 +198,7 @@ class LayoutFile
   end
  	#---------------------------------------------------------------------------------------------------------
   
-  # ermittelt die nächst höhere ID (beeinflusst die Darstellungsebene)
+  # ermittelt die nÃ¤chst hÃ¶here ID (beeinflusst die Darstellungsebene)
   def get_new_id
     id = 0
 		@xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
@@ -208,7 +208,7 @@ class LayoutFile
   end
  	#---------------------------------------------------------------------------------------------------------
   
-  # ließt die ID's der graphischen Objekte aus der Layout-Definition (XML) aus und
+  # liest die ID's der graphischen Objekte aus der Layout-Definition (XML) aus und
   # sortiert sie
   # ==== Return
   # die sortierte Liste mit ID's [Array]
@@ -248,7 +248,7 @@ class LayoutFile
   end
   #---------------------------------------------------------------------------------------------------------
   
-  # fügt ein neues Atrtribut zur Liste der Attribute (@attributes) hinzu 
+  # fÃ¼gt ein neues Atrtribut zur Liste der Attribute (@attributes) hinzu
   # ==== Parameter
   # +name+::    der Name, den das Attribut erhalten soll
   # +typ+::     der Typ 
@@ -266,7 +266,7 @@ class LayoutFile
   end
  	#---------------------------------------------------------------------------------------------------------
 
-  # überprüft, ob der Wert Datasourcetyp in der Layoutdefinition ein gültiger Wert ist.
+  # Ã¼berprÃ¼ft, ob der Wert Datasourcetyp in der Layoutdefinition ein gÃ¼ltiger Wert ist.
   # Wenn nicht, wird ein Fehlerdialog angezeigt und der Standardwert gesetzt und das changed-Flag gesetzt
   def check_valid_datasourcetyp
     datasourcetyp = get_attr_value(S_DATASOURCETYP)
@@ -274,9 +274,9 @@ class LayoutFile
       default = @attributes[S_DATASOURCETYP].attr_value
       set_attr_value(S_DATASOURCETYP, default)
       raise WrongDataSourceType.new(<<-EOTXT)
-        Der eingestellte Datenquellentyp '#{datasourcetyp}' ist ungültig.
+        Der eingestellte Datenquellentyp '#{datasourcetyp}' ist ungÃ¼ltig.
         
-        Gültige Werte sind '#{VALID_DATASOURCES.join("', '")}'.
+        GÃ¼ltige Werte sind '#{VALID_DATASOURCES.join("', '")}'.
         
         Der Wert wird jetzt auf den Standardwert '#{default}'  gesetzt.
         
@@ -287,7 +287,7 @@ class LayoutFile
   end
  	#---------------------------------------------------------------------------------------------------------
 
-  # überprüft, ob der Wert Datasourcencoding in der Layoutdefinition ein gültiger Wert ist.
+  # Ã¼berprÃ¼ft, ob der Wert Datasourcencoding in der Layoutdefinition ein gÃ¼ltiger Wert ist.
   # Wenn nicht, wird ein Fehlerdialog angezeigt und der Standardwert gesetzt und das changed-Flag gesetzt
   def check_valid_encoding
     datasource_encoding = get_attr_value(S_DATASOURCEENCODING)
@@ -295,9 +295,9 @@ class LayoutFile
       default = @layout_file.attributes[S_DATASOURCEENCODING].attr_value
       set_attr_value(S_DATASOURCEENCODING, default)
       raise WrongDataSourceEncoding.new(<<-EOTXT)
-        Das eingestellte Encoding der Datenquelle '#{datasource_encoding}' ist ungültig.
+        Das eingestellte Encoding der Datenquelle '#{datasource_encoding}' ist ungÃ¼ltig.
         
-        Gültige Werte sind '#{VALID_ENCODINGS.join("', '")}'.
+        GÃ¼ltige Werte sind '#{VALID_ENCODINGS.join("', '")}'.
         
         Der Wert wird jetzt auf den Standardwert '#{default}'  gesetzt.
         
@@ -308,15 +308,15 @@ class LayoutFile
   end
  	#---------------------------------------------------------------------------------------------------------
 
-  # ersetllt ein neues Graphik-Objekt und kopiert alle Attributte des übergebenen, außer ID, Typ und Name 
+  # ersetllt ein neues Graphik-Objekt und kopiert alle Attributte des Ã¼bergebenen, auÃŸer ID, Typ und Name
   # ==== Parameter
-  # +node+:: die XML-Node des zu kopierenden Objekts, fals nil übergeben wurde, kehrt die Methode unverrichteter Dinge zurück
+  # +node+:: die XML-Node des zu kopierenden Objekts, fals nil Ã¼bergeben wurde, kehrt die Methode unverrichteter Dinge zurÃ¼ck
   def copy_object(node)
     return unless node
     o = add_object(node.find_first(GOA_TYP).content)
     node.each_element{|element|
     #~ o.go_attributes.each_pair{|goa_name, go_attribute|
-      # alle Attribute, außer ID, Typ und Name kopieren, sofern sie vorhanden, ansonsten den Standard lassen
+      # alle Attribute, auÃŸer ID, Typ und Name kopieren, sofern sie vorhanden, ansonsten den Standard lassen
       if element.name != GOA_ID && element.name != GOA_TYP && element.name != GOA_NAME
         o.find_first(element.name).content = element.content
       end
@@ -324,7 +324,7 @@ class LayoutFile
   end
  	#---------------------------------------------------------------------------------------------------------
   
-  # löscht sie übergebene XML-Node aus dem Layout ohne Rückfrage, diese muss in der aufrufenden Methode durchgeführt werden
+  # lÃ¶scht sie Ã¼bergebene XML-Node aus dem Layout ohne RÃ¼ckfrage, diese muss in der aufrufenden Methode durchgefÃ¼hrt werden
   # ==== Parameter
   def delete_object(node)
     node.remove!

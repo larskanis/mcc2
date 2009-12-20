@@ -8,13 +8,12 @@ end
 
 require 'dataman'
 
-class ResourceNotFoundError < RuntimeError
-end
-
-class BarcodeError < RuntimeError
-end
-
 class Page
+  class ResourceNotFoundError < RuntimeError
+  end
+  class BarcodeError < RuntimeError
+  end
+  
   attr_accessor :page_nr
   
   #

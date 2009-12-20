@@ -79,7 +79,7 @@ class GdiPrinter < CardPrinter
         Page.new(page_nr).draw(canvas, draw_pos_x, draw_pos_y, layout_file, preview, selected_object_id, row)
       end
     
-    # das VRG in ein Bitmap konvertieren
+    # das RVG in ein Bitmap konvertieren
     pic = img.draw
     
     with_page(hPrinter) do

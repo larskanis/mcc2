@@ -11,6 +11,9 @@ require 'layout_file'
 
 # definiert ein Clientfenster mit allen Einstellungen und Attributen, die für ein bestimmtes Kartenlayout benötigt werden
 class Layout
+  class ResourceNotFoundError < RuntimeError
+  end
+  
   # definiert, ob an den Einstellungen seit dem letzten speichern oder laden etwas geändert wurde
   attr_accessor :changed
   
