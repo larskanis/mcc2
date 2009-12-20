@@ -86,6 +86,9 @@ class Page
             if typ == TEXTOBJECT 
             
               font = go.find(GOA_FONT_TYP).first.content
+              if font=='from_file'
+                font = go.find(GOA_FONT_FILE).first.content
+              end
               fontsize = go.find(GOA_FONT_HEIGHT).first.content.to_f
               font_color = ["#", go.find(GOA_FONT_COLOR).first.content].join
               font_color = Page.check_color_definition(font_color)
@@ -103,8 +106,8 @@ class Page
                 just = 'start' # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
               end
               
-              unless rmfl.index(font)
-#                raise ResourceNotFoundError, "Die Schriftart '#{font}' konnte nicht gefunden werden. Der Druck wird angehalten."
+              unless rmfl.index(font) || File.exist?(font)
+                raise ResourceNotFoundError, "Die Schriftart '#{font}' konnte nicht gefunden werden. Der Druck wird angehalten."
               end
               
               if data != ""

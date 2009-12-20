@@ -131,6 +131,8 @@ class Layout
       
       # die Listbox zum Auswählen der Schriftart
       @lf.listbox_fonts.connect(SEL_COMMAND){ |sender, sel, event| sel_list_box_changed(sender) }
+      @lf.textfield_font_file.connect(SEL_COMMAND){ |sender, sel, event| textfield_exit(sender, GOA_FONT_FILE) }
+      @lf.button_fontfile_select.connect(SEL_COMMAND){ fontfile_select_button_pressed }
       
       @lf.textfield_fontsize.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_FONT_HEIGHT) }
       
@@ -549,11 +551,9 @@ class Layout
     #~ node.find_first(GOA_FONT_HEIGHT).content = (fontdesc.size.to_f/10).to_s
     
     if sender.wdg_name == 'listbox_fonts'
-      id = @lf.listbox_fonts.getItemData(@lf.listbox_fonts.currentItem)
-      if id==:from_file
-        id = "/usr/share/cups/fonts/FreeMono.ttf"
-      end
-      @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_FONT_TYP).content = id
+      font = @lf.listbox_fonts.getItemData(@lf.listbox_fonts.currentItem)
+      @lf.textfield_font_file.enabled = font=='from_file'
+      @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_FONT_TYP).content = font
     elsif sender.wdg_name == 'listbox_bc_typ'
       bc = @lf.listbox_bc_typ.getItemText(@lf.listbox_bc_typ.currentItem)
       @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_BC_TYP).content = bc
@@ -601,7 +601,7 @@ class Layout
     rmfl.sort!
     @lf.listbox_fonts.clearItems
     idx = @lf.listbox_fonts.appendItem("aus Font-Datei") # die humanreadable
-    @lf.listbox_fonts.setItemData(idx, :from_file)         # die Werte
+    @lf.listbox_fonts.setItemData(idx, 'from_file')         # die Werte
 
     rmfl.each_with_index{|rmf, idx|
       idx = @lf.listbox_fonts.appendItem(rmf.gsub("-"," ")) # die humanreadable
@@ -614,9 +614,11 @@ class Layout
   def fill_font_fields(node)
     # die Schriftgröße zurücklesen
     @lf.textfield_fontsize.text = node.find_first(GOA_FONT_HEIGHT).content
-    
+
+    font_typ = node.find_first(GOA_FONT_TYP).content
     # den gewählten Parameter in den entsprechenden Listen markieren
-    set_listbox_value('listbox_fonts', node.find_first(GOA_FONT_TYP).content)
+    set_listbox_value('listbox_fonts', font_typ)
+    @lf.textfield_font_file.enabled = font_typ=='from_file'
   end
   #---------------------------------------------------------------------------------------------------------
   
@@ -932,16 +934,27 @@ class Layout
   #
   def datasource_button_pressed
     lds = @layout_file.get_attr_value(S_DATASOURCE)
-    ldsd = File.join(File.dirname(lds),'\\')
-    if FileTest.exists?(ldsd)
-      dest = ldsd
-    else
-      dest = "."
+    ldsd = File.join(File.dirname(lds),'/')
+    dest = FileTest.exists?(ldsd) ? ldsd : '.'
+    s = FXFileDialog.getOpenFilename(@parent, "Datenquelle wählen", dest, patterns="*", initial=0)
+    unless s.empty?
+      @lf.textfield_datasource.text = s
+      @lf.textfield_datasource.tipText = @lf.textfield_datasource.text
+      textfield_exit(@lf.textfield_datasource, S_DATASOURCE)
+      changed_attributes
     end
-    s = FXFileDialog.getOpenFilename(@parent, "Bild auswählen", dest, patterns="*", initial=0)   
-    changed_attributes if s != ""
-    @lf.textfield_datasource.text = s
-    @lf.textfield_datasource.tipText = @lf.textfield_datasource.text
+  end
+
+  def fontfile_select_button_pressed
+    lds = @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_FONT_FILE).content
+    ldsd = File.join(File.dirname(lds),'/')
+    dest = FileTest.exists?(ldsd) ? ldsd : '.'
+    s = FXFileDialog.getOpenFilename(@parent, "Font-Datei wählen", dest, patterns="*", initial=0)
+    unless s.empty?
+      @lf.textfield_font_file.text = s
+      textfield_exit(@lf.textfield_font_file, GOA_FONT_FILE)
+      changed_attributes
+    end
   end
 end
 #*****************************************************************************

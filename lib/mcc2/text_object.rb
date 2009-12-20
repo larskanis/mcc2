@@ -12,8 +12,9 @@ class TextObject < GraphicObject
     super
     @go_attributes[GOA_TYP].attr_value = TEXTOBJECT
     add_attr(@go_attributes, GOA_FONT_HEIGHT, Integer, 10)
-    add_attr(@go_attributes, GOA_FONT_TYP, String, "Arial")
+    add_attr(@go_attributes, GOA_FONT_TYP, String, "Helvetica")
     add_attr(@go_attributes, GOA_FONT_COLOR, String, "000000FF")
+    add_attr(@go_attributes, GOA_FONT_FILE, String, "")
     add_attr(@go_attributes, GOA_BACK_COLOR, String, "FFFFFFFF")
     add_attr(@go_attributes, GOA_JUSTIFICATION, String, "Links")
   end
