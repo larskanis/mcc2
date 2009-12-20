@@ -8,7 +8,7 @@ require 'iconv'
 
 class MyPrintDialogBox < PrintDialogBox
 
-def initialize(app, child, chip)
+  def initialize(app, child, chip)
     super(app)
     @app = app
     @chip = chip

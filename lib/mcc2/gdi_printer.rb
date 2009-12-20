@@ -72,12 +72,12 @@ class GdiPrinter < CardPrinter
     draw_pos_y  = layout_file.get_attr_value(S_Y_OFFSET).to_f
 
     # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
-      selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
-      preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
-      img = Magick::RVG.new(page_width.mm, page_height.mm) do |canvas|
-        canvas.background_fill = 'white'
-        Page.new(page_nr).draw(canvas, draw_pos_x, draw_pos_y, layout_file, preview, selected_object_id, row)
-      end
+    selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
+    preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
+    img = Magick::RVG.new(page_width.mm, page_height.mm) do |canvas|
+      canvas.background_fill = 'white'
+      Page.new(page_nr).draw(canvas, draw_pos_x, draw_pos_y, layout_file, preview, selected_object_id, row)
+    end
     
     # das RVG in ein Bitmap konvertieren
     pic = img.draw

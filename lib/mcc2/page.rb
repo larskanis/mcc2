@@ -39,7 +39,6 @@ class Page
     width =  layout_file.get_attr_value(S_WIDTH).to_f
     height = layout_file.get_attr_value(S_HEIGHT).to_f
     encoding = layout_file.get_attr_value(S_DATASOURCEENCODING)
-    barcodes = []
     if preview
       canvas.g.translate(draw_pos_x.mm, draw_pos_y.mm) do |canvas1|
         rx = 10
@@ -48,12 +47,10 @@ class Page
       end
     end
     
-    rmfl = []
-    Magick.fonts.each{|mf| 
-      rmfl << mf.name
-    }
+    rmfl = Magick.fonts.map{|mf| mf.name }
     
     canvas.g.translate((draw_pos_x + $pr.card_margin_left).mm, (draw_pos_y + $pr.card_margin_top).mm) do |canvas1|
+      barcodes = nil
       rx = 10
       # ..........................................................................................
       # Kartenhintergrund füllen (für Vorschau)
@@ -71,7 +68,7 @@ class Page
         if go.find(GOA_PAGE_NR).first.content.to_i == @page_nr
         
           # die allgemeinen Attribute ermitteln
-          id = go.find_first(GOA_ID).content.to_i
+#           id = go.find_first(GOA_ID).content.to_i
           x = go.find_first(GOA_X).content.to_f
           y = go.find_first(GOA_Y).content.to_f
           go_width = go.find_first(GOA_WIDTH).content.to_f
@@ -107,7 +104,7 @@ class Page
               end
               
               unless rmfl.index(font)
-                raise ResourceNotFoundError, "Die Schriftart '#{font}' konnte nicht gefunden werden. Der Druck wird angehalten."
+#                raise ResourceNotFoundError, "Die Schriftart '#{font}' konnte nicht gefunden werden. Der Druck wird angehalten."
               end
               
               if data != ""
@@ -139,7 +136,7 @@ class Page
             elsif typ == BARCODEOBJECT 
               #~ p "#{self.class.name}::draw => barcode | data: #{data} "
               
-              barcodes = BarcodeAPI::bc_get_bc_list if barcodes == [] # nur bei 1. Barcode initialisieren
+              barcodes = BarcodeAPI::bc_get_bc_list unless barcodes  # nur bei 1. Barcode initialisieren
               
               mw = go.find(GOA_BC_MODUL_WIDTH).first.content
 

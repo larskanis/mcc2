@@ -18,17 +18,11 @@ class Layout
   attr_accessor :changed
   
   # enthält die kompletten Einstellungen des Kartenlayouts
-  #~ attr_accessor :xml_doc
   attr_accessor :layout_file
   
   # die aktuelle Zoom-Stufe der Anzeige
   attr_accessor :zoom
   
-  # ???
-  attr_accessor :scale
-  
-  # ???
-
   # der Datamanager
   attr_accessor :dataman
   
@@ -187,10 +181,10 @@ class Layout
     @chipparam_textfields = []
     
     scrl_w = FX::ScrollWindow.new(@lf.verticalframe_chip, LAYOUT_FILL_X | LAYOUT_FILL_Y)
-    matrix_chipparams = FX::Matrix.new(scrl_w){|w|
+    matrix_chipparams = FX::Matrix.new(scrl_w, LAYOUT_FILL_X | LAYOUT_FILL_Y){|w|
       @matrix3 = w
       w.wdg_name = 'matrix_xyz'
-      w.numRows = 4 
+      w.numRows = 4
       w.width = 650
       w.y = 2
       w.height = 0
@@ -205,15 +199,13 @@ class Layout
         w.text = ['Parameter', i+1].join(' ')
 				w.font=FX::Font.new.from_s('Arial|80|40|5|0|0|0').to_FXFont
 			}
-			tf = FX::TextField.new(matrix_chipparams){|w|
-        w.textFieldTextStyle = LAYOUT_FIX_WIDTH
+			tf = FX::TextField.new(matrix_chipparams, LAYOUT_FILL_X){|w|
+        w.textFieldTextStyle = LAYOUT_FILL_X
 				w.wdg_name = "textfield_chipparam_#{i}"
 				w.font = FX::Font.new.from_s('Arial|80|40|5|0|0|0').to_FXFont
-        w.width = 200
-				w.numColumns=10
+				w.numColumns = 40
 			}
       tf.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_CHIPPARAMS) }
-      tf.width = 800
       @chipparam_textfields << tf
     }
   end
@@ -558,6 +550,9 @@ class Layout
     
     if sender.wdg_name == 'listbox_fonts'
       id = @lf.listbox_fonts.getItemData(@lf.listbox_fonts.currentItem)
+      if id==:from_file
+        id = "/usr/share/cups/fonts/FreeMono.ttf"
+      end
       @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_FONT_TYP).content = id
     elsif sender.wdg_name == 'listbox_bc_typ'
       bc = @lf.listbox_bc_typ.getItemText(@lf.listbox_bc_typ.currentItem)
@@ -602,14 +597,14 @@ class Layout
   # füllt die Font-Auswahlliste mit den möglichen Fonts
   def fill_font_list
     # Font-Name
-    rmfl = []
-    Magick.fonts.each{|mf| 
-      rmfl << mf.name
-    }
+    rmfl = Magick.fonts.map{|mf| mf.name }
     rmfl.sort!
     @lf.listbox_fonts.clearItems
+    idx = @lf.listbox_fonts.appendItem("aus Font-Datei") # die humanreadable
+    @lf.listbox_fonts.setItemData(idx, :from_file)         # die Werte
+
     rmfl.each_with_index{|rmf, idx|
-      @lf.listbox_fonts.appendItem(rmf.gsub("-"," ")) # die humanreadable
+      idx = @lf.listbox_fonts.appendItem(rmf.gsub("-"," ")) # die humanreadable
       @lf.listbox_fonts.setItemData(idx, rmf)         # die Werte
     }
   end
@@ -722,7 +717,7 @@ class Layout
             
             canvas.background_fill = 'white'
           end
-        
+
           # ..........................................................................................
           # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
           data = rvg.draw.to_blob{
@@ -945,7 +940,7 @@ class Layout
     end
     s = FXFileDialog.getOpenFilename(@parent, "Bild auswählen", dest, patterns="*", initial=0)   
     changed_attributes if s != ""
-    @lf.textfield_datasource.text = @lf.textfield_datasource.text + s
+    @lf.textfield_datasource.text = s
     @lf.textfield_datasource.tipText = @lf.textfield_datasource.text
   end
 end
