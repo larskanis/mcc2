@@ -19,8 +19,7 @@ require 'win32api_winspool'
 require 'card_printer'
 
 
-class GdiCardPrinter < CardPrinter
-  
+class GdiPrinter < CardPrinter
   #
   def initialize
     @dpi = 300
