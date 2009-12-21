@@ -703,7 +703,7 @@ class Layout
         scale_width = Page.width_with_margins(width).mm
         scale_height = (2 * Page.height_with_margins(height) + card_offset).mm
         
-        @dataman ? row = @dataman.row(@row_nr) : row = nil
+        row = @dataman ? @dataman.row(@row_nr) : nil
         begin
           rvg = Magick::RVG.new(image_width.mm, image_height.mm).viewbox(0, 0, scale_width, scale_height) do |canvas|
             # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
