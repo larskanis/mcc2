@@ -201,6 +201,7 @@ class MCC2GUI < MainWindow
     child.create
     child.show
     child.recalc
+    @mdiclient.setActiveChild(child)
   end
 	#---------------------------------------------------------------------------------------------------------
   
@@ -224,6 +225,8 @@ class MCC2GUI < MainWindow
       return 
     end
     child.userData.load_from_xml(filename)
+
+    @mdiclient.setActiveChild(child)
   end
 	#---------------------------------------------------------------------------------------------------------
   

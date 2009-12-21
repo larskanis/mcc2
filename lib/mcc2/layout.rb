@@ -795,8 +795,15 @@ class Layout
     end
     
     if @parent && @app # für Tests ohne GUI kann parent und app nil gesetzt werden
-      object_deselected      
+      object_deselected
       fill_objectlist
+
+      if action == ADD || action == COPY
+        # neu hinzugefügtes Objekt aktiv schalten
+        @lf.iconlist_objects.currentItem = @lf.iconlist_objects.numItems-1
+        object_selection_changed
+      end
+      
       draw_preview(true)
     end
   end
