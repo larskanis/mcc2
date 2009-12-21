@@ -4,6 +4,7 @@ Manifest.txt
 README.txt
 Rakefile
 bin/mcc2
+lib/libguib16.rb
 lib/mcc2.rb
 lib/mcc2/advanced_data_edit_dlg.rb
 lib/mcc2/barcode_object.rb
@@ -33,7 +34,6 @@ lib/mcc2/images/mcc2_temp.bmp
 lib/mcc2/layout.rb
 lib/mcc2/layout_file.rb
 lib/mcc2/layout_win.rb
-lib/mcc2/libguib16.rb
 lib/mcc2/list_revisions.rb
 lib/mcc2/magstripe.rb
 lib/mcc2/mcc2.rb
