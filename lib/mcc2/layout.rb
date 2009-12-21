@@ -325,8 +325,7 @@ class Layout
   # zeichnet anschließend die Vorschau neu
   def text_color_dialog
     cdlg = FXColorDialog.new(@parent, "Textfarbe")
-    cdlg.execute
-    if @lf.textfield_text_color.text != cdlg.rgba
+    if cdlg.execute>0 && @lf.textfield_text_color.text != cdlg.rgba
       node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_FONT_COLOR)
       s = cdlg.rgba.to_i.to_s(16)
       @lf.textfield_text_color.text = [s[6,2], s[4,2], s[2,2], s[0,2]].join
