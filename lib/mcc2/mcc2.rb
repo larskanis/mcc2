@@ -206,24 +206,19 @@ class MCC2GUI < MainWindow
 	#---------------------------------------------------------------------------------------------------------
   
   def open_layout(filename=nil)
+    unless filename && FileTest.exists?(filename)
+      fn = FXFileDialog.getOpenFilename(@topwin, 'Laden', '.', patterns = '*.xml', initial = 0)
+      filename = fn
+    end
+    unless File.exist?(filename)
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, "Die Datei '#{}' wurde nicht gefunden. Das Layout wird nicht geöffnet.", 'ok')
+      return
+    end
     child = FXMDIChild.new(@mdiclient, "Layout", nil, nil, 0, 0, 0, 800, 600)
     child.userData = Layout.new(child, @app)
     child.create
     child.show
     child.recalc
-    if @app # für Tests ohne GUI kann parent und app nil gesetzt werden
-      unless filename && FileTest.exists?(filename)
-        fn = FXFileDialog.getOpenFilename(@topwin, 'Laden', '.', patterns = '*.xml', initial = 0)
-        filename = fn
-      end
-    end
-    if filename == nil || filename == "" 
-      child.close
-    end
-    unless File.exist?(filename)
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, "Die Datei '#{}' wurde nicht gefunden. Das Layout wird nicht geöffnet.", 'ok')
-      return 
-    end
     child.userData.load_from_xml(filename)
 
     @mdiclient.setActiveChild(child)
