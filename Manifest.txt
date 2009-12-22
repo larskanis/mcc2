@@ -16,6 +16,8 @@ lib/mcc2/dataman.rb
 lib/mcc2/dataman_csv.rb
 lib/mcc2/dataman_database.rb
 lib/mcc2/debug_tools.rb
+lib/mcc2/gdi_card_printer.rb
+lib/mcc2/gdi_printer.rb
 lib/mcc2/go_attribut.rb
 lib/mcc2/graphic_object.rb
 lib/mcc2/gui/advanced_data_edit_dlg.rbin
