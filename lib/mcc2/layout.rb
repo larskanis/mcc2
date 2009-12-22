@@ -13,6 +13,8 @@ require 'layout_file'
 class Layout
   class ResourceNotFoundError < RuntimeError
   end
+
+  JobSetupObjID = -1
   
   # definiert, ob an den Einstellungen seit dem letzten speichern oder laden etwas geändert wurde
   attr_accessor :changed
@@ -167,10 +169,9 @@ class Layout
       # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
       @lf.matrix1.numColumns = 3
       @lf.matrix2.numColumns = 3
-      deactivate_object_tabs
-      
-      deactivat_up_down
       @lf.dial_zoom.range = (49..359)
+      fill_objectlist
+      object_selection_changed
     end
   end
   #---------------------------------------------------------------------------------------------------------
@@ -331,7 +332,6 @@ class Layout
       @lf.textfield_text_color.text = [s[6,2], s[4,2], s[2,2], s[0,2]].join
       node.first.content = @lf.textfield_text_color.text
       changed_attributes
-      draw_preview(true)
     end
   end
   #~ #---------------------------------------------------------------------------------------------------------
@@ -439,53 +439,76 @@ class Layout
     set_title
   end
   #---------------------------------------------------------------------------------------------------------
+
+  # deaktivieren der Anzeige der Objektattribute, wenn kein Objekt selektiert ist
+  def activate_object_tabs(on=true)
+    @lf.tabitem_object.shown = on
+    @lf.tabitem_posit.shown = on
+    @lf.tabitem_font.shown = on
+    @lf.tabitem_barcode.shown = on
+  end
+  
+  def activate_job_tabs(on=true)
+    @lf.tabitem_allgemein.shown = on
+    @lf.tabitem_chip.shown = on
+    @lf.tabitem_magstripe.shown = on
+  end
+  #---------------------------------------------------------------------------------------------------------
   
   # deaktiviert die Buttons für das Verschieben der Objekte in der Objektliste (zum Beispiel, wenn kein Objekt selektiert ist)
-  def deactivat_up_down
-    @lf.button_up.enabled = false
-    @lf.button_down.enabled = false
+  def activate_up_down(on=true)
+    @lf.button_up.enabled = on
+    @lf.button_down.enabled = on
+  end
+
+  def activate_copy_delete(on=true)
+    @lf.button_copy.enabled = on
+    @lf.button_delete.enabled = on
   end
   #---------------------------------------------------------------------------------------------------------
   
   # deaktiviert die Tabs im Layout-Dialog, welche Objekt-spezifisch sind
   def object_deselected
-    deactivate_object_tabs
+    activate_object_tabs(false)
     @selected_object_id = nil
-    deactivat_up_down
-    @lf.button_copy.enabled = false
-    @lf.button_delete.enabled = false
+    activate_up_down(false)
+    activate_copy_delete(false)
   end
   #---------------------------------------------------------------------------------------------------------
   
   # wenn in der Objektliste ein anderes Objekt selektiert wird, dann werden mit dieser Methode die Anzeigen aktualisiert, 
   # z.Bsp, nur die Tabs aktiviert, die zum Objekttyp passen, usw.
   def object_selection_changed
-    # erst einmal alle Objekt-Tabs deaktivieren, damit sicher gestellt ist, dass nur die Objekt-typischen angezeigt werden
-    deactivate_object_tabs
-    
-    @lf.button_copy.enabled = true
-    @lf.button_delete.enabled = true
-
     item_ID = @lf.iconlist_objects.currentItem
     @selected_object_id = @lf.iconlist_objects.getItemData(item_ID).to_i
-    
-    # die Buttons für das Ändern der Reihenfolge aktivieren
-    @lf.button_up.enabled = (@selected_object_id > 0)
-    @lf.button_down.enabled = (@selected_object_id < (@layout_file.sorted_id_list.length - 1)) 
-    
-    node = @layout_file.get_objectnode_by_id(@selected_object_id)
-    
-    # allgemeine Attribute auslesen
-      # 
+
+    if @selected_object_id == JobSetupObjID
+      object_deselected
+      activate_job_tabs
+      @lf.tabbook_objectattributes.current = 0
+      
+    else
+      # erst einmal alle Objekt-Tabs deaktivieren, damit sicher gestellt ist, dass nur die Objekt-typischen angezeigt werden
+      activate_object_tabs(false)
+      activate_job_tabs(false)
+      activate_copy_delete
+      
+      # die Buttons für das Ändern der Reihenfolge aktivieren
+      @lf.button_up.enabled = item_ID > 1
+      @lf.button_down.enabled = item_ID < @layout_file.sorted_id_list.length
+
+      node = @layout_file.get_objectnode_by_id(@selected_object_id)
+
+      # allgemeine Attribute auslesen
       @lf.tabitem_object.shown = true
       @lf.tabitem_posit.shown = true
-      
+
       # Daten-Attribute
       @lf.textfield_name.text = node.find(GOA_NAME).first.content
       @lf.textfield_sample_data.text = node.find(GOA_SAMPLE_DATA).first.content
       @lf.textfield_data.text = node.find(GOA_DATA).first.content
       @lf.textfield_data_non_text.text = node.find(GOA_DATA).first.content
-    
+
       # Positionsattribute
       @lf.textfield_x.text = node.find(GOA_X).first.content
       @lf.textfield_y.text = node.find(GOA_Y).first.content
@@ -494,20 +517,20 @@ class Layout
       @lf.textfield_rotation.text = node.find(GOA_ROTATION).first.content
       @lf.textfield_rotation.text = node.find(GOA_ROTATION).first.content
       @lf.spinner_seiten_nr.value = node.find(GOA_PAGE_NR).first.content.to_i + 1
-#      @lf.iconlist_justify.connect(SEL_CHANGED){iconlist_justify_exit } # todo
+  #      @lf.iconlist_justify.connect(SEL_CHANGED){iconlist_justify_exit } # todo
 
       if node.find(GOA_PRINTLIST).first.content == 'false' || node.find(GOA_PRINTLIST).first.content == '0'
-        @lf.checkbutton_printlist.state = false 
+        @lf.checkbutton_printlist.state = false
       else
         @lf.checkbutton_printlist.state = true
       end
-    
+
     # Typ-spezifische Attribute auslesen
       # Attribute, die Barcode und Texte haben
       if node.find(GOA_TYP).first.content == TEXTOBJECT || node.find(GOA_TYP).first.content == BARCODEOBJECT
         @lf.tabitem_font.shown = true
         @lf.textfield_text_color.text = node.find(GOA_FONT_COLOR).first.content
-        
+
         # den Radiobutton der Ausrichtung setzen
         @lf.radiobutton_just_l.state = false
         @lf.radiobutton_just_l.state = false
@@ -520,16 +543,16 @@ class Layout
         elsif just == S_JUST_RIGHT
           @lf.radiobutton_just_r.state = true
         end
-        
+
         fill_font_list
         fill_font_fields(node)
       end
-      
+
       # Attribute, die nur Texte haben
       if node.find(GOA_TYP).first.content == TEXTOBJECT
         data_block_shown
       end
-      
+
       # Attribute, die nur Barcodes haben
       if node.find(GOA_TYP).first.content == BARCODEOBJECT
         @lf.tabitem_barcode.shown = true
@@ -538,11 +561,14 @@ class Layout
         fill_barcode_fields(node)
         data_shown
       end
-      
+
       # Attribute, die nur Bilder haben
       if node.find(GOA_TYP).first.content == PICTUREOBJECT
         data_shown
       end
+    end
+
+    draw_preview
   end
   #---------------------------------------------------------------------------------------------------------
   
@@ -584,12 +610,11 @@ class Layout
   
   # füllt die Barcode-spezifischen Felder mit den gewählten Optionen aus dem Layout
   def fill_barcode_fields(node)
-    #~ p "#{self.class.name}::fill_barcode_fields"
     # den gewählten Parameter in den entsprechenden Listen markieren
     bc_typ = node.find_first(GOA_BC_TYP).content
     bc_id = @barcodes.index(bc_typ)
     error_WahlMessage = FXFehlerAuswahlDialog.new(@app, "Der Barcode-Typ #{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes.\ Der Wert wird auf 'NONE' gesetzt.", 'ok') unless bc_id
-    @lf.listbox_bc_typ.currentItem = bc_id
+    @lf.listbox_bc_typ.currentItem = bc_id if bc_id
   end
   #---------------------------------------------------------------------------------------------------------
   
@@ -799,8 +824,9 @@ class Layout
 
       if action == ADD || action == COPY
         # neu hinzugefügtes Objekt aktiv schalten
-        @lf.iconlist_objects.currentItem = @lf.iconlist_objects.numItems-1
-        object_selection_changed
+        notify = true
+        @lf.iconlist_objects.setCurrentItem(@lf.iconlist_objects.numItems-1, notify)
+        @lf.iconlist_objects.selectItem(@lf.iconlist_objects.numItems-1, notify)
       end
       
       draw_preview(true)
@@ -812,23 +838,17 @@ class Layout
   def fill_objectlist
     # Objekt-Liste leeren
     @lf.iconlist_objects.clearItems
-    
-    # Array mit sortierten Objekt-ID's holen
-    @layout_file.sorted_id_list.each{|id|
-      go = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
-      name = go.find(GOA_NAME).first.content
-      typ = go.find(GOA_TYP).first.content
-      @lf.iconlist_objects.appendItem([id, name, typ].join("\t"), nil, nil, id)
-    }
-  end
- 	#---------------------------------------------------------------------------------------------------------
-  
-  # deaktivieren der Anzeige der Objektattribute, wenn kein Objekt selektiert ist
-  def deactivate_object_tabs
-    @lf.tabitem_object.shown = false
-    @lf.tabitem_posit.shown = false
-    @lf.tabitem_font.shown = false
-    @lf.tabitem_barcode.shown = false
+    @lf.iconlist_objects.appendItem(['', 'Jobsetup', ''].join("\t"), nil, nil, JobSetupObjID)
+
+    if @layout_file
+      # Array mit sortierten Objekt-ID's holen
+      @layout_file.sorted_id_list.each{|id|
+        go = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
+        name = go.find(GOA_NAME).first.content
+        typ = go.find(GOA_TYP).first.content
+        @lf.iconlist_objects.appendItem([id, name, typ].join("\t"), nil, nil, id)
+      }
+    end
   end
  	#---------------------------------------------------------------------------------------------------------
 
