@@ -141,11 +141,11 @@ class MCC2GUI < MainWindow
       connect_with_accel(@mcmd_exit, "&Beenden"){ @app.stop }
       connect_with_accel(@mcmd_druck, "D&rucken"){ print_cards }
       
-      @menutitle_object.text = "&Objekt"
+      @menutitle_object.text = "Neues &Objekt"
       
-      connect_with_accel(@mcmd_text, "&Text-Objekt"){ new_object(TEXTOBJECT) }
-      connect_with_accel(@mcmd_barcode, "&Barcode-Objekt"){ new_object(BARCODEOBJECT) }
-      connect_with_accel(@mcmd_picture, "B&ild-Objekt"){ new_object(PICTUREOBJECT) }
+      connect_with_accel(@mcmd_text, "&Text"){ new_object(TEXTOBJECT) }
+      connect_with_accel(@mcmd_barcode, "&Barcode"){ new_object(BARCODEOBJECT) }
+      connect_with_accel(@mcmd_picture, "B&ild"){ new_object(PICTUREOBJECT) }
       
       @topwin.width = 1024
       @topwin.height = 768
