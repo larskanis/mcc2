@@ -782,9 +782,10 @@ class Layout
  	#---------------------------------------------------------------------------------------------------------
   
   # speichert alle GraphicObjekte und Layout-Einstellungen im XML-File
-	def store_to_xml
-    unless @layout_file.filename
+	def store_to_xml(filename_dialog=false)
+    if filename_dialog || !@layout_file.filename
       fn = FXFileDialog.getSaveFilename(@parent, 'Speichern', '.', patterns = '*.xml', initial = 0)
+      return if fn.empty?
       unless fn.split(".")[-1].downcase == 'xml'
         fn = [fn, 'xml'].join(".")
       end

@@ -133,37 +133,19 @@ class MCC2GUI < MainWindow
       
       @menutitle_datei.text = "&Datei"
       
-      @mcmd_new.text = "&Neu"
-      @mcmd_new.connect(SEL_COMMAND){ new_layout }
-      #~ @topwin.accelTable.addAccel(fxparseAccel("Ctrl N"), @app, new_layout)
-      
-      @mcmd_open.text = "&Öffnen"
-      @mcmd_open.connect(SEL_COMMAND){ open_layout }
-#      @topwin.accelTable.addAccel(fxparseAccel("Ctrl O"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
-      
-      @mcmd_close.text = "Schließ&en"
-#      @mcmd_close.connect(SEL_COMMAND){  }
-
-      @mcmd_save.text = "&Speichern"
-      @mcmd_save.connect(SEL_COMMAND){ save_layout }
-#      @topwin.accelTable.addAccel(fxparseAccel("Ctrl S"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
-
-      @mcmd_save_as.text = "Speichern &als"
-#      @mcmd_save_as.connect(SEL_COMMAND){  }
-
-      @mcmd_exit.text = "&Beenden"
-      @mcmd_exit.connect(SEL_COMMAND){ @app.stop }
-      @topwin.accelTable.addAccel(fxparseAccel("Alt F4"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
-      
-      @mcmd_druck.text = "Dr&ucken"
-      @mcmd_druck.connect(SEL_COMMAND){ print_cards }
-#      @topwin.accelTable.addAccel(fxparseAccel("Strg P"), @app, FXSEL(SEL_COMMAND, FXApp::ID_QUIT))
+      connect_with_accel(@mcmd_new, "&Neu"){ new_layout }
+      connect_with_accel(@mcmd_open, "&Öffnen"){ open_layout }
+      connect_with_accel(@mcmd_close, "&Schließ&en"){ close_layout }
+      connect_with_accel(@mcmd_save, "&Speichern"){ save_layout }
+      connect_with_accel(@mcmd_save_as, "Speichern &unter"){ save_layout(true) }
+      connect_with_accel(@mcmd_exit, "&Beenden"){ @app.stop }
+      connect_with_accel(@mcmd_druck, "D&rucken"){ print_cards }
       
       @menutitle_object.text = "&Objekt"
       
-      @mcmd_text.connect(SEL_COMMAND){ new_object(TEXTOBJECT) }
-      @mcmd_barcode.connect(SEL_COMMAND){ new_object(BARCODEOBJECT) }
-      @mcmd_picture.connect(SEL_COMMAND){ new_object(PICTUREOBJECT) }
+      connect_with_accel(@mcmd_text, "&Text-Objekt"){ new_object(TEXTOBJECT) }
+      connect_with_accel(@mcmd_barcode, "&Barcode-Objekt"){ new_object(BARCODEOBJECT) }
+      connect_with_accel(@mcmd_picture, "B&ild-Objekt"){ new_object(PICTUREOBJECT) }
       
       @topwin.width = 1024
       @topwin.height = 768
@@ -176,6 +158,13 @@ class MCC2GUI < MainWindow
       }    
       
   end
+
+  def connect_with_accel(button, text=nil, &block)
+    button.text = text if text
+    button.connect(SEL_COMMAND, &block)
+    @topwin.accelTable.addAccel(fxparseAccel(button.accelText), block)
+  end
+  
 	#---------------------------------------------------------------------------------------------------------
   
   def new_object(typ)
@@ -186,10 +175,10 @@ class MCC2GUI < MainWindow
   end
 	#---------------------------------------------------------------------------------------------------------
   
-  def save_layout
+  def save_layout(filename_dialog=false)
     child = @mdiclient.activeChild
     if child
-      child.userData.store_to_xml
+      child.userData.store_to_xml(filename_dialog)
     end
   end
 	#---------------------------------------------------------------------------------------------------------
@@ -222,6 +211,13 @@ class MCC2GUI < MainWindow
     child.userData.load_from_xml(filename)
 
     @mdiclient.setActiveChild(child)
+  end
+
+  def close_layout
+    child = @mdiclient.activeChild
+    if child
+      child.close
+    end
   end
 	#---------------------------------------------------------------------------------------------------------
   

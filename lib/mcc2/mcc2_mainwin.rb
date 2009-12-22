@@ -14,8 +14,8 @@ class MainWindow
 			w.width=340
 			w.height=246
 			w.shown=true
-			w.y=350
-			w.x=680
+			w.y=351
+			w.x=318
 			FX::MenuBar.new(@mainWindow){|w|
 				@menubar=w
 				w.wdg_name='menubar'
@@ -36,8 +36,8 @@ class MainWindow
 						@menupane_datei=w
 						w.wdg_name='menupane_datei'
 						w.shadowColor=Fox::FXRGBA(128,128,128,255)
-						w.y=354
-						w.x=62
+						w.y=370
+						w.x=682
 						FX::MenuCommand.new(@menupane_datei){|w|
 							@mcmd_new=w
 							w.wdg_name='mcmd_new'
@@ -59,7 +59,7 @@ class MainWindow
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=21
-							w.accelText="Ctl+O"
+							w.accelText="Ctrl+O"
 							w.x=2
 						}
 						FX::MenuCommand.new(@menupane_datei){|w|
@@ -71,6 +71,7 @@ class MainWindow
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=40
+							w.accelText="Ctrl+W"
 							w.x=2
 						}
 						FX::MenuCommand.new(@menupane_datei){|w|
@@ -82,7 +83,7 @@ class MainWindow
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=59
-							w.accelText="Ctl+S"
+							w.accelText="Ctrl+S"
 							w.x=2
 						}
 						FX::MenuCommand.new(@menupane_datei){|w|
@@ -122,13 +123,13 @@ class MainWindow
 				FX::MenuCommand.new(@menubar){|w|
 					@mcmd_druck=w
 					w.wdg_name='mcmd_druck'
-					w.width=120
+					w.width=125
 					w.text="Drucken"
 					w.height=19
 					w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 					w.shadowColor=Fox::FXRGBA(128,128,128,255)
 					w.y=2
-					w.accelText="Ctl+P"
+					w.accelText="Ctrl+P"
 					w.x=48
 				}
 				FX::MenuTitle.new(@menubar){|w|
@@ -140,7 +141,7 @@ class MainWindow
 					w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 					w.shadowColor=Fox::FXRGBA(128,128,128,255)
 					w.y=2
-					w.x=172
+					w.x=177
 					FX::MenuPane.new(@menutitle_object){|w|
 						@menupane_object=w
 						w.wdg_name='menupane_object'
@@ -154,6 +155,7 @@ class MainWindow
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=2
+							w.accelText="Ctrl+T"
 							w.x=2
 						}
 						FX::MenuCommand.new(@menupane_object){|w|
@@ -165,6 +167,7 @@ class MainWindow
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=21
+							w.accelText="Ctrl+B"
 							w.x=2
 						}
 						FX::MenuCommand.new(@menupane_object){|w|
@@ -176,6 +179,7 @@ class MainWindow
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=40
+							w.accelText="Ctrl+i"
 							w.x=2
 						}
 					}

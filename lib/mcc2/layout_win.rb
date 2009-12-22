@@ -33,14 +33,14 @@ class LayoutFrame
 						@splitter12=w
 						w.wdg_name='splitter12'
 						w.width=320
-						w.height=98
+						w.height=102
 						w.barSize=2
 						FX::VerticalFrame.new(@splitter12){|w|
 							@verticalframe_steuerung=w
 							w.wdg_name='verticalframe_steuerung'
 							w.width=54
 							w.frameStyle=16384
-							w.height=98
+							w.height=102
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							FX::Button.new(@verticalframe_steuerung){|w|
 								@button_up=w
@@ -110,14 +110,14 @@ class LayoutFrame
 							w.wdg_name='verticalframe_objectlist'
 							w.width=264
 							w.frameStyle=16384
-							w.height=98
+							w.height=102
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.x=56
 							FX::IconList.new(@verticalframe_objectlist){|w|
 								@iconlist_objects=w
 								w.wdg_name='iconlist_objects'
 								w.width=260
-								w.height=94
+								w.height=98
 								w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 								w.y=2
 								w.iconListStyle=1048576
@@ -130,15 +130,14 @@ class LayoutFrame
 						w.wdg_name='horizontalframe_attributes'
 						w.width=320
 						w.frameStyle=16384
-						w.height=349
+						w.height=345
 						w.shadowColor=Fox::FXRGBA(128,128,128,255)
-						w.y=100
+						w.y=104
 						FX::TabBook.new(@horizontalframe_attributes){|w|
 							@tabbook_objectattributes=w
 							w.wdg_name='tabbook_objectattributes'
-							w.current=5
 							w.width=316
-							w.height=345
+							w.height=341
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=2
 							w.x=2
@@ -151,16 +150,15 @@ class LayoutFrame
 								w.tipText="Hier werden alle allgemeinen Einstellungen vorgenommen, die das gesamte Layout betreffen."
 								w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=6
-								w.x=6
+								w.y=4
+								w.x=4
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe52=w
 								w.wdg_name='verticalframe52'
 								w.width=308
-								w.height=317
+								w.height=313
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.shown=false
 								w.y=24
 								w.vSpacing=2
 								w.x=4
@@ -473,14 +471,14 @@ class LayoutFrame
 								w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								w.y=6
-								w.x=69
+								w.x=66
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_chip=w
 								w.wdg_name='verticalframe_chip'
 								w.width=308
 								w.frameStyle=16384
-								w.height=317
+								w.height=313
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								w.shown=false
 								w.y=24
@@ -496,14 +494,14 @@ class LayoutFrame
 								w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								w.y=6
-								w.x=102
+								w.x=99
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe54=w
 								w.wdg_name='verticalframe54'
 								w.width=308
 								w.frameStyle=16384
-								w.height=317
+								w.height=313
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								w.shown=false
 								w.y=24
@@ -1104,16 +1102,17 @@ class LayoutFrame
 								w.tipText="In diesem Tab k\303\266nnen die Einstellungen zur Schriftart vorgenommen werden."
 								w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=4
-								w.x=193
+								w.y=6
+								w.x=192
 							}
 							FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 								@verticalframe_font=w
 								w.wdg_name='verticalframe_font'
 								w.width=308
 								w.frameStyle=16384
-								w.height=317
+								w.height=313
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
+								w.shown=false
 								w.y=24
 								w.padTop=10
 								w.vSpacing=4
@@ -1332,7 +1331,7 @@ class LayoutFrame
 								w.wdg_name='verticalframe_barcode'
 								w.width=308
 								w.frameStyle=16384
-								w.height=317
+								w.height=313
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								w.shown=false
 								w.y=24
