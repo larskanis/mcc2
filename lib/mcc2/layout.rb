@@ -926,7 +926,7 @@ class Layout
     if @layout_file.get_attr_value(S_DATASOURCE) == ""
       # nur eine Karte ohne Daten drucken
       printer = $pr 
-      printer.print(@layout_file, nil, chip) # self ???
+      printer.print_card(@layout_file, nil, chip) # self ???
       chip.close_reader if chip
     else
       # Printdialog um Drucken von Karten mit Daten öffnen
