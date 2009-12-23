@@ -189,8 +189,9 @@ class LayoutFile
     node << go = XML::Node.new(GRAPHICOBJECT)
     go << XML::Node.new(GOA_TYP, typ)
     go << XML::Node.new(GOA_ID, id.to_s)
+    go << XML::Node.new(GOA_NAME, "#{typ}##{id}")
     o.go_attributes.each_pair{|goa_name, go_attribute|
-      if go_attribute.attr_name != GOA_ID && go_attribute.attr_name != GOA_TYP
+      unless [GOA_ID, GOA_TYP, GOA_NAME].include?(go_attribute.attr_name)
         go << XML::Node.new(go_attribute.attr_name, go_attribute.attr_value.to_s)
       end
     }

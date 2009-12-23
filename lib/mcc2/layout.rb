@@ -839,7 +839,7 @@ class Layout
   def fill_objectlist
     # Objekt-Liste leeren
     @lf.iconlist_objects.clearItems
-    @lf.iconlist_objects.appendItem(['', 'Jobsetup', ''].join("\t"), nil, nil, JobSetupObjID)
+    @lf.iconlist_objects.appendItem(['', '', 'Job-Einstellungen'].join("\t"), nil, nil, JobSetupObjID)
 
     if @layout_file
       # Array mit sortierten Objekt-ID's holen
