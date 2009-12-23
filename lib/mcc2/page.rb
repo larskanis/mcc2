@@ -179,13 +179,7 @@ class Page
               bc.set_text_alignment(just)
               
               # versuchen, einen eindeutigen Dateinamen für das  temporäre Barcode-Image zu erzeugen
-              now = Time.now.strftime("%Y%m%d%H%M%S")
-              fn_ready = false
-              while !fn_ready
-                zufall = rand(10000)
-                img_name = File.join("temp", [now,zufall].join("_") + '.png')
-                fn_ready = true unless File.exist?(img_name)
-              end
+              img_name = Tempfile.new("barcode.png") 
               
               raise BarcodeError, "Das Prüfen der Barcodeeinstellungen hat einen Fehler gemeldet.\nBitte prüfen, ob die Daten für diesen Barcodetyp gültig sind!" unless bc.check_barcode == 0
               img_width = go_width.mm

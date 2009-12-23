@@ -5,14 +5,7 @@ module DebugTools
     File.open("logs/#{source}.log","a"){|f_out| 
       f_out.puts "-"*100
       f_out.puts Time.now.strftime("%Y-%m-%d  %H:%M:%S")
-      f_out.puts "."*50
-      f_out.puts "Dateiversionen:"
-      message.split("\n")
-      $versions_liste.each_pair{|k,v|
-        if message.index(k)
-          f_out.puts [k, v].join(" || ")
-        end
-      }
+      f_out.puts "Programmversion: #{Mcc2::VERSION}"
       f_out.puts "."*50
       f_out.puts message
     }

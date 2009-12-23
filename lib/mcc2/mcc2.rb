@@ -87,8 +87,6 @@ include DebugTools
 
 
 File.makedirs("./logs", true)
-File.makedirs("./versions", true)
-File.makedirs("./temp", true)
 
 class Magick::RVG
   def draw
@@ -119,14 +117,7 @@ class MCC2GUI < MainWindow
       
       # Achtung der Text in den nächsten Zeilen ändert sich beim Einchecken 
       # nicht manuell bearbeiten!
-      if "$Revision$" =~ /^\$Revision: (.*)\$$/
-        revision_nr = $1.strip
-      end
-      
-      if "$HeadURL$" =~ /^\$HeadURL: (.*)\$$/
-        head_url = $1.strip.split('/')[-2]
-      end
-      @topwin.title = "mcc2 Version: #{head_url} Revision: #{revision_nr}"
+      @topwin.title = "mcc2 Version #{ Mcc2::VERSION }"
       
       # ......................................................................
       # die Menue-Einträge modifizieren
@@ -247,11 +238,6 @@ class MCC2GUI < MainWindow
     #~ set_trace_func proc { |event, file, line, id, binding, classname|
       #~ printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
     #~ }
-
-    # ermitteln der Versionsnummern und Einbinden in das Programm, damit beim Logging die Versionsnummern mit aufgeführt werden
-    require 'list_revisions'
-    list_revisions
-    require 'versions'
 
     begin
       app = FX::App.new("MCC2", "ComCard")
