@@ -95,6 +95,7 @@ class MainWindow
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=78
+							w.accelText="Shift-Ctrl-S"
 							w.x=2
 						}
 						FX::MenuSeparator.new(@menupane_datei){|w|
