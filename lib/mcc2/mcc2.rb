@@ -162,7 +162,18 @@ class MCC2GUI < MainWindow
   def connect_with_accel(button, text=nil, &block)
     button.text = text if text
     button.connect(SEL_COMMAND, &block)
-    @topwin.accelTable.addAccel(fxparseAccel(button.accelText), block)
+    
+    # work-a-round:
+    # FXPseudoTarget is not correctly marked as used in some fxruby-versions
+    # and is therefore GC'ed.
+    # @topwin.accelTable.addAccel(fxparseAccel(button.accelText), block)
+    tgt = FXPseudoTarget.new
+    seldn = FXSEL(SEL_KEYPRESS, 0)
+    tgt.pconnect(SEL_KEYPRESS, block)
+    @accelTargets ||= []
+    @accelTargets << tgt
+    @topwin.accelTable.addAccel(fxparseAccel(button.accelText), tgt, seldn)
+    # end work-a-round:
   end
   
 	#---------------------------------------------------------------------------------------------------------
