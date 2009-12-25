@@ -67,7 +67,7 @@ class LayoutFile
     }
     
     # Magstripe definieren
-    @xml_doc.root << node = XML::Node.new(S_MAGSTRIPEPARAMS)
+    ensure_magsripe_attrs
     
     # Container für die GraphikObjekte definieren definieren
     @xml_doc.root << node = XML::Node.new(GRAPHICOBJECTS)
@@ -121,31 +121,9 @@ class LayoutFile
         @changed = true
       end
     }
+
+    ensure_magsripe_attrs
     
-    # ................................................................................................................................
-    # die Magnetstreifen-Einstellungen auslesen
-    
-    # kontrollieren, ob alle Nodes des Magstripes existieren, ansonsten anlegen und als 'changed' markieren
-    # todo
-    node_lay = @xml_doc.find_first("//#{S_ROOT}")
-    node_ms = node_lay.find_first(S_MAGSTRIPEPARAMS)
-    unless node_ms
-      node_lay << node_ms = XML::Node.new(S_MAGSTRIPEPARAMS)
-      p node_ms
-      @changed = true
-    end
-    unless node_ms.find_first(S_MSSPUR1)
-      node_ms << XML::Node.new(S_MSSPUR1, '')
-      @changed = true
-    end
-    unless node_ms.find_first(S_MSSPUR2)
-      node_ms << XML::Node.new(S_MSSPUR2, '')
-      @changed = true
-    end
-    unless node_ms.find_first(S_MSSPUR3)
-      node_ms << XML::Node.new(S_MSSPUR3, '')
-      @changed = true
-    end
     # ................................................................................................................................
     # die Einstellungen der graphischen Objekte auslesen
     
@@ -162,6 +140,33 @@ class LayoutFile
       }
     }
   end
+
+  def ensure_magsripe_attrs
+    # ................................................................................................................................
+    # die Magnetstreifen-Einstellungen auslesen
+
+    # kontrollieren, ob alle Nodes des Magstripes existieren, ansonsten anlegen und als 'changed' markieren
+    # todo
+    node_lay = @xml_doc.find_first("//#{S_ROOT}")
+    node_ms = node_lay.find_first(S_MAGSTRIPEPARAMS)
+    unless node_ms
+      node_lay << node_ms = XML::Node.new(S_MAGSTRIPEPARAMS)
+      @changed = true
+    end
+    unless node_ms.find_first(S_MSSPUR1)
+      node_ms << XML::Node.new(S_MSSPUR1, '')
+      @changed = true
+    end
+    unless node_ms.find_first(S_MSSPUR2)
+      node_ms << XML::Node.new(S_MSSPUR2, '')
+      @changed = true
+    end
+    unless node_ms.find_first(S_MSSPUR3)
+      node_ms << XML::Node.new(S_MSSPUR3, '')
+      @changed = true
+    end
+  end
+  
 	#---------------------------------------------------------------------------------------------------------
   
   # holt den Zweig mit den Einstellungen eines graphischen Objekts aus dem XML-File mit der Layout-Spezifikation

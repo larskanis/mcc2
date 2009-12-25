@@ -16,9 +16,10 @@ require 'win32api_user'
 
 require 'win32api_winspool'
 
-require 'card_printer'
+require 'printer/card_printer'
 
 
+module Printer
 class GdiPrinter < CardPrinter
   #
   def initialize
@@ -149,6 +150,7 @@ class GdiPrinter < CardPrinter
     @w32printer.get_printer(hPrinter, Level, pPrinter, cbBuf, pcbNeeded)
     
   end
+end
 end
 
 

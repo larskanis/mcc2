@@ -36,12 +36,8 @@ require "dl"
 
 # die GUI's, alle mit FoxGUI-Builder erstellt
 require 'mcc2_mainwin'      # das Main-GUI 
-require 'layout_win.rb'     # die GUI der Kartenlayout-Windows
-require 'print_dlg'         # der Print-Dialog
 
 require 'layout'            # das Kartenlayout
-
-require 'my_print_dlg'      # die Ableitung des Print-Dialogs
 
 require 'dataman'           # der Datenmanager
 require 'dataman_csv'       # der Datenmanager für CSV-dateien
@@ -55,7 +51,7 @@ require 'picture_object'    # grafische Bild-Objekte
 require 'text_object'       # grafische Text-Objekte
 
 require 'magstripe'         # Magnetstreifen
-require 'card_printer'           # die Basis-Printer-Klasse
+require 'printer/card_printer'           # die Basis-Printer-Klasse
 
 begin
   require 'printer_xid'       # die XID-Printer-Klasse
@@ -172,7 +168,7 @@ class MCC2GUI < MainWindow
   def new_object(typ)
     child = @mdiclient.activeChild
     if child
-      child.userData.manage_objects(ADD, typ)
+      child.userData.add_object(typ)
     end
   end
 	#---------------------------------------------------------------------------------------------------------
@@ -244,7 +240,7 @@ class MCC2GUI < MainWindow
       FXToolTip.new(app, TOOLTIP_PERMANENT)
 
 #       $pr = PrinterXID.new # todo, muss später vom Anwender ausgewählt werden
-      $pr = CardPrinter.new # todo, muss später vom Anwender ausgewählt werden
+      $pr = Printer::CardPrinter.new # todo, muss später vom Anwender ausgewählt werden
 
       w = MCC2GUI.new(app, argv)
       w.topwin.show(Fox::PLACEMENT_SCREEN)

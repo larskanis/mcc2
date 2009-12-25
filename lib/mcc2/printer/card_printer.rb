@@ -1,8 +1,9 @@
 # -*- coding: UTF-8 -*-
 
-require 'printer'           # die Basisklasse für die Printer
+require 'printer/base'           # die Basisklasse für die Printer
 
 
+module Printer
 module CardPrinting
   def default_width; 85.6; end
   def default_height; 53.98; end
@@ -35,8 +36,9 @@ module CardPrinting
 
 end
 
-class CardPrinter < Printer
+class CardPrinter < Base
   include CardPrinting
+end
 end
 
 if __FILE__ == $0

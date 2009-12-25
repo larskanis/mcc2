@@ -7,10 +7,11 @@
 #~ if __FILE__ == $0
   #~ require 'mcc2'
 #~ end
-require 'gdi_printer'           # die Basisklasse für die Printer
-require 'card_printer'
+require 'printer/gdi_printer'           # die Basisklasse für die Printer
+require 'printer/card_printer'
 
 
+module Printer
 class GdiCardPrinter < GdiPrinter
   include CardPrinting
   
@@ -18,6 +19,7 @@ class GdiCardPrinter < GdiPrinter
     super
   end
   
+end
 end
 
 

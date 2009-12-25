@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
-class Printer
+module Printer
+class Base
   attr_reader :default_width
   attr_reader :default_height
   attr_reader :default_x_offset
@@ -53,4 +54,4 @@ class Printer
     raise "not implemented"
   end
 end
-
+end
