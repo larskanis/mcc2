@@ -75,8 +75,13 @@ class Page
           go_height = go.find_first(GOA_HEIGHT).content.to_f
           rotation = go.find_first(GOA_ROTATION).content.to_f
           typ = go.find_first(GOA_TYP).content
-          data = DataMan.replace_variables(go.find_first(GOA_DATA).content, row, encoding)
-          sample_data = DataMan.replace_variables(go.find_first(GOA_SAMPLE_DATA).content, row, encoding)
+          if row
+            data = DataMan.replace_variables(go.find_first(GOA_DATA).content, row, encoding)
+          else
+            data = go.find_first(GOA_DATA).content
+            sample_data = go.find_first(GOA_SAMPLE_DATA).content
+            data = sample_data unless sample_data.to_s.empty?
+          end
           
           canvas1.g.translate(x.mm, y.mm).rotate(rotation) do |body|
             #~ p "#{self.class.name}::draw => data: #{data} typ: #{typ}"
@@ -146,10 +151,8 @@ class Page
               bc_typ = go.find(GOA_BC_TYP).first.content
               bc_typ_id = barcodes.index(bc_typ)
               if (data.nil? || data.empty?) 
-                if (sample_data.nil? || sample_data.empty?)
+                if (data.empty?)
                   raise BarcodeError, "Beim Barcode wurden weder Daten noch Beispieldaten angegeben!"
-                else
-                  data = sample_data
                 end
               end
               optimize = true

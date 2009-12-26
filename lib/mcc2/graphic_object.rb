@@ -9,7 +9,6 @@ end
 class GraphicObject
   attr_accessor :go_attributes
   def initialize
-    p "GraphicObject::Initialize"
     @go_attributes = {}
     add_attr(@go_attributes, GOA_ID, Integer, 0)
     add_attr(@go_attributes, GOA_DATA, String, 'Daten')
@@ -18,8 +17,6 @@ class GraphicObject
     add_attr(@go_attributes, GOA_TYP, String, GRAPHICOBJECT)
     add_attr(@go_attributes, GOA_X, Integer, 10)
     add_attr(@go_attributes, GOA_Y, Integer, 10)
-    add_attr(@go_attributes, GOA_WIDTH, Integer, 30)
-    add_attr(@go_attributes, GOA_HEIGHT, Integer, 10)
     add_attr(@go_attributes, GOA_ROTATION, Integer, 0)
     add_attr(@go_attributes, GOA_PAGE_NR, Integer, 0)
     add_attr(@go_attributes, GOA_PRINTLIST, String, 'false')

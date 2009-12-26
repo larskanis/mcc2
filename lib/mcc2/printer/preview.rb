@@ -5,6 +5,10 @@ require 'printer/base'           # die Basisklasse für die Printer
 
 module Printer
 class Preview < Base
+  
+  class ResourceNotFoundError < RuntimeError
+  end
+  
   def initialize parent
     super()
     @parent = parent
@@ -17,9 +21,9 @@ class Preview < Base
         dial_zoom.tipText="Hier kann die Anzeige vergr\303\266\303\237ert oder verkleinert werden. Achtung, bei vergr\303\266\303\237erter Anzeige werden viele Operationen deutlich langsamer ausgef\303\274hrt."
         
         dial_zoom.connect(SEL_CHANGED){ set_zoom }
-        dial_zoom.connect(SEL_LEFTBUTTONRELEASE){ draw_preview(true) }
+        dial_zoom.connect(SEL_LEFTBUTTONRELEASE){ draw_preview(true, @row) }
         dial_zoom.value = 100
-        dial_zoom.range = (49..359)
+        dial_zoom.range = (1..1000)
       end
     end
 
@@ -31,6 +35,11 @@ class Preview < Base
 
   def layout_file= file
     @layout_file = file
+  end
+
+  def selected_object_id= id
+    @selected_object_id = id
+    draw_preview false, @row
   end
   
   # verändert die Zoomstufe, wenn am Rädchen gedreht wird
@@ -45,7 +54,9 @@ class Preview < Base
   # zeichnet die Vorschau im Layout-Modus
   # hier ist noch einiges zu tun, im speziellen sind einige Werte "hart" kodiert,
   # die z.Bsp abhängig von anderen Einstellungen sein sollten
-  def draw_preview(row = nil, immediately = false)
+  def draw_preview(immediately = false, row = nil)
+    @row = row
+    
     @last_change = Time.now
     @last_change -= 5 if immediately
     return if @thread && @thread.alive?

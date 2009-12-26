@@ -13,6 +13,7 @@ class Layoutview
   # +parent+:: ??
   def initialize(parent, layout)
     @layout = layout
+    @parent = parent
 
     @lf = Dialogbox_layoutview.new parent
     @lf.splitter11.reparent parent, nil
@@ -147,12 +148,12 @@ class Layoutview
       FX::Label.new(matrix_chipparams){|w|
         w.wdg_name = "label_chipparam_#{i}"
         w.text = ['Parameter', i+1].join(' ')
-        w.font=FX::Font.new.from_s('Arial|80|40|5|0|0|0').to_FXFont
+        w.font=FX::Font.new.from_s('Helvetica|80|40|5|0|0|0').to_FXFont
       }
       tf = FX::TextField.new(matrix_chipparams, LAYOUT_FILL_X){|w|
         w.textFieldTextStyle = LAYOUT_FILL_X
         w.wdg_name = "textfield_chipparam_#{i}"
-        w.font = FX::Font.new.from_s('Arial|80|40|5|0|0|0').to_FXFont
+        w.font = FX::Font.new.from_s('Helvetica|80|40|5|0|0|0').to_FXFont
         w.numColumns = 40
       }
       tf.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_CHIPPARAMS) }
@@ -189,11 +190,15 @@ class Layoutview
     @lf.textfield_spur1.text = mag_attrs.find_first(S_MSSPUR1).content
     @lf.textfield_spur2.text = mag_attrs.find_first(S_MSSPUR2).content
     @lf.textfield_spur3.text = mag_attrs.find_first(S_MSSPUR3).content
+
+    draw_preview(true)
   end
   #
   
   def enhanced_data_edit
-    typ = @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_TYP).content
+    objnode = @layout_file.get_objectnode_by_id(@selected_object_id)
+    return unless objnode
+    typ = objnode.find_first(GOA_TYP).content
     if typ == PICTUREOBJECT
       s = FXFileDialog.getOpenFilename(@lf, "Bild auswählen", ".", patterns="*", initial=0)
       @lf.textfield_data_non_text.text = @lf.textfield_data_non_text.text + s
@@ -217,7 +222,9 @@ class Layoutview
 
   # ???
   def change_chkbtn_printlist
-    node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_PRINTLIST)
+    objnode = @layout_file.get_objectnode_by_id(@selected_object_id)
+    return unless objnode
+    node = objnode.find(GOA_PRINTLIST)
     if @lf.checkbutton_printlist.state != node.first.content
       node.first.content = @lf.checkbutton_printlist.state.to_s
       changed_attributes
@@ -356,7 +363,9 @@ class Layoutview
     else
       # in diesem Zweig werden alle Graphik-Objekte bearbeitet
       # das Attribut suchen
-      node = @layout_file.get_objectnode_by_id(@selected_object_id).find(attr_name).first
+      objnode = @layout_file.get_objectnode_by_id(@selected_object_id)
+      return unless objnode
+      node = objnode.find(attr_name).first
     end
 
     # nur wenn im Textfeld etwas geändert wurde, den Text in das Attribut schreiben und das changed-Flag setzen
@@ -374,7 +383,9 @@ class Layoutview
 
   # schreibt den Text der im Textfeld eingegeben wurde in das Attribut 'name' des graphischen Objekts und aktualisiert die Objektliste
   def textfield_name_exit
-    orig_name = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_NAME)
+    objnode = @layout_file.get_objectnode_by_id(@selected_object_id)
+    return unless objnode
+    orig_name = objnode.find(GOA_NAME)
     if @lf.textfield_name.text != orig_name.first.content
       orig_name.first.content = @lf.textfield_name.text
       changed_attributes
@@ -408,12 +419,19 @@ class Layoutview
     @lf.button_copy.enabled = on
     @lf.button_delete.enabled = on
   end
+
+  attr_reader :selected_object_id
+  def selected_object_id= id
+    @selected_object_id = id
+    @layout.selected_object_id = id
+  end
+  
   #---------------------------------------------------------------------------------------------------------
 
   # deaktiviert die Tabs im Layout-Dialog, welche Objekt-spezifisch sind
   def object_deselected
     activate_object_tabs(false)
-    @selected_object_id = nil
+    self.selected_object_id = nil
     activate_up_down(false)
     activate_copy_delete(false)
   end
@@ -423,7 +441,7 @@ class Layoutview
   # z.Bsp, nur die Tabs aktiviert, die zum Objekttyp passen, usw.
   def object_selection_changed
     item_ID = @lf.iconlist_objects.currentItem
-    @selected_object_id = @lf.iconlist_objects.getItemData(item_ID).to_i
+    self.selected_object_id = @lf.iconlist_objects.getItemData(item_ID).to_i
 
     if @selected_object_id == JobSetupObjID
       object_deselected
@@ -556,7 +574,7 @@ class Layoutview
     # den gewählten Parameter in den entsprechenden Listen markieren
     bc_typ = node.find_first(GOA_BC_TYP).content
     bc_id = @barcodes.index(bc_typ)
-    error_WahlMessage = FXFehlerAuswahlDialog.new(@app, "Der Barcode-Typ #{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes.\ Der Wert wird auf 'NONE' gesetzt.", 'ok') unless bc_id
+    error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Der Barcode-Typ #{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes.\ Der Wert wird auf 'NONE' gesetzt.", 'ok') unless bc_id
     @lf.listbox_bc_typ.currentItem = bc_id if bc_id
   end
   #---------------------------------------------------------------------------------------------------------
@@ -640,7 +658,7 @@ class Layoutview
     elsif action == DELETE
       nn = node.find_first(GOA_NAME).content
       s = "Wollen Sie wirklich das Objekt '#{nn}' löschen? Dieser Vorgang lässt sich nicht rückgängig machen!"
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, s, ['löschen','abbrechen'])
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, s, ['löschen','abbrechen'])
       error_WahlMessage.execute
       if error_WahlMessage.selection == 0
         @layout_file.delete_object(node)
@@ -733,11 +751,12 @@ class Layoutview
   end
 
   def draw_preview(immediately=false)
-    @layout.draw_preview(nil, immediately)
+    @layout.draw_preview(immediately)
   end
 
   def changed_attributes
     @layout.changed_attributes
+    draw_preview
   end
 
 end

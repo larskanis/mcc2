@@ -14,8 +14,6 @@ require 'printer/preview'
 
 # definiert ein Clientfenster mit allen Einstellungen und Attributen, die für ein bestimmtes Kartenlayout benötigt werden
 class Layout
-  class ResourceNotFoundError < RuntimeError
-  end
 
   # definiert, ob an den Einstellungen seit dem letzten speichern oder laden etwas geändert wurde
   attr_accessor :changed
@@ -154,6 +152,10 @@ class Layout
     @layoutview.layout_file = @layout_file
     @dataview.layout_file = @layout_file
   end
+
+  def selected_object_id= id
+    @preview.selected_object_id = id if @preview
+  end
   
   #
   def create_xml
@@ -168,10 +170,15 @@ class Layout
   
  	#---------------------------------------------------------------------------------------------------------
 
-  def draw_preview row=nil, immediately = false
+  def draw_preview_with_row immediately=false, row=nil
     return unless @preview
-    
-    @preview.draw_preview row, immediately
+    @row = row if row
+    @preview.draw_preview immediately, @row
+  end
+  
+  def draw_preview immediately=false
+    return unless @preview
+    @preview.draw_preview immediately, nil
   end
     
   
