@@ -19,13 +19,13 @@ class Dialogbox_layoutview
 			w.layoutHints=768
 			w.x=483
 			FX::Splitter.new(@dialogbox_layoutview){|w|
-				@splitter11=w
-				w.wdg_name='splitter11'
+				@splitter_layoutview=w
+				w.wdg_name='splitter_layoutview'
 				w.width=490
 				w.height=432
 				w.barSize=2
 				w.splitterStyle=163840
-				FX::Splitter.new(@splitter11){|w|
+				FX::Splitter.new(@splitter_layoutview){|w|
 					@splitter12=w
 					w.wdg_name='splitter12'
 					w.width=490
@@ -121,7 +121,7 @@ class Dialogbox_layoutview
 						}
 					}
 				}
-				FX::HorizontalFrame.new(@splitter11){|w|
+				FX::HorizontalFrame.new(@splitter_layoutview){|w|
 					@horizontalframe_attributes=w
 					w.wdg_name='horizontalframe_attributes'
 					w.width=490
@@ -1414,7 +1414,7 @@ class Dialogbox_layoutview
 	end
 	attr_reader :topwin
 	attr_reader :dialogbox_layoutview
-	attr_reader :splitter11
+	attr_reader :splitter_layoutview
 	attr_reader :splitter12
 	attr_reader :verticalframe_steuerung
 	attr_reader :button_up

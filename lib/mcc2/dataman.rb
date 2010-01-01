@@ -44,7 +44,7 @@ class DataMan
     unless VALID_ENCODINGS.index(encoding)
       raise BadEncodingError, "falsches Encoding angegeben! Erlaubte Begriffe: #{VALID_ENCODINGS.join(", ")}. Auf Groß- Kleinschreibung achten!"
     end
-    encoding = Iconv.new('latin1', encoding)
+    encoding = Iconv.new('utf-8', encoding)
     encoding.iconv(text)
   end
  	#---------------------------------------------------------------------------------------------------------

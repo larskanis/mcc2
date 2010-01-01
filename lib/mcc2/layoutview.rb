@@ -16,13 +16,13 @@ class Layoutview
     @parent = parent
 
     @lf = Dialogbox_layoutview.new parent
-    @lf.splitter11.reparent parent, nil
+    @lf.splitter_layoutview.reparent parent, nil
     @lf.dialogbox_layoutview.close
     @lf.iconlist_objects.appendHeader('ID', nil, 50)
     @lf.iconlist_objects.appendHeader('Name', nil, 100)
     @lf.iconlist_objects.appendHeader('Typ', nil, 100)
 
-    @lf.splitter11.setSplit(0, 250)
+    @lf.splitter_layoutview.setSplit(0, 250)
     @lf.splitter12.setSplit(0, 100)
 
     # .............................................................................................
@@ -162,6 +162,10 @@ class Layoutview
   end
   #---------------------------------------------------------------------------------------------------------
 
+  def layoutview_tab_activated
+    draw_preview
+  end
+  
   def layout_file= file
     @layout_file = file
     
@@ -372,11 +376,6 @@ class Layoutview
     if sender.text != node.content
       node.content = sender.text
       changed_attributes
-    end
-    if attr_name == S_DATASOURCE
-      # nachdem die Daten in das Layout eingetrage wurden, die neue Datei laden
-      close_dataman
-      open_dataman
     end
   end
   #---------------------------------------------------------------------------------------------------------

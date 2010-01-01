@@ -47,6 +47,15 @@ class Layout
 
     FXSplitter.new(parent) do |splitter1|
       FXTabBook.new(splitter1) do |tabbook|
+#         %w[SEL_MAP SEL_CONFIGURE SEL_ENTER SEL_FOCUSIN SEL_UPDATE SEL_UNGRABBED SEL_COMMAND].each{|se|
+#           tabbook.connect(Fox.const_get(se)){|sender, sel, event|
+#             puts "#{se}: #{sender}, #{sel}, #{event}"
+#           }
+#         }
+        tabbook.connect(SEL_COMMAND){|sender, sel, event|
+          @layoutview.layoutview_tab_activated if event == 0
+          @dataview.dataview_tab_activated if event == 1
+        }
         FXTabItem.new(tabbook, "Entwurfsansicht") do |tabitem_layoutview|
         end
         FXVerticalFrame.new(tabbook) do |frame_layoutview|
@@ -77,8 +86,8 @@ class Layout
   # erzeugt einen Datenmanager abhängig davon welcher Datensourcetyp im Layout definiert ist (momentan DATABASE oder CSV)
   def open_dataman
     
-    datamantyp =  @layout_file.get_attr_value(S_DATASOURCETYP)
-    datasource =  @layout_file.get_attr_value(S_DATASOURCE)
+    @open_datamantyp = datamantyp =  @layout_file.get_attr_value(S_DATASOURCETYP)
+    @open_datasource = datasource =  @layout_file.get_attr_value(S_DATASOURCE)
     
     if datamantyp == DATABASE
       @dataman = DataManDatabase.new(datasource)
@@ -89,6 +98,7 @@ class Layout
     else
       raise "falscher datasourcetyp '#{datamantyp}' angegeben!"
     end
+    @dataview.dataman = @dataman
   end
   #---------------------------------------------------------------------------------------------------------
   
@@ -99,6 +109,13 @@ class Layout
     @changed = true
     draw_preview
     set_title
+
+    # Any datasource related values changed? -> reopen
+    if  @open_datamantyp!=@layout_file.get_attr_value(S_DATASOURCETYP) ||
+        @open_datasource!=@layout_file.get_attr_value(S_DATASOURCE)
+      close_dataman
+      open_dataman
+    end
   end
   #---------------------------------------------------------------------------------------------------------
   
@@ -170,9 +187,9 @@ class Layout
   
  	#---------------------------------------------------------------------------------------------------------
 
-  def draw_preview_with_row immediately=false, row=nil
+  def draw_preview_with_row row, immediately=false
     return unless @preview
-    @row = row if row
+    @row = row
     @preview.draw_preview immediately, @row
   end
   
