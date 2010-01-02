@@ -14,7 +14,8 @@ class Preview < Base
     @parent = parent
 
     FXHorizontalFrame.new(parent) do |frame1|
-      @label_zoom = FXLabel.new(frame1, "Zoom:") do |label_zoom|
+      @label_zoom = FXLabel.new(frame1, "") do |label_zoom|
+        label_zoom.img = 'mcc2/images/zoom-in.png'
         label_zoom.tipText="Hier kann die Anzeige vergr\303\266\303\237ert oder verkleinert werden. Achtung, bei vergr\303\266\303\237erter Anzeige werden viele Operationen deutlich langsamer ausgef\303\274hrt."
       end
       @dial_zoom = FXDial.new(frame1, :opts=>DIAL_HORIZONTAL) do |dial_zoom|
@@ -45,7 +46,7 @@ class Preview < Base
   # verändert die Zoomstufe, wenn am Rädchen gedreht wird
   def set_zoom
     @zoom = (@dial_zoom.value).to_f / 100
-    @label_zoom.text = "Zoom: #{@zoom}"
+    @label_zoom.text = "#{@zoom}"
     #~ p "@zoom: #{@zoom}"
     #~ p "@scale: #{@scale}"
   end

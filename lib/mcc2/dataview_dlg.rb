@@ -197,6 +197,7 @@ class Dialogbox_dataview
 							w.tipText="alle markierten Datens\303\244tze drucken"
 							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 							w.y=4
+							w.img='mcc2/images/document-print-frame.png'
 							w.x=65
 						}
 						FX::Button.new(@matrix18){|w|
@@ -208,6 +209,7 @@ class Dialogbox_dataview
 							w.tipText="Alle Datens\303\244tze drucken"
 							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 							w.y=4
+							w.img='mcc2/images/document-print.png'
 							w.x=181
 						}
 						FX::Button.new(@matrix18){|w|
@@ -220,6 +222,7 @@ class Dialogbox_dataview
 							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 							w.helpText="Druck anhalten"
 							w.y=4
+							w.img='mcc2/images/process-stop.png'
 							w.x=263
 						}
 					}

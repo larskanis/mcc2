@@ -30,6 +30,14 @@ require 'fox16/responder'
 include Fox
 require 'libguib16'
 
+# convert relative image file path to absolute one
+# based on dir of this file.
+alias loadImage_libguib16 loadImage
+def loadImage(file)
+  file = File.join( File.dirname(__FILE__), '..', file)
+  loadImage_libguib16(file)
+end
+
 require 'constants'
 
 require "dl"
@@ -120,19 +128,19 @@ class MCC2GUI < MainWindow
       
       @menutitle_datei.text = "&Datei"
       
-      connect_with_accel(@mcmd_new, "&Neu"){ new_layout }
-      connect_with_accel(@mcmd_open, "&Öffnen"){ open_layout }
-      connect_with_accel(@mcmd_close, "&Schließ&en"){ close_layout }
-      connect_with_accel(@mcmd_save, "&Speichern"){ save_layout }
-      connect_with_accel(@mcmd_save_as, "Speichern &unter"){ save_layout(true) }
-      connect_with_accel(@mcmd_exit, "&Beenden"){ @app.stop }
-      connect_with_accel(@mcmd_druck, "D&rucken"){ print_cards }
+      connect_with_accel(@mcmd_new){ new_layout }
+      connect_with_accel(@mcmd_open){ open_layout }
+      connect_with_accel(@mcmd_close){ close_layout }
+      connect_with_accel(@mcmd_save){ save_layout }
+      connect_with_accel(@mcmd_save_as){ save_layout(true) }
+      connect_with_accel(@mcmd_exit){ @app.stop }
+      connect_with_accel(@mcmd_druck){ print_cards }
       
       @menutitle_object.text = "Neues &Objekt"
       
-      connect_with_accel(@mcmd_text, "&Text"){ new_object(TEXTOBJECT) }
-      connect_with_accel(@mcmd_barcode, "&Barcode"){ new_object(BARCODEOBJECT) }
-      connect_with_accel(@mcmd_picture, "B&ild"){ new_object(PICTUREOBJECT) }
+      connect_with_accel(@mcmd_text){ new_object(TEXTOBJECT) }
+      connect_with_accel(@mcmd_barcode){ new_object(BARCODEOBJECT) }
+      connect_with_accel(@mcmd_picture){ new_object(PICTUREOBJECT) }
       
       @topwin.width = 1024
       @topwin.height = 768
@@ -148,6 +156,7 @@ class MCC2GUI < MainWindow
 
   def connect_with_accel(button, text=nil, &block)
     button.text = text if text
+    button.text = button.text.gsub('_', '&')
     button.connect(SEL_COMMAND, &block)
     
     # work-a-round:

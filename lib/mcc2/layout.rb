@@ -56,12 +56,16 @@ class Layout
           @layoutview.layoutview_tab_activated if event == 0
           @dataview.dataview_tab_activated if event == 1
         }
-        FXTabItem.new(tabbook, "Entwurfsansicht") do |tabitem_layoutview|
+        FX::TabItem.new(tabbook) do |tabitem_layoutview|
+          tabitem_layoutview.text = "Entwurfsansicht"
+          tabitem_layoutview.img = 'mcc2/images/document-edit.png'
         end
         FXVerticalFrame.new(tabbook) do |frame_layoutview|
           @layoutview = Layoutview.new frame_layoutview, self
         end
-        FXTabItem.new(tabbook, "Datenansicht") do |tabitem_dataview|
+        FX::TabItem.new(tabbook) do |tabitem_dataview|
+          tabitem_dataview.text = "Datenansicht"
+          tabitem_dataview.img = 'mcc2/images/documentation.png'
         end
         FXVerticalFrame.new(tabbook) do |frame_dataview|
           @dataview = Dataview.new frame_dataview, self

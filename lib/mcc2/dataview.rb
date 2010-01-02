@@ -228,8 +228,10 @@ class Dataview < Dialogbox_dataview
   def update_preview
     if @checkbutton2.state && !@printing # Vorschau nicht während dem Druck, da es sonst zu Druckfehlern kommt und der Druck länger dauert
       row_nr = @iconlist_data.currentItem
-      @iconlist_data.makeItemVisible(@iconlist_data.currentItem)
-      draw_preview @dataman.row(row_nr)
+      if row_nr>=0
+        @iconlist_data.makeItemVisible(row_nr)
+        draw_preview @dataman.row(row_nr)
+      end
     end
   end
   #---------------------------------------------------------------------------------------------------------

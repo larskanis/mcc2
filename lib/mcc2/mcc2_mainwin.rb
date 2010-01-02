@@ -35,73 +35,80 @@ class MainWindow
 					FX::MenuPane.new(@menutitle_datei){|w|
 						@menupane_datei=w
 						w.wdg_name='menupane_datei'
+						w.width=200
+						w.height=120
 						w.shadowColor=Fox::FXRGBA(128,128,128,255)
-						w.y=370
-						w.x=682
+						w.y=371
+						w.x=320
 						FX::MenuCommand.new(@menupane_datei){|w|
 							@mcmd_new=w
 							w.wdg_name='mcmd_new'
-							w.width=0
-							w.text="Neu"
+							w.width=196
+							w.text="_Neu"
 							w.height=19
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=2
 							w.accelText="Ctrl+N"
+							w.img='mcc2/images/document-new.png'
 							w.x=2
 						}
 						FX::MenuCommand.new(@menupane_datei){|w|
 							@mcmd_open=w
 							w.wdg_name='mcmd_open'
-							w.width=0
-							w.text="\303\226ffnen"
+							w.width=196
+							w.text="_\303\226ffnen"
 							w.height=19
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=21
 							w.accelText="Ctrl+O"
+							w.img='mcc2/images/document-open.png'
 							w.x=2
 						}
 						FX::MenuCommand.new(@menupane_datei){|w|
 							@mcmd_close=w
 							w.wdg_name='mcmd_close'
-							w.width=0
-							w.text="Schlie\303\237en"
+							w.width=196
+							w.text="Schlie\303\237_en"
 							w.height=19
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=40
 							w.accelText="Ctrl+W"
+							w.img='mcc2/images/document-close.png'
 							w.x=2
 						}
 						FX::MenuCommand.new(@menupane_datei){|w|
 							@mcmd_save=w
 							w.wdg_name='mcmd_save'
-							w.width=0
-							w.text="Speichern"
+							w.width=196
+							w.text="_Speichern"
 							w.height=19
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=59
 							w.accelText="Ctrl+S"
+							w.img='mcc2/images/document-save.png'
 							w.x=2
 						}
 						FX::MenuCommand.new(@menupane_datei){|w|
 							@mcmd_save_as=w
 							w.wdg_name='mcmd_save_as'
-							w.width=0
-							w.text="Speichern unter"
+							w.width=196
+							w.text="Speichern _unter"
 							w.height=19
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=78
 							w.accelText="Shift-Ctrl-S"
+							w.img='mcc2/images/document-save-as.png'
 							w.x=2
 						}
 						FX::MenuSeparator.new(@menupane_datei){|w|
 							@menuseparator1=w
 							w.wdg_name='menuseparator1'
-							w.width=0
+							w.width=196
 							w.height=2
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=97
@@ -110,13 +117,14 @@ class MainWindow
 						FX::MenuCommand.new(@menupane_datei){|w|
 							@mcmd_exit=w
 							w.wdg_name='mcmd_exit'
-							w.width=0
-							w.text="Beenden"
+							w.width=196
+							w.text="_Beenden"
 							w.height=19
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=99
 							w.accelText="Alt+F4"
+							w.img='mcc2/images/application-exit.png'
 							w.x=2
 						}
 					}
@@ -124,8 +132,8 @@ class MainWindow
 				FX::MenuCommand.new(@menubar){|w|
 					@mcmd_druck=w
 					w.wdg_name='mcmd_druck'
-					w.width=125
-					w.text="Drucken"
+					w.width=131
+					w.text="D_rucken"
 					w.height=19
 					w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 					w.shadowColor=Fox::FXRGBA(128,128,128,255)
@@ -142,45 +150,52 @@ class MainWindow
 					w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 					w.shadowColor=Fox::FXRGBA(128,128,128,255)
 					w.y=2
-					w.x=177
+					w.x=183
 					FX::MenuPane.new(@menutitle_object){|w|
 						@menupane_object=w
 						w.wdg_name='menupane_object'
+						w.width=131
+						w.height=61
 						w.shadowColor=Fox::FXRGBA(128,128,128,255)
+						w.y=371
+						w.x=494
 						FX::MenuCommand.new(@menupane_object){|w|
 							@mcmd_text=w
 							w.wdg_name='mcmd_text'
-							w.width=0
-							w.text="Text"
+							w.width=127
+							w.text="_Text"
 							w.height=19
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=2
 							w.accelText="Ctrl+T"
+							w.img='mcc2/images/insert-text.png'
 							w.x=2
 						}
 						FX::MenuCommand.new(@menupane_object){|w|
 							@mcmd_barcode=w
 							w.wdg_name='mcmd_barcode'
-							w.width=0
-							w.text="Barcode"
+							w.width=127
+							w.text="_Barcode"
 							w.height=19
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=21
 							w.accelText="Ctrl+B"
+							w.img='mcc2/images/measure.png'
 							w.x=2
 						}
 						FX::MenuCommand.new(@menupane_object){|w|
 							@mcmd_picture=w
 							w.wdg_name='mcmd_picture'
-							w.width=0
-							w.text="Bild"
+							w.width=127
+							w.text="B_ild"
 							w.height=19
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=40
 							w.accelText="Ctrl+i"
+							w.img='mcc2/images/insert-image.png'
 							w.x=2
 						}
 					}
