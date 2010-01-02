@@ -11,23 +11,23 @@ class Dialogbox_dataview
 		FX::DialogBox.new(parent){|w|
 			@dialogbox_dataview=w
 			w.wdg_name='dialogbox_dataview'
-			w.width=490
-			w.height=432
+			w.width=398
+			w.height=254
 			w.shown=true
-			w.y=165
+			w.y=303
 			w.title="Entwurfsansicht"
 			w.layoutHints=768
-			w.x=483
+			w.x=313
 			FX::Splitter.new(@dialogbox_dataview){|w|
 				@splitter_dataview=w
 				w.wdg_name='splitter_dataview'
-				w.width=490
-				w.height=432
+				w.width=398
+				w.height=254
 				w.splitterStyle=163840
 				FX::VerticalFrame.new(@splitter_dataview){|w|
 					@verticalframe_printersetup=w
 					w.wdg_name='verticalframe_printersetup'
-					w.width=490
+					w.width=398
 					w.height=21
 					FX::ComboBox.new(@verticalframe_printersetup){|w|
 						@combobox_printertype=w
@@ -40,31 +40,31 @@ class Dialogbox_dataview
 				FX::VerticalFrame.new(@splitter_dataview){|w|
 					@verticalframe_datalist=w
 					w.wdg_name='verticalframe_datalist'
-					w.width=490
+					w.width=398
 					w.frameStyle=16384
-					w.height=407
+					w.height=229
 					w.y=25
 					w.layoutHints=2304
 					FX::Matrix.new(@verticalframe_datalist){|w|
 						@matrix_printbuttons=w
 						w.wdg_name='matrix_printbuttons'
 						w.padLeft=10
-						w.width=486
-						w.height=159
+						w.width=394
+						w.height=76
 						w.hSpacing=0
 						w.y=2
 						w.numColumns=3
 						w.matrixStyle=131072
 						w.layoutHints=1024
 						w.padTop=10
-						w.numRows=6
+						w.numRows=3
 						w.vSpacing=0
 						w.x=2
 						FX::Label.new(@matrix_printbuttons){|w|
 							@label766=w
 							w.wdg_name='label766'
-							w.width=23
-							w.text="von"
+							w.width=44
+							w.text="von/bis"
 							w.height=19
 							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 							w.y=10
@@ -81,74 +81,15 @@ class Dialogbox_dataview
 							w.numColumns=10
 							w.x=78
 						}
-						FX::Label.new(@matrix_printbuttons){|w|
-							@label767=w
-							w.wdg_name='label767'
-							w.width=4
-							w.text=""
-							w.height=4
-							w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
-							w.y=10
-							w.x=228
-						}
-						FX::Label.new(@matrix_printbuttons){|w|
-							@label768=w
-							w.wdg_name='label768'
-							w.width=21
-							w.text="bis"
-							w.height=19
-							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-							w.y=31
-							w.x=10
-						}
 						FX::TextField.new(@matrix_printbuttons){|w|
 							@textfield_print_to=w
 							w.wdg_name='textfield_print_to'
 							w.width=76
 							w.height=21
 							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-							w.y=31
+							w.y=10
 							w.textFieldTextStyle=1048576
 							w.numColumns=10
-							w.x=78
-						}
-						FX::Label.new(@matrix_printbuttons){|w|
-							@label15=w
-							w.wdg_name='label15'
-							w.width=4
-							w.text=""
-							w.height=4
-							w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
-							w.y=31
-							w.x=228
-						}
-						FX::Packer.new(@matrix_printbuttons){|w|
-							@packer3=w
-							w.wdg_name='packer3'
-							w.width=68
-							w.height=40
-							w.y=52
-							w.layoutHints=1536
-							w.x=10
-						}
-						FX::Label.new(@matrix_printbuttons){|w|
-							@label16=w
-							w.wdg_name='label16'
-							w.width=4
-							w.text=""
-							w.height=4
-							w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
-							w.y=52
-							w.x=78
-						}
-						FX::Label.new(@matrix_printbuttons){|w|
-							@label17=w
-							w.wdg_name='label17'
-							w.width=4
-							w.text=""
-							w.height=4
-							w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
-							w.y=52
 							w.x=228
 						}
 						FX::Label.new(@matrix_printbuttons){|w|
@@ -158,7 +99,7 @@ class Dialogbox_dataview
 							w.text="Suchbegriff"
 							w.height=19
 							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-							w.y=92
+							w.y=31
 							w.x=10
 						}
 						FX::TextField.new(@matrix_printbuttons){|w|
@@ -169,50 +110,17 @@ class Dialogbox_dataview
 							w.tipText="hier einen Text eingeben und auf Suchen klicken. Dann wird in allen angezeigten Feldern gesucht"
 							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 							w.helpText="hier einen Text eingeben und auf Suchen klicken. Dann wird in allen angezeigten Feldern gesucht"
-							w.y=92
+							w.y=31
 							w.numColumns=10
 							w.layoutHints=256
 							w.x=78
 						}
-						FX::Button.new(@matrix_printbuttons){|w|
-							@button_search=w
-							w.wdg_name='button_search'
-							w.width=52
-							w.text="Suchen"
-							w.height=23
-							w.tipText="hier einen Text eingeben und auf Suchen klicken. Dann wird in allen angezeigten Feldern gesucht"
-							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-							w.helpText="hier einen Text eingeben und auf Suchen klicken. Dann wird in allen angezeigten Feldern gesucht"
-							w.y=92
-							w.x=228
-						}
 						FX::Packer.new(@matrix_printbuttons){|w|
-							@packer4=w
-							w.wdg_name='packer4'
-							w.width=68
-							w.height=20
-							w.y=115
-							w.layoutHints=1536
-							w.x=10
-						}
-						FX::Label.new(@matrix_printbuttons){|w|
-							@label19=w
-							w.wdg_name='label19'
-							w.width=4
-							w.text=""
-							w.height=4
-							w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
-							w.y=115
-							w.x=78
-						}
-						FX::Label.new(@matrix_printbuttons){|w|
-							@label20=w
-							w.wdg_name='label20'
-							w.width=4
-							w.text=""
-							w.height=4
-							w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
-							w.y=115
+							@packer55=w
+							w.wdg_name='packer55'
+							w.width=76
+							w.height=21
+							w.y=31
 							w.x=228
 						}
 						FX::Label.new(@matrix_printbuttons){|w|
@@ -222,7 +130,7 @@ class Dialogbox_dataview
 							w.text="Vorschau"
 							w.height=20
 							w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
-							w.y=135
+							w.y=52
 							w.x=10
 						}
 						FX::CheckButton.new(@matrix_printbuttons){|w|
@@ -233,152 +141,97 @@ class Dialogbox_dataview
 							w.text=""
 							w.height=17
 							w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
-							w.y=135
+							w.y=52
 							w.state=true
 							w.x=78
 						}
 						FX::Label.new(@matrix_printbuttons){|w|
 							@label42=w
 							w.wdg_name='label42'
-							w.width=34
-							w.height=18
+							w.width=4
+							w.text=""
+							w.height=4
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=135
+							w.y=52
 							w.x=228
 						}
 					}
-					FX::Button.new(@verticalframe_datalist){|w|
-						@button_select_all=w
-						w.wdg_name='button_select_all'
-						w.width=89
-						w.text="alle markieren"
-						w.height=23
-						w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-						w.y=162
-						w.layoutHints=296
-						w.x=200
-					}
-					FX::Button.new(@verticalframe_datalist){|w|
-						@button_deselect_all=w
-						w.wdg_name='button_deselect_all'
-						w.width=167
-						w.text="alle Markierungen entfernen"
-						w.height=23
-						w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-						w.y=189
-						w.layoutHints=296
-						w.x=161
-					}
-					FX::Button.new(@verticalframe_datalist){|w|
-						@button_print_selected=w
-						w.wdg_name='button_print_selected'
-						w.width=200
-						w.text="markierte drucken"
-						w.height=23
-						w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-						w.y=216
-						w.layoutHints=296
-						w.x=145
-					}
-					FX::Button.new(@verticalframe_datalist){|w|
-						@button_print_all=w
-						w.wdg_name='button_print_all'
-						w.width=200
-						w.text="alle drucken"
-						w.height=23
-						w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-						w.y=243
-						w.layoutHints=296
-						w.x=145
-					}
-					FX::Button.new(@verticalframe_datalist){|w|
-						@button_stop_printing=w
-						w.wdg_name='button_stop_printing'
-						w.width=200
-						w.text="anhalten"
-						w.height=23
-						w.tipText="Druck anhalten"
-						w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-						w.helpText="Druck anhalten"
-						w.y=270
-						w.layoutHints=296
-						w.x=145
-					}
-					FX::Button.new(@verticalframe_datalist){|w|
-						@button_exit=w
-						w.wdg_name='button_exit'
-						w.width=200
-						w.text="beenden"
-						w.height=23
-						w.tipText="Druckdialog schlie\303\237en"
-						w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-						w.helpText="Druckdialog schlie\303\237en"
-						w.y=297
-						w.layoutHints=296
-						w.x=145
+					FX::Matrix.new(@verticalframe_datalist){|w|
+						@matrix18=w
+						w.wdg_name='matrix18'
+						w.width=394
+						w.height=31
+						w.y=78
+						w.numColumns=5
+						w.layoutHints=1024
+						w.x=2
+						FX::Button.new(@matrix18){|w|
+							@button_select_all=w
+							w.wdg_name='button_select_all'
+							w.width=28
+							w.text="alle"
+							w.height=23
+							w.tipText="alle Datens\303\244tze markieren"
+							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
+							w.y=4
+							w.x=4
+						}
+						FX::Button.new(@matrix18){|w|
+							@button_deselect_all=w
+							w.wdg_name='button_deselect_all'
+							w.width=25
+							w.text="nix"
+							w.height=23
+							w.tipText="alle Datensatz-Markierungen entfernen"
+							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
+							w.y=4
+							w.x=36
+						}
+						FX::Button.new(@matrix18){|w|
+							@button_print_selected=w
+							w.wdg_name='button_print_selected'
+							w.width=112
+							w.text="markierte drucken"
+							w.height=23
+							w.tipText="alle markierten Datens\303\244tze drucken"
+							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
+							w.y=4
+							w.x=65
+						}
+						FX::Button.new(@matrix18){|w|
+							@button_print_all=w
+							w.wdg_name='button_print_all'
+							w.width=78
+							w.text="alle drucken"
+							w.height=23
+							w.tipText="Alle Datens\303\244tze drucken"
+							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
+							w.y=4
+							w.x=181
+						}
+						FX::Button.new(@matrix18){|w|
+							@button_stop_printing=w
+							w.wdg_name='button_stop_printing'
+							w.width=42
+							w.text="Stopp"
+							w.height=23
+							w.tipText="Druck anhalten"
+							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
+							w.helpText="Druck anhalten"
+							w.y=4
+							w.x=263
+						}
 					}
 					FX::IconList.new(@verticalframe_datalist){|w|
 						@iconlist_data=w
 						w.wdg_name='iconlist_data'
-						w.width=486
-						w.height=61
+						w.width=394
+						w.height=118
 						w.font=FX::Font.new.from_s('Arial|90|40|5|0|0|0').to_FXFont
-						w.y=322
+						w.y=109
 						w.iconListStyle=3145728
 						w.x=2
-					}
-					FX::HorizontalFrame.new(@verticalframe_datalist){|w|
-						@horizontalframe4=w
-						w.wdg_name='horizontalframe4'
-						w.width=486
-						w.height=22
-						w.y=383
-						w.layoutHints=1024
-						w.x=2
-						FX::Button.new(@horizontalframe4){|w|
-							@button_top=w
-							w.wdg_name='button_top'
-							w.width=40
-							w.text="<<"
-							w.height=22
-							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.layoutHints=256
-						}
-						FX::Button.new(@horizontalframe4){|w|
-							@button_prev=w
-							w.wdg_name='button_prev'
-							w.width=40
-							w.text="<"
-							w.height=22
-							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.layoutHints=256
-							w.x=40
-						}
-						FX::Button.new(@horizontalframe4){|w|
-							@button_next=w
-							w.wdg_name='button_next'
-							w.width=40
-							w.text=">"
-							w.height=22
-							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.layoutHints=256
-							w.x=80
-						}
-						FX::Button.new(@horizontalframe4){|w|
-							@button_bottom=w
-							w.wdg_name='button_bottom'
-							w.width=40
-							w.text=">>"
-							w.height=22
-							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.layoutHints=256
-							w.x=120
-						}
 					}
 				}
 			}
@@ -393,34 +246,20 @@ class Dialogbox_dataview
 	attr_reader :matrix_printbuttons
 	attr_reader :label766
 	attr_reader :textfield_print_from
-	attr_reader :label767
-	attr_reader :label768
 	attr_reader :textfield_print_to
-	attr_reader :label15
-	attr_reader :packer3
-	attr_reader :label16
-	attr_reader :label17
 	attr_reader :label18
 	attr_reader :textfield_search
-	attr_reader :button_search
-	attr_reader :packer4
-	attr_reader :label19
-	attr_reader :label20
+	attr_reader :packer55
 	attr_reader :label21
 	attr_reader :checkbutton2
 	attr_reader :label42
+	attr_reader :matrix18
 	attr_reader :button_select_all
 	attr_reader :button_deselect_all
 	attr_reader :button_print_selected
 	attr_reader :button_print_all
 	attr_reader :button_stop_printing
-	attr_reader :button_exit
 	attr_reader :iconlist_data
-	attr_reader :horizontalframe4
-	attr_reader :button_top
-	attr_reader :button_prev
-	attr_reader :button_next
-	attr_reader :button_bottom
 end
 
 #unit test

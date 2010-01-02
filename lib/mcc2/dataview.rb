@@ -21,11 +21,9 @@ class Dataview < Dialogbox_dataview
     @button_select_all.connect(SEL_COMMAND){ select_all }
     @button_deselect_all.connect(SEL_COMMAND){ deselect_all }
     @button_print_selected.connect(SEL_COMMAND){ print_selected }
-    @button_search.connect(SEL_COMMAND){ search; @textfield_search.setFocus }
     @textfield_search.connect(SEL_COMMAND){ search; @textfield_search.setFocus }
     @button_print_all.connect(SEL_COMMAND){ print_all }
     @button_stop_printing.connect(SEL_COMMAND){ stop_printing }
-#    @button_exit.connect(SEL_COMMAND){ peng }
     @iconlist_data.connect(SEL_CHANGED){ update_preview }
     @iconlist_data.connect(SEL_SELECTED){ print_list_selection_changed }
     @iconlist_data.connect(SEL_DESELECTED){ print_list_deselected }
@@ -36,7 +34,6 @@ class Dataview < Dialogbox_dataview
     @printing = false
     disable_all_buttons
     @button_print_all.enabled = true
-    @button_exit.enabled = true
     @button_select_all.enabled = true
 
     @verticalframe_datalist.width = 500
@@ -138,7 +135,7 @@ class Dataview < Dialogbox_dataview
 
 
   def textfield_exit(sender, attr_name)
-    anz = @@dataman.rows.length
+    anz = @dataman.rows.length
     if attr_name == PRINT_FROM || attr_name == PRINT_TO
       if sender.text.to_i < 1 || sender.text.to_i > anz
         error_WahlMessage = FXFehlerAuswahlDialog.new(@app, "Nur Werte > 0 und <= #{anz} möglich!", 'ok')
@@ -187,7 +184,7 @@ class Dataview < Dialogbox_dataview
       old_search_pos = @search_pos
 
       while true
-        if @iconlist_data.getItemText(@search_pos) =~ /#{@textfield_search.text}/i
+        if @search_pos<anz_items && @iconlist_data.getItemText(@search_pos) =~ /#{@textfield_search.text}/i
           # wenn gefunden
           @iconlist_data.setCurrentItem(@search_pos, true)
           @iconlist_data.makeItemVisible(@search_pos)
@@ -301,7 +298,7 @@ class Dataview < Dialogbox_dataview
       end
     }
 
-    layout_file = @@layout_file
+    layout_file = @layout_file
     Thread.new{
       begin
         marked_items.each{|item|
@@ -376,7 +373,6 @@ class Dataview < Dialogbox_dataview
   def disable_all_buttons
     @button_print_selected.enabled = false
     @button_print_all.enabled = false
-    @button_exit.enabled = false
     @button_select_all.enabled = false
     @button_deselect_all.enabled = false
     @button_stop_printing.enabled = false
@@ -386,7 +382,6 @@ class Dataview < Dialogbox_dataview
   def enable_all_buttons
     @button_print_selected.enabled = true
     @button_print_all.enabled = true
-    @button_exit.enabled = true
     @button_select_all.enabled = true
     @button_deselect_all.enabled = true
     @button_stop_printing.enabled = true
