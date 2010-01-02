@@ -21,7 +21,8 @@ class Dataview < Dialogbox_dataview
     @button_select_all.connect(SEL_COMMAND){ select_all }
     @button_deselect_all.connect(SEL_COMMAND){ deselect_all }
     @button_print_selected.connect(SEL_COMMAND){ print_selected }
-    @button_search.connect(SEL_COMMAND){ search }
+    @button_search.connect(SEL_COMMAND){ search; @textfield_search.setFocus }
+    @textfield_search.connect(SEL_COMMAND){ search; @textfield_search.setFocus }
     @button_print_all.connect(SEL_COMMAND){ print_all }
     @button_stop_printing.connect(SEL_COMMAND){ stop_printing }
 #    @button_exit.connect(SEL_COMMAND){ peng }
@@ -186,9 +187,9 @@ class Dataview < Dialogbox_dataview
       old_search_pos = @search_pos
 
       while true
-        if @iconlist_data.getItemText(@search_pos) =~ /#{@textfield_search.text}/
+        if @iconlist_data.getItemText(@search_pos) =~ /#{@textfield_search.text}/i
           # wenn gefunden
-          @iconlist_data.currentItem = @search_pos
+          @iconlist_data.setCurrentItem(@search_pos, true)
           @iconlist_data.makeItemVisible(@search_pos)
           #~ @iconlist_data.anchorItem = @search_pos
           @search_pos += 1
@@ -205,7 +206,7 @@ class Dataview < Dialogbox_dataview
 
         if @search_pos == old_search_pos
           # Message ausgeben
-            error_WahlMessage = FXFehlerAuswahlDialog.new(@app, 'Der Suchbegriff wurde nicht gefunden.', 'ok')
+            error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, 'Der Suchbegriff wurde nicht gefunden.', 'ok')
             error_WahlMessage.execute
           break
         end
