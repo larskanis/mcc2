@@ -66,6 +66,10 @@ class Layoutview
     @lf.textfield_x_offset.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_X_OFFSET) }
     @lf.textfield_y_offset.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_Y_OFFSET) }
     @lf.textfield_datasource.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_DATASOURCE) }
+    # Button für das Auswählen einer Datenquelle an Textfeld knüpfen
+    connect_filebutton_to_textfield( @lf.button_datasource, @lf.textfield_datasource,
+          ["Semicolon seperated file (*.csv)", "All Files (*)"]
+    )
 
     # die Auswahl auf welche Seite das Objekt soll
     @lf.spinner_seiten_nr.connect(SEL_COMMAND){ seiten_nr_changed }
@@ -78,14 +82,13 @@ class Layoutview
     @lf.button_enhanced_data_edit.connect(SEL_COMMAND){ enhanced_data_edit }
     @lf.button_enhanced_data_text_edit.connect(SEL_COMMAND){ enhanced_data_edit }
 
-    # der Button dür das Auswählen einer Datenquelle
-    @lf.button_datasource.connect(SEL_COMMAND){ datasource_button_pressed }
 
     # die Listbox zum Auswählen der Schriftart
     @lf.listbox_fonts.connect(SEL_COMMAND){ |sender, sel, event| sel_list_box_changed(sender) }
     @lf.textfield_font_file.connect(SEL_COMMAND){ |sender, sel, event| textfield_exit(sender, GOA_FONT_FILE) }
-    @lf.button_fontfile_select.connect(SEL_COMMAND){ fontfile_select_button_pressed }
-
+    connect_filebutton_to_textfield( @lf.button_fontfile_select, @lf.textfield_font_file,
+          ["Truetype/Opentype font (*.ttf, *.otf)",  "PS-type1 font (*.pfb)", "All Files (*)"]
+    )
     @lf.textfield_fontsize.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_FONT_HEIGHT) }
 
     # der Checkbuttons für die Einstellung, ob Magnestreifen, Kontaktchip und Kontaktlos personalisiert werden sollen
@@ -161,6 +164,19 @@ class Layoutview
     }
   end
   #---------------------------------------------------------------------------------------------------------
+
+  def connect_filebutton_to_textfield( button, textfield, filepatterns='*')
+    filepatterns = filepatterns.join("\n") if filepatterns.kind_of?(Array)
+    button.connect(SEL_COMMAND){
+      lds = textfield.text
+      ldsd = File.join(File.dirname(lds), '')
+      dest = FileTest.exists?(ldsd) ? ldsd : '.'
+      s = FXFileDialog.getOpenFilename(button, textfield.tipText, dest, filepatterns)
+      unless s.empty?
+        textfield.setText(s, true)
+      end
+    }
+  end
 
   def layoutview_tab_activated
     draw_preview
@@ -705,7 +721,6 @@ class Layoutview
     @lf.textfield_x_offset.text = @layout_file.get_attr_value(S_X_OFFSET)
     @lf.textfield_y_offset.text = @layout_file.get_attr_value(S_Y_OFFSET)
     @lf.textfield_datasource.text = @layout_file.get_attr_value(S_DATASOURCE)
-    @lf.textfield_datasource.tipText = @lf.textfield_datasource.text
     set_check_button('checkbutton_contactless', @layout_file.get_attr_value(S_CONTACTLESS), $pr.has_contactless_engine?)
     set_check_button('checkbutton_contact', @layout_file.get_attr_value(S_CONTACT), $pr.has_contact_engine?)
     set_check_button('checkbutton_magstripe', @layout_file.get_attr_value(S_MAGSTRIPE), $pr.has_magstripe_engine?)
@@ -724,30 +739,6 @@ class Layoutview
   end
   #---------------------------------------------------------------------------------------------------------
   #
-  def datasource_button_pressed
-    lds = @layout_file.get_attr_value(S_DATASOURCE)
-    ldsd = File.join(File.dirname(lds),'/')
-    dest = FileTest.exists?(ldsd) ? ldsd : '.'
-    s = FXFileDialog.getOpenFilename(@lf, "Datenquelle wählen", dest, patterns="*", initial=0)
-    unless s.empty?
-      @lf.textfield_datasource.text = s
-      @lf.textfield_datasource.tipText = @lf.textfield_datasource.text
-      textfield_exit(@lf.textfield_datasource, S_DATASOURCE)
-      changed_attributes
-    end
-  end
-
-  def fontfile_select_button_pressed
-    lds = @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_FONT_FILE).content
-    ldsd = File.join(File.dirname(lds),'/')
-    dest = FileTest.exists?(ldsd) ? ldsd : '.'
-    s = FXFileDialog.getOpenFilename(@lf, "Font-Datei wählen", dest, patterns="*", initial=0)
-    unless s.empty?
-      @lf.textfield_font_file.text = s
-      textfield_exit(@lf.textfield_font_file, GOA_FONT_FILE)
-      changed_attributes
-    end
-  end
 
   def draw_preview(immediately=false)
     @layout.draw_preview(immediately)

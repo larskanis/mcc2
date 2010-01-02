@@ -47,6 +47,7 @@ class Dataview < Dialogbox_dataview
 
   def dataview_tab_activated
     ensure_datalist_filled
+    update_preview
   end
 
   attr_reader :layout_file
@@ -58,7 +59,7 @@ class Dataview < Dialogbox_dataview
 
   # This method is called whenever the datasource has changed.
   def dataman= v
-    @textfield_print_to.text = v.rows.length.to_s
+    @textfield_print_to.text = v.rows.length.to_s if v.rows
     @dataman = v
     fill_datalist_when_visible
   end
