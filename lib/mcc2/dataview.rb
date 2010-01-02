@@ -18,6 +18,7 @@ class Dataview < Dialogbox_dataview
     # .............................................................................................
     # alle Aktionen definieren
 
+    @combobox_printertype.connect(SEL_COMMAND){ combobox_printertype_changed }
     @button_select_all.connect(SEL_COMMAND){ select_all }
     @button_deselect_all.connect(SEL_COMMAND){ deselect_all }
     @button_print_selected.connect(SEL_COMMAND){ print_selected }
@@ -40,6 +41,7 @@ class Dataview < Dialogbox_dataview
 #    @horizontalframe3.height = 0
 #    @splitter2.setSplit(0, 500)
 
+    fill_printertype_list
     fill_datalist_when_visible
   end
 
@@ -51,13 +53,24 @@ class Dataview < Dialogbox_dataview
   attr_reader :layout_file
   def layout_file= file
     @layout_file = file
+
+    prtype = @layout_file.get_attr_value(S_PRINTERTYPE)
+    idx = -1
+    if @combobox_printertype.find{|text, data| idx+=1; data == prtype }
+      @combobox_printertype.setCurrentItem( idx, true )
+    end
+
+    update_preview
   end
 
   attr_reader :dataman
 
   # This method is called whenever the datasource has changed.
   def dataman= v
-    @textfield_print_to.text = v.rows.length.to_s if v.rows
+    if v && v.rows
+      @textfield_print_from.text = 1
+      @textfield_print_to.text = v.rows.length.to_s
+    end
     @dataman = v
     fill_datalist_when_visible
   end
@@ -109,6 +122,21 @@ class Dataview < Dialogbox_dataview
     end
     
   end
+
+  def fill_printertype_list
+    l = @combobox_printertype
+    l.clearItems
+    l.appendItem('', 'Printer::CardPrinter')
+    l.appendItem('Generic-Windows-GDI', 'Printer::GdiPrinter')
+    l.appendItem('Print-to-file', 'Printer::FilePrinter')
+    l.appendItem('XID-440', 'Printer::PrinterXID')
+  end
+
+  def combobox_printertype_changed
+    prtype = @combobox_printertype.getItemData(@combobox_printertype.currentItem)
+    @layout_file.set_attr_value(S_PRINTERTYPE, prtype)
+  end
+    
   
   #
   def print_cards
@@ -121,7 +149,7 @@ class Dataview < Dialogbox_dataview
       chip.close_reader if chip
     else
       # Printdialog um Drucken von Karten mit Daten öffnen
-      pr_dlg = MyPrintDialogBox.new(@app, self, chip)
+      pr_dlg = MyPrintDialogBox.new(@parent.app, self, chip)
       pr_dlg.topwin.show(Fox::PLACEMENT_SCREEN)
       pr_dlg.topwin.execute
     end
@@ -138,7 +166,7 @@ class Dataview < Dialogbox_dataview
     anz = @dataman.rows.length
     if attr_name == PRINT_FROM || attr_name == PRINT_TO
       if sender.text.to_i < 1 || sender.text.to_i > anz
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@app, "Nur Werte > 0 und <= #{anz} möglich!", 'ok')
+        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Nur Werte > 0 und <= #{anz} möglich!", 'ok')
         error_WahlMessage.execute
         if attr_name == PRINT_FROM
           sender.text = 1
@@ -226,7 +254,7 @@ class Dataview < Dialogbox_dataview
 
   #
   def update_preview
-    if @checkbutton2.state && !@printing # Vorschau nicht während dem Druck, da es sonst zu Druckfehlern kommt und der Druck länger dauert
+    if !@printing # Vorschau nicht während dem Druck, da es sonst zu Druckfehlern kommt und der Druck länger dauert
       row_nr = @iconlist_data.currentItem
       if row_nr>=0
         @iconlist_data.makeItemVisible(row_nr)
@@ -318,12 +346,12 @@ class Dataview < Dialogbox_dataview
             break
           end
         }
-      rescue ResourceNotFoundError => e
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@app, e.to_s, 'ok')
+      rescue Page::ResourceNotFoundError => e
+        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, e.to_s, 'ok')
         error_WahlMessage.execute
       rescue => e
         DebugTools::write_log_file('print_card_thread', unkown_error_message(e))
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@app, unkown_error_message(e), 'ok')
+        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, unkown_error_message(e), 'ok')
         error_WahlMessage.execute
       ensure
         @printing = false
@@ -343,21 +371,21 @@ class Dataview < Dialogbox_dataview
 
     # wenn 'bis' gefüllt, aber 'von' nicht gefüllt -> Fehler
     if von == nil && bis != nil
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, "Im Textfeld 'Von' ist kein Wert angegeben!", 'ok')
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Im Textfeld 'Von' ist kein Wert angegeben!", 'ok')
       error_WahlMessage.execute
       return nil
     end
 
     # wenn 'von' gefüllt, aber 'bis' nicht gefüllt -> Fehler
     if von != nil && bis == nil
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, "Im Textfeld 'Bis' ist kein Wert angegeben!", 'ok')
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Im Textfeld 'Bis' ist kein Wert angegeben!", 'ok')
       error_WahlMessage.execute
       return nil
     end
 
     # wenn 'von' größer als 'bis' -> Fehler
     if von && bis && von > bis
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, "Der Wert im Feld 'Von' ist größer als der Wert im Textfeld 'Bis'!", 'ok')
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Der Wert im Feld 'Von' ist größer als der Wert im Textfeld 'Bis'!", 'ok')
       error_WahlMessage.execute
       return nil
     end

@@ -57,14 +57,14 @@ class Layout
           @dataview.dataview_tab_activated if event == 1
         }
         FX::TabItem.new(tabbook) do |tabitem_layoutview|
-          tabitem_layoutview.text = "Entwurfsansicht"
+          tabitem_layoutview.text = "&Entwurfsansicht"
           tabitem_layoutview.img = 'mcc2/images/document-edit.png'
         end
         FXVerticalFrame.new(tabbook) do |frame_layoutview|
           @layoutview = Layoutview.new frame_layoutview, self
         end
         FX::TabItem.new(tabbook) do |tabitem_dataview|
-          tabitem_dataview.text = "Datenansicht"
+          tabitem_dataview.text = "D&atenansicht"
           tabitem_dataview.img = 'mcc2/images/documentation.png'
         end
         FXVerticalFrame.new(tabbook) do |frame_dataview|

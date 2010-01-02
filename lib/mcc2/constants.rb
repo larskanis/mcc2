@@ -68,6 +68,9 @@ S_DATASOURCETYP = 'datasource_typ'
 S_DATASOURCEENCODING = 'datasource_encoding'
 
 S_CHIPPARAMS = 'chipparams'
+S_PRINTERTYPE = 'printertype'
+
+
 UP = 0
 DOWN = 1
 

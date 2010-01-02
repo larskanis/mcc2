@@ -40,6 +40,7 @@ class LayoutFile
     add_attr(S_CONTACTLESS, String, FALSE)
     add_attr(S_CONTACT, String, FALSE)
     add_attr(S_MAGSTRIPE, String, FALSE)
+    add_attr(S_PRINTERTYPE, String, '')
   end
  	#---------------------------------------------------------------------------------------------------------
   def xml_doc

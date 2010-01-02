@@ -14,10 +14,10 @@ class Dialogbox_dataview
 			w.width=398
 			w.height=254
 			w.shown=true
-			w.y=303
+			w.y=277
 			w.title="Entwurfsansicht"
 			w.layoutHints=768
-			w.x=313
+			w.x=233
 			FX::Splitter.new(@dialogbox_dataview){|w|
 				@splitter_dataview=w
 				w.wdg_name='splitter_dataview'
@@ -32,9 +32,18 @@ class Dialogbox_dataview
 					FX::ComboBox.new(@verticalframe_printersetup){|w|
 						@combobox_printertype=w
 						w.wdg_name='combobox_printertype'
-						w.width=101
+						w.width=398
 						w.height=21
 						w.numColumns=10
+						w.comboStyle=1048576
+						w.layoutHints=1024
+					}
+					FX::VerticalFrame.new(@verticalframe_printersetup){|w|
+						@verticalframe_printersetup_dynamic=w
+						w.wdg_name='verticalframe_printersetup_dynamic'
+						w.width=398
+						w.height=0
+						w.y=21
 					}
 				}
 				FX::VerticalFrame.new(@splitter_dataview){|w|
@@ -50,14 +59,14 @@ class Dialogbox_dataview
 						w.wdg_name='matrix_printbuttons'
 						w.padLeft=10
 						w.width=394
-						w.height=76
+						w.height=56
 						w.hSpacing=0
 						w.y=2
 						w.numColumns=3
 						w.matrixStyle=131072
 						w.layoutHints=1024
 						w.padTop=10
-						w.numRows=3
+						w.numRows=2
 						w.vSpacing=0
 						w.x=2
 						FX::Label.new(@matrix_printbuttons){|w|
@@ -123,46 +132,13 @@ class Dialogbox_dataview
 							w.y=31
 							w.x=228
 						}
-						FX::Label.new(@matrix_printbuttons){|w|
-							@label21=w
-							w.wdg_name='label21'
-							w.width=56
-							w.text="Vorschau"
-							w.height=20
-							w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
-							w.y=52
-							w.x=10
-						}
-						FX::CheckButton.new(@matrix_printbuttons){|w|
-							@checkbutton2=w
-							w.wdg_name='checkbutton2'
-							w.width=17
-							w.iconPosition=0
-							w.text=""
-							w.height=17
-							w.font=FX::Font.new.from_s('helvetica|90|0|0|0|0|0').to_FXFont
-							w.y=52
-							w.state=true
-							w.x=78
-						}
-						FX::Label.new(@matrix_printbuttons){|w|
-							@label42=w
-							w.wdg_name='label42'
-							w.width=4
-							w.text=""
-							w.height=4
-							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=52
-							w.x=228
-						}
 					}
 					FX::Matrix.new(@verticalframe_datalist){|w|
 						@matrix18=w
 						w.wdg_name='matrix18'
 						w.width=394
 						w.height=31
-						w.y=78
+						w.y=58
 						w.numColumns=5
 						w.layoutHints=1024
 						w.x=2
@@ -230,9 +206,9 @@ class Dialogbox_dataview
 						@iconlist_data=w
 						w.wdg_name='iconlist_data'
 						w.width=394
-						w.height=118
+						w.height=138
 						w.font=FX::Font.new.from_s('Arial|90|40|5|0|0|0').to_FXFont
-						w.y=109
+						w.y=89
 						w.iconListStyle=3145728
 						w.x=2
 					}
@@ -245,6 +221,7 @@ class Dialogbox_dataview
 	attr_reader :splitter_dataview
 	attr_reader :verticalframe_printersetup
 	attr_reader :combobox_printertype
+	attr_reader :verticalframe_printersetup_dynamic
 	attr_reader :verticalframe_datalist
 	attr_reader :matrix_printbuttons
 	attr_reader :label766
@@ -253,9 +230,6 @@ class Dialogbox_dataview
 	attr_reader :label18
 	attr_reader :textfield_search
 	attr_reader :packer55
-	attr_reader :label21
-	attr_reader :checkbutton2
-	attr_reader :label42
 	attr_reader :matrix18
 	attr_reader :button_select_all
 	attr_reader :button_deselect_all
