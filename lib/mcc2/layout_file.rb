@@ -41,6 +41,8 @@ class LayoutFile
     add_attr(S_CONTACT, String, FALSE)
     add_attr(S_MAGSTRIPE, String, FALSE)
     add_attr(S_PRINTERTYPE, String, '')
+    add_attr(S_FILEPRINTER_SAVE_AS, String, './mcc2_%d_%p.jpeg')
+    add_attr(S_FILEPRINTER_DPI, Integer, 300)
   end
  	#---------------------------------------------------------------------------------------------------------
   def xml_doc

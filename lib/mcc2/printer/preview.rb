@@ -1,10 +1,14 @@
 # -*- coding: UTF-8 -*-
 
 require 'printer/base'           # die Basisklasse für die Printer
+require 'printer/card_printer'
+require 'printer/rmagick_drawer'
 
 
 module Printer
 class Preview < Base
+  include RmagickDrawer
+  include CardPrinting
   
   class ResourceNotFoundError < RuntimeError
   end
@@ -79,11 +83,11 @@ class Preview < Base
 
         card_offset = 10
 
-        image_width = (Page.width_with_margins(width) * @zoom)
-        image_height = ((2 * Page.height_with_margins(height) + card_offset) * @zoom )
+        image_width = width_with_margins(width) * @zoom
+        image_height = ((2 * height_with_margins(height) + card_offset) * @zoom )
 
-        scale_width = Page.width_with_margins(width).mm
-        scale_height = (2 * Page.height_with_margins(height) + card_offset).mm
+        scale_width = width_with_margins(width).mm
+        scale_height = (2 * height_with_margins(height) + card_offset).mm
 
         begin
           rvg = Magick::RVG.new(image_width.mm, image_height.mm).viewbox(0, 0, scale_width, scale_height) do |canvas|
@@ -91,12 +95,14 @@ class Preview < Base
 
             draw_pos_x = 0
             draw_pos_y = 0
-            page = Page.new(0)
-            page.draw(canvas, draw_pos_x, draw_pos_y, @layout_file, preview, @selected_object_id, row) # Seite 1 drucken
+            canvas.g.translate(draw_pos_x.mm, draw_pos_y.mm) do |canvas1|
+              draw(canvas1, @layout_file, preview, @selected_object_id, row, 0) # Seite 1 drucken
+            end
 
-            page = Page.new(1)
-            draw_pos_y = (Page.height_with_margins(height) + card_offset)
-            page.draw(canvas, draw_pos_x, draw_pos_y, @layout_file, preview, @selected_object_id, row) # Seite 2 drucken
+            draw_pos_y = height_with_margins(height) + card_offset
+            canvas.g.translate(draw_pos_x.mm, draw_pos_y.mm) do |canvas1|
+              draw(canvas1, @layout_file, preview, @selected_object_id, row, 1) # Seite 2 drucken
+            end
 
             canvas.background_fill = 'white'
           end

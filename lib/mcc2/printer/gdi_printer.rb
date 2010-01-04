@@ -1,7 +1,4 @@
 # -*- coding: UTF-8 -*-
-
-# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
-
 # diese Klasse dient als Basis für die Printer, es macht keinen Sinn direkt ein Objekt von dieser Klasse zu erzeugen
 
 #~ if __FILE__ == $0
@@ -9,18 +6,20 @@
 #~ end
 
 require 'win32api_base'
-#~ require 'win32api_comdlg'
 require 'win32api_gdi'
-#~ require 'win32api_kernel'
 require 'win32api_user'
-
 require 'win32api_winspool'
+#~ require 'win32api_comdlg'
+#~ require 'win32api_kernel'
 
 require 'printer/card_printer'
+require 'printer/rmagick_drawer'
 
 
 module Printer
 class GdiPrinter < CardPrinter
+  include RmagickDrawer
+  
   #
   def initialize
     @dpi = 300

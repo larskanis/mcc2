@@ -10,6 +10,7 @@ require 'cc_dialogbox'
 require 'layout_file'
 require 'layoutview'
 require 'dataview'
+require 'printerview'
 require 'printer/preview'
 
 # definiert ein Clientfenster mit allen Einstellungen und Attributen, die für ein bestimmtes Kartenlayout benötigt werden
@@ -57,14 +58,21 @@ class Layout
           @dataview.dataview_tab_activated if event == 1
         }
         FX::TabItem.new(tabbook) do |tabitem_layoutview|
-          tabitem_layoutview.text = "&Entwurfsansicht"
+          tabitem_layoutview.text = "&Entwurf"
           tabitem_layoutview.img = 'mcc2/images/document-edit.png'
         end
         FXVerticalFrame.new(tabbook) do |frame_layoutview|
           @layoutview = Layoutview.new frame_layoutview, self
         end
+        FX::TabItem.new(tabbook) do |tabitem_printerview|
+          tabitem_printerview.text = "D&rucker"
+          tabitem_printerview.img = 'mcc2/images/document-print.png'
+        end
+        FXVerticalFrame.new(tabbook) do |frame_printerview|
+          @printerview = Printerview.new frame_printerview, self
+        end
         FX::TabItem.new(tabbook) do |tabitem_dataview|
-          tabitem_dataview.text = "D&atenansicht"
+          tabitem_dataview.text = "D&aten"
           tabitem_dataview.img = 'mcc2/images/documentation.png'
         end
         FXVerticalFrame.new(tabbook) do |frame_dataview|
@@ -172,6 +180,7 @@ class Layout
     @preview.layout_file = @layout_file
     @layoutview.layout_file = @layout_file
     @dataview.layout_file = @layout_file
+    @printerview.layout_file = @layout_file
   end
 
   def selected_object_id= id
@@ -202,7 +211,26 @@ class Layout
     @preview.draw_preview immediately, nil
   end
     
-  
+
+  def self.connect_filebutton_to_textfield( button, textfield, filepatterns='*')
+    filepatterns = filepatterns.join("\n") if filepatterns.kind_of?(Array)
+    button.connect(SEL_COMMAND){
+      lds = textfield.text
+      ldsd = File.join(File.dirname(lds), '')
+      dest = FileTest.exists?(ldsd) ? ldsd : '.'
+      s = FXFileDialog.getOpenFilename(button, textfield.tipText, dest, filepatterns)
+      unless s.empty?
+        textfield.setText(s, true)
+      end
+    }
+  end
+
+  def self.set_combobox_by_data( combobox, dataval, notify=true )
+    idx = -1
+    if combobox.find{|text, data| idx+=1; data == dataval }
+      combobox.setCurrentItem( idx, notify )
+    end
+  end
 end
 #*****************************************************************************
 # Main

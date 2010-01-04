@@ -22,7 +22,7 @@ class Layoutview
     @lf.iconlist_objects.appendHeader('Name', nil, 100)
     @lf.iconlist_objects.appendHeader('Typ', nil, 100)
 
-    @lf.splitter_layoutview.setSplit(0, 250)
+    @lf.splitter_layoutview.setSplit(0, 170)
     @lf.splitter12.setSplit(0, 100)
 
     # .............................................................................................
@@ -65,11 +65,12 @@ class Layoutview
     # die Textfelder für die allgemeine Layoutoptionen
     @lf.textfield_x_offset.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_X_OFFSET) }
     @lf.textfield_y_offset.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_Y_OFFSET) }
-    @lf.textfield_datasource.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_DATASOURCE) }
-    # Button für das Auswählen einer Datenquelle an Textfeld knüpfen
-    connect_filebutton_to_textfield( @lf.button_datasource, @lf.textfield_datasource,
-          ["Semicolon seperated file (*.csv)", "All Files (*)"]
-    )
+    l = @lf.combobox_datasource_typ
+    l.clearItems
+    l.appendItem('keine Daten - statisches Layout', NONE)
+    l.appendItem('CSV-Datei', CSV)
+    l.appendItem('Datenbank', DATABASE)
+    l.connect(SEL_COMMAND){ combobox_datasource_typ_changed }
 
     # die Auswahl auf welche Seite das Objekt soll
     @lf.spinner_seiten_nr.connect(SEL_COMMAND){ seiten_nr_changed }
@@ -86,7 +87,7 @@ class Layoutview
     # die Listbox zum Auswählen der Schriftart
     @lf.listbox_fonts.connect(SEL_COMMAND){ |sender, sel, event| sel_list_box_changed(sender) }
     @lf.textfield_font_file.connect(SEL_COMMAND){ |sender, sel, event| textfield_exit(sender, GOA_FONT_FILE) }
-    connect_filebutton_to_textfield( @lf.button_fontfile_select, @lf.textfield_font_file,
+    Layout.connect_filebutton_to_textfield( @lf.button_fontfile_select, @lf.textfield_font_file,
           ["Truetype/Opentype font (*.ttf, *.otf)",  "PS-type1 font (*.pfb)", "All Files (*)"]
     )
     @lf.textfield_fontsize.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_FONT_HEIGHT) }
@@ -164,19 +165,6 @@ class Layoutview
     }
   end
   #---------------------------------------------------------------------------------------------------------
-
-  def connect_filebutton_to_textfield( button, textfield, filepatterns='*')
-    filepatterns = filepatterns.join("\n") if filepatterns.kind_of?(Array)
-    button.connect(SEL_COMMAND){
-      lds = textfield.text
-      ldsd = File.join(File.dirname(lds), '')
-      dest = FileTest.exists?(ldsd) ? ldsd : '.'
-      s = FXFileDialog.getOpenFilename(button, textfield.tipText, dest, filepatterns)
-      unless s.empty?
-        textfield.setText(s, true)
-      end
-    }
-  end
 
   def layoutview_tab_activated
     draw_preview
@@ -326,6 +314,11 @@ class Layoutview
   #~ end
   #---------------------------------------------------------------------------------------------------------
 
+  def combobox_datasource_typ_changed
+    datatype = @lf.combobox_datasource_typ.getItemData(@lf.combobox_datasource_typ.currentItem)
+    @layout_file.set_attr_value(S_DATASOURCETYP, datatype)
+  end
+
   # die Aktion, welche ausgeführt wird, wenn die Auswahl der Seitennummer geändert wurde, auf welcher das Objekt ausgegeben werden soll
   def seiten_nr_changed
     seite = @lf.spinner_seiten_nr.value - 1
@@ -377,9 +370,6 @@ class Layoutview
       node = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}/#{S_MSSPUR2}")
     elsif attr_name == S_MSSPUR3
       node = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}/#{S_MSSPUR3}")
-    elsif attr_name == S_DATASOURCE
-      lay_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
-      node = lay_attrs.find_first(S_DATASOURCE)
     else
       # in diesem Zweig werden alle Graphik-Objekte bearbeitet
       # das Attribut suchen
@@ -720,7 +710,7 @@ class Layoutview
   def fill_layout_attr_tab
     @lf.textfield_x_offset.text = @layout_file.get_attr_value(S_X_OFFSET)
     @lf.textfield_y_offset.text = @layout_file.get_attr_value(S_Y_OFFSET)
-    @lf.textfield_datasource.text = @layout_file.get_attr_value(S_DATASOURCE)
+    Layout.set_combobox_by_data( @lf.combobox_datasource_typ, @layout_file.get_attr_value(S_DATASOURCETYP))
     set_check_button('checkbutton_contactless', @layout_file.get_attr_value(S_CONTACTLESS), $pr.has_contactless_engine?)
     set_check_button('checkbutton_contact', @layout_file.get_attr_value(S_CONTACT), $pr.has_contact_engine?)
     set_check_button('checkbutton_magstripe', @layout_file.get_attr_value(S_MAGSTRIPE), $pr.has_magstripe_engine?)

@@ -1,6 +1,13 @@
 # -*- coding: UTF-8 -*-
 
 require 'dataview_dlg'
+require 'printer/base'
+
+module Printer
+  autoload 'PrinterXID', 'printer/printer_xid'
+  autoload 'GdiPrinter', 'printer/gdi_printer'
+  autoload 'FilePrinter', 'printer/file_printer'
+end
 
 class Dataview < Dialogbox_dataview
 
@@ -18,7 +25,15 @@ class Dataview < Dialogbox_dataview
     # .............................................................................................
     # alle Aktionen definieren
 
-    @combobox_printertype.connect(SEL_COMMAND){ combobox_printertype_changed }
+    @textfield_datasource.connect(SEL_COMMAND){
+      @layout_file.set_attr_value(S_DATASOURCE, @textfield_datasource.text)
+      changed_attributes
+    }
+    # Button für das Auswählen einer Datenquelle an Textfeld knüpfen
+    Layout.connect_filebutton_to_textfield( @button_datasource, @textfield_datasource,
+          ["Semicolon seperated file (*.csv)", "All Files (*)"]
+    )
+    
     @button_select_all.connect(SEL_COMMAND){ select_all }
     @button_deselect_all.connect(SEL_COMMAND){ deselect_all }
     @button_print_selected.connect(SEL_COMMAND){ print_selected }
@@ -41,7 +56,6 @@ class Dataview < Dialogbox_dataview
 #    @horizontalframe3.height = 0
 #    @splitter2.setSplit(0, 500)
 
-    fill_printertype_list
     fill_datalist_when_visible
   end
 
@@ -53,14 +67,7 @@ class Dataview < Dialogbox_dataview
   attr_reader :layout_file
   def layout_file= file
     @layout_file = file
-
-    prtype = @layout_file.get_attr_value(S_PRINTERTYPE)
-    idx = -1
-    if @combobox_printertype.find{|text, data| idx+=1; data == prtype }
-      @combobox_printertype.setCurrentItem( idx, true )
-    end
-
-    update_preview
+    @textfield_datasource.text = @layout_file.get_attr_value(S_DATASOURCE)
   end
 
   attr_reader :dataman
@@ -122,39 +129,6 @@ class Dataview < Dialogbox_dataview
     end
     
   end
-
-  def fill_printertype_list
-    l = @combobox_printertype
-    l.clearItems
-    l.appendItem('', 'Printer::CardPrinter')
-    l.appendItem('Generic-Windows-GDI', 'Printer::GdiPrinter')
-    l.appendItem('Print-to-file', 'Printer::FilePrinter')
-    l.appendItem('XID-440', 'Printer::PrinterXID')
-  end
-
-  def combobox_printertype_changed
-    prtype = @combobox_printertype.getItemData(@combobox_printertype.currentItem)
-    @layout_file.set_attr_value(S_PRINTERTYPE, prtype)
-  end
-    
-  
-  #
-  def print_cards
-    c = @layout_file.get_attr_value(S_CONTACTLESS) == S_TRUE || @layout_file.get_attr_value(S_CONTACT) == S_TRUE
-    c ? chip = Chip.new : chip = nil
-    if @layout_file.get_attr_value(S_DATASOURCE) == ""
-      # nur eine Karte ohne Daten drucken
-      printer = $pr
-      printer.print_card(@layout_file, nil, chip) # self ???
-      chip.close_reader if chip
-    else
-      # Printdialog um Drucken von Karten mit Daten öffnen
-      pr_dlg = MyPrintDialogBox.new(@parent.app, self, chip)
-      pr_dlg.topwin.show(Fox::PLACEMENT_SCREEN)
-      pr_dlg.topwin.execute
-    end
-  end
-  #---------------------------------------------------------------------------------------------------------
 
   def draw_preview(row, immediately=false)
     @layout.draw_preview_with_row(row, immediately)
@@ -316,7 +290,11 @@ class Dataview < Dialogbox_dataview
     disable_all_buttons
     @button_stop_printing.enabled = true
     @printing = true
-    printer = $pr
+    
+    printertype = @layout_file.get_attr_value(S_PRINTERTYPE)
+    printerclass = Printer.const_get(printertype.gsub('Printer::', ''))
+    printer = printerclass.new
+    
     if bis == -1
       bis = @iconlist_data.numRows - 1
     end
@@ -328,7 +306,6 @@ class Dataview < Dialogbox_dataview
       end
     }
 
-    layout_file = @layout_file
     Thread.new{
       begin
         marked_items.each{|item|
@@ -346,7 +323,7 @@ class Dataview < Dialogbox_dataview
             break
           end
         }
-      rescue Page::ResourceNotFoundError => e
+      rescue RmagickDrawer::ResourceNotFoundError => e
         error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, e.to_s, 'ok')
         error_WahlMessage.execute
       rescue => e
@@ -423,5 +400,10 @@ class Dataview < Dialogbox_dataview
     @printing = false
   end
   #---------------------------------------------------------------------------------------------------------
+
+  def changed_attributes
+    @layout.changed_attributes
+    update_preview
+  end
   
 end

@@ -70,6 +70,8 @@ S_DATASOURCEENCODING = 'datasource_encoding'
 S_CHIPPARAMS = 'chipparams'
 S_PRINTERTYPE = 'printertype'
 
+S_FILEPRINTER_SAVE_AS = 'fileprinter_save_sa'
+S_FILEPRINTER_DPI = 'fileprinter_dpi'
 
 UP = 0
 DOWN = 1

@@ -14,10 +14,10 @@ class Dialogbox_dataview
 			w.width=398
 			w.height=254
 			w.shown=true
-			w.y=277
+			w.y=298
 			w.title="Entwurfsansicht"
 			w.layoutHints=768
-			w.x=233
+			w.x=303
 			FX::Splitter.new(@dialogbox_dataview){|w|
 				@splitter_dataview=w
 				w.wdg_name='splitter_dataview'
@@ -25,47 +25,69 @@ class Dialogbox_dataview
 				w.height=254
 				w.splitterStyle=163840
 				FX::VerticalFrame.new(@splitter_dataview){|w|
-					@verticalframe_printersetup=w
-					w.wdg_name='verticalframe_printersetup'
-					w.width=398
-					w.height=21
-					FX::ComboBox.new(@verticalframe_printersetup){|w|
-						@combobox_printertype=w
-						w.wdg_name='combobox_printertype'
-						w.width=398
-						w.height=21
-						w.numColumns=10
-						w.comboStyle=1048576
-						w.layoutHints=1024
-					}
-					FX::VerticalFrame.new(@verticalframe_printersetup){|w|
-						@verticalframe_printersetup_dynamic=w
-						w.wdg_name='verticalframe_printersetup_dynamic'
-						w.width=398
-						w.height=0
-						w.y=21
-					}
-				}
-				FX::VerticalFrame.new(@splitter_dataview){|w|
 					@verticalframe_datalist=w
 					w.wdg_name='verticalframe_datalist'
 					w.width=398
 					w.frameStyle=16384
-					w.height=229
-					w.y=25
+					w.height=254
 					w.layoutHints=2304
+					FX::HorizontalFrame.new(@verticalframe_datalist){|w|
+						@horizontalframe74=w
+						w.wdg_name='horizontalframe74'
+						w.padLeft=4
+						w.width=394
+						w.height=22
+						w.shadowColor=Fox::FXRGBA(128,128,128,255)
+						w.hSpacing=2
+						w.y=2
+						w.layoutHints=1024
+						w.x=2
+						FX::Label.new(@horizontalframe74){|w|
+							@label409=w
+							w.wdg_name='label409'
+							w.width=65
+							w.text="Datenquelle"
+							w.height=18
+							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+							w.shadowColor=Fox::FXRGBA(128,128,128,255)
+							w.layoutHints=256
+							w.x=4
+						}
+						FX::TextField.new(@horizontalframe74){|w|
+							@textfield_datasource=w
+							w.wdg_name='textfield_datasource'
+							w.width=301
+							w.height=20
+							w.tipText="Hier wird die Datendatei angegeben. Wenn keine verwendet werden, kann das Feld leer bleiben."
+							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+							w.shadowColor=Fox::FXRGBA(128,128,128,255)
+							w.numColumns=30
+							w.layoutHints=1024
+							w.x=71
+						}
+						FX::Button.new(@horizontalframe74){|w|
+							@button_datasource=w
+							w.wdg_name='button_datasource'
+							w.width=20
+							w.text="..."
+							w.height=22
+							w.tipText="Hier klicken, um eine Datei auszuw\303\244hlen. Achtung der Dateiname wird an das Feld hinten angef\303\274gt. Wenn dies nicht erw\303\274nscht ist, dann das Feld vorher leeren."
+							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+							w.shadowColor=Fox::FXRGBA(128,128,128,255)
+							w.layoutHints=256
+							w.x=374
+						}
+					}
 					FX::Matrix.new(@verticalframe_datalist){|w|
 						@matrix_printbuttons=w
 						w.wdg_name='matrix_printbuttons'
-						w.padLeft=10
 						w.width=394
-						w.height=56
+						w.height=50
 						w.hSpacing=0
-						w.y=2
+						w.y=24
 						w.numColumns=3
 						w.matrixStyle=131072
 						w.layoutHints=1024
-						w.padTop=10
 						w.numRows=2
 						w.vSpacing=0
 						w.x=2
@@ -76,8 +98,8 @@ class Dialogbox_dataview
 							w.text="von/bis"
 							w.height=19
 							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-							w.y=10
-							w.x=10
+							w.y=4
+							w.x=4
 						}
 						FX::TextField.new(@matrix_printbuttons){|w|
 							@textfield_print_from=w
@@ -85,10 +107,10 @@ class Dialogbox_dataview
 							w.width=76
 							w.height=21
 							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-							w.y=10
+							w.y=4
 							w.textFieldTextStyle=1048576
 							w.numColumns=10
-							w.x=78
+							w.x=72
 						}
 						FX::TextField.new(@matrix_printbuttons){|w|
 							@textfield_print_to=w
@@ -96,10 +118,10 @@ class Dialogbox_dataview
 							w.width=76
 							w.height=21
 							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-							w.y=10
+							w.y=4
 							w.textFieldTextStyle=1048576
 							w.numColumns=10
-							w.x=228
+							w.x=222
 						}
 						FX::Label.new(@matrix_printbuttons){|w|
 							@label18=w
@@ -108,8 +130,8 @@ class Dialogbox_dataview
 							w.text="Suchbegriff"
 							w.height=19
 							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-							w.y=31
-							w.x=10
+							w.y=25
+							w.x=4
 						}
 						FX::TextField.new(@matrix_printbuttons){|w|
 							@textfield_search=w
@@ -119,18 +141,18 @@ class Dialogbox_dataview
 							w.tipText="hier einen Text eingeben und auf Suchen klicken. Dann wird in allen angezeigten Feldern gesucht"
 							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
 							w.helpText="hier einen Text eingeben und auf Suchen klicken. Dann wird in allen angezeigten Feldern gesucht"
-							w.y=31
+							w.y=25
 							w.numColumns=10
 							w.layoutHints=256
-							w.x=78
+							w.x=72
 						}
 						FX::Packer.new(@matrix_printbuttons){|w|
 							@packer55=w
 							w.wdg_name='packer55'
 							w.width=76
 							w.height=21
-							w.y=31
-							w.x=228
+							w.y=25
+							w.x=222
 						}
 					}
 					FX::Matrix.new(@verticalframe_datalist){|w|
@@ -138,7 +160,7 @@ class Dialogbox_dataview
 						w.wdg_name='matrix18'
 						w.width=394
 						w.height=31
-						w.y=58
+						w.y=74
 						w.numColumns=5
 						w.layoutHints=1024
 						w.x=2
@@ -206,9 +228,9 @@ class Dialogbox_dataview
 						@iconlist_data=w
 						w.wdg_name='iconlist_data'
 						w.width=394
-						w.height=138
+						w.height=147
 						w.font=FX::Font.new.from_s('Arial|90|40|5|0|0|0').to_FXFont
-						w.y=89
+						w.y=105
 						w.iconListStyle=3145728
 						w.x=2
 					}
@@ -219,10 +241,11 @@ class Dialogbox_dataview
 	attr_reader :topwin
 	attr_reader :dialogbox_dataview
 	attr_reader :splitter_dataview
-	attr_reader :verticalframe_printersetup
-	attr_reader :combobox_printertype
-	attr_reader :verticalframe_printersetup_dynamic
 	attr_reader :verticalframe_datalist
+	attr_reader :horizontalframe74
+	attr_reader :label409
+	attr_reader :textfield_datasource
+	attr_reader :button_datasource
 	attr_reader :matrix_printbuttons
 	attr_reader :label766
 	attr_reader :textfield_print_from
