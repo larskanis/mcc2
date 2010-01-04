@@ -195,6 +195,7 @@ class MCC2GUI < MainWindow
     child.create
     child.show
     child.recalc
+    child.setFocus
     @mdiclient.setActiveChild(child)
   end
 	#---------------------------------------------------------------------------------------------------------
@@ -214,7 +215,7 @@ class MCC2GUI < MainWindow
     child.show
     child.recalc
     child.userData.load_from_xml(filename)
-
+    child.setFocus
     @mdiclient.setActiveChild(child)
   end
 

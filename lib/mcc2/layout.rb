@@ -54,8 +54,8 @@ class Layout
 #           }
 #         }
         tabbook.connect(SEL_COMMAND){|sender, sel, event|
-          @layoutview.layoutview_tab_activated if event == 0
-          @dataview.dataview_tab_activated if event == 1
+          @layoutview.layoutview_tab_activated( event == 0 )
+          @dataview.dataview_tab_activated( event == 2 )
         }
         FX::TabItem.new(tabbook) do |tabitem_layoutview|
           tabitem_layoutview.text = "&Entwurf"
@@ -119,7 +119,6 @@ class Layout
   # es wird das changed-Flag gesetzt und der Titel aktualisiert und die Vorschau neu gezeichnet
   def changed_attributes
     @changed = true
-    draw_preview
     set_title
 
     # Any datasource related values changed? -> reopen

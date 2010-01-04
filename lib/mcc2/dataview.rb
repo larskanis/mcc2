@@ -21,6 +21,7 @@ class Dataview < Dialogbox_dataview
 
     @matrix_printbuttons.numColumns = 3
     @search_pos = 0
+    @visible = false
 
     # .............................................................................................
     # alle Aktionen definieren
@@ -59,9 +60,12 @@ class Dataview < Dialogbox_dataview
     fill_datalist_when_visible
   end
 
-  def dataview_tab_activated
-    ensure_datalist_filled
-    update_preview
+  def dataview_tab_activated(active=true)
+    @visible = active
+    if @visible
+      ensure_datalist_filled
+      update_preview
+    end
   end
 
   attr_reader :layout_file
@@ -85,7 +89,7 @@ class Dataview < Dialogbox_dataview
   def fill_datalist_when_visible
     puts "fill_datalist_when_visible"
     @fill_datalist_triggered = true
-    if @parent.active?
+    if @visible
       ensure_datalist_filled
     end
   end
@@ -106,6 +110,9 @@ class Dataview < Dialogbox_dataview
     #~ printlist = xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").collect{|objekt|
       #~ name = objekt.find(GOA_NAME).first.content
     #~ }
+    @iconlist_data.clearItems
+    @iconlist_data.header.clearItems
+    
     if @dataman && @layout_file
       @iconlist_data.appendHeader("Datensatz", nil, 60)
       felder = @dataman.row(0).map{|e|
@@ -401,9 +408,9 @@ class Dataview < Dialogbox_dataview
   end
   #---------------------------------------------------------------------------------------------------------
 
-  def changed_attributes
+  def changed_attributes(update_preview=true)
     @layout.changed_attributes
-    update_preview
+    self.update_preview if update_preview
   end
   
 end

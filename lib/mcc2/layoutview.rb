@@ -166,8 +166,8 @@ class Layoutview
   end
   #---------------------------------------------------------------------------------------------------------
 
-  def layoutview_tab_activated
-    draw_preview
+  def layoutview_tab_activated(active=true)
+    draw_preview if active
   end
   
   def layout_file= file
