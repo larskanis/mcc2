@@ -6,9 +6,9 @@ class Printerview < Dialogbox_printerview
 
   PrinterDescription = Struct.new :human_name, :class_name, :tab_idx
   PrinterDescriptions = [
-    PrinterDescription.new( 'Generic-Windows-GDI', 'Printer::GdiPrinter', 0),
-    PrinterDescription.new( 'Print-to-file', 'Printer::FilePrinter', 1),
-    PrinterDescription.new( 'XID-440', 'Printer::PrinterXID', 2),
+    PrinterDescription.new( 'Generic-Windows-GDI', 'GdiPrinter', 0),
+    PrinterDescription.new( 'Print-to-file', 'FilePrinter', 1),
+    PrinterDescription.new( 'XID-440', 'PrinterXID', 2),
   ]
 
   def initialize parent, layout
@@ -70,7 +70,7 @@ class Printerview < Dialogbox_printerview
   def layout_file= file
     @layout_file = file
     pd = PrinterDescriptions.find{|d| @layout_file.get_attr_value(S_PRINTERTYPE)==d.class_name }
-    Layout.set_combobox_by_data( @combobox_printertype, pd) if pd
+    Layout.set_combobox_by_data( @combobox_printertype, pd)
     @textfield_file_save_as.text = @layout_file.get_attr_value(S_FILEPRINTER_SAVE_AS)
     @spinner_dpi.value = @layout_file.get_attr_value(S_FILEPRINTER_DPI).to_i
   end

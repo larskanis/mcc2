@@ -34,7 +34,6 @@ class Dialogbox_printerview
 				FX::TabBook.new(@verticalframe_printersetup){|w|
 					@tabbook_printers=w
 					w.wdg_name='tabbook_printers'
-					w.current=1
 					w.width=308
 					w.height=85
 					w.y=21
@@ -44,15 +43,14 @@ class Dialogbox_printerview
 						w.width=90
 						w.text="Windows-GDI"
 						w.height=23
-						w.y=6
-						w.x=6
+						w.y=4
+						w.x=4
 					}
 					FX::VerticalFrame.new(@tabbook_printers){|w|
 						@verticalframe6=w
 						w.wdg_name='verticalframe6'
 						w.width=300
 						w.height=56
-						w.shown=false
 						w.y=25
 						w.x=4
 					}
@@ -62,14 +60,15 @@ class Dialogbox_printerview
 						w.width=42
 						w.text="Datei"
 						w.height=23
-						w.y=4
-						w.x=94
+						w.y=6
+						w.x=93
 					}
 					FX::VerticalFrame.new(@tabbook_printers){|w|
 						@verticalframe7=w
 						w.wdg_name='verticalframe7'
 						w.width=300
 						w.height=56
+						w.shown=false
 						w.y=25
 						w.x=4
 						FX::Matrix.new(@verticalframe7){|w|

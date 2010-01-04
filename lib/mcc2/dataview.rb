@@ -299,7 +299,7 @@ class Dataview < Dialogbox_dataview
     @printing = true
     
     printertype = @layout_file.get_attr_value(S_PRINTERTYPE)
-    printerclass = Printer.const_get(printertype.gsub('Printer::', ''))
+    printerclass = Printer.const_get(printertype)
     printer = printerclass.new
     
     if bis == -1
