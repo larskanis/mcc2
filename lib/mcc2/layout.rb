@@ -72,7 +72,7 @@ class Layout
           @printerview = Printerview.new frame_printerview, self
         end
         FX::TabItem.new(tabbook) do |tabitem_dataview|
-          tabitem_dataview.text = "D&aten"
+          tabitem_dataview.text = "Da&ten"
           tabitem_dataview.img = 'mcc2/images/documentation.png'
         end
         FXVerticalFrame.new(tabbook) do |frame_dataview|

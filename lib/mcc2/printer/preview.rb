@@ -81,7 +81,7 @@ class Preview < Base
 
         preview = true
 
-        card_offset = 10
+        card_offset = 0
 
         image_width = width_with_margins(width) * @zoom
         image_height = ((2 * height_with_margins(height) + card_offset) * @zoom )

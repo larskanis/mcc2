@@ -132,7 +132,6 @@ class MCC2GUI < MainWindow
       connect_with_accel(@mcmd_save){ save_layout }
       connect_with_accel(@mcmd_save_as){ save_layout(true) }
       connect_with_accel(@mcmd_exit){ @app.stop }
-      connect_with_accel(@mcmd_druck){ print_cards }
       
       @menutitle_object.text = "Neues &Objekt"
       
