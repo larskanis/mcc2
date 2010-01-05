@@ -1,8 +1,11 @@
 # -*- coding: UTF-8 -*-
 
-require 'layoutview_dlg'
+module Mcc2
+require 'mcc2/layoutview_dlg'
 
 class Layoutview
+  include Fox
+  
   JobSetupObjID = -1
   
   
@@ -740,4 +743,4 @@ class Layoutview
   end
 
 end
-
+end

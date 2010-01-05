@@ -8,4 +8,4 @@ $stderr.sync = true
 require "rubygems"
 require "mcc2"
 
-MCC2GUI.run(ARGV)
+Mcc2::Mcc2Gui.run(ARGV)

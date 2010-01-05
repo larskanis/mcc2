@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 
+module Mcc2
 module Printer
 class Base
   attr_reader :default_width
@@ -53,5 +54,6 @@ class Base
   def set_duplex(hPrinter, state)
     raise "not implemented"
   end
+end
 end
 end

@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 # -*- coding: UTF-8 -*-
 
-# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
-
 # *****************************************************************************
 
 # Projekt           : MCC2
@@ -27,7 +25,6 @@ require "rubygems"
 require 'fox16'
 require 'fox16/colors'
 require 'fox16/responder'
-include Fox
 require 'libguib16'
 
 # convert relative image file path to absolute one
@@ -38,79 +35,57 @@ def loadImage(file)
   loadImage_libguib16(file)
 end
 
-require 'constants'
-
-require "dl"
-
 # die GUI's, alle mit FoxGUI-Builder erstellt
-require 'mcc2_mainwin'      # das Main-GUI 
+require 'mcc2/mcc2_mainwin'      # das Main-GUI 
 
-require 'layout'            # das Kartenlayout
+require 'mcc2/layout'            # das Kartenlayout
 
-require 'dataman'           # der Datenmanager
-require 'dataman_csv'       # der Datenmanager für CSV-dateien
-require 'dataman_database'  # der Datenmanager für Datenbanken
+require 'mcc2/dataman'           # der Datenmanager
+require 'mcc2/dataman_csv'       # der Datenmanager für CSV-dateien
+require 'mcc2/dataman_database'  # der Datenmanager für Datenbanken
 
-require 'go_attribut'       # die Attribut-Klasse für die grafischen Objekte
-
-require 'graphic_object'    # die Basisklasse für die grafischen Objekte
-require 'barcode_object'    # grafische Barcode-Objekte
-require 'picture_object'    # grafische Bild-Objekte
-require 'text_object'       # grafische Text-Objekte
-
-require 'magstripe'         # Magnetstreifen
-require 'printer/card_printer'           # die Basis-Printer-Klasse
+require 'mcc2/magstripe'         # Magnetstreifen
+require 'mcc2/printer/card_printer'           # die Basis-Printer-Klasse
 
 begin
-  require 'printer_xid'       # die XID-Printer-Klasse
+  require 'mcc2/printer/printer_xid'       # die XID-Printer-Klasse
 rescue LoadError => e
   puts "Loading XID-printer driver failed: #{e}"
 end
 
-require 'xml'               # für die Layout-Struktur
-
-require 'fastercsv'
+require 'mcc2/chipobjekt'              # Chip
+require 'mcc2/cc_dialogbox.rb'
+require 'mcc2/debug_tools'
 
 require 'ftools'
 
-require 'RMagick'           # für das Erzeugen der Druckbilder
-include Magick
-require 'rvg/rvg'           # für RMagick die Vektorgraphik-Bibliothek
-
-require "tempfile" 
-
-
-require 'chipobjekt'              # Chip
-
-require 'cc_dialogbox.rb'
-
-require 'debug_tools'
-include DebugTools
-
+require "tempfile"
 
 File.makedirs("./logs", true)
 
 class Magick::RVG
   def draw
-      raise StandardError, "draw not permitted in nested RVG objects" if @nested
-      @canvas ||= new_canvas    # allow drawing over existing canvas
-      gc = Utility::GraphicContext.new
-      
-      # Turn off antialiasing
-      gc.text_antialias(false)
-      
-      add_outermost_primitives(gc)
-      pp(self) if ENV['debug_rvg']
-      print_gc(gc) if ENV['debug_prim']
-      gc.draw(@canvas)
-      return @canvas
+    raise StandardError, "draw not permitted in nested RVG objects" if @nested
+    @canvas ||= new_canvas    # allow drawing over existing canvas
+    gc = Utility::GraphicContext.new
+
+    # Turn off antialiasing
+    gc.text_antialias(false)
+
+    add_outermost_primitives(gc)
+    pp(self) if ENV['debug_rvg']
+    print_gc(gc) if ENV['debug_prim']
+    gc.draw(@canvas)
+    return @canvas
   end
 end
 
 # *****************************************************************************
+module Mcc2
 
 # die Haupklasse des Programms
-class MCC2GUI < MainWindow
+class Mcc2Gui < MainWindow
+  include Fox
 
   def initialize(parent, argv)
     @app = parent
@@ -244,23 +219,23 @@ class MCC2GUI < MainWindow
 
     begin
       app = FX::App.new("MCC2", "ComCard")
-      FXToolTip.new(app, TOOLTIP_PERMANENT)
+      Fox::FXToolTip.new(app, Fox::TOOLTIP_PERMANENT)
 
 #       $pr = PrinterXID.new # todo, muss später vom Anwender ausgewählt werden
       $pr = Printer::CardPrinter.new # todo, muss später vom Anwender ausgewählt werden
 
-      w = MCC2GUI.new(app, argv)
+      w = Mcc2Gui.new(app, argv)
       w.topwin.show(Fox::PLACEMENT_SCREEN)
 
       app.create
       app.run
     rescue Exception => e
       file = File.basename(__FILE__, ".rb")
-      DebugTools::write_log_file('main', unkown_error_message(e))
-      puts(unkown_error_message(e))
+      DebugTools.write_log_file('main', DebugTools.unkown_error_message(e))
+      puts(DebugTools.unkown_error_message(e))
       exit -1
     end
 
   end
 end
-
+end

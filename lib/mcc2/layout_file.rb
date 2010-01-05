@@ -1,6 +1,19 @@
 # -*- coding: UTF-8 -*-
 
-# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
+require 'xml'               # für die Layout-Datei
+require 'mcc2/constants'
+require 'mcc2/layout_objects/go_attribut'
+require 'mcc2/layout_objects/graphic_object'    # die Basisklasse für die grafischen Objekte
+require 'mcc2/layout_objects/barcode_object'    # grafische Barcode-Objekte
+require 'mcc2/layout_objects/picture_object'    # grafische Bild-Objekte
+require 'mcc2/layout_objects/text_object'       # grafische Text-Objekte
+
+module Mcc2
+module Printer
+  autoload 'PrinterXID', 'printer/printer_xid'
+  autoload 'GdiPrinter', 'printer/gdi_printer'
+  autoload 'FilePrinter', 'printer/file_printer'
+end
 
 class LayoutFile
   class WrongDataSourceEncoding  < RuntimeError
@@ -338,4 +351,12 @@ class LayoutFile
   def delete_object(node)
     node.remove!
   end
+
+  def build_printer_instance
+    printertype = get_attr_value(S_PRINTERTYPE)
+    printerclass = Printer.const_get(printertype)
+    return printerclass.new
+  end
+
+end
 end

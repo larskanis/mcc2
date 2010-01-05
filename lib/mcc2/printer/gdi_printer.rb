@@ -1,10 +1,6 @@
 # -*- coding: UTF-8 -*-
 # diese Klasse dient als Basis für die Printer, es macht keinen Sinn direkt ein Objekt von dieser Klasse zu erzeugen
 
-#~ if __FILE__ == $0
-  #~ require 'mcc2'
-#~ end
-
 require 'win32api_base'
 require 'win32api_gdi'
 require 'win32api_user'
@@ -12,10 +8,11 @@ require 'win32api_winspool'
 #~ require 'win32api_comdlg'
 #~ require 'win32api_kernel'
 
-require 'printer/card_printer'
-require 'printer/rmagick_drawer'
+require 'mcc2/printer/card_printer'
+require 'mcc2/printer/rmagick_drawer'
 
 
+module Mcc2
 module Printer
 class GdiPrinter < CardPrinter
   include RmagickDrawer
@@ -151,7 +148,4 @@ class GdiPrinter < CardPrinter
   end
 end
 end
-
-
-if __FILE__ == $0
 end

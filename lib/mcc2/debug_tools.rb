@@ -1,7 +1,9 @@
-# -*- coding: utf-8 Cookie -*-
+# -*- coding: utf-8 -*-
+
+module Mcc2
 module DebugTools
 
-  def write_log_file(source, message)
+  def self.write_log_file(source, message)
     File.open("logs/#{source}.log","a"){|f_out| 
       f_out.puts "-"*100
       f_out.puts Time.now.strftime("%Y-%m-%d  %H:%M:%S")
@@ -12,7 +14,8 @@ module DebugTools
   end
  	#---------------------------------------------------------------------------------------------------------
   
-  def unkown_error_message(e)
+  def self.unkown_error_message(e)
     (["Es ist ein unerwarteter Fehler aufgetreten.\nBitte informieren Sie umgehend die EDV!\n\n  #{e.class}:  #{e.to_s}"]+e.backtrace).join("\n")
   end
+end
 end

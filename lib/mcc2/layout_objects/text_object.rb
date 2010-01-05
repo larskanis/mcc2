@@ -1,12 +1,8 @@
 # -*- coding: UTF-8 -*-
 
-# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
+require 'mcc2/layout_objects/graphic_object'
 
-if __FILE__ == $0
-  require 'mcc2'
-end
-
-
+module Mcc2
 class TextObject < GraphicObject
   def initialize
     super
@@ -21,7 +17,7 @@ class TextObject < GraphicObject
     add_attr(@go_attributes, GOA_JUSTIFICATION, String, "Links")
   end
 end
-
+end
 
 if __FILE__ == $0
   to = TextObject.new

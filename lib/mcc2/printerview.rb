@@ -1,8 +1,10 @@
 # -*- coding: UTF-8 -*-
 
-require 'printerview_dlg'
+module Mcc2
+require 'mcc2/printerview_dlg'
 
 class Printerview < Dialogbox_printerview
+  include Fox
 
   PrinterDescription = Struct.new :human_name, :class_name, :tab_idx
   PrinterDescriptions = [
@@ -79,4 +81,5 @@ class Printerview < Dialogbox_printerview
     @layout.changed_attributes
   end
 
+end
 end

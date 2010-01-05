@@ -1,7 +1,11 @@
 # -*- coding: UTF-8 -*-
 
-require 'dataman'
+require 'mcc2/dataman'
+require 'RMagick'           # für das Erzeugen der Druckbilder
+require 'rvg/rvg'           # für RMagick die Vektorgraphik-Bibliothek
 
+
+module Mcc2
 module RmagickDrawer
   class ResourceNotFoundError < RuntimeError
   end
@@ -248,4 +252,4 @@ module RmagickDrawer
   end
   
 end
-
+end

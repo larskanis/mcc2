@@ -1,15 +1,10 @@
 # -*- coding: UTF-8 -*-
 
-require 'dataview_dlg'
-require 'printer/base'
-
-module Printer
-  autoload 'PrinterXID', 'printer/printer_xid'
-  autoload 'GdiPrinter', 'printer/gdi_printer'
-  autoload 'FilePrinter', 'printer/file_printer'
-end
+module Mcc2
+require 'mcc2/dataview_dlg'
 
 class Dataview < Dialogbox_dataview
+  include Fox
 
   def initialize parent, layout
     @layout = layout
@@ -297,10 +292,7 @@ class Dataview < Dialogbox_dataview
     disable_all_buttons
     @button_stop_printing.enabled = true
     @printing = true
-    
-    printertype = @layout_file.get_attr_value(S_PRINTERTYPE)
-    printerclass = Printer.const_get(printertype)
-    printer = printerclass.new
+    printer = @layout_file.build_printer_instance
     
     if bis == -1
       bis = @iconlist_data.numRows - 1
@@ -308,7 +300,7 @@ class Dataview < Dialogbox_dataview
 
     marked_items = []
     (von..bis).map{|i|
-      if only_selected == false || only_selected == true && @iconlist_data.itemSelected?(i)
+      if !only_selected || @iconlist_data.itemSelected?(i)
         marked_items << @iconlist_data.getItemData(i)
       end
     }
@@ -413,4 +405,5 @@ class Dataview < Dialogbox_dataview
     self.update_preview if update_preview
   end
   
+end
 end

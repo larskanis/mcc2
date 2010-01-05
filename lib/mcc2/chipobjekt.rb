@@ -1,11 +1,9 @@
 # -*- coding: UTF-8 -*-
 
-# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
 
+require 'mcc2/dataman'
 
-require 'dataman'
-
-
+module Mcc2
 # diese Klasse ist für die Personalisierung der Chips verantwortlich
 class Chip
   # muss vor dem require 'chibbase' kommen
@@ -69,7 +67,7 @@ class Chip
   end
   
 end
-
+end
 
 if __FILE__ == $0
   #~ system("ruby mcc2.rb #{ARGV}")

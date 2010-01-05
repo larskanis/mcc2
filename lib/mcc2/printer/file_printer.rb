@@ -1,9 +1,10 @@
 # -*- coding: UTF-8 -*-
 
-require 'printer/card_printer'
-require 'printer/rmagick_drawer'
+require 'mcc2/printer/card_printer'
+require 'mcc2/printer/rmagick_drawer'
 
 
+module Mcc2
 module Printer
 class FilePrinter < CardPrinter
   include RmagickDrawer
@@ -76,7 +77,4 @@ class FilePrinter < CardPrinter
 
 end
 end
-
-
-if __FILE__ == $0
 end

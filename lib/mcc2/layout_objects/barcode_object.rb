@@ -1,10 +1,9 @@
 # -*- coding: UTF-8 -*-
 
-if __FILE__ == $0
-  require 'mcc2'
-end
+require 'mcc2/layout_objects/graphic_object'
 
 
+module Mcc2
 class BarcodeObject < GraphicObject
   def initialize
     super
@@ -22,7 +21,7 @@ class BarcodeObject < GraphicObject
     add_attr(@go_attributes, GOA_JUSTIFICATION, Integer, 0)
   end
 end
-
+end
 
 if __FILE__ == $0
   bo = BarcodeObject.new

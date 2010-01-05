@@ -1,8 +1,9 @@
 # -*- coding: UTF-8 -*-
 
-require 'printer/base'           # die Basisklasse für die Printer
+require 'mcc2/printer/base'           # die Basisklasse für die Printer
 
 
+module Mcc2
 module Printer
 module CardPrinting
   def default_width; 85.6; end
@@ -40,6 +41,4 @@ class CardPrinter < Base
   include CardPrinting
 end
 end
-
-if __FILE__ == $0
 end

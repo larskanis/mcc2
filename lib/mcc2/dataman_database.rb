@@ -1,13 +1,8 @@
 # -*- coding: UTF-8 -*-
 
-if __FILE__ == $0
-  require 'mcc2'
-end
+require 'mcc2/dataman'
 
-
+module Mcc2
 class DataManDatabase < DataMan
 end
-
-
-if __FILE__ == $0
 end

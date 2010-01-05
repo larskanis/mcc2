@@ -1,20 +1,16 @@
 # -*- coding: UTF-8 -*-
 
-# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
+require 'mcc2/cc_dialogbox'
+require 'mcc2/layout_file'
+require 'mcc2/layoutview'
+require 'mcc2/dataview'
+require 'mcc2/printerview'
+require 'mcc2/printer/preview'
 
-if __FILE__ == $0
-  require 'mcc2'
-end
-
-require 'cc_dialogbox'
-require 'layout_file'
-require 'layoutview'
-require 'dataview'
-require 'printerview'
-require 'printer/preview'
-
+module Mcc2
 # definiert ein Clientfenster mit allen Einstellungen und Attributen, die für ein bestimmtes Kartenlayout benötigt werden
 class Layout
+  include Fox
 
   # definiert, ob an den Einstellungen seit dem letzten speichern oder laden etwas geändert wurde
   attr_accessor :changed
@@ -231,6 +227,8 @@ class Layout
     end
   end
 end
+end
+
 #*****************************************************************************
 # Main
 

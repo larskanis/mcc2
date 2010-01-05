@@ -1,9 +1,8 @@
 # -*- coding: UTF-8 -*-
 
-if __FILE__ == $0
-  require 'mcc2'
-end
+require 'mcc2/layout_objects/go_attribut'       # die Attribut-Klasse für die grafischen Objekte
 
+module Mcc2
 class GraphicObject
   attr_accessor :go_attributes
   def initialize
@@ -34,7 +33,7 @@ class GraphicObject
     end
   end
 end
-
+end
 
 if __FILE__ == $0
   go = GraphicObject.new

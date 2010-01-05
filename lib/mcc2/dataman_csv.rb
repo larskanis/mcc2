@@ -1,10 +1,9 @@
 # -*- coding: UTF-8 -*-
 
-if __FILE__ == $0
-  require 'mcc2'
-end
+require 'fastercsv'
+require 'mcc2/dataman'
 
-
+module Mcc2
 class DataManCSV < DataMan
   def initialize(datasource)
 #   puts "\nFile: #{ fname }  #{csv.length} Datensätze"  
@@ -32,7 +31,4 @@ class DataManCSV < DataMan
   end
 
 end
-
-
-if __FILE__ == $0
 end

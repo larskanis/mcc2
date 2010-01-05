@@ -1,11 +1,10 @@
 # -*- coding: UTF-8 -*-
 
-# Revision = "$WCREV$"; Modified = "$WCMODS?Modified:Not modified$"; Date = "$WCDATE$"; RevRange = "$WCRANGE$"
 
-##############################################################################
-
+module Mcc2
 # FehlerAuswahlDialog mit variablen Buttons zur Eingabe der Batchnummer
-class FXFehlerAuswahlDialog < FXDialogBox
+class FXFehlerAuswahlDialog < Fox::FXDialogBox
+  include Fox
   attr_accessor :selection
   
   def initialize(owner, message, buttonlist)
@@ -56,4 +55,4 @@ class FXFehlerAuswahlDialog < FXDialogBox
     end
   end
 end # Ende Klasse 'FXFehlerAuswahlDialog'
-##############################################################################
+end

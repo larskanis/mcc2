@@ -1,14 +1,16 @@
 # -*- coding: UTF-8 -*-
 
-require 'printer/base'           # die Basisklasse für die Printer
-require 'printer/card_printer'
-require 'printer/rmagick_drawer'
+require 'mcc2/printer/base'           # die Basisklasse für die Printer
+require 'mcc2/printer/card_printer'
+require 'mcc2/printer/rmagick_drawer'
 
 
+module Mcc2
 module Printer
 class Preview < Base
   include RmagickDrawer
   include CardPrinting
+  include Fox
   
   class ResourceNotFoundError < RuntimeError
   end
@@ -145,5 +147,6 @@ class Preview < Base
   end
   #---------------------------------------------------------------------------------------------------------
 
+end
 end
 end
