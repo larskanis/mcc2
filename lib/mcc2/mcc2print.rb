@@ -53,8 +53,9 @@ class Mcc2Print
 
       opts.on("-v", "--[no-]verbose", "Run verbosely", &app.method(:verbose=))
       opts.on("-x", "--xpath-value XPATH~VALUE", "Replace XML-value on the given xpath", &app.method(:add_xpath_value))
-      opts.separator "\tchange datasource: -x Layout/datasource~mydata.csv"
-
+      opts.separator "\tExsamples:"
+      opts.separator "\t -x Layout/datasource~mydata.csv"
+      opts.separator "\t -x Layout/fileprinter_save_as~image_%d_%p.png"
     end.parse!
 
     begin
