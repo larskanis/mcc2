@@ -57,23 +57,6 @@ require "tempfile"
 
 File.makedirs("./logs", true)
 
-class Magick::RVG
-  def draw
-    raise StandardError, "draw not permitted in nested RVG objects" if @nested
-    @canvas ||= new_canvas    # allow drawing over existing canvas
-    gc = Utility::GraphicContext.new
-
-    # Turn off antialiasing
-    gc.text_antialias(false)
-
-    add_outermost_primitives(gc)
-    pp(self) if ENV['debug_rvg']
-    print_gc(gc) if ENV['debug_prim']
-    gc.draw(@canvas)
-    return @canvas
-  end
-end
-
 # *****************************************************************************
 module Mcc2
 
