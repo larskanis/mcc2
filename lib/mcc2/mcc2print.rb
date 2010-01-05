@@ -4,10 +4,6 @@
 
 require "rubygems"
 
-require 'mcc2/dataman'           # der Datenmanager
-require 'mcc2/dataman_csv'       # der Datenmanager für CSV-dateien
-require 'mcc2/dataman_database'  # der Datenmanager für Datenbanken
-
 require 'mcc2/magstripe'         # Magnetstreifen
 require 'mcc2/chipobjekt'              # Chip
 require 'mcc2/debug_tools'
@@ -37,7 +33,8 @@ class Mcc2Print
     }
     printer = lf.build_printer_instance
     dataman = lf.build_dataman_instance
-    dataman.rows.each do |row|
+    rows = dataman.rows || [nil]
+    rows.each do |row|
       erg = printer.print_card(lf, row, @chip)
     end
   end

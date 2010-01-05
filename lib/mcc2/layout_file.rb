@@ -15,6 +15,12 @@ module Printer
   autoload 'FilePrinter', 'mcc2/printer/file_printer'
 end
 
+module DataMan
+  autoload 'Database', 'mcc2/dataman/database'
+  autoload 'CSV', 'mcc2/dataman/csv'
+  autoload 'None', 'mcc2/dataman/none'
+end
+
 class LayoutFile
   class WrongDataSourceEncoding  < RuntimeError
   end
@@ -369,11 +375,11 @@ class LayoutFile
     datasource =  get_attr_value(S_DATASOURCE)
 
     dataman = if datamantyp == DATABASE
-      DataManDatabase.new(datasource)
+      DataMan::Database.new(datasource)
     elsif datamantyp == CSV
-      DataManCSV.new(datasource)
+      DataMan::CSV.new(datasource)
     elsif datamantyp == NONE
-      nil
+      DataMan::None.new(datasource)
     else
       raise "falscher datasourcetyp '#{datamantyp}' angegeben!"
     end

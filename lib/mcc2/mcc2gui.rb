@@ -31,24 +31,11 @@ end
 
 # die GUI's, alle mit FoxGUI-Builder erstellt
 require 'mcc2/mcc2_mainwin'      # das Main-GUI 
+require 'mcc2/cc_dialogbox.rb'
 
 require 'mcc2/layout'            # das Kartenlayout
-
-require 'mcc2/dataman'           # der Datenmanager
-require 'mcc2/dataman_csv'       # der Datenmanager für CSV-dateien
-require 'mcc2/dataman_database'  # der Datenmanager für Datenbanken
-
 require 'mcc2/magstripe'         # Magnetstreifen
-require 'mcc2/printer/card_printer'           # die Basis-Printer-Klasse
-
-begin
-  require 'mcc2/printer/printer_xid'       # die XID-Printer-Klasse
-rescue LoadError => e
-  puts "Loading XID-printer driver failed: #{e}"
-end
-
 require 'mcc2/chipobjekt'              # Chip
-require 'mcc2/cc_dialogbox.rb'
 require 'mcc2/debug_tools'
 
 require 'ftools'

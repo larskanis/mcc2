@@ -1,10 +1,11 @@
 # -*- coding: UTF-8 -*-
 
 require 'fastercsv'
-require 'mcc2/dataman'
+require 'mcc2/dataman/base'
 
 module Mcc2
-class DataManCSV < DataMan
+module DataMan
+class CSV < Base
   class CanNotOpenFile  < RuntimeError
   end
   
@@ -32,5 +33,6 @@ class DataManCSV < DataMan
     @csv
   end
 
+end
 end
 end

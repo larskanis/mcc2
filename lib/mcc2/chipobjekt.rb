@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 
-require 'mcc2/dataman'
+require 'mcc2/dataman/base'
 
 module Mcc2
 # diese Klasse ist für die Personalisierung der Chips verantwortlich

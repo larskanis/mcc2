@@ -4,13 +4,7 @@ require 'iconv'
 require 'mcc2/constants'
 
 module Mcc2
-class DataMan
-  class BadEncodingError < RuntimeError
-  end
-  attr_reader :filename
-  
- 	#---------------------------------------------------------------------------------------------------------
-  
+module DataMan
   # ermittelt, ob der übergebene String eine erlaubtes Encoding ist
   # === Return
   # true oder false
@@ -19,8 +13,8 @@ class DataMan
   def self.valid_datasource_encoding?(encoding)
     VALID_ENCODINGS.index(encoding)
   end
- 	#---------------------------------------------------------------------------------------------------------
-  
+  #---------------------------------------------------------------------------------------------------------
+
   # ermittelt, ob der übergebene String eine erlaubte Datenquelle ist
   # === Return
   # true oder false
@@ -29,8 +23,8 @@ class DataMan
   def self.valid_datasourcetyp?(datasource)
     VALID_DATASOURCES.index(datasource)
   end
- 	#---------------------------------------------------------------------------------------------------------
-  
+  #---------------------------------------------------------------------------------------------------------
+
   # === Paramter
   # +text+::        der zu konvertierende Text
   # +encoding+::    das Encoding der Quelle
@@ -41,8 +35,8 @@ class DataMan
     encoding = Iconv.new('utf-8', encoding)
     encoding.iconv(text)
   end
- 	#---------------------------------------------------------------------------------------------------------
-  
+  #---------------------------------------------------------------------------------------------------------
+
   # ersetzt die Felder in data, welche dem Muster {feldname[pos,anz]} entsprechen, durch ihren Inhalt
   # === Paramter
   # +data+::   die im Layut definierten Daten für dieses Objekt
@@ -62,6 +56,11 @@ class DataMan
       end
     }
   end
- 	#---------------------------------------------------------------------------------------------------------
+
+  class Base
+    class BadEncodingError < RuntimeError
+    end
+    attr_reader :filename
+  end
 end
 end
