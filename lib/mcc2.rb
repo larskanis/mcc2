@@ -7,5 +7,6 @@ module Mcc2
   VERSION = '0.5.0'
   
   autoload :Mcc2Gui, 'mcc2/mcc2gui'
+  autoload :Mcc2Print, 'mcc2/mcc2print'
 end
 

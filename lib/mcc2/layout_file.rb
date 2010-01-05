@@ -10,9 +10,9 @@ require 'mcc2/layout_objects/text_object'       # grafische Text-Objekte
 
 module Mcc2
 module Printer
-  autoload 'PrinterXID', 'printer/printer_xid'
-  autoload 'GdiPrinter', 'printer/gdi_printer'
-  autoload 'FilePrinter', 'printer/file_printer'
+  autoload 'PrinterXID', 'mcc2/printer/printer_xid'
+  autoload 'GdiPrinter', 'mcc2/printer/gdi_printer'
+  autoload 'FilePrinter', 'mcc2/printer/file_printer'
 end
 
 class LayoutFile
