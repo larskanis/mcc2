@@ -93,19 +93,7 @@ class Layout
 
   # erzeugt einen Datenmanager abhängig davon welcher Datensourcetyp im Layout definiert ist (momentan DATABASE oder CSV)
   def open_dataman
-    
-    @open_datamantyp = datamantyp =  @layout_file.get_attr_value(S_DATASOURCETYP)
-    @open_datasource = datasource =  @layout_file.get_attr_value(S_DATASOURCE)
-    
-    if datamantyp == DATABASE
-      @dataman = DataManDatabase.new(datasource)
-    elsif datamantyp == CSV
-      @dataman = DataManCSV.new(datasource)
-    elsif datamantyp == NONE
-      @dataman = nil
-    else
-      raise "falscher datasourcetyp '#{datamantyp}' angegeben!"
-    end
+    @dataman = @layout_file.build_dataman_instance
     @dataview.dataman = @dataman
   end
   #---------------------------------------------------------------------------------------------------------

@@ -280,6 +280,13 @@ class LayoutFile
     @attributes[attr.attr_name] = attr
   end
 
+  def change_first_xpath_value(xpath, value)
+    attr = @xml_doc.find_first(xpath)
+    if attr
+      attr.content = value
+    end
+  end
+
  	#---------------------------------------------------------------------------------------------------------
   
   #
@@ -337,7 +344,6 @@ class LayoutFile
     return unless node
     o = add_object(node.find_first(GOA_TYP).content)
     node.each_element{|element|
-    #~ o.go_attributes.each_pair{|goa_name, go_attribute|
       # alle Attribute, außer ID, Typ und Name kopieren, sofern sie vorhanden, ansonsten den Standard lassen
       if element.name != GOA_ID && element.name != GOA_TYP && element.name != GOA_NAME
         o.find_first(element.name).content = element.content
@@ -356,6 +362,23 @@ class LayoutFile
     printertype = get_attr_value(S_PRINTERTYPE)
     printerclass = Printer.const_get(printertype)
     return printerclass.new
+  end
+
+  def build_dataman_instance
+    datamantyp =  get_attr_value(S_DATASOURCETYP)
+    datasource =  get_attr_value(S_DATASOURCE)
+
+    dataman = if datamantyp == DATABASE
+      DataManDatabase.new(datasource)
+    elsif datamantyp == CSV
+      DataManCSV.new(datasource)
+    elsif datamantyp == NONE
+      nil
+    else
+      raise "falscher datasourcetyp '#{datamantyp}' angegeben!"
+    end
+
+    return dataman
   end
 
 end

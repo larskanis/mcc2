@@ -5,16 +5,18 @@ require 'mcc2/dataman'
 
 module Mcc2
 class DataManCSV < DataMan
+  class CanNotOpenFile  < RuntimeError
+  end
+  
   def initialize(datasource)
-#   puts "\nFile: #{ fname }  #{csv.length} Datensätze"  
-#   puts "Erster : #{ csv[0][:vorname] } #{ csv[0][:name] }"  
     @csv = nil
     
     fn = datasource.strip
-    if datasource && FileTest.exists?(fn)
-      @csv = FasterCSV.read(fn, :col_sep=>';', :headers=>true)
-      @filename = fn
-    end
+    return if fn.empty?
+    
+    raise CanNotOpenFile, "file not found: #{fn.inspect}" unless File.exists?(fn)
+    @csv = FasterCSV.read(fn, :col_sep=>';', :headers=>true)
+    @filename = fn
   end
   
  	# ---------------------------------------------------------------------------------------------------------

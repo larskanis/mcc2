@@ -326,8 +326,8 @@ class Dataview < Dialogbox_dataview
         error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, e.to_s, 'ok')
         error_WahlMessage.execute
       rescue => e
-        DebugTools::write_log_file('print_card_thread', unkown_error_message(e))
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, unkown_error_message(e), 'ok')
+        DebugTools::write_log_file('print_card_thread', DebugTools::unkown_error_message(e))
+        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, DebugTools::unkown_error_message(e), 'ok')
         error_WahlMessage.execute
       ensure
         @printing = false

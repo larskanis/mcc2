@@ -128,8 +128,8 @@ class Preview < Base
           @printing = false
         end
       rescue => e
-        DebugTools::write_log_file('draw_preview_thread', unkown_error_message(e))
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, unkown_error_message(e), 'ok')
+        DebugTools::write_log_file('draw_preview_thread', DebugTools::unkown_error_message(e))
+        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, DebugTools::unkown_error_message(e), 'ok')
         error_WahlMessage.execute
       end # rescue
     }

@@ -25,23 +25,42 @@ class Mcc2Print
 
   attr_accessor :verbose
 
+  def initialize
+    @xpath_changes = []
+  end
+
   def start!(layout_fname)
     lf = LayoutFile.load_from_xml(layout_fname)
+    @xpath_changes.each{|xc|
+      xpath, value = *xc.split('~', 2)
+      lf.change_first_xpath_value(xpath, value)
+    }
+    printer = lf.build_printer_instance
+    dataman = lf.build_dataman_instance
+    dataman.rows.each do |row|
+      erg = printer.print_card(lf, row, @chip)
+    end
   end
-  
+
+  def add_xpath_value(param)
+    @xpath_changes << param
+  end
 
   def self.run(argv)
     Thread.abort_on_exception = true
 
+    app = self.new
+
+    OptionParser.new do |opts|
+      opts.banner = "Usage: #{$0} [options]"
+
+      opts.on("-v", "--[no-]verbose", "Run verbosely", &app.method(:verbose=))
+      opts.on("-x", "--xpath-value XPATH~VALUE", "Replace XML-value on the given xpath", &app.method(:add_xpath_value))
+      opts.separator "\tchange datasource: -x Layout/datasource~mydata.csv"
+
+    end.parse!
+
     begin
-      app = self.new
-      
-      OptionParser.new do |opts|
-        opts.banner = "Usage: #{$0} [options]"
-
-        opts.on("-v", "--[no-]verbose", "Run verbosely", &app.method(:verbose=))
-      end.parse!
-
       app.start!(argv[0])
       
     rescue Exception => e
