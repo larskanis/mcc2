@@ -77,7 +77,7 @@ class Layoutview
 
     # die Auswahl auf welche Seite das Objekt soll
     @lf.spinner_seiten_nr.connect(SEL_COMMAND){ seiten_nr_changed }
-    @lf.spinner_seiten_nr.range = (1..$pr.max_pages)
+    @lf.spinner_seiten_nr.range = (1..999)
 
     # der Checkbutton für die Einstellung Simplex/Duplex
     @lf.checkbutton_duplex.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_DUPLEX) }
@@ -714,10 +714,10 @@ class Layoutview
     @lf.textfield_x_offset.text = @layout_file.get_attr_value(S_X_OFFSET)
     @lf.textfield_y_offset.text = @layout_file.get_attr_value(S_Y_OFFSET)
     Layout.set_combobox_by_data( @lf.combobox_datasource_typ, @layout_file.get_attr_value(S_DATASOURCETYP))
-    set_check_button('checkbutton_contactless', @layout_file.get_attr_value(S_CONTACTLESS), $pr.has_contactless_engine?)
-    set_check_button('checkbutton_contact', @layout_file.get_attr_value(S_CONTACT), $pr.has_contact_engine?)
-    set_check_button('checkbutton_magstripe', @layout_file.get_attr_value(S_MAGSTRIPE), $pr.has_magstripe_engine?)
-    set_check_button('checkbutton_duplex', @layout_file.get_attr_value(S_DUPLEX), $pr.can_duplex?)
+    set_check_button('checkbutton_contactless', @layout_file.get_attr_value(S_CONTACTLESS), true)
+    set_check_button('checkbutton_contact', @layout_file.get_attr_value(S_CONTACT), true)
+    set_check_button('checkbutton_magstripe', @layout_file.get_attr_value(S_MAGSTRIPE), true)
+    set_check_button('checkbutton_duplex', @layout_file.get_attr_value(S_DUPLEX), true)
   end
   #---------------------------------------------------------------------------------------------------------
 

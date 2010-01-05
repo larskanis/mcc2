@@ -6,9 +6,9 @@ require 'mcc2/printer/base'           # die Basisklasse für die Printer
 module Mcc2
 module Printer
 module CardPrinting
-  def default_width; 85.6; end
-  def default_height; 53.98; end
-  def dpi; 300; end
+  def default_width; LAYOUT_DEFAULT_WIDTH; end
+  def default_height; LAYOUT_DEFAULT_HEIGHT; end
+  def max_dpi; 300; end
 
   # die Ränder außerhalb der Karte, auf den maximal gedruckt werden darf (für vollflächige Bilder notwendig)
   #

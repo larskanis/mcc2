@@ -198,9 +198,6 @@ class Mcc2Gui < MainWindow
       app = FX::App.new("MCC2", "ComCard")
       Fox::FXToolTip.new(app, Fox::TOOLTIP_PERMANENT)
 
-#       $pr = PrinterXID.new # todo, muss später vom Anwender ausgewählt werden
-      $pr = Printer::CardPrinter.new # todo, muss später vom Anwender ausgewählt werden
-
       w = Mcc2Gui.new(app, argv)
       w.topwin.show(Fox::PLACEMENT_SCREEN)
 

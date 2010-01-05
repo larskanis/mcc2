@@ -43,10 +43,10 @@ class LayoutFile
     @xml_doc = nil
     @attributes = {}
     add_attr(S_DUPLEX, String, FALSE)
-    add_attr(S_WIDTH, Integer, $pr.default_width)
-    add_attr(S_HEIGHT, Integer, $pr.default_height)
-    add_attr(S_X_OFFSET, Integer, $pr.default_x_offset)
-    add_attr(S_Y_OFFSET, Integer, $pr.default_y_offset)
+    add_attr(S_WIDTH, Integer,  LAYOUT_DEFAULT_WIDTH)
+    add_attr(S_HEIGHT, Integer, LAYOUT_DEFAULT_HEIGHT)
+    add_attr(S_X_OFFSET, Integer, LAYOUT_DEFAULT_X_OFFSET)
+    add_attr(S_Y_OFFSET, Integer, LAYOUT_DEFAULT_Y_OFFSET)
     add_attr(S_DATASOURCE, String, "")
     add_attr(S_DATASOURCETYP, String, NONE)
     add_attr(S_DATASOURCEENCODING, String, ENC_IBM850)
