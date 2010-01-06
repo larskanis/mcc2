@@ -82,7 +82,6 @@ class Dataview < Dialogbox_dataview
   end
 
   def fill_datalist_when_visible
-    puts "fill_datalist_when_visible"
     @fill_datalist_triggered = true
     if @visible
       ensure_datalist_filled
@@ -90,7 +89,6 @@ class Dataview < Dialogbox_dataview
   end
 
   def ensure_datalist_filled
-    puts "ensure_datalist_filled"
     if @fill_datalist_triggered
       fill_datalist
       @fill_datalist_triggered = false
@@ -98,13 +96,9 @@ class Dataview < Dialogbox_dataview
   end
 
   def fill_datalist
-    puts "fill_datalist"
     # todo im Moment werden in der Liste der zu druckenden Datensätze alle Felder des Datensatzes angezeigt,
     # eigentlichh soll auswählbar sein, welche Felder angezeigt werden sollen, in den graphischen Objekten ist schon ein Feld vorgesehen, welches dieses Verhalten steuern sollen
     # es ist zu überlegen, welche Daten man dort anzeigt
-    #~ printlist = xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").collect{|objekt|
-      #~ name = objekt.find(GOA_NAME).first.content
-    #~ }
     @iconlist_data.clearItems
     @iconlist_data.header.clearItems
     

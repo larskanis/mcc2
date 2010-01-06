@@ -16,22 +16,14 @@ class Printerview < Dialogbox_printerview
   def initialize parent, layout
     @layout = layout
     @parent = parent
+    @layout_file = nil
 
     super(parent)
     @verticalframe_printersetup.reparent parent, nil
     @dialogbox_printerview.close
 
     @matrix_file.numColumns = 3
-    @combobox_printertype.connect(SEL_COMMAND){
-      deactivate_printer_tabs
-      prdesc = @combobox_printertype.getItemData(@combobox_printertype.currentItem)
-      @tabbook_printers.childAtIndex(prdesc.tab_idx*2).shown = true
-      @tabbook_printers.recalc
-      
-      @layout_file.set_attr_value(S_PRINTERTYPE, prdesc.class_name)
-      changed_attributes
-    }
-
+    @combobox_printertype.connect(SEL_COMMAND){ combobox_printertype_changed }
     @textfield_file_save_as.connect(SEL_COMMAND){
       @layout_file.set_attr_value(S_FILEPRINTER_SAVE_AS, @textfield_file_save_as.text)
       changed_attributes
@@ -47,6 +39,19 @@ class Printerview < Dialogbox_printerview
     }
 
     fill_printertype_list
+    combobox_printertype_changed
+  end
+
+  def combobox_printertype_changed
+    deactivate_printer_tabs
+    prdesc = @combobox_printertype.getItemData(@combobox_printertype.currentItem)
+    @tabbook_printers.childAtIndex(prdesc.tab_idx*2).shown = true
+    @tabbook_printers.recalc
+
+    if @layout_file
+      @layout_file.set_attr_value(S_PRINTERTYPE, prdesc.class_name)
+      changed_attributes
+    end
   end
 
   def deactivate_printer_tabs

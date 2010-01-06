@@ -16,7 +16,7 @@ class Layout
   attr_accessor :changed
   
   # enthält die kompletten Einstellungen des Kartenlayouts
-  attr_accessor :layout_file
+  attr_reader :layout_file
   
   # der Datamanager
   attr_accessor :dataman
@@ -27,9 +27,8 @@ class Layout
   # setzt Parameter bei Dialog-Elementen
   # definiert die Aktionen, welche bei bestimmten Ereignissen auf bestimmten Elementen des Dialogs ausgeführt werden sollen
   # ==== Parameter
-  # +parent+:: ??
-  # +app+::    die Applikation
-  def initialize(parent, app)
+  # +parent+:: parent-fx-window
+  def initialize(parent, filename=nil)
     @parent = parent
     begin
       # Achtung! Nicht das Verzeichnis 'printer' in den Pfad einbinden. Dort befindet sich eine printer.rb, die nichts mit der printer.rb dieses Projektes zu tun hat.
@@ -38,9 +37,10 @@ class Layout
       puts "Loading barcode driver failed: #{e}"
     end
 
+    # avoid warnings to uninit values
+    @preview = nil
+
     close_dataman
-    
-    @changed = false
 
     FXSplitter.new(parent) do |splitter1|
       FXTabBook.new(splitter1) do |tabbook|
@@ -80,6 +80,17 @@ class Layout
       end
       splitter1.setSplit(0, 400)
     end
+
+    if filename
+      load_from_xml(filename)
+      @changed = false
+    else
+      create_xml
+      @changed = true
+    end
+
+    draw_preview(true)
+    set_title
   end
   #---------------------------------------------------------------------------------------------------------
 
@@ -87,18 +98,24 @@ class Layout
   # schließt den Datenmanager
   def close_dataman
     @dataman = nil
+    @dataman_values = {}
   end
   #---------------------------------------------------------------------------------------------------------
-  
+
+  DatamanAttributes = [S_DATASOURCE, S_DATASOURCETYP]
 
   # erzeugt einen Datenmanager abhängig davon welcher Datensourcetyp im Layout definiert ist (momentan DATABASE oder CSV)
   def open_dataman
     @dataman = @layout_file.build_dataman_instance
     @dataview.dataman = @dataman
+
+    @dataman_values = DatamanAttributes.inject({}){|s,a|
+      s[a] = @layout_file.get_attr_value(a)
+      s
+    }
   end
   #---------------------------------------------------------------------------------------------------------
-  
-  
+
   # sollte jedesmal dann aufgerufen werden, wenn ein Attribut des Layouts geändert wurde
   # es wird das changed-Flag gesetzt und der Titel aktualisiert und die Vorschau neu gezeichnet
   def changed_attributes
@@ -106,8 +123,7 @@ class Layout
     set_title
 
     # Any datasource related values changed? -> reopen
-    if  @open_datamantyp!=@layout_file.get_attr_value(S_DATASOURCETYP) ||
-        @open_datasource!=@layout_file.get_attr_value(S_DATASOURCE)
+    if DatamanAttributes.find{|a| @dataman_values[a] != @layout_file.get_attr_value(a) }
       close_dataman
       open_dataman
     end
@@ -120,7 +136,7 @@ class Layout
   # * die verbunden Datenquelle (coming soon)
   # * ein Zeichen *, ob das Layout seit dem letzten Laden oder Speichern geändert wurde
   def set_title
-    @parent.title = "#{@layout_file.filename} #{@dataman.filename.to_s if @dataman}  #{@changed ? ' *' : '' }"
+    @parent.title = "#{@layout_file.filename} #{@changed ? ' *' : '' }"
   end
  	#---------------------------------------------------------------------------------------------------------
   
@@ -144,26 +160,23 @@ class Layout
   #
   def load_from_xml(filename)
     begin
-      @layout_file = LayoutFile.load_from_xml(filename)
+      layout_file = LayoutFile.load_from_xml(filename)
     rescue LayoutFile::WrongDataSourceEncoding, LayoutFile::WrongDataSourceType => e
-      changed_attributes 
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, e.to_s, 'ok')
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, e.to_s, 'ok')
       error_WahlMessage.execute
       # error_WahlMessage.selection # enthält die Nummer der gewählten Taste
     end
-    open_dataman
-
-    self.layout_file = @layout_file
-    draw_preview(true)
-    set_title
+    self.layout_file = layout_file
   end
  	#---------------------------------------------------------------------------------------------------------
 
   def layout_file= layout_file
-    @preview.layout_file = @layout_file
-    @layoutview.layout_file = @layout_file
-    @dataview.layout_file = @layout_file
-    @printerview.layout_file = @layout_file
+    @layout_file = layout_file
+    @preview.layout_file = layout_file
+    @layoutview.layout_file = layout_file
+    @dataview.layout_file = layout_file
+    @printerview.layout_file = layout_file
+    open_dataman
   end
 
   def selected_object_id= id
@@ -172,9 +185,8 @@ class Layout
   
   #
   def create_xml
-    @layout_file = LayoutFile.create_xml
-    self.layout_file = @layout_file
-    draw_preview(true)
+    layout_file = LayoutFile.create_xml
+    self.layout_file = layout_file
   end
 
   def add_object(typ)

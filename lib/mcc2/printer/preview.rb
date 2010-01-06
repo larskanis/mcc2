@@ -18,6 +18,7 @@ class Preview < Base
   def initialize parent
     super()
     @parent = parent
+    @selected_object_id = nil
 
     FXHorizontalFrame.new(parent) do |frame1|
       @label_zoom = FXLabel.new(frame1, "") do |label_zoom|

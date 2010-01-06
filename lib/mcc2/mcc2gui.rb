@@ -128,8 +128,7 @@ class Mcc2Gui < MainWindow
   
   def new_layout
     child = FXMDIChild.new(@mdiclient, "Layout", nil, nil, 0, 0, 0, 800, 600)
-    child.userData = Layout.new(child, @app)
-    child.userData.create_xml
+    child.userData = Layout.new(child)
     child.create
     child.show
     child.recalc
@@ -148,11 +147,10 @@ class Mcc2Gui < MainWindow
       return
     end
     child = FXMDIChild.new(@mdiclient, "Layout", nil, nil, 0, 0, 0, 800, 600)
-    child.userData = Layout.new(child, @app)
+    child.userData = Layout.new(child, filename)
     child.create
     child.show
     child.recalc
-    child.userData.load_from_xml(filename)
     child.setFocus
     @mdiclient.setActiveChild(child)
   end
@@ -177,9 +175,6 @@ class Mcc2Gui < MainWindow
 
   def self.run(argv)
     Thread.abort_on_exception = true
-    #~ set_trace_func proc { |event, file, line, id, binding, classname|
-      #~ printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
-    #~ }
 
     begin
       app = FX::App.new("MCC2", "ComCard")

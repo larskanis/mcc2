@@ -17,6 +17,7 @@ class Layoutview
   def initialize(parent, layout)
     @layout = layout
     @parent = parent
+    @layout_file = nil
 
     @lf = Dialogbox_layoutview.new parent
     @lf.splitter_layoutview.reparent parent, nil

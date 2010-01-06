@@ -6,6 +6,7 @@ require 'rvg/rvg'           # für RMagick die Vektorgraphik-Bibliothek
 
 # Workaround for disabling text_antialias
 class Magick::RVG
+  alias original_draw draw
   def draw
     raise StandardError, "draw not permitted in nested RVG objects" if @nested
     @canvas ||= new_canvas    # allow drawing over existing canvas
