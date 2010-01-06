@@ -170,6 +170,7 @@ class Dialogbox_layoutview
 									@label267=w
 									w.wdg_name='label267'
 									w.width=65
+									w.justify=32768
 									w.text="Datenquelle"
 									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
@@ -202,6 +203,7 @@ class Dialogbox_layoutview
 									w.wdg_name='label411'
 									w.enabled=false
 									w.width=65
+									w.justify=32768
 									w.text="Kodierung"
 									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
@@ -300,6 +302,7 @@ class Dialogbox_layoutview
 									@label414=w
 									w.wdg_name='label414'
 									w.width=85
+									w.justify=32768
 									w.text="Magnetstreifen"
 									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
