@@ -110,11 +110,18 @@ class Dataview < Dialogbox_dataview
     
     if @dataman && @layout_file
       @iconlist_data.appendHeader("Datensatz", nil, 60)
-      felder = @dataman.row(0).map{|e|
-        feldname = e[0].to_s
-        @iconlist_data.appendHeader(feldname, nil, 100)
-        feldname
-      }
+      
+      first_row = @dataman.row(0)
+      felder = if first_row
+        first_row.map{|e|
+          feldname = e[0].to_s
+          @iconlist_data.appendHeader(feldname, nil, 100)
+          feldname
+        }
+      else
+        []
+      end
+      
       big_icon = nil
       mini_icon = nil
       coding = @layout_file.get_attr_value(S_DATASOURCEENCODING)
