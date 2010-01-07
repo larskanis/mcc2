@@ -19,13 +19,11 @@ class GdiPrinter < CardPrinter
   
   #
   def initialize
-    @dpi = 300
+    super
     @w32gdi = Win32ApiGDI.new
     @w32user = Win32ApiUser.new
     @w32printer = Winspool.new
-    @default_x_offset = 0
-    @default_y_offset = 0
-  end 
+  end
   #--------------------------------------------------------------------------------------------------------------
   
   #
@@ -54,26 +52,23 @@ class GdiPrinter < CardPrinter
   end
   #--------------------------------------------------------------------------------------------------------------
   
-  #
-  def print_page(hPrinter, layout_file, row, page_nr , page_width = default_width, page_height = default_height)
   
-    # den Pfad ermitteln, wo das temporäre File abgelegt werden soll
-    tf = Tempfile.new("afile") 
-    temp_path = File.join(tf.path.split("/")[0..-2])
-    tf.close(true)            # #<File:0x4016e3c0>\n0x40187c30 
+  def print_gdi_page(hPrinter, row, page_nr)
+    self.dpi = @layout_file.get_attr_value(S_FILEPRINTER_DPI).to_f
 
-    Magick::RVG.dpi = @dpi
-
-    # todo zentralen Offset einbauen
-    draw_pos_x  = layout_file.get_attr_value(S_X_OFFSET).to_f
-    draw_pos_y  = layout_file.get_attr_value(S_Y_OFFSET).to_f
+    page_width =  @layout_file.get_attr_value(S_WIDTH).to_f
+    page_height = @layout_file.get_attr_value(S_HEIGHT).to_f
+    draw_pos_x  = @layout_file.get_attr_value(S_X_OFFSET).to_f
+    draw_pos_y  = @layout_file.get_attr_value(S_Y_OFFSET).to_f
 
     # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
     selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
     preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
-    img = Magick::RVG.new(page_width.mm, page_height.mm) do |canvas|
+    img = Magick::RVG.new(mm(page_width), mm(page_height)) do |canvas|
       canvas.background_fill = 'white'
-      Page.new(page_nr).draw(canvas, draw_pos_x, draw_pos_y, layout_file, preview, selected_object_id, row)
+      canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
+        draw(canvas1, layout_file, preview, selected_object_id, row, page_nr)
+      end
     end
     
     # das RVG in ein Bitmap konvertieren

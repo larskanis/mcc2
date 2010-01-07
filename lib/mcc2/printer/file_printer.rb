@@ -12,9 +12,7 @@ class FilePrinter < CardPrinter
   attr_accessor :layout_file
 
   def initialize
-    @default_x_offset = 0
-    @default_y_offset = 0
-
+    super
     @image_idx = 0
   end
   
