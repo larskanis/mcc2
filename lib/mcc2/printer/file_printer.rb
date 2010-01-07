@@ -54,11 +54,10 @@ class FilePrinter < CardPrinter
     self.dpi = @layout_file.get_attr_value(S_FILEPRINTER_DPI).to_f
 #    Magick::RVG::dpi = self.dpi
 
-    page_width = default_width.to_f
-    page_height = default_height.to_f
-
-    draw_pos_x  = layout_file.get_attr_value(S_X_OFFSET).to_f
-    draw_pos_y  = layout_file.get_attr_value(S_Y_OFFSET).to_f
+    page_width =  @layout_file.get_attr_value(S_WIDTH).to_f
+    page_height = @layout_file.get_attr_value(S_HEIGHT).to_f
+    draw_pos_x  = @layout_file.get_attr_value(S_X_OFFSET).to_f
+    draw_pos_y  = @layout_file.get_attr_value(S_Y_OFFSET).to_f
 
     # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
     selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
