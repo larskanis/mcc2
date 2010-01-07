@@ -69,6 +69,8 @@ class Layoutview
     # die Textfelder für die allgemeine Layoutoptionen
     @lf.textfield_x_offset.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_X_OFFSET) }
     @lf.textfield_y_offset.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_Y_OFFSET) }
+    @lf.textfield_page_width.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_WIDTH) }
+    @lf.textfield_page_height.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_HEIGHT) }
     l = @lf.combobox_datasource_typ
     l.clearItems
     l.appendItem('keine Daten - statisches Layout', NONE)
@@ -362,9 +364,9 @@ class Layoutview
       # den entsprechenden Parameter suchen
       attr_name = "#{S_PARAM}_#{id+1}"
       node = chip_attrs.find_first(attr_name)
-    elsif attr_name == S_Y_OFFSET
-      lay_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
-      node = lay_attrs.find_first(S_Y_OFFSET)
+    elsif [S_X_OFFSET, S_Y_OFFSET, S_WIDTH, S_HEIGHT].include?(attr_name)
+      @layout_file.set_attr_value(attr_name, sender.text)
+      changed_attributes
     elsif attr_name == S_X_OFFSET
       lay_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
       node = lay_attrs.find_first(S_X_OFFSET)
@@ -383,7 +385,7 @@ class Layoutview
     end
 
     # nur wenn im Textfeld etwas geändert wurde, den Text in das Attribut schreiben und das changed-Flag setzen
-    if sender.text != node.content
+    if node && sender.text != node.content
       node.content = sender.text
       changed_attributes
     end
@@ -714,6 +716,8 @@ class Layoutview
   def fill_layout_attr_tab
     @lf.textfield_x_offset.text = @layout_file.get_attr_value(S_X_OFFSET)
     @lf.textfield_y_offset.text = @layout_file.get_attr_value(S_Y_OFFSET)
+    @lf.textfield_page_width.text = @layout_file.get_attr_value(S_WIDTH)
+    @lf.textfield_page_height.text = @layout_file.get_attr_value(S_HEIGHT)
     Layout.set_combobox_by_data( @lf.combobox_datasource_typ, @layout_file.get_attr_value(S_DATASOURCETYP))
     set_check_button('checkbutton_contactless', @layout_file.get_attr_value(S_CONTACTLESS), true)
     set_check_button('checkbutton_contact', @layout_file.get_attr_value(S_CONTACT), true)
