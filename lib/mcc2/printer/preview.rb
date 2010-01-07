@@ -76,11 +76,11 @@ class Preview < Base
         end
 
         # allgemeine Einstellungen des Image vornehmen
-        dpi = 90
+        self.dpi = 90
         width =  @layout_file.get_attr_value(S_WIDTH).to_f
         height = @layout_file.get_attr_value(S_HEIGHT).to_f
 
-        Magick::RVG.dpi = dpi
+#        Magick::RVG.dpi = dpi
 
         preview = true
 
@@ -89,21 +89,21 @@ class Preview < Base
         image_width = width_with_margins(width) * @zoom
         image_height = ((2 * height_with_margins(height) + card_offset) * @zoom )
 
-        scale_width = width_with_margins(width).mm
-        scale_height = (2 * height_with_margins(height) + card_offset).mm
+        scale_width = mm(width_with_margins(width))
+        scale_height = mm(2 * height_with_margins(height) + card_offset)
 
         begin
-          rvg = Magick::RVG.new(image_width.mm, image_height.mm).viewbox(0, 0, scale_width, scale_height) do |canvas|
+          rvg = Magick::RVG.new(mm(image_width), mm(image_height)).viewbox(0, 0, scale_width, scale_height) do |canvas|
             # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
 
             draw_pos_x = 0
             draw_pos_y = 0
-            canvas.g.translate(draw_pos_x.mm, draw_pos_y.mm) do |canvas1|
+            canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
               draw(canvas1, @layout_file, preview, @selected_object_id, row, 0) # Seite 1 drucken
             end
 
             draw_pos_y = height_with_margins(height) + card_offset
-            canvas.g.translate(draw_pos_x.mm, draw_pos_y.mm) do |canvas1|
+            canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
               draw(canvas1, @layout_file, preview, @selected_object_id, row, 1) # Seite 2 drucken
             end
 
