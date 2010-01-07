@@ -13,22 +13,22 @@ module CardPrinting
   # die Ränder außerhalb der Karte, auf den maximal gedruckt werden darf (für vollflächige Bilder notwendig)
   #
   def card_margin_left #:nodoc:
-    5
+    5.0
   end
 
   #
   def card_margin_right
-    5
+    5.0
   end
 
   #
   def card_margin_top
-    5
+    5.0
   end
 
   #
   def card_margin_bottom
-    5
+    5.0
   end
 
   def max_pages

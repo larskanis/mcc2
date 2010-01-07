@@ -46,15 +46,16 @@ class FilePrinter < CardPrinter
   end
   
   #--------------------------------------------------------------------------------------------------------------
-  
+
   def print_page(row, page_nr)
 
     documentName = @layout_file.get_attr_value(S_FILEPRINTER_SAVE_AS).gsub("%d", @image_idx.to_s).gsub("%p", page_nr.to_s)
 
-    Magick::RVG.dpi = @layout_file.get_attr_value(S_FILEPRINTER_DPI).to_i
+    self.dpi = @layout_file.get_attr_value(S_FILEPRINTER_DPI).to_f
+#    Magick::RVG::dpi = self.dpi
 
-    page_width = default_width
-    page_height = default_height
+    page_width = default_width.to_f
+    page_height = default_height.to_f
 
     draw_pos_x  = layout_file.get_attr_value(S_X_OFFSET).to_f
     draw_pos_y  = layout_file.get_attr_value(S_Y_OFFSET).to_f
@@ -62,9 +63,9 @@ class FilePrinter < CardPrinter
     # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
     selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
     preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
-    img = Magick::RVG.new(page_width.mm, page_height.mm) do |canvas|
+    img = Magick::RVG.new(mm(page_width), mm(page_height)) do |canvas|
       canvas.background_fill = 'white'
-      canvas.g.translate(draw_pos_x.mm, draw_pos_y.mm) do |canvas1|
+      canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
         draw(canvas1, layout_file, preview, selected_object_id, row, page_nr)
       end
     end

@@ -7,13 +7,24 @@ class Base
   attr_reader :default_height
   attr_reader :default_x_offset
   attr_reader :default_y_offset
-  attr_reader :dpi
+  attr_accessor :dpi
 
   #
   def initialize
-    @dpi = 300
-    @default_x_offset = 0
-    @default_y_offset = 0
+    self.dpi = 300
+    @default_x_offset = 0.0
+    @default_y_offset = 0.0
+  end
+
+
+  # mm to px
+  def mm(l)
+    @dpi / 25.4 * l
+  end
+
+  # points to px
+  def pt(l)
+    @dpi / 72.0 * l
   end
 
   #

@@ -4,6 +4,15 @@ require 'mcc2/dataman/base'
 require 'RMagick'           # für das Erzeugen der Druckbilder
 require 'rvg/rvg'           # für RMagick die Vektorgraphik-Bibliothek
 
+# class Numeric
+#   def mm
+#     self
+#   end
+#   def pt
+#     self * 25.4 / 72.0
+#   end
+# end
+
 # Workaround for disabling text_antialias
 class Magick::RVG
   alias original_draw draw
@@ -51,18 +60,18 @@ module RmagickDrawer
     if preview
       rx = 10
       # todo -0.5, damit die rechten und unteren Ränder zu sehen sind, jetzt sitzt die Karte aber unsymetrisch auf dem Rechteck
-      canvas.rect(width_with_margins(width-0.5).mm, height_with_margins(height-0.5).mm ).styles(:fill=>'none', :stroke=>'black')
+      canvas.rect(mm(width_with_margins(width-0.5)), mm(height_with_margins(height-0.5)) ).styles(:fill=>'none', :stroke=>'black')
     end
 
     rmfl = Magick.fonts.map{|mf| mf.name }
 
-    canvas.g.translate(self.card_margin_left.mm, self.card_margin_top.mm) do |canvas1|
+    canvas.g.translate(mm(self.card_margin_left), mm(self.card_margin_top)) do |canvas1|
       barcodes = nil
       rx = 10
       # ..........................................................................................
       # Kartenhintergrund füllen (für Vorschau)
       if preview
-        canvas1.rect(width.mm, height.mm ).round(rx).styles(:fill=>'lightgray', :stroke=>'none')
+        canvas1.rect(mm(width), mm(height) ).round(rx).styles(:fill=>'lightgray', :stroke=>'none')
       end
       # ..........................................................................................
       # die graphischen Elemnte zeichnen
@@ -90,7 +99,7 @@ module RmagickDrawer
             data = sample_data unless sample_data.to_s.empty?
           end
 
-          canvas1.g.translate(x.mm, y.mm).rotate(rotation) do |body|
+          canvas1.g.translate(mm(x), mm(y)).rotate(rotation) do |body|
             #~ p "#{self.class.name}::draw => data: #{data} typ: #{typ}"
             # ............................................................................................................
             # die Objekt-spezifischen Attribute ermitteln
@@ -123,9 +132,9 @@ module RmagickDrawer
               end
 
               if data != ""
-                body.text(text_x.mm, 0, data).styles(
+                body.text(mm(text_x), mm(0), data).styles(
                   :font => ["'", font, "'"].join,
-                  :font_size => fontsize.pt,
+                  :font_size => pt(fontsize),
                   :fill => font_color,
                   :text_anchor => just
                 )
@@ -140,9 +149,9 @@ module RmagickDrawer
                 if go_image.density =~ /^(\d+)x(\d+)$/
                   density_x, density_y = $1.to_f, $2.to_f
                 end
-                im_width = go_width == 0 ? go_image.columns/density_x*25.4.mm : go_width.mm
-                im_height = go_height == 0 ? go_image.rows/density_y*25.4.mm : go_height.mm
-                body.image(go_image, im_width, im_height)
+                im_width = go_width == 0 ? go_image.columns/density_x*25.4 : go_width
+                im_height = go_height == 0 ? go_image.rows/density_y*25.4 : go_height
+                body.image(go_image, mm(im_width), mm(im_height))
               else
                 raise ResourceNotFoundError, "Das Bild '#{data}' konnte nicht gefunden werden. Der Druck wird angehalten."
               end
@@ -192,8 +201,8 @@ module RmagickDrawer
               img_name = Tempfile.new("barcode.png")
 
               raise BarcodeError, "Das Prüfen der Barcodeeinstellungen hat einen Fehler gemeldet.\nBitte prüfen, ob die Daten für diesen Barcodetyp gültig sind!" unless bc.check_barcode == 0
-              img_width = go_width.mm
-              img_height = go_height.mm
+              img_width = mm(go_width)
+              img_height = mm(go_height)
               bc.save_image(img_name, img_width, img_height, dpi)
               bc_image = Magick::Image.read(img_name).first
               body.image(bc_image, img_width, img_height)
@@ -204,7 +213,7 @@ module RmagickDrawer
 
             # in Vorschau einen Rahmen um das selektierte Objekt zeichnen
             if preview && selected_object_id == id
-              body.rect(go_width.mm, go_height.mm).styles(:fill=>'none', :stroke=>'red')
+              body.rect(mm(go_width), mm(go_height)).styles(:fill=>'none', :stroke=>'red')
             end
 
           end
@@ -216,32 +225,32 @@ module RmagickDrawer
       # ..........................................................................................
       # Rand zeichnen (für Vorschau)
       if preview
-        canvas1.rect(width.mm, height.mm ).round(rx).styles(:fill=>'none', :stroke=>'blue')
+        canvas1.rect(mm(width), mm(height) ).round(rx).styles(:fill=>'none', :stroke=>'blue')
         if page_nr == 1 && layout_file.get_attr_value(S_MAGSTRIPE) == S_TRUE
-          canvas1.g.translate(0, 4.mm){|ms_rect|
-            ms_rect.rect(width.mm, 12.5.mm ).styles(:fill=>'black', :stroke=>'none', :opacity => 0.5)
+          canvas1.g.translate(mm(0), mm(4)){|ms_rect|
+            ms_rect.rect(mm(width), mm(12.5) ).styles(:fill=>'black', :stroke=>'none', :opacity => 0.5)
             ms_node = layout_file.xml_doc.find_first(S_MAGSTRIPEPARAMS)
             (1..3).each{|spurnr|
               spur_data = ms_node.find_first('ms_spur' + spurnr.to_s).content
-                ms_rect.text(3.mm, ((3.5 * spurnr) + 0.5).mm, "Spur #{spurnr}: #{spur_data}").styles(
+                ms_rect.text(mm(3), mm((3.5 * spurnr) + 0.5), "Spur #{spurnr}: #{spur_data}").styles(
                   :font => "Courier-New-Bold",
-                  :font_size => 10.pt,
+                  :font_size => pt(10),
                   :fill => 'white'
                 )
             }
           }
         end
         if page_nr == 0 && layout_file.get_attr_value(S_CONTACTLESS) == S_TRUE
-          rx = 0.5.mm
-          canvas1.g.translate(3.mm, 3.mm).rect(5.mm, 5.mm ).round(rx).styles(:fill=>'gray', :stroke=>'none', :opacity => 0.5)
-          rx = 3.mm
-          canvas1.g.translate(4.mm, 4.mm).rect(75.mm, 45.mm ).round(rx).styles(:fill=>'none', :stroke=>'gray', :stroke_opacity => 0.5)
-          canvas1.g.translate(5.mm, 5.mm).rect(73.mm, 43.mm ).round(rx).styles(:fill=>'none', :stroke=>'gray', :stroke_opacity => 0.5)
-          canvas1.g.translate(6.mm, 6.mm).rect(71.mm, 41.mm ).round(rx).styles(:fill=>'none', :stroke=>'gray', :stroke_opacity => 0.5)
+          rx = mm(0.5)
+          canvas1.g.translate(mm(3), mm(3)).rect(mm(5), mm(5) ).round(rx).styles(:fill=>'gray', :stroke=>'none', :opacity => 0.5)
+          rx = mm(3)
+          canvas1.g.translate(mm(4), mm(4)).rect(mm(75), mm(45) ).round(rx).styles(:fill=>'none', :stroke=>'gray', :stroke_opacity => 0.5)
+          canvas1.g.translate(mm(5), mm(5)).rect(mm(73), mm(43) ).round(rx).styles(:fill=>'none', :stroke=>'gray', :stroke_opacity => 0.5)
+          canvas1.g.translate(mm(6), mm(6)).rect(mm(71), mm(41) ).round(rx).styles(:fill=>'none', :stroke=>'gray', :stroke_opacity => 0.5)
         end
         if page_nr == 0 && layout_file.get_attr_value(S_CONTACT) == S_TRUE
-          rx = 2.mm
-          canvas1.g.translate(8.mm, 18.mm).rect(13.mm, 12.mm ).round(rx).styles(:fill=>'yellow', :stroke=>'gray')
+          rx = mm(2)
+          canvas1.g.translate(mm(8), mm(18)).rect(mm(13), mm(12) ).round(rx).styles(:fill=>'yellow', :stroke=>'gray')
         end
       end
 
