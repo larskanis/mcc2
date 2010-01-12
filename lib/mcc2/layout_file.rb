@@ -62,6 +62,8 @@ class LayoutFile
     add_attr(S_PRINTERTYPE, String, 'GdiPrinter')
     add_attr(S_FILEPRINTER_SAVE_AS, String, './mcc2_%d_%p.jpeg')
     add_attr(S_FILEPRINTER_DPI, Integer, 300)
+    add_attr(S_GDIPRINTER_NAME, String, '')
+    add_attr(S_GDIPRINTER_INITDATA, String, '')
   end
  	#---------------------------------------------------------------------------------------------------------
   def xml_doc
@@ -385,6 +387,18 @@ class LayoutFile
     end
 
     return dataman
+  end
+
+
+  def get_gdiprinter_initdata
+    initdatahex = get_attr_value(S_GDIPRINTER_INITDATA)
+    if initdatahex && !initdatahex.empty?
+      [initdatahex].pack("H*")
+    end
+  end
+
+  def set_gdiprinter_initdata(bindata)
+    set_attr_value(S_GDIPRINTER_INITDATA, bindata.unpack("H*")[0])
   end
 
 end

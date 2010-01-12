@@ -14,8 +14,8 @@ class Dialogbox_printerview
 			w.width=308
 			w.height=265
 			w.shown=true
-			w.y=273
-			w.x=358
+			w.y=301
+			w.x=350
 			FX::VerticalFrame.new(@dialogbox_printerview){|w|
 				@verticalframe_printersetup=w
 				w.wdg_name='verticalframe_printersetup'
@@ -53,6 +53,44 @@ class Dialogbox_printerview
 						w.height=56
 						w.y=25
 						w.x=4
+						FX::Matrix.new(@verticalframe6){|w|
+							@matrix_gdi=w
+							w.wdg_name='matrix_gdi'
+							w.width=300
+							w.height=56
+							w.numColumns=3
+							w.matrixStyle=131072
+							FX::Label.new(@matrix_gdi){|w|
+								@label9=w
+								w.wdg_name='label9'
+								w.width=54
+								w.text="Drucker"
+								w.height=19
+								w.y=4
+								w.x=4
+							}
+							FX::ComboBox.new(@matrix_gdi){|w|
+								@combobox_gdi_printer=w
+								w.wdg_name='combobox_gdi_printer'
+								w.width=159
+								w.height=21
+								w.y=4
+								w.numColumns=10
+								w.layoutHints=1025
+								w.x=62
+							}
+							FX::Button.new(@matrix_gdi){|w|
+								@button_gdi_printersetup=w
+								w.wdg_name='button_gdi_printersetup'
+								w.width=71
+								w.text="Einrichten"
+								w.height=23
+								w.tipText="Dateiauswahl"
+								w.y=4
+								w.layoutHints=1024
+								w.x=225
+							}
+						}
 					}
 					FX::TabItem.new(@tabbook_printers){|w|
 						@tabitem5=w
@@ -120,8 +158,8 @@ class Dialogbox_printerview
 								w.x=4
 							}
 							FX::Spinner.new(@matrix_file){|w|
-								@spinner_dpi=w
-								w.wdg_name='spinner_dpi'
+								@spinner_file_dpi=w
+								w.wdg_name='spinner_file_dpi'
 								w.value=300
 								w.width=68
 								w.range=-2147483648..2147483647
@@ -171,6 +209,10 @@ class Dialogbox_printerview
 	attr_reader :tabbook_printers
 	attr_reader :tabitem4
 	attr_reader :verticalframe6
+	attr_reader :matrix_gdi
+	attr_reader :label9
+	attr_reader :combobox_gdi_printer
+	attr_reader :button_gdi_printersetup
 	attr_reader :tabitem5
 	attr_reader :verticalframe7
 	attr_reader :matrix_file
@@ -178,7 +220,7 @@ class Dialogbox_printerview
 	attr_reader :textfield_file_save_as
 	attr_reader :button_file_save_as
 	attr_reader :label4
-	attr_reader :spinner_dpi
+	attr_reader :spinner_file_dpi
 	attr_reader :label5
 	attr_reader :tabitem6
 	attr_reader :verticalframe8
