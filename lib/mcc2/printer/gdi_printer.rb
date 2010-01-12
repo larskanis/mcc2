@@ -9,7 +9,8 @@ module Mcc2
 module Printer
 class GdiPrinter < CardPrinter
   include RmagickDrawer
-  
+
+  attr_accessor :layout_file
   
   #
   def with_doc(documentName, handleToPrinter)
@@ -44,6 +45,7 @@ class GdiPrinter < CardPrinter
   # +layout_file+::
   # +row+:: momentan ein CSV-Row-Objekt
   def print_card(layout_file, row, chip)
+    @layout_file = layout_file
     #~ set_message_handler
     preview = false
     selected_object_id = nil
@@ -152,7 +154,7 @@ class GdiPrinter < CardPrinter
         hdcSrc = tmpDC
         nXSrc = 0
         nYSrc = 0
-        dwRop = SRCCOPY
+        dwRop = Win32api4ruby::Gdi::SRCCOPY
         Win32api4ruby::Gdi.bit_blt(hPrinter, nXDest, nYDest, pic.columns, 1, hdcSrc, nXSrc, nYSrc, dwRop)
         
         Win32api4ruby::Gdi.select_object( tmpDC, oldBmp )
