@@ -36,7 +36,68 @@ class GdiPrinter < CardPrinter
     end
   end
   #--------------------------------------------------------------------------------------------------------------
-  
+
+  # startet das Drucken
+  # === Return
+  # -
+  # === Parameter
+  # +layout_file+::
+  # +row+:: momentan ein CSV-Row-Objekt
+  def print_card(layout_file, row, chip)
+    #~ set_message_handler
+    preview = false
+    selected_object_id = nil
+
+    devicename = layout_file.get_attr_value(S_GDIPRINTER_NAME)
+
+    page_width = default_width + card_margin_left + card_margin_right # vorläufig todo ??? warum eigentlich vorläufig?
+    page_height = default_height + card_margin_top + card_margin_bottom # vorläufig todo  ??? warum eigentlich vorläufig?
+
+    datasourcename = layout_file.get_attr_value(S_DATASOURCE)
+    duplex = layout_file.get_attr_value(S_DUPLEX) == S_TRUE
+    initdata = layout_file.get_gdiprinter_initdata
+
+    # einen DeviceContext für den Drucker erzeugen
+    hPrinter = Win32api4ruby::Gdi.create_dc( nil, devicename, nil, initdata)
+
+    documentName = "mcc2 - #{datasourcename} - Satz #{}\0"
+    #~ p "documentName #{documentName}"
+    docinfo = [documentName].pack('px120')
+    #~ p "docinfo #{docinfo}"
+    begin
+      Win32api4ruby::Gdi.start_doc(hPrinter, docinfo)
+        page_nr = 0
+        print_gdi_page(hPrinter, row, page_nr)
+
+        if duplex
+          page_nr = 1
+          print_gdi_page(hPrinter, row, page_nr)
+        end
+
+        # ............................................................................................
+        # der Chip-Teil, er muss nach dem start_doc und den pages kommen, falls dort Fehler auftreten, wird dieser dan nicht ausgeführt,
+        # und keine Karte eingezogen, dann gibt es weniger Probleme mit dem Entfernen von Karten aus dem Drucker, wenn ein Fehler aufgetreten ist
+        if chip
+          run_chipcoding chip, row
+        end
+        # ............................................................................................
+
+      #~ p "end_doc"
+      Win32api4ruby::Gdi.end_doc(hPrinter)
+      wait_on_print_ready(nr, timeout)
+    rescue => e
+      # wenn ein Fehler aufgetreten ist, wird der Druckjob abgebrochen und somit aus der Warteschlange entfernt
+      Win32api4ruby::Gdi.abort_doc(hPrinter)
+      raise
+    end
+    Win32api4ruby::Gdi.delete_dc(hPrinter)
+    #~ unset_message_handler
+    return true
+  end
+
+  def run_chipcoding(chip, row)
+    chip.pers_card(layout_file, row)
+  end
   
   def print_gdi_page(hPrinter, row, page_nr)
     self.dpi = @layout_file.get_attr_value(S_FILEPRINTER_DPI).to_f
