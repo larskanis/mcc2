@@ -66,9 +66,7 @@ class GdiPrinter < CardPrinter
     preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
     img = Magick::RVG.new(mm(page_width), mm(page_height)) do |canvas|
       canvas.background_fill = 'white'
-      canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
-        draw(canvas1, layout_file, preview, selected_object_id, row, page_nr)
-      end
+      draw(canvas, layout_file, preview, selected_object_id, row, page_nr)
     end
     
     # das RVG in ein Bitmap konvertieren
@@ -103,8 +101,8 @@ class GdiPrinter < CardPrinter
         tmpDC = @w32gdi.create_compatible_dc(hPrinter)
         oldBmp = @w32gdi.select_object( tmpDC, hBmp )
         
-        nXDest = 0
-        nYDest = 0 + row_idx
+        nXDest = mm(draw_pos_x)
+        nYDest = mm(draw_pos_y) + row_idx
         hdcSrc = tmpDC
         nXSrc = 0
         nYSrc = 0
