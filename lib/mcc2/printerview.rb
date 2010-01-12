@@ -74,12 +74,12 @@ class Printerview < Dialogbox_printerview
       l = @combobox_gdi_printer
       l.clearItems
       
-      flags = Winspool::PRINTER_ENUM_NAME
+      flags = Win32api4ruby::Winspool::PRINTER_ENUM_NAME
       name = nil
       level = 4
       infos = Win32api4ruby::Winspool.enum_printers(flags, name, level)
       infos.each{|info|
-        l.appendItem(info[:pPrinterName], info[:pPrinterName])
+        l.appendItem(info[:pPrinterName].to_s, info[:pPrinterName].to_s)
       }
       prname = @layout_file.get_attr_value(S_GDIPRINTER_NAME)
       Layout.set_combobox_by_data( l, prname )
@@ -89,6 +89,7 @@ class Printerview < Dialogbox_printerview
   def gdi_printersetup_pressed
     prname = @combobox_gdi_printer.getItemData(@combobox_gdi_printer.currentItem)
     initdata = @layout_file.get_gdiprinter_initdata
+    p initdata
 
     # open setup-dialog
     devmod = Win32api4ruby::Winspool.document_properties( 0, 0, prname, initdata,
@@ -119,6 +120,7 @@ class Printerview < Dialogbox_printerview
   end
 
   def printerview_tab_activated
+    combobox_printertype_changed
     ensure_datalist_filled
     update_preview
   end
