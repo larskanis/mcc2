@@ -84,7 +84,7 @@ class GdiPrinter < CardPrinter
 
       #~ p "end_doc"
       Win32api4ruby::Gdi.end_doc(hPrinter)
-      wait_on_print_ready(nr, timeout)
+      wait_on_print_ready
     rescue => e
       # wenn ein Fehler aufgetreten ist, wird der Druckjob abgebrochen und somit aus der Warteschlange entfernt
       Win32api4ruby::Gdi.abort_doc(hPrinter)
@@ -97,6 +97,9 @@ class GdiPrinter < CardPrinter
 
   def run_chipcoding(chip, row)
     chip.pers_card(layout_file, row)
+  end
+
+  def wait_on_print_ready
   end
   
   def print_gdi_page(hPrinter, row, page_nr)
