@@ -73,6 +73,9 @@ module Mcc2
   S_FILEPRINTER_SAVE_AS = 'fileprinter_save_as'
   S_FILEPRINTER_DPI = 'fileprinter_dpi'
 
+  S_GDIPRINTER_NAME = 'gdiprinter_name'
+  S_GDIPRINTER_INITDATA = 'gdiprinter_initdata'
+
   UP = 0
   DOWN = 1
 

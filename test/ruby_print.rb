@@ -1,7 +1,6 @@
 $: << '../win32'
 
 if __FILE__ == $0
-  require 'Win32API'
   #~ begin
     #~ require 'fox16'
     #~ require 'fox16/colors'
@@ -14,11 +13,10 @@ if __FILE__ == $0
     #~ $enable_fox12_workaround = true
   #~ end
   #~ include Fox
-  require 'RMagick'
-  include Magick
-  require 'rvg/rvg'        # für RMagick
+#   require 'RMagick'
+#   include Magick
+#   require 'rvg/rvg'        # fï¿½r RMagick
 
-  #~ require 'cstruct'
   require "tempfile" 
   
 end
@@ -28,19 +26,9 @@ $stdout.sync = true
 
 require "dl"
 
-require 'win32api_base'
-#~ require 'win32api_comdlg'
-require 'win32api_gdi'
-#~ require 'win32api_kernel'
-require 'win32api_user'
-#~ require 'win32api_winspool'
-
+require 'win32api4ruby'
 
 class RubyPrinting
-  def initialize
-    @w32gdi = Win32ApiGDI.new
-    @w32user = Win32ApiUser.new
-  end
   # --------------------------------------------------------------------------------------------------------------
   def with_printer(devicename, datatype, devmode)
     begin
@@ -71,7 +59,7 @@ class RubyPrinting
     begin
       documentName << "\0"
       #~ docinfo = [documentName].pack('px12')
-      docinfo = [documentName, nil, "TEXT"].pack('ppp') # das hat zumindest ein Blatt befördert
+      docinfo = [documentName, nil, "TEXT"].pack('ppp') # das hat zumindest ein Blatt befï¿½rdert
       #~ docinfo = [documentName, nil, "RAW"].pack('ppp') # das tut so, als wenn es drucken will, tut es aber nicht
       #~ docinfo = [documentName, nil, nil].pack('ppp') # das tut nicht drucken wollen
       start_doc_printer(handleToPrinter, 1, docinfo)
@@ -94,77 +82,35 @@ class RubyPrinting
     begin
       documentName << "\0"
       docinfo = [documentName].pack('px12')
-      @w32gdi.start_doc(handleToPrinter, docinfo)
+      Win32api4ruby::Gdi.start_doc(handleToPrinter, docinfo)
       yield
     ensure
-      @w32gdi.end_doc(handleToPrinter)
+      Win32api4ruby::Gdi.end_doc(handleToPrinter)
     end
   end
   # --------------------------------------------------------------------------------------------------------------
   def with_page(hPrinter)
     begin
-      @w32gdi.start_page(hPrinter)
+      Win32api4ruby::Gdi.start_page(hPrinter)
       yield
     ensure
-      @w32gdi.end_page(hPrinter)
+      Win32api4ruby::Gdi.end_page(hPrinter)
     end
+  end
+  
+  def print_dlg(str)
+    Win32api4ruby::Comdlg.print_dlg(str)
   end
   # --------------------------------------------------------------------------------------------------------------
   def show_print_dialog
-    # wird zwar gestartet, liefert aber keine gefüllte struktur zurück
-    #~ typedef struct tagPD {
-        #~ DWORD lStructSize;
-        #~ HWND hwndOwner;
-        #~ HGLOBAL hDevMode;
-        #~ HGLOBAL hDevNames;
-        #~ HDC hDC;
-        #~ DWORD Flags;
-        #~ WORD nFromPage;
-        #~ WORD nToPage;
-        #~ WORD nMinPage;
-        #~ WORD nMaxPage;
-        #~ WORD nCopies;
-        #~ HINSTANCE hInstance;
-        #~ LPARAM lCustData;
-        #~ LPPRINTHOOKPROC lpfnPrintHook;
-        #~ LPSETUPHOOKPROC lpfnSetupHook;
-        #~ LPCTSTR lpPrintTemplateName;
-        #~ LPCTSTR lpSetupTemplateName;
-        #~ HGLOBAL hPrintTemplate;
-        #~ HGLOBAL hSetupTemplate;
-    #~ } PRINTDLG, *LPPRINTDLG;
-    
-    #~ pdlg = PRINTDLG.new
-    pdlg = DL.malloc(DL.sizeof("L"*6 + "H"*5 + "L"*8))
-    p pdlg
-    pdlg.struct!("L"*6 + "H"*5 + "L"*8, 
-                        :lStructSize,
-                        :hwndOwner,
-                        :hDevMode,
-                        :hDevNames,
-                        :hDC,
-                        :Flags,
-                        :nFromPage,
-                        :nToPage,
-                        :nMinPage,
-                        :nMaxPage,
-                        :nCopies,
-                        :hInstance,
-                        :lCustData,
-                        :lpfnPrintHook,
-                        :lpfnSetupHook,
-                        :lpPrintTemplateName,
-                        :lpSetupTemplateName,
-                        :hPrintTemplate,
-                        :hSetupTemplate)
-    
-    pdlg[:lStructSize] = 66
-    #~ pdlg[:lStructSize] = pdlg.size
+    # wird zwar gestartet, liefert aber keine gefï¿½llte struktur zurï¿½ck
+    pdlg = Win32api4ruby::Comdlg.create_PRINTDLG
     pdlg[:hwndOwner] = 0
     pdlg[:hDevMode] = 0
     pdlg[:hDC] = 0
     #~ pdlg[:Flags] = 0x140
-    pdlg[:Flags] = PD_RETURNDC | PD_PRINTSETUP | PD_NONETWORKBUTTON
+    pdlg[:Flags] = PD_RETURNDC | PD_NOSELECTION
+    #~ pdlg[:Flags] = PD_RETURNDC | PD_PRINTSETUP | PD_NONETWORKBUTTON
     pdlg[:nFromPage] = 0
     pdlg[:nToPage] = 0
     pdlg[:nMinPage] = 0
@@ -191,7 +137,7 @@ class RubyPrinting
     #~ ok = print_dlg(pd)
     ok = print_dlg(pdlg)
     
-    p "pdlg: #{pdlg.inspect}"
+    p "res: #{ok.to_s(16)} pdlg: #{pdlg.inspect}"
     #~ p PRINTDLG.read(pdlg)
     p pdlg[:lStructSize]
     p pdlg[0,64].unpack("LLLLLLLLLLLLLLLL")
@@ -201,7 +147,73 @@ class RubyPrinting
     #~ p pd.unpack("x8Lx4L")
     p "hdc: #{pdlg[:hDC]}"
     p "devMode: #{pdlg[:hDevMode]}"
+    dm_prt = DL::PtrData.new(pdlg[:hDevMode], 100)
+    p dm_prt.to_s
+
+    p "devnames: #{pdlg[:hDevNames]}"
+    hDevNames = pdlg[:hDevNames]
+    pDevNames = Win32api4ruby::Kernel.global_lock(hDevNames)
+    dn_prt = DL::PtrData.new(pDevNames, DL.sizeof('H'*4))
+    dn_prt.struct!('H'*4,
+          :wDriverOffset,
+          :wDeviceOffset,
+          :wOutputOffset,
+          :wDefault)
+    
+    puts "wDriverOffset: #{dn_prt[:wDriverOffset]} wDeviceOffset: #{dn_prt[:wDeviceOffset]} wOutputOffset: #{dn_prt[:wOutputOffset]} wDefault: #{dn_prt[:wDefault]}"
+    
+    p DL::PtrData.new(pDevNames+dn_prt[:wDriverOffset]).to_s
+    p DL::PtrData.new(pDevNames+dn_prt[:wDeviceOffset]).to_s
+    p DL::PtrData.new(pDevNames+dn_prt[:wOutputOffset]).to_s
+    p DL::PtrData.new(pDevNames+dn_prt[:wDefault]).to_s
+    
+    Win32api4ruby::Kernel.global_unlock(hDevNames)
     #~ devmode, dc = pd.unpack("x8Lx4L")
+  end
+  
+  def show_print_setup_dialog
+    pdlg = Win32api4ruby::Comdlg.create_PAGESETUPDLG
+    p "pdlg: #{pdlg.inspect}"
+    p Win32api4ruby::Comdlg.print_setup_dlg(pdlg)
+    
+    p "pdlg: #{pdlg.inspect}"
+    
+  end
+  
+  WS_VISIBLE = 0x10000000
+  def create_dummy_window(name='dummy-window')
+    Win32api4ruby::User.create_window_ex(0, 'Button', name, WS_VISIBLE, 0,0,100,100, 0, 0, 0, 0)
+  end
+  
+  def show_print_dialog_ex
+    pdlg = Win32api4ruby::Comdlg.create_PRINTDLGEX
+    
+    hWnd = create_dummy_window
+    pdlg[:hwndOwner] = hWnd
+    pdlg[:hDevMode] = 0
+    pdlg[:hDevNames] = 0
+    pdlg[:hDC] = 0
+    pdlg[:Flags] = PD_RETURNDC | PD_COLLATE | PD_NOPAGENUMS
+    pdlg[:Flags2] = 0
+    pdlg[:ExclusionFlags] = 0
+    pdlg[:nPageRanges] = 0
+    pdlg[:nMaxPageRanges] = 10
+    pdlg[:lpPageRanges] = "1234"*2*10
+    pdlg[:nMinPage] = 1
+    pdlg[:nMaxPage] = 1000
+    pdlg[:nCopies] = 1
+    pdlg[:hInstance] = 0
+    pdlg[:lpPrintTemplateName] = nil
+    pdlg[:lpCallback] = nil
+    pdlg[:nPropertyPages] = 0
+    pdlg[:lphPropertyPages] = 0
+    pdlg[:nStartPage] = 0#START_PAGE_GENERAL
+    pdlg[:dwResultAction] = 0
+
+    p "pdlg: #{pdlg.inspect}"
+    p Win32api4ruby::Comdlg.print_dlg_ex(pdlg)
+    
+    p "pdlg: #{pdlg.inspect}"
     
   end
   # --------------------------------------------------------------------------------------------------------------
@@ -254,7 +266,7 @@ class RubyPrinting
   # --------------------------------------------------------------------------------------------------------------
   def print_graphic(devicename, datatype)
  
-    # den Pfad ermitteln, wo das temporäre File abgelegt werden soll
+    # den Pfad ermitteln, wo das temporï¿½re File abgelegt werden soll
     tf = Tempfile.new("afile") 
     temp_path = File.join(tf.path.split("/")[0..-2])
     tf.close(true)            # #<File:0x4016e3c0>\n0x40187c30 
@@ -299,7 +311,7 @@ class RubyPrinting
     
     
     # create_dc(lpszDriver, lpszDevice, lpszOutput, lpInitData)
-    hDC = @w32gdi.create_dc( nil, devicename, nil, nil);
+    hDC = Win32api4ruby::Gdi.create_dc( nil, devicename, nil, nil);
     
     hPrinter = hDC
     
@@ -321,12 +333,12 @@ class RubyPrinting
         (0 ... pic.rows).each{|row_idx|
           linedata = bmdata[3*row_idx*pic.columns, 3*pic.columns]
           linedata = linedata.unpack('a3'*pic.columns).map{|a| a.reverse! }.pack('a3'*pic.columns)
-          hBmp = @w32gdi.create_bitmap(pic.columns, 1, 1, 24, linedata)
+          hBmp = Win32api4ruby::Gdi.create_bitmap(pic.columns, 1, 1, 24, linedata)
           #~ p "hBmp: #{hBmp}"
           
-          tmpDC = @w32gdi.create_compatible_dc(hPrinter)
+          tmpDC = Win32api4ruby::Gdi.create_compatible_dc(hPrinter)
           
-          oldBmp = @w32gdi.select_object( tmpDC, hBmp )
+          oldBmp = Win32api4ruby::Gdi.select_object( tmpDC, hBmp )
           
           nXDest = 500
           nYDest = 500+row_idx
@@ -334,23 +346,31 @@ class RubyPrinting
           nXSrc = 0
           nYSrc = 0
           dwRop = SRCCOPY
-          @w32gdi.bit_blt(hPrinter, nXDest, nYDest, pic.columns, 1, hdcSrc, nXSrc, nYSrc, dwRop)
+          Win32api4ruby::Gdi.bit_blt(hPrinter, nXDest, nYDest, pic.columns, 1, hdcSrc, nXSrc, nYSrc, dwRop)
           
-          @w32gdi.select_object( tmpDC, oldBmp )
+          Win32api4ruby::Gdi.select_object( tmpDC, oldBmp )
         }
           
         s = "Teststring"
-        @w32gdi.text_out(hPrinter, 10, 10, s, s.length)
+        Win32api4ruby::Gdi.text_out(hPrinter, 10, 10, s, s.length)
       end
     end
   end
-  
+
 end
 # ======================================================================================================
 # ======================================================================================================
 if __FILE__ == $0
 	#~ require 'libguib16.rb'
   rp = RubyPrinting.new
+  
+#   rp.show_print_dialog
+  #~ rp.show_print_setup_dialog
+#   rp.show_print_dialog_ex
+#   rp.enum_printers
+  rp.document_properties
+  exit
+   
   devicename = "Jaws PDF Creator"
   #~ devicename = '\\\COMFILE1\P0049'
   #~ devicename = "XeroxPhaser7750DN PS"
