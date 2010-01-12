@@ -76,6 +76,8 @@ class Dialogbox_printerview
 								w.height=21
 								w.y=4
 								w.numColumns=10
+								w.comboStyle=1048576
+								w.numVisible=10
 								w.layoutHints=1025
 								w.x=62
 							}
