@@ -58,7 +58,7 @@ class GdiPrinter < CardPrinter
 
     datasourcename = layout_file.get_attr_value(S_DATASOURCE)
     duplex = layout_file.get_attr_value(S_DUPLEX) == S_TRUE
-    initdata = layout_file.get_gdiprinter_initdata
+    initdata = Win32api4ruby::Winspool.create_DEVMOD(layout_file.get_gdiprinter_initdata)
 
     # einen DeviceContext für den Drucker erzeugen
     hPrinter = Win32api4ruby::Gdi.create_dc( nil, devicename.to_s_win32, nil, initdata)
@@ -70,11 +70,11 @@ class GdiPrinter < CardPrinter
     begin
       Win32api4ruby::Gdi.start_doc(hPrinter, docinfo)
         page_nr = 0
-        print_gdi_page(hPrinter, row, page_nr)
+        print_gdi_page(hPrinter, initdata, row, page_nr)
 
         if duplex
           page_nr = 1
-          print_gdi_page(hPrinter, row, page_nr)
+          print_gdi_page(hPrinter, initdata, row, page_nr)
         end
 
         # ............................................................................................
@@ -105,8 +105,9 @@ class GdiPrinter < CardPrinter
   def wait_on_print_ready
   end
   
-  def print_gdi_page(hPrinter, row, page_nr)
-    self.dpi = @layout_file.get_attr_value(S_FILEPRINTER_DPI).to_f
+  def print_gdi_page(hPrinter, initdata, row, page_nr)
+    raise "unterschiedliche X- und Y-Auflösung wird beim Druck nicht unterstützt" if initdata[:dmYResolution] != initdata[:dmPrintQuality]
+    self.dpi = initdata[:dmYResolution]
 
     page_width =  @layout_file.get_attr_value(S_WIDTH).to_f
     page_height = @layout_file.get_attr_value(S_HEIGHT).to_f

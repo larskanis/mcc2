@@ -99,7 +99,7 @@ class Printerview < Dialogbox_printerview
     # open setup-dialog
     devmod = Win32api4ruby::Winspool.document_properties(0, 0, prname.to_s_win32, initdata, flags)
     
-    @layout_file.set_gdiprinter_initdata(devmod) if devmod
+    @layout_file.set_gdiprinter_initdata(devmod[0, devmod.size]) if devmod
   end
 
   def selected_FilePrinter
