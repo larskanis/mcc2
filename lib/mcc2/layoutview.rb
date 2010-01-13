@@ -128,7 +128,7 @@ class Layoutview
 
     # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
     @lf.matrix1.numColumns = 3
-    @lf.matrix2.numColumns = 3
+    @lf.matrix2.numColumns = 4
     fill_objectlist
     object_selection_changed
   end
@@ -214,7 +214,7 @@ class Layoutview
     return unless objnode
     typ = objnode.find_first(GOA_TYP).content
     if typ == PICTUREOBJECT
-      s = FXFileDialog.getOpenFilename(@lf, "Bild auswählen", ".", patterns="*", initial=0)
+      s = FXFileDialog.getOpenFilename(@parent, "Bild auswählen", ".", patterns="*", initial=0)
       @lf.textfield_data_non_text.text = @lf.textfield_data_non_text.text + s
     end
   end
@@ -298,7 +298,7 @@ class Layoutview
   # trägt diese in das Textfeld für die Farbangabe ein
   # zeichnet anschließend die Vorschau neu
   def text_color_dialog
-    cdlg = FXColorDialog.new(@lf, "Textfarbe")
+    cdlg = FXColorDialog.new(@parent, "Textfarbe")
     if cdlg.execute>0 && @lf.textfield_text_color.text != cdlg.rgba
       node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_FONT_COLOR)
       s = cdlg.rgba.to_i.to_s(16)
