@@ -12,7 +12,7 @@ class Printerview < Dialogbox_printerview
     PrinterDescription.new( 'Print-to-file', 'FilePrinter', 1),
     PrinterDescription.new( 'XID-440', 'PrinterXID', 2),
   ]
-
+  
   def initialize parent, layout
     @layout = layout
     @parent = parent
@@ -67,7 +67,7 @@ class Printerview < Dialogbox_printerview
   def selected_GdiPrinter
     begin
       require "win32api4ruby"
-      Win32api4ruby::Winspool
+      Win32api4ruby::Base.unicode = true
     rescue => e
       error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Die Windoes-Druckerschnittstelle konnte nicht geladen werden.\nBitte stellen Sie sicher, dass das Gem-Paket win32api4ruby installiert ist.\n\n" + e.to_s, 'Abbruch')
       error_WahlMessage.execute
@@ -81,7 +81,8 @@ class Printerview < Dialogbox_printerview
       level = 4
       infos = Win32api4ruby::Winspool.enum_printers(flags, name, level)
       infos.each{|info|
-        l.appendItem(info[:pPrinterName].to_s, info[:pPrinterName].to_s)
+        prname = info[:pPrinterName].to_s_utf8
+        l.appendItem(prname, prname)
       }
       prname = @layout_file.get_attr_value(S_GDIPRINTER_NAME)
       Layout.set_combobox_by_data( l, prname )
@@ -96,7 +97,7 @@ class Printerview < Dialogbox_printerview
     flags |= Win32api4ruby::Winspool::DM_IN_BUFFER if initdata
 
     # open setup-dialog
-    devmod = Win32api4ruby::Winspool.document_properties(0, 0, prname, initdata, flags)
+    devmod = Win32api4ruby::Winspool.document_properties(0, 0, prname.to_s_win32, initdata, flags)
     
     @layout_file.set_gdiprinter_initdata(devmod) if devmod
   end

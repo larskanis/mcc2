@@ -4,6 +4,7 @@ require 'win32api4ruby'
 require 'mcc2/printer/card_printer'
 require 'mcc2/printer/rmagick_drawer'
 
+Win32api4ruby::Base.unicode = true
 
 module Mcc2
 module Printer
@@ -60,7 +61,7 @@ class GdiPrinter < CardPrinter
     initdata = layout_file.get_gdiprinter_initdata
 
     # einen DeviceContext für den Drucker erzeugen
-    hPrinter = Win32api4ruby::Gdi.create_dc( nil, devicename, nil, initdata)
+    hPrinter = Win32api4ruby::Gdi.create_dc( nil, devicename.to_s_win32, nil, initdata)
 
     documentName = "mcc2 - #{datasourcename} - Satz #{}\0"
     #~ p "documentName #{documentName}"
