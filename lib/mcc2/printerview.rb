@@ -54,8 +54,10 @@ class Printerview < Dialogbox_printerview
     @tabbook_printers.childAtIndex(prdesc.tab_idx*2).shown = true
 
     if @layout_file
-      @layout_file.set_attr_value(S_PRINTERTYPE, prdesc.class_name)
-      changed_attributes
+      if @layout_file.get_attr_value(S_PRINTERTYPE) != prdesc.class_name
+        @layout_file.set_attr_value(S_PRINTERTYPE, prdesc.class_name)
+        changed_attributes
+      end
       send "selected_#{prdesc.class_name}"
     end
     
