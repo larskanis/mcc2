@@ -120,10 +120,8 @@ class Printerview < Dialogbox_printerview
     }
   end
 
-  def printerview_tab_activated
-    combobox_printertype_changed
-    ensure_datalist_filled
-    update_preview
+  def printerview_tab_activated(active=true)
+    combobox_printertype_changed if active
   end
 
   attr_reader :layout_file

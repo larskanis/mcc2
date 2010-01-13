@@ -51,6 +51,7 @@ class Layout
 #         }
         tabbook.connect(SEL_COMMAND){|sender, sel, event|
           @layoutview.layoutview_tab_activated( event == 0 )
+          @printerview.printerview_tab_activated( event == 1 )
           @dataview.dataview_tab_activated( event == 2 )
         }
         FX::TabItem.new(tabbook) do |tabitem_layoutview|
