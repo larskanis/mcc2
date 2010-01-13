@@ -89,11 +89,12 @@ class Printerview < Dialogbox_printerview
   def gdi_printersetup_pressed
     prname = @combobox_gdi_printer.getItemData(@combobox_gdi_printer.currentItem)
     initdata = @layout_file.get_gdiprinter_initdata
-    p initdata
+    
+    flags = Win32api4ruby::Winspool::DM_PROMPT|Win32api4ruby::Winspool::DM_OUT_BUFFER
+    flags |= Win32api4ruby::Winspool::DM_IN_BUFFER if initdata
 
     # open setup-dialog
-    devmod = Win32api4ruby::Winspool.document_properties( 0, 0, prname, initdata,
-        Win32api4ruby::Winspool::DM_PROMPT|Win32api4ruby::Winspool::DM_OUT_BUFFER )
+    devmod = Win32api4ruby::Winspool.document_properties(0, 0, prname, initdata, flags)
     
     @layout_file.set_gdiprinter_initdata(devmod) if devmod
   end
