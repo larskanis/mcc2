@@ -12,6 +12,7 @@ class PictureObject < GraphicObject
     add_attr(@go_attributes, GOA_HEIGHT, Integer, 28)
     add_attr(@go_attributes, GOA_STRETCH, Integer, false)
     add_attr(@go_attributes, GOA_PRINTABLE, Integer, true)
+    add_attr(@go_attributes, GOA_SAMPLE_DATA, String, File.join(File.dirname(__FILE__), '../../../test/layouts/bart_simpson.png'))
   end
 end
 end
