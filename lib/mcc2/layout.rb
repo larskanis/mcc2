@@ -31,8 +31,7 @@ class Layout
   def initialize(parent, filename=nil)
     @parent = parent
     begin
-      # Achtung! Nicht das Verzeichnis 'printer' in den Pfad einbinden. Dort befindet sich eine printer.rb, die nichts mit der printer.rb dieses Projektes zu tun hat.
-      require 'libs/printer/tbarcode_api'
+      require 'barby'
     rescue LoadError => e
       puts "Loading barcode driver failed: #{e}"
     end

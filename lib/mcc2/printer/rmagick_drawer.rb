@@ -63,8 +63,6 @@ module RmagickDrawer
       canvas.rect(mm(width_with_margins(width-0.5)), mm(height_with_margins(height-0.5)) ).styles(:fill=>'none', :stroke=>'black')
     end
 
-    rmfl = Magick.fonts.map{|mf| mf.name }
-
     canvas.g.translate(mm(self.card_margin_left), mm(self.card_margin_top)) do |canvas1|
       barcodes = nil
       rx = 10
@@ -100,121 +98,16 @@ module RmagickDrawer
           end
 
           canvas1.g.translate(mm(x), mm(y)).rotate(rotation) do |body|
-            #~ p "#{self.class.name}::draw => data: #{data} typ: #{typ}"
             # ............................................................................................................
             # die Objekt-spezifischen Attribute ermitteln
-            # Textobjekt
             if typ == TEXTOBJECT
-
-              font = go.find(GOA_FONT_TYP).first.content
-              if font=='from_file'
-                font = go.find(GOA_FONT_FILE).first.content
-              end
-              fontsize = go.find(GOA_FONT_HEIGHT).first.content.to_f
-              font_color = ["#", go.find(GOA_FONT_COLOR).first.content].join
-#              font_color = Page.check_color_definition(font_color)
-              just = go.find(GOA_JUSTIFICATION).first.content.downcase
-              if just == "links"
-                text_x = 0
-                just = 'start'
-              elsif just == "mitte"
-                text_x = go_width.to_f / 2
-                just = 'middle'
-              elsif just == "rechts"
-                text_x = go_width
-                just = 'end'
-              else
-                just = 'start' # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
-              end
-
-              unless rmfl.index(font) || File.exist?(font)
-                raise ResourceNotFoundError, "Die Schriftart '#{font}' konnte nicht gefunden werden. Der Druck wird angehalten."
-              end
-
-              if data != ""
-                body.text(mm(text_x), mm(0), data).styles(
-                  :font => ["'", font, "'"].join,
-                  :font_size => pt(fontsize),
-                  :fill => font_color,
-                  :text_anchor => just
-                )
-              end
-
-            # Bildobjekt
+              draw_textobject(body.g, go, go_width, go_height, data)
             elsif typ == PICTUREOBJECT
-              if data.nil? || data.empty?
-                # kein Bildname angegeben -> dieses Objekt ignorieren
-              elsif FileTest.file?(data)
-                go_image = Magick::Image.read(data).first
-                if go_image.density =~ /^(\d+)x(\d+)$/
-                  density_x, density_y = $1.to_f, $2.to_f
-                end
-                im_width = go_width == 0 ? go_image.columns/density_x*25.4 : go_width
-                im_height = go_height == 0 ? go_image.rows/density_y*25.4 : go_height
-                body.image(go_image, mm(im_width), mm(im_height))
-              else
-                raise ResourceNotFoundError, "Das Bild '#{data}' konnte nicht gefunden werden. Der Druck wird angehalten."
-              end
-
-            elsif typ == BOXOBJECT
-              corner_radius = go.find(GOA_CORNER_RADIUS).first.content.to_f
-              fill_color = go.find(GOA_FILL_COLOR).first.content
-              border_color = go.find(GOA_BORDER_COLOR).first.content
-              border_width = go.find(GOA_BORDER_WIDTH).first.content.to_f
-              
-              body.g.rect(mm(go_width), mm(go_height) ).round(mm(corner_radius)).styles(:fill=>'#'+fill_color, :stroke=>'#'+border_color, :stroke_width=>mm(border_width))
-
-            # Barcode-Objekte
+              draw_pictureobject(body.g, go, go_width, go_height, data)
             elsif typ == BARCODEOBJECT
-              #~ p "#{self.class.name}::draw => barcode | data: #{data} "
-
-              barcodes = BarcodeAPI::bc_get_bc_list unless barcodes  # nur bei 1. Barcode initialisieren
-
-              mw = go.find(GOA_BC_MODUL_WIDTH).first.content
-
-              bc_typ = go.find(GOA_BC_TYP).first.content
-              bc_typ_id = barcodes.index(bc_typ)
-              if (data.nil? || data.empty?)
-                if (data.empty?)
-                  raise BarcodeError, "Beim Barcode wurden weder Daten noch Beispieldaten angegeben!"
-                end
-              end
-              optimize = true
-              dpi = Magick::RVG.dpi
-              bc = BarcodeAPI.new(bc_typ_id, data, optimize, dpi)
-
-              # Modulweite und damit die Breite des Barcodes setzen
-              bc.set_module_width_pixel(mw)
-#              bc.bc_set_must_fit(true) # setzt, das der Barcode in das Feld passen muss
-
-              # Font für die Klarschrift setzen
-              font = go.find(GOA_FONT_TYP).first.content
-              bc.set_font_name(font)
-              fontsize = go.find(GOA_FONT_HEIGHT).first.content.to_f
-              bc.set_font_size(fontsize)
-
-              just = go.find(GOA_JUSTIFICATION).first.content.downcase
-              if just == "links"
-                just = EAlLeft
-              elsif just == "mitte"
-                just = EAlCenter
-              elsif just == "rechts"
-                just = EAlRight
-              else
-                just = EAlCenter # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
-              end
-              bc.set_text_alignment(just)
-
-              # versuchen, einen eindeutigen Dateinamen für das  temporäre Barcode-Image zu erzeugen
-              img_name = Tempfile.new("barcode.png")
-
-              raise BarcodeError, "Das Prüfen der Barcodeeinstellungen hat einen Fehler gemeldet.\nBitte prüfen, ob die Daten für diesen Barcodetyp gültig sind!" unless bc.check_barcode == 0
-              img_width = mm(go_width)
-              img_height = mm(go_height)
-              bc.save_image(img_name, img_width, img_height, dpi)
-              bc_image = Magick::Image.read(img_name).first
-              body.image(bc_image, img_width, img_height)
-              File.delete(img_name)
+              draw_barcode(body.g, go, go_width, go_height, data, !preview)
+            elsif typ == BOXOBJECT
+              draw_boxobject(body.g, go, go_width, go_height)
             end
 
             # ............................................................................................................
@@ -227,8 +120,6 @@ module RmagickDrawer
           end
         end
       }
-
-
 
       # ..........................................................................................
       # Rand zeichnen (für Vorschau)
@@ -263,6 +154,122 @@ module RmagickDrawer
       end
 
     end
+  end
+
+  def draw_textobject(body, go, go_width, go_height, data)
+    @rmfl ||= Magick.fonts.map{|mf| mf.name }
+
+    font = go.find(GOA_FONT_TYP).first.content
+    if font=='from_file'
+      font = go.find(GOA_FONT_FILE).first.content
+    end
+    fontsize = go.find(GOA_FONT_HEIGHT).first.content.to_f
+    font_color = ["#", go.find(GOA_FONT_COLOR).first.content].join
+#              font_color = Page.check_color_definition(font_color)
+    just = go.find(GOA_JUSTIFICATION).first.content.downcase
+    if just == "links"
+      text_x = 0
+      just = 'start'
+    elsif just == "mitte"
+      text_x = go_width.to_f / 2
+      just = 'middle'
+    elsif just == "rechts"
+      text_x = go_width
+      just = 'end'
+    else
+      just = 'start' # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
+    end
+
+    unless @rmfl.index(font) || File.exist?(font)
+      raise ResourceNotFoundError, "Die Schriftart '#{font}' konnte nicht gefunden werden. Der Druck wird angehalten."
+    end
+
+    if data != ""
+      body.text(mm(text_x), mm(0), data).styles(
+        :font => ["'", font, "'"].join,
+        :font_size => pt(fontsize),
+        :fill => font_color,
+        :text_anchor => just
+      )
+    end
+  end
+
+  def draw_pictureobject(body, go, go_width, go_height, data)
+    if data.nil? || data.empty?
+      # kein Bildname angegeben -> dieses Objekt ignorieren
+    elsif FileTest.file?(data)
+      go_image = Magick::Image.read(data).first
+      if go_image.density =~ /^(\d+)x(\d+)$/
+        density_x, density_y = $1.to_f, $2.to_f
+      end
+      im_width = go_width == 0 ? go_image.columns/density_x*25.4 : go_width
+      im_height = go_height == 0 ? go_image.rows/density_y*25.4 : go_height
+      body.image(go_image, mm(im_width), mm(im_height))
+    else
+      raise ResourceNotFoundError, "Das Bild '#{data}' konnte nicht gefunden werden. Der Druck wird angehalten."
+    end
+  end
+  
+  def draw_barcode(body, go, go_width, go_height, data, optimized=true)
+    barcode_typ = go.find(GOA_BARCODE_TYP).first.content
+    bar_ratio = go.find(GOA_BAR_RATIO).first.content.to_i
+    body.styles(:fill=>'black', :stroke=>'none')
+
+    begin
+      barcode = Barby.const_get(barcode_typ).new(data)
+    rescue => e
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Beim generieren des Barcodes #{data.inspect} it ein Fehler aufgetreten:\n#{ e }", 'ok')
+      error_WahlMessage.execute
+    else
+      if barcode.respond_to?(:wide_width=)
+        barcode.narrow_width = 1
+        barcode.wide_width = bar_ratio
+      end
+      bcencoding = barcode.encoding
+      px_width, px_height = mm(go_width), mm(go_height)
+      if barcode.two_dimensional?
+        x, y = 0, 0
+        xdim, ydim = px_width / bcencoding.first.length, px_height / bcencoding.length
+        xdim, ydim = xdim.to_i, ydim.to_i if optimized
+        bcencoding.each do |line|
+          line.split(//).map{|c| c == '1' }.each do |bar|
+            body.rect([0,xdim-1].max, [0,ydim-1].max, x, y) if bar
+            x += xdim
+          end
+          x = 0
+          y += ydim
+        end
+      else
+        x = 0
+        xdim = px_width / bcencoding.length
+        xdim = xdim.to_i if optimized
+        bcencoding.split(//).map{|c| c == '1' }.each do |bar|
+  #         puts "#{xdim}, #{px_height}, #{x}" if bar
+          body.rect([0,xdim-1].max, px_height, x, 0) if bar
+          x += xdim
+        end
+      end
+
+  #               just = go.find(GOA_JUSTIFICATION).first.content.downcase
+  #               if just == "links"
+  #                 just = EAlLeft
+  #               elsif just == "mitte"
+  #                 just = EAlCenter
+  #               elsif just == "rechts"
+  #                 just = EAlRight
+  #               else
+  #                 just = EAlCenter # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
+  #               end
+    end
+  end
+
+  def draw_boxobject(body, go, go_width, go_height)
+    corner_radius = go.find(GOA_CORNER_RADIUS).first.content.to_f
+    fill_color = go.find(GOA_FILL_COLOR).first.content
+    border_color = go.find(GOA_BORDER_COLOR).first.content
+    border_width = go.find(GOA_BORDER_WIDTH).first.content.to_f
+
+    body.rect(mm(go_width), mm(go_height) ).round(mm(corner_radius)).styles(:fill=>'#'+fill_color, :stroke=>'#'+border_color, :stroke_width=>mm(border_width))
   end
 
   def self.check_color_definition(color)

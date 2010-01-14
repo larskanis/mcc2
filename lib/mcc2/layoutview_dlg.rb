@@ -132,7 +132,7 @@ class Dialogbox_layoutview
 					FX::TabBook.new(@horizontalframe_attributes){|w|
 						@tabbook_objectattributes=w
 						w.wdg_name='tabbook_objectattributes'
-						w.current=7
+						w.current=6
 						w.width=461
 						w.height=213
 						w.shadowColor=Fox::FXRGBA(128,128,128,255)
@@ -1292,8 +1292,8 @@ class Dialogbox_layoutview
 							w.height=22
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=6
-							w.x=337
+							w.y=4
+							w.x=335
 						}
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe_barcode=w
@@ -1302,7 +1302,6 @@ class Dialogbox_layoutview
 							w.frameStyle=16384
 							w.height=185
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.shown=false
 							w.y=24
 							w.vSpacing=4
 							w.x=4
@@ -1330,16 +1329,16 @@ class Dialogbox_layoutview
 									w.layoutHints=288
 								}
 								FX::ListBox.new(@horizontalframe133){|w|
-									@listbox_bc_typ=w
-									w.wdg_name='listbox_bc_typ'
-									w.width=224
+									@listbox_barcode_typ=w
+									w.wdg_name='listbox_barcode_typ'
+									w.width=369
 									w.height=20
 									w.tipText="Hier kann die Schriftart ausgew\303\244hlt werden."
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.y=10
-									w.numVisible=30
-									w.layoutHints=288
+									w.numVisible=10
+									w.layoutHints=1056
 									w.x=80
 								}
 							}
@@ -1359,7 +1358,7 @@ class Dialogbox_layoutview
 									w.wdg_name='label529'
 									w.width=80
 									w.justify=32768
-									w.text="Modul-Weite"
+									w.text="Ratio"
 									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
@@ -1367,10 +1366,10 @@ class Dialogbox_layoutview
 									w.layoutHints=288
 								}
 								FX::Spinner.new(@horizontalframe134){|w|
-									@spinner_modul_width=w
-									w.wdg_name='spinner_modul_width'
+									@spinner_barcode_ratio=w
+									w.wdg_name='spinner_barcode_ratio'
 									w.width=41
-									w.range=0..1
+									w.range=-2147483648..2147483647
 									w.height=20
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
@@ -1387,14 +1386,15 @@ class Dialogbox_layoutview
 							w.text="Rahmen"
 							w.height=22
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.y=4
-							w.x=390
+							w.y=6
+							w.x=389
 						}
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe_boxtab=w
 							w.wdg_name='verticalframe_boxtab'
 							w.width=453
 							w.height=185
+							w.shown=false
 							w.y=24
 							w.x=4
 							FX::Matrix.new(@verticalframe_boxtab){|w|
@@ -1653,10 +1653,10 @@ class Dialogbox_layoutview
 	attr_reader :verticalframe_barcode
 	attr_reader :horizontalframe133
 	attr_reader :label528
-	attr_reader :listbox_bc_typ
+	attr_reader :listbox_barcode_typ
 	attr_reader :horizontalframe134
 	attr_reader :label529
-	attr_reader :spinner_modul_width
+	attr_reader :spinner_barcode_ratio
 	attr_reader :tabitem_box
 	attr_reader :verticalframe_boxtab
 	attr_reader :matrix_boxtab

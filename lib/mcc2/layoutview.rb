@@ -121,14 +121,14 @@ class Layoutview
     @lf.textfield_spur2.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_MSSPUR2) }
     @lf.textfield_spur3.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_MSSPUR3) }
 
-    @barcodes = if self.class.const_defined?(:BarcodeAPI)
-      BarcodeAPI::bc_get_bc_list
+    @barcodes = if Object.const_defined?(:Barby)
+      Barby.constants.sort.select{|c| Barby.const_get(c).ancestors.include?(Barby::Barcode)} - %w[Barcode Barcode1D Barcode2D]
     else
       []
     end
-    @lf.listbox_bc_typ.connect(SEL_COMMAND){ |sender, sel, event| sel_list_box_changed(sender) }
-    @lf.spinner_modul_width.connect(SEL_COMMAND){ bc_modul_with_changed }
-    @lf.spinner_modul_width.range = (1..100)
+    @lf.listbox_barcode_typ.connect(SEL_COMMAND){ |sender, sel, event| sel_list_box_changed(sender) }
+    @lf.spinner_barcode_ratio.connect(SEL_COMMAND){ bc_modul_with_changed }
+    @lf.spinner_barcode_ratio.range = (1..100)
     # .............................................................................................
 
     create_chipparam_fields
@@ -526,7 +526,7 @@ class Layoutview
       # Attribute, die nur Barcodes haben
       if node.find(GOA_TYP).first.content == BARCODEOBJECT
         @lf.tabitem_barcode.shown = true
-        @lf.spinner_modul_width.value = node.find(GOA_BC_MODUL_WIDTH).first.content.to_i
+        @lf.spinner_barcode_ratio.value = node.find(GOA_BAR_RATIO).first.content.to_i
         fill_barcode_typ_list
         fill_barcode_fields(node)
         data_shown
@@ -559,9 +559,9 @@ class Layoutview
       font = @lf.listbox_fonts.getItemData(@lf.listbox_fonts.currentItem)
       @lf.textfield_font_file.enabled = font=='from_file'
       @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_FONT_TYP).content = font
-    elsif sender.wdg_name == 'listbox_bc_typ'
-      bc = @lf.listbox_bc_typ.getItemText(@lf.listbox_bc_typ.currentItem)
-      @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_BC_TYP).content = bc
+    elsif sender.wdg_name == 'listbox_barcode_typ'
+      bc = @lf.listbox_barcode_typ.getItemText(@lf.listbox_barcode_typ.currentItem)
+      @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_BARCODE_TYP).content = bc
     else
       raise "unbekannter Sender. Eingriff des Programmierers nötig. :-("
     end
@@ -571,8 +571,8 @@ class Layoutview
 
   # die Aktion, welche ausgeführt wird, wenn die Auswahl der Modulbreite des Barcodes geändert wird
   def bc_modul_with_changed
-    mw = @lf.spinner_modul_width.value
-    node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_BC_MODUL_WIDTH)
+    mw = @lf.spinner_barcode_ratio.value
+    node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_BAR_RATIO)
     if mw != node.first.content.to_i
       node.first.content = mw.to_s
       changed_attributes
@@ -583,7 +583,7 @@ class Layoutview
   # füllt die Barcode-Typ-Auswahlliste mit den möglichen Barcodes
   def fill_barcode_typ_list
     @barcodes.each{|bc|
-      @lf.listbox_bc_typ.appendItem(bc)
+      @lf.listbox_barcode_typ.appendItem(bc)
     }
   end
   #---------------------------------------------------------------------------------------------------------
@@ -591,10 +591,10 @@ class Layoutview
   # füllt die Barcode-spezifischen Felder mit den gewählten Optionen aus dem Layout
   def fill_barcode_fields(node)
     # den gewählten Parameter in den entsprechenden Listen markieren
-    bc_typ = node.find_first(GOA_BC_TYP).content
+    bc_typ = node.find_first(GOA_BARCODE_TYP).content
     bc_id = @barcodes.index(bc_typ)
     error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Der Barcode-Typ #{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes.\ Der Wert wird auf 'NONE' gesetzt.", 'ok') unless bc_id
-    @lf.listbox_bc_typ.currentItem = bc_id if bc_id
+    @lf.listbox_barcode_typ.currentItem = bc_id if bc_id
   end
   #---------------------------------------------------------------------------------------------------------
 
