@@ -37,12 +37,18 @@ module Mcc2
   GOA_SAMPLE_DATA = 'sample_data'
   GOA_PRINTLIST = 'view_in_printlist'
 
+  GOA_FILL_COLOR = 'fill_color'
+  GOA_BORDER_COLOR = 'border_color'
+  GOA_BORDER_WIDTH = 'border_width'
+  GOA_CORNER_RADIUS = 'corner_radius'
+
   # das sind die Objektbezeichner
   GRAPHICOBJECTS = 'GraphicObjects'
   GRAPHICOBJECT = 'GraphicObject'
   TEXTOBJECT = 'TextObject'
   BARCODEOBJECT = 'BarcodeObject'
   PICTUREOBJECT = 'PictureObject'
+  BOXOBJECT = 'BoxObject'
 
 
   S_LAYOUT = 'Layout'

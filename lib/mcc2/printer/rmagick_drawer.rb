@@ -93,7 +93,7 @@ module RmagickDrawer
           typ = go.find_first(GOA_TYP).content
           if row
             data = DataMan.replace_variables(go.find_first(GOA_DATA).content, row, encoding)
-          else
+          elsif go.find_first(GOA_DATA)
             data = go.find_first(GOA_DATA).content
             sample_data = go.find_first(GOA_SAMPLE_DATA).content
             data = sample_data unless sample_data.to_s.empty?
@@ -155,6 +155,14 @@ module RmagickDrawer
               else
                 raise ResourceNotFoundError, "Das Bild '#{data}' konnte nicht gefunden werden. Der Druck wird angehalten."
               end
+
+            elsif typ == BOXOBJECT
+              corner_radius = go.find(GOA_CORNER_RADIUS).first.content.to_f
+              fill_color = go.find(GOA_FILL_COLOR).first.content
+              border_color = go.find(GOA_BORDER_COLOR).first.content
+              border_width = go.find(GOA_BORDER_WIDTH).first.content.to_f
+              
+              body.g.rect(mm(go_width), mm(go_height) ).round(mm(corner_radius)).styles(:fill=>'#'+fill_color, :stroke=>'#'+border_color, :stroke_width=>mm(border_width))
 
             # Barcode-Objekte
             elsif typ == BARCODEOBJECT

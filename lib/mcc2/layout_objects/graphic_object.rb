@@ -8,7 +8,6 @@ class GraphicObject
   def initialize
     @go_attributes = {}
     add_attr(@go_attributes, GOA_ID, Integer, 0)
-    add_attr(@go_attributes, GOA_DATA, String, 'Daten')
     add_attr(@go_attributes, GOA_NAME, String, GRAPHICOBJECT) # bekommen erst einmal alle den gleichen Namen, können später durch den Anwender geändert werden
     add_attr(@go_attributes, GOA_TYP, String, GRAPHICOBJECT)
     add_attr(@go_attributes, GOA_X, Integer, 10)
@@ -29,6 +28,7 @@ class GraphicObject
     if typ == TEXTOBJECT then TextObject.new
     elsif typ == BARCODEOBJECT then BarcodeObject.new
     elsif typ == PICTUREOBJECT then PictureObject.new
+    elsif typ == BOXOBJECT then BoxObject.new
     end
   end
 end

@@ -77,6 +77,7 @@ class Mcc2Gui < MainWindow
       connect_with_accel(@mcmd_text){ new_object(TEXTOBJECT) }
       connect_with_accel(@mcmd_barcode){ new_object(BARCODEOBJECT) }
       connect_with_accel(@mcmd_picture){ new_object(PICTUREOBJECT) }
+      connect_with_accel(@mcmd_box){ new_object(BOXOBJECT) }
       
       @topwin.width = 1024
       @topwin.height = 768

@@ -1,0 +1,18 @@
+# -*- coding: UTF-8 -*-
+
+require 'mcc2/layout_objects/graphic_object'
+
+module Mcc2
+class BoxObject < GraphicObject
+  def initialize
+    super
+    @go_attributes[GOA_TYP].attr_value = BOXOBJECT
+    add_attr(@go_attributes, GOA_WIDTH, Float, 30)
+    add_attr(@go_attributes, GOA_HEIGHT, Float, 20)
+    add_attr(@go_attributes, GOA_FILL_COLOR, String, "ffff00ff")
+    add_attr(@go_attributes, GOA_BORDER_COLOR, String, "ff00ffff")
+    add_attr(@go_attributes, GOA_BORDER_WIDTH, Float, 1)
+    add_attr(@go_attributes, GOA_CORNER_RADIUS, Float, 4)
+  end
+end
+end

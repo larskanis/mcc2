@@ -7,6 +7,7 @@ require 'mcc2/layout_objects/graphic_object'    # die Basisklasse für die grafi
 require 'mcc2/layout_objects/barcode_object'    # grafische Barcode-Objekte
 require 'mcc2/layout_objects/picture_object'    # grafische Bild-Objekte
 require 'mcc2/layout_objects/text_object'       # grafische Text-Objekte
+require 'mcc2/layout_objects/box_object'
 
 module Mcc2
 module Printer
@@ -59,7 +60,7 @@ class LayoutFile
     add_attr(S_CONTACTLESS, String, FALSE)
     add_attr(S_CONTACT, String, FALSE)
     add_attr(S_MAGSTRIPE, String, FALSE)
-    add_attr(S_PRINTERTYPE, String, 'GdiPrinter')
+    add_attr(S_PRINTERTYPE, String, 'FilePrinter')
     add_attr(S_FILEPRINTER_SAVE_AS, String, './mcc2_%d_%p.jpeg')
     add_attr(S_FILEPRINTER_DPI, Integer, 300)
     add_attr(S_GDIPRINTER_NAME, String, '')

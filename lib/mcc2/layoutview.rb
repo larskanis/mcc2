@@ -53,7 +53,7 @@ class Layoutview
 
     # die Font-Attribute
     @lf.textfield_text_color.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_FONT_COLOR) }
-    @lf.button_text_color.connect(@text_field_trigger){ text_color_dialog }
+    @lf.button_text_color.connect(@text_field_trigger){ text_color_dialog(@lf.textfield_text_color) }
     @lf.radiomutex_justify.on_event_selected{|r| radiomutex_justify_changed(r) }
 
     # die Positions-Attribute
@@ -103,6 +103,13 @@ class Layoutview
     @lf.checkbutton_contact.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_CONTACT) }
     @lf.checkbutton_magstripe.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_MAGSTRIPE) }
 
+    @lf.textfield_box_fill_color.connect(SEL_COMMAND){ |sender, sel, event| textfield_exit(sender, GOA_FILL_COLOR)}
+    @lf.button_box_fill_color.connect(SEL_COMMAND){ text_color_dialog(@lf.textfield_box_fill_color) }
+    @lf.textfield_box_border_color.connect(SEL_COMMAND){ |sender, sel, event| textfield_exit(sender, GOA_BORDER_COLOR) }
+    @lf.button_box_border_color.connect(SEL_COMMAND){ text_color_dialog(@lf.textfield_box_border_color) }
+    @lf.textfield_box_border_width.connect(SEL_COMMAND){ |sender, sel, event| textfield_exit(sender, GOA_BORDER_WIDTH) }
+    @lf.textfield_box_corner_radius.connect(SEL_COMMAND){ |sender, sel, event| textfield_exit(sender, GOA_CORNER_RADIUS) }
+
     # die Checkbuttons für das Löschen und Kopieren von Graphik-Objekten
     @lf.button_copy.enabled = false
     @lf.button_copy.connect(SEL_COMMAND){ manage_objects(COPY) }
@@ -129,6 +136,7 @@ class Layoutview
     # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
     @lf.matrix1.numColumns = 3
     @lf.matrix2.numColumns = 4
+    @lf.matrix_boxtab.numColumns = 3
     fill_objectlist
     object_selection_changed
   end
@@ -297,27 +305,13 @@ class Layoutview
   # öffnet einen Dialog, mit dem die Textfarbe gewählt werden kann und
   # trägt diese in das Textfeld für die Farbangabe ein
   # zeichnet anschließend die Vorschau neu
-  def text_color_dialog
+  def text_color_dialog(textfield)
     cdlg = FXColorDialog.new(@parent, "Textfarbe")
-    if cdlg.execute>0 && @lf.textfield_text_color.text != cdlg.rgba
-      node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_FONT_COLOR)
+    if cdlg.execute>0 && textfield.text != cdlg.rgba
       s = cdlg.rgba.to_i.to_s(16)
-      @lf.textfield_text_color.text = [s[6,2], s[4,2], s[2,2], s[0,2]].join
-      node.first.content = @lf.textfield_text_color.text
-      changed_attributes
+      textfield.setText([s[6,2], s[4,2], s[2,2], s[0,2]].join, true)
     end
   end
-  #~ #---------------------------------------------------------------------------------------------------------
-
-  #~ # die Aktion, welche ausgeführt wird, wenn die Auswahl der Seitennummer geändert wurde, auf welcher das Objekt ausgegeben werden soll
-  #~ def duplex_changed
-    #~ seite = @lf.checkbutton_duplex.state - 1
-    #~ node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_PAGE_NR)
-    #~ if seite != node.first.content.to_i
-      #~ node.first.content = seite.to_s
-      #~ changed_attributes
-    #~ end
-  #~ end
   #---------------------------------------------------------------------------------------------------------
 
   def combobox_datasource_typ_changed
@@ -411,6 +405,7 @@ class Layoutview
     @lf.tabitem_posit.shown = on
     @lf.tabitem_font.shown = on
     @lf.tabitem_barcode.shown = on
+    @lf.tabitem_box.shown = on
   end
 
   def activate_job_tabs(on=true)
@@ -477,9 +472,6 @@ class Layoutview
 
       # Daten-Attribute
       @lf.textfield_name.text = node.find(GOA_NAME).first.content
-      @lf.textfield_sample_data.text = node.find(GOA_SAMPLE_DATA).first.content
-      @lf.textfield_data.text = node.find(GOA_DATA).first.content
-      @lf.textfield_data_non_text.text = node.find(GOA_DATA).first.content
 
       # Positionsattribute
       @lf.textfield_x.text = node.find(GOA_X).first.content
@@ -497,7 +489,13 @@ class Layoutview
         @lf.checkbutton_printlist.state = true
       end
 
-    # Typ-spezifische Attribute auslesen
+      # Typ-spezifische Attribute auslesen
+      if [BARCODEOBJECT, TEXTOBJECT, PICTUREOBJECT].include?( node.find(GOA_TYP).first.content )
+        @lf.textfield_sample_data.text = node.find(GOA_SAMPLE_DATA).first.content
+        @lf.textfield_data.text = node.find(GOA_DATA).first.content
+        @lf.textfield_data_non_text.text = node.find(GOA_DATA).first.content
+      end
+      
       # Attribute, die Barcode und Texte haben
       if node.find(GOA_TYP).first.content == TEXTOBJECT || node.find(GOA_TYP).first.content == BARCODEOBJECT
         @lf.tabitem_font.shown = true
@@ -537,6 +535,16 @@ class Layoutview
       # Attribute, die nur Bilder haben
       if node.find(GOA_TYP).first.content == PICTUREOBJECT
         data_shown
+      end
+
+      if node.find(GOA_TYP).first.content == BOXOBJECT
+        @lf.tabitem_box.shown = true
+        @lf.tabitem_box.recalc
+        @lf.textfield_box_fill_color.text = node.find(GOA_FILL_COLOR).first.content
+        @lf.textfield_box_border_color.text = node.find(GOA_BORDER_COLOR).first.content
+        @lf.textfield_box_border_width.text = node.find(GOA_BORDER_WIDTH).first.content
+        @lf.textfield_box_corner_radius.text = node.find(GOA_CORNER_RADIUS).first.content
+        no_data_shown
       end
     end
 
@@ -647,6 +655,15 @@ class Layoutview
     @lf.button_enhanced_data_text_edit.shown = false
   end
   #---------------------------------------------------------------------------------------------------------
+  # deaktiviert die Textfelder für Dateneingabe
+  def no_data_shown
+    @lf.textfield_data.shown = false
+    @lf.label_textblock.shown = false
+    @lf.textfield_data_non_text.shown = false
+    @lf.label_textfield.shown = false
+    @lf.button_enhanced_data_edit.shown = false
+    @lf.button_enhanced_data_text_edit.shown = false
+  end
 
   # aktiviert ein mehrzeiliges Textfeld für die Eingabe der Daten (wird für Text gebraucht)
   def data_block_shown
