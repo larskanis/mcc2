@@ -53,9 +53,6 @@ class GdiPrinter < CardPrinter
 
     devicename = layout_file.get_attr_value(S_GDIPRINTER_NAME)
 
-    page_width = default_width + card_margin_left + card_margin_right # vorläufig todo ??? warum eigentlich vorläufig?
-    page_height = default_height + card_margin_top + card_margin_bottom # vorläufig todo  ??? warum eigentlich vorläufig?
-
     datasourcename = layout_file.get_attr_value(S_DATASOURCE)
     duplex = layout_file.get_attr_value(S_DUPLEX) == S_TRUE
     initdata = Win32api4ruby::Winspool.create_DEVMOD(layout_file.get_gdiprinter_initdata)
@@ -101,6 +98,9 @@ class GdiPrinter < CardPrinter
   def run_chipcoding(chip, row)
     chip.pers_card(layout_file, row)
   end
+  
+  def personalize_ms(hPrinter)
+  end
 
   def wait_on_print_ready
   end
@@ -109,10 +109,10 @@ class GdiPrinter < CardPrinter
     raise "unterschiedliche X- und Y-Auflösung wird beim Druck nicht unterstützt" if initdata[:dmYResolution] != initdata[:dmPrintQuality]
     self.dpi = initdata[:dmYResolution]
 
-    page_width =  @layout_file.get_attr_value(S_WIDTH).to_f
-    page_height = @layout_file.get_attr_value(S_HEIGHT).to_f
-    draw_pos_x  = @layout_file.get_attr_value(S_X_OFFSET).to_f
-    draw_pos_y  = @layout_file.get_attr_value(S_Y_OFFSET).to_f
+    page_width =  @layout_file.get_attr_value(S_WIDTH).to_f + card_margin_left + card_margin_right
+    page_height = @layout_file.get_attr_value(S_HEIGHT).to_f + card_margin_top + card_margin_bottom
+    draw_pos_x  = @layout_file.get_attr_value(S_X_OFFSET).to_f - card_margin_left
+    draw_pos_y  = @layout_file.get_attr_value(S_Y_OFFSET).to_f - card_margin_top
 
     # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
     selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
