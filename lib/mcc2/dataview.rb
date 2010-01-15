@@ -308,13 +308,15 @@ class Dataview < Dialogbox_dataview
 
     Thread.new{
       begin
+        chip = layout_file.build_chip_instance
+      
         marked_items.each{|item|
           it = @iconlist_data.findItemByData(item)
           @iconlist_data.makeItemVisible(it)
           notify = true
           @iconlist_data.setFocus
           @iconlist_data.setCurrentItem(it, notify)
-          erg = printer.print_card(layout_file, item, @chip)
+          erg = printer.print_card(layout_file, item, chip)
           # den aktuellen Datensatz deselektieren, wenn er erfolgreich gedruckt wurde
           @iconlist_data.deselectItem(it) if erg
 
@@ -326,7 +328,7 @@ class Dataview < Dialogbox_dataview
       rescue RmagickDrawer::ResourceNotFoundError => e
         error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, e.to_s, 'ok')
         error_WahlMessage.execute
-      rescue => e
+      rescue Exception => e
         DebugTools::write_log_file('print_card_thread', DebugTools::unkown_error_message(e))
         error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, DebugTools::unkown_error_message(e), 'ok')
         error_WahlMessage.execute
@@ -335,7 +337,7 @@ class Dataview < Dialogbox_dataview
         enable_all_buttons
         enable_disable_print_select_button
         @button_stop_printing.enabled = false
-        @chip.close_reader if @chip
+        chip.close_reader if chip
       end # rescue
     }
   end

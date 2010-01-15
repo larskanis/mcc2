@@ -146,7 +146,6 @@ class Layoutview
   # erzeugt so viele Felder, wie in der Methode anz_params der Klasse Chip definiert sind
   # erzeugt ein Array, in welchem alle Felder gespeichert sind
   def create_chipparam_fields
-    @chip = Chip.new
     @chipparam_textfields = []
 
     scrl_w = FX::ScrollWindow.new(@lf.verticalframe_chip, LAYOUT_FILL_X | LAYOUT_FILL_Y)
@@ -162,7 +161,7 @@ class Layoutview
     }
     matrix_chipparams.numColumns = 2
 
-    (0..(@chip.anz_params-1)).each{|i|
+    (0 ... CHIPPARAM_FIELD_COUNT).each{|i|
       FX::Label.new(matrix_chipparams){|w|
         w.wdg_name = "label_chipparam_#{i}"
         w.text = ['Parameter', i+1].join(' ')
@@ -194,13 +193,7 @@ class Layoutview
     fill_layout_attr_tab
 
     # die Chip-Attribute
-    chip = Chip.new
     chip_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
-    #~ (1..chip.anz_params).each{|i|
-      #~ attr_name = "#{S_PARAM}_#{i}"
-      #~ element = chip_attrs.find_first(attr_name)
-      #~ chip_attrs << param = XML::Node.new(attr_name , "")
-    #~ }
     # diesen Teil getrennt vom oberen machen, damit die Reihenfolge der Chip-Params richtig bleibt, auch wenn sie im XML anders sind
     chip_attrs.each{|chip_attr|
       idx = chip_attr.name.split("_")[-1].to_i-1

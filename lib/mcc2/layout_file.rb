@@ -86,8 +86,7 @@ class LayoutFile
     
     # Chip definieren
     @xml_doc.root << node = XML::Node.new(S_CHIP)
-    chip = Chip.new
-    (1..chip.anz_params).each{|i|
+    (1 .. CHIPPARAM_FIELD_COUNT).each{|i|
       node << param = XML::Node.new("#{S_PARAM}_#{i}", "")
     }
     
@@ -136,9 +135,8 @@ class LayoutFile
     # die Chip-Einstellungen auslesen
     
     # kontrollieren, ob alle Nodes des Chips existieren, ansonsten anlegen und als 'changed' markieren
-    chip = Chip.new
     chip_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
-    (1..chip.anz_params).each{|i|
+    (1 .. CHIPPARAM_FIELD_COUNT).each{|i|
       attr_name = "#{S_PARAM}_#{i}"
       element = chip_attrs.find_first(attr_name)
       unless element
@@ -388,6 +386,16 @@ class LayoutFile
     end
 
     return dataman
+  end
+
+  def build_chip_instance
+    chip = if get_attr_value(S_CONTACTLESS) == S_TRUE || get_attr_value(S_CONTACT) == S_TRUE
+      Chip.new
+    else
+      nil
+    end
+      
+    return chip
   end
 
 

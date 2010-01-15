@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 
+require 'mcc2/constants'
 require 'mcc2/dataman/base'
 
 module Mcc2
@@ -18,7 +19,7 @@ class Chip
   def initialize
     p "Chip::Initialize"
     @params = []
-    (1..anz_params).each{|i|
+    (1 .. CHIPPARAM_FIELD_COUNT).each{|i|
       @params << ""
     }
   end
@@ -28,12 +29,6 @@ class Chip
   def  close_reader
     @chip_obj.close if @chip_obj
     @chip_obj = nil
-  end
-	#---------------------------------------------------------------------------------------------------------
-  
-  # liefert die Anzahl der Parameter zurück, die für Chip-Objekte gespeichert werden sollen
-  def anz_params
-    23
   end
 	#---------------------------------------------------------------------------------------------------------
   
@@ -52,7 +47,7 @@ class Chip
     
     # un dann die Parameter aus dem XML auslesen und entsprechend ihrer  ID in das Array schreiben
     chip_attrs = layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
-    (1..anz_params).each{|i|
+    (1 .. CHIPPARAM_FIELD_COUNT).each{|i|
       attr_name = "#{S_PARAM}_#{i}"
       params << DataMan.replace_variables(chip_attrs.find_first(attr_name).content, row, encoding)
     }
