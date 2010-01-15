@@ -1,9 +1,10 @@
 # -*- coding: UTF-8 -*-
 
-require 'printer/gdi_printer'
-require 'printer/card_printer'
+require 'mcc2/printer/gdi_printer'
+require 'mcc2/printer/card_printer'
 
 
+module Mcc2
 module Printer
 class GdiCardPrinter < GdiPrinter
   include CardPrinting
@@ -12,5 +13,6 @@ class GdiCardPrinter < GdiPrinter
     super
   end
   
+end
 end
 end

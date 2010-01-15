@@ -106,8 +106,8 @@ class GdiPrinter < CardPrinter
   end
   
   def print_gdi_page(hPrinter, initdata, row, page_nr)
-    raise "unterschiedliche X- und Y-Auflösung wird beim Druck nicht unterstützt" if initdata[:dmYResolution] != initdata[:dmPrintQuality]
-    self.dpi = initdata[:dmYResolution]
+    raise "unterschiedliche X- und Y-Auflösung wird beim Druck nicht unterstützt (#{initdata[:dmPrintQuality].inspect}x#{initdata[:dmYResolution].inspect})" if initdata[:dmYResolution]!=initdata[:dmPrintQuality] && initdata[:dmYResolution]!=0 && initdata[:dmPrintQuality]!=0
+    self.dpi = [initdata[:dmYResolution], initdata[:dmPrintQuality]].max
 
     page_width =  @layout_file.get_attr_value(S_WIDTH).to_f + card_margin_left + card_margin_right
     page_height = @layout_file.get_attr_value(S_HEIGHT).to_f + card_margin_top + card_margin_bottom
