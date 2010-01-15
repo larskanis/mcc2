@@ -95,16 +95,15 @@ module RmagickDrawer
           elsif row
             data = DataMan.replace_variables(go.find_first(GOA_DATA).content, row, encoding)
           elsif go.find_first(GOA_DATA)
-            data = go.find_first(GOA_DATA).content
-            sample_data = go.find_first(GOA_SAMPLE_DATA).content
-            data = sample_data unless sample_data.to_s.empty?
+            data_nosub = go.find_first(GOA_DATA).content.to_s
+            data = go.find_first(GOA_SAMPLE_DATA).content.to_s
           end
 
           canvas1.g.translate(mm(x), mm(y)).rotate(rotation) do |body|
             # ............................................................................................................
             # die Objekt-spezifischen Attribute ermitteln
             if typ == TEXTOBJECT
-              draw_textobject(body.g, go, go_width, go_height, data)
+              draw_textobject(body.g, go, go_width, go_height, data.empty? ? data_nosub : data)
             elsif typ == PICTUREOBJECT
               draw_pictureobject(body.g, go, go_width, go_height, data)
             elsif typ == BARCODEOBJECT
@@ -236,7 +235,7 @@ module RmagickDrawer
         xdim, ydim = xdim.to_i, ydim.to_i if optimized
         bcencoding.each do |line|
           line.split(//).map{|c| c == '1' }.each do |bar|
-            body.rect([0,xdim-1].max, [0,ydim-1].max, x, y) if bar
+            body.rect([0,xdim].max, [0,ydim].max, x, y) if bar
             x += xdim
           end
           x = 0
@@ -248,7 +247,7 @@ module RmagickDrawer
         xdim = xdim.to_i if optimized
         bcencoding.split(//).map{|c| c == '1' }.each do |bar|
   #         puts "#{xdim}, #{px_height}, #{x}" if bar
-          body.rect([0,xdim-1].max, px_height, x, 0) if bar
+          body.rect([0,xdim].max, px_height, x, 0) if bar
           x += xdim
         end
       end
