@@ -582,6 +582,7 @@ class Layoutview
 
   # füllt die Barcode-Typ-Auswahlliste mit den möglichen Barcodes
   def fill_barcode_typ_list
+    @lf.listbox_barcode_typ.clearItems
     @barcodes.each{|bc|
       @lf.listbox_barcode_typ.appendItem(bc)
     }

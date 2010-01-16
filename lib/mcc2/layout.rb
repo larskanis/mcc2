@@ -98,7 +98,7 @@ class Layout
   # schließt den Datenmanager
   def close_dataman
     @dataman = nil
-    @dataman_values = {}
+    @current_dataman_settings = {}
   end
   #---------------------------------------------------------------------------------------------------------
 
@@ -106,13 +106,18 @@ class Layout
 
   # erzeugt einen Datenmanager abhängig davon welcher Datensourcetyp im Layout definiert ist (momentan DATABASE oder CSV)
   def open_dataman
-    @dataman = @layout_file.build_dataman_instance
-    @dataview.dataman = @dataman
+    begin
+      @dataman = @layout_file.build_dataman_instance
+      @dataview.dataman = @dataman
 
-    @dataman_values = DatamanAttributes.inject({}){|s,a|
-      s[a] = @layout_file.get_attr_value(a)
-      s
-    }
+      @current_dataman_settings = DatamanAttributes.inject({}){|s,a|
+        s[a] = @layout_file.get_attr_value(a)
+        s
+      }
+    rescue => e
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Die Datenverbindung konnte nicht hergestellt werden.\n\n#{e}", 'Abbruch')
+      error_WahlMessage.execute
+    end
   end
   #---------------------------------------------------------------------------------------------------------
 
@@ -123,7 +128,7 @@ class Layout
     set_title
 
     # Any datasource related values changed? -> reopen
-    if DatamanAttributes.find{|a| @dataman_values[a] != @layout_file.get_attr_value(a) }
+    if DatamanAttributes.find{|a| @current_dataman_settings[a] != @layout_file.get_attr_value(a) }
       close_dataman
       open_dataman
     end

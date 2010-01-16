@@ -89,7 +89,10 @@ module RmagickDrawer
           go_height = go.find_first(GOA_HEIGHT).content.to_f
           rotation = go.find_first(GOA_ROTATION).content.to_f
           typ = go.find_first(GOA_TYP).content
-          if row
+          
+          if !go.find_first(GOA_DATA)
+            data = nil
+          elsif row
             data = DataMan.replace_variables(go.find_first(GOA_DATA).content, row, encoding)
           elsif go.find_first(GOA_DATA)
             data = go.find_first(GOA_DATA).content
