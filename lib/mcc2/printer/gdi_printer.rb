@@ -147,7 +147,7 @@ class GdiPrinter < CardPrinter
         
         linedata = bmdata[3*row_idx*pic.columns, 3*pic.columns]
         # RGB -> BGR wandeln
-        linedata = linedata.unpack(pack_rgb2bgr).map{|a| a.reverse! }.pack(pack_rgb2bgr)
+        linedata = linedata.reverse!.unpack(pack_rgb2bgr).reverse!.pack(pack_rgb2bgr)
         # Windows-Bitmap erzeugen
         hBmp = Win32api4ruby::Gdi.create_bitmap(pic.columns, 1, 1, 24, linedata)
         
