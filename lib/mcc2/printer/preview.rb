@@ -26,7 +26,7 @@ class Preview < Base
         dial_zoom.tipText = @label_zoom.tipText
         dial_zoom.connect(SEL_CHANGED){ set_zoom }
         dial_zoom.connect(SEL_LEFTBUTTONRELEASE){ draw_preview(true, @row) }
-        dial_zoom.value = 90
+        dial_zoom.value = @parent.app.reg.readRealEntry('settings', 'preview_dpi', 90)
         dial_zoom.range = 1..1000
       end
     end
@@ -50,6 +50,7 @@ class Preview < Base
   def set_zoom
     self.dpi = @dial_zoom.value
     @label_zoom.text = "#{self.dpi} DPI"
+    @parent.app.reg.writeRealEntry('settings', 'preview_dpi', self.dpi)
   end
   #---------------------------------------------------------------------------------------------------------
 
