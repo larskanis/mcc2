@@ -115,8 +115,7 @@ class Layout
         s
       }
     rescue => e
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Die Datenverbindung konnte nicht hergestellt werden.\n\n#{e}", 'Abbruch')
-      error_WahlMessage.execute
+      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler bei Datenverbindung", "Die Datenverbindung konnte nicht hergestellt werden.\n\n#{e}")
     end
   end
   #---------------------------------------------------------------------------------------------------------
