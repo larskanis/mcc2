@@ -63,7 +63,7 @@ module RmagickDrawer
 
     canvas.g.translate(mm(self.card_margin_left), mm(self.card_margin_top)) do |canvas1|
       barcodes = nil
-      rx = 10
+      rx = mm(3)
       # ..........................................................................................
       # Kartenhintergrund füllen (für Vorschau)
       if preview
