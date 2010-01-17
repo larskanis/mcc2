@@ -49,8 +49,6 @@ class Dataview < Dialogbox_dataview
     @button_select_all.enabled = true
 
     @verticalframe_datalist.width = 500
-#    @horizontalframe3.height = 0
-#    @splitter2.setSplit(0, 500)
 
     fill_datalist_when_visible
   end

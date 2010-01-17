@@ -17,18 +17,17 @@ class Preview < Base
     @parent = parent
     @selected_object_id = nil
 
-    FXHorizontalFrame.new(parent) do |frame1|
+    FXHorizontalFrame.new(parent, :opts=>LAYOUT_FILL_X) do |frame1|
       @label_zoom = FXLabel.new(frame1, "") do |label_zoom|
         label_zoom.img = 'mcc2/images/zoom-in.png'
-        label_zoom.tipText="Hier kann die Anzeige vergr\303\266\303\237ert oder verkleinert werden. Achtung, bei vergr\303\266\303\237erter Anzeige werden viele Operationen deutlich langsamer ausgef\303\274hrt."
+        label_zoom.tipText = "Hier kann die Vorschau vergrößert oder verkleinert werden. Wird die\ntatsächliche Auflösung des angeschlossenen Bildschirms eingestellt,\nerscheint die Vorschau in Originalgröße."
       end
-      @dial_zoom = FXDial.new(frame1, :opts=>DIAL_HORIZONTAL) do |dial_zoom|
-        dial_zoom.tipText="Hier kann die Anzeige vergr\303\266\303\237ert oder verkleinert werden. Achtung, bei vergr\303\266\303\237erter Anzeige werden viele Operationen deutlich langsamer ausgef\303\274hrt."
-        
+      @dial_zoom = FXDial.new(frame1, :opts=>DIAL_HORIZONTAL|LAYOUT_FIX_WIDTH, :width=>100) do |dial_zoom|
+        dial_zoom.tipText = @label_zoom.tipText
         dial_zoom.connect(SEL_CHANGED){ set_zoom }
         dial_zoom.connect(SEL_LEFTBUTTONRELEASE){ draw_preview(true, @row) }
-        dial_zoom.value = 100
-        dial_zoom.range = (1..1000)
+        dial_zoom.value = 90
+        dial_zoom.range = 1..1000
       end
     end
 
@@ -49,10 +48,8 @@ class Preview < Base
   
   # verändert die Zoomstufe, wenn am Rädchen gedreht wird
   def set_zoom
-    @zoom = (@dial_zoom.value).to_f / 100
-    @label_zoom.text = "#{@zoom}"
-    #~ p "@zoom: #{@zoom}"
-    #~ p "@scale: #{@scale}"
+    self.dpi = @dial_zoom.value
+    @label_zoom.text = "#{self.dpi} DPI"
   end
   #---------------------------------------------------------------------------------------------------------
 
@@ -73,7 +70,6 @@ class Preview < Base
         end
 
         # allgemeine Einstellungen des Image vornehmen
-        self.dpi = 90
         width =  @layout_file.get_attr_value(S_WIDTH).to_f
         height = @layout_file.get_attr_value(S_HEIGHT).to_f
 
@@ -83,16 +79,11 @@ class Preview < Base
 
         card_offset = 0
 
-        image_width = width_with_margins(width) * @zoom
-        image_height = ((2 * height_with_margins(height) + card_offset) * @zoom )
-
-        scale_width = mm(width_with_margins(width))
-        scale_height = mm(2 * height_with_margins(height) + card_offset)
+        image_width = width_with_margins(width)
+        image_height = 2 * height_with_margins(height) + card_offset
 
         begin
-          rvg = Magick::RVG.new(mm(image_width), mm(image_height)).viewbox(0, 0, scale_width, scale_height) do |canvas|
-            # Verhältnis zwischen Viewbox und Größe im RVG entspricht einem Zoom (je größer die viewbox-Werte desto weiter weg erscheint das Bild)
-
+          rvg = Magick::RVG.new(mm(image_width), mm(image_height)) do |canvas|
             draw_pos_x = 0
             draw_pos_y = 0
             canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
