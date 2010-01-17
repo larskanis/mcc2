@@ -34,6 +34,7 @@ class Dialogbox_printerview
 				FX::TabBook.new(@verticalframe_printersetup){|w|
 					@tabbook_printers=w
 					w.wdg_name='tabbook_printers'
+					w.current=2
 					w.width=308
 					w.height=85
 					w.y=21
@@ -43,14 +44,15 @@ class Dialogbox_printerview
 						w.width=90
 						w.text="Windows-GDI"
 						w.height=23
-						w.y=4
-						w.x=4
+						w.y=6
+						w.x=6
 					}
 					FX::VerticalFrame.new(@tabbook_printers){|w|
 						@verticalframe6=w
 						w.wdg_name='verticalframe6'
 						w.width=300
 						w.height=56
+						w.shown=false
 						w.y=25
 						w.x=4
 						FX::Matrix.new(@verticalframe6){|w|
@@ -75,7 +77,6 @@ class Dialogbox_printerview
 								w.width=159
 								w.height=21
 								w.y=4
-								w.numColumns=10
 								w.comboStyle=1048576
 								w.numVisible=10
 								w.layoutHints=1025
@@ -101,7 +102,7 @@ class Dialogbox_printerview
 						w.text="Datei"
 						w.height=23
 						w.y=6
-						w.x=93
+						w.x=96
 					}
 					FX::VerticalFrame.new(@tabbook_printers){|w|
 						@verticalframe7=w
@@ -188,17 +189,55 @@ class Dialogbox_printerview
 						w.width=53
 						w.text="XID440"
 						w.height=23
-						w.y=6
-						w.x=135
+						w.y=4
+						w.x=136
 					}
 					FX::VerticalFrame.new(@tabbook_printers){|w|
 						@verticalframe8=w
 						w.wdg_name='verticalframe8'
 						w.width=300
 						w.height=56
-						w.shown=false
 						w.y=25
 						w.x=4
+						FX::Matrix.new(@verticalframe8){|w|
+							@matrix_xid=w
+							w.wdg_name='matrix_xid'
+							w.width=300
+							w.height=56
+							w.numColumns=3
+							w.matrixStyle=131072
+							FX::Label.new(@matrix_xid){|w|
+								@label16=w
+								w.wdg_name='label16'
+								w.width=54
+								w.text="Drucker"
+								w.height=19
+								w.y=4
+								w.x=4
+							}
+							FX::ComboBox.new(@matrix_xid){|w|
+								@combobox_xid_printer=w
+								w.wdg_name='combobox_xid_printer'
+								w.width=159
+								w.height=21
+								w.y=4
+								w.comboStyle=1048576
+								w.numVisible=10
+								w.layoutHints=1025
+								w.x=62
+							}
+							FX::Button.new(@matrix_xid){|w|
+								@button_xid_printersetup=w
+								w.wdg_name='button_xid_printersetup'
+								w.width=71
+								w.text="Einrichten"
+								w.height=23
+								w.tipText="Dateiauswahl"
+								w.y=4
+								w.layoutHints=1024
+								w.x=225
+							}
+						}
 					}
 				}
 			}
@@ -226,6 +265,10 @@ class Dialogbox_printerview
 	attr_reader :label5
 	attr_reader :tabitem6
 	attr_reader :verticalframe8
+	attr_reader :matrix_xid
+	attr_reader :label16
+	attr_reader :combobox_xid_printer
+	attr_reader :button_xid_printersetup
 end
 
 #unit test

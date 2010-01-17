@@ -81,6 +81,8 @@ module Mcc2
 
   S_GDIPRINTER_NAME = 'gdiprinter_name'
   S_GDIPRINTER_INITDATA = 'gdiprinter_initdata'
+  S_XIDPRINTER_NAME = 'xidprinter_name'
+  S_XIDPRINTER_INITDATA = 'xidprinter_initdata'
 
   UP = 0
   DOWN = 1

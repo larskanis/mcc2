@@ -391,15 +391,15 @@ class LayoutFile
   end
 
 
-  def get_gdiprinter_initdata
-    initdatahex = get_attr_value(S_GDIPRINTER_INITDATA)
+  def get_binary_attr(attr)
+    initdatahex = get_attr_value(attr)
     if initdatahex && !initdatahex.empty?
       [initdatahex].pack("H*")
     end
   end
 
-  def set_gdiprinter_initdata(bindata)
-    set_attr_value(S_GDIPRINTER_INITDATA, bindata.unpack("H*")[0])
+  def set_binary_attr(attr, bindata)
+    set_attr_value(attr, bindata.unpack("H*")[0])
   end
 
 end
