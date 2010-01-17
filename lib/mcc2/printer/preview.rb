@@ -12,9 +12,6 @@ class Preview < Base
   include CardPrinting
   include Fox
   
-  class ResourceNotFoundError < RuntimeError
-  end
-  
   def initialize parent
     super()
     @parent = parent
@@ -123,15 +120,13 @@ class Preview < Base
           @image_view.image = fx_image
           @image_view.show
           @image_view.recalc
-        rescue ResourceNotFoundError => e
-          error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, e.to_s, 'ok')
-          error_WahlMessage.execute
+        rescue RmagickDrawer::ResourceNotFoundError => e
+          FXMessageBox.error(@parent, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
           @printing = false
         end
       rescue => e
         DebugTools::write_log_file('draw_preview_thread', DebugTools::unkown_error_message(e))
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, DebugTools::unkown_error_message(e), 'ok')
-        error_WahlMessage.execute
+        FXMessageBox.error(@parent, MBOX_OK, "Fehler beim Erstellen der Layoutvorschau", DebugTools::unkown_error_message(e))
       end # rescue
     }
   end

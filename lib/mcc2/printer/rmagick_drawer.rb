@@ -37,8 +37,6 @@ module Mcc2
 module RmagickDrawer
   class ResourceNotFoundError < RuntimeError
   end
-  class BarcodeError < RuntimeError
-  end
 
   #
   def width_with_margins(width)

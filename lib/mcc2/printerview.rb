@@ -74,8 +74,7 @@ class Printerview < Dialogbox_printerview
       require "win32api4ruby"
       Win32api4ruby::Base.unicode = true
     rescue LoadError, RuntimeError => e
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Die Windows-Druckerschnittstelle konnte nicht geladen werden.\nBitte stellen Sie sicher, dass das Gem-Paket win32api4ruby installiert ist.\n\n" + e.to_s, 'Abbruch')
-      error_WahlMessage.execute
+      FXMessageBox.error(@parent, MBOX_OK, "Fehler beim Ansprechen der Windows-Druckerschnittstelle" , "Die Windows-Druckerschnittstelle konnte nicht geladen werden.\nBitte stellen Sie sicher, dass das Gem-Paket win32api4ruby installiert ist.\n\n" + e.to_s)
       
     else
       combobox.clearItems

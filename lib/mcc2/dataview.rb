@@ -324,12 +324,10 @@ class Dataview < Dialogbox_dataview
           end
         }
       rescue RmagickDrawer::ResourceNotFoundError => e
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, e.to_s, 'ok')
-        error_WahlMessage.execute
+        FXMessageBox.error(@parent, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
       rescue => e
         DebugTools::write_log_file('print_card_thread', DebugTools::unkown_error_message(e))
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, DebugTools::unkown_error_message(e), 'ok')
-        error_WahlMessage.execute
+        FXMessageBox.error(@parent, MBOX_OK, "Fehler beim Erstellen des Druckbildes", DebugTools::unkown_error_message(e))
       ensure
         @printing = false
         enable_all_buttons
