@@ -3,6 +3,7 @@
 require 'mcc2/printer/base'           # die Basisklasse für die Printer
 require 'mcc2/printer/card_printer'
 require 'mcc2/printer/rmagick_drawer'
+require 'mcc2/thread_event_handler'
 
 
 module Mcc2
@@ -11,6 +12,7 @@ class Preview < Base
   include RmagickDrawer
   include CardPrinting
   include Fox
+  include ThreadEventHandler
   
   def initialize parent
     super()
@@ -33,7 +35,7 @@ class Preview < Base
 
     @image_view = FXImageView.new(parent, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y)
 
-    # Zoom
+    event_handler_setup
     set_zoom
   end
 
@@ -105,20 +107,25 @@ class Preview < Base
             self.format = 'PNG'
           }
 
-          # ..........................................................................................
-          # das erzeugte Bild als Icon anzeigen
-          fx_image = FXPNGImage.new(@parent.app, data)
-          fx_image.create
-          @image_view.image = fx_image
-          @image_view.show
-          @image_view.recalc
+          event_handler_push{
+            # das erzeugte Bild als Icon anzeigen
+            fx_image = FXPNGImage.new(@parent.app, data)
+            fx_image.create
+            @image_view.image = fx_image
+            @image_view.show
+            @image_view.recalc
+          }
         rescue RmagickDrawer::ResourceNotFoundError => e
-          FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
+          event_handler_push{
+            FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
+          }
           @printing = false
         end
       rescue => e
         DebugTools::write_log_file('draw_preview_thread', DebugTools::unkown_error_message(e))
-        FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen der Layoutvorschau", DebugTools::unkown_error_message(e))
+        event_handler_push{
+          FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen der Layoutvorschau", DebugTools::unkown_error_message(e))
+        }
       end # rescue
     }
   end

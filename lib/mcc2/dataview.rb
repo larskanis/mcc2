@@ -1,10 +1,13 @@
 # -*- coding: UTF-8 -*-
 
+require 'mcc2/thread_event_handler'
+
 module Mcc2
 require 'mcc2/dataview_dlg'
 
 class Dataview < Dialogbox_dataview
   include Fox
+  include ThreadEventHandler
 
   def initialize parent, layout
     @layout = layout
@@ -49,10 +52,11 @@ class Dataview < Dialogbox_dataview
     @button_select_all.enabled = true
 
     @verticalframe_datalist.width = 500
-
+    
+    event_handler_setup
     fill_datalist_when_visible
   end
-
+  
   def dataview_tab_activated(active=true)
     @visible = active
     if @visible
@@ -309,14 +313,20 @@ class Dataview < Dialogbox_dataview
         chip = layout_file.build_chip_instance
       
         marked_items.each{|item|
-          it = @iconlist_data.findItemByData(item)
-          @iconlist_data.makeItemVisible(it)
-          notify = true
-          @iconlist_data.setFocus
-          @iconlist_data.setCurrentItem(it, notify)
+          it = nil
+          event_handler_push{
+            it = @iconlist_data.findItemByData(item)
+            @iconlist_data.makeItemVisible(it)
+            @iconlist_data.setFocus
+            @iconlist_data.setCurrentItem(it, true)
+          }
+          
           erg = printer.print_card(layout_file, item, chip)
-          # den aktuellen Datensatz deselektieren, wenn er erfolgreich gedruckt wurde
-          @iconlist_data.deselectItem(it) if erg
+          
+          event_handler_push{
+            # den aktuellen Datensatz deselektieren, wenn er erfolgreich gedruckt wurde
+            @iconlist_data.deselectItem(it) if erg
+          }
 
           if !erg || !@printing
             # abbrechen, wenn ein Fehler aufgetreten ist, oder wenn der Bediener es gefordert hat
@@ -324,15 +334,21 @@ class Dataview < Dialogbox_dataview
           end
         }
       rescue RmagickDrawer::ResourceNotFoundError => e
-        FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
+        event_handler_push{
+          FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
+        }
       rescue Exception => e
         DebugTools::write_log_file('print_card_thread', DebugTools::unkown_error_message(e))
-        FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen des Druckbildes", DebugTools::unkown_error_message(e))
+        event_handler_push{
+          FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen des Druckbildes", DebugTools::unkown_error_message(e))
+        }
       ensure
         @printing = false
-        enable_all_buttons
-        enable_disable_print_select_button
-        @button_stop_printing.enabled = false
+        event_handler_push{
+          enable_all_buttons
+          enable_disable_print_select_button
+          @button_stop_printing.enabled = false
+        }
         chip.close_reader if chip
       end # rescue
     }
