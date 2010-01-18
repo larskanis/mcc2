@@ -145,42 +145,32 @@ class GdiPrinter < CardPrinter
       if (page_nr == 0) && (layout_file.get_attr_value(S_MAGSTRIPE) == S_TRUE)
         personalize_ms(hPrinter)
       end
-      
+
       # die Bilddaten für die Seite aufbereiten
-      bmdata = pic.to_blob{
-        self.format='rgb'
+      lpvBits = pic.to_blob{
+        self.format='rgba'
         self.depth = 8
       }
-      #~ now = Time.now
-      #~ pic.write("test_#{now.strftime("%H%M%S")}.png")
-      #~ break
-      pack_rgb2bgr = 'a3'*pic.columns
-      
-      # das Bild zeilenweise drucken, da es ein Problem mit dem Drucken von Bildern > 4MB gibt # todo Problem beseitigen und mit einem Mal drucken
-      (0 ... pic.rows).each{|row_idx|
-        
-        linedata = bmdata[3*row_idx*pic.columns, 3*pic.columns]
-        # RGB -> BGR wandeln
-        linedata = linedata.reverse!.unpack(pack_rgb2bgr).reverse!.pack(pack_rgb2bgr)
-        # Windows-Bitmap erzeugen
-        hBmp = Win32api4ruby::Gdi.create_bitmap(pic.columns, 1, 1, 24, linedata)
-        
-        tmpDC = Win32api4ruby::Gdi.create_compatible_dc(hPrinter)
-        oldBmp = Win32api4ruby::Gdi.select_object( tmpDC, hBmp )
-        
-        nXDest = mm(draw_pos_x)
-        nYDest = mm(draw_pos_y) + row_idx
-        hdcSrc = tmpDC
-        nXSrc = 0
-        nYSrc = 0
-        dwRop = Win32api4ruby::Gdi::SRCCOPY
-        Win32api4ruby::Gdi.bit_blt(hPrinter, nXDest, nYDest, pic.columns, 1, hdcSrc, nXSrc, nYSrc, dwRop)
-        
-        Win32api4ruby::Gdi.select_object( tmpDC, oldBmp )
-        Win32api4ruby::Gdi.delete_dc(tmpDC)
-        Win32api4ruby::Gdi.delete_object(hBmp)
-        Win32api4ruby::Gdi.delete_object(oldBmp)
-      }
+
+      xDest, yDest, dwWidth, dwHeight, xSrc, ySrc = 0,0, pic.columns,pic.rows, 0,0
+      uStartScan, cScanLines = 0, dwHeight
+      fuColorUse = Gdi::DIB_RGB_COLORS
+
+      lpbmi = Gdi.create_BITMAPINFOHEADER
+      lpbmi[:biWidth] = dwWidth
+      lpbmi[:biHeight] = dwHeight
+      lpbmi[:biPlanes] = 1
+      lpbmi[:biBitCount] = 32
+      lpbmi[:biCompression] = Gdi::BI_RGB
+      lpbmi[:biSizeImage] = lpvBits.length
+      lpbmi[:biXPelsPerMeter] = 0
+      lpbmi[:biYPelsPerMeter] = 0
+      lpbmi[:biClrUsed] = 0
+      lpbmi[:biClrImportant] = 0
+
+      tmpDC = Win32api4ruby::Gdi.create_compatible_dc(hPrinter)
+      Gdi.set_dibits_to_device(tmpDC, xDest, yDest, dwWidth, dwHeight, xSrc, ySrc, uStartScan, cScanLines, lpvBits, lpbmi, fuColorUse)
+      Win32api4ruby::Gdi.delete_dc(tmpDC)
     end
   end
 
