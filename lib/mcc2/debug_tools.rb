@@ -15,7 +15,7 @@ module DebugTools
  	#---------------------------------------------------------------------------------------------------------
   
   def self.unkown_error_message(e)
-    (["Es ist ein unerwarteter Fehler aufgetreten.\nBitte informieren Sie umgehend die EDV!\n\n  #{e.class}:  #{e.to_s}"]+e.backtrace).join("\n")
+    (["Es ist leider ein Fehler aufgetreten:\n\n#{e.to_s} #{e.class}\n"]+e.backtrace).join("\n")
   end
 end
 end

@@ -49,8 +49,6 @@ class Dataview < Dialogbox_dataview
     @button_select_all.enabled = true
 
     @verticalframe_datalist.width = 500
-#    @horizontalframe3.height = 0
-#    @splitter2.setSplit(0, 500)
 
     fill_datalist_when_visible
   end
@@ -326,12 +324,10 @@ class Dataview < Dialogbox_dataview
           end
         }
       rescue RmagickDrawer::ResourceNotFoundError => e
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, e.to_s, 'ok')
-        error_WahlMessage.execute
+        FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
       rescue Exception => e
         DebugTools::write_log_file('print_card_thread', DebugTools::unkown_error_message(e))
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, DebugTools::unkown_error_message(e), 'ok')
-        error_WahlMessage.execute
+        FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen des Druckbildes", DebugTools::unkown_error_message(e))
       ensure
         @printing = false
         enable_all_buttons

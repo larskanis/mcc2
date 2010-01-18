@@ -39,6 +39,15 @@ class GdiPrinter < CardPrinter
   end
   #--------------------------------------------------------------------------------------------------------------
 
+  def device_name
+    layout_file.get_attr_value(S_GDIPRINTER_NAME)
+  end
+  
+  def device_initdata
+    layout_file.get_binary_attr(S_GDIPRINTER_INITDATA)
+  end
+
+
   # startet das Drucken
   # === Return
   # -
@@ -51,11 +60,11 @@ class GdiPrinter < CardPrinter
     preview = false
     selected_object_id = nil
 
-    devicename = layout_file.get_attr_value(S_GDIPRINTER_NAME)
+    devicename = self.device_name
 
     datasourcename = layout_file.get_attr_value(S_DATASOURCE)
     duplex = layout_file.get_attr_value(S_DUPLEX) == S_TRUE
-    initdata = Win32api4ruby::Winspool.create_DEVMOD(layout_file.get_gdiprinter_initdata)
+    initdata = Win32api4ruby::Winspool.create_DEVMOD(device_initdata)
 
     # einen DeviceContext für den Drucker erzeugen
     hPrinter = Win32api4ruby::Gdi.create_dc( nil, devicename.to_s_win32, nil, initdata)
@@ -147,7 +156,7 @@ class GdiPrinter < CardPrinter
         
         linedata = bmdata[3*row_idx*pic.columns, 3*pic.columns]
         # RGB -> BGR wandeln
-        linedata = linedata.unpack(pack_rgb2bgr).map{|a| a.reverse! }.pack(pack_rgb2bgr)
+        linedata = linedata.reverse!.unpack(pack_rgb2bgr).reverse!.pack(pack_rgb2bgr)
         # Windows-Bitmap erzeugen
         hBmp = Win32api4ruby::Gdi.create_bitmap(pic.columns, 1, 1, 24, linedata)
         

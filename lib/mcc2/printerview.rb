@@ -24,6 +24,7 @@ class Printerview < Dialogbox_printerview
 
     @matrix_file.numColumns = 3
     @matrix_gdi.numColumns = 3
+    @matrix_xid.numColumns = 3
     @combobox_printertype.connect(SEL_COMMAND){ combobox_printertype_changed }
     @textfield_file_save_as.connect(SEL_COMMAND){
       @layout_file.set_attr_value(S_FILEPRINTER_SAVE_AS, @textfield_file_save_as.text)
@@ -38,14 +39,18 @@ class Printerview < Dialogbox_printerview
       @layout_file.set_attr_value(S_FILEPRINTER_DPI, @spinner_file_dpi.value.to_s)
       changed_attributes
     }
-    @combobox_gdi_printer.connect(SEL_COMMAND){
-      prname = @combobox_gdi_printer.getItemData(@combobox_gdi_printer.currentItem)
-      @layout_file.set_attr_value(S_GDIPRINTER_NAME, prname)
-    }
-    @button_gdi_printersetup.connect(SEL_COMMAND){ gdi_printersetup_pressed }
+    @combobox_gdi_printer.connect(SEL_COMMAND){ combobox_changed(@combobox_gdi_printer, S_GDIPRINTER_NAME) }
+    @button_gdi_printersetup.connect(SEL_COMMAND){ gdi_printersetup_pressed(@combobox_gdi_printer, S_GDIPRINTER_INITDATA) }
+    @combobox_xid_printer.connect(SEL_COMMAND){ combobox_changed(@combobox_xid_printer, S_XIDPRINTER_NAME) }
+    @button_xid_printersetup.connect(SEL_COMMAND){ gdi_printersetup_pressed(@combobox_xid_printer, S_XIDPRINTER_INITDATA) }
 
     fill_printertype_list
     combobox_printertype_changed
+  end
+
+  def combobox_changed(combobox, attr)
+    data = combobox.getItemData(combobox.currentItem)
+    @layout_file.set_attr_value(attr, data)
   end
 
   def combobox_printertype_changed
@@ -64,17 +69,15 @@ class Printerview < Dialogbox_printerview
     @tabbook_printers.recalc
   end
 
-  def selected_GdiPrinter
+  def selected_GdiPrinter(combobox=@combobox_gdi_printer, attr=S_GDIPRINTER_NAME)
     begin
       require "win32api4ruby"
       Win32api4ruby::Base.unicode = true
     rescue LoadError, RuntimeError => e
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Die Windoes-Druckerschnittstelle konnte nicht geladen werden.\nBitte stellen Sie sicher, dass das Gem-Paket win32api4ruby installiert ist.\n\n" + e.to_s, 'Abbruch')
-      error_WahlMessage.execute
+      FXMessageBox.error(@parent, MBOX_OK, "Fehler beim Ansprechen der Windows-Druckerschnittstelle" , "Die Windows-Druckerschnittstelle konnte nicht geladen werden.\nBitte stellen Sie sicher, dass das Gem-Paket win32api4ruby installiert ist.\n\n" + e.to_s)
       
     else
-      l = @combobox_gdi_printer
-      l.clearItems
+      combobox.clearItems
       
       flags = Win32api4ruby::Winspool::PRINTER_ENUM_NAME
       name = nil
@@ -82,17 +85,17 @@ class Printerview < Dialogbox_printerview
       infos = Win32api4ruby::Winspool.enum_printers(flags, name, level)
       infos.each{|info|
         prname = info[:pPrinterName].to_s_utf8
-        l.appendItem(prname, prname)
+        combobox.appendItem(prname, prname)
       }
-      prname = @layout_file.get_attr_value(S_GDIPRINTER_NAME)
-      Layout.set_combobox_by_data( l, prname )
+      prname = @layout_file.get_attr_value(attr)
+      Layout.set_combobox_by_data( combobox, prname )
     end
   end
 
-  def gdi_printersetup_pressed
-    if @combobox_gdi_printer.currentItem && @combobox_gdi_printer.numItems>0
-      prname = @combobox_gdi_printer.getItemData(@combobox_gdi_printer.currentItem)
-      initdata = @layout_file.get_gdiprinter_initdata
+  def gdi_printersetup_pressed(combobox, attr)
+    if combobox.currentItem && combobox.numItems>0
+      prname = combobox.getItemData(combobox.currentItem)
+      initdata = @layout_file.get_binary_attr(attr)
 
       flags = Win32api4ruby::Winspool::DM_PROMPT|Win32api4ruby::Winspool::DM_OUT_BUFFER
       flags |= Win32api4ruby::Winspool::DM_IN_BUFFER if initdata
@@ -100,7 +103,7 @@ class Printerview < Dialogbox_printerview
       # open setup-dialog
       devmod = Win32api4ruby::Winspool.document_properties(0, 0, prname.to_s_win32, initdata, flags)
 
-      @layout_file.set_gdiprinter_initdata(devmod[0, devmod.size]) if devmod
+      @layout_file.set_binary_attr(attr, devmod.to_str) if devmod
     end
   end
 
@@ -108,7 +111,7 @@ class Printerview < Dialogbox_printerview
   end
 
   def selected_PrinterXID
-    selected_GdiPrinter
+    selected_GdiPrinter(@combobox_xid_printer, S_XIDPRINTER_NAME)
   end
   
   def deactivate_printer_tabs
