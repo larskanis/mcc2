@@ -215,9 +215,19 @@ class Layout
     filepatterns = filepatterns.join("\n") if filepatterns.kind_of?(Array)
     button.connect(SEL_COMMAND){
       lds = textfield.text
-      ldsd = File.join(File.dirname(lds), '')
-      dest = FileTest.exists?(ldsd) ? ldsd : '.'
-      s = FXFileDialog.getOpenFilename(button, textfield.tipText, dest, filepatterns)
+      if lds =~ /(\.\w+?)$/i
+        ext = $1
+        pat_idx = nil
+        filepatterns.split("\n").each_with_index{|pat, idx|
+          if pat =~ /\*#{ext}/i || pat =~ /(\(\*\))/
+            pat_idx = idx 
+            break
+          end
+        }
+      end
+      
+      dest = FileTest.exists?(lds) ? lds : '.'
+      s = FXFileDialog.getOpenFilename(button, textfield.tipText, lds, filepatterns, pat_idx || 0)
       unless s.empty?
         textfield.setText(s, true)
       end
