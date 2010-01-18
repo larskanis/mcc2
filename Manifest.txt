@@ -68,6 +68,7 @@ lib/mcc2/printer/printer_xid.rb
 lib/mcc2/printer/rmagick_drawer.rb
 lib/mcc2/printerview.rb
 lib/mcc2/printerview_dlg.rb
+lib/mcc2/thread_event_handler.rb
 test/layouts/bart_simpson.png
 test/layouts/cc_ausweise_2009_b.xml
 test/layouts/color_test.xml
