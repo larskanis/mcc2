@@ -39,18 +39,19 @@ class Printerview < Dialogbox_printerview
       @layout_file.set_attr_value(S_FILEPRINTER_DPI, @spinner_file_dpi.value.to_s)
       changed_attributes
     }
-    @combobox_gdi_printer.connect(SEL_COMMAND){ combobox_changed(@combobox_gdi_printer, S_GDIPRINTER_NAME) }
+    @combobox_gdi_printer.connect(SEL_COMMAND){ gdi_combobox_changed(@combobox_gdi_printer, S_GDIPRINTER_NAME, S_GDIPRINTER_INITDATA) }
     @button_gdi_printersetup.connect(SEL_COMMAND){ gdi_printersetup_pressed(@combobox_gdi_printer, S_GDIPRINTER_INITDATA) }
-    @combobox_xid_printer.connect(SEL_COMMAND){ combobox_changed(@combobox_xid_printer, S_XIDPRINTER_NAME) }
+    @combobox_xid_printer.connect(SEL_COMMAND){ gdi_combobox_changed(@combobox_xid_printer, S_XIDPRINTER_NAME, S_XIDPRINTER_INITDATA) }
     @button_xid_printersetup.connect(SEL_COMMAND){ gdi_printersetup_pressed(@combobox_xid_printer, S_XIDPRINTER_INITDATA) }
 
     fill_printertype_list
     combobox_printertype_changed
   end
 
-  def combobox_changed(combobox, attr)
+  def gdi_combobox_changed(combobox, attr, attr_initdata)
     data = combobox.getItemData(combobox.currentItem)
     @layout_file.set_attr_value(attr, data)
+    @layout_file.set_binary_attr(attr_initdata, '')
   end
 
   def combobox_printertype_changed

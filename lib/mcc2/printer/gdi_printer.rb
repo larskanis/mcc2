@@ -64,7 +64,12 @@ class GdiPrinter < CardPrinter
 
     datasourcename = layout_file.get_attr_value(S_DATASOURCE)
     duplex = layout_file.get_attr_value(S_DUPLEX) == S_TRUE
-    initdata = Win32api4ruby::Winspool.create_DEVMOD(device_initdata)
+    
+    if initdata=device_initdata
+      initdata = Win32api4ruby::Winspool.create_DEVMOD(initdata)
+    else
+      raise RmagickDrawer::ResourceNotFoundError, "Bitte richten Sie erst den ausgewählten Drucker ein !"
+    end
 
     # einen DeviceContext für den Drucker erzeugen
     hPrinter = Win32api4ruby::Gdi.create_dc( nil, devicename.to_s_win32, nil, initdata)
