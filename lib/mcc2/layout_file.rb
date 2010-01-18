@@ -65,6 +65,8 @@ class LayoutFile
     add_attr(S_FILEPRINTER_DPI, Integer, 300)
     add_attr(S_GDIPRINTER_NAME, String, '')
     add_attr(S_GDIPRINTER_INITDATA, String, '')
+    add_attr(S_XIDPRINTER_NAME, String, '')
+    add_attr(S_XIDPRINTER_INITDATA, String, '')
   end
  	#---------------------------------------------------------------------------------------------------------
   def xml_doc
