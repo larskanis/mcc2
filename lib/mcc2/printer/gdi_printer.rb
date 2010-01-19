@@ -146,16 +146,20 @@ class GdiPrinter < CardPrinter
         personalize_ms(hPrinter)
       end
 
-      # die Bilddaten für die Seite aufbereiten
+      # flip left to right and raster image
       lpvBits = pic.flop.to_blob{
         self.format='rgb'
         self.depth = 8
       }
-      pack_rgb2bgr = 'a3' * pic.columns
-      block_size = 4 # each scanline has to be DWORD padded
+      # Reversion the image data means:
+      # - turning color order RGB to BGR (needed by win32api)
+      # - mirroring bottom to up
+      # - mirroring left to right
+      lpvBits.reverse!
       
+      block_size = 4 # each scanline has to be DWORD padded
       # split the image in single rows
-      lpvBits = lpvBits.reverse.unpack("a#{pic.columns*3}" * pic.rows).map{|row|
+      lpvBits = lpvBits.unpack("a#{pic.columns*3}" * pic.rows).map{|row|
         # align each row to DWORD
         row << "\0" * (block_size - 1 - (row.length-1 & (block_size-1)))
       }.join
