@@ -163,14 +163,7 @@ class Layout
   
   #
   def load_from_xml(filename)
-    begin
-      layout_file = LayoutFile.load_from_xml(filename)
-    rescue LayoutFile::WrongDataSourceEncoding, LayoutFile::WrongDataSourceType => e
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, e.to_s, 'ok')
-      error_WahlMessage.execute
-      # error_WahlMessage.selection # enthält die Nummer der gewählten Taste
-    end
-    self.layout_file = layout_file
+    self.layout_file = LayoutFile.load_from_xml(filename)
   end
  	#---------------------------------------------------------------------------------------------------------
 

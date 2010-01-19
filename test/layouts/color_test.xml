@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Root>
+<Root version="1">
   <Layout>
     <Magstripe>false</Magstripe>
     <Contact>false</Contact>
@@ -17,6 +17,8 @@
     <gdiprinter_name>BöweMailer-HP LaserJet 8150 Series PCL</gdiprinter_name>
     <fileprinter_dpi>300</fileprinter_dpi>
     <datasource_typ>csv</datasource_typ>
+    <xidprinter_name></xidprinter_name>
+    <xidprinter_initdata></xidprinter_initdata>
   </Layout>
   <Chip_Params>
     <Param_1/>

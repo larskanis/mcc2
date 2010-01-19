@@ -148,12 +148,17 @@ class Mcc2Gui < MainWindow
       return
     end
     child = FXMDIChild.new(@mdiclient, "Layout", nil, nil, 0, 0, 0, 800, 600)
-    child.userData = Layout.new(child, filename)
-    child.create
-    child.show
-    child.recalc
-    child.setFocus
-    @mdiclient.setActiveChild(child)
+    begin
+      child.userData = Layout.new(child, filename)
+    rescue LayoutFile::Error => e
+      FXMessageBox.error(@topwin.app, MBOX_OK, "Fehler beim Laden der Datei", e.to_s)
+    else
+      child.create
+      child.show
+      child.recalc
+      child.setFocus
+      @mdiclient.setActiveChild(child)
+    end
   end
 
   def close_layout

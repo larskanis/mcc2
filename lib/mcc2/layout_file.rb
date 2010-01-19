@@ -23,11 +23,16 @@ module DataMan
 end
 
 class LayoutFile
-  class WrongDataSourceEncoding  < RuntimeError
+  class Error < RuntimeError
   end
-  
-  class WrongDataSourceType  < RuntimeError
+  class WrongDataSourceEncoding  < Error
   end
+  class WrongDataSourceType  < Error
+  end
+  class InvalidFileVersion < Error
+  end
+
+  FILE_VERSION_RANGE = 1..1
   
   attr_accessor :attributes
   attr_accessor :filename
@@ -79,6 +84,7 @@ class LayoutFile
     @xml_doc = LibXML::XML::Document.new
     @xml_doc.encoding = XML::Encoding::UTF_8
     @xml_doc.root = XML::Node.new(S_ROOT)
+    @xml_doc.root['version'] = FILE_VERSION_RANGE.last.to_s
     
     # Layout definieren
     @xml_doc.root << node = XML::Node.new(S_LAYOUT)
@@ -109,6 +115,11 @@ class LayoutFile
     return nil if filename == ""
     
     @xml_doc = LibXML::XML::Document.file(filename, :options => XML::Parser::Options::NOBLANKS )
+    @xml_doc.root['version'] ||= '1'
+    unless FILE_VERSION_RANGE.include?(@xml_doc.root['version'].to_i)
+      raise InvalidFileVersion, "Die Datei #{filename.inspect} ist nach Version #{@xml_doc.root['version'].to_i} aufgebaut, dieses Programm kann aber nur die Versionen #{FILE_VERSION_RANGE.inspect} verarbeiten"
+    end
+
     
     @filename = filename
     # ................................................................................................................................
