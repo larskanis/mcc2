@@ -598,7 +598,7 @@
                "font="=>"Arial|90|40|5|0|0|0",
                "height="=>147,
                "helpText="=>"",
-               "iconListStyle="=>3145728,
+               "iconListStyle="=>4194304,
                "layoutHints="=>3072,
                "scrollStyle="=>0,
                "selBackColor="=>"10,36,106,255",

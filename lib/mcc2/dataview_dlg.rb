@@ -231,7 +231,7 @@ class Dialogbox_dataview
 						w.height=147
 						w.font=FX::Font.new.from_s('Arial|90|40|5|0|0|0').to_FXFont
 						w.y=105
-						w.iconListStyle=3145728
+						w.iconListStyle=4194304
 						w.x=2
 					}
 				}
