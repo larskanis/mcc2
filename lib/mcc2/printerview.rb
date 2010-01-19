@@ -8,8 +8,8 @@ class Printerview < Dialogbox_printerview
 
   PrinterDescription = Struct.new :human_name, :class_name, :tab_idx
   PrinterDescriptions = [
-    PrinterDescription.new( 'Generic-Windows-GDI', 'GdiPrinter', 0),
-    PrinterDescription.new( 'Print-to-file', 'FilePrinter', 1),
+    PrinterDescription.new( 'normaler Windows-Drucker', 'GdiPrinter', 0),
+    PrinterDescription.new( 'als Bild speichern', 'FilePrinter', 1),
     PrinterDescription.new( 'XID-440', 'PrinterXID', 2),
   ]
   
@@ -81,6 +81,7 @@ class Printerview < Dialogbox_printerview
       combobox.clearItems
       
       flags = Win32api4ruby::Winspool::PRINTER_ENUM_NAME
+      flags |= Win32api4ruby::Winspool::PRINTER_ENUM_CONNECTIONS
       name = nil
       level = 4
       infos = Win32api4ruby::Winspool.enum_printers(flags, name, level)
@@ -89,7 +90,7 @@ class Printerview < Dialogbox_printerview
         combobox.appendItem(prname, prname)
       }
       prname = @layout_file.get_attr_value(attr)
-      Layout.set_combobox_by_data( combobox, prname )
+      Layout.set_combobox_by_data( combobox, prname, false )
     end
   end
 
