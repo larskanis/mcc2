@@ -164,7 +164,7 @@ class GdiPrinter < CardPrinter
         row << "\0" * (block_size - 1 - (row.length-1 & (block_size-1)))
       }.join
 
-      xDest, yDest, dwWidth, dwHeight, xSrc, ySrc = 0,0, pic.columns,pic.rows, 0,0
+      xDest, yDest, dwWidth, dwHeight, xSrc, ySrc = mm(draw_pos_x),mm(draw_pos_y), pic.columns,pic.rows, 0,0
       uStartScan, cScanLines = 0, dwHeight
       fuColorUse = Win32api4ruby::Gdi::DIB_RGB_COLORS
 
