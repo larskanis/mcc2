@@ -147,30 +147,36 @@ class GdiPrinter < CardPrinter
       end
 
       # die Bilddaten für die Seite aufbereiten
-      lpvBits = pic.to_blob{
-        self.format='rgba'
+      lpvBits = pic.flop.to_blob{
+        self.format='rgb'
         self.depth = 8
       }
+      pack_rgb2bgr = 'a3' * pic.columns
+      block_size = 4 # each scanline has to be DWORD padded
+      
+      # split the image in single rows
+      lpvBits = lpvBits.reverse.unpack("a#{pic.columns*3}" * pic.rows).map{|row|
+        # align each row to DWORD
+        row << "\0" * (block_size - 1 - (row.length-1 & (block_size-1)))
+      }.join
 
       xDest, yDest, dwWidth, dwHeight, xSrc, ySrc = 0,0, pic.columns,pic.rows, 0,0
       uStartScan, cScanLines = 0, dwHeight
-      fuColorUse = Gdi::DIB_RGB_COLORS
+      fuColorUse = Win32api4ruby::Gdi::DIB_RGB_COLORS
 
-      lpbmi = Gdi.create_BITMAPINFOHEADER
+      lpbmi = Win32api4ruby::Gdi.create_BITMAPINFOHEADER
       lpbmi[:biWidth] = dwWidth
       lpbmi[:biHeight] = dwHeight
       lpbmi[:biPlanes] = 1
-      lpbmi[:biBitCount] = 32
-      lpbmi[:biCompression] = Gdi::BI_RGB
+      lpbmi[:biBitCount] = 24
+      lpbmi[:biCompression] = Win32api4ruby::Gdi::BI_RGB
       lpbmi[:biSizeImage] = lpvBits.length
       lpbmi[:biXPelsPerMeter] = 0
       lpbmi[:biYPelsPerMeter] = 0
       lpbmi[:biClrUsed] = 0
       lpbmi[:biClrImportant] = 0
 
-      tmpDC = Win32api4ruby::Gdi.create_compatible_dc(hPrinter)
-      Gdi.set_dibits_to_device(tmpDC, xDest, yDest, dwWidth, dwHeight, xSrc, ySrc, uStartScan, cScanLines, lpvBits, lpbmi, fuColorUse)
-      Win32api4ruby::Gdi.delete_dc(tmpDC)
+      Win32api4ruby::Gdi.set_dibits_to_device(hPrinter, xDest, yDest, dwWidth, dwHeight, xSrc, ySrc, uStartScan, cScanLines, lpvBits, lpbmi, fuColorUse)
     end
   end
 
