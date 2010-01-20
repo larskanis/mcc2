@@ -88,7 +88,16 @@ class Mcc2Gui < MainWindow
           open_layout(arg)
         end
       }    
-      
+
+      class << @app
+        attr_writer :statusline
+        def show_on_statusline(text)
+          @statusline.text = text
+        end
+      end
+      @app.statusline = @statusbar.statusLine
+      @statusbar.statusLine.textHighlightColor = FXRGB(255,0,0)
+      @statusbar.statusLine.normalText = ''
   end
 
   def connect_with_accel(button, text=nil, &block)

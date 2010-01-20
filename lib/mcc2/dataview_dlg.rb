@@ -45,7 +45,7 @@ class Dialogbox_dataview
 						FX::Label.new(@horizontalframe74){|w|
 							@label409=w
 							w.wdg_name='label409'
-							w.width=65
+							w.width=68
 							w.text="Datenquelle"
 							w.height=18
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
@@ -56,14 +56,14 @@ class Dialogbox_dataview
 						FX::TextField.new(@horizontalframe74){|w|
 							@textfield_datasource=w
 							w.wdg_name='textfield_datasource'
-							w.width=301
+							w.width=298
 							w.height=20
-							w.tipText="Hier wird die Datendatei angegeben. Wenn keine verwendet werden, kann das Feld leer bleiben."
+							w.tipText="Hier wird die Datendatei angegeben. Wenn keine verwendet wird, kann das Feld leer bleiben."
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.numColumns=30
 							w.layoutHints=1024
-							w.x=71
+							w.x=74
 						}
 						FX::Button.new(@horizontalframe74){|w|
 							@button_datasource=w
@@ -71,7 +71,7 @@ class Dialogbox_dataview
 							w.width=20
 							w.text="..."
 							w.height=22
-							w.tipText="Hier klicken, um eine Datei auszuw\303\244hlen. Achtung der Dateiname wird an das Feld hinten angef\303\274gt. Wenn dies nicht erw\303\274nscht ist, dann das Feld vorher leeren."
+							w.tipText="CSV-Datei \303\274ber Dateiauswahl-Dialog laden"
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.layoutHints=256
@@ -82,77 +82,46 @@ class Dialogbox_dataview
 						@matrix_printbuttons=w
 						w.wdg_name='matrix_printbuttons'
 						w.width=394
-						w.height=50
+						w.height=29
 						w.hSpacing=0
 						w.y=24
 						w.numColumns=3
 						w.matrixStyle=131072
 						w.layoutHints=1024
-						w.numRows=2
 						w.vSpacing=0
 						w.x=2
 						FX::Label.new(@matrix_printbuttons){|w|
-							@label766=w
-							w.wdg_name='label766'
-							w.width=44
-							w.text="von/bis"
-							w.height=19
-							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-							w.y=4
-							w.x=4
-						}
-						FX::TextField.new(@matrix_printbuttons){|w|
-							@textfield_print_from=w
-							w.wdg_name='textfield_print_from'
-							w.width=76
-							w.height=21
-							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-							w.y=4
-							w.textFieldTextStyle=1048576
-							w.numColumns=10
-							w.x=72
-						}
-						FX::TextField.new(@matrix_printbuttons){|w|
-							@textfield_print_to=w
-							w.wdg_name='textfield_print_to'
-							w.width=76
-							w.height=21
-							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-							w.y=4
-							w.textFieldTextStyle=1048576
-							w.numColumns=10
-							w.x=222
-						}
-						FX::Label.new(@matrix_printbuttons){|w|
 							@label18=w
 							w.wdg_name='label18'
-							w.width=68
+							w.width=69
 							w.text="Suchbegriff"
-							w.height=19
-							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-							w.y=25
+							w.height=18
+							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+							w.y=4
+							w.layoutHints=256
 							w.x=4
 						}
 						FX::TextField.new(@matrix_printbuttons){|w|
 							@textfield_search=w
 							w.wdg_name='textfield_search'
-							w.width=150
+							w.width=313
 							w.height=21
-							w.tipText="hier einen Text eingeben und auf Suchen klicken. Dann wird in allen angezeigten Feldern gesucht"
+							w.tipText="Durch Eingabe einer Zeichenkette werden alle angezeigten Felder\ndurchsucht und markiert. Durch mehrfaches Dr\303\274cken der Enter-\nTaste wird zur n\303\244chsten Fundstelle gesprungen."
 							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-							w.helpText="hier einen Text eingeben und auf Suchen klicken. Dann wird in allen angezeigten Feldern gesucht"
-							w.y=25
+							w.y=4
 							w.numColumns=10
-							w.layoutHints=256
-							w.x=72
+							w.layoutHints=1025
+							w.x=73
 						}
-						FX::Packer.new(@matrix_printbuttons){|w|
-							@packer55=w
-							w.wdg_name='packer55'
-							w.width=76
-							w.height=21
-							w.y=25
-							w.x=222
+						FX::Label.new(@matrix_printbuttons){|w|
+							@label_selected=w
+							w.wdg_name='label_selected'
+							w.width=4
+							w.text=""
+							w.height=4
+							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+							w.y=4
+							w.x=386
 						}
 					}
 					FX::Matrix.new(@verticalframe_datalist){|w|
@@ -160,7 +129,7 @@ class Dialogbox_dataview
 						w.wdg_name='matrix18'
 						w.width=394
 						w.height=31
-						w.y=74
+						w.y=53
 						w.numColumns=5
 						w.layoutHints=1024
 						w.x=2
@@ -216,9 +185,8 @@ class Dialogbox_dataview
 							w.width=42
 							w.text="Stopp"
 							w.height=23
-							w.tipText="Druck anhalten"
+							w.tipText="Druck nach der aktuellen Karte anhalten"
 							w.font=FX::Font.new.from_s('arial|90|0|0|0|0|0').to_FXFont
-							w.helpText="Druck anhalten"
 							w.y=4
 							w.img='mcc2/images/process-stop.png'
 							w.x=263
@@ -228,9 +196,9 @@ class Dialogbox_dataview
 						@iconlist_data=w
 						w.wdg_name='iconlist_data'
 						w.width=394
-						w.height=147
+						w.height=168
 						w.font=FX::Font.new.from_s('Arial|90|40|5|0|0|0').to_FXFont
-						w.y=105
+						w.y=84
 						w.iconListStyle=4194304
 						w.x=2
 					}
@@ -247,12 +215,9 @@ class Dialogbox_dataview
 	attr_reader :textfield_datasource
 	attr_reader :button_datasource
 	attr_reader :matrix_printbuttons
-	attr_reader :label766
-	attr_reader :textfield_print_from
-	attr_reader :textfield_print_to
 	attr_reader :label18
 	attr_reader :textfield_search
-	attr_reader :packer55
+	attr_reader :label_selected
 	attr_reader :matrix18
 	attr_reader :button_select_all
 	attr_reader :button_deselect_all

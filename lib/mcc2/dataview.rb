@@ -42,9 +42,6 @@ class Dataview < Dialogbox_dataview
     @iconlist_data.connect(SEL_CHANGED){ update_preview }
     @iconlist_data.connect(SEL_SELECTED){ print_list_selection_changed }
     @iconlist_data.connect(SEL_DESELECTED){ print_list_deselected }
-    @text_field_trigger = SEL_COMMAND
-    @textfield_print_from.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, PRINT_FROM) }
-    @textfield_print_to.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, PRINT_TO) }
     # .............................................................................................
     @printing = false
     disable_all_buttons
@@ -75,10 +72,6 @@ class Dataview < Dialogbox_dataview
 
   # This method is called whenever the datasource has changed.
   def dataman= v
-    if v && v.rows
-      @textfield_print_from.text = 1
-      @textfield_print_to.text = v.rows.length.to_s
-    end
     @dataman = v
     fill_datalist_when_visible
   end
@@ -131,6 +124,7 @@ class Dataview < Dialogbox_dataview
       }
 
       update_preview
+      @parent.app.show_on_statusline "#{@dataman.rows.length} Datensätze geladen"
     end
     
   end
@@ -139,22 +133,6 @@ class Dataview < Dialogbox_dataview
     @layout.draw_preview_with_row(row, immediately)
   end
 
-
-
-  def textfield_exit(sender, attr_name)
-    anz = @dataman.rows.length
-    if attr_name == PRINT_FROM || attr_name == PRINT_TO
-      if sender.text.to_i < 1 || sender.text.to_i > anz
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Nur Werte > 0 und <= #{anz} möglich!", 'ok')
-        error_WahlMessage.execute
-        if attr_name == PRINT_FROM
-          sender.text = 1
-        elsif attr_name == PRINT_TO
-          sender.text = anz
-        end
-      end
-    end
-  end
   #---------------------------------------------------------------------------------------------------------
 
   def itemsSelected?
@@ -184,41 +162,46 @@ class Dataview < Dialogbox_dataview
 
   # sucht in allen Feldern nach dem Text, der ins Suchfeld eingegeben wurde
   def search
-    anz_items = @iconlist_data.numItems
-    @iconlist_data.setFocus
-    if anz_items > 0
-      # alte Suchposition sichern, damit nur 1 Runde gesucht wird, falls kein Ergebnis gefunden wird
-      old_search_pos = @search_pos
+    search_text = @textfield_search.text
+    if @old_search_text != search_text
+      @search_pos = -1
+      @old_search_text = search_text
+    end
 
-      while true
-        if @search_pos<anz_items && @iconlist_data.getItemText(@search_pos) =~ /#{@textfield_search.text}/i
-          # wenn gefunden
-          @iconlist_data.setCurrentItem(@search_pos, true)
-          @iconlist_data.makeItemVisible(@search_pos)
-          #~ @iconlist_data.anchorItem = @search_pos
-          @search_pos += 1
-          break
-        end
+    first_finding = true
+    finding_count = 0
+    @iconlist_data.each_with_index{|item, itemidx|
+      if item.text =~ /#{search_text}/i
+        
+        @iconlist_data.selectItem(itemidx)
+        finding_count += 1
 
-        if @search_pos < anz_items -1
-          # solange Tabelelnende noch nicht erreicht
-          @search_pos += 1
-        else
-          # wenn Tabelelnende erreicht, am Anfang fortsetzen
-          @search_pos = 0
-        end
+        if first_finding && @search_pos<itemidx
+          @iconlist_data.setCurrentItem(itemidx, true)
+          @iconlist_data.makeItemVisible(itemidx)
 
-        if @search_pos == old_search_pos
-          # Message ausgeben
-            error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, 'Der Suchbegriff wurde nicht gefunden.', 'ok')
-            error_WahlMessage.execute
-          break
+          @search_pos = itemidx
+          first_finding = false
         end
+      else
+        @iconlist_data.deselectItem(itemidx)
       end
+    }
+    if first_finding
+      @parent.app.show_on_statusline "kein #{"weiterer" if finding_count>0} Datensatz gefunden"
+    else
+      curr_text = "aktueller Datensatz: #{@search_pos}" if @search_pos>=0
+      @parent.app.show_on_statusline "#{finding_count} Datensätze gefunden \n- #{curr_text}"
     end
   end
   #---------------------------------------------------------------------------------------------------------
 
+  def set_label_selected(count=nil)
+    unless count
+      count = @iconlist_data.inject(0){|s,i| s += i.selected? ? 1 : 0 }
+    end
+    @parent.app.show_on_statusline "#{count} Datensätze markiert"
+  end
   #
   def print_list_selection_changed
     enable_disable_print_select_button
@@ -286,12 +269,6 @@ class Dataview < Dialogbox_dataview
 
   #
   def print_cards(only_selected = false)
-    range = check_range
-    unless range
-      return
-    end
-    von = range[0]
-    bis = range[1]
     disable_all_buttons
     @button_stop_printing.enabled = true
     @printing = true
@@ -352,42 +329,6 @@ class Dataview < Dialogbox_dataview
         chip.close_reader if chip
       end # rescue
     }
-  end
-  #---------------------------------------------------------------------------------------------------------
-
-  #
-  def check_range
-    textfield_print_from.text != "" ? von = textfield_print_from.text.to_i - 1 : von = nil
-    textfield_print_to.text != "" ? bis = textfield_print_to.text.to_i - 1 : bis = nil
-
-    # wenn 'bis' gefüllt, aber 'von' nicht gefüllt -> Fehler
-    if von == nil && bis != nil
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Im Textfeld 'Von' ist kein Wert angegeben!", 'ok')
-      error_WahlMessage.execute
-      return nil
-    end
-
-    # wenn 'von' gefüllt, aber 'bis' nicht gefüllt -> Fehler
-    if von != nil && bis == nil
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Im Textfeld 'Bis' ist kein Wert angegeben!", 'ok')
-      error_WahlMessage.execute
-      return nil
-    end
-
-    # wenn 'von' größer als 'bis' -> Fehler
-    if von && bis && von > bis
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Der Wert im Feld 'Von' ist größer als der Wert im Textfeld 'Bis'!", 'ok')
-      error_WahlMessage.execute
-      return nil
-    end
-
-    # wenn 'von' und 'bis' nicht gefüllt  -> kein Fehler
-    if !von && !bis
-      return [0, -1]
-    end
-
-    # ansonsten -> kein Fehler
-    return [von, bis]
   end
   #---------------------------------------------------------------------------------------------------------
 
