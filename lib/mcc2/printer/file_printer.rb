@@ -15,6 +15,12 @@ class FilePrinter < CardPrinter
     super
     @image_idx = 0
   end
+
+  # die Ränder außerhalb der Karte, auf den maximal gedruckt werden darf (für vollflächige Bilder notwendig)
+  def card_margin_left; 0; end
+  def card_margin_right; 0; end
+  def card_margin_top; 0; end
+  def card_margin_bottom; 0; end
   
   #--------------------------------------------------------------------------------------------------------------
 
