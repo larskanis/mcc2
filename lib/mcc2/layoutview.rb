@@ -679,8 +679,8 @@ class Layoutview
       changed_attributes
     elsif action == DELETE
       nn = node.find_first(GOA_NAME).content
-      s = "Wollen Sie wirklich das Objekt '#{nn}' löschen? Dieser Vorgang lässt sich nicht rückgängig machen!"
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, s, ['löschen','abbrechen'])
+      s = "Wollen Sie wirklich das Objekt '#{nn}' löschen?\nDieser Vorgang lässt sich nicht rückgängig machen!"
+      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, s, ['&Löschen','&Abbrechen'])
       error_WahlMessage.execute
       if error_WahlMessage.selection == 0
         @layout_file.delete_object(node)
