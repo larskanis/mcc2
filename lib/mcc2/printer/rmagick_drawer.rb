@@ -198,12 +198,21 @@ module RmagickDrawer
     if data.nil? || data.empty?
       # kein Bildname angegeben -> dieses Objekt ignorieren
     elsif FileTest.file?(data)
-      go_image = Magick::Image.read(data).first
-      if go_image.density =~ /^(\d+)x(\d+)$/
-        density_x, density_y = $1.to_f, $2.to_f
+      self_dpi = self.dpi
+      go_image = Magick::Image.read(data){|attr|
+        # use view DPI for vector-graphics (PDF)
+        attr.density = self_dpi
+      }.first
+      
+      # workaround: ImageMagick uses wrong colors when inserting into RVG
+      if [Magick::ColorSeparationType, Magick::ColorSeparationMatteType].include?(go_image.image_type)
+        go_image.image_type = Magick::TrueColorMatteType
       end
-      im_width = go_width == 0 ? go_image.columns/density_x*25.4 : go_width
-      im_height = go_height == 0 ? go_image.rows/density_y*25.4 : go_height
+      
+      # if object size is not given, try to determine object size based on the DPI of the image
+      im_width = go_width == 0 && go_image.x_resolution>0 ? go_image.columns/go_image.x_resolution*25.4 : go_width
+      im_height = go_height == 0 && go_image.y_resolution>0 ? go_image.rows/go_image.y_resolution*25.4 : go_height
+      
       body.image(go_image, mm(im_width), mm(im_height))
     else
       raise ResourceNotFoundError, "Das Bild '#{data}' konnte nicht gefunden werden. Der Druck wird angehalten."
