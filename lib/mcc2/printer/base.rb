@@ -3,6 +3,13 @@
 module Mcc2
 module Printer
 class Base
+  class PrintError < RuntimeError
+  end
+  class ResourceNotFoundError < PrintError
+  end
+  class InvalidBarcodeData < PrintError
+  end
+
   attr_reader :default_width
   attr_reader :default_height
   attr_reader :default_x_offset

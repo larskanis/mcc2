@@ -35,9 +35,6 @@ end
 
 module Mcc2
 module RmagickDrawer
-  class ResourceNotFoundError < RuntimeError
-  end
-
   #
   def width_with_margins(width)
     width + self.card_margin_left + self.card_margin_right
@@ -181,7 +178,7 @@ module RmagickDrawer
     end
 
     unless @rmfl.index(font) || File.exist?(font)
-      raise ResourceNotFoundError, "Die Schriftart '#{font}' konnte nicht gefunden werden. Der Druck wird angehalten."
+      raise Printer::Base::ResourceNotFoundError, "Die Schriftart '#{font}' konnte nicht gefunden werden. Der Druck wird angehalten."
     end
 
     if data != ""
@@ -215,7 +212,7 @@ module RmagickDrawer
       
       body.image(go_image, mm(im_width), mm(im_height))
     else
-      raise ResourceNotFoundError, "Das Bild '#{data}' konnte nicht gefunden werden. Der Druck wird angehalten."
+      raise Printer::Base::ResourceNotFoundError, "Das Bild '#{data}' konnte nicht gefunden werden. Der Druck wird angehalten."
     end
   end
   
@@ -227,8 +224,7 @@ module RmagickDrawer
     begin
       barcode = Barby.const_get(barcode_typ).new(data)
     rescue => e
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Beim generieren des Barcodes #{data.inspect} it ein Fehler aufgetreten:\n#{ e }", 'ok')
-      error_WahlMessage.execute
+      raise Printer::Base::InvalidBarcodeData, "Fehler beim Generieren des Barcodes #{data.inspect}: #{e}"
     else
       if barcode.respond_to?(:wide_width=)
         barcode.narrow_width = 1

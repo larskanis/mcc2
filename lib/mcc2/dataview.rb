@@ -333,7 +333,7 @@ class Dataview < Dialogbox_dataview
             break
           end
         }
-      rescue RmagickDrawer::ResourceNotFoundError => e
+      rescue Printer::Base::PrintError => e
         event_handler_push{
           FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
         }
