@@ -189,7 +189,7 @@ class Dataview < Dialogbox_dataview
     if first_finding
       @parent.app.show_on_statusline "kein #{"weiterer" if finding_count>0} Datensatz gefunden"
     else
-      curr_text = "aktueller Datensatz: #{@search_pos}" if @search_pos>=0
+      curr_text = "aktueller Datensatz: #{@search_pos+1}" if @search_pos>=0
       @parent.app.show_on_statusline "#{finding_count} Datensätze gefunden \n- #{curr_text}"
     end
   end
