@@ -93,6 +93,7 @@ class Mcc2Gui < MainWindow
         attr_writer :statusline
         def show_on_statusline(text)
           @statusline.text = text
+          @statusline.normalText = text
         end
       end
       @app.statusline = @statusbar.statusLine
