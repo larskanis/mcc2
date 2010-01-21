@@ -14,10 +14,10 @@ class Dialogbox_layoutview
 			w.width=465
 			w.height=321
 			w.shown=true
-			w.y=95
+			w.y=23
 			w.title="Entwurfsansicht"
 			w.layoutHints=768
-			w.x=266
+			w.x=230
 			FX::Splitter.new(@dialogbox_layoutview){|w|
 				@splitter_layoutview=w
 				w.wdg_name='splitter_layoutview'
@@ -132,7 +132,7 @@ class Dialogbox_layoutview
 					FX::TabBook.new(@horizontalframe_attributes){|w|
 						@tabbook_objectattributes=w
 						w.wdg_name='tabbook_objectattributes'
-						w.current=6
+						w.current=3
 						w.width=461
 						w.height=213
 						w.shadowColor=Fox::FXRGBA(128,128,128,255)
@@ -646,8 +646,8 @@ class Dialogbox_layoutview
 							w.tipText="Hier werden alle allgemeinen Einstellungen zum ausgew\303\244hlten Graphik-Objekt durchgef\303\274hrt."
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=6
-							w.x=195
+							w.y=4
+							w.x=193
 						}
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe_object=w
@@ -656,7 +656,6 @@ class Dialogbox_layoutview
 							w.frameStyle=16384
 							w.height=185
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.shown=false
 							w.y=24
 							w.x=4
 							FX::Matrix.new(@verticalframe_object){|w|
@@ -684,14 +683,14 @@ class Dialogbox_layoutview
 								FX::TextField.new(@matrix1){|w|
 									@textfield_name=w
 									w.wdg_name='textfield_name'
-									w.width=200
+									w.width=285
 									w.height=20
 									w.tipText="Der Name ist nur f\303\274r die Anzeige in der Objektliste und bei bestimmten Aktionen notwendig, sollte aber dennoch in einen aussagekr\303\244ftigen Namen ge\303\244ndert werden."
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.y=4
 									w.numColumns=10
-									w.layoutHints=256
+									w.layoutHints=1025
 									w.x=136
 								}
 								FX::Label.new(@matrix1){|w|
@@ -703,7 +702,7 @@ class Dialogbox_layoutview
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.y=4
-									w.x=340
+									w.x=425
 								}
 								FX::Label.new(@matrix1){|w|
 									@label_textblock=w
@@ -719,18 +718,19 @@ class Dialogbox_layoutview
 								FX::VerticalFrame.new(@matrix1){|w|
 									@verticalframe44=w
 									w.wdg_name='verticalframe44'
-									w.width=200
+									w.width=285
 									w.frameStyle=4096
 									w.height=54
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.y=28
+									w.layoutHints=3073
 									w.x=136
 									FX::Text.new(@verticalframe44){|w|
 										@textfield_data=w
 										w.wdg_name='textfield_data'
-										w.width=198
+										w.width=283
 										w.height=52
-										w.tipText="Enth\303\244lt die Daten, welche sp\303\244ter auf der Karte gedruckt werden sollen. In diesem Feld k\303\266nnen mehrerer Zeilen eingegeben werden. Platzhalter aus einer Datenquelle werden nach der Syntax {feldname[anfang,laenge]} gebildet."
+										w.tipText="Enth\303\244lt die Daten, welche sp\303\244ter auf der Karte gedruckt werden sollen.\nIn diesem Feld k\303\266nnen mehrerer Zeilen eingegeben werden.\nPlatzhalter aus einer Datenquelle werden nach der Syntax\n{feldname[anfang,laenge]} gebildet."
 										w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 										w.y=1
 										w.x=1
@@ -742,11 +742,11 @@ class Dialogbox_layoutview
 									w.width=20
 									w.text="..."
 									w.height=22
-									w.tipText="Dieser Button ist momentan noch nicht belegt."
+									w.tipText="F\303\274gt an der Cusor-Position ein Datenfeld\naus der ausgew\303\244lten Datenquelle ein"
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.y=28
-									w.x=340
+									w.x=425
 								}
 								FX::Label.new(@matrix1){|w|
 									@label_textfield=w
@@ -762,15 +762,14 @@ class Dialogbox_layoutview
 								FX::TextField.new(@matrix1){|w|
 									@textfield_data_non_text=w
 									w.wdg_name='textfield_data_non_text'
-									w.width=200
-									w.text="Daten"
+									w.width=285
 									w.height=20
-									w.tipText="Enth\303\244lt die Daten, welche sp\303\244ter auf der Karte gedruckt werden sollen. In diesem Feld kann nur 1 Zeile eingegeben werden. Platzhalter aus einer Datenquelle werden nach der Syntax {feldname[anfang,laenge]} gebildet."
+									w.tipText="Enth\303\244lt die Daten, welche sp\303\244ter auf der Karte gedruckt werden sollen.\nIn diesem Feld kann nur 1 Zeile eingegeben werden.\nPlatzhalter aus einer Datenquelle werden nach der Syntax\n{feldname[anfang,laenge]} gebildet."
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.y=86
 									w.numColumns=10
-									w.layoutHints=1024
+									w.layoutHints=1025
 									w.x=136
 								}
 								FX::Button.new(@matrix1){|w|
@@ -779,11 +778,11 @@ class Dialogbox_layoutview
 									w.width=20
 									w.text="..."
 									w.height=22
-									w.tipText="Mit diesem Button k\303\266nnen Datenfelder aus einer Datenquelle oder ein Dateiname ausgew\303\244hlt werden."
+									w.tipText="F\303\274gt an der Cusor-Position ein Datenfeld\naus der ausgew\303\244lten Datenquelle ein"
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.y=86
-									w.x=340
+									w.x=425
 								}
 								FX::Label.new(@matrix1){|w|
 									@label27=w
@@ -799,26 +798,27 @@ class Dialogbox_layoutview
 								FX::TextField.new(@matrix1){|w|
 									@textfield_sample_data=w
 									w.wdg_name='textfield_sample_data'
-									w.width=200
+									w.width=285
 									w.height=20
-									w.tipText="Dieses Feld ist momentan ohne Funktion."
+									w.tipText="Hier werden die Daten zur Anzeige in der\nEntwurfsansicht eingetragen."
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.y=112
 									w.numColumns=10
-									w.layoutHints=1024
+									w.layoutHints=1025
 									w.x=136
 								}
-								FX::Label.new(@matrix1){|w|
-									@label188=w
-									w.wdg_name='label188'
-									w.width=4
-									w.text=""
-									w.height=4
+								FX::Button.new(@matrix1){|w|
+									@button_sample_data=w
+									w.wdg_name='button_sample_data'
+									w.width=20
+									w.text="..."
+									w.height=22
+									w.tipText="Auswahl einer Datei\n(nur bei Bild-Objekten)"
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.y=112
-									w.x=340
+									w.x=425
 								}
 								FX::Label.new(@matrix1){|w|
 									@label61=w
@@ -828,7 +828,7 @@ class Dialogbox_layoutview
 									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=136
+									w.y=138
 									w.x=4
 								}
 								FX::CheckButton.new(@matrix1){|w|
@@ -840,7 +840,9 @@ class Dialogbox_layoutview
 									w.tipText="Dieser Button ist momentan ohne Funktion."
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=136
+									w.y=138
+									w.layoutHints=1
+									w.state=true
 									w.x=136
 								}
 							}
@@ -855,7 +857,7 @@ class Dialogbox_layoutview
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=6
-							w.x=239
+							w.x=236
 						}
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe_posit=w
@@ -1072,7 +1074,7 @@ class Dialogbox_layoutview
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.y=6
-							w.x=292
+							w.x=289
 						}
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe_font=w
@@ -1292,8 +1294,8 @@ class Dialogbox_layoutview
 							w.height=22
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=4
-							w.x=335
+							w.y=6
+							w.x=334
 						}
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe_barcode=w
@@ -1302,6 +1304,7 @@ class Dialogbox_layoutview
 							w.frameStyle=16384
 							w.height=185
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
+							w.shown=false
 							w.y=24
 							w.vSpacing=4
 							w.x=4
@@ -1607,7 +1610,7 @@ class Dialogbox_layoutview
 	attr_reader :button_enhanced_data_edit
 	attr_reader :label27
 	attr_reader :textfield_sample_data
-	attr_reader :label188
+	attr_reader :button_sample_data
 	attr_reader :label61
 	attr_reader :checkbutton_printlist
 	attr_reader :tabitem_posit

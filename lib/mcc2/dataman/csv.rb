@@ -10,27 +10,32 @@ class CSV < Base
   end
   
   def initialize(datasource)
-    @csv = nil
+    @table = nil
     
     fn = datasource.strip
     return if fn.empty?
     
     raise CanNotOpenFile, "file not found: #{fn.inspect}" unless File.exists?(fn)
-    @csv = FasterCSV.read(fn, :col_sep=>';', :headers=>true)
+    @table = FasterCSV.read(fn, :col_sep=>';', :headers=>true)
     @filename = fn
+  end
+
+  def headers
+    return unless @table
+    @table.headers
   end
   
  	# ---------------------------------------------------------------------------------------------------------
   def row(index)
-    if @csv
-      @csv[index]
+    if @table
+      @table[index]
     else
       nil
     end
   end
  	# ---------------------------------------------------------------------------------------------------------
   def rows
-    @csv
+    @table
   end
 
 end

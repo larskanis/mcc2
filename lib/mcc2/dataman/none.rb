@@ -7,6 +7,9 @@ module DataMan
 class None < Base
   def initialize(datasource)
   end
+  
+  def headers
+  end
 
   # ---------------------------------------------------------------------------------------------------------
   def row(index)

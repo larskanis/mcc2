@@ -100,10 +100,9 @@ class Dataview < Dialogbox_dataview
     if @dataman && @layout_file
       @iconlist_data.appendHeader("Datensatz", nil, 60)
       
-      first_row = @dataman.row(0)
+      first_row = @dataman.headers
       felder = if first_row
-        first_row.map{|e|
-          feldname = e[0].to_s
+        first_row.map{|feldname|
           @iconlist_data.appendHeader(feldname, nil, 100)
           feldname
         }

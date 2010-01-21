@@ -86,8 +86,9 @@ class Layoutview
     @lf.checkbutton_duplex.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_DUPLEX) }
 
     # der Button auf den Objektattributen, mit dem die Daten erweitert bearbeitet werden können (Variablen aus der Datenquelle verwenden usw.)
-    @lf.button_enhanced_data_edit.connect(SEL_COMMAND){ enhanced_data_edit }
-    @lf.button_enhanced_data_text_edit.connect(SEL_COMMAND){ enhanced_data_edit }
+    @lf.button_enhanced_data_edit.connect(SEL_COMMAND){ enhanced_data_edit(@lf.textfield_data_non_text) }
+    @lf.button_enhanced_data_text_edit.connect(SEL_COMMAND){ enhanced_data_edit(@lf.textfield_data) }
+    @lf.button_sample_data.connect(SEL_COMMAND){ button_sample_data }
 
 
     # die Listbox zum Auswählen der Schriftart
@@ -210,15 +211,33 @@ class Layoutview
   end
   #
   
-  def enhanced_data_edit
+  def enhanced_data_edit(textfield)
+    if (dm=@layout.dataman) && dm.headers
+      filemenu = FXMenuPane.new(textfield)
+      dm.headers.each{|col|
+        FXMenuCommand.new(filemenu, col).connect(SEL_COMMAND) {
+          text = textfield.text
+          text[textfield.cursorPos,0] = "{#{col}[0,999]}"
+          textfield.setText(text, true)
+        }
+      }
+      x = textfield.x
+      y = textfield.y
+      filemenu.x, filemenu.y = *textfield.parent.translateCoordinatesTo(@parent, x, y)
+      filemenu.create
+      filemenu.show
+    end
+  end
+
+  def button_sample_data
     objnode = @layout_file.get_objectnode_by_id(@selected_object_id)
     return unless objnode
     typ = objnode.find_first(GOA_TYP).content
     if typ == PICTUREOBJECT
-      s = FXFileDialog.getOpenFilename(@parent, "Bild auswählen", ".", patterns="*", initial=0)
-      @lf.textfield_data_non_text.text = @lf.textfield_data_non_text.text + s
+      Layout.execute_filedialog_for_textfield(@lf.textfield_sample_data, filepatterns='*')
     end
   end
+  
   #---------------------------------------------------------------------------------------------------------
   # die Reaktion, wenn der Status eines Checkbuttons geänderrt wurde
   # setzt das changed-Flag
