@@ -148,8 +148,8 @@ class Dataview < Dialogbox_dataview
   #---------------------------------------------------------------------------------------------------------
 
   #
-  def enable_disable_print_select_button
-    if itemsSelected?
+  def enable_disable_print_select_button(selected=nil)
+    if selected==true || (selected.nil? && itemsSelected?)
       @button_print_selected.enabled = true
       @button_deselect_all.enabled = true
     else
@@ -192,6 +192,7 @@ class Dataview < Dialogbox_dataview
       curr_text = "aktueller Datensatz: #{@search_pos+1}" if @search_pos>=0
       @parent.app.show_on_statusline "#{finding_count} Datensätze gefunden \n- #{curr_text}"
     end
+    enable_disable_print_select_button( finding_count>0 )
   end
   #---------------------------------------------------------------------------------------------------------
 
@@ -273,12 +274,8 @@ class Dataview < Dialogbox_dataview
     @printing = true
     printer = @layout_file.build_printer_instance
     
-    if bis == -1
-      bis = @iconlist_data.numRows - 1
-    end
-
     marked_items = []
-    (von..bis).map{|i|
+    (0 ... @iconlist_data.numRows).map{|i|
       if !only_selected || @iconlist_data.itemSelected?(i)
         marked_items << @iconlist_data.getItemData(i)
       end
@@ -288,7 +285,7 @@ class Dataview < Dialogbox_dataview
       begin
         chip = layout_file.build_chip_instance
       
-        marked_items.each{|item|
+        marked_items.each_with_index{|item, itemidx|
           it = nil
           event_handler_push{
             it = @iconlist_data.findItemByData(item)
@@ -300,6 +297,7 @@ class Dataview < Dialogbox_dataview
           erg = printer.print_card(layout_file, item, chip)
           
           event_handler_push{
+            @parent.app.show_on_statusline "#{itemidx+1} von #{marked_items.length} Datensätzen gedruckt"
             # den aktuellen Datensatz deselektieren, wenn er erfolgreich gedruckt wurde
             @iconlist_data.deselectItem(it) if erg
           }
