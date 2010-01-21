@@ -31,6 +31,14 @@ class Preview < Base
         dial_zoom.value = @parent.app.reg.readRealEntry('settings', 'preview_dpi', 90)
         dial_zoom.range = 1..1000
       end
+      @checkbutton_continous_update = FXCheckButton.new(frame1, 'Vorschau aktuell halten'){|checkbutton|
+        checkbutton.tipText = "Bei Fehlern in den Layout-Einstellungen kann die Vorschau\nabgeschaltet werden, um mehrfache Hinweise zu vermeiden."
+        checkbutton.connect(SEL_COMMAND){
+          draw_preview(true, @row) if checkbutton.checked?
+          @parent.app.reg.writeBoolEntry('settings', 'preview_continous_update', checkbutton.checked? )
+        }
+        checkbutton.checkState = @parent.app.reg.readBoolEntry('settings', 'preview_continous_update', true )
+      }
     end
 
     @image_view = FXImageView.new(parent, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y)
@@ -61,6 +69,7 @@ class Preview < Base
   # die z.Bsp abhängig von anderen Einstellungen sein sollten
   def draw_preview(immediately = false, row = nil)
     @row = row
+    return unless @checkbutton_continous_update.checked?
     
     @last_change = Time.now
     @last_change -= 5 if immediately
