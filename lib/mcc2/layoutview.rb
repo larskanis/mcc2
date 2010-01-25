@@ -295,6 +295,7 @@ class Layoutview
         new_id = obj_arr.index(id)
         go_struct.find(GOA_ID).first.content = new_id.to_s
       }
+      currentItem = @lf.iconlist_objects.currentItem
 
       # changed-Flag setzen
       changed_attributes
@@ -303,12 +304,12 @@ class Layoutview
       fill_objectlist
 
       notify = true
-      if dest == UP
-        @lf.iconlist_objects.setCurrentItem(@selected_object_id - 1, notify)
-        @lf.iconlist_objects.selectItem(@selected_object_id - 1, notify)
-      elsif dest == DOWN
-        @lf.iconlist_objects.setCurrentItem(@selected_object_id + 1, notify)
-        @lf.iconlist_objects.selectItem(@selected_object_id + 1, notify)
+      if currentItem>1 && dest == UP
+        @lf.iconlist_objects.setCurrentItem(currentItem - 1, notify)
+        @lf.iconlist_objects.selectItem(currentItem - 1, notify)
+      elsif currentItem>0 && currentItem<@lf.iconlist_objects.numItems && dest == DOWN
+        @lf.iconlist_objects.setCurrentItem(currentItem + 1, notify)
+        @lf.iconlist_objects.selectItem(currentItem + 1, notify)
       end
     end
   end
