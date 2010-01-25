@@ -68,7 +68,7 @@ class GdiPrinter < CardPrinter
     if initdata=device_initdata
       initdata = Win32api4ruby::Winspool.create_DEVMOD(initdata)
     else
-      raise RmagickDrawer::ResourceNotFoundError, "Bitte richten Sie erst den ausgewählten Drucker ein !"
+      raise Printer::Base::ResourceNotFoundError, "Bitte richten Sie erst den ausgewählten Drucker ein !"
     end
 
     # einen DeviceContext für den Drucker erzeugen
