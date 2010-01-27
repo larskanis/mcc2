@@ -341,14 +341,12 @@ class LayoutFile
   def check_valid_encoding
     datasource_encoding = get_attr_value(S_DATASOURCEENCODING)
     unless DataMan.valid_datasource_encoding?(datasource_encoding)
-      default = @layout_file.attributes[S_DATASOURCEENCODING].attr_value
+      default = 'UTF-8'
       set_attr_value(S_DATASOURCEENCODING, default)
       raise WrongDataSourceEncoding.new(<<-EOTXT)
         Das eingestellte Encoding der Datenquelle '#{datasource_encoding}' ist ungültig.
         
         Gültige Werte sind '#{VALID_ENCODINGS.join("', '")}'.
-        
-        Der Wert wird jetzt auf den Standardwert '#{default}'  gesetzt.
         
         Bitte stellen Sie in den Layouteigenschaften das korrekte Encoding
         ein und speichern Sie die Einstellungen.
