@@ -77,6 +77,12 @@ class Layoutview
     l.appendItem('CSV-Datei', CSV)
     l.appendItem('Datenbank', DATABASE)
     l.connect(SEL_COMMAND){ combobox_datasource_typ_changed }
+    
+    l = @lf.combobox_datasource_encoding
+    l.clearItems
+    VALID_ENCODINGS.each{|enc| l.appendItem(enc, enc) }
+    l.connect(SEL_COMMAND){ combobox_datasource_encoding_changed }
+    
 
     # die Auswahl auf welche Seite das Objekt soll
     @lf.spinner_seiten_nr.connect(SEL_COMMAND){ seiten_nr_changed }
@@ -330,6 +336,13 @@ class Layoutview
   def combobox_datasource_typ_changed
     datatype = @lf.combobox_datasource_typ.getItemData(@lf.combobox_datasource_typ.currentItem)
     @layout_file.set_attr_value(S_DATASOURCETYP, datatype)
+    changed_attributes
+  end
+
+  def combobox_datasource_encoding_changed
+    datatype = @lf.combobox_datasource_encoding.getItemData(@lf.combobox_datasource_encoding.currentItem)
+    @layout_file.set_attr_value(S_DATASOURCEENCODING, datatype)
+    changed_attributes
   end
 
   # die Aktion, welche ausgeführt wird, wenn die Auswahl der Seitennummer geändert wurde, auf welcher das Objekt ausgegeben werden soll
@@ -750,6 +763,7 @@ class Layoutview
     @lf.textfield_page_width.text = @layout_file.get_attr_value(S_WIDTH)
     @lf.textfield_page_height.text = @layout_file.get_attr_value(S_HEIGHT)
     Layout.set_combobox_by_data( @lf.combobox_datasource_typ, @layout_file.get_attr_value(S_DATASOURCETYP))
+    Layout.set_combobox_by_data( @lf.combobox_datasource_encoding, @layout_file.get_attr_value(S_DATASOURCEENCODING))
     set_check_button('checkbutton_contactless', @layout_file.get_attr_value(S_CONTACTLESS), true)
     set_check_button('checkbutton_contact', @layout_file.get_attr_value(S_CONTACT), true)
     set_check_button('checkbutton_magstripe', @layout_file.get_attr_value(S_MAGSTRIPE), true)

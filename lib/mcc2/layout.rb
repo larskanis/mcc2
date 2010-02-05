@@ -102,7 +102,7 @@ class Layout
   end
   #---------------------------------------------------------------------------------------------------------
 
-  DatamanAttributes = [S_DATASOURCE, S_DATASOURCETYP]
+  DatamanAttributes = [S_DATASOURCE, S_DATASOURCETYP, S_DATASOURCEENCODING]
 
   # erzeugt einen Datenmanager abhängig davon welcher Datensourcetyp im Layout definiert ist (momentan DATABASE oder CSV)
   def open_dataman
