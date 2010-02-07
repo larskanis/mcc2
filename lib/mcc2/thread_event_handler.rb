@@ -5,7 +5,9 @@ module ThreadEventHandler
     @event_handler_mutex.synchronize{
       prd.read(1) if prd
       while ev = @event_handler_events.shift
-        ev.call
+				@event_handler_mutex.unlock
+					ev.call
+				@event_handler_mutex.lock
       end
     }
   end
