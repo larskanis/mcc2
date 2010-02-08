@@ -114,23 +114,26 @@ class Dataview < Dialogbox_dataview
       else
         []
       end
-      
-      big_icon = nil
-      mini_icon = nil
-      @dataman.rows.each_with_index{|row, idx|
-        itemtext = "#{idx+1}\t" + felder.map{|feld|
-          data = row[feld]
-          begin
-            to_utf8.iconv(data)
-          rescue => e
-            FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Einlesen der Daten", "Fehler beim Einlesen der Daten in der Zeile #{idx+1}:\n#{e}")
-          end
-        }.join("\t")
-        @iconlist_data.appendItem(itemtext, big_icon, mini_icon, row)
-      }
 
-      update_preview
-      @parent.app.show_on_statusline "#{@dataman.rows.length} Datensätze geladen"
+      rows = @dataman.rows
+      if rows
+        big_icon = nil
+        mini_icon = nil
+        rows.each_with_index{|row, idx|
+          itemtext = "#{idx+1}\t" + felder.map{|feld|
+            data = row[feld]
+            begin
+              to_utf8.iconv(data)
+            rescue => e
+              FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Einlesen der Daten", "Fehler beim Einlesen der Daten in der Zeile #{idx+1}:\n#{e}")
+            end
+          }.join("\t")
+          @iconlist_data.appendItem(itemtext, big_icon, mini_icon, row)
+        }
+
+        update_preview
+        @parent.app.show_on_statusline "#{@dataman.rows.length} Datensätze geladen"
+      end
     end
     
   end
