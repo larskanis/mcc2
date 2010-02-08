@@ -43,7 +43,7 @@ class Preview < Base
     end
 
     @image_view = FXImageView.new(parent, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y)
-
+    
     event_handler_setup
     set_zoom
   end
@@ -133,12 +133,16 @@ class Preview < Base
 			}
 
 			event_handler_push{
-				# das erzeugte Bild als Icon anzeigen
-				fx_image = FXPNGImage.new(@parent.app, data)
-				fx_image.create
-				@image_view.image = fx_image
-				@image_view.show
-				@image_view.recalc
+        # das erzeugte Bild als Icon anzeigen
+        fx_image = FXPNGImage.new(@parent.app, data)
+        fx_image.create
+        begin
+          @image_view.image = fx_image
+          @image_view.show
+          @image_view.recalc
+        rescue RuntimeError => e
+          raise unless e.to_s=~/already released/
+        end
 			}
 		rescue Printer::Base::PrintError => e
 			event_handler_push{
