@@ -1,15 +1,15 @@
+# -*- coding: UTF-8 -*-
+
+require 'thread'
 
 module Mcc2
 module ThreadEventHandler
   def event_handler_pull(prd)
-    @event_handler_mutex.synchronize{
-      prd.read(1) if prd
-      while ev = @event_handler_events.shift
-				@event_handler_mutex.unlock
-				ev.call
-				@event_handler_mutex.lock
-      end
-    }
+    prd.read(1) if prd
+    while !@event_handler_events.empty?
+      ev = @event_handler_events.shift
+      ev.call
+    end
   end
   
   def event_handler_setup
@@ -36,15 +36,12 @@ module ThreadEventHandler
       @parent.app.addInput(prd, Fox::INPUT_READ){ event_handler_pull(prd) }
       @event_handler_pwr = pwr
     end
-    @event_handler_events = []
-    @event_handler_mutex = Mutex.new
+    @event_handler_events = Queue.new
   end
   
   def event_handler_push(&block)
-    @event_handler_mutex.synchronize{
-      @event_handler_events << block
-      @event_handler_pwr.write 'e' if @event_handler_pwr
-    }
+    @event_handler_events << block
+    @event_handler_pwr.write 'e' if @event_handler_pwr
   end
 end
 end
