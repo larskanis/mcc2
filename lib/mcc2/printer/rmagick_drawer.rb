@@ -217,6 +217,8 @@ module RmagickDrawer
   end
   
   def draw_barcode(body, go, go_width, go_height, data, optimized=true)
+    return if data.nil? || data.empty?
+      
     barcode_typ = go.find(GOA_BARCODE_TYP).first.content
     bar_ratio = go.find(GOA_BAR_RATIO).first.content.to_i
 		fontname = go.find(GOA_FONT_TYP).first.content
