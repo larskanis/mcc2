@@ -192,7 +192,7 @@ module RmagickDrawer
   end
 
   def draw_pictureobject(body, go, go_width, go_height, data)
-    if data.nil? || data.empty?
+    if data.nil? || data.empty? || (data.gsub("\\","/") =~ /\/$/)
       # kein Bildname angegeben -> dieses Objekt ignorieren
     elsif FileTest.file?(data)
       self_dpi = self.dpi
