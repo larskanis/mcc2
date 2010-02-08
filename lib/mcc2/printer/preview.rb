@@ -18,6 +18,7 @@ class Preview < Base
     super()
     @parent = parent
     @selected_object_id = nil
+		@thread = nil
 
     FXHorizontalFrame.new(parent, :opts=>LAYOUT_FILL_X) do |frame1|
       @label_zoom = FXLabel.new(frame1, "") do |label_zoom|
@@ -70,73 +71,86 @@ class Preview < Base
   def draw_preview(immediately = false, row = nil)
     @row = row
     return unless @checkbutton_continous_update.checked?
-    
-    @last_change = Time.now
-    @last_change -= 5 if immediately
-    return if @thread && @thread.alive?
 
-    @thread = Thread.new{
-      begin
-        while Time.now-@last_change < 1
-          sleep 0.1
-        end
+		@draw_preview_at = Time.now + (immediately ? 0 : 1)
+		start_preview_timer
+	end
 
-        # allgemeine Einstellungen des Image vornehmen
-        width =  @layout_file.get_attr_value(S_WIDTH).to_f
-        height = @layout_file.get_attr_value(S_HEIGHT).to_f
+	def start_preview_timer
+		return unless @draw_preview_at
+		
+		delay = @draw_preview_at - Time.now
+		@parent.app.addTimeout(delay>0 ? delay*1000 : 0) do
+			if @draw_preview_at && Time.now>=@draw_preview_at && !@thread
+				@draw_preview_at = nil
+				@thread = Thread.new do
+					
+					draw_preview_now(@row)
 
-#        Magick::RVG.dpi = dpi
+					@thread = nil
+					# requeue preview generation, when something was changed
+					# while the thread was running.
+					event_handler_push{
+						start_preview_timer
+					}
+				end
+			end
+		end
+	end
 
-        preview = true
+	def draw_preview_now(row=nil)
+		begin
+			# allgemeine Einstellungen des Image vornehmen
+			width =  @layout_file.get_attr_value(S_WIDTH).to_f
+			height = @layout_file.get_attr_value(S_HEIGHT).to_f
 
-        card_offset = 0
+			preview = true
 
-        image_width = width_with_margins(width)
-        image_height = 2 * height_with_margins(height) + card_offset
+			card_offset = 0
 
-        begin
-          rvg = Magick::RVG.new(mm(image_width), mm(image_height)) do |canvas|
-            draw_pos_x = 0
-            draw_pos_y = 0
-            canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
-              draw(canvas1, @layout_file, preview, @selected_object_id, row, 0) # Seite 1 drucken
-            end
+			image_width = width_with_margins(width)
+			image_height = 2 * height_with_margins(height) + card_offset
 
-            draw_pos_y = height_with_margins(height) + card_offset
-            canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
-              draw(canvas1, @layout_file, preview, @selected_object_id, row, 1) # Seite 2 drucken
-            end
+			rvg = Magick::RVG.new(mm(image_width), mm(image_height)) do |canvas|
+				draw_pos_x = 0
+				draw_pos_y = 0
+				canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
+					draw(canvas1, @layout_file, preview, @selected_object_id, row, 0) # Seite 1 drucken
+				end
 
-            canvas.background_fill = 'white'
-          end
+				draw_pos_y = height_with_margins(height) + card_offset
+				canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
+					draw(canvas1, @layout_file, preview, @selected_object_id, row, 1) # Seite 2 drucken
+				end
 
-          # ..........................................................................................
-          # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
-          data = rvg.draw.to_blob{
-            self.format = 'PNG'
-          }
+				canvas.background_fill = 'white'
+			end
 
-          event_handler_push{
-            # das erzeugte Bild als Icon anzeigen
-            fx_image = FXPNGImage.new(@parent.app, data)
-            fx_image.create
-            @image_view.image = fx_image
-            @image_view.show
-            @image_view.recalc
-          }
-        rescue Printer::Base::PrintError => e
-          event_handler_push{
-            FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
-          }
-          @printing = false
-        end
-      rescue => e
-        DebugTools::write_log_file('draw_preview_thread', DebugTools::unkown_error_message(e))
-        event_handler_push{
-          FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen der Layoutvorschau", DebugTools::unkown_error_message(e))
-        }
-      end # rescue
-    }
+			# ..........................................................................................
+			# Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
+			data = rvg.draw.to_blob{
+				self.format = 'PNG'
+			}
+
+			event_handler_push{
+				# das erzeugte Bild als Icon anzeigen
+				fx_image = FXPNGImage.new(@parent.app, data)
+				fx_image.create
+				@image_view.image = fx_image
+				@image_view.show
+				@image_view.recalc
+			}
+		rescue Printer::Base::PrintError => e
+			event_handler_push{
+				FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
+			}
+			@printing = false
+		rescue => e
+			DebugTools::write_log_file('draw_preview_thread', DebugTools::unkown_error_message(e))
+			event_handler_push{
+				FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen der Layoutvorschau", DebugTools::unkown_error_message(e))
+			}
+		end # rescue
   end
   #---------------------------------------------------------------------------------------------------------
 

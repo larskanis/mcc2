@@ -1,11 +1,13 @@
 
 module Mcc2
 module ThreadEventHandler
-  def event_handler_pop(prd)
+  def event_handler_pull(prd)
     @event_handler_mutex.synchronize{
       prd.read(1) if prd
       while ev = @event_handler_events.shift
-        ev.call
+				@event_handler_mutex.unlock
+				ev.call
+				@event_handler_mutex.lock
       end
     }
   end
@@ -27,11 +29,11 @@ module ThreadEventHandler
     #~ prd, pwr = s1, s2
 
     if RUBY_PLATFORM =~ /win32/i
-      @parent.app.addTimeout(100, :repeat => true){ event_handler_pop(nil) }
+      @parent.app.addTimeout(100, :repeat => true){ event_handler_pull(nil) }
       @event_handler_pwr = nil
     else
       prd, pwr = IO.pipe
-      @parent.app.addInput(prd, Fox::INPUT_READ){ event_handler_pop(prd) }
+      @parent.app.addInput(prd, Fox::INPUT_READ){ event_handler_pull(prd) }
       @event_handler_pwr = pwr
     end
     @event_handler_events = []
