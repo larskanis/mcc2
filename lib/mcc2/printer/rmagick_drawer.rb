@@ -49,6 +49,8 @@ module RmagickDrawer
 
   #
   def draw(canvas, layout_file, preview, selected_object_id, row, page_nr)
+    @magick_font_list ||= Magick.fonts.map{|mf| mf.name }
+    
     width =  layout_file.get_attr_value(S_WIDTH).to_f
     height = layout_file.get_attr_value(S_HEIGHT).to_f
     encoding = layout_file.get_attr_value(S_DATASOURCEENCODING)
@@ -154,8 +156,6 @@ module RmagickDrawer
   end
 
   def draw_textobject(body, go, go_width, go_height, data)
-    @rmfl ||= Magick.fonts.map{|mf| mf.name }
-
     font = go.find(GOA_FONT_TYP).first.content
     if font=='from_file'
       font = go.find(GOA_FONT_FILE).first.content
@@ -177,7 +177,7 @@ module RmagickDrawer
       just = 'start' # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
     end
 
-    unless @rmfl.index(font) || File.exist?(font)
+    unless @magick_font_list.index(font) || File.exist?(font)
       raise Printer::Base::ResourceNotFoundError, "Die Schriftart '#{font}' konnte nicht gefunden werden. Der Druck wird angehalten."
     end
 
@@ -225,6 +225,10 @@ module RmagickDrawer
 		end
 		fontsize = go.find(GOA_FONT_HEIGHT).first.content.to_f
 		font_color = ["#", go.find(GOA_FONT_COLOR).first.content].join
+    
+    unless @magick_font_list.index(fontname) || File.exist?(fontname)
+      raise Printer::Base::ResourceNotFoundError, "Die Schriftart '#{fontname}' konnte nicht gefunden werden. Der Druck wird angehalten."
+    end
 
     body.styles(
 			:fill=>font_color,
