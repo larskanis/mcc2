@@ -160,6 +160,20 @@ class Layout
   end
  	#---------------------------------------------------------------------------------------------------------
   
+  def can_close?
+    return true if !changed
+    
+    res = FXMessageBox.question( @parent.app, MBOX_YES_NO_CANCEL, 'Datei speichern', "Datei #{@layout_file.filename} speichern")
+    case res
+      when MBOX_CLICKED_YES
+        store_to_xml
+        changed ? false : true
+      when MBOX_CLICKED_NO
+        true
+      when MBOX_CLICKED_CANCEL
+        false
+    end
+  end
   
   #
   def load_from_xml(filename)

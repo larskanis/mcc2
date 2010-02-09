@@ -70,7 +70,7 @@ class Mcc2Gui < MainWindow
       connect_with_accel(@mcmd_close){ close_layout }
       connect_with_accel(@mcmd_save){ save_layout }
       connect_with_accel(@mcmd_save_as){ save_layout(true) }
-      connect_with_accel(@mcmd_exit){ @app.stop }
+      connect_with_accel(@mcmd_exit){ @app.stop if can_close? }
       
       @menutitle_object.text = "Neues &Objekt"
       
@@ -83,11 +83,15 @@ class Mcc2Gui < MainWindow
       @topwin.height = 768
       
       # ......................................................................
-      @app.addTimeout(1000) { |sender, sel, ptr|
+      @app.addChore{
         argv.each do |arg|
           open_layout(arg)
         end
       }    
+
+      @topwin.connect(SEL_CLOSE){|sender, selector, data|
+        can_close? ? 0 : 1
+      }
 
       class << @app
         attr_writer :statusline
@@ -99,6 +103,14 @@ class Mcc2Gui < MainWindow
       @app.statusline = @statusbar.statusLine
       @statusbar.statusLine.textHighlightColor = FXRGB(255,0,0)
       @statusbar.statusLine.normalText = ''
+  end
+    
+  def can_close?
+    @mdiclient.each_child{|child|
+      res = child.userData.can_close?
+      return false unless res
+    }
+    true
   end
 
   def connect_with_accel(button, text=nil, &block)
@@ -188,7 +200,7 @@ class Mcc2Gui < MainWindow
       error_WahlMessage.execute
     end
   end
-
+  
   def self.run(argv)
     Thread.abort_on_exception = true
 

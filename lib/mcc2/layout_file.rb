@@ -61,7 +61,7 @@ class LayoutFile
     add_attr(S_Y_OFFSET, Integer, LAYOUT_DEFAULT_Y_OFFSET)
     add_attr(S_DATASOURCE, String, "")
     add_attr(S_DATASOURCETYP, String, NONE)
-    add_attr(S_DATASOURCEENCODING, String, ENC_IBM850)
+    add_attr(S_DATASOURCEENCODING, String, ENC_UTF8)
     add_attr(S_CONTACTLESS, String, FALSE)
     add_attr(S_CONTACT, String, FALSE)
     add_attr(S_MAGSTRIPE, String, FALSE)
