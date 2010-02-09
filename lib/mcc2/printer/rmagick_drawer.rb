@@ -58,7 +58,7 @@ module RmagickDrawer
       canvas.rect(mm(width_with_margins(width-0.5)), mm(height_with_margins(height-0.5)) ).styles(:fill=>'none', :stroke=>'black')
     end
 
-    canvas.g.translate(mm(self.card_margin_left), mm(self.card_margin_top)) do |canvas1|
+    canvas.g.translate(mm(self.card_margin_left).round, mm(self.card_margin_top).round) do |canvas1|
       barcodes = nil
       rx = mm(3)
       # ..........................................................................................
@@ -94,7 +94,7 @@ module RmagickDrawer
             data = go.find_first(GOA_SAMPLE_DATA).content.to_s
           end
 
-          canvas1.g.translate(mm(x), mm(y)).rotate(rotation) do |body|
+          canvas1.g.translate(mm(x).round, mm(y).round).rotate(rotation) do |body|
             # ............................................................................................................
             # die Objekt-spezifischen Attribute ermitteln
             if typ == TEXTOBJECT
@@ -257,7 +257,7 @@ module RmagickDrawer
 
 			just = go.find(GOA_JUSTIFICATION).first.content.downcase
 			xgap = mm(go_width) - xdim*xbars
-			body.translate( {'links'=>0, 'mitte'=>xgap/2, 'rechts'=>xgap}[just] || 0, 0)
+			body.translate( ({'links'=>0, 'mitte'=>xgap/2, 'rechts'=>xgap}[just] || 0).round, 0)
 
       if barcode.two_dimensional?
         x, y = 0, 0
