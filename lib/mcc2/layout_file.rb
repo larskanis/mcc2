@@ -9,6 +9,7 @@ require 'mcc2/layout_objects/picture_object'    # grafische Bild-Objekte
 require 'mcc2/layout_objects/text_object'       # grafische Text-Objekte
 require 'mcc2/layout_objects/box_object'
 require 'mcc2/layout_objects/magstripe_object'
+require 'mcc2/layout_objects/chip_object'
 
 module Mcc2
 module Printer
@@ -217,6 +218,11 @@ class LayoutFile
     MagstripeObject.new(ms_node)
   end
 
+  def chip_object
+    chip_attrs = xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
+    ChipObject.new chip_attrs
+  end
+  
   # holt den Zweig mit den Einstellungen eines graphischen Objekts aus dem XML-File mit der Layout-Spezifikation
   # ==== Parameter
   # +id+:: die Nummer, unter welcher das Attribut gespeichert ist
@@ -249,7 +255,6 @@ class LayoutFile
     }
     go
   end
- 	#---------------------------------------------------------------------------------------------------------
   
   # ermittelt die nächst höhere ID (beeinflusst die Darstellungsebene)
   def get_new_id
@@ -259,8 +264,7 @@ class LayoutFile
     }
     id
   end
- 	#---------------------------------------------------------------------------------------------------------
-  
+
   # liest die ID's der graphischen Objekte aus der Layout-Definition (XML) aus und
   # sortiert sie
   # ==== Return
@@ -270,7 +274,6 @@ class LayoutFile
       go_struct.find(GOA_ID).first.content.to_i
     }.sort!
   end
- 	#---------------------------------------------------------------------------------------------------------
   
   # ermittelt den Inhalt eines Attributes des Layout-Abschnittes
   # ==== Return
@@ -299,7 +302,7 @@ class LayoutFile
     end
     return false
   end
-  #---------------------------------------------------------------------------------------------------------
+
   
   # fügt ein neues Atrtribut zur Liste der Attribute (@attributes) hinzu
   # ==== Parameter
@@ -318,13 +321,10 @@ class LayoutFile
     end
   end
 
- 	#---------------------------------------------------------------------------------------------------------
-  
   #
   def save
     @xml_doc.save(@filename)
   end
- 	#---------------------------------------------------------------------------------------------------------
 
   # überprüft, ob der Wert Datasourcetyp in der Layoutdefinition ein gültiger Wert ist.
   # Wenn nicht, wird ein Fehlerdialog angezeigt und der Standardwert gesetzt und das changed-Flag gesetzt
@@ -333,19 +333,18 @@ class LayoutFile
     unless DataMan.valid_datasourcetyp?(datasourcetyp)
       default = @attributes[S_DATASOURCETYP].attr_value
       set_attr_value(S_DATASOURCETYP, default)
-      raise WrongDataSourceType.new(<<-EOTXT)
+      raise WrongDataSourceType, <<-EOTXT
         Der eingestellte Datenquellentyp '#{datasourcetyp}' ist ungültig.
-        
+
         Gültige Werte sind '#{VALID_DATASOURCES.join("', '")}'.
-        
+
         Der Wert wird jetzt auf den Standardwert '#{default}'  gesetzt.
-        
+
         Bitte stellen Sie in den Layouteigenschaften den korrekten Datenquellentyp
         ein und speichern Sie die Einstellungen.
       EOTXT
     end
   end
- 	#---------------------------------------------------------------------------------------------------------
 
   # überprüft, ob der Wert Datasourcencoding in der Layoutdefinition ein gültiger Wert ist.
   # Wenn nicht, wird ein Fehlerdialog angezeigt und der Standardwert gesetzt und das changed-Flag gesetzt
@@ -412,7 +411,7 @@ class LayoutFile
 
   def build_chip_instance
     chip = if get_attr_value(S_CONTACTLESS) == S_TRUE || get_attr_value(S_CONTACT) == S_TRUE
-      Chip.new
+      chip_object
     else
       nil
     end

@@ -4,8 +4,6 @@
 
 require "rubygems"
 
-require 'mcc2/magstripe'         # Magnetstreifen
-require 'mcc2/chipobjekt'              # Chip
 require 'mcc2/debug_tools'
 require 'barby'
 require 'ftools'

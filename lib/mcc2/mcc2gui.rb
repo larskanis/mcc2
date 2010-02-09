@@ -34,12 +34,9 @@ require 'mcc2/mcc2_mainwin'      # das Main-GUI
 require 'mcc2/cc_dialogbox.rb'
 
 require 'mcc2/layout'            # das Kartenlayout
-require 'mcc2/magstripe'         # Magnetstreifen
-require 'mcc2/chipobjekt'              # Chip
 require 'mcc2/debug_tools'
 
 require 'ftools'
-
 require "tempfile"
 
 File.makedirs("./logs", true)
