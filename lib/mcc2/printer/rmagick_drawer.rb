@@ -245,12 +245,22 @@ module RmagickDrawer
       bcencoding = barcode.encoding
 
 			eancode = %w[EAN13 EAN8].include?(barcode_typ)
-      px_width, px_height = mm(go_width), mm(go_height)-pt(fontsize/5*4)
 			
+      px_width, px_height = mm(go_width), mm(go_height)-pt(fontsize/5*4)
+			xbars, ybars = if barcode.two_dimensional?
+				[bcencoding.first.length, bcencoding.length] if barcode.two_dimensional?
+			else
+				[bcencoding.length, 1]
+			end
+			xdim, ydim = px_width/xbars, px_height/ybars
+			xdim, ydim = xdim.to_i, ydim.to_i if optimized
+
+			just = go.find(GOA_JUSTIFICATION).first.content.downcase
+			xgap = mm(go_width) - xdim*xbars
+			body.translate( {'links'=>0, 'mitte'=>xgap/2, 'rechts'=>xgap}[just] || 0, 0)
+
       if barcode.two_dimensional?
         x, y = 0, 0
-        xdim, ydim = px_width / bcencoding.first.length, px_height / bcencoding.length
-        xdim, ydim = xdim.to_i, ydim.to_i if optimized
         bcencoding.each do |line|
           line.split(//).map{|c| c == '1' }.each do |bar|
             body.rect([0,xdim].max, [0,ydim].max, x, y) if bar
@@ -261,12 +271,10 @@ module RmagickDrawer
         end
       else
         x = 0
-        xdim = px_width / bcencoding.length
-        xdim = xdim.to_i if optimized
         bcencoding.split(//).map{|c| c == '1' }.each_with_index do |bar, bidx|
   #         puts "#{xdim}, #{px_height}, #{x}" if bar
 					h = px_height
-					if eancode && (bidx<=3 || bidx>=bcencoding.length-3 || (bidx-bcencoding.length/2).abs<=1)
+					if eancode && (bidx<=3 || bidx>=xbars-3 || (bidx-xbars/2).abs<=1)
 						h += pt(fontsize/10*4)
 					end
           body.rect([0,xdim].max, h, x, 0) if bar
@@ -284,24 +292,11 @@ module RmagickDrawer
 					[data2[0,1], data2[1,6], data2[7,6]]
 				end
 				body.text(0, mm(go_height), data3[0]).styles(:text_anchor => 'end') if data[0]
-				body.text(xdim * (bcencoding.length/4.0+1), mm(go_height), data3[1]).styles(:text_anchor => 'middle')
-				body.text(xdim * (bcencoding.length/4.0*3.0-1), mm(go_height), data3[2]).styles(:text_anchor => 'middle')
+				body.text(xdim * (xbars/4.0+1), mm(go_height), data3[1]).styles(:text_anchor => 'middle')
+				body.text(xdim * (xbars/4.0*3.0-1), mm(go_height), data3[2]).styles(:text_anchor => 'middle')
 			else
-				body.text(xdim * (bcencoding.length/2.0), mm(go_height), data).styles(:text_anchor => 'middle')
+				body.text(xdim * (xbars/2.0), mm(go_height), data).styles(:text_anchor => 'middle')
 			end
-
-			
-
-  #               just = go.find(GOA_JUSTIFICATION).first.content.downcase
-  #               if just == "links"
-  #                 just = EAlLeft
-  #               elsif just == "mitte"
-  #                 just = EAlCenter
-  #               elsif just == "rechts"
-  #                 just = EAlRight
-  #               else
-  #                 just = EAlCenter # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
-  #               end
     end
   end
 
