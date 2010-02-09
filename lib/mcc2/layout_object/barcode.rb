@@ -1,10 +1,11 @@
 # -*- coding: UTF-8 -*-
 
-require 'mcc2/layout_objects/graphic_object'
+require 'mcc2/layout_object/graphic'
 
 
 module Mcc2
-class BarcodeObject < GraphicObject
+module LayoutObject
+class Barcode < Graphic
   def initialize(xml_elem=nil)
     super
     @go_attributes[GOA_TYP].attr_value = BARCODEOBJECT
@@ -23,6 +24,7 @@ class BarcodeObject < GraphicObject
     add_attr(@go_attributes, GOA_BAR_RATIO, Integer, 2)
     add_attr(@go_attributes, GOA_JUSTIFICATION, Integer, 0)
   end
+end
 end
 end
 

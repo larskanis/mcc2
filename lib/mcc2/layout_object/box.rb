@@ -1,9 +1,10 @@
 # -*- coding: UTF-8 -*-
 
-require 'mcc2/layout_objects/graphic_object'
+require 'mcc2/layout_object/graphic'
 
 module Mcc2
-class BoxObject < GraphicObject
+module LayoutObject
+class Box < Graphic
   def initialize(xml_elem=nil)
     super
     @go_attributes[GOA_TYP].attr_value = BOXOBJECT
@@ -14,5 +15,6 @@ class BoxObject < GraphicObject
     add_attr(@go_attributes, GOA_BORDER_WIDTH, Float, 1)
     add_attr(@go_attributes, GOA_CORNER_RADIUS, Float, 4)
   end
+end
 end
 end

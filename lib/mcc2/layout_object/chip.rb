@@ -5,8 +5,9 @@ require 'mcc2/constants'
 require 'mcc2/dataman/base'
 
 module Mcc2
+module LayoutObject
 # diese Klasse ist für die Personalisierung der Chips verantwortlich
-class ChipObject
+class Chip
   class InvalidScriptType < RuntimeError
   end
   
@@ -72,6 +73,7 @@ class ChipObject
   
 end
 end
+end
 
 if __FILE__ == $0
   #~ system("ruby mcc2.rb #{ARGV}")
@@ -79,7 +81,7 @@ if __FILE__ == $0
   
   chip = Chip.new
   
-  params = [nil]*chip.anz_params  
+  params = [nil]*chip.anz_params
   params[0] = 'ohne'
   params[3] = '31382' # Batch
   params[4] = '413' # Card
@@ -95,5 +97,4 @@ if __FILE__ == $0
   chip_obj.personalize(params)
   chip_obj.close
   
-
 end

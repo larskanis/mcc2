@@ -1,9 +1,10 @@
 # -*- coding: UTF-8 -*-
 
-require 'mcc2/layout_objects/go_attribut'       # die Attribut-Klasse für die grafischen Objekte
+require 'mcc2/layout_object/go_attribut'       # die Attribut-Klasse für die grafischen Objekte
 
 module Mcc2
-class GraphicObject
+module LayoutObject
+class Graphic
   attr_accessor :go_attributes
   def initialize(xml_elem=nil)
     @go_attributes = {}
@@ -35,16 +36,12 @@ class GraphicObject
   end
 
   def self.get_object_by_typ(typ, xml_elem=nil)
-    if typ == TEXTOBJECT then TextObject.new xml_elem
-    elsif typ == BARCODEOBJECT then BarcodeObject.new xml_elem
-    elsif typ == PICTUREOBJECT then PictureObject.new xml_elem
-    elsif typ == BOXOBJECT then BoxObject.new xml_elem
+    if typ == TEXTOBJECT then Text.new xml_elem
+    elsif typ == BARCODEOBJECT then Barcode.new xml_elem
+    elsif typ == PICTUREOBJECT then Picture.new xml_elem
+    elsif typ == BOXOBJECT then Box.new xml_elem
     end
   end
 end
 end
-
-if __FILE__ == $0
-  go = GraphicObject.new
-  go.go_attributes.each{|e| p e}
 end

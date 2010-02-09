@@ -2,14 +2,14 @@
 
 require 'xml'               # für die Layout-Datei
 require 'mcc2/constants'
-require 'mcc2/layout_objects/go_attribut'
-require 'mcc2/layout_objects/graphic_object'    # die Basisklasse für die grafischen Objekte
-require 'mcc2/layout_objects/barcode_object'    # grafische Barcode-Objekte
-require 'mcc2/layout_objects/picture_object'    # grafische Bild-Objekte
-require 'mcc2/layout_objects/text_object'       # grafische Text-Objekte
-require 'mcc2/layout_objects/box_object'
-require 'mcc2/layout_objects/magstripe_object'
-require 'mcc2/layout_objects/chip_object'
+require 'mcc2/layout_object/go_attribut'
+require 'mcc2/layout_object/graphic'    # die Basisklasse für die grafischen Objekte
+require 'mcc2/layout_object/barcode'    # grafische Barcode-Objekte
+require 'mcc2/layout_object/picture'    # grafische Bild-Objekte
+require 'mcc2/layout_object/text'       # grafische Text-Objekte
+require 'mcc2/layout_object/box'
+require 'mcc2/layout_object/magstripe'
+require 'mcc2/layout_object/chip'
 
 module Mcc2
 module Printer
@@ -168,7 +168,7 @@ class LayoutFile
     # kontrollieren, ob alle Nodes der GraphicObjects existieren, ansonsten anlegen und als 'changed' markieren
     @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
       typ = go_struct.find(GOA_TYP).first.content
-      go = GraphicObject.get_object_by_typ(typ)
+      go = LayoutObject::Graphic.get_object_by_typ(typ)
       go.go_attributes.each_pair{|go_attrname, go_attr|
         element = go_struct.find_first(go_attr.attr_name)
         unless element
@@ -210,17 +210,17 @@ class LayoutFile
 			"//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
     typ = go.find_first(GOA_TYP).content
     
-		GraphicObject.get_object_by_typ(typ, go)
+		LayoutObject::Graphic.get_object_by_typ(typ, go)
 	end
 
   def magstripe_object
     ms_node = xml_doc.find_first(S_MAGSTRIPEPARAMS)
-    MagstripeObject.new(ms_node)
+    LayoutObject::Magstripe.new(ms_node)
   end
 
   def chip_object
     chip_attrs = xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
-    ChipObject.new chip_attrs
+    LayoutObject::Chip.new chip_attrs
   end
   
   # holt den Zweig mit den Einstellungen eines graphischen Objekts aus dem XML-File mit der Layout-Spezifikation
@@ -241,7 +241,7 @@ class LayoutFile
   # ==== Return
   # Object [XML-Node]
   def  add_object(typ)
-    o = GraphicObject.get_object_by_typ(typ)
+    o = LayoutObject::Graphic.get_object_by_typ(typ)
     id = get_new_id
  		node = @xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}")
     node << go = XML::Node.new(GRAPHICOBJECT)
@@ -310,7 +310,7 @@ class LayoutFile
   # +typ+::     der Typ 
   # +default+:: der Wert, mit dem das Attribut vorinitialisiert werden soll
   def add_attr(name, typ, default)
-    attr = GO_Attribut.new(name, typ, default) 
+    attr = LayoutObject::GO_Attribut.new(name, typ, default) 
     @attributes[attr.attr_name] = attr
   end
 

@@ -2,6 +2,7 @@
 
 # GraphicObject-Attribut
 module Mcc2
+module LayoutObject
 class GO_Attribut 
   attr_accessor :attr_name
   attr_accessor :attr_typ
@@ -12,6 +13,6 @@ class GO_Attribut
     @attr_typ = attr_typ
     @attr_value = attr_default_value
   end
-  
+end
 end
 end
