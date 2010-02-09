@@ -263,7 +263,7 @@ module RmagickDrawer
         x, y = 0, 0
         bcencoding.each do |line|
           line.split(//).map{|c| c == '1' }.each do |bar|
-            body.rect([0,xdim].max, [0,ydim].max, x, y) if bar
+            body.rect(xdim, ydim, x, y) if bar
             x += xdim
           end
           x = 0
@@ -277,7 +277,7 @@ module RmagickDrawer
 					if eancode && (bidx<=3 || bidx>=xbars-3 || (bidx-xbars/2).abs<=1)
 						h += pt(fontsize/10*4)
 					end
-          body.rect([0,xdim].max, h, x, 0) if bar
+          body.rect(xdim, h, x, 0) if bar
           x += xdim
         end
       end
