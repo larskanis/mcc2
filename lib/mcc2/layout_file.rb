@@ -8,6 +8,7 @@ require 'mcc2/layout_objects/barcode_object'    # grafische Barcode-Objekte
 require 'mcc2/layout_objects/picture_object'    # grafische Bild-Objekte
 require 'mcc2/layout_objects/text_object'       # grafische Text-Objekte
 require 'mcc2/layout_objects/box_object'
+require 'mcc2/layout_objects/magstripe_object'
 
 module Mcc2
 module Printer
@@ -202,9 +203,20 @@ class LayoutFile
       @changed = true
     end
   end
-  
-	#---------------------------------------------------------------------------------------------------------
-  
+
+	def find_graphic_object_by_id(id)
+		go = xml_doc.find_first(
+			"//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
+    typ = go.find_first(GOA_TYP).content
+    
+		GraphicObject.get_object_by_typ(typ, go)
+	end
+
+  def magstripe_object
+    ms_node = xml_doc.find_first(S_MAGSTRIPEPARAMS)
+    MagstripeObject.new(ms_node)
+  end
+
   # holt den Zweig mit den Einstellungen eines graphischen Objekts aus dem XML-File mit der Layout-Spezifikation
   # ==== Parameter
   # +id+:: die Nummer, unter welcher das Attribut gespeichert ist
@@ -216,7 +228,6 @@ class LayoutFile
     }
     nil
   end
-	#---------------------------------------------------------------------------------------------------------
 
   # Fügt ein Graphik-Objekt zur Layout-Definition hinzu
   # ==== Parameter

@@ -5,7 +5,7 @@ require 'mcc2/layout_objects/graphic_object'
 
 module Mcc2
 class BarcodeObject < GraphicObject
-  def initialize
+  def initialize(xml_elem=nil)
     super
     @go_attributes[GOA_TYP].attr_value = BARCODEOBJECT
     add_attr(@go_attributes, GOA_WIDTH, Integer, 30)
