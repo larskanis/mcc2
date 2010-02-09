@@ -162,7 +162,6 @@ module RmagickDrawer
     end
     fontsize = go[GOA_FONT_HEIGHT].to_f
     font_color = ["#", go[GOA_FONT_COLOR]].join
-#              font_color = Page.check_color_definition(font_color)
     just = go[GOA_JUSTIFICATION].downcase
     if just == "links"
       text_x = 0
@@ -315,27 +314,5 @@ module RmagickDrawer
     body.rect(mm(go_width), mm(go_height) ).round(mm(corner_radius)).styles(:fill=>'#'+fill_color, :stroke=>'#'+border_color, :stroke_width=>mm(border_width))
   end
 
-  def self.check_color_definition(color)
-    # erstellt einen Dummy-Text, um zu testen, ob die Farbdefinition gültig ist
-    # liefert die Farbe zurück, wenn sie gültig ist, ansonsten liefert sie vorläufig schwarz als Standard zurück
-
-    begin
-      rvg = Magick::RVG.new(1, 1) do |canvas|
-        canvas.text(1, 1, "1").styles(
-          :font_family => "Arial",
-          :font_size => 10,
-          :fill => color,
-          :font_weight=>'normal',
-          :font_style=>'normal')
-      end
-      rvg.draw.to_blob{
-        self.format = 'PNG'
-      }
-    rescue => e
-      return "#000000FF"
-    end
-    color
-  end
-  
 end
 end
