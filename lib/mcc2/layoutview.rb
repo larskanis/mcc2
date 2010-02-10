@@ -101,7 +101,7 @@ class Layoutview
     @lf.listbox_fonts.connect(SEL_COMMAND){ |sender, sel, event| sel_list_box_changed(sender) }
     @lf.textfield_font_file.connect(SEL_COMMAND){ |sender, sel, event| textfield_exit(sender, GOA_FONT_FILE) }
     Layout.connect_filebutton_to_textfield( @lf.button_fontfile_select, @lf.textfield_font_file,
-          ["Truetype/Opentype font (*.ttf, *.otf)",  "PS-type1 font (*.pfb)", "All Files (*)"]
+          ["Truetype/Opentype font (*.ttf,*.otf)",  "PS-type1 font (*.pfb)", "All Files (*)"]
     )
     @lf.textfield_fontsize.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_FONT_HEIGHT) }
 
