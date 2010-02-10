@@ -646,6 +646,7 @@ class Layoutview
     # den gewählten Parameter in den entsprechenden Listen markieren
     set_listbox_value('listbox_fonts', font_typ)
     @lf.textfield_font_file.enabled = font_typ=='from_file'
+    @lf.textfield_font_file.text = node.find_first(GOA_FONT_FILE).content
   end
   #---------------------------------------------------------------------------------------------------------
 
