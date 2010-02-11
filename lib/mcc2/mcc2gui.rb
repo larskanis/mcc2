@@ -36,10 +36,7 @@ require 'mcc2/cc_dialogbox.rb'
 require 'mcc2/layout'            # das Kartenlayout
 require 'mcc2/debug_tools'
 
-require 'ftools'
 require "tempfile"
-
-File.makedirs("./logs", true)
 
 # *****************************************************************************
 module Mcc2
@@ -213,7 +210,6 @@ class Mcc2Gui < MainWindow
     rescue Exception => e
       file = File.basename(__FILE__, ".rb")
       DebugTools.write_log_file('main', DebugTools.unkown_error_message(e))
-      puts(DebugTools.unkown_error_message(e))
       exit -1
     end
 
