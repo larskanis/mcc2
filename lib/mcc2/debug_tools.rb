@@ -11,7 +11,6 @@ module DebugTools
     f_out.puts "."*50
     f_out.puts message
   end
- 	#---------------------------------------------------------------------------------------------------------
   
   def self.unkown_error_message(e)
     (["Es ist leider ein Fehler aufgetreten:\n\n#{e.to_s} #{e.class}\n"]+e.backtrace).join("\n")
