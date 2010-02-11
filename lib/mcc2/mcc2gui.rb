@@ -180,17 +180,6 @@ class Mcc2Gui < MainWindow
       child.close
     end
   end
-	#---------------------------------------------------------------------------------------------------------
-  
-  def print_cards
-    child = @mdiclient.activeChild
-    if child
-      child.userData.print_cards
-    else
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@app, "Wählen Sie erst ein Layout und dann die Aktion, die Sie ausführen wollen!", 'ok')
-      error_WahlMessage.execute
-    end
-  end
   
   def self.run(argv)
     Thread.abort_on_exception = true
