@@ -28,7 +28,7 @@ module ThreadEventHandler
     #~ s1.connect(*s2.addr.values_at(3,1))
     #~ prd, pwr = s1, s2
 
-    if RUBY_PLATFORM =~ /win32/i
+    if RUBY_PLATFORM =~ /win32/i || RUBY_VERSION >= '1.9'
       @parent.app.addTimeout(100, :repeat => true){ event_handler_pull(nil) }
       @event_handler_pwr = nil
     else

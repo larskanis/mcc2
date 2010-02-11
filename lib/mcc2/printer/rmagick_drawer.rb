@@ -195,9 +195,9 @@ module RmagickDrawer
       # kein Bildname angegeben -> dieses Objekt ignorieren
     elsif FileTest.file?(data)
       self_dpi = self.dpi
-      go_image = Magick::Image.read(data){|attr|
+      go_image = Magick::Image.read(data){
         # use view DPI for vector-graphics (PDF)
-        attr.density = self_dpi
+        self.density = self_dpi
       }.first
       
       # workaround: ImageMagick uses wrong colors when inserting into RVG
@@ -290,7 +290,7 @@ module RmagickDrawer
 			# Barcode - text
 
 			if eancode
-				data2 = barcode.numbers_with_checksum
+				data2 = barcode.numbers_with_checksum.join
 				data3 = if barcode_typ=='EAN8'
 					[nil, data2[0,4], data2[4,4]]
 				elsif barcode_typ=='EAN13'

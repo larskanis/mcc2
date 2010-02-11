@@ -129,7 +129,7 @@ class Layoutview
     @lf.textfield_spur3.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_MSSPUR3) }
 
     @barcodes = if Object.const_defined?(:Barby)
-      Barby.constants.sort.select{|c| Barby.const_get(c).ancestors.include?(Barby::Barcode)} - %w[Barcode Barcode1D Barcode2D]
+      Barby.constants.map{|c| c.to_s }.sort.select{|c| Barby.const_get(c).ancestors.include?(Barby::Barcode)} - %w[Barcode Barcode1D Barcode2D]
     else
       []
     end
