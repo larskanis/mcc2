@@ -80,7 +80,11 @@ class Layout
       end
       splitter1.setSplit(0, 400)
     end
-
+    
+    @parent.connect(SEL_CLOSE){|sender, selector, data|
+      can_close? ? 0 : 1
+    }
+    
     if filename
       load_from_xml(filename)
       @changed = false
@@ -163,7 +167,7 @@ class Layout
   def can_close?
     return true if !changed
     
-    res = FXMessageBox.question( @parent.app, MBOX_YES_NO_CANCEL, 'Datei speichern', "Datei #{@layout_file.filename} speichern")
+    res = FXMessageBox.question( @parent.app, MBOX_YES_NO_CANCEL, 'Datei speichern', "Datei #{@layout_file.filename} speichern ?")
     case res
       when MBOX_CLICKED_YES
         store_to_xml

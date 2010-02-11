@@ -182,7 +182,7 @@ class Mcc2Gui < MainWindow
 
   def close_layout
     child = @mdiclient.activeChild
-    if child
+    if child && child.userData.can_close?
       child.close
     end
   end
