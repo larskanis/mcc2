@@ -13,7 +13,6 @@ module DataMan
   def self.valid_datasource_encoding?(encoding)
     VALID_ENCODINGS.index(encoding)
   end
-  #---------------------------------------------------------------------------------------------------------
 
   # ermittelt, ob der übergebene String eine erlaubte Datenquelle ist
   # === Return
@@ -23,7 +22,6 @@ module DataMan
   def self.valid_datasourcetyp?(datasource)
     VALID_DATASOURCES.index(datasource)
   end
-  #---------------------------------------------------------------------------------------------------------
 
   # === Paramter
   # +text+::        der zu konvertierende Text
@@ -35,7 +33,6 @@ module DataMan
     encoding = Iconv.new('utf-8', encoding)
     encoding.iconv(text)
   end
-  #---------------------------------------------------------------------------------------------------------
 
   # ersetzt die Felder in data, welche dem Muster {feldname[pos,anz]} entsprechen, durch ihren Inhalt
   # === Paramter
