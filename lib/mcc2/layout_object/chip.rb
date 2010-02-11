@@ -52,12 +52,10 @@ class Chip
     # die Chip-Parameter auslesen
     # erst ein leeres Array anlegen
     params = []
-    encoding = layout_file.get_attr_value(S_DATASOURCEENCODING)
-    
     # un dann die Parameter aus dem XML auslesen und entsprechend ihrer  ID in das Array schreiben
     (1 .. CHIPPARAM_FIELD_COUNT).each{|i|
       attr_name = "#{S_PARAM}_#{i}"
-      params << DataMan.replace_variables(self[attr_name], row, encoding)
+      params << DataMan.replace_variables(self[attr_name], row)
     }
     
     # die Personalisierung durchführen

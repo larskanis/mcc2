@@ -53,7 +53,6 @@ module RmagickDrawer
     
     width =  layout_file.get_attr_value(S_WIDTH).to_f
     height = layout_file.get_attr_value(S_HEIGHT).to_f
-    encoding = layout_file.get_attr_value(S_DATASOURCEENCODING)
     if preview
       rx = 10
       # todo -0.5, damit die rechten und unteren Ränder zu sehen sind, jetzt sitzt die Karte aber unsymetrisch auf dem Rechteck
@@ -90,7 +89,7 @@ module RmagickDrawer
           if !go[GOA_DATA]
             data = nil
           elsif row
-            data = DataMan.replace_variables(go[GOA_DATA], row, encoding)
+            data = DataMan.replace_variables(go[GOA_DATA], row)
           elsif go[GOA_DATA]
             data_nosub = go[GOA_DATA].to_s
             data = go[GOA_SAMPLE_DATA].to_s

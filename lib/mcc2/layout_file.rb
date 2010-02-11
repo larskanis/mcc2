@@ -353,7 +353,7 @@ class LayoutFile
     unless DataMan.valid_datasource_encoding?(datasource_encoding)
       default = 'UTF-8'
       set_attr_value(S_DATASOURCEENCODING, default)
-      raise WrongDataSourceEncoding.new(<<-EOTXT)
+      raise WrongDataSourceEncoding, <<-EOTXT
         Das eingestellte Encoding der Datenquelle '#{datasource_encoding}' ist ungültig.
         
         Gültige Werte sind '#{VALID_ENCODINGS.join("', '")}'.
@@ -395,11 +395,12 @@ class LayoutFile
   def build_dataman_instance
     datamantyp =  get_attr_value(S_DATASOURCETYP)
     datasource =  get_attr_value(S_DATASOURCE)
+    encoding =  get_attr_value(S_DATASOURCEENCODING)
 
     dataman = if datamantyp == DATABASE
       DataMan::Database.new(datasource)
     elsif datamantyp == CSV
-      DataMan::CSV.new(datasource)
+      DataMan::CSV.new(datasource, encoding)
     elsif datamantyp == NONE
       DataMan::None.new(datasource)
     else
