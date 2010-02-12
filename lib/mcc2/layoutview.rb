@@ -748,7 +748,7 @@ class Layoutview
     if @layout_file
       # Array mit sortierten Objekt-ID's holen
       @layout_file.sorted_id_list.each{|id|
-        go = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
+        go = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[.='#{id.to_s}']").parent
         name = go.find(GOA_NAME).first.content
         typ = go.find(GOA_TYP).first.content
         @lf.iconlist_objects.appendItem([id, name, typ].join("\t"), nil, nil, id)

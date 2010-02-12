@@ -74,7 +74,7 @@ module RmagickDrawer
       # Text-Objekte
       sorted_id_list = layout_file.sorted_id_list
       sorted_id_list.each{|id|
-        go = layout_file.xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
+        go = layout_file.xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[.='#{id.to_s}']").parent
         # nur die Objekte zeichnen, die auf diese Seite sollen
         if go.find(GOA_PAGE_NR).first.content.to_i == page_nr
 
