@@ -37,7 +37,11 @@ class Chip
   # +xml_doc+::   die XML-Struktur mit den Definitionen des Kartenlayouts
   # +row+::       ein Datensatz im FasteCSV-Format
   def pers_card(layout_file, row)
-    require 'libs/chipcoding/chipbase'
+    require 'rubygems'
+    require 'simple_logger'
+    require 'simple_logger/compat'
+    require 'chipcoding/message_box'
+    require 'chipcoding/class_loader'
     
     p "pers_card #{row.inspect}"
     # die Chip-Parameter auslesen
