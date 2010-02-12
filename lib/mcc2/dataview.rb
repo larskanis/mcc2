@@ -100,16 +100,11 @@ class Dataview < Dialogbox_dataview
     if @dataman && @layout_file
       @iconlist_data.appendHeader("Datensatz", nil, 60)
       
-      to_utf8 = Iconv.new('UTF-8', @layout_file.get_attr_value(S_DATASOURCEENCODING))
       first_row = @dataman.headers
       felder = if first_row
         first_row.map{|feldname|
           @iconlist_data.appendHeader(feldname, nil, 100)
-          begin
-            to_utf8.iconv(feldname)
-          rescue => e
-            FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Einlesen der Daten", "Fehler beim Einlesen der Daten in der Kopfzeile:\n#{e}")
-          end
+          feldname
         }
       else
         []
@@ -121,12 +116,7 @@ class Dataview < Dialogbox_dataview
         mini_icon = nil
         rows.each_with_index{|row, idx|
           itemtext = "#{idx+1}\t" + felder.map{|feld|
-            data = row[feld]
-            begin
-              to_utf8.iconv(data)
-            rescue => e
-              FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Einlesen der Daten", "Fehler beim Einlesen der Daten in der Zeile #{idx+1}:\n#{e}")
-            end
+            row[feld]
           }.join("\t")
           @iconlist_data.appendItem(itemtext, big_icon, mini_icon, row)
         }
