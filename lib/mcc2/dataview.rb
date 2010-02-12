@@ -309,7 +309,11 @@ class Dataview < Dialogbox_dataview
           event_handler_push{
             @parent.app.show_on_statusline "#{itemidx+1} von #{marked_items.length} Datensätzen gedruckt"
             # den aktuellen Datensatz deselektieren, wenn er erfolgreich gedruckt wurde
-            @iconlist_data.deselectItem(it) if erg
+            begin
+              @iconlist_data.deselectItem(it) if erg
+            rescue RuntimeError => e
+              raise unless e.to_s=~/already released/
+            end
           }
 
           if !erg || !@printing
