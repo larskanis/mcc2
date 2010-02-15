@@ -207,7 +207,7 @@ class LayoutFile
 
 	def find_graphic_object_by_id(id)
 		go = xml_doc.find_first(
-			"//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
+			"//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[.='#{id.to_s}']").parent
     typ = go.find_first(GOA_TYP).content
     
 		LayoutObject::Graphic.get_object_by_typ(typ, go)
