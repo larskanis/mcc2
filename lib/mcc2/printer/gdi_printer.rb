@@ -56,29 +56,32 @@ class GdiPrinter < CardPrinter
     # einen DeviceContext für den Drucker erzeugen
     hPrinter = Win32api4ruby::Gdi.create_dc( nil, devicename.to_s_win32, nil, initdata)
 
-    documentName = "mcc2 - #{datasourcename} - Satz #{}\0"
-    #~ p "documentName #{documentName}"
-    docinfo = [documentName].pack('px120')
-    #~ p "docinfo #{docinfo}"
+    # set document title
+    row_text = row['mcc2_row_index']
+    if !row_text
+      row_text = row.sort.map{|k,v| v }.select{|v| v && !v.empty? }.join(',')[0,50]  # take row-values
+    end
+    documentName = "MCC #{row_text} #{datasourcename}"
+    docinfo = Win32api4ruby::Gdi.create_DOCINFO
+    docinfo[:lpszDocName] = Win32api4ruby::Base.prepare_PtrData(documentName.to_s_win32)
+    
     begin
       Win32api4ruby::Gdi.start_doc(hPrinter, docinfo)
-        page_nr = 0
+      
+      # der Chip-Teil, er muss nach dem start_doc und den pages kommen, falls dort Fehler auftreten, wird dieser dan nicht ausgeführt,
+      # und keine Karte eingezogen, dann gibt es weniger Probleme mit dem Entfernen von Karten aus dem Drucker, wenn ein Fehler aufgetreten ist
+      if chip
+        run_chipcoding chip, row
+      end
+      
+      page_nr = 0
+      print_gdi_page(hPrinter, initdata, row, page_nr)
+
+      if duplex
+        page_nr = 1
         print_gdi_page(hPrinter, initdata, row, page_nr)
+      end
 
-        if duplex
-          page_nr = 1
-          print_gdi_page(hPrinter, initdata, row, page_nr)
-        end
-
-        # ............................................................................................
-        # der Chip-Teil, er muss nach dem start_doc und den pages kommen, falls dort Fehler auftreten, wird dieser dan nicht ausgeführt,
-        # und keine Karte eingezogen, dann gibt es weniger Probleme mit dem Entfernen von Karten aus dem Drucker, wenn ein Fehler aufgetreten ist
-        if chip
-          run_chipcoding chip, row
-        end
-        # ............................................................................................
-
-      #~ p "end_doc"
       Win32api4ruby::Gdi.end_doc(hPrinter)
       wait_on_print_ready
     rescue => e
@@ -87,7 +90,9 @@ class GdiPrinter < CardPrinter
       raise
     end
     Win32api4ruby::Gdi.delete_dc(hPrinter)
-    #~ unset_message_handler
+    
+    GC.start
+    
     return true
   end
 
