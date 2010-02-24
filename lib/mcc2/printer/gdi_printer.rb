@@ -162,10 +162,15 @@ class GdiPrinter < CardPrinter
       lpbmi[:biClrUsed] = 0
       lpbmi[:biClrImportant] = 0
 
-      Win32api4ruby::Gdi.set_dibits_to_device(hPrinter, xDest, yDest, dwWidth, dwHeight, xSrc, ySrc, uStartScan, cScanLines, lpvBits, lpbmi, fuColorUse)
+      set_dibits_to_device(hPrinter, xDest, yDest, dwWidth, dwHeight, xSrc, ySrc, uStartScan, cScanLines, lpvBits, lpbmi, fuColorUse)
     end
   end
-
+  
+  def set_dibits_to_device(hPrinter, xDest, yDest, dwWidth, dwHeight, xSrc, ySrc, uStartScan, cScanLines, lpvBits, lpbmi, fuColorUse)
+    Win32api4ruby::Gdi.set_dibits_to_device(hPrinter, xDest, yDest, dwWidth, dwHeight, xSrc, ySrc, uStartScan, cScanLines, lpvBits, lpbmi, fuColorUse)
+    lpbmi.free
+  end
+  
 end
 end
 end
