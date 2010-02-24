@@ -13,22 +13,6 @@ class GdiPrinter < CardPrinter
 
   attr_accessor :layout_file
   
-  #
-  def with_doc(documentName, handleToPrinter)
-    begin
-      documentName << "\0"
-      #~ p "documentName #{documentName}"
-      docinfo = [documentName].pack('px12')
-      #~ p "docinfo #{docinfo}"
-      Win32api4ruby::Gdi.start_doc(handleToPrinter, docinfo)
-      yield
-    ensure
-      Win32api4ruby::Gdi.end_doc(handleToPrinter)
-    end
-  end
-  #--------------------------------------------------------------------------------------------------------------
-  
-  #
   def with_page(hPrinter)
     begin
       Win32api4ruby::Gdi.start_page(hPrinter)
@@ -37,7 +21,6 @@ class GdiPrinter < CardPrinter
       Win32api4ruby::Gdi.end_page(hPrinter)
     end
   end
-  #--------------------------------------------------------------------------------------------------------------
 
   def device_name
     layout_file.get_attr_value(S_GDIPRINTER_NAME)
@@ -53,10 +36,9 @@ class GdiPrinter < CardPrinter
   # -
   # === Parameter
   # +layout_file+::
-  # +row+:: momentan ein CSV-Row-Objekt
+  # +row+:: ein Hash-Objekt
   def print_card(layout_file, row, chip)
     @layout_file = layout_file
-    #~ set_message_handler
     preview = false
     selected_object_id = nil
 
