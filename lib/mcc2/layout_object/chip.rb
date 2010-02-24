@@ -46,7 +46,7 @@ class Chip
     # muss vor dem require 'chipbase' kommen
     ENV['CHIPBASE_ENV'] = 'chip32'
     
-    require 'libs/chipcoding/chipbase'
+    require 'chipcoding/class_loader'
     
     p "pers_card #{row.inspect}"
     # die Chip-Parameter auslesen
