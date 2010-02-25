@@ -1,10 +1,11 @@
 # -*- coding: UTF-8 -*-
 
-require 'mcc2/layout_objects/graphic_object'
+require 'mcc2/layout_object/graphic'
 
 module Mcc2
-class TextObject < GraphicObject
-  def initialize
+module LayoutObject
+class Text < Graphic
+  def initialize(xml_elem=nil)
     super
     @go_attributes[GOA_TYP].attr_value = TEXTOBJECT
     add_attr(@go_attributes, GOA_WIDTH, Integer, 30)
@@ -18,6 +19,7 @@ class TextObject < GraphicObject
     add_attr(@go_attributes, GOA_BACK_COLOR, String, "FFFFFFFF")
     add_attr(@go_attributes, GOA_JUSTIFICATION, String, "Links")
   end
+end
 end
 end
 

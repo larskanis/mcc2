@@ -129,7 +129,7 @@ class Layoutview
     @lf.textfield_spur3.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_MSSPUR3) }
 
     @barcodes = if Object.const_defined?(:Barby)
-      Barby.constants.sort.select{|c| Barby.const_get(c).ancestors.include?(Barby::Barcode)} - %w[Barcode Barcode1D Barcode2D]
+      Barby.constants.map{|c| c.to_s }.sort.select{|c| Barby.const_get(c).ancestors.include?(Barby::Barcode)} - %w[Barcode Barcode1D Barcode2D]
     else
       []
     end
@@ -200,18 +200,16 @@ class Layoutview
     fill_layout_attr_tab
 
     # die Chip-Attribute
-    chip_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
-    # diesen Teil getrennt vom oberen machen, damit die Reihenfolge der Chip-Params richtig bleibt, auch wenn sie im XML anders sind
-    chip_attrs.each{|chip_attr|
-      idx = chip_attr.name.split("_")[-1].to_i-1
-      @chipparam_textfields[idx].text = chip_attr.content
+    chip = @layout_file.chip_object
+    chip.params.each_with_index{|param, idx|
+      @chipparam_textfields[idx].text = param
     }
 
     # die Magnetstreifenattribute
-    mag_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}")
-    @lf.textfield_spur1.text = mag_attrs.find_first(S_MSSPUR1).content
-    @lf.textfield_spur2.text = mag_attrs.find_first(S_MSSPUR2).content
-    @lf.textfield_spur3.text = mag_attrs.find_first(S_MSSPUR3).content
+    mag_attrs = @layout_file.magstripe_object
+    @lf.textfield_spur1.text = mag_attrs[S_MSSPUR1]
+    @lf.textfield_spur2.text = mag_attrs[S_MSSPUR2]
+    @lf.textfield_spur3.text = mag_attrs[S_MSSPUR3]
 
     draw_preview(true)
   end
@@ -251,10 +249,8 @@ class Layoutview
   # +sender+::    das Objekt, welches das Ereignis gesendet hat
   # +attr_name+:: der Name des Attributs
   def change_chkbtn(sender, attr_name)
-    lay_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
-    node = lay_attrs.find_first(attr_name)
-    if sender.state != node.first.content
-      node.first.content = sender.state.to_s
+    if sender.state != @layout_file.get_attr_value(attr_name)
+      @layout_file.set_attr_value attr_name, sender.state.to_s
       changed_attributes
     end
   end
@@ -748,10 +744,8 @@ class Layoutview
     if @layout_file
       # Array mit sortierten Objekt-ID's holen
       @layout_file.sorted_id_list.each{|id|
-        go = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[.='#{id.to_s}']").parent
-        name = go.find(GOA_NAME).first.content
-        typ = go.find(GOA_TYP).first.content
-        @lf.iconlist_objects.appendItem([id, name, typ].join("\t"), nil, nil, id)
+        go = @layout_file.find_graphic_object_by_id(id)
+        @lf.iconlist_objects.appendItem([id, go[GOA_NAME], go[GOA_TYP]].join("\t"), nil, nil, id)
       }
     end
   end

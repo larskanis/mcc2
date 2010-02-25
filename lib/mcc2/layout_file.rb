@@ -2,12 +2,14 @@
 
 require 'xml'               # für die Layout-Datei
 require 'mcc2/constants'
-require 'mcc2/layout_objects/go_attribut'
-require 'mcc2/layout_objects/graphic_object'    # die Basisklasse für die grafischen Objekte
-require 'mcc2/layout_objects/barcode_object'    # grafische Barcode-Objekte
-require 'mcc2/layout_objects/picture_object'    # grafische Bild-Objekte
-require 'mcc2/layout_objects/text_object'       # grafische Text-Objekte
-require 'mcc2/layout_objects/box_object'
+require 'mcc2/layout_object/go_attribut'
+require 'mcc2/layout_object/graphic'    # die Basisklasse für die grafischen Objekte
+require 'mcc2/layout_object/barcode'    # grafische Barcode-Objekte
+require 'mcc2/layout_object/picture'    # grafische Bild-Objekte
+require 'mcc2/layout_object/text'       # grafische Text-Objekte
+require 'mcc2/layout_object/box'
+require 'mcc2/layout_object/magstripe'
+require 'mcc2/layout_object/chip'
 
 module Mcc2
 module Printer
@@ -166,7 +168,7 @@ class LayoutFile
     # kontrollieren, ob alle Nodes der GraphicObjects existieren, ansonsten anlegen und als 'changed' markieren
     @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
       typ = go_struct.find(GOA_TYP).first.content
-      go = GraphicObject.get_object_by_typ(typ)
+      go = LayoutObject::Graphic.get_object_by_typ(typ)
       go.go_attributes.each_pair{|go_attrname, go_attr|
         element = go_struct.find_first(go_attr.attr_name)
         unless element
@@ -202,8 +204,24 @@ class LayoutFile
       @changed = true
     end
   end
-  
-	#---------------------------------------------------------------------------------------------------------
+
+	def find_graphic_object_by_id(id)
+		go = xml_doc.find_first(
+			"//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[.='#{id.to_s}']").parent
+    typ = go.find_first(GOA_TYP).content
+    
+		LayoutObject::Graphic.get_object_by_typ(typ, go)
+	end
+
+  def magstripe_object
+    ms_node = xml_doc.find_first(S_MAGSTRIPEPARAMS)
+    LayoutObject::Magstripe.new(ms_node)
+  end
+
+  def chip_object
+    chip_attrs = xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
+    LayoutObject::Chip.new chip_attrs
+  end
   
   # holt den Zweig mit den Einstellungen eines graphischen Objekts aus dem XML-File mit der Layout-Spezifikation
   # ==== Parameter
@@ -216,7 +234,6 @@ class LayoutFile
     }
     nil
   end
-	#---------------------------------------------------------------------------------------------------------
 
   # Fügt ein Graphik-Objekt zur Layout-Definition hinzu
   # ==== Parameter
@@ -224,7 +241,7 @@ class LayoutFile
   # ==== Return
   # Object [XML-Node]
   def  add_object(typ)
-    o = GraphicObject.get_object_by_typ(typ)
+    o = LayoutObject::Graphic.get_object_by_typ(typ)
     id = get_new_id
  		node = @xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}")
     node << go = XML::Node.new(GRAPHICOBJECT)
@@ -238,7 +255,6 @@ class LayoutFile
     }
     go
   end
- 	#---------------------------------------------------------------------------------------------------------
   
   # ermittelt die nächst höhere ID (beeinflusst die Darstellungsebene)
   def get_new_id
@@ -248,8 +264,7 @@ class LayoutFile
     }
     id
   end
- 	#---------------------------------------------------------------------------------------------------------
-  
+
   # liest die ID's der graphischen Objekte aus der Layout-Definition (XML) aus und
   # sortiert sie
   # ==== Return
@@ -259,7 +274,6 @@ class LayoutFile
       go_struct.find(GOA_ID).first.content.to_i
     }.sort!
   end
- 	#---------------------------------------------------------------------------------------------------------
   
   # ermittelt den Inhalt eines Attributes des Layout-Abschnittes
   # ==== Return
@@ -288,7 +302,7 @@ class LayoutFile
     end
     return false
   end
-  #---------------------------------------------------------------------------------------------------------
+
   
   # fügt ein neues Atrtribut zur Liste der Attribute (@attributes) hinzu
   # ==== Parameter
@@ -296,7 +310,7 @@ class LayoutFile
   # +typ+::     der Typ 
   # +default+:: der Wert, mit dem das Attribut vorinitialisiert werden soll
   def add_attr(name, typ, default)
-    attr = GO_Attribut.new(name, typ, default) 
+    attr = LayoutObject::GO_Attribut.new(name, typ, default) 
     @attributes[attr.attr_name] = attr
   end
 
@@ -307,13 +321,10 @@ class LayoutFile
     end
   end
 
- 	#---------------------------------------------------------------------------------------------------------
-  
   #
   def save
     @xml_doc.save(@filename)
   end
- 	#---------------------------------------------------------------------------------------------------------
 
   # überprüft, ob der Wert Datasourcetyp in der Layoutdefinition ein gültiger Wert ist.
   # Wenn nicht, wird ein Fehlerdialog angezeigt und der Standardwert gesetzt und das changed-Flag gesetzt
@@ -322,19 +333,18 @@ class LayoutFile
     unless DataMan.valid_datasourcetyp?(datasourcetyp)
       default = @attributes[S_DATASOURCETYP].attr_value
       set_attr_value(S_DATASOURCETYP, default)
-      raise WrongDataSourceType.new(<<-EOTXT)
+      raise WrongDataSourceType, <<-EOTXT
         Der eingestellte Datenquellentyp '#{datasourcetyp}' ist ungültig.
-        
+
         Gültige Werte sind '#{VALID_DATASOURCES.join("', '")}'.
-        
+
         Der Wert wird jetzt auf den Standardwert '#{default}'  gesetzt.
-        
+
         Bitte stellen Sie in den Layouteigenschaften den korrekten Datenquellentyp
         ein und speichern Sie die Einstellungen.
       EOTXT
     end
   end
- 	#---------------------------------------------------------------------------------------------------------
 
   # überprüft, ob der Wert Datasourcencoding in der Layoutdefinition ein gültiger Wert ist.
   # Wenn nicht, wird ein Fehlerdialog angezeigt und der Standardwert gesetzt und das changed-Flag gesetzt
@@ -343,7 +353,7 @@ class LayoutFile
     unless DataMan.valid_datasource_encoding?(datasource_encoding)
       default = 'UTF-8'
       set_attr_value(S_DATASOURCEENCODING, default)
-      raise WrongDataSourceEncoding.new(<<-EOTXT)
+      raise WrongDataSourceEncoding, <<-EOTXT
         Das eingestellte Encoding der Datenquelle '#{datasource_encoding}' ist ungültig.
         
         Gültige Werte sind '#{VALID_ENCODINGS.join("', '")}'.
@@ -385,11 +395,12 @@ class LayoutFile
   def build_dataman_instance
     datamantyp =  get_attr_value(S_DATASOURCETYP)
     datasource =  get_attr_value(S_DATASOURCE)
+    encoding =  get_attr_value(S_DATASOURCEENCODING)
 
     dataman = if datamantyp == DATABASE
       DataMan::Database.new(datasource)
     elsif datamantyp == CSV
-      DataMan::CSV.new(datasource)
+      DataMan::CSV.new(datasource, encoding)
     elsif datamantyp == NONE
       DataMan::None.new(datasource)
     else
@@ -401,7 +412,7 @@ class LayoutFile
 
   def build_chip_instance
     chip = if get_attr_value(S_CONTACTLESS) == S_TRUE || get_attr_value(S_CONTACT) == S_TRUE
-      Chip.new
+      chip_object
     else
       nil
     end

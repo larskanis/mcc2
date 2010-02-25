@@ -53,7 +53,6 @@ module RmagickDrawer
     
     width =  layout_file.get_attr_value(S_WIDTH).to_f
     height = layout_file.get_attr_value(S_HEIGHT).to_f
-    encoding = layout_file.get_attr_value(S_DATASOURCEENCODING)
     if preview
       rx = 10
       # todo -0.5, damit die rechten und unteren Ränder zu sehen sind, jetzt sitzt die Karte aber unsymetrisch auf dem Rechteck
@@ -74,26 +73,26 @@ module RmagickDrawer
       # Text-Objekte
       sorted_id_list = layout_file.sorted_id_list
       sorted_id_list.each{|id|
-        go = layout_file.xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[.='#{id.to_s}']").parent
+        go = layout_file.find_graphic_object_by_id(id)
         # nur die Objekte zeichnen, die auf diese Seite sollen
-        if go.find(GOA_PAGE_NR).first.content.to_i == page_nr
+        if go[GOA_PAGE_NR].to_i == page_nr
 
           # die allgemeinen Attribute ermitteln
-#           id = go.find_first(GOA_ID).content.to_i
-          x = go.find_first(GOA_X).content.to_f
-          y = go.find_first(GOA_Y).content.to_f
-          go_width = go.find_first(GOA_WIDTH).content.to_f
-          go_height = go.find_first(GOA_HEIGHT).content.to_f
-          rotation = go.find_first(GOA_ROTATION).content.to_f
-          typ = go.find_first(GOA_TYP).content
+#           id = go[GOA_ID].to_i
+          x = go[GOA_X].to_f
+          y = go[GOA_Y].to_f
+          go_width = go[GOA_WIDTH].to_f
+          go_height = go[GOA_HEIGHT].to_f
+          rotation = go[GOA_ROTATION].to_f
+          typ = go[GOA_TYP]
           
-          if !go.find_first(GOA_DATA)
+          if !go[GOA_DATA]
             data = nil
           elsif row
-            data = DataMan.replace_variables(go.find_first(GOA_DATA).content, row, encoding)
-          elsif go.find_first(GOA_DATA)
-            data_nosub = go.find_first(GOA_DATA).content.to_s
-            data = go.find_first(GOA_SAMPLE_DATA).content.to_s
+            data = DataMan.replace_variables(go[GOA_DATA], row)
+          elsif go[GOA_DATA]
+            data_nosub = go[GOA_DATA].to_s
+            data = go[GOA_SAMPLE_DATA].to_s
           end
 
           canvas1.g.translate(mm(x).round, mm(y).round).rotate(rotation) do |body|
@@ -127,9 +126,9 @@ module RmagickDrawer
         if page_nr == 1 && layout_file.get_attr_value(S_MAGSTRIPE) == S_TRUE
           canvas1.g.translate(mm(0), mm(4)){|ms_rect|
             ms_rect.rect(mm(width), mm(12.5) ).styles(:fill=>'black', :stroke=>'none', :opacity => 0.5)
-            ms_node = layout_file.xml_doc.find_first(S_MAGSTRIPEPARAMS)
+            ms_obj = layout_file.magstripe_object
             (1..3).each{|spurnr|
-              spur_data = ms_node.find_first('ms_spur' + spurnr.to_s).content
+              spur_data = ms_obj['ms_spur' + spurnr.to_s]
                 ms_rect.text(mm(3), mm((3.5 * spurnr) + 0.5), "Spur #{spurnr}: #{spur_data}").styles(
                   :font => "Courier-New-Bold",
                   :font_size => pt(10),
@@ -156,14 +155,13 @@ module RmagickDrawer
   end
 
   def draw_textobject(body, go, go_width, go_height, data)
-    font = go.find(GOA_FONT_TYP).first.content
+    font = go[GOA_FONT_TYP]
     if font=='from_file'
-      font = go.find(GOA_FONT_FILE).first.content
+      font = go[GOA_FONT_FILE]
     end
-    fontsize = go.find(GOA_FONT_HEIGHT).first.content.to_f
-    font_color = ["#", go.find(GOA_FONT_COLOR).first.content].join
-#              font_color = Page.check_color_definition(font_color)
-    just = go.find(GOA_JUSTIFICATION).first.content.downcase
+    fontsize = go[GOA_FONT_HEIGHT].to_f
+    font_color = ["#", go[GOA_FONT_COLOR]].join
+    just = go[GOA_JUSTIFICATION].downcase
     if just == "links"
       text_x = 0
       just = 'start'
@@ -196,9 +194,9 @@ module RmagickDrawer
       # kein Bildname angegeben -> dieses Objekt ignorieren
     elsif FileTest.file?(data)
       self_dpi = self.dpi
-      go_image = Magick::Image.read(data){|attr|
+      go_image = Magick::Image.read(data){
         # use view DPI for vector-graphics (PDF)
-        attr.density = self_dpi
+        self.density = self_dpi
       }.first
       
       # workaround: ImageMagick uses wrong colors when inserting into RVG
@@ -219,14 +217,14 @@ module RmagickDrawer
   def draw_barcode(body, go, go_width, go_height, data, optimized=true)
     return if data.nil? || data.empty?
       
-    barcode_typ = go.find(GOA_BARCODE_TYP).first.content
-    bar_ratio = go.find(GOA_BAR_RATIO).first.content.to_i
-		fontname = go.find(GOA_FONT_TYP).first.content
+    barcode_typ = go[GOA_BARCODE_TYP]
+    bar_ratio = go[GOA_BAR_RATIO].to_i
+		fontname = go[GOA_FONT_TYP]
 		if fontname=='from_file'
-			fontname = go.find(GOA_FONT_FILE).first.content
+			fontname = go[GOA_FONT_FILE]
 		end
-		fontsize = go.find(GOA_FONT_HEIGHT).first.content.to_f
-		font_color = ["#", go.find(GOA_FONT_COLOR).first.content].join
+		fontsize = go[GOA_FONT_HEIGHT].to_f
+		font_color = ["#", go[GOA_FONT_COLOR]].join
     
     unless @magick_font_list.index(fontname) || File.exist?(fontname)
       raise Printer::Base::ResourceNotFoundError, "Die Schriftart '#{fontname}' konnte nicht gefunden werden. Der Druck wird angehalten."
@@ -261,7 +259,7 @@ module RmagickDrawer
 			xdim, ydim = px_width/xbars, px_height/ybars
 			xdim, ydim = xdim.to_i, ydim.to_i if optimized
 
-			just = go.find(GOA_JUSTIFICATION).first.content.downcase
+			just = go[GOA_JUSTIFICATION].downcase
 			xgap = mm(go_width) - xdim*xbars
 			body.translate( ({'links'=>0, 'mitte'=>xgap/2, 'rechts'=>xgap}[just] || 0).round, 0)
 
@@ -291,7 +289,7 @@ module RmagickDrawer
 			# Barcode - text
 
 			if eancode
-				data2 = barcode.numbers_with_checksum
+				data2 = barcode.numbers_with_checksum.join
 				data3 = if barcode_typ=='EAN8'
 					[nil, data2[0,4], data2[4,4]]
 				elsif barcode_typ=='EAN13'
@@ -307,35 +305,13 @@ module RmagickDrawer
   end
 
   def draw_boxobject(body, go, go_width, go_height)
-    corner_radius = go.find(GOA_CORNER_RADIUS).first.content.to_f
-    fill_color = go.find(GOA_FILL_COLOR).first.content
-    border_color = go.find(GOA_BORDER_COLOR).first.content
-    border_width = go.find(GOA_BORDER_WIDTH).first.content.to_f
+    corner_radius = go[GOA_CORNER_RADIUS].to_f
+    fill_color = go[GOA_FILL_COLOR]
+    border_color = go[GOA_BORDER_COLOR]
+    border_width = go[GOA_BORDER_WIDTH].to_f
 
     body.rect(mm(go_width), mm(go_height) ).round(mm(corner_radius)).styles(:fill=>'#'+fill_color, :stroke=>'#'+border_color, :stroke_width=>mm(border_width))
   end
 
-  def self.check_color_definition(color)
-    # erstellt einen Dummy-Text, um zu testen, ob die Farbdefinition gültig ist
-    # liefert die Farbe zurück, wenn sie gültig ist, ansonsten liefert sie vorläufig schwarz als Standard zurück
-
-    begin
-      rvg = Magick::RVG.new(1, 1) do |canvas|
-        canvas.text(1, 1, "1").styles(
-          :font_family => "Arial",
-          :font_size => 10,
-          :fill => color,
-          :font_weight=>'normal',
-          :font_style=>'normal')
-      end
-      rvg.draw.to_blob{
-        self.format = 'PNG'
-      }
-    rescue => e
-      return "#000000FF"
-    end
-    color
-  end
-  
 end
 end
