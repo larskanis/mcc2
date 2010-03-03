@@ -16,6 +16,7 @@ module Printer
   autoload 'PrinterXID', 'mcc2/printer/printer_xid'
   autoload 'GdiPrinter', 'mcc2/printer/gdi_printer'
   autoload 'FilePrinter', 'mcc2/printer/file_printer'
+  autoload 'PrinterZebra', 'mcc2/printer/printer_zebra'
 end
 
 module DataMan
@@ -74,6 +75,8 @@ class LayoutFile
     add_attr(S_GDIPRINTER_INITDATA, String, '')
     add_attr(S_XIDPRINTER_NAME, String, '')
     add_attr(S_XIDPRINTER_INITDATA, String, '')
+    add_attr(S_ZEBRAPRINTER_NAME, String, '')
+    add_attr(S_ZEBRAPRINTER_INITDATA, String, '')
   end
  	#---------------------------------------------------------------------------------------------------------
   def xml_doc

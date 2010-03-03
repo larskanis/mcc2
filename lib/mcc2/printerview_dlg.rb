@@ -14,8 +14,8 @@ class Dialogbox_printerview
 			w.width=308
 			w.height=265
 			w.shown=true
-			w.y=301
-			w.x=350
+			w.y=315
+			w.x=388
 			FX::VerticalFrame.new(@dialogbox_printerview){|w|
 				@verticalframe_printersetup=w
 				w.wdg_name='verticalframe_printersetup'
@@ -34,7 +34,7 @@ class Dialogbox_printerview
 				FX::TabBook.new(@verticalframe_printersetup){|w|
 					@tabbook_printers=w
 					w.wdg_name='tabbook_printers'
-					w.current=2
+					w.current=3
 					w.width=308
 					w.height=85
 					w.y=21
@@ -189,14 +189,15 @@ class Dialogbox_printerview
 						w.width=53
 						w.text="XID440"
 						w.height=23
-						w.y=4
-						w.x=136
+						w.y=6
+						w.x=138
 					}
 					FX::VerticalFrame.new(@tabbook_printers){|w|
 						@verticalframe8=w
 						w.wdg_name='verticalframe8'
 						w.width=300
 						w.height=56
+						w.shown=false
 						w.y=25
 						w.x=4
 						FX::Matrix.new(@verticalframe8){|w|
@@ -239,6 +240,62 @@ class Dialogbox_printerview
 							}
 						}
 					}
+					FX::TabItem.new(@tabbook_printers){|w|
+						@tabitem16=w
+						w.wdg_name='tabitem16'
+						w.width=47
+						w.text="Zebra"
+						w.height=23
+						w.y=4
+						w.x=189
+					}
+					FX::VerticalFrame.new(@tabbook_printers){|w|
+						@verticalframe21=w
+						w.wdg_name='verticalframe21'
+						w.width=300
+						w.height=56
+						w.y=25
+						w.x=4
+						FX::Matrix.new(@verticalframe21){|w|
+							@matrix_zebra=w
+							w.wdg_name='matrix_zebra'
+							w.width=300
+							w.height=56
+							w.numColumns=3
+							w.matrixStyle=131072
+							FX::Label.new(@matrix_zebra){|w|
+								@label22=w
+								w.wdg_name='label22'
+								w.width=54
+								w.text="Drucker"
+								w.height=19
+								w.y=4
+								w.x=4
+							}
+							FX::ComboBox.new(@matrix_zebra){|w|
+								@combobox_zebra_printer=w
+								w.wdg_name='combobox_zebra_printer'
+								w.width=159
+								w.height=21
+								w.y=4
+								w.comboStyle=1048576
+								w.numVisible=10
+								w.layoutHints=1025
+								w.x=62
+							}
+							FX::Button.new(@matrix_zebra){|w|
+								@button_zebra_printersetup=w
+								w.wdg_name='button_zebra_printersetup'
+								w.width=71
+								w.text="Einrichten"
+								w.height=23
+								w.tipText="Dateiauswahl"
+								w.y=4
+								w.layoutHints=1024
+								w.x=225
+							}
+						}
+					}
 				}
 			}
 		}
@@ -269,6 +326,12 @@ class Dialogbox_printerview
 	attr_reader :label16
 	attr_reader :combobox_xid_printer
 	attr_reader :button_xid_printersetup
+	attr_reader :tabitem16
+	attr_reader :verticalframe21
+	attr_reader :matrix_zebra
+	attr_reader :label22
+	attr_reader :combobox_zebra_printer
+	attr_reader :button_zebra_printersetup
 end
 
 #unit test

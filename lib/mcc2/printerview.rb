@@ -11,6 +11,7 @@ class Printerview < Dialogbox_printerview
     PrinterDescription.new( 'normaler Windows-Drucker', 'GdiPrinter', 0),
     PrinterDescription.new( 'als Bild speichern', 'FilePrinter', 1),
     PrinterDescription.new( 'XID-440', 'PrinterXID', 2),
+    PrinterDescription.new( 'Zebra', 'PrinterZebra', 3),
   ]
   
   def initialize parent, layout
@@ -25,6 +26,7 @@ class Printerview < Dialogbox_printerview
     @matrix_file.numColumns = 3
     @matrix_gdi.numColumns = 3
     @matrix_xid.numColumns = 3
+    @matrix_zebra.numColumns = 3
     @combobox_printertype.connect(SEL_COMMAND){ combobox_printertype_changed }
     @textfield_file_save_as.connect(SEL_COMMAND){
       @layout_file.set_attr_value(S_FILEPRINTER_SAVE_AS, @textfield_file_save_as.text)
@@ -43,6 +45,8 @@ class Printerview < Dialogbox_printerview
     @button_gdi_printersetup.connect(SEL_COMMAND){ gdi_printersetup_pressed(@combobox_gdi_printer, S_GDIPRINTER_INITDATA) }
     @combobox_xid_printer.connect(SEL_COMMAND){ gdi_combobox_changed(@combobox_xid_printer, S_XIDPRINTER_NAME, S_XIDPRINTER_INITDATA) }
     @button_xid_printersetup.connect(SEL_COMMAND){ gdi_printersetup_pressed(@combobox_xid_printer, S_XIDPRINTER_INITDATA) }
+    @combobox_zebra_printer.connect(SEL_COMMAND){ gdi_combobox_changed(@combobox_zebra_printer, S_ZEBRAPRINTER_NAME, S_ZEBRAPRINTER_INITDATA) }
+    @button_zebra_printersetup.connect(SEL_COMMAND){ gdi_printersetup_pressed(@combobox_zebra_printer, S_ZEBRAPRINTER_INITDATA) }
 
     fill_printertype_list
     combobox_printertype_changed
@@ -118,7 +122,11 @@ class Printerview < Dialogbox_printerview
   def selected_PrinterXID
     selected_GdiPrinter(@combobox_xid_printer, S_XIDPRINTER_NAME)
   end
-  
+
+  def selected_PrinterZebra
+    selected_GdiPrinter(@combobox_zebra_printer, S_ZEBRAPRINTER_NAME)
+  end
+
   def deactivate_printer_tabs
     0.step(@tabbook_printers.numChildren-1, 2){|idx|
       @tabbook_printers.childAtIndex(idx).shown = false
