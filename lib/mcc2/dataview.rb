@@ -115,7 +115,7 @@ class Dataview < Dialogbox_dataview
         big_icon = nil
         mini_icon = nil
         rows.each_with_index{|row, idx|
-          row['mcc2_row_index'] = (idx + 1).to_s
+          row['mcc2_row_index'] = (idx + 1).to_s if row
           itemtext = "#{idx+1}\t" + felder.map{|feld|
             row[feld]
           }.join("\t")

@@ -53,7 +53,8 @@ class FilePrinter < CardPrinter
 
   def print_page(row, page_nr)
 
-    documentName = @layout_file.get_attr_value(S_FILEPRINTER_SAVE_AS).gsub("%d", @image_idx.to_s).gsub("%p", page_nr.to_s)
+    row_idx = row['mcc2_row_index'] if row
+    documentName = @layout_file.get_attr_value(S_FILEPRINTER_SAVE_AS).gsub("%i", @image_idx.to_s).gsub("%p", page_nr.to_s).gsub("%d", row_idx.to_s)
 
     self.dpi = @layout_file.get_attr_value(S_FILEPRINTER_DPI).to_f
 #    Magick::RVG::dpi = self.dpi
