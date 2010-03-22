@@ -19,6 +19,21 @@ module Mcc2
 				layout_file.get_binary_attr(S_ZEBRAPRINTER_INITDATA)
 			end
 
+			def move_to_reject_box()
+				if (@type &&
+								@type == 420 ||
+								@type == 430 ||
+								@type == 520 ||
+								@type == 720)
+					#Bei Druckern mit Ausschuss-Fach, Karte in Ausschuss-Fach
+					#TODO geht noch nicht richtig, es werden 2 Karten in das Ausschuss-Fach transportiert
+					send_command("MRB")
+				else
+					#Bei Druckern ohne Ausschuss-Fach, Karte einfach auswerfen
+					send_command("MO")
+				end
+			end
+
 			def print_card(layout_file, row, chip)
 				#Wird für Chip-Perso benötigt
 				@layout_file = layout_file
@@ -30,26 +45,30 @@ module Mcc2
 					begin
 						# Kartenpersonalisierung
 						chip.pers_card(layout_file, row)
-
-						# Karte vom Leser zum Drucken weiter schicken
-						send_command("MIB")
 					rescue => e
-						#Im Fehlerfall die Karte auswerfen
-						send_command("MRB")
-						raise
+						move_to_reject_box()
+						raise e
 					end
+					# Karte vom Leser zum Drucken weiter schicken
+					send_command("MIB")
 				end
 
 				#Jetzt erst den eigentlichen Druck beginnen
 				super
 			end
 
-			private
+			#TODO wieder private nach Test!!
+#			private
+			public
 			#Sendet ein Kommando an den Drucker
 			def send_command(command)
+				puts("Zebra: Send command '#{command}'")
 				open_handle
-				send_cmd(command)
-				close_handle
+				begin
+					send_cmd(command)
+				ensure
+					close_handle
+				end
 			end
 
 			def open_handle(name = nil)
@@ -127,8 +146,12 @@ module Mcc2
 				printer = PrinterZebra.new()
 				printer.open_handle("Zebra P430i Card Printer USB")
 				printer.send_cmd("MCL")
-				printer.send_cmd("MIB")
-				printer.send_cmd("MO")
+				printer.close_handle
+
+				sleep(5)
+
+				printer.open_handle("Zebra P430i Card Printer USB")
+				printer.send_cmd("MRB")
 				printer.close_handle
 			end
 		end
