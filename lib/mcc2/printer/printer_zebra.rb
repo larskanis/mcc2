@@ -1,12 +1,15 @@
 # -*- coding: UTF-8 -*-
 
 require 'win32api4ruby'
+require 'zebra_dll'
 require 'mcc2/printer/gdi_card_printer'			# die Basisklasse für alle CardPrinter
 
 module Mcc2
 	module Printer
 		# Diese Klasse definiert einen Zebra-Drucker.
 		class PrinterZebra < GdiCardPrinter
+			attr_accessor :name
+
 			def initialize()
 				super
 			end
@@ -87,7 +90,6 @@ module Mcc2
 				ret
 			end
 
-			private
 			def open_handle(name = nil)
 				h_printer = DL.malloc(4)
 				h_printer.struct!('L', :handle)
@@ -106,7 +108,7 @@ module Mcc2
 
 #				puts("---\nGet handle '#{devicename}'")
 				start = Time.now
-				result = Win32api4ruby::ZebraDll.get_handle(h_printer, devicename, printer_type, err)
+				result = ZebraDll.get_handle(h_printer, devicename, printer_type, err)
 
 				@handle = h_printer[:handle]
 				@type = printer_type[:type]
@@ -129,7 +131,7 @@ module Mcc2
 				err.struct!('L', :err)
 #				puts("---\nSend command #{command}")
 				start = Time.now
-				result = Win32api4ruby::ZebraDll.send_cmd(@handle, @type, "#{command}\r", err)
+				result = ZebraDll.send_cmd(@handle, @type, "#{command}\r", err)
 				error = err[:err]
 
 #				puts("result = #{result}, error = #{error}")
@@ -144,17 +146,17 @@ module Mcc2
 				response = DL.malloc(1024)
 				#			response.struct!('S', :response)
 
-				respSize = DL.malloc(4)
-				respSize.struct!('L', :size)
+				resp_size = DL.malloc(4)
+				resp_size.struct!('L', :size)
 
 				err = DL.malloc(4)
 				err.struct!('L', :err)
 
-#				puts("---\nSend Command Ex")
-				start = Time.now
-				result = Win32api4ruby::ZebraDll.send_cmdex(@handle, @type, "#{command.to_s_win32}\r", response, respSize, err)
+#				puts("---\nSend Command Ex: #{command}")
+#				result = ZebraDll.send_cmdex(@handle, @type, "#{command.to_s_win32}\r", response, resp_size, err)
+				result = ZebraDll.send_cmdex(@handle, @type, "#{command}\r", response, resp_size, err)
 
-				size = respSize[:size]
+				size = resp_size[:size]
 				error = err[:err]
 
 #				puts("result = #{result}")
@@ -176,7 +178,7 @@ module Mcc2
 					err.struct!('L', :err)
 #					puts("---\nClose handle")
 					start = Time.now
-					result = Win32api4ruby::ZebraDll.close_handle(@handle, err)
+					result = ZebraDll.close_handle(@handle, err)
 					error = err[:err]
 
 #					puts("result = #{result}, error = #{error}")
@@ -190,7 +192,7 @@ module Mcc2
 			end
 		end
 
-		class ZebraException < Exception
+		class ZebraException < RuntimeError
 			ERRORS = {
 							-1 => "ZBR_ERROR_PRINTER_MECHANICAL_ERROR - Mechanical error",
 							1 => "ZBR_ERROR_BROKEN_RIBBON - Indicates a broken ribbon",
@@ -202,7 +204,7 @@ module Mcc2
 							7 => "ZBR_ERROR_PRINT_HEAD_OPEN Print head is up",
 							8 => "ZBR_ERROR_OUT_OF_RIBBON Out of ribbon",
 							9 => "ZBR_ERROR_REMOVE_RIBBON Ribbon needs to be removed",
-							10 => "ZBR_ERROR_PARAMETERS_ERROR Wrong number of parameters or a value is incorrec",
+							10 => "ZBR_ERROR_PARAMETERS_ERROR Wrong number of parameters or a value is incorrec",
 							11 => "ZBR_ERROR_INVALID_COORDINATES Invalid coordinates while trying to draw a barcode or graphics",
 							12 => "ZBR_ERROR_UNKNOWN_BARCODE Undefined barcode type",
 							13 => "ZBR_ERROR_UNKNOWN_TEXT Text for magnetic encoding or bar code drawing is invalid",

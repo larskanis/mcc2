@@ -48,6 +48,19 @@ class Printerview < Dialogbox_printerview
     @combobox_zebra_printer.connect(SEL_COMMAND){ gdi_combobox_changed(@combobox_zebra_printer, S_ZEBRAPRINTER_NAME, S_ZEBRAPRINTER_INITDATA) }
     @button_zebra_printersetup.connect(SEL_COMMAND){ gdi_printersetup_pressed(@combobox_zebra_printer, S_ZEBRAPRINTER_INITDATA) }
 
+		@button_zebra_reset.connect(SEL_COMMAND) { zebra_send_command(@combobox_zebra_printer, "R") }
+		@button_zebra_eject_card.connect(SEL_COMMAND) { zebra_send_command(@combobox_zebra_printer, "MO") }
+		@button_zebra_eject_card2.connect(SEL_COMMAND) { zebra_send_command(@combobox_zebra_printer, "ME") }
+		@button_zebra_move_contactless.connect(SEL_COMMAND) { zebra_send_command(@combobox_zebra_printer, "MCL") }
+		@button_zebra_print_testcard.connect(SEL_COMMAND) { zebra_send_command(@combobox_zebra_printer, "A") }
+		@button_zebra_printer_info.connect(SEL_COMMAND) { zebra_send_command(@combobox_zebra_printer, "V") }
+		@button_zebra_send.connect(SEL_COMMAND) do
+			command = @textfield_zebra_command.text.strip
+			if(command.length > 0)
+				zebra_send_command(@combobox_zebra_printer, command)
+			end
+		end
+
     fill_printertype_list
     combobox_printertype_changed
   end
@@ -116,7 +129,28 @@ class Printerview < Dialogbox_printerview
     end
   end
 
-  def selected_FilePrinter
+	def zebra_send_command(combobox, command)
+		begin
+			@textfield_zebra_answer.text = ""
+
+			printer_name = combobox.getItemData(combobox.currentItem)
+			printer = Mcc2::Printer::PrinterZebra.new()
+			printer.open_handle(printer_name)
+			begin
+				answer = printer.send_cmd_ex(command).to_s
+				if(answer.length == 1 && answer[0] == 6)
+					answer = "<ACK>"
+				end
+				@textfield_zebra_answer.text = answer
+			ensure
+				printer.close_handle
+			end
+		rescue => e
+			FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Senden des Kommandos '#{command}' an den Drucker:", "#{e.to_s}\n\n#{e.backtrace.join("\n")}")
+		end
+	end
+
+	def selected_FilePrinter
   end
 
   def selected_PrinterXID

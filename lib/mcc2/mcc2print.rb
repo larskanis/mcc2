@@ -30,10 +30,11 @@ class Mcc2Print
       lf.change_first_xpath_value(xpath, value)
     }
     printer = lf.build_printer_instance
+		chip = lf.build_chip_instance
     dataman = lf.build_dataman_instance
-    rows = dataman.rows || [nil]
+		rows = dataman.rows || [nil]
     rows.each do |row|
-      erg = printer.print_card(lf, row, @chip)
+      erg = printer.print_card(lf, row, chip)
     end
   end
 
