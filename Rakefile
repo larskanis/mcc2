@@ -11,6 +11,7 @@ Hoe.spec 'mcc2' do
   extra_deps << ['fastercsv', '>= 1.2']
   extra_deps << ['rmagick', '>= 2.5']
   extra_deps << ['barby', '>= 0.3']
+  extra_deps << ['zebra_dll', '>= 0.1']
   
   # self.rubyforge_name = 'mcc2x' # if different than 'mcc2'
 end

@@ -236,7 +236,7 @@ module Mcc2
 							56 => "ZBR_ERROR_CONTACT_DATA_ERROR Parameter error",
 							57 => "ZBR_ERROR_PROX_DATA_ERROR Parameter error",
 							60 => "ZBR_SDK_ERROR_PRINTER_NOT_SUPPORTED Printer not supported",
-							61 => "ZBR_SDK_ERROR_CANNOT_GET_PRINTER_HANDLE Unable to open handle to Zebra printer driver",
+							61 => "ZBR_SDK_ERROR_CANNOT_GET_PRINTER_HANDLE Unable to open handle to Zebra printer driver\nIst der Drucker korrekt installiert und eingeschaltet? Falls ja, bitte den Drucker ein- und ausschalten.",
 							62 => "ZBR_SDK_ERROR_CANNOT_GET_PRINTER_DRIVER Cannot open printer driver",
 							63 => "ZBR_SDK_ERROR_INVALID_PARAMETER One of the arguments is invalid",
 							64 => "ZBR_SDK_ERROR_PRINTER_BUSY Printer is in use",
