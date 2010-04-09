@@ -30,10 +30,10 @@ module Mcc2
 								@type == 720)
 					#Bei Druckern mit Ausschuss-Fach, Karte in Ausschuss-Fach
 					#TODO geht noch nicht richtig, es werden 2 Karten in das Ausschuss-Fach transportiert
-					send_command("MRB")
+					send_command("MRB", "Karte in Ausschuss-Fach")
 				else
 					#Bei Druckern ohne Ausschuss-Fach, Karte einfach auswerfen
-					send_command("MO")
+					send_command("MO", "Karte auswerfen (Ausschuss)")
 				end
 			end
 
@@ -42,15 +42,23 @@ module Mcc2
 				@layout_file = layout_file
 				@chip = chip
 
-				puts("Zebra-Drucker: #{send_command_ex("V")}")
+        # Warte, bis Durck der vorherigen Karte beendet ist.
+        st = Time.now
+        begin
+          puts "Zebra-Drucker: #{send_command_ex("V", "Firmware-Version ermitteln")}"
+        rescue ZebraException => e
+          raise if Time.now-st > 30
+          sleep 1
+          retry
+        end
 
 				if chip
-					#Karte zum Kontaktlos-Leser fahren
-					send_command("MCL")
+					send_command("MCL", "Karte zum Kontaktlos-Leser fahren")
 					begin
 						# Kartenpersonalisierung
 						chip.pers_card(layout_file, row)
 					rescue => e
+            puts "Fehler bei Chip-Personalisierung: #{e} #{e.class} #{e.backtrace.join("\n")}"
 						begin
 							move_to_reject_box()
 						rescue => e1
@@ -58,8 +66,7 @@ module Mcc2
 						end
 						raise("Fehler bei Chip-Personalisierung, Karte ausgeschleust: #{e}")
 					end
-					# Karte vom Leser zum Drucken weiter schicken
-					send_command("MIB")
+					send_command("MIB", "Karte vom Leser zum Drucken weiter schicken")
 				end
 
 				#Jetzt erst den eigentlichen Druck beginnen
@@ -67,23 +74,23 @@ module Mcc2
 			end
 
 			#Sendet ein Kommando an den Drucker
-			def send_command(command)
-				puts("Zebra: Send command '#{command}'")
+			def send_command(command, msg=nil)
+				puts("Zebra: Send command '#{command}' #{msg}")
 				open_handle
 				begin
-					send_cmd(command)
+					send_cmd(command, msg)
 				ensure
 					close_handle
 				end
 			end
 
 			#Sendet ein Kommando an den Drucker
-			def send_command_ex(command)
-				puts("Zebra: Send command ex '#{command}'")
+			def send_command_ex(command, msg=nil)
+				puts("Zebra: Send command ex '#{command}' #{msg}")
 				ret = ""
 				open_handle
 				begin
-					ret = send_cmd_ex(command)
+					ret = send_cmd_ex(command, msg)
 				ensure
 					close_handle
 				end
@@ -123,7 +130,7 @@ module Mcc2
 				end
 			end
 
-			def send_cmd(command)
+			def send_cmd(command, msg=nil)
 				if (!@handle)
 					raise Exception.new("Es muss erst ein Drucker-Handle geöffnet werden!")
 				end
@@ -138,11 +145,11 @@ module Mcc2
 #				puts("needed: #{Time.now - start}")
 
 				if (result == 0)
-					raise ZebraException.new(error, "Fehler beim Senden von '#{command}' an den Drucker!")
+					raise ZebraException.new(error, "Fehler bei Druckerkommando #{command} #{msg}")
 				end
 			end
 
-			def send_cmd_ex(command)
+			def send_cmd_ex(command, msg=nil)
 				response = DL.malloc(1024)
 				#			response.struct!('S', :response)
 
@@ -167,7 +174,7 @@ module Mcc2
 #				puts("needed: #{Time.now - start}")
 
 				if (result == 0)
-					raise ZebraException.new(error, "Fehler beim Senden von '#{command}' an den Drucker!")
+					raise ZebraException.new(error, "Fehler bei Druckerkommando #{command} #{msg}")
 				end
 				response
 			end
