@@ -158,7 +158,14 @@ class Printerview < Dialogbox_printerview
   end
 
   def selected_PrinterZebra
-    selected_GdiPrinter(@combobox_zebra_printer, S_ZEBRAPRINTER_NAME)
+    begin
+      gem 'zebra_dll'
+      require 'zebra_dll'
+    rescue LoadError, RuntimeError => e
+      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Laden des Zebra-Treibers" , "Der Treiber für Zebra-Drucker konnte nicht geladen werden.\nBitte stellen Sie sicher, dass das Gem-Paket zebra_dll installiert ist.\n\n" + e.to_s)
+    else
+      selected_GdiPrinter(@combobox_zebra_printer, S_ZEBRAPRINTER_NAME)
+    end
   end
 
   def deactivate_printer_tabs
