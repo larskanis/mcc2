@@ -34,9 +34,14 @@ module Mcc2
 			chip = lf.build_chip_instance
 			dataman = lf.build_dataman_instance
 			rows = dataman.rows || [nil]
-			rows.each do |row|
-				erg = printer.print_card(lf, row, chip)
-			end
+      
+      begin
+        rows.each do |row|
+          erg = printer.print_card(lf, row, chip)
+        end
+      ensure
+        chip.close_reader
+      end
 		end
 
 		def add_xpath_value(param)
