@@ -30,10 +30,10 @@ module Mcc2
 								@type == 720)
 					#Bei Druckern mit Ausschuss-Fach, Karte in Ausschuss-Fach
 					#TODO geht noch nicht richtig, es werden 2 Karten in das Ausschuss-Fach transportiert
-					send_command("MRB")
+					send_command("MRB", "Karte in Ausschuss-Fach")
 				else
 					#Bei Druckern ohne Ausschuss-Fach, Karte einfach auswerfen
-					send_command("MO")
+					send_command("MO", "Karte auswerfen (Ausschuss)")
 				end
 			end
 
@@ -42,15 +42,23 @@ module Mcc2
 				@layout_file = layout_file
 				@chip = chip
 
-				puts("Zebra-Drucker: #{send_command_ex("V")}")
+        # Warte, bis Durck der vorherigen Karte beendet ist.
+        st = Time.now
+        begin
+          puts "Zebra-Drucker: #{send_command_ex("V", "Firmware-Version ermitteln")}"
+        rescue ZebraException => e
+          raise if Time.now-st > 30
+          sleep 1
+          retry
+        end
 
 				if chip
-					#Karte zum Kontaktlos-Leser fahren
-					send_command("MCL")
+					send_command("MCL", "Karte zum Kontaktlos-Leser fahren")
 					begin
 						# Kartenpersonalisierung
 						chip.pers_card(layout_file, row)
 					rescue => e
+            puts "Fehler bei Chip-Personalisierung: #{e} #{e.class} #{e.backtrace.join("\n")}"
 						begin
 							move_to_reject_box()
 						rescue => e1
@@ -58,8 +66,7 @@ module Mcc2
 						end
 						raise("Fehler bei Chip-Personalisierung, Karte ausgeschleust: #{e}")
 					end
-					# Karte vom Leser zum Drucken weiter schicken
-					send_command("MIB")
+					send_command("MIB", "Karte vom Leser zum Drucken weiter schicken")
 				end
 
 				#Jetzt erst den eigentlichen Druck beginnen
@@ -67,23 +74,23 @@ module Mcc2
 			end
 
 			#Sendet ein Kommando an den Drucker
-			def send_command(command)
-				puts("Zebra: Send command '#{command}'")
+			def send_command(command, msg=nil)
+				puts("Zebra: Send command '#{command}' #{msg}")
 				open_handle
 				begin
-					send_cmd(command)
+					send_cmd(command, msg)
 				ensure
 					close_handle
 				end
 			end
 
 			#Sendet ein Kommando an den Drucker
-			def send_command_ex(command)
-				puts("Zebra: Send command ex '#{command}'")
+			def send_command_ex(command, msg=nil)
+				puts("Zebra: Send command ex '#{command}' #{msg}")
 				ret = ""
 				open_handle
 				begin
-					ret = send_cmd_ex(command)
+					ret = send_cmd_ex(command, msg)
 				ensure
 					close_handle
 				end
@@ -123,7 +130,7 @@ module Mcc2
 				end
 			end
 
-			def send_cmd(command)
+			def send_cmd(command, msg=nil)
 				if (!@handle)
 					raise Exception.new("Es muss erst ein Drucker-Handle geöffnet werden!")
 				end
@@ -138,11 +145,11 @@ module Mcc2
 #				puts("needed: #{Time.now - start}")
 
 				if (result == 0)
-					raise ZebraException.new(error, "Fehler beim Senden von '#{command}' an den Drucker!")
+					raise ZebraException.new(error, "Fehler bei Druckerkommando #{command} #{msg}")
 				end
 			end
 
-			def send_cmd_ex(command)
+			def send_cmd_ex(command, msg=nil)
 				response = DL.malloc(1024)
 				#			response.struct!('S', :response)
 
@@ -167,7 +174,7 @@ module Mcc2
 #				puts("needed: #{Time.now - start}")
 
 				if (result == 0)
-					raise ZebraException.new(error, "Fehler beim Senden von '#{command}' an den Drucker!")
+					raise ZebraException.new(error, "Fehler bei Druckerkommando #{command} #{msg}")
 				end
 				response
 			end
@@ -204,7 +211,7 @@ module Mcc2
 							7 => "ZBR_ERROR_PRINT_HEAD_OPEN Print head is up",
 							8 => "ZBR_ERROR_OUT_OF_RIBBON Out of ribbon",
 							9 => "ZBR_ERROR_REMOVE_RIBBON Ribbon needs to be removed",
-							10 => "ZBR_ERROR_PARAMETERS_ERROR Wrong number of parameters or a value is incorrec",
+							10 => "ZBR_ERROR_PARAMETERS_ERROR Wrong number of parameters or a value is incorrect",
 							11 => "ZBR_ERROR_INVALID_COORDINATES Invalid coordinates while trying to draw a barcode or graphics",
 							12 => "ZBR_ERROR_UNKNOWN_BARCODE Undefined barcode type",
 							13 => "ZBR_ERROR_UNKNOWN_TEXT Text for magnetic encoding or bar code drawing is invalid",
@@ -238,26 +245,26 @@ module Mcc2
 							60 => "ZBR_SDK_ERROR_PRINTER_NOT_SUPPORTED Printer not supported",
 							61 => "ZBR_SDK_ERROR_CANNOT_GET_PRINTER_HANDLE Unable to open handle to Zebra printer driver\nIst der Drucker korrekt installiert und eingeschaltet? Falls ja, bitte den Drucker ein- und ausschalten.",
 							62 => "ZBR_SDK_ERROR_CANNOT_GET_PRINTER_DRIVER Cannot open printer driver",
-							63 => "ZBR_SDK_ERROR_INVALID_PARAMETER One of the arguments is invalid",
-							64 => "ZBR_SDK_ERROR_PRINTER_BUSY Printer is in use",
-							65 => "ZBR_SDK_ERROR_INVALID_PRINTER_HANDLE Invalid printer handle",
-							66 => "ZBR_SDK_ERROR_CLOSE_HANDLE_ERROR Error closing printer driver handle",
-							67 => "ZBR_SDK_ERROR_COMMUNICATION_ERROR Command failed due to communication error",
-							68 => "ZBR_SDK_ERROR_BUFFER_OVERFLOW Response too large for buffer",
-							69 => "ZBR_SDK_ERROR_READ_DATA_ERROR Error reading data",
-							70 => "ZBR_SDK_ERROR_WRITE_DATA_ERROR Error writing data",
-							71 => "ZBR_SDK_ERROR_LOAD_LIBRARY_ERROR Error loading SDK",
-							72 => "ZBR_SDK_ERROR_INVALID_STRUCT_ALIGNMENT Invalid structure alignment",
-							73 => "ZBR_SDK_ERROR_GETTING_DEVICE_CONTEXT Unable to create the device context for the driver",
-							74 => "ZBR_SDK_ERROR_SPOOLER_ERROR Print spooler error",
-							75 => "ZBR_SDK_ERROR_OUT_OF_MEMORY Operating system is out of memory",
-							76 => "ZBR_SDK_ERROR_OUT_OF_DISK_SPACE Operating system is out of disk space",
-							77 => "ZBR_SDK_ERROR_USER_ABORT Print job aborted by the user",
-							78 => "ZBR_SDK_ERROR_APPLICATION_ABORT Application aborted",
-							79 => "ZBR_SDK_ERROR_CREATE_FILE_ERROR Error creating file",
-							80 => "ZBR_SDK_ERROR_WRITE_FILE_ERROR Error writing file",
-							81 => "ZBR_SDK_ERROR_READ_FILE_ERROR Error reading file",
-							82 => "ZBR_SDK_ERROR_INVALID_MEDIA Invalid media	",
+							63 => "ZBR_SDK_ERROR_INVALID_PARAMETER One of the arguments is invalid",
+							64 => "ZBR_SDK_ERROR_PRINTER_BUSY Printer is in use",
+							65 => "ZBR_SDK_ERROR_INVALID_PRINTER_HANDLE Invalid printer handle",
+							66 => "ZBR_SDK_ERROR_CLOSE_HANDLE_ERROR Error closing printer driver handle",
+							67 => "ZBR_SDK_ERROR_COMMUNICATION_ERROR Command failed due to communication error",
+							68 => "ZBR_SDK_ERROR_BUFFER_OVERFLOW Response too large for buffer",
+							69 => "ZBR_SDK_ERROR_READ_DATA_ERROR Error reading data",
+							70 => "ZBR_SDK_ERROR_WRITE_DATA_ERROR Error writing data",
+							71 => "ZBR_SDK_ERROR_LOAD_LIBRARY_ERROR Error loading SDK",
+							72 => "ZBR_SDK_ERROR_INVALID_STRUCT_ALIGNMENT Invalid structure alignment",
+							73 => "ZBR_SDK_ERROR_GETTING_DEVICE_CONTEXT Unable to create the device context for the driver",
+							74 => "ZBR_SDK_ERROR_SPOOLER_ERROR Print spooler error",
+							75 => "ZBR_SDK_ERROR_OUT_OF_MEMORY Operating system is out of memory",
+							76 => "ZBR_SDK_ERROR_OUT_OF_DISK_SPACE Operating system is out of disk space",
+							77 => "ZBR_SDK_ERROR_USER_ABORT Print job aborted by the user",
+							78 => "ZBR_SDK_ERROR_APPLICATION_ABORT Application aborted",
+							79 => "ZBR_SDK_ERROR_CREATE_FILE_ERROR Error creating file",
+							80 => "ZBR_SDK_ERROR_WRITE_FILE_ERROR Error writing file",
+							81 => "ZBR_SDK_ERROR_READ_FILE_ERROR Error reading file",
+							82 => "ZBR_SDK_ERROR_INVALID_MEDIA Invalid media",
 							8001 => "ZBR_GDI_ERROR_GENERIC_ERROR Window API error, call GetLastError() function from Win32 API for error information",
 							8002 => "ZBR_GDI_ERROR_INVALID_PARAMETER One of the arguments is invalid",
 							8003 => "ZBR_GDI_ERROR_OUT_OF_MEMORY Operating system is out of memory",
