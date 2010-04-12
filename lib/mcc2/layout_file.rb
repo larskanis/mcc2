@@ -319,9 +319,9 @@ class LayoutFile
 
   def change_first_xpath_value(xpath, value)
     attr = @xml_doc.find_first(xpath)
-    if attr
-      attr.content = value
-    end
+    raise "Kein Element unter XPath #{xpath.inspect} in Datei #{@filename} gefunden" unless attr
+    puts "Setze Element unter XPath #{xpath.inspect} in Datei #{@filename} auf #{value.inspect}"
+    attr.content = value
   end
 
   #
