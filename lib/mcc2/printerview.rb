@@ -11,6 +11,7 @@ class Printerview < Dialogbox_printerview
     PrinterDescription.new( 'normaler Windows-Drucker', 'GdiPrinter', 0),
     PrinterDescription.new( 'als Bild speichern', 'FilePrinter', 1),
     PrinterDescription.new( 'XID-440', 'PrinterXID', 2),
+    PrinterDescription.new( 'Zebra', 'PrinterZebra', 3),
   ]
   
   def initialize parent, layout
@@ -25,6 +26,7 @@ class Printerview < Dialogbox_printerview
     @matrix_file.numColumns = 3
     @matrix_gdi.numColumns = 3
     @matrix_xid.numColumns = 3
+    @matrix_zebra.numColumns = 3
     @combobox_printertype.connect(SEL_COMMAND){ combobox_printertype_changed }
     @textfield_file_save_as.connect(SEL_COMMAND){
       @layout_file.set_attr_value(S_FILEPRINTER_SAVE_AS, @textfield_file_save_as.text)
@@ -43,6 +45,21 @@ class Printerview < Dialogbox_printerview
     @button_gdi_printersetup.connect(SEL_COMMAND){ gdi_printersetup_pressed(@combobox_gdi_printer, S_GDIPRINTER_INITDATA) }
     @combobox_xid_printer.connect(SEL_COMMAND){ gdi_combobox_changed(@combobox_xid_printer, S_XIDPRINTER_NAME, S_XIDPRINTER_INITDATA) }
     @button_xid_printersetup.connect(SEL_COMMAND){ gdi_printersetup_pressed(@combobox_xid_printer, S_XIDPRINTER_INITDATA) }
+    @combobox_zebra_printer.connect(SEL_COMMAND){ gdi_combobox_changed(@combobox_zebra_printer, S_ZEBRAPRINTER_NAME, S_ZEBRAPRINTER_INITDATA) }
+    @button_zebra_printersetup.connect(SEL_COMMAND){ gdi_printersetup_pressed(@combobox_zebra_printer, S_ZEBRAPRINTER_INITDATA) }
+
+		@button_zebra_reset.connect(SEL_COMMAND) { zebra_send_command(@combobox_zebra_printer, "R") }
+		@button_zebra_eject_card.connect(SEL_COMMAND) { zebra_send_command(@combobox_zebra_printer, "MO") }
+		@button_zebra_eject_card2.connect(SEL_COMMAND) { zebra_send_command(@combobox_zebra_printer, "ME") }
+		@button_zebra_move_contactless.connect(SEL_COMMAND) { zebra_send_command(@combobox_zebra_printer, "MCL") }
+		@button_zebra_print_testcard.connect(SEL_COMMAND) { zebra_send_command(@combobox_zebra_printer, "A") }
+		@button_zebra_printer_info.connect(SEL_COMMAND) { zebra_send_command(@combobox_zebra_printer, "V") }
+		@button_zebra_send.connect(SEL_COMMAND) do
+			command = @textfield_zebra_command.text.strip
+			if(command.length > 0)
+				zebra_send_command(@combobox_zebra_printer, command)
+			end
+		end
 
     fill_printertype_list
     combobox_printertype_changed
@@ -112,13 +129,45 @@ class Printerview < Dialogbox_printerview
     end
   end
 
-  def selected_FilePrinter
+	def zebra_send_command(combobox, command)
+		begin
+			@textfield_zebra_answer.text = ""
+
+			printer_name = combobox.getItemData(combobox.currentItem)
+			printer = Mcc2::Printer::PrinterZebra.new()
+			printer.open_handle(printer_name)
+			begin
+				answer = printer.send_cmd_ex(command).to_s
+				if(answer.length == 1 && answer[0] == 6)
+					answer = "<ACK>"
+				end
+				@textfield_zebra_answer.text = answer
+			ensure
+				printer.close_handle
+			end
+		rescue => e
+			FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Senden des Kommandos '#{command}' an den Drucker:", "#{e.to_s}\n\n#{e.backtrace.join("\n")}")
+		end
+	end
+
+	def selected_FilePrinter
   end
 
   def selected_PrinterXID
     selected_GdiPrinter(@combobox_xid_printer, S_XIDPRINTER_NAME)
   end
-  
+
+  def selected_PrinterZebra
+    begin
+      gem 'zebra_dll'
+      require 'zebra_dll'
+    rescue LoadError, RuntimeError => e
+      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Laden des Zebra-Treibers" , "Der Treiber für Zebra-Drucker konnte nicht geladen werden.\nBitte stellen Sie sicher, dass das Gem-Paket zebra_dll installiert ist.\n\n" + e.to_s)
+    else
+      selected_GdiPrinter(@combobox_zebra_printer, S_ZEBRAPRINTER_NAME)
+    end
+  end
+
   def deactivate_printer_tabs
     0.step(@tabbook_printers.numChildren-1, 2){|idx|
       @tabbook_printers.childAtIndex(idx).shown = false

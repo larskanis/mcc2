@@ -115,6 +115,7 @@ class Dataview < Dialogbox_dataview
         big_icon = nil
         mini_icon = nil
         rows.each_with_index{|row, idx|
+          row['mcc2_row_index'] = (idx + 1).to_s if row
           itemtext = "#{idx+1}\t" + felder.map{|feld|
             row[feld]
           }.join("\t")
@@ -299,7 +300,11 @@ class Dataview < Dialogbox_dataview
           event_handler_push{
             @parent.app.show_on_statusline "#{itemidx+1} von #{marked_items.length} Datensätzen gedruckt"
             # den aktuellen Datensatz deselektieren, wenn er erfolgreich gedruckt wurde
-            @iconlist_data.deselectItem(it) if erg
+            begin
+              @iconlist_data.deselectItem(it) if erg
+            rescue RuntimeError => e
+              raise unless e.to_s=~/already released/
+            end
           }
 
           if !erg || !@printing

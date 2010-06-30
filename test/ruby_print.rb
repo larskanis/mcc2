@@ -269,7 +269,7 @@ class RubyPrinting
     # den Pfad ermitteln, wo das tempor�re File abgelegt werden soll
     tf = Tempfile.new("afile") 
     temp_path = File.join(tf.path.split("/")[0..-2])
-    tf.close(true)            # #<File:0x4016e3c0>\n0x40187c30 
+    tf.close(true)            # #<File:0x4016e3c0>\n0x40187c30
 
     # 
     Magick::RVG.dpi = 600

@@ -83,6 +83,8 @@ module Mcc2
   S_GDIPRINTER_INITDATA = 'gdiprinter_initdata'
   S_XIDPRINTER_NAME = 'xidprinter_name'
   S_XIDPRINTER_INITDATA = 'xidprinter_initdata'
+  S_ZEBRAPRINTER_NAME = 'zebraprinter_name'
+  S_ZEBRAPRINTER_INITDATA = 'zebraprinter_initdata'
 
   UP = 0
   DOWN = 1

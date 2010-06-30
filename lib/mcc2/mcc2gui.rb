@@ -73,8 +73,8 @@ class Mcc2Gui < MainWindow
       connect_with_accel(@mcmd_picture){ new_object(PICTUREOBJECT) }
       connect_with_accel(@mcmd_box){ new_object(BOXOBJECT) }
       
-      @topwin.width = 1024
-      @topwin.height = 768
+      @topwin.width = 1020
+      @topwin.height = 748
       
       # ......................................................................
       @app.addChore{

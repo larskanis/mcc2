@@ -43,10 +43,10 @@ class Chip
   # +xml_doc+::   die XML-Struktur mit den Definitionen des Kartenlayouts
   # +row+::       ein Datensatz im FasteCSV-Format
   def pers_card(layout_file, row)
-    # muss vor dem require 'chipbase' kommen
+    # muss vor dem require kommen
     ENV['CHIPBASE_ENV'] = 'chip32'
     
-    require 'libs/chipcoding/chipbase'
+    require 'chipcoding/class_loader'
     
     p "pers_card #{row.inspect}"
     # die Chip-Parameter auslesen

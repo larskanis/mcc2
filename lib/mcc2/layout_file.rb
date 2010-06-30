@@ -16,6 +16,7 @@ module Printer
   autoload 'PrinterXID', 'mcc2/printer/printer_xid'
   autoload 'GdiPrinter', 'mcc2/printer/gdi_printer'
   autoload 'FilePrinter', 'mcc2/printer/file_printer'
+  autoload 'PrinterZebra', 'mcc2/printer/printer_zebra'
 end
 
 module DataMan
@@ -74,6 +75,8 @@ class LayoutFile
     add_attr(S_GDIPRINTER_INITDATA, String, '')
     add_attr(S_XIDPRINTER_NAME, String, '')
     add_attr(S_XIDPRINTER_INITDATA, String, '')
+    add_attr(S_ZEBRAPRINTER_NAME, String, '')
+    add_attr(S_ZEBRAPRINTER_INITDATA, String, '')
   end
  	#---------------------------------------------------------------------------------------------------------
   def xml_doc
@@ -207,7 +210,7 @@ class LayoutFile
 
 	def find_graphic_object_by_id(id)
 		go = xml_doc.find_first(
-			"//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[contains(., #{id.to_s})]").parent
+			"//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[.='#{id.to_s}']").parent
     typ = go.find_first(GOA_TYP).content
     
 		LayoutObject::Graphic.get_object_by_typ(typ, go)
@@ -316,9 +319,9 @@ class LayoutFile
 
   def change_first_xpath_value(xpath, value)
     attr = @xml_doc.find_first(xpath)
-    if attr
-      attr.content = value
-    end
+    raise "Kein Element unter XPath #{xpath.inspect} in Datei #{@filename} gefunden" unless attr
+    puts "Setze Element unter XPath #{xpath.inspect} in Datei #{@filename} auf #{value.inspect}"
+    attr.content = value
   end
 
   #
