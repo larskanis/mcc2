@@ -22,6 +22,7 @@ end
 module DataMan
   autoload 'Database', 'mcc2/dataman/database'
   autoload 'CSV', 'mcc2/dataman/csv'
+  autoload 'DBF', 'mcc2/dataman/dbf'
   autoload 'None', 'mcc2/dataman/none'
 end
 
@@ -404,6 +405,8 @@ class LayoutFile
       DataMan::Database.new(datasource)
     elsif datamantyp == CSV
       DataMan::CSV.new(datasource, encoding)
+    elsif datamantyp == DBF
+      DataMan::DBF.new(datasource, encoding)
     elsif datamantyp == NONE
       DataMan::None.new(datasource)
     else
