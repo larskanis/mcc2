@@ -27,7 +27,7 @@ class DBF < Base
     table.each{|row|
       h = {}
       row.to_a.each_with_index{|text, idx|
-        h[@header_row[idx]] = @iconv.iconv(text)
+        h[@header_row[idx]] = @iconv.iconv(text.to_s)
       }
       @table << h
     }
