@@ -75,6 +75,7 @@ class Layoutview
     l.clearItems
     l.appendItem('keine Daten - statisches Layout', NONE)
     l.appendItem('CSV-Datei', CSV)
+    l.appendItem('DBF-Datei', DBF)
     l.appendItem('Datenbank', DATABASE)
     l.connect(SEL_COMMAND){ combobox_datasource_typ_changed }
     

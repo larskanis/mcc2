@@ -30,7 +30,7 @@ class Dataview < Dialogbox_dataview
     }
     # Button für das Auswählen einer Datenquelle an Textfeld knüpfen
     Layout.connect_filebutton_to_textfield( @button_datasource, @textfield_datasource,
-          ["Semicolon seperated file (*.csv)", "All Files (*)"]
+          ["Semicolon seperated file (*.csv,*.dbf)", "All Files (*)"]
     )
     
     @button_select_all.connect(SEL_COMMAND){ select_all }

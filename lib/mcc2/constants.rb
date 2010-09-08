@@ -91,6 +91,7 @@ module Mcc2
 
   NONE = 'none'
   CSV = 'csv'
+  DBF = 'dbf'
   DATABASE = 'database'
 
   NO = 'no'
@@ -104,7 +105,7 @@ module Mcc2
   ENC_LATIN1 = 'LATIN1'
 
   VALID_ENCODINGS = [ENC_UTF8, ENC_IBM850, ENC_LATIN1]
-  VALID_DATASOURCES = [DATABASE, CSV, NONE]
+  VALID_DATASOURCES = [DATABASE, CSV, DBF, NONE]
 
   DELETE = 0
   COPY = 1

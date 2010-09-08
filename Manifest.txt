@@ -13,6 +13,7 @@ lib/mcc2/constants.rb
 lib/mcc2/dataman/base.rb
 lib/mcc2/dataman/csv.rb
 lib/mcc2/dataman/database.rb
+lib/mcc2/dataman/dbf.rb
 lib/mcc2/dataman/none.rb
 lib/mcc2/dataview.rb
 lib/mcc2/dataview_dlg.rb
