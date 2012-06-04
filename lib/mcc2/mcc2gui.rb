@@ -30,7 +30,7 @@ def loadImage(file)
 end
 
 # die GUI's, alle mit FoxGUI-Builder erstellt
-require 'mcc2/mcc2_mainwin'      # das Main-GUI 
+require 'mcc2/mcc2_mainwin'      # das Main-GUI
 require 'mcc2/cc_dialogbox.rb'
 
 require 'mcc2/layout'            # das Kartenlayout
@@ -49,39 +49,43 @@ class Mcc2Gui < MainWindow
     @app = parent
     super(parent)
       # Titel des Hauptfensters mit Programmname und Version setzen
-      
-      # Achtung der Text in den nächsten Zeilen ändert sich beim Einchecken 
-      # nicht manuell bearbeiten!
+
       @topwin.title = "mcc2 Version #{ Mcc2::VERSION }"
-      
+
+      @mdimenu = FXMDIMenu.new(@topwin, @mdiclient)
+      FXMDIWindowButton.new(@menubar, @mdimenu, @mdiclient, FXMDIClient::ID_MDI_MENUWINDOW, LAYOUT_LEFT)
+      FXMDIDeleteButton.new(@menubar, @mdiclient, FXMDIClient::ID_MDI_MENUCLOSE, FRAME_RAISED|LAYOUT_RIGHT)
+      FXMDIRestoreButton.new(@menubar, @mdiclient, FXMDIClient::ID_MDI_MENURESTORE, FRAME_RAISED|LAYOUT_RIGHT)
+      FXMDIMinimizeButton.new(@menubar, @mdiclient, FXMDIClient::ID_MDI_MENUMINIMIZE, FRAME_RAISED|LAYOUT_RIGHT)
+
       # ......................................................................
       # die Menue-Einträge modifizieren
-      
+
       @menutitle_datei.text = "&Datei"
-      
+
       connect_with_accel(@mcmd_new){ new_layout }
       connect_with_accel(@mcmd_open){ open_layout }
       connect_with_accel(@mcmd_close){ close_layout }
       connect_with_accel(@mcmd_save){ save_layout }
       connect_with_accel(@mcmd_save_as){ save_layout(true) }
       connect_with_accel(@mcmd_exit){ @app.stop if can_close? }
-      
+
       @menutitle_object.text = "Neues &Objekt"
-      
+
       connect_with_accel(@mcmd_text){ new_object(TEXTOBJECT) }
       connect_with_accel(@mcmd_barcode){ new_object(BARCODEOBJECT) }
       connect_with_accel(@mcmd_picture){ new_object(PICTUREOBJECT) }
       connect_with_accel(@mcmd_box){ new_object(BOXOBJECT) }
-      
+
       @topwin.width = 1020
       @topwin.height = 748
-      
+
       # ......................................................................
       @app.addChore{
         argv.each do |arg|
           open_layout(arg)
         end
-      }    
+      }
 
       @topwin.connect(SEL_CLOSE){|sender, selector, data|
         can_close? ? 0 : 1
@@ -98,7 +102,7 @@ class Mcc2Gui < MainWindow
       @statusbar.statusLine.textHighlightColor = FXRGB(255,0,0)
       @statusbar.statusLine.normalText = ''
   end
-    
+
   def can_close?
     @mdiclient.each_child{|child|
       res = child.userData.can_close?
@@ -111,7 +115,7 @@ class Mcc2Gui < MainWindow
     button.text = text if text
     button.text = button.text.gsub('_', '&')
     button.connect(SEL_COMMAND, &block)
-    
+
     # work-a-round:
     # FXPseudoTarget is not correctly marked as used in some fxruby-versions
     # and is therefore GC'ed.
@@ -124,9 +128,9 @@ class Mcc2Gui < MainWindow
     @topwin.accelTable.addAccel(fxparseAccel(button.accelText), tgt, seldn)
     # end work-a-round:
   end
-  
+
 	#---------------------------------------------------------------------------------------------------------
-  
+
   def new_object(typ)
     child = @mdiclient.activeChild
     if child
@@ -134,7 +138,7 @@ class Mcc2Gui < MainWindow
     end
   end
 	#---------------------------------------------------------------------------------------------------------
-  
+
   def save_layout(filename_dialog=false)
     child = @mdiclient.activeChild
     if child
@@ -142,9 +146,9 @@ class Mcc2Gui < MainWindow
     end
   end
 	#---------------------------------------------------------------------------------------------------------
-  
+
   def new_layout
-    child = FXMDIChild.new(@mdiclient, "Layout", nil, nil, 0, 0, 0, 800, 600)
+    child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800, 600)
     child.userData = Layout.new(child)
     child.create
     child.show
@@ -153,13 +157,13 @@ class Mcc2Gui < MainWindow
     @mdiclient.setActiveChild(child)
   end
 	#---------------------------------------------------------------------------------------------------------
-  
+
   def open_layout(filename=nil)
     unless filename && FileTest.exists?(filename)
       filename = FXFileDialog.getOpenFilename(@topwin, 'Laden', './', patterns = '*.xml', initial = 0)
     end
     unless filename.to_s.empty?
-      child = FXMDIChild.new(@mdiclient, "Layout", nil, nil, 0, 0, 0, 800, 600)
+      child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800, 600)
       begin
         child.userData = Layout.new(child, filename)
       rescue LayoutFile::Error => e
@@ -180,7 +184,7 @@ class Mcc2Gui < MainWindow
       child.close
     end
   end
-  
+
   def self.run(argv)
     Thread.abort_on_exception = true
 
