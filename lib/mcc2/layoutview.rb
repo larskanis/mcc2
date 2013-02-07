@@ -617,7 +617,7 @@ class Layoutview
     # den gewählten Parameter in den entsprechenden Listen markieren
     bc_typ = node.find_first(GOA_BARCODE_TYP).content
     bc_id = @barcodes.index(bc_typ)
-    error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Der Barcode-Typ #{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes.\ Der Wert wird auf 'NONE' gesetzt.", 'ok') unless bc_id
+    error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Der Barcode-Typ #{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes.\ Der Wert wird auf 'NONE' gesetzt.", ['&OK']) unless bc_id
     @lf.listbox_barcode_typ.currentItem = bc_id if bc_id
   end
   #---------------------------------------------------------------------------------------------------------
