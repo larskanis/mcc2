@@ -5,10 +5,10 @@ require 'mcc2/layoutview_dlg'
 
 class Layoutview
   include Fox
-  
+
   JobSetupObjID = -1
-  
-  
+
+
   # initialisiert zusätzliche Elemente im Layout-Dialog, die nicht oder schlecht im Fox-GUI-Builder erzeugt werden können
   # setzt Parameter bei Dialog-Elementen
   # definiert die Aktionen, welche bei bestimmten Ereignissen auf bestimmten Elementen des Dialogs ausgeführt werden sollen
@@ -78,12 +78,12 @@ class Layoutview
     l.appendItem('DBF-Datei', DBF)
     l.appendItem('Datenbank', DATABASE)
     l.connect(SEL_COMMAND){ combobox_datasource_typ_changed }
-    
+
     l = @lf.combobox_datasource_encoding
     l.clearItems
     VALID_ENCODINGS.each{|enc| l.appendItem(enc, enc) }
     l.connect(SEL_COMMAND){ combobox_datasource_encoding_changed }
-    
+
 
     # die Auswahl auf welche Seite das Objekt soll
     @lf.spinner_seiten_nr.connect(SEL_COMMAND){ seiten_nr_changed }
@@ -190,10 +190,10 @@ class Layoutview
   def layoutview_tab_activated(active=true)
     draw_preview if active
   end
-  
+
   def layout_file= file
     @layout_file = file
-    
+
     # füllt die Liste mit der Übersicht über die graphischen Objekte
     fill_objectlist
 
@@ -215,7 +215,7 @@ class Layoutview
     draw_preview(true)
   end
   #
-  
+
   def enhanced_data_edit(textfield)
     if (dm=@layout.dataman) && dm.headers
       filemenu = FXMenuPane.new(textfield)
@@ -237,12 +237,12 @@ class Layoutview
   def button_sample_data
     objnode = @layout_file.get_objectnode_by_id(@selected_object_id)
     return unless objnode
-    typ = objnode.find_first(GOA_TYP).content
+    typ = objnode.at_xpath(GOA_TYP).content
     if typ == PICTUREOBJECT
       Layout.execute_filedialog_for_textfield(@lf.textfield_sample_data, filepatterns='*')
     end
   end
-  
+
   #---------------------------------------------------------------------------------------------------------
   # die Reaktion, wenn der Status eines Checkbuttons geänderrt wurde
   # setzt das changed-Flag
@@ -261,9 +261,9 @@ class Layoutview
   def change_chkbtn_printlist
     objnode = @layout_file.get_objectnode_by_id(@selected_object_id)
     return unless objnode
-    node = objnode.find(GOA_PRINTLIST)
-    if @lf.checkbutton_printlist.state != node.first.content
-      node.first.content = @lf.checkbutton_printlist.state.to_s
+    node = objnode.at_xpath(GOA_PRINTLIST)
+    if @lf.checkbutton_printlist.state != node.content
+      node.content = @lf.checkbutton_printlist.state.to_s
       changed_attributes
     end
   end
@@ -293,10 +293,10 @@ class Layoutview
       # dabei alle Objekte durchlaufen und im Array die Position der alten ID suchen und in die ID schreiben
       # dies muss so getan werden
       # wenn es anders herum versucht wird, d.h. das Array durchlaufen und dann das Objekt im XML gesucht, dann werden die ID's schon verändert und die Suche schlägt dann fehl
-      @layout_file.xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
-        id = go_struct.find(GOA_ID).first.content.to_i
+      @layout_file.xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
+        id = go_struct.at_xpath(GOA_ID).content.to_i
         new_id = obj_arr.index(id)
-        go_struct.find(GOA_ID).first.content = new_id.to_s
+        go_struct.at_xpath(GOA_ID).content = new_id.to_s
       }
       currentItem = @lf.iconlist_objects.currentItem
 
@@ -345,9 +345,9 @@ class Layoutview
   # die Aktion, welche ausgeführt wird, wenn die Auswahl der Seitennummer geändert wurde, auf welcher das Objekt ausgegeben werden soll
   def seiten_nr_changed
     seite = @lf.spinner_seiten_nr.value - 1
-    node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_PAGE_NR)
-    if seite != node.first.content.to_i
-      node.first.content = seite.to_s
+    node = @layout_file.get_objectnode_by_id(@selected_object_id).at_xpath(GOA_PAGE_NR)
+    if seite != node.content.to_i
+      node.content = seite.to_s
       changed_attributes
     end
   end
@@ -357,9 +357,9 @@ class Layoutview
   # ==== Parameter
   # +r+:: das Radio-Mutex-Objekt
   def radiomutex_justify_changed(r)
-    node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_JUSTIFICATION)
-    if r.to_s != node.first.content
-      node.first.content = r.to_s
+    node = @layout_file.get_objectnode_by_id(@selected_object_id).at_xpath(GOA_JUSTIFICATION)
+    if r.to_s != node.content
+      node.content = r.to_s
       changed_attributes
     end
   end
@@ -376,29 +376,29 @@ class Layoutview
       id = sender.wdg_name.split("_")[-1].to_i
 
       # die die Route zu den Chipparams suchen
-      chip_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
+      chip_attrs = @layout_file.xml_doc.at_xpath("//#{S_ROOT}/#{S_CHIP}")
 
       # den entsprechenden Parameter suchen
       attr_name = "#{S_PARAM}_#{id+1}"
-      node = chip_attrs.find_first(attr_name)
+      node = chip_attrs.at_xpath(attr_name)
     elsif [S_X_OFFSET, S_Y_OFFSET, S_WIDTH, S_HEIGHT].include?(attr_name)
       @layout_file.set_attr_value(attr_name, sender.text)
       changed_attributes
     elsif attr_name == S_X_OFFSET
-      lay_attrs = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
-      node = lay_attrs.find_first(S_X_OFFSET)
+      lay_attrs = @layout_file.xml_doc.at_xpath("//#{S_ROOT}/#{S_LAYOUT}")
+      node = lay_attrs.at_xpath(S_X_OFFSET)
     elsif attr_name == S_MSSPUR1
-      node = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}/#{S_MSSPUR1}")
+      node = @layout_file.xml_doc.at_xpath("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}/#{S_MSSPUR1}")
     elsif attr_name == S_MSSPUR2
-      node = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}/#{S_MSSPUR2}")
+      node = @layout_file.xml_doc.at_xpath("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}/#{S_MSSPUR2}")
     elsif attr_name == S_MSSPUR3
-      node = @layout_file.xml_doc.find_first("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}/#{S_MSSPUR3}")
+      node = @layout_file.xml_doc.at_xpath("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}/#{S_MSSPUR3}")
     else
       # in diesem Zweig werden alle Graphik-Objekte bearbeitet
       # das Attribut suchen
       objnode = @layout_file.get_objectnode_by_id(@selected_object_id)
       return unless objnode
-      node = objnode.find(attr_name).first
+      node = objnode.at_xpath(attr_name)
     end
 
     # nur wenn im Textfeld etwas geändert wurde, den Text in das Attribut schreiben und das changed-Flag setzen
@@ -413,9 +413,9 @@ class Layoutview
   def textfield_name_exit
     objnode = @layout_file.get_objectnode_by_id(@selected_object_id)
     return unless objnode
-    orig_name = objnode.find(GOA_NAME)
-    if @lf.textfield_name.text != orig_name.first.content
-      orig_name.first.content = @lf.textfield_name.text
+    orig_name = objnode.at_xpath(GOA_NAME)
+    if @lf.textfield_name.text != orig_name.content
+      orig_name.content = @lf.textfield_name.text
       changed_attributes
       fill_objectlist
     end
@@ -454,7 +454,7 @@ class Layoutview
     @selected_object_id = id
     @layout.selected_object_id = id
   end
-  
+
   #---------------------------------------------------------------------------------------------------------
 
   # deaktiviert die Tabs im Layout-Dialog, welche Objekt-spezifisch sind
@@ -494,41 +494,41 @@ class Layoutview
       @lf.tabitem_posit.shown = true
 
       # Daten-Attribute
-      @lf.textfield_name.text = node.find(GOA_NAME).first.content
+      @lf.textfield_name.text = node.at_xpath(GOA_NAME).content
 
       # Positionsattribute
-      @lf.textfield_x.text = node.find(GOA_X).first.content
-      @lf.textfield_y.text = node.find(GOA_Y).first.content
-      @lf.textfield_width.text = node.find(GOA_WIDTH).first.content
-      @lf.textfield_height.text = node.find(GOA_HEIGHT).first.content
-      @lf.textfield_rotation.text = node.find(GOA_ROTATION).first.content
-      @lf.textfield_rotation.text = node.find(GOA_ROTATION).first.content
-      @lf.spinner_seiten_nr.value = node.find(GOA_PAGE_NR).first.content.to_i + 1
+      @lf.textfield_x.text = node.at_xpath(GOA_X).content
+      @lf.textfield_y.text = node.at_xpath(GOA_Y).content
+      @lf.textfield_width.text = node.at_xpath(GOA_WIDTH).content
+      @lf.textfield_height.text = node.at_xpath(GOA_HEIGHT).content
+      @lf.textfield_rotation.text = node.at_xpath(GOA_ROTATION).content
+      @lf.textfield_rotation.text = node.at_xpath(GOA_ROTATION).content
+      @lf.spinner_seiten_nr.value = node.at_xpath(GOA_PAGE_NR).content.to_i + 1
   #      @lf.iconlist_justify.connect(SEL_CHANGED){iconlist_justify_exit } # todo
 
-      if node.find(GOA_PRINTLIST).first.content == 'false' || node.find(GOA_PRINTLIST).first.content == '0'
+      if node.at_xpath(GOA_PRINTLIST).content == 'false' || node.at_xpath(GOA_PRINTLIST).content == '0'
         @lf.checkbutton_printlist.state = false
       else
         @lf.checkbutton_printlist.state = true
       end
 
       # Typ-spezifische Attribute auslesen
-      if [BARCODEOBJECT, TEXTOBJECT, PICTUREOBJECT].include?( node.find(GOA_TYP).first.content )
-        @lf.textfield_sample_data.text = node.find(GOA_SAMPLE_DATA).first.content
-        @lf.textfield_data.text = node.find(GOA_DATA).first.content
-        @lf.textfield_data_non_text.text = node.find(GOA_DATA).first.content
+      if [BARCODEOBJECT, TEXTOBJECT, PICTUREOBJECT].include?( node.at_xpath(GOA_TYP).content )
+        @lf.textfield_sample_data.text = node.at_xpath(GOA_SAMPLE_DATA).content
+        @lf.textfield_data.text = node.at_xpath(GOA_DATA).content
+        @lf.textfield_data_non_text.text = node.at_xpath(GOA_DATA).content
       end
-      
+
       # Attribute, die Barcode und Texte haben
-      if node.find(GOA_TYP).first.content == TEXTOBJECT || node.find(GOA_TYP).first.content == BARCODEOBJECT
+      if node.at_xpath(GOA_TYP).content == TEXTOBJECT || node.at_xpath(GOA_TYP).content == BARCODEOBJECT
         @lf.tabitem_font.shown = true
-        @lf.textfield_text_color.text = node.find(GOA_FONT_COLOR).first.content
+        @lf.textfield_text_color.text = node.at_xpath(GOA_FONT_COLOR).content
 
         # den Radiobutton der Ausrichtung setzen
         @lf.radiobutton_just_l.state = false
         @lf.radiobutton_just_l.state = false
         @lf.radiobutton_just_r.state = false
-        just = @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_JUSTIFICATION).content
+        just = @layout_file.get_objectnode_by_id(@selected_object_id).at_xpath(GOA_JUSTIFICATION).content
         if just == S_JUST_LEFT
           @lf.radiobutton_just_l.state = true
         elsif just == S_JUST_MID
@@ -542,31 +542,31 @@ class Layoutview
       end
 
       # Attribute, die nur Texte haben
-      if node.find(GOA_TYP).first.content == TEXTOBJECT
+      if node.at_xpath(GOA_TYP).content == TEXTOBJECT
         data_block_shown
       end
 
       # Attribute, die nur Barcodes haben
-      if node.find(GOA_TYP).first.content == BARCODEOBJECT
+      if node.at_xpath(GOA_TYP).content == BARCODEOBJECT
         @lf.tabitem_barcode.shown = true
-        @lf.spinner_barcode_ratio.value = node.find(GOA_BAR_RATIO).first.content.to_i
+        @lf.spinner_barcode_ratio.value = node.at_xpath(GOA_BAR_RATIO).content.to_i
         fill_barcode_typ_list
         fill_barcode_fields(node)
         data_shown
       end
 
       # Attribute, die nur Bilder haben
-      if node.find(GOA_TYP).first.content == PICTUREOBJECT
+      if node.at_xpath(GOA_TYP).content == PICTUREOBJECT
         data_shown
       end
 
-      if node.find(GOA_TYP).first.content == BOXOBJECT
+      if node.at_xpath(GOA_TYP).content == BOXOBJECT
         @lf.tabitem_box.shown = true
         @lf.tabitem_box.recalc
-        @lf.textfield_box_fill_color.text = node.find(GOA_FILL_COLOR).first.content
-        @lf.textfield_box_border_color.text = node.find(GOA_BORDER_COLOR).first.content
-        @lf.textfield_box_border_width.text = node.find(GOA_BORDER_WIDTH).first.content
-        @lf.textfield_box_corner_radius.text = node.find(GOA_CORNER_RADIUS).first.content
+        @lf.textfield_box_fill_color.text = node.at_xpath(GOA_FILL_COLOR).content
+        @lf.textfield_box_border_color.text = node.at_xpath(GOA_BORDER_COLOR).content
+        @lf.textfield_box_border_width.text = node.at_xpath(GOA_BORDER_WIDTH).content
+        @lf.textfield_box_corner_radius.text = node.at_xpath(GOA_CORNER_RADIUS).content
         no_data_shown
       end
     end
@@ -576,15 +576,15 @@ class Layoutview
   #---------------------------------------------------------------------------------------------------------
 
   def sel_list_box_changed(sender)
-    #~ node.find_first(GOA_FONT_HEIGHT).content = (fontdesc.size.to_f/10).to_s
+    #~ node.at_xpath(GOA_FONT_HEIGHT).content = (fontdesc.size.to_f/10).to_s
 
     if sender.wdg_name == 'listbox_fonts'
       font = @lf.listbox_fonts.getItemData(@lf.listbox_fonts.currentItem)
       @lf.textfield_font_file.enabled = font=='from_file'
-      @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_FONT_TYP).content = font
+      @layout_file.get_objectnode_by_id(@selected_object_id).at_xpath(GOA_FONT_TYP).content = font
     elsif sender.wdg_name == 'listbox_barcode_typ'
       bc = @lf.listbox_barcode_typ.getItemText(@lf.listbox_barcode_typ.currentItem)
-      @layout_file.get_objectnode_by_id(@selected_object_id).find_first(GOA_BARCODE_TYP).content = bc
+      @layout_file.get_objectnode_by_id(@selected_object_id).at_xpath(GOA_BARCODE_TYP).content = bc
     else
       raise "unbekannter Sender. Eingriff des Programmierers nötig. :-("
     end
@@ -595,9 +595,9 @@ class Layoutview
   # die Aktion, welche ausgeführt wird, wenn die Auswahl der Modulbreite des Barcodes geändert wird
   def bc_modul_with_changed
     mw = @lf.spinner_barcode_ratio.value
-    node = @layout_file.get_objectnode_by_id(@selected_object_id).find(GOA_BAR_RATIO)
-    if mw != node.first.content.to_i
-      node.first.content = mw.to_s
+    node = @layout_file.get_objectnode_by_id(@selected_object_id).at_xpath(GOA_BAR_RATIO)
+    if mw != node.content.to_i
+      node.content = mw.to_s
       changed_attributes
     end
   end
@@ -615,7 +615,7 @@ class Layoutview
   # füllt die Barcode-spezifischen Felder mit den gewählten Optionen aus dem Layout
   def fill_barcode_fields(node)
     # den gewählten Parameter in den entsprechenden Listen markieren
-    bc_typ = node.find_first(GOA_BARCODE_TYP).content
+    bc_typ = node.at_xpath(GOA_BARCODE_TYP).content
     bc_id = @barcodes.index(bc_typ)
     error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Der Barcode-Typ #{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes.\ Der Wert wird auf 'NONE' gesetzt.", ['&OK']) unless bc_id
     @lf.listbox_barcode_typ.currentItem = bc_id if bc_id
@@ -641,13 +641,13 @@ class Layoutview
   # füllt die Font-spezifischen Felder mit den gewählten Optionen aus dem Layout
   def fill_font_fields(node)
     # die Schriftgröße zurücklesen
-    @lf.textfield_fontsize.text = node.find_first(GOA_FONT_HEIGHT).content
+    @lf.textfield_fontsize.text = node.at_xpath(GOA_FONT_HEIGHT).content
 
-    font_typ = node.find_first(GOA_FONT_TYP).content
+    font_typ = node.at_xpath(GOA_FONT_TYP).content
     # den gewählten Parameter in den entsprechenden Listen markieren
     set_listbox_value('listbox_fonts', font_typ)
     @lf.textfield_font_file.enabled = font_typ=='from_file'
-    @lf.textfield_font_file.text = node.find_first(GOA_FONT_FILE).content
+    @lf.textfield_font_file.text = node.at_xpath(GOA_FONT_FILE).content
   end
   #---------------------------------------------------------------------------------------------------------
 
@@ -709,7 +709,7 @@ class Layoutview
       @layout_file.add_object(typ)
       changed_attributes
     elsif action == DELETE
-      nn = node.find_first(GOA_NAME).content
+      nn = node.at_xpath(GOA_NAME).content
       s = "Wollen Sie wirklich das Objekt '#{nn}' löschen?\nDieser Vorgang lässt sich nicht rückgängig machen!"
       error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, s, ['&Löschen','&Abbrechen'])
       error_WahlMessage.execute

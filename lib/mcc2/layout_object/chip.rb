@@ -10,10 +10,10 @@ module LayoutObject
 class Chip
   class InvalidScriptType < RuntimeError
   end
-  
+
   # der Kartenleser
   attr_accessor :reader
-  
+
   def initialize(xml_elem)
     @xml_elem = xml_elem
   end
@@ -27,17 +27,17 @@ class Chip
       params << param
     }
   end
-  
+
   # Schließen des Chip-Objekts
   def  close_reader
     @chip_obj.close if @chip_obj
     @chip_obj = nil
   end
-  
+
   def [](attr)
-    @xml_elem.find_first(attr).content
+    @xml_elem.at_xpath(attr).content
   end
-  
+
   # personalisiert eine Karte
   # === Parameter
   # +xml_doc+::   die XML-Struktur mit den Definitionen des Kartenlayouts
@@ -45,9 +45,9 @@ class Chip
   def pers_card(layout_file, row)
     # muss vor dem require kommen
     ENV['CHIPBASE_ENV'] = 'chip32'
-    
+
     require 'chipcoding/class_loader'
-    
+
     p "pers_card #{row.inspect}"
     # die Chip-Parameter auslesen
     # erst ein leeres Array anlegen
@@ -57,18 +57,18 @@ class Chip
       attr_name = "#{S_PARAM}_#{i}"
       params << DataMan.replace_variables(self[attr_name], row)
     }
-    
+
     # die Personalisierung durchführen
     if params[7] =~ /^RUBY;(.*)/
       @chip_obj ||= Chip32n::ClassLoader.load($1)
     else
       raise InvalidScriptType, "Ungültiges Perso-Script eingestellt"
     end
-     
+
     @chip_obj.personalize(params)
-    
+
   end
-  
+
 end
 end
 end
@@ -76,9 +76,9 @@ end
 if __FILE__ == $0
   #~ system("ruby mcc2.rb #{ARGV}")
   #~ exit
-  
+
   chip = Chip.new
-  
+
   params = [nil]*chip.anz_params
   params[0] = 'ohne'
   params[3] = '31382' # Batch
@@ -86,13 +86,13 @@ if __FILE__ == $0
   params[7] = 'RUBY;i:/THERMO/golf/GOLF_MIF_PLATZREIFE.RB'
   params[10] = 'ffffffffffff'
   params[22] = 'feigusb'
-  
+
   if params[7] =~ /^RUBY;(.*)/
     basename = File.basename($1)
     chip_obj = Chip32n::ClassLoader.load(basename)
   end
-   
+
   chip_obj.personalize(params)
   chip_obj.close
-  
+
 end

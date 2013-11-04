@@ -21,17 +21,17 @@ class Graphic
   end
 
   def add_attr(dest, attr_name, attr_typ, attr_default_value)
-    attr = GO_Attribut.new(attr_name, attr_typ, attr_default_value) 
+    attr = GO_Attribut.new(attr_name, attr_typ, attr_default_value)
     dest[attr.attr_name] = attr
   end
 
   def [](attr)
-    goattr = @xml_elem.find_first(attr)
+    goattr = @xml_elem.at_xpath(attr)
     goattr.content if goattr
   end
 
   def []=(attr, text)
-    goattr = @xml_elem.find_first(attr)
+    goattr = @xml_elem.at_xpath(attr)
     goattr.content = text if goattr
   end
 

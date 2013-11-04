@@ -8,7 +8,7 @@ class Magstripe
   end
 
   def [](attr)
-    @xml_elem.find_first(attr).content
+    @xml_elem.at_xpath(attr).content
   end
 end
 end

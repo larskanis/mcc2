@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-require 'xml'               # für die Layout-Datei
+require 'nokogiri'               # für die Layout-Datei
 require 'mcc2/constants'
 require 'mcc2/layout_object/go_attribut'
 require 'mcc2/layout_object/graphic'    # die Basisklasse für die grafischen Objekte
@@ -37,24 +37,24 @@ class LayoutFile
   end
 
   FILE_VERSION_RANGE = 1..1
-  
+
   attr_accessor :attributes
   attr_accessor :filename
-  
+
   def self.load_from_xml(filename)
     o = self.new
     o.load_from_xml(filename)
     return o
   end
  	#---------------------------------------------------------------------------------------------------------
-  
+
   def self.create_xml
     o = self.new
     o.create_xml
     return o
   end
  	#---------------------------------------------------------------------------------------------------------
-  
+
   def initialize
     @xml_doc = nil
     @attributes = {}
@@ -84,103 +84,106 @@ class LayoutFile
     @xml_doc
   end
  	#---------------------------------------------------------------------------------------------------------
-  
+
   # erzeugt eine neue XML-Datei und initialisiert die entsprechenden Variablen und Objekte
 	def create_xml
-    @xml_doc = LibXML::XML::Document.new
-    @xml_doc.encoding = XML::Encoding::UTF_8
-    @xml_doc.root = XML::Node.new(S_ROOT)
+    @xml_doc = Nokogiri::XML::Document.new
+    @xml_doc.encoding = 'UTF-8'
+    @xml_doc.root = Nokogiri::XML::Node.new(S_ROOT, @xml_doc)
     @xml_doc.root['version'] = FILE_VERSION_RANGE.last.to_s
-    
+
     # Layout definieren
-    @xml_doc.root << node = XML::Node.new(S_LAYOUT)
-    attributes.each_pair{|attr_name, attr|
-      node << XML::Node.new(attr.attr_name, attr.attr_value.to_s)
-    }
-    
+    @xml_doc.root << node = Nokogiri::XML::Node.new(S_LAYOUT, @xml_doc)
+    attributes.each_pair do |attr_name, attr|
+      n = Nokogiri::XML::Node.new(attr.attr_name, @xml_doc)
+      n.content = attr.attr_value.to_s
+      node << n
+    end
+
     # Chip definieren
-    @xml_doc.root << node = XML::Node.new(S_CHIP)
-    (1 .. CHIPPARAM_FIELD_COUNT).each{|i|
-      node << param = XML::Node.new("#{S_PARAM}_#{i}", "")
-    }
-    
+    @xml_doc.root << node = Nokogiri::XML::Node.new(S_CHIP, @xml_doc)
+    (1 .. CHIPPARAM_FIELD_COUNT).each do |i|
+      node << param = Nokogiri::XML::Node.new("#{S_PARAM}_#{i}", @xml_doc)
+    end
+
     # Magstripe definieren
     ensure_magsripe_attrs
-    
+
     # Container für die GraphikObjekte definieren definieren
-    @xml_doc.root << node = XML::Node.new(GRAPHICOBJECTS)
-    
+    @xml_doc.root << node = Nokogiri::XML::Node.new(GRAPHICOBJECTS, @xml_doc)
+
   end
  	#---------------------------------------------------------------------------------------------------------
-  
+
   # lädt das XML-File und initialisiert die entsprechenden Variablen und Objekte
   # ==== Parameter
   # +filename+:: der NAme des XML-Files in welchem die Layout-Spezifikation gespeichert werden soll
 	def load_from_xml(filename)
-    XML.indent_tree_output = true
     return nil if filename == ""
-    
-    @xml_doc = LibXML::XML::Document.file(filename, :options => XML::Parser::Options::NOBLANKS )
+
+    @xml_doc = File.open(filename){|fd| Nokogiri::XML(fd) }
     @xml_doc.root['version'] ||= '1'
     unless FILE_VERSION_RANGE.include?(@xml_doc.root['version'].to_i)
       raise InvalidFileVersion, "Die Datei #{filename.inspect} ist nach Version #{@xml_doc.root['version'].to_i} aufgebaut, dieses Programm kann aber nur die Versionen #{FILE_VERSION_RANGE.inspect} verarbeiten"
     end
 
-    
+
     @filename = filename
     # ................................................................................................................................
     # die allgemeine Layout-Einstellungen auslesen
-    
+
     # kontrollieren, ob alle Nodes des Layouts existieren, ansonsten anlegen und als 'changed' markieren
-    lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
+    lay_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{S_LAYOUT}")
     @attributes.each_pair{|attr_bez, attr|
-      element = lay_attrs.find_first(attr.attr_name)
+      element = lay_attrs.at_xpath(attr.attr_name)
       unless element
-        lay_attrs << XML::Node.new(attr.attr_name, attr.attr_value.to_s)
+        lay_attrs << Nokogiri::XML::Node.new(attr.attr_name, attr.attr_value.to_s)
         @changed = true
       end
     }
-    
+
     # kontrollieren, ob die Datenquelle eine gültige Angabe ist, wenn nicht, dann den Benutzer informieren und auf Standard setzen
     check_valid_datasourcetyp
-    
+
     # wenn bei Datensourectyp nicht 'none' eingetrage ist, also eine Datenquelle verwendet wird
     # kontrollieren, ob das eingestellte Encoding eine gültige Angabe ist, wenn nicht, dann den Benutzer informieren und auf Standard setzen
     unless get_attr_value(S_DATASOURCETYP) == NONE
       check_valid_encoding
     end
-    
+
     # ................................................................................................................................
     # die Chip-Einstellungen auslesen
-    
+
     # kontrollieren, ob alle Nodes des Chips existieren, ansonsten anlegen und als 'changed' markieren
-    chip_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
+    chip_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{S_CHIP}")
     (1 .. CHIPPARAM_FIELD_COUNT).each{|i|
       attr_name = "#{S_PARAM}_#{i}"
-      element = chip_attrs.find_first(attr_name)
+      element = chip_attrs.at_xpath(attr_name)
       unless element
-        #~ chip_attrs << param = XML::Node.new(attr_name , "")
+        #~ chip_attrs << param = Nokogiri::XML::Node.new(attr_name , "")
         @changed = true
       end
     }
 
     ensure_magsripe_attrs
-    
+
     # ................................................................................................................................
     # die Einstellungen der graphischen Objekte auslesen
-    
+
     # kontrollieren, ob alle Nodes der GraphicObjects existieren, ansonsten anlegen und als 'changed' markieren
-    @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
-      typ = go_struct.find(GOA_TYP).first.content
+    @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each do |go_struct|
+      typ = go_struct.at_xpath(GOA_TYP).content
       go = LayoutObject::Graphic.get_object_by_typ(typ)
-      go.go_attributes.each_pair{|go_attrname, go_attr|
-        element = go_struct.find_first(go_attr.attr_name)
+      go.go_attributes.each_pair do |go_attrname, go_attr|
+        element = go_struct.at_xpath(go_attr.attr_name)
         unless element
-          go_struct << XML::Node.new(go_attr.attr_name, go_attr.attr_value.to_s)
+          n = Nokogiri::XML::Node.new(go_attr.attr_name, @xml_doc)
+          n.content = go_attr.attr_value.to_s
+          go_struct << n
           @changed = true
         end
-      }
-    }
+      end
+    end
   end
 
   def ensure_magsripe_attrs
@@ -189,50 +192,51 @@ class LayoutFile
 
     # kontrollieren, ob alle Nodes des Magstripes existieren, ansonsten anlegen und als 'changed' markieren
     # todo
-    node_lay = @xml_doc.find_first("//#{S_ROOT}")
-    node_ms = node_lay.find_first(S_MAGSTRIPEPARAMS)
+    node_lay = @xml_doc.at_xpath("//#{S_ROOT}")
+    node_ms = node_lay.at_xpath("//#{S_ROOT}//#{S_MAGSTRIPEPARAMS}")
     unless node_ms
-      node_lay << node_ms = XML::Node.new(S_MAGSTRIPEPARAMS)
+      node_ms = Nokogiri::XML::Node.new(S_MAGSTRIPEPARAMS, @xml_doc)
+      node_lay << node_ms
       @changed = true
     end
-    unless node_ms.find_first(S_MSSPUR1)
-      node_ms << XML::Node.new(S_MSSPUR1, '')
+    unless node_ms.at_xpath(S_MSSPUR1)
+      node_ms << Nokogiri::XML::Node.new(S_MSSPUR1, @xml_doc)
       @changed = true
     end
-    unless node_ms.find_first(S_MSSPUR2)
-      node_ms << XML::Node.new(S_MSSPUR2, '')
+    unless node_ms.at_xpath(S_MSSPUR2)
+      node_ms << Nokogiri::XML::Node.new(S_MSSPUR2, @xml_doc)
       @changed = true
     end
-    unless node_ms.find_first(S_MSSPUR3)
-      node_ms << XML::Node.new(S_MSSPUR3, '')
+    unless node_ms.at_xpath(S_MSSPUR3)
+      node_ms << Nokogiri::XML::Node.new(S_MSSPUR3, @xml_doc)
       @changed = true
     end
   end
 
 	def find_graphic_object_by_id(id)
-		go = xml_doc.find_first(
+		go = xml_doc.at_xpath(
 			"//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[.='#{id.to_s}']").parent
-    typ = go.find_first(GOA_TYP).content
-    
+    typ = go.at_xpath(GOA_TYP).content
+
 		LayoutObject::Graphic.get_object_by_typ(typ, go)
 	end
 
   def magstripe_object
-    ms_node = xml_doc.find_first(S_MAGSTRIPEPARAMS)
+    ms_node = xml_doc.at_xpath("//#{S_ROOT}//#{S_MAGSTRIPEPARAMS}")
     LayoutObject::Magstripe.new(ms_node)
   end
 
   def chip_object
-    chip_attrs = xml_doc.find_first("//#{S_ROOT}/#{S_CHIP}")
+    chip_attrs = xml_doc.at_xpath("//#{S_ROOT}/#{S_CHIP}")
     LayoutObject::Chip.new chip_attrs
   end
-  
+
   # holt den Zweig mit den Einstellungen eines graphischen Objekts aus dem XML-File mit der Layout-Spezifikation
   # ==== Parameter
   # +id+:: die Nummer, unter welcher das Attribut gespeichert ist
   def get_objectnode_by_id(id)
-    @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
-      if go_struct.find(GOA_ID).first.content.to_i == id
+    @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
+      if go_struct.at_xpath(GOA_ID).content.to_i == id
         return go_struct
       end
     }
@@ -247,24 +251,33 @@ class LayoutFile
   def  add_object(typ)
     o = LayoutObject::Graphic.get_object_by_typ(typ)
     id = get_new_id
- 		node = @xml_doc.find_first("//#{S_ROOT}/#{GRAPHICOBJECTS}")
-    node << go = XML::Node.new(GRAPHICOBJECT)
-    go << XML::Node.new(GOA_TYP, typ)
-    go << XML::Node.new(GOA_ID, id.to_s)
-    go << XML::Node.new(GOA_NAME, "#{typ}##{id}")
-    o.go_attributes.each_pair{|goa_name, go_attribute|
+    node = @xml_doc.at_xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}")
+    go = Nokogiri::XML::Node.new(GRAPHICOBJECT, @xml_doc)
+    node << go
+    n = Nokogiri::XML::Node.new(GOA_TYP, @xml_doc)
+    n.content = typ
+    go << n
+    n = Nokogiri::XML::Node.new(GOA_ID, @xml_doc)
+    n.content = id.to_s
+    go << n
+    n = Nokogiri::XML::Node.new(GOA_NAME, @xml_doc)
+    n.content = "#{typ}##{id}"
+    go << n
+    o.go_attributes.each_pair do |goa_name, go_attribute|
       unless [GOA_ID, GOA_TYP, GOA_NAME].include?(go_attribute.attr_name)
-        go << XML::Node.new(go_attribute.attr_name, go_attribute.attr_value.to_s)
+        n = Nokogiri::XML::Node.new(go_attribute.attr_name, @xml_doc)
+        n.content = go_attribute.attr_value.to_s
+        go << n
       end
-    }
+    end
     go
   end
-  
+
   # ermittelt die nächst höhere ID (beeinflusst die Darstellungsebene)
   def get_new_id
     id = 0
-		@xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
-      id = go.find(GOA_ID).first.content.to_i+1 if go.find(GOA_ID).first.content.to_i >= id
+		@xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
+      id = go.at_xpath(GOA_ID).content.to_i+1 if go.at_xpath(GOA_ID).content.to_i >= id
     }
     id
   end
@@ -274,23 +287,23 @@ class LayoutFile
   # ==== Return
   # die sortierte Liste mit ID's [Array]
   def sorted_id_list
-    @xml_doc.find("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").collect{|go_struct|
-      go_struct.find(GOA_ID).first.content.to_i
+    @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").collect{|go_struct|
+      go_struct.at_xpath(GOA_ID).content.to_i
     }.sort!
   end
-  
+
   # ermittelt den Inhalt eines Attributes des Layout-Abschnittes
   # ==== Return
   # den Inhalt des Attributes [String]
   # ==== Parameter
   # +attr_name+:: der Name des Attributes z.Bsp. 'datasource' Bitte vorwiegend Konstanten verwenden z. Bsp. S_DATASOURCE [String]
   def get_attr_value(attr_name)
-    lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
-    attr = lay_attrs.find_first(attr_name)
+    lay_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{S_LAYOUT}")
+    attr = lay_attrs.at_xpath(attr_name)
     attr ? attr.content : nil
   end
  	#---------------------------------------------------------------------------------------------------------
-  
+
   # setzt den Inhalt eines Attributes des Layout-Abschnittes
   # ==== Return
   # true, wenn erfolgreich, ansonsten false
@@ -298,28 +311,28 @@ class LayoutFile
   # +attr_name+:: der Name des Attributes z.Bsp. 'datasource' Bitte vorwiegend Konstanten verwenden z. Bsp. S_DATASOURCE [String]
   # +value+:: der Wert der geschrieben werden soll [String]
   def set_attr_value(attr_name, value)
-    lay_attrs = @xml_doc.find_first("//#{S_ROOT}/#{S_LAYOUT}")
-    attr = lay_attrs.find_first(attr_name)
-    if attr 
+    lay_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{S_LAYOUT}")
+    attr = lay_attrs.at_xpath(attr_name)
+    if attr
       attr.content = value
       return true
     end
     return false
   end
 
-  
+
   # fügt ein neues Atrtribut zur Liste der Attribute (@attributes) hinzu
   # ==== Parameter
   # +name+::    der Name, den das Attribut erhalten soll
-  # +typ+::     der Typ 
+  # +typ+::     der Typ
   # +default+:: der Wert, mit dem das Attribut vorinitialisiert werden soll
   def add_attr(name, typ, default)
-    attr = LayoutObject::GO_Attribut.new(name, typ, default) 
+    attr = LayoutObject::GO_Attribut.new(name, typ, default)
     @attributes[attr.attr_name] = attr
   end
 
   def change_first_xpath_value(xpath, value)
-    attr = @xml_doc.find_first(xpath)
+    attr = @xml_doc.at_xpath(xpath)
     raise "Kein Element unter XPath #{xpath.inspect} in Datei #{@filename} gefunden" unless attr
     puts "Setze Element unter XPath #{xpath.inspect} in Datei #{@filename} auf #{value.inspect}"
     attr.content = value
@@ -327,7 +340,9 @@ class LayoutFile
 
   #
   def save
-    @xml_doc.save(@filename)
+    File.open(@filename, "w") do |fd|
+      @xml_doc.write_to(fd, :indent => 2)
+    end
   end
 
   # überprüft, ob der Wert Datasourcetyp in der Layoutdefinition ein gültiger Wert ist.
@@ -359,9 +374,9 @@ class LayoutFile
       set_attr_value(S_DATASOURCEENCODING, default)
       raise WrongDataSourceEncoding, <<-EOTXT
         Das eingestellte Encoding der Datenquelle '#{datasource_encoding}' ist ungültig.
-        
+
         Gültige Werte sind '#{VALID_ENCODINGS.join("', '")}'.
-        
+
         Bitte stellen Sie in den Layouteigenschaften das korrekte Encoding
         ein und speichern Sie die Einstellungen.
       EOTXT
@@ -374,16 +389,16 @@ class LayoutFile
   # +node+:: die XML-Node des zu kopierenden Objekts, fals nil übergeben wurde, kehrt die Methode unverrichteter Dinge zurück
   def copy_object(node)
     return unless node
-    o = add_object(node.find_first(GOA_TYP).content)
+    o = add_object(node.at_xpath(GOA_TYP).content)
     node.each_element{|element|
       # alle Attribute, außer ID, Typ und Name kopieren, sofern sie vorhanden, ansonsten den Standard lassen
       if element.name != GOA_ID && element.name != GOA_TYP && element.name != GOA_NAME
-        o.find_first(element.name).content = element.content
+        o.at_xpath(element.name).content = element.content
       end
     }
   end
  	#---------------------------------------------------------------------------------------------------------
-  
+
   # löscht sie übergebene XML-Node aus dem Layout ohne Rückfrage, diese muss in der aufrufenden Methode durchgeführt werden
   # ==== Parameter
   def delete_object(node)
@@ -422,7 +437,7 @@ class LayoutFile
     else
       nil
     end
-      
+
     return chip
   end
 
