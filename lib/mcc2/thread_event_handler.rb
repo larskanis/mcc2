@@ -11,7 +11,7 @@ module ThreadEventHandler
       ev.call
     end
   end
-  
+
   def event_handler_setup
     #~ require 'socket'
     #~ gs = TCPServer.open('127.0.0.1', 0)
@@ -28,7 +28,7 @@ module ThreadEventHandler
     #~ s1.connect(*s2.addr.values_at(3,1))
     #~ prd, pwr = s1, s2
 
-    if RUBY_PLATFORM =~ /win32/i || RUBY_VERSION >= '1.9'
+    if RUBY_PLATFORM =~ /mingw|mswin/i #|| RUBY_VERSION >= '1.9'
       @parent.app.addTimeout(100, :repeat => true){ event_handler_pull(nil) }
       @event_handler_pwr = nil
     else
@@ -38,7 +38,7 @@ module ThreadEventHandler
     end
     @event_handler_events = Queue.new
   end
-  
+
   def event_handler_push(&block)
     @event_handler_events << block
     @event_handler_pwr.write 'e' if @event_handler_pwr

@@ -5,7 +5,6 @@ require 'mcc2/printer/card_printer'
 require 'mcc2/printer/rmagick_drawer'
 require 'mcc2/thread_event_handler'
 
-
 module Mcc2
 module Printer
 class Preview < Base
@@ -13,12 +12,12 @@ class Preview < Base
   include CardPrinting
   include Fox
   include ThreadEventHandler
-  
+
   def initialize parent
     super()
     @parent = parent
     @selected_object_id = nil
-		@thread = nil
+    @thread = nil
 
     FXHorizontalFrame.new(parent, :opts=>LAYOUT_FILL_X) do |frame1|
       @label_zoom = FXLabel.new(frame1, "") do |label_zoom|
@@ -32,18 +31,18 @@ class Preview < Base
         dial_zoom.value = @parent.app.reg.readRealEntry('settings', 'preview_dpi', 90)
         dial_zoom.range = 1..1000
       end
-      @checkbutton_continous_update = FXCheckButton.new(frame1, 'Vorschau aktuell halten'){|checkbutton|
+      @checkbutton_continous_update = FXCheckButton.new(frame1, 'Vorschau aktuell halten') do |checkbutton|
         checkbutton.tipText = "Bei Fehlern in den Layout-Einstellungen kann die Vorschau\nabgeschaltet werden, um mehrfache Hinweise zu vermeiden."
-        checkbutton.connect(SEL_COMMAND){
+        checkbutton.connect(SEL_COMMAND) do
           draw_preview(true, @row) if checkbutton.checked?
           @parent.app.reg.writeBoolEntry('settings', 'preview_continous_update', checkbutton.checked? )
-        }
+        end
         checkbutton.checkState = @parent.app.reg.readBoolEntry('settings', 'preview_continous_update', true )
-      }
+      end
     end
 
     @image_view = FXImageView.new(parent, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y)
-    
+
     event_handler_setup
     set_zoom
   end
@@ -56,7 +55,7 @@ class Preview < Base
     @selected_object_id = id
     draw_preview false, @row
   end
-  
+
   # verändert die Zoomstufe, wenn am Rädchen gedreht wird
   def set_zoom
     self.dpi = @dial_zoom.value
@@ -72,67 +71,68 @@ class Preview < Base
     @row = row
     return unless @checkbutton_continous_update.checked?
 
-		@draw_preview_at = Time.now + (immediately ? 0 : 1)
-		start_preview_timer
-	end
+    @draw_preview_at = Time.now + (immediately ? 0 : 1)
+    start_preview_timer
+  end
 
-	def start_preview_timer
-		return unless @draw_preview_at
-		
-		delay = @draw_preview_at - Time.now
-		@parent.app.addTimeout(delay>0 ? delay*1000 : 0) do
-			if @draw_preview_at && Time.now>=@draw_preview_at && !@thread
-				@draw_preview_at = nil
-				@thread = Thread.new do
-					
-					draw_preview_now(@row)
+  def start_preview_timer
+    return unless @draw_preview_at
 
-					@thread = nil
-					# requeue preview generation, when something was changed
-					# while the thread was running.
-					event_handler_push{
-						start_preview_timer
-					}
-				end
-			end
-		end
-	end
+    delay = @draw_preview_at - Time.now
+    # delay*1010, damit immer etwas größer als Zeitspanne mit Time.now
+    @parent.app.addTimeout(delay>0 ? delay*1010 : 0) do
+      if @draw_preview_at && Time.now>=@draw_preview_at && !@thread
+        @draw_preview_at = nil
+        @thread = Thread.new do
 
-	def draw_preview_now(row=nil)
-		begin
-			# allgemeine Einstellungen des Image vornehmen
-			width =  @layout_file.get_attr_value(S_WIDTH).to_f
-			height = @layout_file.get_attr_value(S_HEIGHT).to_f
+          draw_preview_now(@row)
 
-			preview = true
+          @thread = nil
+          # requeue preview generation, when something was changed
+          # while the thread was running.
+          event_handler_push do
+            start_preview_timer
+          end
+        end
+      end
+    end
+  end
 
-			card_offset = 0
+  def draw_preview_now(row=nil)
+    begin
+      # allgemeine Einstellungen des Image vornehmen
+      width =  @layout_file.get_attr_value(S_WIDTH).to_f
+      height = @layout_file.get_attr_value(S_HEIGHT).to_f
 
-			image_width = width_with_margins(width)
-			image_height = 2 * height_with_margins(height) + card_offset
+      preview = true
 
-			rvg = Magick::RVG.new(mm(image_width), mm(image_height)) do |canvas|
-				draw_pos_x = 0
-				draw_pos_y = 0
-				canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
-					draw(canvas1, @layout_file, preview, @selected_object_id, row, 0) # Seite 1 drucken
-				end
+      card_offset = 0
 
-				draw_pos_y = height_with_margins(height) + card_offset
-				canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
-					draw(canvas1, @layout_file, preview, @selected_object_id, row, 1) # Seite 2 drucken
-				end
+      image_width = width_with_margins(width)
+      image_height = 2 * height_with_margins(height) + card_offset
 
-				canvas.background_fill = 'white'
-			end
+      rvg = Magick::RVG.new(mm(image_width), mm(image_height)) do |canvas|
+        draw_pos_x = 0
+        draw_pos_y = 0
+        canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
+          draw(canvas1, @layout_file, preview, @selected_object_id, row, 0) # Seite 1 drucken
+        end
 
-			# ..........................................................................................
-			# Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
-			data = rvg.draw.to_blob{
-				self.format = 'PNG'
-			}
+        draw_pos_y = height_with_margins(height) + card_offset
+        canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
+          draw(canvas1, @layout_file, preview, @selected_object_id, row, 1) # Seite 2 drucken
+        end
 
-			event_handler_push{
+        canvas.background_fill = 'white'
+      end
+
+      # ..........................................................................................
+      # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
+      data = rvg.draw.to_blob do
+        self.format = 'PNG'
+      end
+
+      event_handler_push do
         # das erzeugte Bild als Icon anzeigen
         fx_image = FXPNGImage.new(@parent.app, data)
         fx_image.create
@@ -143,27 +143,27 @@ class Preview < Base
         rescue RuntimeError => e
           raise unless e.to_s=~/already released/
         end
-			}
-		rescue Printer::Base::PrintError => e
-			event_handler_push{
-				FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
-			}
-			@printing = false
-		rescue => e
-			DebugTools::write_log_file('draw_preview_thread', DebugTools::unkown_error_message(e))
-			event_handler_push{
-				FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen der Layoutvorschau", DebugTools::unkown_error_message(e))
-			}
-		end # rescue
+      end
+    rescue Printer::Base::PrintError => e
+      event_handler_push do
+        FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
+      end
+      @printing = false
+    rescue => e
+      DebugTools::write_log_file('draw_preview_thread', DebugTools::unkown_error_message(e))
+      event_handler_push do
+        FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen der Layoutvorschau", DebugTools::unkown_error_message(e))
+      end
+    end # rescue
   end
   #---------------------------------------------------------------------------------------------------------
 
   #
   def check_if_font_exist(fontdesc)
     rmfl = []
-    Magick.fonts.each{|mf|
+    Magick.fonts.each do |mf|
       rmfl << mf.name
-    }
+    end
     return fontdesc if rmfl.index(fontdesc.face.gsub(" ","-").gsub("@",""))
     fdlg.execute
   end

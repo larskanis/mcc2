@@ -13,7 +13,7 @@ class GdiPrinter < CardPrinter
 
   attr_accessor :layout_file
   attr_accessor :chip
-  
+
   def with_page(hPrinter, row, page_nr)
     begin
       start_page(hPrinter, row, page_nr)
@@ -26,7 +26,7 @@ class GdiPrinter < CardPrinter
   def device_name
     layout_file.get_attr_value(S_GDIPRINTER_NAME)
   end
-  
+
   def device_initdata
     layout_file.get_binary_attr(S_GDIPRINTER_INITDATA)
   end
@@ -47,7 +47,7 @@ class GdiPrinter < CardPrinter
     devicename = self.device_name
 
     duplex = layout_file.get_attr_value(S_DUPLEX) == S_TRUE
-    
+
     if initdata=device_initdata
       initdata = Win32api4ruby::Winspool.create_DEVMOD(initdata)
     else
@@ -59,7 +59,7 @@ class GdiPrinter < CardPrinter
 
     begin
       start_doc(hPrinter, row)
-      
+
       page_nr = 0
       print_page(hPrinter, initdata, row, page_nr)
 
@@ -75,17 +75,17 @@ class GdiPrinter < CardPrinter
       raise
     end
     Win32api4ruby::Gdi.delete_dc(hPrinter)
-    
+
     GC.start
-    
+
     return true
   end
-  
+
   def print_page(hPrinter, initdata, row, page_nr)
     page = prepare_gdi_page(hPrinter, initdata, row, page_nr)
     page.draw
   end
-  
+
   def start_doc(hPrinter, row)
     datasourcename = layout_file.get_attr_value(S_DATASOURCE)
     # set document title
@@ -96,18 +96,18 @@ class GdiPrinter < CardPrinter
     documentName = "MCC #{row_text} #{datasourcename}"
     docinfo = Win32api4ruby::Gdi.create_DOCINFO
     docinfo[:lpszDocName] = Win32api4ruby::Base.prepare_PtrData(documentName.to_s_win32)
-    
+
     Win32api4ruby::Gdi.start_doc(hPrinter, docinfo)
   end
 
   def end_doc(hPrinter, row)
     Win32api4ruby::Gdi.end_doc(hPrinter)
   end
-  
+
   class ReadyToSendPage
     attr_reader :row
     attr_reader :page_nr
-    
+
     # hPrinter, xDest, yDest, dwWidth, dwHeight, xSrc, ySrc, uStartScan, cScanLines, lpvBits, lpbmi, fuColorUse
     def initialize(printer, set_dibits_to_device_args, row, page_nr)
       @args = set_dibits_to_device_args
@@ -115,7 +115,7 @@ class GdiPrinter < CardPrinter
       @page_nr = page_nr
       @printer = printer
     end
-    
+
     def draw
       @printer.with_page(@args[0], row, page_nr) do
         Win32api4ruby::Gdi.set_dibits_to_device(*@args)
@@ -140,10 +140,10 @@ class GdiPrinter < CardPrinter
       canvas.background_fill = 'white'
       draw(canvas, layout_file, preview, selected_object_id, row, page_nr)
     end
-    
+
     # das RVG in ein Bitmap konvertieren
     pic = img.draw
-    
+
     # flip left to right and raster image
     lpvBits = pic.flop.to_blob{
       self.format='rgb'
@@ -154,7 +154,7 @@ class GdiPrinter < CardPrinter
     # - mirroring bottom to up
     # - mirroring left to right
     lpvBits.reverse!
-    
+
     block_size = 4 # each scanline has to be DWORD padded
     # split the image in single rows
     lpvBits = lpvBits.unpack("a#{pic.columns*3}" * pic.rows).map{|imgrow|
@@ -180,15 +180,15 @@ class GdiPrinter < CardPrinter
 
     ReadyToSendPage.new self, [hPrinter, xDest, yDest, dwWidth, dwHeight, xSrc, ySrc, uStartScan, cScanLines, lpvBits, lpbmi, fuColorUse], row, page_nr
   end
-  
+
   def start_page(hPrinter, row, page_nr)
     Win32api4ruby::Gdi.start_page(hPrinter)
   end
-  
+
   def end_page(hPrinter, row, page_nr)
     Win32api4ruby::Gdi.end_page(hPrinter)
   end
-  
+
 end
 end
 end
