@@ -1,4 +1,4 @@
-Name1;Name2;Name3
-Hans;Müller;Maschinenbau Meier
-Franz;Meiser;Maschinenbau Meier
-Helga;Freudig;Baufuchs
+Name1;Name2;Name3;Barcode
+Hans;Müller;Maschinenbau Meier;123456789012
+Franz;Meiser;Maschinenbau Meier;123456789013
+Helga;Freudig;Baufuchs;123456789014

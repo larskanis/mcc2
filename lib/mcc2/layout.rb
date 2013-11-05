@@ -14,15 +14,15 @@ class Layout
 
   # definiert, ob an den Einstellungen seit dem letzten speichern oder laden etwas geändert wurde
   attr_accessor :changed
-  
+
   # enthält die kompletten Einstellungen des Kartenlayouts
   attr_reader :layout_file
-  
+
   # der Datamanager
   attr_accessor :dataman
-  
+
  	#---------------------------------------------------------------------------------------------------------
-  
+
   # initialisiert zusätzliche Elemente im Layout-Dialog, die nicht oder schlecht im Fox-GUI-Builder erzeugt werden können
   # setzt Parameter bei Dialog-Elementen
   # definiert die Aktionen, welche bei bestimmten Ereignissen auf bestimmten Elementen des Dialogs ausgeführt werden sollen
@@ -32,6 +32,12 @@ class Layout
     @parent = parent
     begin
       require 'barby'
+      %w[
+          bookland code_25_iata code_25 code_93 ean_13 gs1_128 qr_code
+          code_128 code_25_interleaved code_39 data_matrix ean_8 pdf_417 upc_supplemental
+        ].each do |code|
+        require "barby/barcode/#{code}"
+      end
     rescue LoadError => e
       puts "Loading barcode driver failed: #{e}"
     end
@@ -80,11 +86,11 @@ class Layout
       end
       splitter1.setSplit(0, 400)
     end
-    
+
     @parent.connect(SEL_CLOSE){|sender, selector, data|
       can_close? ? 0 : 1
     }
-    
+
     if filename
       load_from_xml(filename)
       @changed = false
@@ -137,7 +143,7 @@ class Layout
     end
   end
   #---------------------------------------------------------------------------------------------------------
-  
+
   # aktualisiert den Titel des Layout-Fensters
   # es werden eingetragen
   # * der Dateiname des Layouts
@@ -147,7 +153,7 @@ class Layout
     @parent.title = "#{@layout_file.filename} #{@changed ? ' *' : '' }"
   end
  	#---------------------------------------------------------------------------------------------------------
-  
+
   # speichert alle GraphicObjekte und Layout-Einstellungen im XML-File
 	def store_to_xml(filename_dialog=false)
     if filename_dialog || !@layout_file.filename
@@ -163,10 +169,10 @@ class Layout
     set_title
   end
  	#---------------------------------------------------------------------------------------------------------
-  
+
   def can_close?
     return true if !changed
-    
+
     res = FXMessageBox.question( @parent.app, MBOX_YES_NO_CANCEL, 'Datei speichern', "Datei #{@layout_file.filename} speichern ?")
     case res
       when MBOX_CLICKED_YES
@@ -178,7 +184,7 @@ class Layout
         false
     end
   end
-  
+
   #
   def load_from_xml(filename)
     self.layout_file = LayoutFile.load_from_xml(filename)
@@ -197,7 +203,7 @@ class Layout
   def selected_object_id= id
     @preview.selected_object_id = id if @preview
   end
-  
+
   #
   def create_xml
     layout_file = LayoutFile.create_xml
@@ -207,7 +213,7 @@ class Layout
   def add_object(typ)
     @layoutview.manage_objects(ADD, typ)
   end
-  
+
  	#---------------------------------------------------------------------------------------------------------
 
   def draw_preview_with_row row, immediately=false
@@ -215,12 +221,12 @@ class Layout
     @row = row
     @preview.draw_preview immediately, @row
   end
-  
+
   def draw_preview immediately=false
     return unless @preview
     @preview.draw_preview immediately, nil
   end
-    
+
 
   def self.connect_filebutton_to_textfield( button, textfield, filepatterns='*')
     button.connect(SEL_COMMAND){
@@ -262,12 +268,12 @@ end
 # Main
 
 if __FILE__ == $0
-  
-  
+
+
   system("ruby mcc2.rb #{ARGV}")
   exit
   lay = Layout.new(nil, nil)
-  
+
   # ...........................................................
   # Test für das Erstellen einer neune XML-Datei
   lay.filename = 't:\Project\MCC2a\trunk\layouts\test1.xml'
@@ -275,14 +281,14 @@ if __FILE__ == $0
   # ...........................................................
   # Test für das Erstellen einer neune XML-Datei
   #~ lay.create_xml
-  
-  #~ lay.add_object(TEXTOBJECT)  
-  #~ lay.add_object(BARCODEOBJECT)  
-  #~ lay.add_object(PICTUREOBJECT)  
-  #~ lay.add_object(TEXTOBJECT)  
-  #~ lay.add_object(BARCODEOBJECT)  
-  #~ lay.add_object(TEXTOBJECT)  
-  
-  
+
+  #~ lay.add_object(TEXTOBJECT)
+  #~ lay.add_object(BARCODEOBJECT)
+  #~ lay.add_object(PICTUREOBJECT)
+  #~ lay.add_object(TEXTOBJECT)
+  #~ lay.add_object(BARCODEOBJECT)
+  #~ lay.add_object(TEXTOBJECT)
+
+
   print lay.xml_doc.to_s
 end

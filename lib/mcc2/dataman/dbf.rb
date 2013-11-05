@@ -1,24 +1,21 @@
 # -*- coding: UTF-8 -*-
 
 require 'mcc2/dataman/base'
-
 require 'dbf'
-require 'iconv'
 
 module Mcc2
 module DataMan
 class DBF < Base
   class CanNotOpenFile  < RuntimeError
   end
-  
+
   def initialize(datasource, encoding)
     @table = nil
 
     fn = datasource.strip
     return if fn.empty?
-    
+
     raise CanNotOpenFile, "file not found: #{fn.inspect}" unless File.exists?(fn)
-    @iconv = Iconv.new('utf-8', encoding)
     table = ::DBF::Table.new(fn)
     @header_row = table.columns.map{|c| c.name }
 
@@ -27,7 +24,7 @@ class DBF < Base
     table.each{|row|
       h = {}
       row.to_a.each_with_index{|text, idx|
-        h[@header_row[idx]] = @iconv.iconv(text.to_s)
+        h[@header_row[idx]] = text.to_s.encode('utf-8', encoding)
       }
       @table << h
     }
