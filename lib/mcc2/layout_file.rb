@@ -134,13 +134,15 @@ class LayoutFile
 
     # kontrollieren, ob alle Nodes des Layouts existieren, ansonsten anlegen und als 'changed' markieren
     lay_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{S_LAYOUT}")
-    @attributes.each_pair{|attr_bez, attr|
+    @attributes.each_pair do |attr_bez, attr|
       element = lay_attrs.at_xpath(attr.attr_name)
       unless element
-        lay_attrs << Nokogiri::XML::Node.new(attr.attr_name, attr.attr_value.to_s)
+        n = Nokogiri::XML::Node.new(attr.attr_name, @xml_doc)
+        n.content = attr.attr_value.to_s
+        lay_attrs << n
         @changed = true
       end
-    }
+    end
 
     # kontrollieren, ob die Datenquelle eine gültige Angabe ist, wenn nicht, dann den Benutzer informieren und auf Standard setzen
     check_valid_datasourcetyp
@@ -157,8 +159,7 @@ class LayoutFile
     # kontrollieren, ob alle Nodes des Chips existieren, ansonsten anlegen und als 'changed' markieren
     chip_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{S_CHIP}")
     (1 .. CHIPPARAM_FIELD_COUNT).each{|i|
-      attr_name = "#{S_PARAM}_#{i}"
-      element = chip_attrs.at_xpath(attr_name)
+      element = chip_attrs.at_xpath("#{S_PARAM}_#{i}")
       unless element
         #~ chip_attrs << param = Nokogiri::XML::Node.new(attr_name , "")
         @changed = true
