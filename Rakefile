@@ -9,13 +9,13 @@ Hoe.spec 'mcc2' do
   developer('Andreas Kosche', 'kosche@comcard.de')
   developer('Lars Kanis', 'kanis@comcard.de')
 
-  extra_deps << ['nokogiri', '>= 1.4', '< 1.6']
+  extra_deps << ['nokogiri', '>= 1.4']
   extra_deps << ['fastercsv', '>= 1.2']
   extra_deps << ['dbf', '>= 1.2']
   extra_deps << ['rmagick', '>= 2.5']
   extra_deps << ['barby', '>= 0.5']
   extra_deps << ['rqrcode', '>= 0.4']
-  extra_dev_deps << ['win32api4ruby', '>= 0.1.1']
+  extra_dev_deps << ['win32api4ruby', '>= 0.2.0']
   extra_dev_deps << ['fxruby', '>= 1.6']
 
   # self.rubyforge_name = 'mcc2x' # if different than 'mcc2'
