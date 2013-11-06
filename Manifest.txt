@@ -5,7 +5,6 @@ Manifest.txt
 README.txt
 Rakefile
 bin/mcc2
-bin/mcc2.bat
 bin/mcc2print
 lib/libguib16.rb
 lib/mcc2.rb
