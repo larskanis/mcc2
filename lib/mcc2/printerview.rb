@@ -120,12 +120,12 @@ class Printerview < Dialogbox_printerview
 
       # open setup-dialog
       begin
-        devmod = Win32api4ruby::Winspool.document_properties(0, 0, prname.to_s_win32, initdata, flags)
+        devmod = Win32api4ruby::Winspool.document_properties(nil, nil, prname.to_s_win32, initdata, flags)
       rescue => e
         FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Einrichten des Druckers", e.to_s)
       end
 
-      @layout_file.set_binary_attr(attr, devmod.to_str) if devmod
+      @layout_file.set_binary_attr(attr, devmod.pointer.read_bytes(devmod.size)) if devmod
     end
   end
 

@@ -28,7 +28,7 @@ class GdiPrinter < CardPrinter
   end
 
   def device_initdata
-    layout_file.get_binary_attr(S_GDIPRINTER_INITDATA)
+    FFI::MemoryPointer.from_string(layout_file.get_binary_attr(S_GDIPRINTER_INITDATA))
   end
 
 
@@ -119,7 +119,6 @@ class GdiPrinter < CardPrinter
     def draw
       @printer.with_page(@args[0], row, page_nr) do
         Win32api4ruby::Gdi.set_dibits_to_device(*@args)
-        @args[10].free
       end
     end
   end
