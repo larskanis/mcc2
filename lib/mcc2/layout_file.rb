@@ -391,19 +391,19 @@ class LayoutFile
   def copy_object(node)
     return unless node
     o = add_object(node.at_xpath(GOA_TYP).content)
-    node.each_element{|element|
+    node.children do |element|
       # alle Attribute, außer ID, Typ und Name kopieren, sofern sie vorhanden, ansonsten den Standard lassen
       if element.name != GOA_ID && element.name != GOA_TYP && element.name != GOA_NAME
         o.at_xpath(element.name).content = element.content
       end
-    }
+    end
   end
  	#---------------------------------------------------------------------------------------------------------
 
   # löscht sie übergebene XML-Node aus dem Layout ohne Rückfrage, diese muss in der aufrufenden Methode durchgeführt werden
   # ==== Parameter
   def delete_object(node)
-    node.remove!
+    node.remove
   end
 
   def build_printer_instance
