@@ -95,7 +95,12 @@ class GdiPrinter < CardPrinter
     end
     documentName = "MCC #{row_text} #{datasourcename}"
     docinfo = Win32api4ruby::Gdi.create_DOCINFO
-    docinfo[:lpszDocName] = Win32api4ruby::Base.prepare_PtrData(documentName.to_s_win32)
+    # Store the pointer instance in docinfo to avoid GC'ing
+    class << docinfo
+      attr_accessor :pDocumentName
+    end
+    pDocumentName = Win32api4ruby::Base.prepare_PtrData(documentName.to_s_win32)
+    docinfo[:lpszDocName] = docinfo.pDocumentName = pDocumentName
 
     Win32api4ruby::Gdi.start_doc(hPrinter, docinfo)
   end
