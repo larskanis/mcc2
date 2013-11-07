@@ -71,7 +71,7 @@ class GdiPrinter < CardPrinter
       end_doc(hPrinter, row)
     rescue => e
       # wenn ein Fehler aufgetreten ist, wird der Druckjob abgebrochen und somit aus der Warteschlange entfernt
-      Win32api4ruby::Gdi.abort_doc(hPrinter)
+      abort_doc(hPrinter, row)
       raise
     end
     Win32api4ruby::Gdi.delete_dc(hPrinter)
@@ -108,6 +108,11 @@ class GdiPrinter < CardPrinter
   def end_doc(hPrinter, row)
     Win32api4ruby::Gdi.end_doc(hPrinter)
   end
+
+  def abort_doc(hPrinter, row)
+    Win32api4ruby::Gdi.abort_doc(hPrinter)
+  end
+
 
   class ReadyToSendPage
     attr_reader :row
