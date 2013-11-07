@@ -124,8 +124,10 @@ class Printerview < Dialogbox_printerview
       rescue => e
         FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Einrichten des Druckers", e.to_s)
       end
-
-      @layout_file.set_binary_attr(attr, devmod.pointer.read_bytes(devmod.size)) if devmod
+      if devmod
+        @layout_file.set_binary_attr(attr, devmod.pointer.read_bytes(devmod.pointer.size))
+        changed_attributes
+      end
     end
   end
 
