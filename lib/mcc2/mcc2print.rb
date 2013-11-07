@@ -6,19 +6,19 @@ require "rubygems"
 
 require 'mcc2'
 require 'mcc2/debug_tools'
-require 'ftools'
+require 'fileutils'
 require "tempfile"
 require "optparse"
 
 require 'barby'
 %w[
     bookland code_25_iata code_25 code_93 ean_13 gs1_128 qr_code
-    code_128 code_25_interleaved code_39 data_matrix ean_8 pdf_417 upc_supplemental
+    code_128 code_25_interleaved code_39 ean_8 upc_supplemental
   ].each do |code|
   require "barby/barcode/#{code}"
 end
 
-File.makedirs("./logs", true)
+FileUtils.mkdir_p("./logs")
 
 
 module Mcc2
