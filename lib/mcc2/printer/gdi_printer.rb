@@ -71,7 +71,7 @@ class GdiPrinter < CardPrinter
       end_doc(hPrinter, row)
     rescue => e
       # wenn ein Fehler aufgetreten ist, wird der Druckjob abgebrochen und somit aus der Warteschlange entfernt
-      Win32api4ruby::Gdi.abort_doc(hPrinter)
+      abort_doc(hPrinter, row)
       raise
     end
     Win32api4ruby::Gdi.delete_dc(hPrinter)
@@ -95,7 +95,12 @@ class GdiPrinter < CardPrinter
     end
     documentName = "MCC #{row_text} #{datasourcename}"
     docinfo = Win32api4ruby::Gdi.create_DOCINFO
-    docinfo[:lpszDocName] = Win32api4ruby::Base.prepare_PtrData(documentName.to_s_win32)
+    # Store the pointer instance in docinfo to avoid GC'ing
+    class << docinfo
+      attr_accessor :pDocumentName
+    end
+    pDocumentName = Win32api4ruby::Base.prepare_PtrData(documentName.to_s_win32)
+    docinfo[:lpszDocName] = docinfo.pDocumentName = pDocumentName
 
     Win32api4ruby::Gdi.start_doc(hPrinter, docinfo)
   end
@@ -103,6 +108,11 @@ class GdiPrinter < CardPrinter
   def end_doc(hPrinter, row)
     Win32api4ruby::Gdi.end_doc(hPrinter)
   end
+
+  def abort_doc(hPrinter, row)
+    Win32api4ruby::Gdi.abort_doc(hPrinter)
+  end
+
 
   class ReadyToSendPage
     attr_reader :row
