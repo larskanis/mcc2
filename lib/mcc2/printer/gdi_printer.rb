@@ -76,8 +76,6 @@ class GdiPrinter < CardPrinter
     end
     Win32api4ruby::Gdi.delete_dc(hPrinter)
 
-    GC.start
-
     return true
   end
 
