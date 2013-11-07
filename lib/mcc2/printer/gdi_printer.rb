@@ -28,7 +28,7 @@ class GdiPrinter < CardPrinter
   end
 
   def device_initdata
-    FFI::MemoryPointer.from_string(layout_file.get_binary_attr(S_GDIPRINTER_INITDATA))
+    layout_file.get_binary_attr(S_GDIPRINTER_INITDATA)
   end
 
 
