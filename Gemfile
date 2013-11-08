@@ -12,7 +12,7 @@ gem "barby", ">=0.5"
 gem "rqrcode", ">=0.4"
 
 gem "rdoc", "~>4.0", :group => [:development, :test]
-gem "win32api4ruby", ">=0.2.0", :group => [:development, :test]
+gem "win32api4ruby", ">=0.2.1", :group => [:development, :test]
 gem "fxruby", ">=1.6", :group => [:development, :test]
 gem "hoe", "~>3.7", :group => [:development, :test]
 
