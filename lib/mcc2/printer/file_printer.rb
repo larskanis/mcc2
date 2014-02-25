@@ -21,7 +21,7 @@ class FilePrinter < CardPrinter
   def card_margin_right; 0; end
   def card_margin_top; 0; end
   def card_margin_bottom; 0; end
-  
+
   #--------------------------------------------------------------------------------------------------------------
 
   def print_card(layout_file, row, chip)
@@ -35,7 +35,7 @@ class FilePrinter < CardPrinter
     if duplex
       print_page(row, 1)
     end
-    
+
     # ............................................................................................
     # der Chip-Teil, er muss nach dem start_doc und den pages kommen, falls dort Fehler auftreten, wird dieser dan nicht ausgeführt,
     # und keine Karte eingezogen, dann gibt es weniger Probleme mit dem Entfernen von Karten aus dem Drucker, wenn ein Fehler aufgetreten ist
@@ -45,10 +45,10 @@ class FilePrinter < CardPrinter
     end
 
     @image_idx += 1
-    
+
     return true
   end
-  
+
   #--------------------------------------------------------------------------------------------------------------
 
   def print_page(row, page_nr)

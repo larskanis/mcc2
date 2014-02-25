@@ -129,7 +129,7 @@ class Mcc2Gui < MainWindow
     # end work-a-round:
   end
 
-	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   def new_object(typ)
     child = @mdiclient.activeChild
@@ -137,7 +137,7 @@ class Mcc2Gui < MainWindow
       child.userData.add_object(typ)
     end
   end
-	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   def save_layout(filename_dialog=false)
     child = @mdiclient.activeChild
@@ -145,7 +145,7 @@ class Mcc2Gui < MainWindow
       child.userData.store_to_xml(filename_dialog)
     end
   end
-	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   def new_layout
     child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800, 600)
@@ -156,7 +156,7 @@ class Mcc2Gui < MainWindow
     child.setFocus
     @mdiclient.setActiveChild(child)
   end
-	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   def open_layout(filename=nil)
     unless filename && FileTest.exists?(filename)

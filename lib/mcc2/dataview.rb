@@ -32,7 +32,7 @@ class Dataview < Dialogbox_dataview
     Layout.connect_filebutton_to_textfield( @button_datasource, @textfield_datasource,
           ["Semicolon seperated file (*.csv,*.dbf)", "All Files (*)"]
     )
-    
+
     @button_select_all.connect(SEL_COMMAND){ select_all }
     @button_deselect_all.connect(SEL_COMMAND){ deselect_all }
     @button_print_selected.connect(SEL_COMMAND){ print_selected }
@@ -49,11 +49,11 @@ class Dataview < Dialogbox_dataview
     @button_select_all.enabled = true
 
     @verticalframe_datalist.width = 500
-    
+
     event_handler_setup
     fill_datalist_when_visible
   end
-  
+
   def dataview_tab_activated(active=true)
     @visible = active
     if @visible
@@ -96,10 +96,10 @@ class Dataview < Dialogbox_dataview
     # es ist zu überlegen, welche Daten man dort anzeigt
     @iconlist_data.clearItems
     @iconlist_data.header.clearItems
-    
+
     if @dataman && @layout_file
       @iconlist_data.appendHeader("Datensatz", nil, 60)
-      
+
       first_row = @dataman.headers
       felder = if first_row
         first_row.map{|feldname|
@@ -126,7 +126,7 @@ class Dataview < Dialogbox_dataview
         @parent.app.show_on_statusline "#{@dataman.rows.length} Datensätze geladen"
       end
     end
-    
+
   end
 
   def draw_preview(row, immediately=false)
@@ -172,7 +172,7 @@ class Dataview < Dialogbox_dataview
     finding_count = 0
     @iconlist_data.each_with_index{|item, itemidx|
       if item.text =~ /#{search_text}/i
-        
+
         @iconlist_data.selectItem(itemidx)
         finding_count += 1
 
@@ -274,7 +274,7 @@ class Dataview < Dialogbox_dataview
     @button_stop_printing.enabled = true
     @printing = true
     printer = @layout_file.build_printer_instance
-    
+
     marked_items = []
     (0 ... @iconlist_data.numRows).map{|i|
       if !only_selected || @iconlist_data.itemSelected?(i)
@@ -285,7 +285,7 @@ class Dataview < Dialogbox_dataview
     Thread.new{
       begin
         chip = layout_file.build_chip_instance
-      
+
         marked_items.each_with_index{|item, itemidx|
           it = nil
           event_handler_push{
@@ -294,9 +294,9 @@ class Dataview < Dialogbox_dataview
             @iconlist_data.setFocus
             @iconlist_data.setCurrentItem(it, true)
           }
-          
+
           erg = printer.print_card(layout_file, item, chip)
-          
+
           event_handler_push{
             @parent.app.show_on_statusline "#{itemidx+1} von #{marked_items.length} Datensätzen gedruckt"
             # den aktuellen Datensatz deselektieren, wenn er erfolgreich gedruckt wurde
@@ -362,6 +362,6 @@ class Dataview < Dialogbox_dataview
     @layout.changed_attributes
     self.update_preview if update_preview
   end
-  
+
 end
 end

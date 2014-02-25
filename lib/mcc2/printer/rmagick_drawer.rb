@@ -50,7 +50,7 @@ module RmagickDrawer
   #
   def draw(canvas, layout_file, preview, selected_object_id, row, page_nr)
     @magick_font_list ||= Magick.fonts.map{|mf| mf.name }
-    
+
     width =  layout_file.get_attr_value(S_WIDTH).to_f
     height = layout_file.get_attr_value(S_HEIGHT).to_f
     if preview
@@ -85,7 +85,7 @@ module RmagickDrawer
           go_height = go[GOA_HEIGHT].to_f
           rotation = go[GOA_ROTATION].to_f
           typ = go[GOA_TYP]
-          
+
           if !go[GOA_DATA]
             data = nil
           elsif row
@@ -198,44 +198,44 @@ module RmagickDrawer
         # use view DPI for vector-graphics (PDF)
         self.density = self_dpi
       }.first
-      
+
       # workaround: ImageMagick uses wrong colors when inserting into RVG
       if [Magick::ColorSeparationType, Magick::ColorSeparationMatteType].include?(go_image.image_type)
         go_image.image_type = Magick::TrueColorMatteType
       end
-      
+
       # if object size is not given, try to determine object size based on the DPI of the image
       im_width = go_width == 0 && go_image.x_resolution>0 ? go_image.columns/go_image.x_resolution*25.4 : go_width
       im_height = go_height == 0 && go_image.y_resolution>0 ? go_image.rows/go_image.y_resolution*25.4 : go_height
-      
+
       body.image(go_image, mm(im_width), mm(im_height))
     else
       raise Printer::Base::ResourceNotFoundError, "Das Bild '#{data}' konnte nicht gefunden werden. Der Druck wird angehalten."
     end
   end
-  
+
   def draw_barcode(body, go, go_width, go_height, data, optimized=true)
     return if data.nil? || data.empty?
-      
+
     barcode_typ = go[GOA_BARCODE_TYP]
     bar_ratio = go[GOA_BAR_RATIO].to_i
-		fontname = go[GOA_FONT_TYP]
-		if fontname=='from_file'
-			fontname = go[GOA_FONT_FILE]
-		end
-		fontsize = go[GOA_FONT_HEIGHT].to_f
-		font_color = ["#", go[GOA_FONT_COLOR]].join
-    
+    fontname = go[GOA_FONT_TYP]
+    if fontname=='from_file'
+      fontname = go[GOA_FONT_FILE]
+    end
+    fontsize = go[GOA_FONT_HEIGHT].to_f
+    font_color = ["#", go[GOA_FONT_COLOR]].join
+
     unless @magick_font_list.index(fontname) || File.exist?(fontname)
       raise Printer::Base::ResourceNotFoundError, "Die Schriftart '#{fontname}' konnte nicht gefunden werden. Der Druck wird angehalten."
     end
 
     body.styles(
-			:fill=>font_color,
-			:stroke=>'none',
-			:font => ["'", fontname, "'"].join,
-			:font_size => pt(fontsize)
-		)
+      :fill=>font_color,
+      :stroke=>'none',
+      :font => ["'", fontname, "'"].join,
+      :font_size => pt(fontsize)
+    )
 
     begin
       barcode = Barby.const_get(barcode_typ).new(data)
@@ -248,20 +248,20 @@ module RmagickDrawer
       end
       bcencoding = barcode.encoding
 
-			eancode = %w[EAN13 EAN8].include?(barcode_typ)
-			
-      px_width, px_height = mm(go_width), mm(go_height)-pt(fontsize/5*4)
-			xbars, ybars = if barcode.two_dimensional?
-				[bcencoding.first.length, bcencoding.length] if barcode.two_dimensional?
-			else
-				[bcencoding.length, 1]
-			end
-			xdim, ydim = px_width/xbars, px_height/ybars
-			xdim, ydim = xdim.to_i, ydim.to_i if optimized
+      eancode = %w[EAN13 EAN8].include?(barcode_typ)
 
-			just = go[GOA_JUSTIFICATION].downcase
-			xgap = mm(go_width) - xdim*xbars
-			body.translate( ({'links'=>0, 'mitte'=>xgap/2, 'rechts'=>xgap}[just] || 0).round, 0)
+      px_width, px_height = mm(go_width), mm(go_height)-pt(fontsize/5*4)
+      xbars, ybars = if barcode.two_dimensional?
+        [bcencoding.first.length, bcencoding.length] if barcode.two_dimensional?
+      else
+        [bcencoding.length, 1]
+      end
+      xdim, ydim = px_width/xbars, px_height/ybars
+      xdim, ydim = xdim.to_i, ydim.to_i if optimized
+
+      just = go[GOA_JUSTIFICATION].downcase
+      xgap = mm(go_width) - xdim*xbars
+      body.translate( ({'links'=>0, 'mitte'=>xgap/2, 'rechts'=>xgap}[just] || 0).round, 0)
 
       if barcode.two_dimensional?
         x, y = 0, 0
@@ -277,30 +277,30 @@ module RmagickDrawer
         x = 0
         bcencoding.split(//).map{|c| c == '1' }.each_with_index do |bar, bidx|
   #         puts "#{xdim}, #{px_height}, #{x}" if bar
-					h = px_height
-					if eancode && (bidx<=3 || bidx>=xbars-3 || (bidx-xbars/2).abs<=1)
-						h += pt(fontsize/10*4)
-					end
+          h = px_height
+          if eancode && (bidx<=3 || bidx>=xbars-3 || (bidx-xbars/2).abs<=1)
+            h += pt(fontsize/10*4)
+          end
           body.rect(xdim, h, x, 0) if bar
           x += xdim
         end
       end
 
-			# Barcode - text
+      # Barcode - text
 
-			if eancode
-				data2 = barcode.numbers_with_checksum.join
-				data3 = if barcode_typ=='EAN8'
-					[nil, data2[0,4], data2[4,4]]
-				elsif barcode_typ=='EAN13'
-					[data2[0,1], data2[1,6], data2[7,6]]
-				end
-				body.text(0, mm(go_height), data3[0]).styles(:text_anchor => 'end') if data[0]
-				body.text(xdim * (xbars/4.0+1), mm(go_height), data3[1]).styles(:text_anchor => 'middle')
-				body.text(xdim * (xbars/4.0*3.0-1), mm(go_height), data3[2]).styles(:text_anchor => 'middle')
-			else
-				body.text(xdim * (xbars/2.0), mm(go_height), data).styles(:text_anchor => 'middle')
-			end
+      if eancode
+        data2 = barcode.numbers_with_checksum.join
+        data3 = if barcode_typ=='EAN8'
+          [nil, data2[0,4], data2[4,4]]
+        elsif barcode_typ=='EAN13'
+          [data2[0,1], data2[1,6], data2[7,6]]
+        end
+        body.text(0, mm(go_height), data3[0]).styles(:text_anchor => 'end') if data[0]
+        body.text(xdim * (xbars/4.0+1), mm(go_height), data3[1]).styles(:text_anchor => 'middle')
+        body.text(xdim * (xbars/4.0*3.0-1), mm(go_height), data3[2]).styles(:text_anchor => 'middle')
+      else
+        body.text(xdim * (xbars/2.0), mm(go_height), data).styles(:text_anchor => 'middle')
+      end
     end
   end
 

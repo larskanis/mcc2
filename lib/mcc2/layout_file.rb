@@ -46,14 +46,14 @@ class LayoutFile
     o.load_from_xml(filename)
     return o
   end
- 	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   def self.create_xml
     o = self.new
     o.create_xml
     return o
   end
- 	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   def initialize
     @xml_doc = nil
@@ -79,14 +79,14 @@ class LayoutFile
     add_attr(S_ZEBRAPRINTER_NAME, String, '')
     add_attr(S_ZEBRAPRINTER_INITDATA, String, '')
   end
- 	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
   def xml_doc
     @xml_doc
   end
- 	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   # erzeugt eine neue XML-Datei und initialisiert die entsprechenden Variablen und Objekte
-	def create_xml
+  def create_xml
     @xml_doc = Nokogiri::XML::Document.new
     @xml_doc.encoding = 'UTF-8'
     @xml_doc.root = Nokogiri::XML::Node.new(S_ROOT, @xml_doc)
@@ -113,12 +113,12 @@ class LayoutFile
     @xml_doc.root << node = Nokogiri::XML::Node.new(GRAPHICOBJECTS, @xml_doc)
 
   end
- 	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   # lädt das XML-File und initialisiert die entsprechenden Variablen und Objekte
   # ==== Parameter
   # +filename+:: der NAme des XML-Files in welchem die Layout-Spezifikation gespeichert werden soll
-	def load_from_xml(filename)
+  def load_from_xml(filename)
     return nil if filename == ""
 
     @xml_doc = File.open(filename){|fd| Nokogiri::XML(fd) }
@@ -214,13 +214,13 @@ class LayoutFile
     end
   end
 
-	def find_graphic_object_by_id(id)
-		go = xml_doc.at_xpath(
-			"//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[.='#{id.to_s}']").parent
+  def find_graphic_object_by_id(id)
+    go = xml_doc.at_xpath(
+      "//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[.='#{id.to_s}']").parent
     typ = go.at_xpath(GOA_TYP).content
 
-		LayoutObject::Graphic.get_object_by_typ(typ, go)
-	end
+    LayoutObject::Graphic.get_object_by_typ(typ, go)
+  end
 
   def magstripe_object
     ms_node = xml_doc.at_xpath("//#{S_ROOT}//#{S_MAGSTRIPEPARAMS}")
@@ -277,7 +277,7 @@ class LayoutFile
   # ermittelt die nächst höhere ID (beeinflusst die Darstellungsebene)
   def get_new_id
     id = 0
-		@xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
+    @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go|
       id = go.at_xpath(GOA_ID).content.to_i+1 if go.at_xpath(GOA_ID).content.to_i >= id
     }
     id
@@ -303,7 +303,7 @@ class LayoutFile
     attr = lay_attrs.at_xpath(attr_name)
     attr ? attr.content : nil
   end
- 	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   # setzt den Inhalt eines Attributes des Layout-Abschnittes
   # ==== Return
@@ -383,7 +383,7 @@ class LayoutFile
       EOTXT
     end
   end
- 	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   # ersetllt ein neues Graphik-Objekt und kopiert alle Attributte des übergebenen, außer ID, Typ und Name
   # ==== Parameter
@@ -398,7 +398,7 @@ class LayoutFile
       end
     end
   end
- 	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   # löscht sie übergebene XML-Node aus dem Layout ohne Rückfrage, diese muss in der aufrufenden Methode durchgeführt werden
   # ==== Parameter

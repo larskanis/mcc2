@@ -21,7 +21,7 @@ class Layout
   # der Datamanager
   attr_accessor :dataman
 
- 	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   # initialisiert zusätzliche Elemente im Layout-Dialog, die nicht oder schlecht im Fox-GUI-Builder erzeugt werden können
   # setzt Parameter bei Dialog-Elementen
@@ -152,10 +152,10 @@ class Layout
   def set_title
     @parent.title = "#{@layout_file.filename} #{@changed ? ' *' : '' }"
   end
- 	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   # speichert alle GraphicObjekte und Layout-Einstellungen im XML-File
-	def store_to_xml(filename_dialog=false)
+  def store_to_xml(filename_dialog=false)
     if filename_dialog || !@layout_file.filename
       fn = FXFileDialog.getSaveFilename(@parent, 'Speichern', './', patterns = '*.xml', initial = 0)
       return if fn.empty?
@@ -168,7 +168,7 @@ class Layout
     @changed = false
     set_title
   end
- 	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   def can_close?
     return true if !changed
@@ -189,7 +189,7 @@ class Layout
   def load_from_xml(filename)
     self.layout_file = LayoutFile.load_from_xml(filename)
   end
- 	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   def layout_file= layout_file
     @layout_file = layout_file
@@ -214,7 +214,7 @@ class Layout
     @layoutview.manage_objects(ADD, typ)
   end
 
- 	#---------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------
 
   def draw_preview_with_row row, immediately=false
     return unless @preview
