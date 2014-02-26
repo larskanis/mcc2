@@ -72,7 +72,7 @@ module RmagickDrawer
 
       # Text-Objekte
       sorted_id_list = layout_file.sorted_id_list
-      sorted_id_list.each{|id|
+      sorted_id_list.each do |id|
         go = layout_file.find_graphic_object_by_id(id)
         # nur die Objekte zeichnen, die auf diese Seite sollen
         if go[GOA_PAGE_NR].to_i == page_nr
@@ -103,6 +103,7 @@ module RmagickDrawer
             elsif typ == PICTUREOBJECT
               draw_pictureobject(body.g, go, go_width, go_height, data)
             elsif typ == BARCODEOBJECT
+              data = data.gsub(/\\x([0-9a-f][0-9a-f])/i){ [$1.hex].pack("C") }.gsub(/\\(.)/, '\\1')
               draw_barcode(body.g, go, go_width, go_height, data, !preview)
             elsif typ == BOXOBJECT
               draw_boxobject(body.g, go, go_width, go_height)
@@ -117,7 +118,7 @@ module RmagickDrawer
 
           end
         end
-      }
+      end
 
       # ..........................................................................................
       # Rand zeichnen (für Vorschau)

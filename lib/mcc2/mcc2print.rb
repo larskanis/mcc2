@@ -17,6 +17,7 @@ require 'barby'
   ].each do |code|
   require "barby/barcode/#{code}"
 end
+require 'mcc2/barby_barcode_extensions'
 
 FileUtils.mkdir_p("./logs")
 

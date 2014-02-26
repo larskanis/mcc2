@@ -38,6 +38,7 @@ class Layout
         ].each do |code|
         require "barby/barcode/#{code}"
       end
+      require 'mcc2/barby_barcode_extensions'
     rescue LoadError => e
       puts "Loading barcode driver failed: #{e}"
     end
