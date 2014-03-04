@@ -89,6 +89,7 @@ class Printerview < Dialogbox_printerview
 
   def selected_GdiPrinter(combobox=@combobox_gdi_printer, attr=S_GDIPRINTER_NAME)
     begin
+      gem 'win32api4ruby', '>= 0.2.1'
       require "win32api4ruby"
       Win32api4ruby::Base.unicode = true
     rescue LoadError, RuntimeError => e
