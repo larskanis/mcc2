@@ -105,6 +105,7 @@ class GdiPrinter < CardPrinter
 
   def end_doc(hPrinter, row)
     Win32api4ruby::Gdi.end_doc(hPrinter)
+    GC.start
   end
 
   def abort_doc(hPrinter, row)
