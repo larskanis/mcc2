@@ -85,6 +85,9 @@ module Mcc2
   S_XIDPRINTER_INITDATA = 'xidprinter_initdata'
   S_ZEBRAPRINTER_NAME = 'zebraprinter_name'
   S_ZEBRAPRINTER_INITDATA = 'zebraprinter_initdata'
+  S_CABPRINTER_HOST = 'cabprinter_host'
+  S_CABPRINTER_PORT = 'cabprinter_port'
+  S_CABPRINTER_PAGE_COMMANDS = 'cabprinter_page_commands'
 
   UP = 0
   DOWN = 1
