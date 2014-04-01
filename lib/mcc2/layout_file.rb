@@ -79,11 +79,21 @@ class LayoutFile
     add_attr(S_XIDPRINTER_INITDATA, String, '')
     add_attr(S_ZEBRAPRINTER_NAME, String, '')
     add_attr(S_ZEBRAPRINTER_INITDATA, String, '')
-    add_attr(S_CABPRINTER_HOST, String, '')
-    add_attr(S_CABPRINTER_PORT, Integer, 9001)
-    add_attr(S_CABPRINTER_PAGE_COMMANDS, String, '
-I
-A
+    add_attr(S_CABPRINTER_HOST, String, 'localhost')
+    add_attr(S_CABPRINTER_PORT, Integer, 9100)
+    add_attr(S_CABPRINTER_PAGE_COMMANDS, String,
+'ePNG;*
+dPNG;pngimg
+\e.%IMAGE_DATA_PNG%\e.
+mm
+zO
+J
+H125,+0,T,R0
+P0.00
+O R
+Sl1;0.0,0.00,27.61,27.61,85.04
+I:Field1;0.00,4.57,pngimg;
+A1
 ')
   end
   #---------------------------------------------------------------------------------------------------------

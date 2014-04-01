@@ -39,17 +39,26 @@ class PrinterCab < CardPrinter
     pic = img.draw
 
     page_commands.gsub!("\\e", "\e")
-    send_data = page_commands.gsub("%IMAGE_DATA_PNG%") do
+    page_commands.gsub!("\n", "\r\n")
+
+    page_commands.gsub!("%IMAGE_DATA_PNG%") do
       pic = pic.quantize(2, Magick::RGBColorspace, false)
       data = pic.to_blob do
         self.format='png'
       end
+      data.gsub("\e", "\e\e")
+    end
 
+    page_commands.gsub!("%IMAGE_DATA_PCX%") do
+      pic = pic.quantize(2, Magick::RGBColorspace, false)
+      data = pic.to_blob do
+        self.format='pcx'
+      end
       data.gsub("\e", "\e\e")
     end
 
     open_socket(layout_file) do |sock|
-      sock.write send_data
+      sock.write page_commands
     end
 
     return true
