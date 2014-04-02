@@ -74,6 +74,7 @@ lib/mcc2/printer/file_printer.rb
 lib/mcc2/printer/gdi_card_printer.rb
 lib/mcc2/printer/gdi_printer.rb
 lib/mcc2/printer/preview.rb
+lib/mcc2/printer/printer_cab.rb
 lib/mcc2/printer/printer_xid.rb
 lib/mcc2/printer/printer_zebra.rb
 lib/mcc2/printer/rmagick_drawer.rb
