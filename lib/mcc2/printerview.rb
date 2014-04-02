@@ -65,9 +65,9 @@ class Printerview < Dialogbox_printerview
     @spinner_cab_port.connect(SEL_COMMAND){ @layout_file.set_attr_value(S_CABPRINTER_PORT, @spinner_cab_port.value.to_s); changed_attributes }
     @text_cab_page_commands.connect(SEL_CHANGED){ @layout_file.set_attr_value(S_CABPRINTER_PAGE_COMMANDS, @text_cab_page_commands.text); changed_attributes }
     @button_cab_info.connect(SEL_COMMAND){ cab_send_command("\es\r\n"){|s| s.read(9) } }
-    @button_cab_extended_info.connect(SEL_COMMAND){ cab_send_command("\ez\r\n"){|s| s.gets } }
+    @button_cab_extended_info.connect(SEL_COMMAND){ cab_send_command("\ez\r\n"){|s| s.gets("\r") } }
     @button_cab_self_test.connect(SEL_COMMAND){ cab_send_command("t\r\n") }
-    @button_cab_firmware_version.connect(SEL_COMMAND){ cab_send_command("v\r\n"){|s| s.gets } }
+    @button_cab_firmware_version.connect(SEL_COMMAND){ cab_send_command("v\r\n"){|s| s.gets("\r") } }
     @button_cab_cancel_jobs.connect(SEL_COMMAND){ cab_send_command("\et\r\n") }
 
     fill_printertype_list

@@ -26,6 +26,8 @@ class PrinterCab < CardPrinter
     page_commands = layout_file.get_attr_value(S_CABPRINTER_PAGE_COMMANDS)
     page_width =  layout_file.get_attr_value(S_WIDTH).to_f
     page_height = layout_file.get_attr_value(S_HEIGHT).to_f
+    draw_pos_x  = layout_file.get_attr_value(S_X_OFFSET).to_f
+    draw_pos_y  = layout_file.get_attr_value(S_Y_OFFSET).to_f
 
     # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
     selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
@@ -40,6 +42,10 @@ class PrinterCab < CardPrinter
 
     page_commands.gsub!("\\e", "\e")
     page_commands.gsub!("\n", "\r\n")
+    page_commands.gsub!("%PAGE_WIDTH%", page_width.to_s)
+    page_commands.gsub!("%PAGE_HEIGHT%", page_height.to_s)
+    page_commands.gsub!("%PAGE_OFFSET_X%", draw_pos_x.to_s)
+    page_commands.gsub!("%PAGE_OFFSET_Y%", draw_pos_y.to_s)
 
     page_commands.gsub!("%IMAGE_DATA_PNG%") do
       pic = pic.quantize(2, Magick::RGBColorspace, false)
