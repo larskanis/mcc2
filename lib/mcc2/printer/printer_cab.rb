@@ -81,10 +81,10 @@ class PrinterCab < CardPrinter
   end
   private :open_socket
 
-  def send_command(layout_file, data)
+  def send_command(layout_file, data, &block)
     open_socket(layout_file) do |sock|
       sock.write data
-      sock.read
+      yield sock if block_given?
     end
   end
 end

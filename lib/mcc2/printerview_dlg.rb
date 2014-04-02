@@ -28,6 +28,7 @@ class Dialogbox_printerview
 					w.layoutHints=1024
 					w.width=570
 					w.height=21
+					w.numColumns=10
 				}
 				FX::TabBook.new(@verticalframe_printersetup){|w|
 					@tabbook_printers=w
@@ -555,8 +556,9 @@ class Dialogbox_printerview
 						FX::Matrix.new(@verticalframe40){|w|
 							@matrix_connection=w
 							w.wdg_name='matrix_connection'
+							w.layoutHints=1024
 							w.width=562
-							w.height=106
+							w.height=29
 							w.numColumns=4
 							FX::Label.new(@matrix_connection){|w|
 								@label60=w
@@ -602,71 +604,100 @@ class Dialogbox_printerview
 							@horizontalframe1=w
 							w.wdg_name='horizontalframe1'
 							w.frameStyle=16384
-							w.padTop=3
+							w.layoutHints=1024
+							w.padTop=10
 							w.padLeft=3
 							w.padRight=3
-							w.padBottom=3
-							w.y=106
+							w.padBottom=10
+							w.y=29
 							w.width=562
-							w.height=329
+							w.height=159
 							FX::VerticalFrame.new(@horizontalframe1){|w|
 								@verticalframe41=w
 								w.wdg_name='verticalframe41'
 								w.vSpacing=5
 								w.x=5
-								w.y=5
-								w.width=409
-								w.height=319
+								w.y=12
+								w.width=420
+								w.height=135
 								FX::Button.new(@verticalframe41){|w|
 									@button_cab_info=w
 									w.wdg_name='button_cab_info'
 									w.layoutHints=1024
-									w.width=409
+									w.width=420
 									w.height=23
 									w.text="Printer Status Abfrage"
 								}
 								FX::Button.new(@verticalframe41){|w|
-									@button_cab_self_test=w
-									w.wdg_name='button_cab_self_test'
+									@button_cab_extended_info=w
+									w.wdg_name='button_cab_extended_info'
 									w.layoutHints=1024
 									w.y=28
-									w.width=409
+									w.width=420
 									w.height=23
-									w.text="Start Self Test"
+									w.text="Extended Status Abfrage"
 								}
 								FX::Button.new(@verticalframe41){|w|
 									@button_cab_firmware_version=w
 									w.wdg_name='button_cab_firmware_version'
 									w.layoutHints=1024
 									w.y=56
-									w.width=409
+									w.width=420
 									w.height=23
 									w.text="Firmware-Version"
+								}
+								FX::Button.new(@verticalframe41){|w|
+									@button_cab_self_test=w
+									w.wdg_name='button_cab_self_test'
+									w.layoutHints=1024
+									w.y=84
+									w.width=420
+									w.height=23
+									w.text="Start Self Test"
+								}
+								FX::Button.new(@verticalframe41){|w|
+									@button_cab_cancel_jobs=w
+									w.wdg_name='button_cab_cancel_jobs'
+									w.layoutHints=1024
+									w.y=112
+									w.width=420
+									w.height=23
+									w.text="Drucker zurücksetzen"
 								}
 							}
 							FX::Text.new(@horizontalframe1){|w|
 								@text_cab_output=w
 								w.wdg_name='text_cab_output'
-								w.x=414
-								w.y=5
-								w.width=143
-								w.height=319
+								w.x=425
+								w.y=12
+								w.width=132
+								w.height=135
 							}
 						}
 						FX::Label.new(@verticalframe40){|w|
 							@label62=w
 							w.wdg_name='label62'
-							w.y=435
+							w.padTop=10
+							w.y=188
 							w.width=625
-							w.height=19
+							w.height=27
 							w.text="Druckbefehle pro Ausgabeseite (siehe \"Programming Manual\" von cab Produktionstechnik GmbH)"
 						}
-						FX::Text.new(@verticalframe40){|w|
-							@text_cab_page_commands=w
-							w.wdg_name='text_cab_page_commands'
-							w.y=454
+						FX::Packer.new(@verticalframe40){|w|
+							@packer3=w
+							w.wdg_name='packer3'
+							w.frameStyle=16384
+							w.y=215
 							w.width=562
-							w.height=192
+							w.height=431
+							FX::Text.new(@packer3){|w|
+								@text_cab_page_commands=w
+								w.wdg_name='text_cab_page_commands'
+								w.x=6
+								w.y=2
+								w.width=550
+								w.height=427
+							}
 						}
 					}
 				}
@@ -731,10 +762,13 @@ class Dialogbox_printerview
 	attr_reader :horizontalframe1
 	attr_reader :verticalframe41
 	attr_reader :button_cab_info
-	attr_reader :button_cab_self_test
+	attr_reader :button_cab_extended_info
 	attr_reader :button_cab_firmware_version
+	attr_reader :button_cab_self_test
+	attr_reader :button_cab_cancel_jobs
 	attr_reader :text_cab_output
 	attr_reader :label62
+	attr_reader :packer3
 	attr_reader :text_cab_page_commands
 end
 
