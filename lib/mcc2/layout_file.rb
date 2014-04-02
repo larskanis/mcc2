@@ -91,8 +91,8 @@ J
 H125,+0,T,R0
 P0.00
 O R
-Sl1;0.0,0.00,27.61,27.61,85.04
-I:Field1;0.00,4.57,pngimg;
+Sl1;0.0,0.00,%PAGE_HEIGHT%,%PAGE_HEIGHT%,%PAGE_WIDTH%
+I:Field1;%PAGE_OFFSET_X%,%PAGE_OFFSET_Y%,0;pngimg
 A1
 ')
   end
