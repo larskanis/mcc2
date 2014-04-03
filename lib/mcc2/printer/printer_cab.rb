@@ -50,7 +50,7 @@ class PrinterCab < CardPrinter
     page_commands.gsub!("%IMAGE_DATA_PNG%") do
       pic = pic.quantize(2, Magick::RGBColorspace, false)
       data = pic.to_blob do
-        self.format='png'
+        self.format='png8'
       end
       data.gsub("\e", "\e\e")
     end
