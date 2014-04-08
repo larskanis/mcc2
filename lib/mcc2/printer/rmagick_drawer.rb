@@ -282,7 +282,7 @@ module RmagickDrawer
           if eancode && (bidx<=3 || bidx>=xbars-3 || (bidx-xbars/2).abs<=1)
             h += pt(fontsize/10*4)
           end
-          body.rect(xdim, h, x, 0) if bar
+          body.rect(xdim-1, h, x, 0) if bar && xdim>=1
           x += xdim
         end
       end
