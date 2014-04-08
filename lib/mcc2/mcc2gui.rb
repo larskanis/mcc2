@@ -189,7 +189,7 @@ class Mcc2Gui < MainWindow
     Thread.abort_on_exception = true
 
     begin
-      app = FX::App.new("MCC2", "ComCard")
+      app = FX::App.new("MCC2", "ComCard-Mcc2")
       Fox::FXToolTip.new(app, Fox::TOOLTIP_PERMANENT)
 
       w = Mcc2Gui.new(app, argv)
