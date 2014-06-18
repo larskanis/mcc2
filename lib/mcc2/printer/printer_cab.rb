@@ -21,7 +21,7 @@ class PrinterCab < CardPrinter
   #--------------------------------------------------------------------------------------------------------------
 
   def print_card(layout_file, row, chip)
-    self.dpi = layout_file.get_attr_value(S_FILEPRINTER_DPI).to_f
+    self.dpi = layout_file.get_attr_value(S_CABPRINTER_DPI).to_f
 
     page_commands = layout_file.get_attr_value(S_CABPRINTER_PAGE_COMMANDS)
     page_width =  layout_file.get_attr_value(S_WIDTH).to_f

@@ -18,6 +18,7 @@ module Printer
   autoload 'FilePrinter', 'mcc2/printer/file_printer'
   autoload 'PrinterZebra', 'mcc2/printer/printer_zebra'
   autoload 'PrinterCab', 'mcc2/printer/printer_cab'
+  autoload 'PrinterEpl', 'mcc2/printer/printer_epl'
 end
 
 module DataMan
@@ -81,6 +82,7 @@ class LayoutFile
     add_attr(S_ZEBRAPRINTER_INITDATA, String, '')
     add_attr(S_CABPRINTER_HOST, String, 'localhost')
     add_attr(S_CABPRINTER_PORT, Integer, 9100)
+    add_attr(S_CABPRINTER_DPI, Integer, 300)
     add_attr(S_CABPRINTER_PAGE_COMMANDS, String,
 'ePNG;*
 dPNG;pngimg
@@ -94,6 +96,23 @@ O R
 Sl1;0.0,0.00,%PAGE_HEIGHT%,%PAGE_HEIGHT%,%PAGE_WIDTH%
 I:Field1;%PAGE_OFFSET_X%,%PAGE_OFFSET_Y%,0;pngimg
 A1
+')
+    add_attr(S_EPLPRINTER_DEVICE, String, '/dev/usb/lp0')
+    add_attr(S_EPLPRINTER_DPI, Integer, 203)
+    add_attr(S_EPLPRINTER_PAGE_COMMANDS, String,
+'
+OD
+N
+D8
+S2
+GK"*"
+GM"image1"%IMAGE_LEN_DATA_PCX%
+O
+JF
+WN
+ZB
+GG0,0,"image1"
+P1
 ')
   end
   #---------------------------------------------------------------------------------------------------------

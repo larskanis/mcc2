@@ -13,6 +13,7 @@ class Printerview < Dialogbox_printerview
     PrinterDescription.new( 'XID-440', 'PrinterXID', 2),
     PrinterDescription.new( 'Zebra', 'PrinterZebra', 3),
     PrinterDescription.new( 'cab Produktionstechnik GmbH', 'PrinterCab', 4),
+    PrinterDescription.new( 'EPL-Drucker', 'PrinterEpl', 5),
   ]
 
   def initialize parent, layout
@@ -63,12 +64,23 @@ class Printerview < Dialogbox_printerview
     end
     @textfield_cab_host.connect(SEL_COMMAND){ @layout_file.set_attr_value(S_CABPRINTER_HOST, @textfield_cab_host.text); changed_attributes }
     @spinner_cab_port.connect(SEL_COMMAND){ @layout_file.set_attr_value(S_CABPRINTER_PORT, @spinner_cab_port.value.to_s); changed_attributes }
+    @spinner_cab_dpi.connect(SEL_COMMAND){
+      @layout_file.set_attr_value(S_CABPRINTER_DPI, @spinner_cab_dpi.value.to_s)
+      changed_attributes
+    }
     @text_cab_page_commands.connect(SEL_CHANGED){ @layout_file.set_attr_value(S_CABPRINTER_PAGE_COMMANDS, @text_cab_page_commands.text); changed_attributes }
     @button_cab_info.connect(SEL_COMMAND){ cab_send_command("\es\r\n"){|s| s.read(9) } }
     @button_cab_extended_info.connect(SEL_COMMAND){ cab_send_command("\ez\r\n"){|s| s.gets("\r") } }
     @button_cab_self_test.connect(SEL_COMMAND){ cab_send_command("t\r\n") }
     @button_cab_firmware_version.connect(SEL_COMMAND){ cab_send_command("v\r\n"){|s| s.gets("\r") } }
     @button_cab_cancel_jobs.connect(SEL_COMMAND){ cab_send_command("\et\r\n") }
+
+    @textfield_epl_device.connect(SEL_COMMAND){ @layout_file.set_attr_value(S_EPLPRINTER_DEVICE, @textfield_epl_device.text); changed_attributes }
+    @text_epl_page_commands.connect(SEL_CHANGED){ @layout_file.set_attr_value(S_EPLPRINTER_PAGE_COMMANDS, @text_epl_page_commands.text); changed_attributes }
+    @spinner_epl_dpi.connect(SEL_COMMAND){
+      @layout_file.set_attr_value(S_EPLPRINTER_DPI, @spinner_epl_dpi.value.to_s)
+      changed_attributes
+    }
 
     fill_printertype_list
     combobox_printertype_changed
@@ -183,6 +195,9 @@ class Printerview < Dialogbox_printerview
   def selected_PrinterCab
   end
 
+  def selected_PrinterEpl
+  end
+
   def cab_send_command(data, &block)
     begin
       cab = Mcc2::Printer::PrinterCab.new
@@ -221,7 +236,12 @@ class Printerview < Dialogbox_printerview
 
     @textfield_cab_host.text = @layout_file.get_attr_value(S_CABPRINTER_HOST)
     @spinner_cab_port.value = @layout_file.get_attr_value(S_CABPRINTER_PORT).to_i
+    @spinner_cab_dpi.value = @layout_file.get_attr_value(S_CABPRINTER_DPI).to_i
     @text_cab_page_commands.text = @layout_file.get_attr_value(S_CABPRINTER_PAGE_COMMANDS)
+
+    @textfield_epl_device.text = @layout_file.get_attr_value(S_EPLPRINTER_DEVICE)
+    @spinner_epl_dpi.value = @layout_file.get_attr_value(S_EPLPRINTER_DPI).to_i
+    @text_epl_page_commands.text = @layout_file.get_attr_value(S_EPLPRINTER_PAGE_COMMANDS)
   end
 
   def changed_attributes

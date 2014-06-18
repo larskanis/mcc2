@@ -87,7 +87,11 @@ module Mcc2
   S_ZEBRAPRINTER_INITDATA = 'zebraprinter_initdata'
   S_CABPRINTER_HOST = 'cabprinter_host'
   S_CABPRINTER_PORT = 'cabprinter_port'
+  S_CABPRINTER_DPI = 'cabprinter_dpi'
   S_CABPRINTER_PAGE_COMMANDS = 'cabprinter_page_commands'
+  S_EPLPRINTER_DEVICE = 'eplprinter_device'
+  S_EPLPRINTER_DPI = 'eplprinter_dpi'
+  S_EPLPRINTER_PAGE_COMMANDS = 'eplprinter_page_commands'
 
   UP = 0
   DOWN = 1
