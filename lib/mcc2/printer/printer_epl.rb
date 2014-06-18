@@ -32,7 +32,7 @@ class PrinterEpl < CardPrinter
     # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
     selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
     preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
-    img = Magick::RVG.new(mm(page_width), mm(page_height)) do |canvas|
+    img = Magick::RVG.new(mm(page_width - draw_pos_x), mm(page_height - draw_pos_y)) do |canvas|
       canvas.background_fill = 'white'
       draw(canvas, layout_file, preview, selected_object_id, row, 0)
     end
@@ -52,11 +52,13 @@ class PrinterEpl < CardPrinter
     page_commands.gsub!("%PAGE_OFFSET_Y_PX%", mm(draw_pos_y).to_i.to_s)
 
     page_commands.gsub!("%IMAGE_LEN_DATA_PCX%") do
+      pic = pic.level2(Magick::QuantumRange/2, Magick::QuantumRange/2)
       pic = pic.quantize(2, Magick::RGBColorspace, false)
-      pic = pic.level2(1,1)
+      pic = pic.level2(Magick::QuantumRange/2, Magick::QuantumRange/2)
       data = pic.to_blob do
         self.format='pcx'
       end
+#       File.write("test.pcx", data)
       "#{data.bytesize}\r\n#{data}"
     end
 

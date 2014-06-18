@@ -311,7 +311,7 @@ module RmagickDrawer
     border_color = go[GOA_BORDER_COLOR]
     border_width = go[GOA_BORDER_WIDTH].to_f
 
-    body.rect(mm(go_width), mm(go_height) ).round(mm(corner_radius)).styles(:fill=>'#'+fill_color, :stroke=>'#'+border_color, :stroke_width=>mm(border_width))
+    body.rect( mm(go_width).round, mm(go_height).round ).round(mm(corner_radius)).styles(:fill=>'#'+fill_color, :stroke=>'#'+border_color, :stroke_width=>mm(border_width).round)
   end
 
 end
