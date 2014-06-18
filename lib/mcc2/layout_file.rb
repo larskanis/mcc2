@@ -105,13 +105,14 @@ OD
 N
 D8
 S2
+q%PAGE_WIDTH_PX%
 GK"*"
 GM"image1"%IMAGE_LEN_DATA_PCX%
 O
 JF
 WN
 ZB
-GG0,0,"image1"
+GG%PAGE_OFFSET_X_PX%,%PAGE_OFFSET_Y_PX%,"image1"
 P1
 ')
   end
