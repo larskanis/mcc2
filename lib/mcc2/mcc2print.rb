@@ -19,9 +19,6 @@ require 'barby'
 end
 require 'mcc2/barby_barcode_extensions'
 
-FileUtils.mkdir_p("./logs")
-
-
 module Mcc2
 # die Haupklasse des Programms
   class Mcc2Print
@@ -71,14 +68,7 @@ module Mcc2
         opts.separator "\t -x //Layout/fileprinter_save_as~image_%d_%p.png"
       end.parse!
 
-      begin
-        app.start!(argv[0])
-      rescue Exception => e
-        file = File.basename(__FILE__, ".rb")
-        DebugTools.write_log_file('main', DebugTools.unkown_error_message(e))
-        puts(DebugTools.unkown_error_message(e))
-        exit -1
-      end
+      app.start!(argv[0])
     end
   end
 end
