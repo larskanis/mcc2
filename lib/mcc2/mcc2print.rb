@@ -5,7 +5,6 @@
 require "rubygems"
 
 require 'mcc2'
-require 'mcc2/debug_tools'
 require 'fileutils'
 require "tempfile"
 require "optparse"
