@@ -27,6 +27,7 @@ lib/mcc2/gui/layoutview_dlg.pp
 lib/mcc2/gui/mcc2_mainwin.pp
 lib/mcc2/gui/picture_data_edit_dlg.rbin
 lib/mcc2/gui/printerview_dlg.pp
+lib/mcc2/i386-mswin32/XID_Card_Loader.exe
 lib/mcc2/i386-mswin32/prnsc.dll
 lib/mcc2/images/Image-Arrow-Left.gif
 lib/mcc2/images/Image-Arrow-Right.gif

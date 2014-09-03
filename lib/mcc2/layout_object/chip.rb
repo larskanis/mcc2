@@ -43,28 +43,27 @@ class Chip
   # +xml_doc+::   die XML-Struktur mit den Definitionen des Kartenlayouts
   # +row+::       ein Datensatz im FasteCSV-Format
   def pers_card(layout_file, row)
-    # muss vor dem require kommen
-    ENV['CHIPBASE_ENV'] = 'chip32'
-
-    require 'chipcoding/class_loader'
+    require 'chipcoding'
+    require 'config_loader'
 
     p "pers_card #{row.inspect}"
     # die Chip-Parameter auslesen
     # erst ein leeres Array anlegen
-    params = []
+    params = {}
     # un dann die Parameter aus dem XML auslesen und entsprechend ihrer  ID in das Array schreiben
     (1 .. CHIPPARAM_FIELD_COUNT).each{|i|
       attr_name = "#{S_PARAM}_#{i}"
-      params << DataMan.replace_variables(self[attr_name], row)
+      params[i-1] = DataMan.replace_variables(self[attr_name], row)
     }
 
     # die Personalisierung durchführen
     if params[7] =~ /^RUBY;(.*)/
-      @chip_obj ||= Chip32n::ClassLoader.load($1)
+      @chip_obj ||= ConfigBase.load($1)
     else
       raise InvalidScriptType, "Ungültiges Perso-Script eingestellt"
     end
 
+    params['OpenReader'] = params[22]
     @chip_obj.personalize(params)
 
   end
