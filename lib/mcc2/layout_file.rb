@@ -453,6 +453,7 @@ P1
     datamantyp =  get_attr_value(S_DATASOURCETYP)
     datasource =  get_attr_value(S_DATASOURCE)
     encoding =  get_attr_value(S_DATASOURCEENCODING)
+    # Ruby-1.9 kennt kein LATIN1
     encoding = 'iso-8859-1' if encoding=~/latin1/i
 
     dataman = if datamantyp == DATABASE
