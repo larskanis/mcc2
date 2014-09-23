@@ -453,6 +453,7 @@ P1
     datamantyp =  get_attr_value(S_DATASOURCETYP)
     datasource =  get_attr_value(S_DATASOURCE)
     encoding =  get_attr_value(S_DATASOURCEENCODING)
+    encoding = 'iso-8859-1' if encoding=~/latin1/i
 
     dataman = if datamantyp == DATABASE
       DataMan::Database.new(datasource)
