@@ -841,7 +841,7 @@
                         "text="=>"",
                         "textColor="=>"0,0,0,255",
                         "tipText="=>
-                         "Aktivieren Sie dieses K\303\244stchen, wenn bei der Karte der Magnetstreifen kontaktloser personalisiert werden soll.",
+                         "Aktivieren Sie dieses K\303\244stchen, wenn bei der Karte der Magnetstreifen personalisiert werden soll.",
                         "width="=>17,
                         "x="=>85,
                         "y="=>0},
@@ -894,7 +894,7 @@
                         "padTop="=>2,
                         "shadowColor="=>"128,128,128,255",
                         "shown="=>true,
-                        "text="=>"Seitegr\303\266\303\237e",
+                        "text="=>"Seitengr\303\266\303\237e",
                         "textColor="=>"0,0,0,255",
                         "tipText="=>"",
                         "width="=>85,
