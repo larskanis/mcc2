@@ -15,6 +15,7 @@ Hoe.spec 'mcc2' do
   extra_deps << ['rmagick', '>= 2.5']
   extra_deps << ['barby', '>= 0.5']
   extra_deps << ['rqrcode', '>= 0.4']
+  extra_deps << ['fxruby', '>= 1.6.30']
 
   # self.rubyforge_name = 'mcc2x' # if different than 'mcc2'
 end

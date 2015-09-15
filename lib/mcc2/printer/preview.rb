@@ -3,7 +3,6 @@
 require 'mcc2/printer/base'           # die Basisklasse für die Printer
 require 'mcc2/printer/card_printer'
 require 'mcc2/printer/rmagick_drawer'
-require 'mcc2/thread_event_handler'
 
 module Mcc2
 module Printer
@@ -11,7 +10,6 @@ class Preview < Base
   include RmagickDrawer
   include CardPrinting
   include Fox
-  include ThreadEventHandler
 
   def initialize parent
     super()
@@ -43,7 +41,6 @@ class Preview < Base
 
     @image_view = FXImageView.new(parent, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y)
 
-    event_handler_setup
     set_zoom
   end
 
@@ -90,7 +87,7 @@ class Preview < Base
           @thread = nil
           # requeue preview generation, when something was changed
           # while the thread was running.
-          event_handler_push do
+          @parent.runOnUiThread do
             start_preview_timer
           end
         end
@@ -132,7 +129,7 @@ class Preview < Base
         self.format = 'PNG'
       end
 
-      event_handler_push do
+      @parent.runOnUiThread do
         # das erzeugte Bild als Icon anzeigen
         fx_image = FXPNGImage.new(@parent.app, data)
         fx_image.create
@@ -145,13 +142,13 @@ class Preview < Base
         end
       end
     rescue Printer::Base::PrintError => e
-      event_handler_push do
+      @parent.runOnUiThread do
         FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
       end
       @printing = false
     rescue => e
       DebugTools::write_log_file('draw_preview_thread', DebugTools::unkown_error_message(e))
-      event_handler_push do
+      @parent.runOnUiThread do
         FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen der Layoutvorschau", DebugTools::unkown_error_message(e))
       end
     end # rescue

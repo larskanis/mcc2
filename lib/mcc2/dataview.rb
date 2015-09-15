@@ -1,13 +1,10 @@
 # -*- coding: UTF-8 -*-
 
-require 'mcc2/thread_event_handler'
-
 module Mcc2
 require 'mcc2/dataview_dlg'
 
 class Dataview < Dialogbox_dataview
   include Fox
-  include ThreadEventHandler
 
   def initialize parent, layout
     @layout = layout
@@ -24,10 +21,10 @@ class Dataview < Dialogbox_dataview
     # .............................................................................................
     # alle Aktionen definieren
 
-    @textfield_datasource.connect(SEL_COMMAND){
+    @textfield_datasource.connect(SEL_COMMAND) do
       @layout_file.set_attr_value(S_DATASOURCE, @textfield_datasource.text)
       changed_attributes
-    }
+    end
     # Button für das Auswählen einer Datenquelle an Textfeld knüpfen
     Layout.connect_filebutton_to_textfield( @button_datasource, @textfield_datasource,
           ["Semicolon seperated file (*.csv,*.dbf)", "All Files (*)"]
@@ -50,7 +47,6 @@ class Dataview < Dialogbox_dataview
 
     @verticalframe_datalist.width = 500
 
-    event_handler_setup
     fill_datalist_when_visible
   end
 
@@ -102,10 +98,10 @@ class Dataview < Dialogbox_dataview
 
       first_row = @dataman.headers
       felder = if first_row
-        first_row.map{|feldname|
+        first_row.map do |feldname|
           @iconlist_data.appendHeader(feldname, nil, 100)
           feldname
-        }
+        end
       else
         []
       end
@@ -114,13 +110,13 @@ class Dataview < Dialogbox_dataview
       if rows
         big_icon = nil
         mini_icon = nil
-        rows.each_with_index{|row, idx|
+        rows.each_with_index do |row, idx|
           row['mcc2_row_index'] = (idx + 1).to_s if row
-          itemtext = "#{idx+1}\t" + felder.map{|feld|
+          itemtext = "#{idx+1}\t" + felder.map do |feld|
             row[feld]
-          }.join("\t")
+          end.join("\t")
           @iconlist_data.appendItem(itemtext, big_icon, mini_icon, row)
-        }
+        end
 
         update_preview
         @parent.app.show_on_statusline "#{@dataman.rows.length} Datensätze geladen"
@@ -170,7 +166,7 @@ class Dataview < Dialogbox_dataview
 
     first_finding = true
     finding_count = 0
-    @iconlist_data.each_with_index{|item, itemidx|
+    @iconlist_data.each_with_index do |item, itemidx|
       if item.text =~ /#{search_text}/i
 
         @iconlist_data.selectItem(itemidx)
@@ -186,7 +182,7 @@ class Dataview < Dialogbox_dataview
       else
         @iconlist_data.deselectItem(itemidx)
       end
-    }
+    end
     if first_finding
       @parent.app.show_on_statusline "kein #{"weiterer" if finding_count>0} Datensatz gefunden"
     else
@@ -276,28 +272,28 @@ class Dataview < Dialogbox_dataview
     printer = @layout_file.build_printer_instance
 
     marked_items = []
-    (0 ... @iconlist_data.numRows).map{|i|
+    (0 ... @iconlist_data.numRows).map do |i|
       if !only_selected || @iconlist_data.itemSelected?(i)
         marked_items << @iconlist_data.getItemData(i)
       end
-    }
+    end
 
-    Thread.new{
+    Thread.new do
       begin
         chip = layout_file.build_chip_instance
 
-        marked_items.each_with_index{|item, itemidx|
+        marked_items.each_with_index do |item, itemidx|
           it = nil
-          event_handler_push{
+          @parent.runOnUiThread do
             it = @iconlist_data.findItemByData(item)
             @iconlist_data.makeItemVisible(it)
             @iconlist_data.setFocus
             @iconlist_data.setCurrentItem(it, true)
-          }
+          end
 
           erg = printer.print_card(layout_file, item, chip)
 
-          event_handler_push{
+          @parent.runOnUiThread do
             @parent.app.show_on_statusline "#{itemidx+1} von #{marked_items.length} Datensätzen gedruckt"
             # den aktuellen Datensatz deselektieren, wenn er erfolgreich gedruckt wurde
             begin
@@ -305,32 +301,32 @@ class Dataview < Dialogbox_dataview
             rescue RuntimeError => e
               raise unless e.to_s=~/already released/
             end
-          }
+          end
 
           if !erg || !@printing
             # abbrechen, wenn ein Fehler aufgetreten ist, oder wenn der Bediener es gefordert hat
             break
           end
-        }
+        end
       rescue Printer::Base::PrintError => e
-        event_handler_push{
+        @parent.runOnUiThread do
           FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
-        }
+        end
       rescue Exception => e
         DebugTools::write_log_file('print_card_thread', DebugTools::unkown_error_message(e))
-        event_handler_push{
+        @parent.runOnUiThread do
           FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen des Druckbildes", DebugTools::unkown_error_message(e))
-        }
+        end
       ensure
         @printing = false
-        event_handler_push{
+        @parent.runOnUiThread do
           enable_all_buttons
           enable_disable_print_select_button
           @button_stop_printing.enabled = false
-        }
+        end
         chip.close_reader if chip
       end # rescue
-    }
+    end
   end
   #---------------------------------------------------------------------------------------------------------
 
