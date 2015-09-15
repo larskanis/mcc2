@@ -19,6 +19,8 @@ module Printer
   autoload 'PrinterZebra', 'mcc2/printer/printer_zebra'
   autoload 'PrinterCab', 'mcc2/printer/printer_cab'
   autoload 'PrinterEpl', 'mcc2/printer/printer_epl'
+  autoload 'PrinterCx320Direct', 'mcc2/printer/printer_cx320_direct'
+  autoload 'PrinterCx320Gdi', 'mcc2/printer/printer_cx320_gdi'
 end
 
 module DataMan

@@ -14,6 +14,8 @@ class Printerview < Dialogbox_printerview
     PrinterDescription.new( 'Zebra', 'PrinterZebra', 3),
     PrinterDescription.new( 'cab Produktionstechnik GmbH', 'PrinterCab', 4),
     PrinterDescription.new( 'EPL-Drucker', 'PrinterEpl', 5),
+    PrinterDescription.new( 'CX-320 Direct', 'PrinterCx320Direct', 5),
+    PrinterDescription.new( 'CX-320 Spooler', 'PrinterCx320Gdi', 5),
   ]
 
   def initialize parent, layout
@@ -109,13 +111,9 @@ class Printerview < Dialogbox_printerview
   end
 
   def selected_GdiPrinter(combobox=@combobox_gdi_printer, attr=S_GDIPRINTER_NAME)
-    begin
-      gem 'win32api4ruby', '>= 0.2.1'
-      require "win32api4ruby"
+    if_driver_loadable('win32api4ruby', "win32api4ruby", "die Windows-Druckerschnittstelle") do
       Win32api4ruby::Base.unicode = true
-    rescue LoadError, RuntimeError => e
-      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Ansprechen der Windows-Druckerschnittstelle" , "Die Windows-Druckerschnittstelle konnte nicht geladen werden.\nBitte stellen Sie sicher, dass das Gem-Paket win32api4ruby installiert ist.\n\n" + e.to_s)
-    else
+
       combobox.clearItems
 
       flags = Win32api4ruby::Winspool::PRINTER_ENUM_NAME
@@ -182,12 +180,7 @@ class Printerview < Dialogbox_printerview
   end
 
   def selected_PrinterZebra
-    begin
-      gem 'zebra_dll'
-      require 'zebra_dll'
-    rescue LoadError, RuntimeError => e
-      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Laden des Zebra-Treibers" , "Der Treiber für Zebra-Drucker konnte nicht geladen werden.\nBitte stellen Sie sicher, dass das Gem-Paket zebra_dll installiert ist.\n\n" + e.to_s)
-    else
+    if_driver_loadable('zebra_dll', 'zebra_dll', "Zebra-Drucker") do
       selected_GdiPrinter(@combobox_zebra_printer, S_ZEBRAPRINTER_NAME)
     end
   end
@@ -196,6 +189,28 @@ class Printerview < Dialogbox_printerview
   end
 
   def selected_PrinterEpl
+  end
+
+  def selected_PrinterCx320Direct
+    if_driver_loadable('libcx320', 'libcx320', 'CX320-Drucker') do
+    end
+  end
+
+  def selected_PrinterCx320Gdi
+    if_driver_loadable('libcx320', 'libcx320', 'CX320-Drucker') do
+#       selected_GdiPrinter(@combobox_zebra_printer, S_ZEBRAPRINTER_NAME)
+    end
+  end
+
+  def if_driver_loadable(gem_name, require_name, human_name)
+    begin
+      gem gem_name
+      require require_name
+    rescue LoadError, RuntimeError => e
+      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Laden des Treibers für #{human_name}" , "Der Treiber für #{human_name} konnte nicht geladen werden.\nBitte stellen Sie sicher, dass das Gem-Paket '#{gem_name}' installiert ist.\n\n" + e.to_s)
+    else
+      yield
+    end
   end
 
   def cab_send_command(data, &block)
