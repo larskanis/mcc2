@@ -30,14 +30,16 @@ class PrinterCx320Direct < CardPrinter
   def print_card(layout_file, row, chip)
     self.dpi = layout_file.get_attr_value(S_EPLPRINTER_DPI).to_f
     duplex = layout_file.get_attr_value(S_DUPLEX) == S_TRUE
+    x_offset = layout_file.get_attr_value(S_X_OFFSET).to_f
+    y_offset = layout_file.get_attr_value(S_Y_OFFSET).to_f
 
     front_layers = layout_file.get_layers_of_page(0)
-    front_planes = generate_image_planes(layout_file, row, 0, front_layers)
+    front_planes = generate_image_planes(layout_file, row, 0, front_layers, x_offset, y_offset)
     front_layer_syms = front_layers.map{|l| PrintLayers[l] }.uniq
 
     if duplex
       back_layers = layout_file.get_layers_of_page(1)
-      back_planes = generate_image_planes(layout_file, row, 1, back_layers)
+      back_planes = generate_image_planes(layout_file, row, 1, back_layers, x_offset, y_offset)
       back_layer_syms = back_layers.map{|l| PrintLayers[l] }.uniq
     end
 
@@ -93,18 +95,21 @@ class PrinterCx320Direct < CardPrinter
     return true
   end
 
-  def generate_image_planes(layout_file, row, page, layers)
-    # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
-    selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
-    preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
+  def draw_rvg_image(layout_file, row, page, layers, x_offset, y_offset)
+    Magick::RVG.new(1036, 664) do |canvas|
+      canvas.background_fill = 'white'
+      canvas.g.translate(mm(x_offset).round, mm(y_offset).round) do |canvas1|
+        selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
+        preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
 
-    if layers.include?(0)
-      img = Magick::RVG.new(1036, 664) do |canvas|
-        canvas.background_fill = 'white'
-        draw(canvas, layout_file, preview, selected_object_id, row, page, [0])
+        draw(canvas1, layout_file, preview, selected_object_id, row, page, layers)
       end
-      # das RVG in ein Bitmap konvertieren
-      pic = img.draw
+    end.draw
+  end
+
+  def generate_image_planes(layout_file, row, page, layers, x_offset, y_offset)
+    if layers.include?(0)
+      pic = draw_rvg_image(layout_file, row, page, [0], x_offset, y_offset)
 
       gradient_pic = Magick::Image.new(256, 1)
       gradient = 0.upto(255).map do |i|
@@ -120,26 +125,17 @@ class PrinterCx320Direct < CardPrinter
     end
 
     if layers.include?(1)
-      pic = Magick::RVG.new(1036, 664) do |canvas|
-        canvas.background_fill = 'white'
-        draw(canvas, layout_file, preview, selected_object_id, row, page, [1])
-      end.draw.negate
+      pic = draw_rvg_image(layout_file, row, page, [1], x_offset, y_offset).negate
       data_k = pic.export_pixels_to_str(0, 0, pic.columns, pic.rows, "R", Magick::CharPixel)
     end
 
     if layers.include?(2)
-      pic = Magick::RVG.new(1036, 664) do |canvas|
-        canvas.background_fill = 'white'
-        draw(canvas, layout_file, preview, selected_object_id, row, page, [2])
-      end.draw.negate
+      pic = draw_rvg_image(layout_file, row, page, [2], x_offset, y_offset).negate
       data_uv = pic.export_pixels_to_str(0, 0, pic.columns, pic.rows, "R", Magick::CharPixel)
     end
 
     if layers.include?(3)
-      pic = Magick::RVG.new(1036, 664) do |canvas|
-        canvas.background_fill = 'white'
-        draw(canvas, layout_file, preview, selected_object_id, row, page, [3])
-      end.draw.negate
+      pic = draw_rvg_image(layout_file, row, page, [3], x_offset, y_offset).negate
       data_peeloff = pic.export_pixels_to_str(0, 0, pic.columns, pic.rows, "R", Magick::CharPixel)
     end
 
