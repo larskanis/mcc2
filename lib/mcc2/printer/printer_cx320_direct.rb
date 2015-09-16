@@ -20,57 +20,69 @@ class PrinterCx320Direct < CardPrinter
 
   #--------------------------------------------------------------------------------------------------------------
 
+  PrintLayers = {
+    0 => :YMC,
+    1 => :K,
+    2 => :UV,
+    3 => :PeelOff,
+  }
+
   def print_card(layout_file, row, chip)
     self.dpi = layout_file.get_attr_value(S_EPLPRINTER_DPI).to_f
+    duplex = layout_file.get_attr_value(S_DUPLEX) == S_TRUE
 
-    page_width =  layout_file.get_attr_value(S_WIDTH).to_f + card_margin_left + card_margin_right
-    page_height = layout_file.get_attr_value(S_HEIGHT).to_f + card_margin_top + card_margin_bottom
-    draw_pos_x  = layout_file.get_attr_value(S_X_OFFSET).to_f - card_margin_left
-    draw_pos_y  = layout_file.get_attr_value(S_Y_OFFSET).to_f - card_margin_top
+    front_layers = layout_file.get_layers_of_page(0)
+    front_planes = generate_image_planes(layout_file, row, 0, front_layers)
+    front_layer_syms = front_layers.map{|l| PrintLayers[l] }.uniq
 
-    # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
-    selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
-    preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
-    img = Magick::RVG.new(mm(page_width - draw_pos_x), mm(page_height - draw_pos_y)) do |canvas|
-      canvas.background_fill = 'white'
-      draw(canvas, layout_file, preview, selected_object_id, row, 0)
+    if duplex
+      back_layers = layout_file.get_layers_of_page(1)
+      back_planes = generate_image_planes(layout_file, row, 1, back_layers)
+      back_layer_syms = back_layers.map{|l| PrintLayers[l] }.uniq
     end
-
-    # das RVG in ein Bitmap konvertieren
-    pic = img.draw
-    sized_pic = Magick::Image.new(1036, 664)
-    sized_pic = sized_pic.composite(pic, Magick::CenterGravity, Magick::OverCompositeOp)
-
-    gradient_pic = Magick::Image.new(256, 1)
-    gradient = 0.upto(255).map do |i|
-      a = (255-i) / 255.0 * Magick::QuantumRange
-      [a, a, a]
-    end
-    gradient_pic.import_pixels(0, 0, 256, 1, "RGB", gradient.flatten)
-    sized_pic = sized_pic.clut_channel(gradient_pic)
-
-    data_c = sized_pic.export_pixels_to_str(0, 0, sized_pic.columns, sized_pic.rows, "R", Magick::CharPixel)
-    data_m = sized_pic.export_pixels_to_str(0, 0, sized_pic.columns, sized_pic.rows, "G", Magick::CharPixel)
-    data_y = sized_pic.export_pixels_to_str(0, 0, sized_pic.columns, sized_pic.rows, "B", Magick::CharPixel)
-
-    p [data_c[0..60].unpack("H*")[0], data_c.bytesize]
-    p [data_m[0..60].unpack("H*")[0], data_m.bytesize]
-    p [data_y[0..60].unpack("H*")[0], data_y.bytesize]
 
     dev = LibCX320::CX320_USB.devices.first
-    raise "printer not found" unless dev
+    raise "Printer not found" unless dev
 
     begin
       dev.ready?
 
-      dev.image_out(:C, data_c)
-      dev.image_out(:M, data_m)
-      dev.image_out(:Y, data_y)
+      if chip
+        dev.load_card(:contactless, false)
+      else
+        dev.load_card(:retransfer, false)
+      end
 
-      dev.load_card(:retransfer, false)
+      front_planes.each do |plane, data|
+        dev.image_out(plane, data) if data
+      end
+
+      if chip
+        begin
+          # Kartenpersonalisierung
+          chip.pers_card(layout_file, row)
+        rescue Exception
+          dev.move_card(:eject, false)
+          raise
+        end
+
+        dev.move_card(:retransfer, false)
+      end
       begin
-        dev.print([:YMC])
-        dev.retransfer_and_eject
+        dev.print(front_layer_syms)
+
+        if duplex
+          dev.retransfer_and_turn
+
+          back_planes.each do |plane, data|
+            dev.image_out(plane, data) if data
+          end
+
+          dev.print(back_layer_syms)
+          dev.retransfer_and_eject
+        else
+          dev.retransfer_and_eject
+        end
       rescue
         dev.move_card(:eject)
       end
@@ -79,6 +91,70 @@ class PrinterCx320Direct < CardPrinter
     end
 
     return true
+  end
+
+  def generate_image_planes(layout_file, row, page, layers)
+    # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
+    selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
+    preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
+
+    if layers.include?(0)
+      img = Magick::RVG.new(1036, 664) do |canvas|
+        canvas.background_fill = 'white'
+        draw(canvas, layout_file, preview, selected_object_id, row, page, [0])
+      end
+      # das RVG in ein Bitmap konvertieren
+      pic = img.draw
+
+      gradient_pic = Magick::Image.new(256, 1)
+      gradient = 0.upto(255).map do |i|
+        a = (255-i) / 255.0 * Magick::QuantumRange
+        [a, a, a]
+      end
+      gradient_pic.import_pixels(0, 0, 256, 1, "RGB", gradient.flatten)
+      pic = pic.clut_channel(gradient_pic)
+
+      data_c, data_m, data_y = ["R", "G", "B"].map do |color|
+        pic.export_pixels_to_str(0, 0, pic.columns, pic.rows, color, Magick::CharPixel)
+      end
+    end
+
+    if layers.include?(1)
+      pic = Magick::RVG.new(1036, 664) do |canvas|
+        canvas.background_fill = 'white'
+        draw(canvas, layout_file, preview, selected_object_id, row, page, [1])
+      end.draw.negate
+      data_k = pic.export_pixels_to_str(0, 0, pic.columns, pic.rows, "R", Magick::CharPixel)
+    end
+
+    if layers.include?(2)
+      pic = Magick::RVG.new(1036, 664) do |canvas|
+        canvas.background_fill = 'white'
+        draw(canvas, layout_file, preview, selected_object_id, row, page, [2])
+      end.draw.negate
+      data_uv = pic.export_pixels_to_str(0, 0, pic.columns, pic.rows, "R", Magick::CharPixel)
+    end
+
+    if layers.include?(3)
+      pic = Magick::RVG.new(1036, 664) do |canvas|
+        canvas.background_fill = 'white'
+        draw(canvas, layout_file, preview, selected_object_id, row, page, [3])
+      end.draw.negate
+      data_peeloff = pic.export_pixels_to_str(0, 0, pic.columns, pic.rows, "R", Magick::CharPixel)
+    end
+
+    [data_c, data_m, data_y, data_k, data_uv, data_peeloff].each do |data|
+      raise "internal error unexpected size #{data.bytesize}" if data && data.bytesize != 1036*664
+    end
+
+    return {
+      C: data_c,
+      M: data_m,
+      Y: data_y,
+      K: data_k,
+      UV: data_uv,
+      PeelOff: data_peeloff,
+    }
   end
 
 end
