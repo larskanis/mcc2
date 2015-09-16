@@ -48,10 +48,10 @@ module RmagickDrawer
   #---------------------------------------------------------------------------------------------------------
 
   #
-  def draw(canvas, layout_file, preview, selected_object_id, row, page_nr)
+  def draw(canvas, layout_file, preview, selected_object_id, row, page_nr, layers=[0])
     @magick_font_list ||= Magick.fonts.map{|mf| mf.name }
 
-    width =  layout_file.get_attr_value(S_WIDTH).to_f
+    width = layout_file.get_attr_value(S_WIDTH).to_f
     height = layout_file.get_attr_value(S_HEIGHT).to_f
     if preview
       rx = 10
