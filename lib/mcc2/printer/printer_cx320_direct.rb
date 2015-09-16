@@ -35,42 +35,38 @@ class PrinterCx320Direct < CardPrinter
 
     front_layers = layout_file.get_layers_of_page(0)
     front_planes = generate_image_planes(layout_file, row, 0, front_layers, x_offset, y_offset)
-    front_layer_syms = front_layers.map{|l| PrintLayers[l] }.uniq
+    front_layer_syms = front_layers.map{|l| PrintLayers[l] }.compact.uniq
 
     if duplex
       back_layers = layout_file.get_layers_of_page(1)
       back_planes = generate_image_planes(layout_file, row, 1, back_layers, x_offset, y_offset)
-      back_layer_syms = back_layers.map{|l| PrintLayers[l] }.uniq
+      back_layer_syms = back_layers.map{|l| PrintLayers[l] }.compact.uniq
     end
 
-    dev = LibCX320::CX320_USB.devices.first
-    raise "Printer not found" unless dev
-
-    begin
-      dev.ready?
-
+    open_printer(layout_file) do |dev|
       if chip
         dev.load_card(:contactless, false)
       else
         dev.load_card(:retransfer, false)
       end
 
-      front_planes.each do |plane, data|
-        dev.image_out(plane, data) if data
-      end
-
-      if chip
-        begin
-          # Kartenpersonalisierung
-          chip.pers_card(layout_file, row)
-        rescue Exception
-          dev.move_card(:eject, false)
-          raise
+      begin
+        front_planes.each do |plane, data|
+          dev.image_out(plane, data) if data
         end
 
-        dev.move_card(:retransfer, false)
-      end
-      begin
+        if chip
+          begin
+            # Kartenpersonalisierung
+            chip.pers_card(layout_file, row)
+          rescue Exception
+            dev.move_card(:eject, false, false, true) rescue
+            raise
+          end
+
+          dev.move_card(:retransfer, false)
+        end
+
         dev.print(front_layer_syms)
 
         if duplex
@@ -86,10 +82,9 @@ class PrinterCx320Direct < CardPrinter
           dev.retransfer_and_eject
         end
       rescue
-        dev.move_card(:eject)
+        dev.move_card(:eject, false, false, true) rescue
+        raise
       end
-    ensure
-      dev.close
     end
 
     return true
@@ -151,6 +146,24 @@ class PrinterCx320Direct < CardPrinter
       UV: data_uv,
       PeelOff: data_peeloff,
     }
+  end
+
+  def open_printer(layout_file)
+    printer_klass = LibCX320.const_get(layout_file.get_attr_value(S_CX320_DRIVER))
+    printer_nr = layout_file.get_attr_value(S_CX320_PRINTER_NR).to_i
+    dev = printer_klass.devices[printer_nr]
+    raise "Printer #{printer_nr} not found" unless dev
+
+    begin
+      dev.ready?
+      yield dev
+    ensure
+      dev.close
+    end
+  end
+
+  def run_command(&block)
+    open_printer(layout_file, &block)
   end
 
 end

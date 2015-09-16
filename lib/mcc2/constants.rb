@@ -94,6 +94,9 @@ module Mcc2
   S_EPLPRINTER_DPI = 'eplprinter_dpi'
   S_EPLPRINTER_PAGE_COMMANDS = 'eplprinter_page_commands'
 
+  S_CX320_DRIVER = 'cx320_driver'
+  S_CX320_PRINTER_NR = 'cx320_printer_nr'
+
   UP = 0
   DOWN = 1
 

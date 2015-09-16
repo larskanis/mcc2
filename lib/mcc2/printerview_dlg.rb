@@ -38,7 +38,7 @@ class Dialogbox_printerview
 					w.y=21
 					w.width=570
 					w.height=675
-					w.current=4
+					w.current=6
 					w.backColor=Fox::FXRGBA(226,226,226,255)
 					w.baseColor=Fox::FXRGBA(226,226,226,255)
 					w.shadowColor=Fox::FXRGBA(180,180,180,255)
@@ -542,8 +542,8 @@ class Dialogbox_printerview
 					FX::TabItem.new(@tabbook_printers){|w|
 						@tabitem29=w
 						w.wdg_name='tabitem29'
-						w.x=240
-						w.y=4
+						w.x=242
+						w.y=6
 						w.width=31
 						w.height=23
 						w.text="cab"
@@ -551,6 +551,7 @@ class Dialogbox_printerview
 					FX::VerticalFrame.new(@tabbook_printers){|w|
 						@verticalframe40=w
 						w.wdg_name='verticalframe40'
+						w.shown=false
 						w.x=4
 						w.y=25
 						w.width=562
@@ -726,7 +727,7 @@ class Dialogbox_printerview
 					FX::TabItem.new(@tabbook_printers){|w|
 						@tabitem35=w
 						w.wdg_name='tabitem35'
-						w.x=270
+						w.x=273
 						w.y=6
 						w.width=31
 						w.height=23
@@ -814,6 +815,171 @@ class Dialogbox_printerview
 							}
 						}
 					}
+					FX::TabItem.new(@tabbook_printers){|w|
+						@tabitem42=w
+						w.wdg_name='tabitem42'
+						w.x=302
+						w.y=4
+						w.width=50
+						w.height=23
+						w.text="CX320"
+					}
+					FX::VerticalFrame.new(@tabbook_printers){|w|
+						@verticalframe60=w
+						w.wdg_name='verticalframe60'
+						w.x=4
+						w.y=25
+						w.width=562
+						w.height=646
+						FX::Matrix.new(@verticalframe60){|w|
+							@matrix46=w
+							w.wdg_name='matrix46'
+							w.layoutHints=1024
+							w.width=562
+							w.height=29
+							w.numColumns=4
+							FX::Label.new(@matrix46){|w|
+								@label96=w
+								w.wdg_name='label96'
+								w.x=4
+								w.y=4
+								w.width=49
+								w.height=19
+								w.text="Treiber"
+							}
+							FX::ComboBox.new(@matrix46){|w|
+								@combobox_cx320_driver=w
+								w.wdg_name='combobox_cx320_driver'
+								w.x=57
+								w.y=4
+								w.width=101
+								w.height=21
+								w.numColumns=10
+							}
+							FX::Label.new(@matrix46){|w|
+								@label98=w
+								w.wdg_name='label98'
+								w.x=162
+								w.y=4
+								w.width=73
+								w.height=19
+								w.text="Drucker-Nr"
+							}
+							FX::Spinner.new(@matrix46){|w|
+								@spinner_cx320_printer_nr=w
+								w.wdg_name='spinner_cx320_printer_nr'
+								w.range=-2147483648..2147483647
+								w.x=239
+								w.y=4
+								w.width=44
+								w.height=21
+								w.numColumns=3
+							}
+						}
+						FX::Matrix.new(@verticalframe60){|w|
+							@matrix48=w
+							w.wdg_name='matrix48'
+							w.layoutHints=1024
+							w.y=29
+							w.width=562
+							w.height=31
+							FX::Button.new(@matrix48){|w|
+								@button_cx320_update_status=w
+								w.wdg_name='button_cx320_update_status'
+								w.x=4
+								w.y=4
+								w.width=134
+								w.height=23
+								w.text="Status aktualisieren"
+							}
+						}
+						FX::ScrollWindow.new(@verticalframe60){|w|
+							@scrollwindow_status=w
+							w.wdg_name='scrollwindow_status'
+							w.y=60
+							w.width=562
+							w.height=262
+						}
+						FX::Matrix.new(@verticalframe60){|w|
+							@matrix49=w
+							w.wdg_name='matrix49'
+							w.layoutHints=1024
+							w.y=322
+							w.width=562
+							w.height=31
+							w.numColumns=2
+							FX::Button.new(@matrix49){|w|
+								@button_cx320_read_config=w
+								w.wdg_name='button_cx320_read_config'
+								w.x=4
+								w.y=4
+								w.width=108
+								w.height=23
+								w.text="Konfig auslesen"
+							}
+							FX::Button.new(@matrix49){|w|
+								@button_cx320_write_config=w
+								w.wdg_name='button_cx320_write_config'
+								w.x=116
+								w.y=4
+								w.width=113
+								w.height=23
+								w.text="Konfig schreiben"
+							}
+						}
+						FX::ScrollWindow.new(@verticalframe60){|w|
+							@scrollwindow_config=w
+							w.wdg_name='scrollwindow_config'
+							w.y=353
+							w.width=562
+							w.height=262
+						}
+						FX::Matrix.new(@verticalframe60){|w|
+							@matrix47=w
+							w.wdg_name='matrix47'
+							w.layoutHints=1024
+							w.y=615
+							w.width=562
+							w.height=31
+							w.numColumns=4
+							FX::Button.new(@matrix47){|w|
+								@button_cx320_reset=w
+								w.wdg_name='button_cx320_reset'
+								w.x=4
+								w.y=4
+								w.width=45
+								w.height=23
+								w.text="Reset"
+							}
+							FX::Button.new(@matrix47){|w|
+								@button_cx320_move_to_0=w
+								w.wdg_name='button_cx320_move_to_0'
+								w.x=53
+								w.y=4
+								w.width=108
+								w.height=23
+								w.text="zu Druckstation"
+							}
+							FX::Button.new(@matrix47){|w|
+								@button_cx320_move_to_2=w
+								w.wdg_name='button_cx320_move_to_2'
+								w.x=165
+								w.y=4
+								w.width=77
+								w.height=23
+								w.text="zu kont.los"
+							}
+							FX::Button.new(@matrix47){|w|
+								@button_cx320_move_to_4=w
+								w.wdg_name='button_cx320_move_to_4'
+								w.x=246
+								w.y=4
+								w.width=59
+								w.height=23
+								w.text="Auswurf"
+							}
+						}
+					}
 				}
 			}
 		}
@@ -896,6 +1062,25 @@ class Dialogbox_printerview
 	attr_reader :label77
 	attr_reader :packer5
 	attr_reader :text_epl_page_commands
+	attr_reader :tabitem42
+	attr_reader :verticalframe60
+	attr_reader :matrix46
+	attr_reader :label96
+	attr_reader :combobox_cx320_driver
+	attr_reader :label98
+	attr_reader :spinner_cx320_printer_nr
+	attr_reader :matrix48
+	attr_reader :button_cx320_update_status
+	attr_reader :scrollwindow_status
+	attr_reader :matrix49
+	attr_reader :button_cx320_read_config
+	attr_reader :button_cx320_write_config
+	attr_reader :scrollwindow_config
+	attr_reader :matrix47
+	attr_reader :button_cx320_reset
+	attr_reader :button_cx320_move_to_0
+	attr_reader :button_cx320_move_to_2
+	attr_reader :button_cx320_move_to_4
 end
 
 #unit test

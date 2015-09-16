@@ -14,8 +14,8 @@ class Printerview < Dialogbox_printerview
     PrinterDescription.new( 'Zebra', 'PrinterZebra', 3),
     PrinterDescription.new( 'cab Produktionstechnik GmbH', 'PrinterCab', 4),
     PrinterDescription.new( 'EPL-Drucker', 'PrinterEpl', 5),
-    PrinterDescription.new( 'CX-320 Direct', 'PrinterCx320Direct', 5),
-    PrinterDescription.new( 'CX-320 Spooler', 'PrinterCx320Gdi', 5),
+    PrinterDescription.new( 'CX-320 Direct', 'PrinterCx320Direct', 6),
+    PrinterDescription.new( 'CX-320 Spooler', 'PrinterCx320Gdi', 0),
   ]
 
   def initialize parent, layout
@@ -84,8 +84,26 @@ class Printerview < Dialogbox_printerview
       changed_attributes
     }
 
+    @combobox_cx320_driver.appendItem("LIBUSB", "CX320_USB")
+    @combobox_cx320_driver.appendItem("DLL", "CX320_DLL")
+    @combobox_cx320_driver.connect(SEL_COMMAND){ combobox_changed(@combobox_cx320_driver, S_CX320_DRIVER) }
+    @spinner_cx320_printer_nr.connect(SEL_COMMAND){ @layout_file.set_attr_value(S_CX320_PRINTER_NR, @spinner_cx320_printer_nr.value.to_s); changed_attributes }
+
+    @button_cx320_reset.connect(SEL_COMMAND){ cx320_run_command{|dev| dev.rezero_unit } }
+    @button_cx320_move_to_0.connect(SEL_COMMAND){ cx320_move_to(0) }
+    @button_cx320_move_to_2.connect(SEL_COMMAND){ cx320_move_to(2) }
+    @button_cx320_move_to_4.connect(SEL_COMMAND){ cx320_move_to(4) }
+
     fill_printertype_list
     combobox_printertype_changed
+  end
+
+  def combobox_changed(combobox, attr)
+    data = combobox.getItemData(combobox.currentItem)
+    if @layout_file.get_attr_value(attr) != data
+      @layout_file.set_attr_value(attr, data)
+      changed_attributes
+    end
   end
 
   def gdi_combobox_changed(combobox, attr, attr_initdata)
@@ -222,6 +240,26 @@ class Printerview < Dialogbox_printerview
     end
   end
 
+  def cx320_run_command(&block)
+    begin
+      dev = Mcc2::Printer::PrinterCx320Direct.new
+      dev.layout_file = @layout_file
+      dev.run_command(&block)
+    rescue => e
+      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Senden" , "Das Kommando konnte nicht ausgeführt werden\nBitte stellen Sie sicher, dass die Verbindungsparameter korrekt sind.\n\n" + e.to_s)
+    end
+  end
+
+  def cx320_move_to(pos)
+    cx320_run_command do |dev|
+      begin
+        dev.move_card(pos)
+      rescue LibCX320::ErrorHandling::CommandSequenceError
+        dev.load_card(pos)
+      end
+    end
+  end
+
   def deactivate_printer_tabs
     0.step(@tabbook_printers.numChildren-1, 2){|idx|
       @tabbook_printers.childAtIndex(idx).shown = false
@@ -257,6 +295,9 @@ class Printerview < Dialogbox_printerview
     @textfield_epl_device.text = @layout_file.get_attr_value(S_EPLPRINTER_DEVICE)
     @spinner_epl_dpi.value = @layout_file.get_attr_value(S_EPLPRINTER_DPI).to_i
     @text_epl_page_commands.text = @layout_file.get_attr_value(S_EPLPRINTER_PAGE_COMMANDS)
+
+    Layout.set_combobox_by_data( @combobox_cx320_driver, @layout_file.get_attr_value(S_CX320_DRIVER))
+    @spinner_cx320_printer_nr.value = @layout_file.get_attr_value(S_CX320_PRINTER_NR).to_i
   end
 
   def changed_attributes
