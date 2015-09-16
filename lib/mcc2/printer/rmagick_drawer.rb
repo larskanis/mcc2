@@ -75,7 +75,7 @@ module RmagickDrawer
       sorted_id_list.each do |id|
         go = layout_file.find_graphic_object_by_id(id)
         # nur die Objekte zeichnen, die auf diese Seite sollen
-        if go[GOA_PAGE_NR].to_i == page_nr
+        if go[GOA_PAGE_NR].to_i == page_nr && (layers==:all || layers.include?(go[GOA_LAYER].to_i))
 
           # die allgemeinen Attribute ermitteln
 #           id = go[GOA_ID].to_i

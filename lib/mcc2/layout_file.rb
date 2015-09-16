@@ -275,13 +275,32 @@ P1
   # ==== Parameter
   # +id+:: die Nummer, unter welcher das Attribut gespeichert ist
   def get_objectnode_by_id(id)
-    @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each{|go_struct|
+    @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each do |go_struct|
       if go_struct.at_xpath(GOA_ID).content.to_i == id
         return go_struct
       end
-    }
+    end
     nil
   end
+
+  def get_layers_of_page(page_nr)
+    @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").select do |go_struct|
+      go_struct.at_xpath(GOA_PAGE_NR).content.to_i == page_nr
+    end.map do |go_struct|
+      go_struct.at_xpath(GOA_LAYER).content.to_i
+    end.uniq
+  end
+
+  def get_object_by_id(obj_id, attr)
+    node = get_objectnode_by_id(obj_id)
+    node.at_xpath(attr).content if node
+  end
+
+  def set_object_by_id(obj_id, attr, value)
+    node = get_objectnode_by_id(obj_id)
+    node.at_xpath(attr).content = value if node
+  end
+
 
   # Fügt ein Graphik-Objekt zur Layout-Definition hinzu
   # ==== Parameter

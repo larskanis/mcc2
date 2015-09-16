@@ -15,6 +15,7 @@ class Graphic
     add_attr(@go_attributes, GOA_Y, Integer, 10)
     add_attr(@go_attributes, GOA_ROTATION, Integer, 0)
     add_attr(@go_attributes, GOA_PAGE_NR, Integer, 0)
+    add_attr(@go_attributes, GOA_LAYER, Integer, 0)
     add_attr(@go_attributes, GOA_PRINTLIST, String, 'false')
 
     @xml_elem = xml_elem

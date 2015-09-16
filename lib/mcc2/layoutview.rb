@@ -44,7 +44,7 @@ class Layoutview
     @lf.iconlist_objects.connect(SEL_DESELECTED){ object_deselected }
 
     # die allgemeinen Objektattribute
-    @lf.textfield_name.connect(SEL_COMMAND){ textfield_name_exit }
+    @lf.textfield_name.connect(SEL_COMMAND){ obj_attr_changed(GOA_NAME, @lf.textfield_name.text) }
 
     # die Daten-Attribute
     @lf.textfield_data_non_text.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_DATA) }
@@ -54,7 +54,7 @@ class Layoutview
     # die Font-Attribute
     @lf.textfield_text_color.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_FONT_COLOR) }
     @lf.button_text_color.connect(@text_field_trigger){ text_color_dialog(@lf.textfield_text_color) }
-    @lf.radiomutex_justify.on_event_selected{|r| radiomutex_justify_changed(r) }
+    @lf.radiomutex_justify.on_event_selected{|r| obj_attr_changed(GOA_JUSTIFICATION, r) }
 
     # die Positions-Attribute
     @lf.textfield_x.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_X) }
@@ -64,7 +64,7 @@ class Layoutview
     @lf.textfield_rotation.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, GOA_ROTATION) }
 
     # die Checkbox, ob der Inhalt des Feldes in der Liste des Druckdialogs mit angezeigt werden soll
-    @lf.checkbutton_printlist.connect(SEL_COMMAND ){ change_chkbtn_printlist }
+    @lf.checkbutton_printlist.connect(SEL_COMMAND ){ obj_attr_changed(GOA_PRINTLIST, @lf.checkbutton_printlist.state) }
 
     # die Textfelder für die allgemeine Layoutoptionen
     @lf.textfield_x_offset.connect(@text_field_trigger){|sender, sel, event| textfield_exit(sender, S_X_OFFSET) }
@@ -77,17 +77,24 @@ class Layoutview
     l.appendItem('CSV-Datei', CSV)
     l.appendItem('DBF-Datei', DBF)
     l.appendItem('Datenbank', DATABASE)
-    l.connect(SEL_COMMAND){ combobox_datasource_typ_changed }
+    l.connect(SEL_COMMAND) do
+      value = @lf.combobox_datasource_typ.getItemData(@lf.combobox_datasource_typ.currentItem)
+      attr_changed(S_DATASOURCETYP, value)
+    end
 
     l = @lf.combobox_datasource_encoding
     l.clearItems
     VALID_ENCODINGS.each{|enc| l.appendItem(enc, enc) }
-    l.connect(SEL_COMMAND){ combobox_datasource_encoding_changed }
+    l.connect(SEL_COMMAND) do
+      value = @lf.combobox_datasource_encoding.getItemData(@lf.combobox_datasource_encoding.currentItem)
+      attr_changed(S_DATASOURCEENCODING, value)
+    end
 
 
     # die Auswahl auf welche Seite das Objekt soll
-    @lf.spinner_seiten_nr.connect(SEL_COMMAND){ seiten_nr_changed }
+    @lf.spinner_seiten_nr.connect(SEL_COMMAND){ obj_attr_changed(GOA_PAGE_NR, @lf.spinner_seiten_nr.value - 1) }
     @lf.spinner_seiten_nr.range = (1..999)
+    @lf.spinner_layer.connect(SEL_COMMAND){ obj_attr_changed(GOA_LAYER, @lf.spinner_layer.value) }
 
     # der Checkbutton für die Einstellung Simplex/Duplex
     @lf.checkbutton_duplex.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_DUPLEX) }
@@ -235,9 +242,7 @@ class Layoutview
   end
 
   def button_sample_data
-    objnode = @layout_file.get_objectnode_by_id(@selected_object_id)
-    return unless objnode
-    typ = objnode.at_xpath(GOA_TYP).content
+    typ = @layout_file.get_object_by_id(@selected_object_id, GOA_TYP)
     if typ == PICTUREOBJECT
       Layout.execute_filedialog_for_textfield(@lf.textfield_sample_data, filepatterns='*')
     end
@@ -252,18 +257,6 @@ class Layoutview
   def change_chkbtn(sender, attr_name)
     if sender.state != @layout_file.get_attr_value(attr_name)
       @layout_file.set_attr_value attr_name, sender.state.to_s
-      changed_attributes
-    end
-  end
-  #---------------------------------------------------------------------------------------------------------
-
-  # ???
-  def change_chkbtn_printlist
-    objnode = @layout_file.get_objectnode_by_id(@selected_object_id)
-    return unless objnode
-    node = objnode.at_xpath(GOA_PRINTLIST)
-    if @lf.checkbutton_printlist.state != node.content
-      node.content = @lf.checkbutton_printlist.state.to_s
       changed_attributes
     end
   end
@@ -330,37 +323,18 @@ class Layoutview
   end
   #---------------------------------------------------------------------------------------------------------
 
-  def combobox_datasource_typ_changed
-    datatype = @lf.combobox_datasource_typ.getItemData(@lf.combobox_datasource_typ.currentItem)
-    @layout_file.set_attr_value(S_DATASOURCETYP, datatype)
-    changed_attributes
-  end
-
-  def combobox_datasource_encoding_changed
-    datatype = @lf.combobox_datasource_encoding.getItemData(@lf.combobox_datasource_encoding.currentItem)
-    @layout_file.set_attr_value(S_DATASOURCEENCODING, datatype)
-    changed_attributes
-  end
-
-  # die Aktion, welche ausgeführt wird, wenn die Auswahl der Seitennummer geändert wurde, auf welcher das Objekt ausgegeben werden soll
-  def seiten_nr_changed
-    seite = @lf.spinner_seiten_nr.value - 1
-    node = @layout_file.get_objectnode_by_id(@selected_object_id).at_xpath(GOA_PAGE_NR)
-    if seite != node.content.to_i
-      node.content = seite.to_s
+  def attr_changed(attr, value)
+    if value != @layout_file.get_attr_value(attr)
+      @layout_file.set_attr_value(attr, value)
       changed_attributes
     end
   end
-  #---------------------------------------------------------------------------------------------------------
 
-  # die Aktion, welche ausgeführt wird, wenn die Auswahl der Textausrichtung geändert wurde
-  # ==== Parameter
-  # +r+:: das Radio-Mutex-Objekt
-  def radiomutex_justify_changed(r)
-    node = @layout_file.get_objectnode_by_id(@selected_object_id).at_xpath(GOA_JUSTIFICATION)
-    if r.to_s != node.content
-      node.content = r.to_s
+  def obj_attr_changed(attr, value)
+    if value.to_s != @layout_file.get_object_by_id(@selected_object_id, attr)
+      @layout_file.set_object_by_id(@selected_object_id, attr, value.to_s)
       changed_attributes
+      fill_objectlist if [GOA_NAME, GOA_TYP].include?(attr)
     end
   end
   #---------------------------------------------------------------------------------------------------------
@@ -396,28 +370,13 @@ class Layoutview
     else
       # in diesem Zweig werden alle Graphik-Objekte bearbeitet
       # das Attribut suchen
-      objnode = @layout_file.get_objectnode_by_id(@selected_object_id)
-      return unless objnode
-      node = objnode.at_xpath(attr_name)
+      node = @layout_file.get_objectnode_by_id(@selected_object_id).at_xpath(attr_name)
     end
 
     # nur wenn im Textfeld etwas geändert wurde, den Text in das Attribut schreiben und das changed-Flag setzen
     if node && sender.text != node.content
       node.content = sender.text
       changed_attributes
-    end
-  end
-  #---------------------------------------------------------------------------------------------------------
-
-  # schreibt den Text der im Textfeld eingegeben wurde in das Attribut 'name' des graphischen Objekts und aktualisiert die Objektliste
-  def textfield_name_exit
-    objnode = @layout_file.get_objectnode_by_id(@selected_object_id)
-    return unless objnode
-    orig_name = objnode.at_xpath(GOA_NAME)
-    if @lf.textfield_name.text != orig_name.content
-      orig_name.content = @lf.textfield_name.text
-      changed_attributes
-      fill_objectlist
     end
   end
   #---------------------------------------------------------------------------------------------------------
@@ -504,6 +463,7 @@ class Layoutview
       @lf.textfield_rotation.text = node.at_xpath(GOA_ROTATION).content
       @lf.textfield_rotation.text = node.at_xpath(GOA_ROTATION).content
       @lf.spinner_seiten_nr.value = node.at_xpath(GOA_PAGE_NR).content.to_i + 1
+      @lf.spinner_layer.value = node.at_xpath(GOA_LAYER).content.to_i
   #      @lf.iconlist_justify.connect(SEL_CHANGED){iconlist_justify_exit } # todo
 
       if node.at_xpath(GOA_PRINTLIST).content == 'false' || node.at_xpath(GOA_PRINTLIST).content == '0'
@@ -528,7 +488,7 @@ class Layoutview
         @lf.radiobutton_just_l.state = false
         @lf.radiobutton_just_l.state = false
         @lf.radiobutton_just_r.state = false
-        just = @layout_file.get_objectnode_by_id(@selected_object_id).at_xpath(GOA_JUSTIFICATION).content
+        just = @layout_file.get_object_by_id(@selected_object_id, GOA_JUSTIFICATION)
         if just == S_JUST_LEFT
           @lf.radiobutton_just_l.state = true
         elsif just == S_JUST_MID
@@ -581,10 +541,10 @@ class Layoutview
     if sender.wdg_name == 'listbox_fonts'
       font = @lf.listbox_fonts.getItemData(@lf.listbox_fonts.currentItem)
       @lf.textfield_font_file.enabled = font=='from_file'
-      @layout_file.get_objectnode_by_id(@selected_object_id).at_xpath(GOA_FONT_TYP).content = font
+      @layout_file.set_object_by_id(@selected_object_id, GOA_FONT_TYP, font)
     elsif sender.wdg_name == 'listbox_barcode_typ'
       bc = @lf.listbox_barcode_typ.getItemText(@lf.listbox_barcode_typ.currentItem)
-      @layout_file.get_objectnode_by_id(@selected_object_id).at_xpath(GOA_BARCODE_TYP).content = bc
+      @layout_file.set_object_by_id(@selected_object_id, GOA_BARCODE_TYP, bc)
     else
       raise "unbekannter Sender. Eingriff des Programmierers nötig. :-("
     end
@@ -595,7 +555,7 @@ class Layoutview
   # die Aktion, welche ausgeführt wird, wenn die Auswahl der Modulbreite des Barcodes geändert wird
   def bc_modul_with_changed
     mw = @lf.spinner_barcode_ratio.value
-    node = @layout_file.get_objectnode_by_id(@selected_object_id).at_xpath(GOA_BAR_RATIO)
+    node = @layout_file.get_object_by_id(@selected_object_id, GOA_BAR_RATIO)
     if mw != node.content.to_i
       node.content = mw.to_s
       changed_attributes

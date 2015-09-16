@@ -13,6 +13,7 @@ module Mcc2
   GOA_NAME = 'object_name'
   GOA_TYP  = 'object_typ'
   GOA_PAGE_NR = 'page_nr'
+  GOA_LAYER = 'layer'
   GOA_FONT_HEIGHT = 'font_height'
   GOA_FONT_TYP = 'font_typ'
   GOA_FONT_WEIGHT = 'font_weight'

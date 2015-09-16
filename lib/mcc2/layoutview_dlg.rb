@@ -11,20 +11,20 @@ class Dialogbox_layoutview
 		FX::DialogBox.new(parent){|w|
 			@dialogbox_layoutview=w
 			w.wdg_name='dialogbox_layoutview'
+			w.layoutHints=768
+			w.shown=true
+			w.x=230
+			w.y=23
 			w.width=465
 			w.height=321
-			w.shown=true
-			w.y=23
 			w.title="Entwurfsansicht"
-			w.layoutHints=768
-			w.x=230
 			FX::Splitter.new(@dialogbox_layoutview){|w|
 				@splitter_layoutview=w
 				w.wdg_name='splitter_layoutview'
+				w.splitterStyle=163840
 				w.width=465
 				w.height=321
 				w.barSize=2
-				w.splitterStyle=163840
 				FX::Splitter.new(@splitter_layoutview){|w|
 					@splitter12=w
 					w.wdg_name='splitter12'
@@ -34,1254 +34,1264 @@ class Dialogbox_layoutview
 					FX::VerticalFrame.new(@splitter12){|w|
 						@verticalframe_steuerung=w
 						w.wdg_name='verticalframe_steuerung'
-						w.width=54
 						w.frameStyle=16384
+						w.width=54
 						w.height=102
 						w.shadowColor=Fox::FXRGBA(128,128,128,255)
 						FX::Button.new(@verticalframe_steuerung){|w|
 							@button_up=w
 							w.wdg_name='button_up'
-							w.width=50
-							w.text="hoch ^"
-							w.height=22
-							w.tipText="Mit diesem Button wird das Objekt eine Zeile nach oben verschoben."
-							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=2
 							w.layoutHints=256
+							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.x=2
+							w.y=2
+							w.width=50
+							w.height=22
+							w.text="hoch ^"
+							w.tipText="Mit diesem Button wird das Objekt eine Zeile nach oben verschoben."
+							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 						}
 						FX::Button.new(@verticalframe_steuerung){|w|
 							@button_down=w
 							w.wdg_name='button_down'
-							w.width=50
-							w.text="runter v"
-							w.height=22
-							w.tipText="Mit diesem Button wird das Objekt eine Zeile nach oben verschoben."
-							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=24
 							w.layoutHints=256
+							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.x=2
+							w.y=24
+							w.width=50
+							w.height=22
+							w.text="runter v"
+							w.tipText="Mit diesem Button wird das Objekt eine Zeile nach oben verschoben."
+							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 						}
 						FX::Packer.new(@verticalframe_steuerung){|w|
 							@packer1=w
 							w.wdg_name='packer1'
+							w.layoutHints=1536
+							w.x=2
+							w.y=46
 							w.width=50
 							w.height=10
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=46
-							w.layoutHints=1536
-							w.x=2
 						}
 						FX::Button.new(@verticalframe_steuerung){|w|
 							@button_copy=w
 							w.wdg_name='button_copy'
-							w.width=50
-							w.text="kopieren"
-							w.height=22
-							w.tipText="kopiert das selektierte Objekt und \303\274bernimmt alle Eigenschaften, au\303\237er dem Namen"
-							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=56
 							w.layoutHints=256
+							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.x=2
+							w.y=56
+							w.width=50
+							w.height=22
+							w.text="kopieren"
+							w.tipText="kopiert das selektierte Objekt und übernimmt alle Eigenschaften, außer dem Namen"
+							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 						}
 						FX::Button.new(@verticalframe_steuerung){|w|
 							@button_delete=w
 							w.wdg_name='button_delete'
-							w.width=50
-							w.text="l\303\266schen"
-							w.height=22
-							w.tipText="L\303\266scht das selektierte Objekt nach Best\303\244tigung einer Sicherheistabfrage."
-							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=78
 							w.layoutHints=256
+							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.x=2
+							w.y=78
+							w.width=50
+							w.height=22
+							w.text="löschen"
+							w.tipText="Löscht das selektierte Objekt nach Bestätigung einer Sicherheistabfrage."
+							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 						}
 					}
 					FX::VerticalFrame.new(@splitter12){|w|
 						@verticalframe_objectlist=w
 						w.wdg_name='verticalframe_objectlist'
-						w.width=409
 						w.frameStyle=16384
+						w.x=56
+						w.width=409
 						w.height=102
 						w.shadowColor=Fox::FXRGBA(128,128,128,255)
-						w.x=56
 						FX::IconList.new(@verticalframe_objectlist){|w|
 							@iconlist_objects=w
 							w.wdg_name='iconlist_objects'
+							w.iconListStyle=1048576
+							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+							w.x=2
+							w.y=2
 							w.width=405
 							w.height=98
-							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.y=2
-							w.iconListStyle=1048576
-							w.x=2
 						}
 					}
 				}
 				FX::HorizontalFrame.new(@splitter_layoutview){|w|
 					@horizontalframe_attributes=w
 					w.wdg_name='horizontalframe_attributes'
-					w.width=465
 					w.frameStyle=16384
+					w.y=104
+					w.width=465
 					w.height=217
 					w.shadowColor=Fox::FXRGBA(128,128,128,255)
-					w.y=104
 					FX::TabBook.new(@horizontalframe_attributes){|w|
 						@tabbook_objectattributes=w
 						w.wdg_name='tabbook_objectattributes'
-						w.current=3
+						w.x=2
+						w.y=2
 						w.width=461
 						w.height=213
+						w.current=4
 						w.shadowColor=Fox::FXRGBA(128,128,128,255)
-						w.y=2
-						w.x=2
 						FX::TabItem.new(@tabbook_objectattributes){|w|
 							@tabitem_allgemein=w
 							w.wdg_name='tabitem_allgemein'
-							w.width=63
-							w.text="Allgemein"
-							w.height=22
-							w.tipText="Hier werden alle allgemeinen Einstellungen vorgenommen, die das gesamte Layout betreffen."
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=6
 							w.x=6
+							w.y=6
+							w.width=64
+							w.height=22
+							w.text="Allgemein"
+							w.tipText="Hier werden alle allgemeinen Einstellungen vorgenommen, die das gesamte Layout betreffen."
+							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 						}
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe52=w
 							w.wdg_name='verticalframe52'
+							w.shown=false
+							w.x=4
+							w.y=24
 							w.width=453
 							w.height=185
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.shown=false
-							w.y=24
-							w.x=4
 							FX::HorizontalFrame.new(@verticalframe52){|w|
 								@horizontalframe74=w
 								w.wdg_name='horizontalframe74'
+								w.layoutHints=1024
+								w.padTop=10
 								w.width=453
 								w.height=31
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.layoutHints=1024
-								w.padTop=10
 								FX::Label.new(@horizontalframe74){|w|
 									@label267=w
 									w.wdg_name='label267'
-									w.width=85
-									w.justify=32768
-									w.text="Datenquelle"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=10
 									w.layoutHints=256
+									w.justify=32768
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.y=10
+									w.width=85
+									w.height=18
+									w.text="Datenquelle"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::ComboBox.new(@horizontalframe74){|w|
 									@combobox_datasource_typ=w
 									w.wdg_name='combobox_datasource_typ'
-									w.width=368
-									w.height=21
-									w.y=10
 									w.comboStyle=1048576
 									w.layoutHints=1024
 									w.x=85
+									w.y=10
+									w.width=368
+									w.height=21
 								}
 							}
 							FX::HorizontalFrame.new(@verticalframe52){|w|
 								@horizontalframe75=w
 								w.wdg_name='horizontalframe75'
+								w.layoutHints=1024
+								w.y=31
 								w.width=453
 								w.height=21
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=31
-								w.layoutHints=1024
 								FX::Label.new(@horizontalframe75){|w|
 									@label411=w
 									w.wdg_name='label411'
-									w.width=85
-									w.justify=32768
-									w.text="Kodierung"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.layoutHints=256
+									w.justify=32768
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.width=85
+									w.height=18
+									w.text="Kodierung"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::ComboBox.new(@horizontalframe75){|w|
 									@combobox_datasource_encoding=w
 									w.wdg_name='combobox_datasource_encoding'
-									w.width=368
-									w.height=21
 									w.comboStyle=1048576
 									w.layoutHints=1024
 									w.x=85
+									w.width=368
+									w.height=21
 								}
 							}
 							FX::HorizontalFrame.new(@verticalframe52){|w|
 								@horizontalframe76=w
 								w.wdg_name='horizontalframe76'
+								w.layoutHints=1024
+								w.padTop=15
+								w.y=52
 								w.width=453
 								w.height=33
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=52
-								w.layoutHints=1024
-								w.padTop=15
 								FX::Label.new(@horizontalframe76){|w|
 									@label412=w
 									w.wdg_name='label412'
-									w.width=85
-									w.justify=32768
-									w.text="Kontaktlos"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=15
 									w.layoutHints=256
+									w.justify=32768
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.y=15
+									w.width=85
+									w.height=18
+									w.text="Kontaktlos"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::CheckButton.new(@horizontalframe76){|w|
 									@checkbutton_contactless=w
 									w.wdg_name='checkbutton_contactless'
-									w.width=17
 									w.justify=32768
-									w.text=""
-									w.height=17
-									w.tipText="Aktivieren Sie dieses K\303\244stchen, wenn bei der Karte ein kontaktloser Chip personalisiert werden soll. "
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=15
 									w.x=85
+									w.y=15
+									w.width=17
+									w.height=17
+									w.text=""
+									w.tipText="Aktivieren Sie dieses Kästchen, wenn bei der Karte ein kontaktloser Chip personalisiert werden soll. "
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 							FX::HorizontalFrame.new(@verticalframe52){|w|
 								@horizontalframe77=w
 								w.wdg_name='horizontalframe77'
+								w.layoutHints=1024
+								w.y=85
 								w.width=453
 								w.height=18
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=85
-								w.layoutHints=1024
 								FX::Label.new(@horizontalframe77){|w|
 									@label413=w
 									w.wdg_name='label413'
-									w.width=85
-									w.justify=32768
-									w.text="Chip"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.layoutHints=256
+									w.justify=32768
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.width=85
+									w.height=18
+									w.text="Chip"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::CheckButton.new(@horizontalframe77){|w|
 									@checkbutton_contact=w
 									w.wdg_name='checkbutton_contact'
-									w.width=17
 									w.justify=32768
-									w.text=""
-									w.height=17
-									w.tipText="Aktivieren Sie dieses K\303\244stchen, wenn bei der Karte ein Kontakt-Chip personalisiert werden soll."
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.x=85
+									w.width=17
+									w.height=17
+									w.text=""
+									w.tipText="Aktivieren Sie dieses Kästchen, wenn bei der Karte ein Kontakt-Chip personalisiert werden soll."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 							FX::HorizontalFrame.new(@verticalframe52){|w|
 								@horizontalframe78=w
 								w.wdg_name='horizontalframe78'
+								w.layoutHints=1024
+								w.y=103
 								w.width=453
 								w.height=18
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=103
-								w.layoutHints=1024
 								FX::Label.new(@horizontalframe78){|w|
 									@label414=w
 									w.wdg_name='label414'
-									w.width=85
-									w.justify=32768
-									w.text="Magnetstreifen"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.layoutHints=256
+									w.justify=32768
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.width=85
+									w.height=18
+									w.text="Magnetstreifen"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::CheckButton.new(@horizontalframe78){|w|
 									@checkbutton_magstripe=w
 									w.wdg_name='checkbutton_magstripe'
-									w.width=17
 									w.justify=32768
-									w.text=""
-									w.height=17
-									w.tipText="Aktivieren Sie dieses K\303\244stchen, wenn bei der Karte der Magnetstreifen kontaktloser personalisiert werden soll."
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.x=85
+									w.width=17
+									w.height=17
+									w.text=""
+									w.tipText="Aktivieren Sie dieses Kästchen, wenn bei der Karte der Magnetstreifen personalisiert werden soll."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 							FX::HorizontalFrame.new(@verticalframe52){|w|
 								@horizontalframe81=w
 								w.wdg_name='horizontalframe81'
+								w.layoutHints=1024
+								w.y=121
 								w.width=453
 								w.height=20
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=121
-								w.layoutHints=1024
 								FX::Label.new(@horizontalframe81){|w|
 									@label268=w
 									w.wdg_name='label268'
-									w.width=85
-									w.justify=32768
-									w.text="Seitegr\303\266\303\237e"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.layoutHints=256
+									w.justify=32768
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.width=85
+									w.height=18
+									w.text="Seitengröße"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@horizontalframe81){|w|
 									@textfield_page_width=w
 									w.wdg_name='textfield_page_width'
+									w.layoutHints=1024
+									w.textFieldTextStyle=2097152
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=85
 									w.width=169
 									w.height=20
-									w.tipText="Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.textFieldTextStyle=2097152
 									w.numColumns=10
-									w.layoutHints=1024
-									w.x=85
+									w.tipText="Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@horizontalframe81){|w|
 									@textfield_page_height=w
 									w.wdg_name='textfield_page_height'
+									w.layoutHints=1024
+									w.textFieldTextStyle=2097152
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=254
 									w.width=169
 									w.height=20
-									w.tipText="Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.textFieldTextStyle=2097152
 									w.numColumns=10
-									w.layoutHints=1024
-									w.x=254
+									w.tipText="Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@horizontalframe81){|w|
 									@label269=w
 									w.wdg_name='label269'
-									w.width=30
 									w.justify=32768
-									w.text=" mm"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.x=423
+									w.width=30
+									w.height=18
+									w.text=" mm"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 							FX::HorizontalFrame.new(@verticalframe52){|w|
 								@horizontalframe80=w
 								w.wdg_name='horizontalframe80'
+								w.layoutHints=1024
+								w.y=141
 								w.width=453
 								w.height=20
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=141
-								w.layoutHints=1024
 								FX::Label.new(@horizontalframe80){|w|
 									@label415=w
 									w.wdg_name='label415'
-									w.width=85
-									w.justify=32768
-									w.text="Offset X/Y"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.layoutHints=256
+									w.justify=32768
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.width=85
+									w.height=18
+									w.text="Offset X/Y"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@horizontalframe80){|w|
 									@textfield_x_offset=w
 									w.wdg_name='textfield_x_offset'
+									w.layoutHints=1024
+									w.textFieldTextStyle=2097152
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=85
 									w.width=169
 									w.height=20
-									w.tipText="Mit diesem Wert wird das gesamte Druckbild um die X-Achse verschoben."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.textFieldTextStyle=2097152
 									w.numColumns=10
-									w.layoutHints=1024
-									w.x=85
+									w.tipText="Mit diesem Wert wird das gesamte Druckbild um die X-Achse verschoben."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@horizontalframe80){|w|
 									@textfield_y_offset=w
 									w.wdg_name='textfield_y_offset'
+									w.layoutHints=1024
+									w.textFieldTextStyle=2097152
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=254
 									w.width=169
 									w.height=20
-									w.tipText="Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.textFieldTextStyle=2097152
 									w.numColumns=10
-									w.layoutHints=1024
-									w.x=254
+									w.tipText="Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@horizontalframe80){|w|
 									@label418=w
 									w.wdg_name='label418'
-									w.width=30
 									w.justify=32768
-									w.text=" mm"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.x=423
+									w.width=30
+									w.height=18
+									w.text=" mm"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 							FX::HorizontalFrame.new(@verticalframe52){|w|
 								@horizontalframe79=w
 								w.wdg_name='horizontalframe79'
+								w.layoutHints=1024
+								w.y=161
 								w.width=453
 								w.height=18
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=161
-								w.layoutHints=1024
 								FX::Label.new(@horizontalframe79){|w|
 									@label419=w
 									w.wdg_name='label419'
-									w.width=85
-									w.justify=32768
-									w.text="Duplexdruck"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.layoutHints=256
+									w.justify=32768
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.width=85
+									w.height=18
+									w.text="Duplexdruck"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::CheckButton.new(@horizontalframe79){|w|
 									@checkbutton_duplex=w
 									w.wdg_name='checkbutton_duplex'
-									w.width=17
 									w.justify=32768
-									w.text=""
-									w.height=17
-									w.tipText="Aktivieren Sie dieses K\303\244stchen, wenn die Karte Duplex personalisiert werden soll."
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.x=85
+									w.width=17
+									w.height=17
+									w.text=""
+									w.tipText="Aktivieren Sie dieses Kästchen, wenn die Karte Duplex personalisiert werden soll."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 						}
 						FX::TabItem.new(@tabbook_objectattributes){|w|
 							@tabitem_chip=w
 							w.wdg_name='tabitem_chip'
-							w.width=33
-							w.text="Chip"
-							w.height=22
-							w.tipText="Hier werden alle Chipparameter eingetragen, unabh\303\244ngig davon, ob dann tats\303\244chlich die Chipkodierung stattfindet"
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
+							w.x=70
 							w.y=6
-							w.x=69
+							w.width=33
+							w.height=22
+							w.text="Chip"
+							w.tipText="Hier werden alle Chipparameter eingetragen, unabhängig davon, ob dann tatsächlich die Chipkodierung stattfindet"
+							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 						}
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe_chip=w
 							w.wdg_name='verticalframe_chip'
-							w.width=453
 							w.frameStyle=16384
+							w.shown=false
+							w.x=4
+							w.y=24
+							w.width=453
 							w.height=185
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.shown=false
-							w.y=24
-							w.x=4
 						}
 						FX::TabItem.new(@tabbook_objectattributes){|w|
 							@tabitem_magstripe=w
 							w.wdg_name='tabitem_magstripe'
-							w.width=93
-							w.text="Magnetstreifen"
-							w.height=22
-							w.tipText="Hier werden alle Magnetstreifeneinstellungen vorgenommen, unabh\303\244ngig davon, ob der Magnetstreifen tats\303\244chlich personalisiert wird."
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
+							w.x=103
 							w.y=6
-							w.x=102
+							w.width=93
+							w.height=22
+							w.text="Magnetstreifen"
+							w.tipText="Hier werden alle Magnetstreifeneinstellungen vorgenommen, unabhängig davon, ob der Magnetstreifen tatsächlich personalisiert wird."
+							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 						}
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe54=w
 							w.wdg_name='verticalframe54'
-							w.width=453
 							w.frameStyle=16384
+							w.layoutHints=1024
+							w.shown=false
+							w.vSpacing=4
+							w.padTop=4
+							w.x=4
+							w.y=24
+							w.width=453
 							w.height=185
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.shown=false
-							w.y=24
-							w.layoutHints=1024
-							w.padTop=4
-							w.vSpacing=4
-							w.x=4
 							FX::HorizontalFrame.new(@verticalframe54){|w|
 								@horizontalframe112=w
 								w.wdg_name='horizontalframe112'
+								w.layoutHints=1024
+								w.x=2
+								w.y=6
 								w.width=449
 								w.height=22
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=6
-								w.layoutHints=1024
-								w.x=2
 								FX::Label.new(@horizontalframe112){|w|
 									@label488=w
 									w.wdg_name='label488'
-									w.width=35
-									w.text="Spur1"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.layoutHints=256
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.width=35
+									w.height=18
+									w.text="Spur1"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@horizontalframe112){|w|
 									@textfield_spur1=w
 									w.wdg_name='textfield_spur1'
+									w.layoutHints=1024
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=35
 									w.width=394
 									w.height=20
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.numColumns=10
-									w.layoutHints=1024
-									w.x=35
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Button.new(@horizontalframe112){|w|
 									@button_spur1=w
 									w.wdg_name='button_spur1'
-									w.width=20
-									w.text="..."
-									w.height=22
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.x=429
+									w.width=20
+									w.height=22
+									w.text="..."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 							FX::HorizontalFrame.new(@verticalframe54){|w|
 								@horizontalframe113=w
 								w.wdg_name='horizontalframe113'
+								w.layoutHints=1024
+								w.x=2
+								w.y=32
 								w.width=449
 								w.height=22
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=32
-								w.layoutHints=1024
-								w.x=2
 								FX::Label.new(@horizontalframe113){|w|
 									@label489=w
 									w.wdg_name='label489'
-									w.width=35
-									w.text="Spur2"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.layoutHints=256
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.width=35
+									w.height=18
+									w.text="Spur2"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@horizontalframe113){|w|
 									@textfield_spur2=w
 									w.wdg_name='textfield_spur2'
+									w.layoutHints=1024
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=35
 									w.width=394
 									w.height=20
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.numColumns=10
-									w.layoutHints=1024
-									w.x=35
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Button.new(@horizontalframe113){|w|
 									@button_spur2=w
 									w.wdg_name='button_spur2'
-									w.width=20
-									w.text="..."
-									w.height=22
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.x=429
+									w.width=20
+									w.height=22
+									w.text="..."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 							FX::HorizontalFrame.new(@verticalframe54){|w|
 								@horizontalframe114=w
 								w.wdg_name='horizontalframe114'
+								w.layoutHints=1024
+								w.x=2
+								w.y=58
 								w.width=449
 								w.height=22
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=58
-								w.layoutHints=1024
-								w.x=2
 								FX::Label.new(@horizontalframe114){|w|
 									@label490=w
 									w.wdg_name='label490'
-									w.width=35
-									w.text="Spur3"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.layoutHints=256
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.width=35
+									w.height=18
+									w.text="Spur3"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@horizontalframe114){|w|
 									@textfield_spur3=w
 									w.wdg_name='textfield_spur3'
+									w.layoutHints=1024
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=35
 									w.width=394
 									w.height=20
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.numColumns=10
-									w.layoutHints=1024
-									w.x=35
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Button.new(@horizontalframe114){|w|
 									@button_spur3=w
 									w.wdg_name='button_spur3'
-									w.width=20
-									w.text="..."
-									w.height=22
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.x=429
+									w.width=20
+									w.height=22
+									w.text="..."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 						}
 						FX::TabItem.new(@tabbook_objectattributes){|w|
 							@tabitem_object=w
 							w.wdg_name='tabitem_object'
-							w.width=44
-							w.text="Objekt"
-							w.height=22
-							w.tipText="Hier werden alle allgemeinen Einstellungen zum ausgew\303\244hlten Graphik-Objekt durchgef\303\274hrt."
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+							w.x=196
+							w.y=6
+							w.width=44
+							w.height=22
+							w.text="Objekt"
+							w.tipText="Hier werden alle allgemeinen Einstellungen zum ausgewählten Graphik-Objekt durchgeführt."
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=4
-							w.x=193
 						}
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe_object=w
 							w.wdg_name='verticalframe_object'
-							w.width=453
 							w.frameStyle=16384
+							w.shown=false
+							w.x=4
+							w.y=24
+							w.width=453
 							w.height=185
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=24
-							w.x=4
 							FX::Matrix.new(@verticalframe_object){|w|
 								@matrix1=w
 								w.wdg_name='matrix1'
+								w.matrixStyle=131072
+								w.x=2
+								w.y=2
 								w.width=449
 								w.height=181
-								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=2
 								w.numColumns=3
-								w.matrixStyle=131072
 								w.numRows=5
-								w.x=2
+								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@matrix1){|w|
 									@label9=w
 									w.wdg_name='label9'
-									w.width=37
-									w.text="Name"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=4
 									w.x=4
+									w.y=4
+									w.width=37
+									w.height=18
+									w.text="Name"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@matrix1){|w|
 									@textfield_name=w
 									w.wdg_name='textfield_name'
-									w.width=285
-									w.height=20
-									w.tipText="Der Name ist nur f\303\274r die Anzeige in der Objektliste und bei bestimmten Aktionen notwendig, sollte aber dennoch in einen aussagekr\303\244ftigen Namen ge\303\244ndert werden."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=4
-									w.numColumns=10
 									w.layoutHints=1025
-									w.x=136
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=137
+									w.y=4
+									w.width=284
+									w.height=20
+									w.numColumns=10
+									w.tipText="Der Name ist nur für die Anzeige in der Objektliste und bei bestimmten Aktionen notwendig, sollte aber dennoch in einen aussagekräftigen Namen geändert werden."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@matrix1){|w|
 									@label185=w
 									w.wdg_name='label185'
-									w.width=4
-									w.text=""
-									w.height=4
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=4
 									w.x=425
+									w.y=4
+									w.width=4
+									w.height=4
+									w.text=""
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@matrix1){|w|
 									@label_textblock=w
 									w.wdg_name='label_textblock'
-									w.width=37
-									w.text="Daten"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=28
 									w.x=4
+									w.y=28
+									w.width=38
+									w.height=18
+									w.text="Daten"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::VerticalFrame.new(@matrix1){|w|
 									@verticalframe44=w
 									w.wdg_name='verticalframe44'
-									w.width=285
 									w.frameStyle=4096
+									w.layoutHints=3073
+									w.x=137
+									w.y=28
+									w.width=284
 									w.height=54
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=28
-									w.layoutHints=3073
-									w.x=136
 									FX::Text.new(@verticalframe44){|w|
 										@textfield_data=w
 										w.wdg_name='textfield_data'
-										w.width=283
-										w.height=52
-										w.tipText="Enth\303\244lt die Daten, welche sp\303\244ter auf der Karte gedruckt werden sollen.\nIn diesem Feld k\303\266nnen mehrerer Zeilen eingegeben werden.\nPlatzhalter aus einer Datenquelle werden nach der Syntax\n{feldname[anfang,laenge]} gebildet."
 										w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-										w.y=1
 										w.x=1
+										w.y=1
+										w.width=282
+										w.height=52
+										w.tipText="Enthält die Daten, welche später auf der Karte gedruckt werden sollen.\nIn diesem Feld können mehrerer Zeilen eingegeben werden.\nPlatzhalter aus einer Datenquelle werden nach der Syntax\n{feldname[anfang,laenge]} gebildet."
 									}
 								}
 								FX::Button.new(@matrix1){|w|
 									@button_enhanced_data_text_edit=w
 									w.wdg_name='button_enhanced_data_text_edit'
-									w.width=20
-									w.text="..."
-									w.height=22
-									w.tipText="F\303\274gt an der Cusor-Position ein Datenfeld\naus der ausgew\303\244lten Datenquelle ein"
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=28
 									w.x=425
+									w.y=28
+									w.width=20
+									w.height=22
+									w.text="..."
+									w.tipText="Fügt an der Cusor-Position ein Datenfeld\naus der ausgewälten Datenquelle ein"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@matrix1){|w|
 									@label_textfield=w
 									w.wdg_name='label_textfield'
-									w.width=37
-									w.text="Daten"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=86
 									w.x=4
+									w.y=86
+									w.width=38
+									w.height=18
+									w.text="Daten"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@matrix1){|w|
 									@textfield_data_non_text=w
 									w.wdg_name='textfield_data_non_text'
-									w.width=285
-									w.height=20
-									w.tipText="Enth\303\244lt die Daten, welche sp\303\244ter auf der Karte gedruckt werden sollen.\nIn diesem Feld kann nur 1 Zeile eingegeben werden.\nPlatzhalter aus einer Datenquelle werden nach der Syntax\n{feldname[anfang,laenge]} gebildet."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=86
-									w.numColumns=10
 									w.layoutHints=1025
-									w.x=136
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=137
+									w.y=86
+									w.width=284
+									w.height=20
+									w.numColumns=10
+									w.tipText="Enthält die Daten, welche später auf der Karte gedruckt werden sollen.\nIn diesem Feld kann nur 1 Zeile eingegeben werden.\nPlatzhalter aus einer Datenquelle werden nach der Syntax\n{feldname[anfang,laenge]} gebildet."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Button.new(@matrix1){|w|
 									@button_enhanced_data_edit=w
 									w.wdg_name='button_enhanced_data_edit'
-									w.width=20
-									w.text="..."
-									w.height=22
-									w.tipText="F\303\274gt an der Cusor-Position ein Datenfeld\naus der ausgew\303\244lten Datenquelle ein"
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=86
 									w.x=425
+									w.y=86
+									w.width=20
+									w.height=22
+									w.text="..."
+									w.tipText="Fügt an der Cusor-Position ein Datenfeld\naus der ausgewälten Datenquelle ein"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@matrix1){|w|
 									@label27=w
 									w.wdg_name='label27'
-									w.width=81
-									w.text="Beispieldaten"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=112
 									w.x=4
+									w.y=112
+									w.width=80
+									w.height=18
+									w.text="Beispieldaten"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@matrix1){|w|
 									@textfield_sample_data=w
 									w.wdg_name='textfield_sample_data'
-									w.width=285
-									w.height=20
-									w.tipText="Hier werden die Daten zur Anzeige in der\nEntwurfsansicht eingetragen."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=112
-									w.numColumns=10
 									w.layoutHints=1025
-									w.x=136
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=137
+									w.y=112
+									w.width=284
+									w.height=20
+									w.numColumns=10
+									w.tipText="Hier werden die Daten zur Anzeige in der\nEntwurfsansicht eingetragen."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Button.new(@matrix1){|w|
 									@button_sample_data=w
 									w.wdg_name='button_sample_data'
-									w.width=20
-									w.text="..."
-									w.height=22
-									w.tipText="Auswahl einer Datei\n(nur bei Bild-Objekten)"
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=112
 									w.x=425
+									w.y=112
+									w.width=20
+									w.height=22
+									w.text="..."
+									w.tipText="Auswahl einer Datei\n(nur bei Bild-Objekten)"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@matrix1){|w|
 									@label61=w
 									w.wdg_name='label61'
-									w.width=128
-									w.text="in Druckliste anzeigen"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=138
 									w.x=4
+									w.y=138
+									w.width=129
+									w.height=18
+									w.text="in Druckliste anzeigen"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::CheckButton.new(@matrix1){|w|
 									@checkbutton_printlist=w
 									w.wdg_name='checkbutton_printlist'
-									w.width=17
-									w.text=""
-									w.height=17
-									w.tipText="Dieser Button ist momentan ohne Funktion."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=138
 									w.layoutHints=1
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.state=true
-									w.x=136
+									w.x=137
+									w.y=138
+									w.width=17
+									w.height=17
+									w.text=""
+									w.tipText="Dieser Button ist momentan ohne Funktion."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 						}
 						FX::TabItem.new(@tabbook_objectattributes){|w|
 							@tabitem_posit=w
 							w.wdg_name='tabitem_posit'
-							w.width=53
-							w.text="Position"
-							w.height=22
-							w.tipText="In diesem Tab werden alle Einstellungen zu Positionierung des Objekts vorgenommen."
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+							w.x=238
+							w.y=4
+							w.width=52
+							w.height=22
+							w.text="Position"
+							w.tipText="In diesem Tab werden alle Einstellungen zu Positionierung des Objekts vorgenommen."
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=6
-							w.x=236
 						}
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe_posit=w
 							w.wdg_name='verticalframe_posit'
-							w.width=453
 							w.frameStyle=16384
+							w.x=4
+							w.y=24
+							w.width=453
 							w.height=185
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.shown=false
-							w.y=24
-							w.x=4
 							FX::Matrix.new(@verticalframe_posit){|w|
 								@matrix2=w
 								w.wdg_name='matrix2'
+								w.matrixStyle=131072
+								w.x=2
+								w.y=2
 								w.width=449
 								w.height=181
-								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=2
 								w.numColumns=4
-								w.matrixStyle=131072
 								w.numRows=4
-								w.x=2
+								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@matrix2){|w|
 									@label11=w
 									w.wdg_name='label11'
-									w.width=71
-									w.text="Position X/Y"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=4
 									w.x=4
+									w.y=4
+									w.width=71
+									w.height=18
+									w.text="Position X/Y"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@matrix2){|w|
 									@textfield_x=w
 									w.wdg_name='textfield_x'
+									w.layoutHints=1025
+									w.textFieldTextStyle=2097152
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=79
+									w.y=4
 									w.width=76
 									w.height=20
-									w.tipText="Dieser Wert bezeichnet den Abstand des Objekts von der linken Kartenseite."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=4
-									w.textFieldTextStyle=2097152
 									w.numColumns=10
-									w.layoutHints=1025
-									w.x=79
+									w.tipText="Dieser Wert bezeichnet den Abstand des Objekts von der linken Kartenseite."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@matrix2){|w|
 									@textfield_y=w
 									w.wdg_name='textfield_y'
+									w.layoutHints=1025
+									w.textFieldTextStyle=2097152
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=159
+									w.y=4
 									w.width=76
 									w.height=20
-									w.tipText="Dieser Wert bezeichnet den Abstand des Objekts von der Oberkannte der Karte. Bei Textfeldern ist dieser Wert bezogen auf die Unterkante des Textes."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=4
-									w.textFieldTextStyle=2097152
 									w.numColumns=10
-									w.layoutHints=1025
-									w.x=159
+									w.tipText="Dieser Wert bezeichnet den Abstand des Objekts von der Oberkannte der Karte. Bei Textfeldern ist dieser Wert bezogen auf die Unterkante des Textes."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@matrix2){|w|
 									@label137=w
 									w.wdg_name='label137'
-									w.width=26
 									w.justify=32768
-									w.text="mm"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=4
 									w.x=239
+									w.y=4
+									w.width=26
+									w.height=18
+									w.text="mm"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@matrix2){|w|
 									@label13=w
 									w.wdg_name='label13'
-									w.width=61
-									w.text="Gr\303\266\303\237e X/Y"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=28
 									w.x=4
+									w.y=28
+									w.width=62
+									w.height=18
+									w.text="Größe X/Y"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@matrix2){|w|
 									@textfield_width=w
 									w.wdg_name='textfield_width'
+									w.layoutHints=1025
+									w.textFieldTextStyle=2097152
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=79
+									w.y=28
 									w.width=76
 									w.height=20
-									w.tipText="Dieser Wert bezeichnet die Breite des Objektes. Bei Textfeldern hat dieser Wert momentan nur einen Einfluss, wenn die Ausrichtung Mitte oder Rechts gew\303\244hlt wurde."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=28
-									w.textFieldTextStyle=2097152
 									w.numColumns=10
-									w.layoutHints=1025
-									w.x=79
+									w.tipText="Dieser Wert bezeichnet die Breite des Objektes. Bei Textfeldern hat dieser Wert momentan nur einen Einfluss, wenn die Ausrichtung Mitte oder Rechts gewählt wurde."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@matrix2){|w|
 									@textfield_height=w
 									w.wdg_name='textfield_height'
+									w.layoutHints=1025
+									w.textFieldTextStyle=2097152
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=159
+									w.y=28
 									w.width=76
 									w.height=20
-									w.tipText="Dieser Wert ist die H\303\266he des Objekts. Er hat momentan nur bei Bildern einen Einfluss."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=28
-									w.textFieldTextStyle=2097152
 									w.numColumns=10
-									w.layoutHints=1025
-									w.x=159
+									w.tipText="Dieser Wert ist die Höhe des Objekts. Er hat momentan nur bei Bildern einen Einfluss."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@matrix2){|w|
 									@label139=w
 									w.wdg_name='label139'
-									w.width=26
 									w.justify=32768
-									w.text="mm"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=28
 									w.x=239
+									w.y=28
+									w.width=26
+									w.height=18
+									w.text="mm"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@matrix2){|w|
 									@label58=w
 									w.wdg_name='label58'
-									w.width=52
-									w.text="Drehung"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=52
 									w.x=4
+									w.y=52
+									w.width=53
+									w.height=18
+									w.text="Drehung"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@matrix2){|w|
 									@textfield_rotation=w
 									w.wdg_name='textfield_rotation'
+									w.textFieldTextStyle=2097152
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=79
+									w.y=52
 									w.width=76
 									w.height=20
-									w.tipText="Dieser Wert kennzeichnet den Winkel, um den das Objekt gedreht werden soll. Es sind auch Realzahlen m\303\266glich (mit Punkt als Dezimaltrenner)."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=52
-									w.textFieldTextStyle=2097152
 									w.numColumns=10
-									w.x=79
+									w.tipText="Dieser Wert kennzeichnet den Winkel, um den das Objekt gedreht werden soll. Es sind auch Realzahlen möglich (mit Punkt als Dezimaltrenner)."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@matrix2){|w|
 									@label140=w
 									w.wdg_name='label140'
-									w.width=14
 									w.justify=32768
-									w.text="\302\260 "
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=52
 									w.x=159
+									w.y=52
+									w.width=14
+									w.height=18
+									w.text="° "
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@matrix2){|w|
 									@label270=w
 									w.wdg_name='label270'
-									w.width=4
-									w.text=""
-									w.height=4
-									w.y=52
 									w.x=239
+									w.y=52
+									w.width=4
+									w.height=4
+									w.text=""
 								}
 								FX::Label.new(@matrix2){|w|
 									@label141=w
 									w.wdg_name='label141'
-									w.width=33
-									w.text="Seite"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=76
 									w.x=4
+									w.y=76
+									w.width=32
+									w.height=18
+									w.text="Seite"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Spinner.new(@matrix2){|w|
 									@spinner_seiten_nr=w
 									w.wdg_name='spinner_seiten_nr'
-									w.width=41
-									w.range=0..1
-									w.height=20
-									w.tipText="Dieser Wert kennzeichnet, auf welche Seite das Objekt gedruckt werden soll. Bei Karten ist die Nr. 1 die Vorderseite und die Nr. 2 die R\303\274ckseite. Achtung! Wenn im Druckertreiber kein Duplex eingestellt ist, werden 2 Karten gedruckt."
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=76
-									w.numColumns=3
+									w.range=0..1
 									w.x=79
+									w.y=76
+									w.width=41
+									w.height=20
+									w.numColumns=3
+									w.tipText="Dieser Wert kennzeichnet, auf welche Seite das Objekt gedruckt werden soll. Bei Karten ist die Nr. 1 die Vorderseite und die Nr. 2 die Rückseite. Achtung! Wenn im Druckertreiber kein Duplex eingestellt ist, werden 2 Karten gedruckt."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@matrix2){|w|
 									@label142=w
 									w.wdg_name='label142'
-									w.width=4
-									w.text=""
-									w.height=4
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=76
 									w.x=159
+									w.y=76
+									w.width=36
+									w.height=18
+									w.text="Layer"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
+								}
+								FX::Spinner.new(@matrix2){|w|
+									@spinner_layer=w
+									w.wdg_name='spinner_layer'
+									w.range=-2147483648..2147483647
+									w.x=239
+									w.y=76
+									w.width=44
+									w.height=21
+									w.numColumns=3
 								}
 							}
 						}
 						FX::TabItem.new(@tabbook_objectattributes){|w|
 							@tabitem_font=w
 							w.wdg_name='tabitem_font'
-							w.width=45
-							w.text="Schrift"
-							w.height=22
-							w.tipText="In diesem Tab k\303\266nnen die Einstellungen zur Schriftart vorgenommen werden."
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.y=6
 							w.x=289
+							w.y=6
+							w.width=44
+							w.height=22
+							w.text="Schrift"
+							w.tipText="In diesem Tab können die Einstellungen zur Schriftart vorgenommen werden."
+							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 						}
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe_font=w
 							w.wdg_name='verticalframe_font'
-							w.width=453
 							w.frameStyle=16384
+							w.shown=false
+							w.vSpacing=4
+							w.padTop=10
+							w.x=4
+							w.y=24
+							w.width=453
 							w.height=185
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
-							w.shown=false
-							w.y=24
-							w.padTop=10
-							w.vSpacing=4
-							w.x=4
 							FX::HorizontalFrame.new(@verticalframe_font){|w|
 								@horizontalframe54=w
 								w.wdg_name='horizontalframe54'
+								w.layoutHints=1024
+								w.x=2
+								w.y=12
 								w.width=449
 								w.height=20
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=12
-								w.layoutHints=1024
-								w.x=2
 								FX::Label.new(@horizontalframe54){|w|
 									@label358=w
 									w.wdg_name='label358'
-									w.width=80
-									w.justify=32768
-									w.text="Schriftart"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=1
 									w.layoutHints=288
+									w.justify=32768
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.y=1
+									w.width=80
+									w.height=18
+									w.text="Schriftart"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::ListBox.new(@horizontalframe54){|w|
 									@listbox_fonts=w
 									w.wdg_name='listbox_fonts'
+									w.layoutHints=288
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=80
 									w.width=224
 									w.height=20
-									w.tipText="Hier kann die Schriftart ausgew\303\244hlt werden."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.numVisible=30
-									w.layoutHints=288
-									w.x=80
+									w.tipText="Hier kann die Schriftart ausgewählt werden."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 							FX::HorizontalFrame.new(@verticalframe_font){|w|
 								@horizontalframe175=w
 								w.wdg_name='horizontalframe175'
-								w.width=449
-								w.height=23
-								w.y=36
 								w.layoutHints=1024
 								w.x=2
+								w.y=36
+								w.width=449
+								w.height=23
 								FX::TextField.new(@horizontalframe175){|w|
 									@textfield_font_file=w
 									w.wdg_name='textfield_font_file'
+									w.layoutHints=1024
 									w.width=429
 									w.height=21
-									w.layoutHints=1024
 								}
 								FX::Button.new(@horizontalframe175){|w|
 									@button_fontfile_select=w
 									w.wdg_name='button_fontfile_select'
-									w.width=20
-									w.text="..."
-									w.height=23
 									w.x=429
+									w.width=20
+									w.height=23
+									w.text="..."
 								}
 							}
 							FX::HorizontalFrame.new(@verticalframe_font){|w|
 								@horizontalframe61=w
 								w.wdg_name='horizontalframe61'
+								w.layoutHints=1024
+								w.x=2
+								w.y=63
 								w.width=449
 								w.height=20
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=63
-								w.layoutHints=1024
-								w.x=2
 								FX::Label.new(@horizontalframe61){|w|
 									@label360=w
 									w.wdg_name='label360'
-									w.width=80
-									w.justify=32768
-									w.text="Schriftgr\303\266\303\237e"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.layoutHints=256
+									w.justify=32768
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.width=80
+									w.height=18
+									w.text="Schriftgröße"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@horizontalframe61){|w|
 									@textfield_fontsize=w
 									w.wdg_name='textfield_fontsize'
+									w.layoutHints=256
+									w.textFieldTextStyle=2097152
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=80
 									w.width=50
 									w.height=20
-									w.tipText="Hier wird die Schriftgr\303\266\303\237e in Punkt eingestellt. Es ist auch die Angabe von Realzahlen m\303\266glich (Punkt als Dezimaltrenner)"
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.textFieldTextStyle=2097152
 									w.numColumns=10
-									w.layoutHints=256
-									w.x=80
+									w.tipText="Hier wird die Schriftgröße in Punkt eingestellt. Es ist auch die Angabe von Realzahlen möglich (Punkt als Dezimaltrenner)"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 							FX::HorizontalFrame.new(@verticalframe_font){|w|
 								@horizontalframe63=w
 								w.wdg_name='horizontalframe63'
+								w.layoutHints=1024
+								w.x=2
+								w.y=87
 								w.width=449
 								w.height=22
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=87
-								w.layoutHints=1024
-								w.x=2
 								FX::Label.new(@horizontalframe63){|w|
 									@label365=w
 									w.wdg_name='label365'
-									w.width=80
-									w.justify=32768
-									w.text="Textfarbe"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.layoutHints=256
+									w.justify=32768
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.width=80
+									w.height=18
+									w.text="Textfarbe"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::TextField.new(@horizontalframe63){|w|
 									@textfield_text_color=w
 									w.wdg_name='textfield_text_color'
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=80
 									w.width=76
 									w.height=20
-									w.tipText="Hier kann die Schriftfarbe als Hexadezimalwert eingetragen werden. Um eine Farbe auszuw\303\244hlen, nutzen Sie den Button rechts."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.numColumns=10
-									w.x=80
+									w.tipText="Hier kann die Schriftfarbe als Hexadezimalwert eingetragen werden. Um eine Farbe auszuwählen, nutzen Sie den Button rechts."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Button.new(@horizontalframe63){|w|
 									@button_text_color=w
 									w.wdg_name='button_text_color'
-									w.width=69
-									w.text="ausw\303\244hlen"
-									w.height=22
-									w.tipText="Hier kann mit Hilfe eines Dialogs eine Farbe ausgew\303\244hlt werden."
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.x=156
+									w.width=68
+									w.height=22
+									w.text="auswählen"
+									w.tipText="Hier kann mit Hilfe eines Dialogs eine Farbe ausgewählt werden."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 							FX::HorizontalFrame.new(@verticalframe_font){|w|
 								@horizontalframe62=w
 								w.wdg_name='horizontalframe62'
+								w.layoutHints=1024
+								w.x=2
+								w.y=113
 								w.width=449
 								w.height=54
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=113
-								w.layoutHints=1024
-								w.x=2
 								FX::Label.new(@horizontalframe62){|w|
 									@label364=w
 									w.wdg_name='label364'
-									w.width=80
-									w.justify=32768
-									w.text="Ausrichtung"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									w.layoutHints=256
+									w.justify=32768
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.width=80
+									w.height=18
+									w.text="Ausrichtung"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::RadioMutex.new(@horizontalframe62){|w|
 									@radiomutex_justify=w
 									w.wdg_name='radiomutex_justify'
+									w.x=80
 									w.width=59
 									w.height=54
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.x=80
 									FX::RadioButton.new(@radiomutex_justify){|w|
 										@radiobutton_just_l=w
 										w.wdg_name='radiobutton_just_l'
-										w.width=50
-										w.text="Links"
-										w.height=18
-										w.tipText="Richtet den Text linksb\303\274ndig aus."
 										w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-										w.shadowColor=Fox::FXRGBA(128,128,128,255)
 										w.state=true
+										w.width=49
+										w.height=18
+										w.text="Links"
+										w.tipText="Richtet den Text linksbündig aus."
+										w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									}
 									FX::RadioButton.new(@radiomutex_justify){|w|
 										@radiobutton_just_m=w
 										w.wdg_name='radiobutton_just_m'
-										w.width=48
-										w.text="Mitte"
-										w.height=18
-										w.tipText="Richtet den Text mittig zur Objektbreite aus."
 										w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-										w.shadowColor=Fox::FXRGBA(128,128,128,255)
 										w.y=18
+										w.width=49
+										w.height=18
+										w.text="Mitte"
+										w.tipText="Richtet den Text mittig zur Objektbreite aus."
+										w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									}
 									FX::RadioButton.new(@radiomutex_justify){|w|
 										@radiobutton_just_r=w
 										w.wdg_name='radiobutton_just_r'
-										w.width=59
-										w.text="Rechts"
-										w.height=18
-										w.tipText="Richtet den Text rechtsb\303\274ndig zur Objektbreite aus."
 										w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-										w.shadowColor=Fox::FXRGBA(128,128,128,255)
 										w.y=36
+										w.width=59
+										w.height=18
+										w.text="Rechts"
+										w.tipText="Richtet den Text rechtsbündig zur Objektbreite aus."
+										w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									}
 								}
 							}
@@ -1289,244 +1299,244 @@ class Dialogbox_layoutview
 						FX::TabItem.new(@tabbook_objectattributes){|w|
 							@tabitem_barcode=w
 							w.wdg_name='tabitem_barcode'
-							w.width=55
-							w.text="Barcode"
-							w.height=22
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
+							w.x=333
 							w.y=6
-							w.x=334
+							w.width=55
+							w.height=22
+							w.text="Barcode"
+							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 						}
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe_barcode=w
 							w.wdg_name='verticalframe_barcode'
-							w.width=453
 							w.frameStyle=16384
-							w.height=185
-							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							w.shown=false
-							w.y=24
 							w.vSpacing=4
 							w.x=4
+							w.y=24
+							w.width=453
+							w.height=185
+							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							FX::HorizontalFrame.new(@verticalframe_barcode){|w|
 								@horizontalframe133=w
 								w.wdg_name='horizontalframe133'
+								w.layoutHints=1024
+								w.vSpacing=4
+								w.padTop=10
+								w.x=2
+								w.y=2
 								w.width=449
 								w.height=30
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=2
-								w.layoutHints=1024
-								w.padTop=10
-								w.vSpacing=4
-								w.x=2
 								FX::Label.new(@horizontalframe133){|w|
 									@label528=w
 									w.wdg_name='label528'
-									w.width=80
-									w.justify=32768
-									w.text="Typ"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=11
 									w.layoutHints=288
+									w.justify=32768
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.y=11
+									w.width=80
+									w.height=18
+									w.text="Typ"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::ListBox.new(@horizontalframe133){|w|
 									@listbox_barcode_typ=w
 									w.wdg_name='listbox_barcode_typ'
+									w.layoutHints=1056
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=80
+									w.y=10
 									w.width=369
 									w.height=20
-									w.tipText="Hier kann die Schriftart ausgew\303\244hlt werden."
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=10
 									w.numVisible=10
-									w.layoutHints=1056
-									w.x=80
+									w.tipText="Hier kann die Schriftart ausgewählt werden."
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 							FX::HorizontalFrame.new(@verticalframe_barcode){|w|
 								@horizontalframe134=w
 								w.wdg_name='horizontalframe134'
+								w.layoutHints=1024
+								w.vSpacing=4
+								w.padTop=10
+								w.x=2
+								w.y=36
 								w.width=449
 								w.height=30
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
-								w.y=36
-								w.layoutHints=1024
-								w.padTop=10
-								w.vSpacing=4
-								w.x=2
 								FX::Label.new(@horizontalframe134){|w|
 									@label529=w
 									w.wdg_name='label529'
-									w.width=80
-									w.justify=32768
-									w.text="Ratio"
-									w.height=18
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=11
 									w.layoutHints=288
+									w.justify=32768
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.y=11
+									w.width=80
+									w.height=18
+									w.text="Ratio"
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Spinner.new(@horizontalframe134){|w|
 									@spinner_barcode_ratio=w
 									w.wdg_name='spinner_barcode_ratio'
-									w.width=41
-									w.range=-2147483648..2147483647
-									w.height=20
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
-									w.y=10
-									w.numColumns=3
+									w.range=-2147483648..2147483647
 									w.x=80
+									w.y=10
+									w.width=41
+									w.height=20
+									w.numColumns=3
+									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
 						}
 						FX::TabItem.new(@tabbook_objectattributes){|w|
 							@tabitem_box=w
 							w.wdg_name='tabitem_box'
-							w.width=54
-							w.text="Rahmen"
-							w.height=22
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+							w.x=388
 							w.y=6
-							w.x=389
+							w.width=55
+							w.height=22
+							w.text="Rahmen"
 						}
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe_boxtab=w
 							w.wdg_name='verticalframe_boxtab'
+							w.shown=false
+							w.x=4
+							w.y=24
 							w.width=453
 							w.height=185
-							w.shown=false
-							w.y=24
-							w.x=4
 							FX::Matrix.new(@verticalframe_boxtab){|w|
 								@matrix_boxtab=w
 								w.wdg_name='matrix_boxtab'
+								w.matrixStyle=131072
 								w.width=453
 								w.height=185
 								w.numColumns=3
-								w.matrixStyle=131072
 								w.numRows=4
 								FX::Label.new(@matrix_boxtab){|w|
 									@label306=w
 									w.wdg_name='label306'
-									w.width=53
-									w.text="F\303\274llfarbe"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.y=4
 									w.x=4
+									w.y=4
+									w.width=53
+									w.height=18
+									w.text="Füllfarbe"
 								}
 								FX::TextField.new(@matrix_boxtab){|w|
 									@textfield_box_fill_color=w
 									w.wdg_name='textfield_box_fill_color'
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=92
+									w.y=4
 									w.width=76
 									w.height=20
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.y=4
 									w.numColumns=10
-									w.x=91
 								}
 								FX::Button.new(@matrix_boxtab){|w|
 									@button_box_fill_color=w
 									w.wdg_name='button_box_fill_color'
-									w.width=20
-									w.text="..."
-									w.height=22
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=172
 									w.y=4
-									w.x=171
+									w.width=20
+									w.height=22
+									w.text="..."
 								}
 								FX::Label.new(@matrix_boxtab){|w|
 									@label307=w
 									w.wdg_name='label307'
-									w.width=80
-									w.text="Rahmenfarbe"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.y=30
 									w.x=4
+									w.y=30
+									w.width=81
+									w.height=18
+									w.text="Rahmenfarbe"
 								}
 								FX::TextField.new(@matrix_boxtab){|w|
 									@textfield_box_border_color=w
 									w.wdg_name='textfield_box_border_color'
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=92
+									w.y=30
 									w.width=76
 									w.height=20
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.y=30
 									w.numColumns=10
-									w.x=91
 								}
 								FX::Button.new(@matrix_boxtab){|w|
 									@button_box_border_color=w
 									w.wdg_name='button_box_border_color'
-									w.width=20
-									w.text="..."
-									w.height=22
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=172
 									w.y=30
-									w.x=171
+									w.width=20
+									w.height=22
+									w.text="..."
 								}
 								FX::Label.new(@matrix_boxtab){|w|
 									@label308=w
 									w.wdg_name='label308'
-									w.width=83
-									w.text="Rahmenbreite"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.y=56
 									w.x=4
+									w.y=56
+									w.width=84
+									w.height=18
+									w.text="Rahmenbreite"
 								}
 								FX::TextField.new(@matrix_boxtab){|w|
 									@textfield_box_border_width=w
 									w.wdg_name='textfield_box_border_width'
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=92
+									w.y=56
 									w.width=76
 									w.height=20
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.y=56
 									w.numColumns=10
-									w.x=91
 								}
 								FX::Label.new(@matrix_boxtab){|w|
 									@label309=w
 									w.wdg_name='label309'
-									w.width=26
-									w.text="mm"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=172
 									w.y=56
-									w.x=171
+									w.width=26
+									w.height=18
+									w.text="mm"
 								}
 								FX::Label.new(@matrix_boxtab){|w|
 									@label310=w
 									w.wdg_name='label310'
-									w.width=73
-									w.text="Eckenradius"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.y=80
 									w.x=4
+									w.y=80
+									w.width=72
+									w.height=18
+									w.text="Eckenradius"
 								}
 								FX::TextField.new(@matrix_boxtab){|w|
 									@textfield_box_corner_radius=w
 									w.wdg_name='textfield_box_corner_radius'
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=92
+									w.y=80
 									w.width=76
 									w.height=20
-									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.y=80
 									w.numColumns=10
-									w.x=91
 								}
 								FX::Label.new(@matrix_boxtab){|w|
 									@label311=w
 									w.wdg_name='label311'
-									w.width=26
-									w.text="mm"
-									w.height=18
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.x=172
 									w.y=80
-									w.x=171
+									w.width=26
+									w.height=18
+									w.text="mm"
 								}
 							}
 						}
@@ -1631,6 +1641,7 @@ class Dialogbox_layoutview
 	attr_reader :label141
 	attr_reader :spinner_seiten_nr
 	attr_reader :label142
+	attr_reader :spinner_layer
 	attr_reader :tabitem_font
 	attr_reader :verticalframe_font
 	attr_reader :horizontalframe54
