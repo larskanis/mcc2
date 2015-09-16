@@ -49,16 +49,9 @@ class PrinterCx320Direct < CardPrinter
     gradient_pic.import_pixels(0, 0, 256, 1, "RGB", gradient.flatten)
     sized_pic = sized_pic.clut_channel(gradient_pic)
 
-    cmyk_data = sized_pic.to_blob do |a|
-      a.format='rgb'
-      a.depth = 8
-    end
-    p cmyk_data[0..60].unpack("H*")[0].gsub(/(.{6})/, "\\1 ")
-
-    form = "Cx2" * (sized_pic.columns * sized_pic.rows - 1)
-    data_c = cmyk_data.unpack(""   << form << "Cx2").pack("C*")
-    data_m = cmyk_data.unpack("x1" << form << "Cx1").pack("C*")
-    data_y = cmyk_data.unpack("x2" << form << "C"  ).pack("C*")
+    data_c = sized_pic.export_pixels_to_str(0, 0, sized_pic.columns, sized_pic.rows, "R", Magick::CharPixel)
+    data_m = sized_pic.export_pixels_to_str(0, 0, sized_pic.columns, sized_pic.rows, "G", Magick::CharPixel)
+    data_y = sized_pic.export_pixels_to_str(0, 0, sized_pic.columns, sized_pic.rows, "B", Magick::CharPixel)
 
     p [data_c[0..60].unpack("H*")[0], data_c.bytesize]
     p [data_m[0..60].unpack("H*")[0], data_m.bytesize]
