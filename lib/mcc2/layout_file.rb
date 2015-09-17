@@ -120,6 +120,7 @@ P1
     add_attr(S_CX320_DRIVER, String, 'CX320_USB')
     add_attr(S_CX320_PRINTER_NR, Integer, 0)
     add_attr(S_CX320_PARALLEL_PRINT, String, 'second_card')
+    add_attr(S_CX320_CONFIG, String, '{}')
   end
   #---------------------------------------------------------------------------------------------------------
   def xml_doc

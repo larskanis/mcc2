@@ -896,34 +896,10 @@ class Dialogbox_printerview
 							}
 						}
 						FX::Matrix.new(@verticalframe60){|w|
-							@matrix48=w
-							w.wdg_name='matrix48'
-							w.layoutHints=1024
-							w.y=29
-							w.width=562
-							w.height=31
-							FX::Button.new(@matrix48){|w|
-								@button_cx320_update_status=w
-								w.wdg_name='button_cx320_update_status'
-								w.x=4
-								w.y=4
-								w.width=134
-								w.height=23
-								w.text="Status aktualisieren"
-							}
-						}
-						FX::ScrollWindow.new(@verticalframe60){|w|
-							@scrollwindow_status=w
-							w.wdg_name='scrollwindow_status'
-							w.y=60
-							w.width=562
-							w.height=262
-						}
-						FX::Matrix.new(@verticalframe60){|w|
 							@matrix49=w
 							w.wdg_name='matrix49'
 							w.layoutHints=1024
-							w.y=322
+							w.y=29
 							w.width=562
 							w.height=31
 							w.numColumns=2
@@ -949,9 +925,15 @@ class Dialogbox_printerview
 						FX::ScrollWindow.new(@verticalframe60){|w|
 							@scrollwindow_config=w
 							w.wdg_name='scrollwindow_config'
-							w.y=353
+							w.y=60
 							w.width=562
-							w.height=262
+							w.height=555
+							FX::Packer.new(@scrollwindow_config){|w|
+								@packer_cx320_config=w
+								w.wdg_name='packer_cx320_config'
+								w.width=562
+								w.height=555
+							}
 						}
 						FX::Matrix.new(@verticalframe60){|w|
 							@matrix47=w
@@ -1090,13 +1072,11 @@ class Dialogbox_printerview
 	attr_reader :spinner_cx320_printer_nr
 	attr_reader :label99
 	attr_reader :combobox_cx320_parallel_print
-	attr_reader :matrix48
-	attr_reader :button_cx320_update_status
-	attr_reader :scrollwindow_status
 	attr_reader :matrix49
 	attr_reader :button_cx320_read_config
 	attr_reader :button_cx320_write_config
 	attr_reader :scrollwindow_config
+	attr_reader :packer_cx320_config
 	attr_reader :matrix47
 	attr_reader :button_cx320_reset
 	attr_reader :button_cx320_move_to_0

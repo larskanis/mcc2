@@ -1,8 +1,9 @@
 # -*- coding: UTF-8 -*-
 
+require 'json'
+require 'libcx320'
 require 'mcc2/printer/card_printer'
 require 'mcc2/printer/rmagick_drawer'
-require 'libcx320'
 
 
 module Mcc2
@@ -44,6 +45,8 @@ class PrinterCx320Direct < CardPrinter
       else raise("invalid value for attr #{S_CX320_PARALLEL_PRINT}")
     end
 
+    config = JSON.parse(layout_file.get_attr_value(S_CX320_CONFIG))
+
     front_layers = layout_file.get_layers_of_page(0)
     front_planes = generate_image_planes(layout_file, row, 0, front_layers, x_offset, y_offset)
     front_layer_syms = front_layers.map{|l| PrintLayers[l] }.compact.uniq
@@ -55,6 +58,19 @@ class PrinterCx320Direct < CardPrinter
     end
 
     open_printer(layout_file) do |dev|
+      # Aktuelle Konfig auslesen und mit gespeicherter Konfig vergleichen
+      attrs = dev.mode_sense(:all) + dev.log_sense(:log)
+      config_changed = attrs.find do |attr|
+        value = config[attr.name.to_s]
+        value && value != attr.value
+      end
+      if config_changed
+        dev.mode_select(:print, config.select{|k,v| k.to_s =~ /^print_/ })
+        dev.mode_select(:mag, config.select{|k,v| k.to_s =~ /^mag_/ })
+
+        dev.rezero_unit
+      end
+
       while_busy do
         dev.load_card(chip ? :contactless : :retransfer, false, false, parallel)
       end
@@ -215,6 +231,7 @@ class PrinterCx320Direct < CardPrinter
     printer_klass = LibCX320.const_get(layout_file.get_attr_value(S_CX320_DRIVER))
     printer_nr = layout_file.get_attr_value(S_CX320_PRINTER_NR).to_i
     dev = printer_klass.devices[printer_nr]
+#     dev = printer_klass.new(nil)
     raise "Printer #{printer_nr} not found" unless dev
 
     begin
