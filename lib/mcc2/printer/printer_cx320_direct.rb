@@ -231,7 +231,6 @@ class PrinterCx320Direct < CardPrinter
     printer_klass = LibCX320.const_get(layout_file.get_attr_value(S_CX320_DRIVER))
     printer_nr = layout_file.get_attr_value(S_CX320_PRINTER_NR).to_i
     dev = printer_klass.devices[printer_nr]
-#     dev = printer_klass.new(nil)
     raise "Printer #{printer_nr} not found" unless dev
 
     begin

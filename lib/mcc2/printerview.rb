@@ -89,6 +89,7 @@ class Printerview < Dialogbox_printerview
 
     @combobox_cx320_driver.appendItem("LIBUSB", "CX320_USB")
     @combobox_cx320_driver.appendItem("DLL", "CX320_DLL")
+    @combobox_cx320_driver.appendItem("Simulation", "CX320_SIMU")
     @combobox_cx320_driver.connect(SEL_COMMAND){ combobox_changed(@combobox_cx320_driver, S_CX320_DRIVER) }
     @spinner_cx320_printer_nr.connect(SEL_COMMAND){ @layout_file.set_attr_value(S_CX320_PRINTER_NR, @spinner_cx320_printer_nr.value.to_s); changed_attributes }
     @combobox_cx320_parallel_print.appendItem("Ein", "on")
@@ -221,6 +222,16 @@ class Printerview < Dialogbox_printerview
 
   def selected_PrinterCx320Direct
     if_driver_loadable('libcx320', 'libcx320', 'CX320-Drucker') do
+      attrs = LibCX320::CX320.mode_sense_attrs(:all) + LibCX320::CX320.log_sense_attrs(:log)
+      config = JSON.parse(@layout_file.get_attr_value(S_CX320_CONFIG))
+      attrs = attrs.map do |attr|
+        attr = attr.dup
+        if value=config[attr.name.to_s]
+          attr.value = value
+        end
+        attr
+      end
+      cx320_fill_config(attrs)
     end
   end
 
@@ -287,16 +298,19 @@ class Printerview < Dialogbox_printerview
               w = FXSpinner.new(matrix, 15)
               w.range = attr.params || (0..0xff)
               w.value = attr.value if attr.value
+              w.connect(SEL_COMMAND){ cx320_config_field_changed }
               w
             when :word
               w = FXSpinner.new(matrix, 15)
               w.range = attr.params || (0..0xffff)
               w.value = attr.value if attr.value
+              w.connect(SEL_COMMAND){ cx320_config_field_changed }
               w
             when :dword
               w = FXSpinner.new(matrix, 15)
               w.range = attr.params || (0..0xffffffff)
               w.value = attr.value if attr.value
+              w.connect(SEL_COMMAND){ cx320_config_field_changed }
               w
             when :set
               w = FXComboBox.new(matrix, 15)
@@ -309,10 +323,12 @@ class Printerview < Dialogbox_printerview
               end
               w.numVisible = [attr.params.length, 10].min
               w.editable = false
+              w.connect(SEL_COMMAND){ cx320_config_field_changed }
               w
             when :ascii
               w = FXTextField.new(matrix, attr.params)
               w.text = attr.value if attr.value
+              w.connect(SEL_COMMAND){ cx320_config_field_changed }
               w
           end
 
@@ -334,43 +350,54 @@ class Printerview < Dialogbox_printerview
     end
   end
 
+  def cx320_config_field_changed
+    config = JSON.parse(@layout_file.get_attr_value(S_CX320_CONFIG))
+
+    hash = {}
+    @packer_cx320_config.children.first.children.each do |w|
+      attr = w.userData
+      next unless attr
+
+      if attr.offs_write
+        # READ/WRITE parameter
+
+        value = case attr.typ
+          when :byte
+            w.value
+          when :word
+            w.value
+          when :dword
+            w.value
+          when :set
+            w.getItemData(w.currentItem)
+          when :ascii
+            w.text
+        end
+        hash[attr.name] = value
+      end
+    end
+
+    if hash != config
+      @layout_file.set_attr_value(S_CX320_CONFIG, hash.to_json)
+      changed_attributes
+    end
+  end
+
   def cx320_read_config
     cx320_run_command do |dev|
       attrs = dev.mode_sense(:all) + dev.log_sense(:log)
       cx320_fill_config(attrs)
+      cx320_config_field_changed
     end
   end
 
   def cx320_write_config
     cx320_run_command do |dev|
-      hash = {}
-      @packer_cx320_config.children.first.children.each do |w|
-        attr = w.userData
-        next unless attr
+      cx320_config_field_changed
 
-        if attr.offs_write
-          # READ/WRITE parameter
-
-          value = case attr.typ
-            when :byte
-              w.value
-            when :word
-              w.value
-            when :dword
-              w.value
-            when :set
-              w.getItemData(w.currentItem)
-            when :ascii
-              w.text
-          end
-          hash[attr.name] = value
-        end
-      end
-
-      dev.mode_select(:print, hash.select{|k,v| k.to_s =~ /^print_/ })
-      dev.mode_select(:mag, hash.select{|k,v| k.to_s =~ /^mag_/ })
-      @layout_file.set_attr_value(S_CX320_CONFIG, hash.to_json)
-      changed_attributes
+      config = JSON.parse(@layout_file.get_attr_value(S_CX320_CONFIG))
+      dev.mode_select(:print, config.select{|k,v| k.to_s =~ /^print_/ })
+      dev.mode_select(:mag, config.select{|k,v| k.to_s =~ /^mag_/ })
     end
     FXMessageBox.error(@parent.app, MBOX_OK, "Änderung der Konfiguration" , "Bitte führen Sie einen Drucker-Reset durch,\ndamit die Änderung der Konfiguration aktiv wird.")
   end
@@ -414,17 +441,6 @@ class Printerview < Dialogbox_printerview
     Layout.set_combobox_by_data( @combobox_cx320_driver, @layout_file.get_attr_value(S_CX320_DRIVER))
     @spinner_cx320_printer_nr.value = @layout_file.get_attr_value(S_CX320_PRINTER_NR).to_i
     Layout.set_combobox_by_data( @combobox_cx320_parallel_print, @layout_file.get_attr_value(S_CX320_PARALLEL_PRINT))
-
-    attrs = LibCX320::CX320.mode_sense_attrs(:all) + LibCX320::CX320.log_sense_attrs(:log)
-    config = JSON.parse(@layout_file.get_attr_value(S_CX320_CONFIG))
-    attrs = attrs.map do |attr|
-      attr = attr.dup
-      if value=config[attr.name.to_s]
-        attr.value = value
-      end
-      attr
-    end
-    cx320_fill_config(attrs)
   end
 
   def changed_attributes
