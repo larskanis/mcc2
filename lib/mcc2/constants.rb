@@ -96,6 +96,7 @@ module Mcc2
 
   S_CX320_DRIVER = 'cx320_driver'
   S_CX320_PRINTER_NR = 'cx320_printer_nr'
+  S_CX320_PARALLEL_PRINT = 'cx320_parallel_print'
 
   UP = 0
   DOWN = 1

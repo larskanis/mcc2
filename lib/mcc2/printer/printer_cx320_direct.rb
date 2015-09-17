@@ -27,11 +27,22 @@ class PrinterCx320Direct < CardPrinter
     3 => :PeelOff,
   }
 
+  def initialize(*args)
+    super
+    @first_card = true
+  end
+
   def print_card(layout_file, row, chip)
     self.dpi = layout_file.get_attr_value(S_EPLPRINTER_DPI).to_f
     duplex = layout_file.get_attr_value(S_DUPLEX) == S_TRUE
     x_offset = layout_file.get_attr_value(S_X_OFFSET).to_f
     y_offset = layout_file.get_attr_value(S_Y_OFFSET).to_f
+    parallel = case layout_file.get_attr_value(S_CX320_PARALLEL_PRINT)
+      when 'off' then false
+      when 'on' then true
+      when 'second_card' then !@first_card
+      else raise("invalid value for attr #{S_CX320_PARALLEL_PRINT}")
+    end
 
     front_layers = layout_file.get_layers_of_page(0)
     front_planes = generate_image_planes(layout_file, row, 0, front_layers, x_offset, y_offset)
@@ -44,49 +55,76 @@ class PrinterCx320Direct < CardPrinter
     end
 
     open_printer(layout_file) do |dev|
-      if chip
-        dev.load_card(:contactless, false)
-      else
-        dev.load_card(:retransfer, false)
+      while_busy do
+        dev.load_card(chip ? :contactless : :retransfer, false, false, parallel)
       end
 
       begin
         front_planes.each do |plane, data|
-          dev.image_out(plane, data) if data
+          dev.image_out(plane, data, 0) if data
+        end
+
+        if parallel
+          # run printing in parallel to load_card and chip
+          while_busy do
+            dev.print(front_layer_syms, 0, parallel)
+          end
         end
 
         if chip
+          wait_for_card_position(dev, :contactless)
           begin
             # Kartenpersonalisierung
             chip.pers_card(layout_file, row)
           rescue Exception
-            dev.move_card(:eject, false, false, true) rescue
+            ignore_all_errors do
+              while_busy do
+                dev.move_card(:eject, false, false, true)
+              end
+            end
             raise
           end
 
-          dev.move_card(:retransfer, false)
+          while_busy do
+            dev.move_card(:retransfer, false)
+          end
         end
 
-        dev.print(front_layer_syms)
+        if !parallel
+          dev.print(front_layer_syms, 0)
+        end
 
         if duplex
-          dev.retransfer_and_turn
-
-          back_planes.each do |plane, data|
-            dev.image_out(plane, data) if data
+          while_busy do
+            dev.retransfer_and_turn(parallel)
           end
 
-          dev.print(back_layer_syms)
-          dev.retransfer_and_eject
+          back_planes.each do |plane, data|
+            dev.image_out(plane, data, 1) if data
+          end
+
+          while_busy do
+            dev.print(back_layer_syms, 1, parallel)
+          end
+          while_busy do
+            dev.retransfer_and_eject(parallel)
+          end
         else
-          dev.retransfer_and_eject
+          while_busy do
+            dev.retransfer_and_eject(parallel)
+          end
         end
       rescue
-        dev.move_card(:eject, false, false, true) rescue
+        ignore_all_errors do
+          while_busy do
+            dev.move_card(:eject, false, false, true)
+          end
+        end
         raise
       end
     end
 
+    @first_card = false
     return true
   end
 
@@ -146,6 +184,31 @@ class PrinterCx320Direct < CardPrinter
       UV: data_uv,
       PeelOff: data_peeloff,
     }
+  end
+
+  def while_busy
+    begin
+      yield
+    rescue LibCX320::ErrorHandling::BusyError
+      puts "Printer busy"
+      sleep 0.1
+      retry
+    end
+  end
+
+  def ignore_all_errors
+    begin
+      yield
+    rescue => e
+      puts "Ignore error: #{e.class} #{e}"
+    end
+  end
+
+  def wait_for_card_position(pos)
+    while dev.get_current_card_position[:position] != pos
+      puts "Wait for card position #{pos}"
+      sleep 0.1
+    end
   end
 
   def open_printer(layout_file)

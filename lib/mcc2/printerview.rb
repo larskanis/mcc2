@@ -31,6 +31,7 @@ class Printerview < Dialogbox_printerview
     @matrix_gdi.numColumns = 3
     @matrix_xid.numColumns = 3
     @matrix_zebra.numColumns = 3
+    @matrix_cx320_settings.numColumns = 4
     @combobox_printertype.connect(SEL_COMMAND){ combobox_printertype_changed }
     @textfield_file_save_as.connect(SEL_COMMAND){
       @layout_file.set_attr_value(S_FILEPRINTER_SAVE_AS, @textfield_file_save_as.text)
@@ -88,6 +89,10 @@ class Printerview < Dialogbox_printerview
     @combobox_cx320_driver.appendItem("DLL", "CX320_DLL")
     @combobox_cx320_driver.connect(SEL_COMMAND){ combobox_changed(@combobox_cx320_driver, S_CX320_DRIVER) }
     @spinner_cx320_printer_nr.connect(SEL_COMMAND){ @layout_file.set_attr_value(S_CX320_PRINTER_NR, @spinner_cx320_printer_nr.value.to_s); changed_attributes }
+    @combobox_cx320_parallel_print.appendItem("Ein", "on")
+    @combobox_cx320_parallel_print.appendItem("Aus", "off")
+    @combobox_cx320_parallel_print.appendItem("ab zweiter Karte", "second_card")
+    @combobox_cx320_parallel_print.connect(SEL_COMMAND){ combobox_changed(@combobox_cx320_parallel_print, S_CX320_PARALLEL_PRINT) }
 
     @button_cx320_reset.connect(SEL_COMMAND){ cx320_run_command{|dev| dev.rezero_unit } }
     @button_cx320_move_to_0.connect(SEL_COMMAND){ cx320_move_to(0) }
@@ -298,6 +303,7 @@ class Printerview < Dialogbox_printerview
 
     Layout.set_combobox_by_data( @combobox_cx320_driver, @layout_file.get_attr_value(S_CX320_DRIVER))
     @spinner_cx320_printer_nr.value = @layout_file.get_attr_value(S_CX320_PRINTER_NR).to_i
+    Layout.set_combobox_by_data( @combobox_cx320_parallel_print, @layout_file.get_attr_value(S_CX320_PARALLEL_PRINT))
   end
 
   def changed_attributes

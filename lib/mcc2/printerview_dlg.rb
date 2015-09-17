@@ -832,13 +832,13 @@ class Dialogbox_printerview
 						w.width=562
 						w.height=646
 						FX::Matrix.new(@verticalframe60){|w|
-							@matrix46=w
-							w.wdg_name='matrix46'
+							@matrix_cx320_settings=w
+							w.wdg_name='matrix_cx320_settings'
 							w.layoutHints=1024
 							w.width=562
 							w.height=29
-							w.numColumns=4
-							FX::Label.new(@matrix46){|w|
+							w.numColumns=6
+							FX::Label.new(@matrix_cx320_settings){|w|
 								@label96=w
 								w.wdg_name='label96'
 								w.x=4
@@ -847,7 +847,7 @@ class Dialogbox_printerview
 								w.height=19
 								w.text="Treiber"
 							}
-							FX::ComboBox.new(@matrix46){|w|
+							FX::ComboBox.new(@matrix_cx320_settings){|w|
 								@combobox_cx320_driver=w
 								w.wdg_name='combobox_cx320_driver'
 								w.x=57
@@ -856,7 +856,7 @@ class Dialogbox_printerview
 								w.height=21
 								w.numColumns=10
 							}
-							FX::Label.new(@matrix46){|w|
+							FX::Label.new(@matrix_cx320_settings){|w|
 								@label98=w
 								w.wdg_name='label98'
 								w.x=162
@@ -865,7 +865,7 @@ class Dialogbox_printerview
 								w.height=19
 								w.text="Drucker-Nr"
 							}
-							FX::Spinner.new(@matrix46){|w|
+							FX::Spinner.new(@matrix_cx320_settings){|w|
 								@spinner_cx320_printer_nr=w
 								w.wdg_name='spinner_cx320_printer_nr'
 								w.range=-2147483648..2147483647
@@ -874,6 +874,25 @@ class Dialogbox_printerview
 								w.width=44
 								w.height=21
 								w.numColumns=3
+							}
+							FX::Label.new(@matrix_cx320_settings){|w|
+								@label99=w
+								w.wdg_name='label99'
+								w.x=287
+								w.y=4
+								w.width=104
+								w.height=19
+								w.text="Paralleler Druck"
+							}
+							FX::ComboBox.new(@matrix_cx320_settings){|w|
+								@combobox_cx320_parallel_print=w
+								w.wdg_name='combobox_cx320_parallel_print'
+								w.x=395
+								w.y=4
+								w.width=101
+								w.height=21
+								w.numVisible=3
+								w.numColumns=10
 							}
 						}
 						FX::Matrix.new(@verticalframe60){|w|
@@ -1064,11 +1083,13 @@ class Dialogbox_printerview
 	attr_reader :text_epl_page_commands
 	attr_reader :tabitem42
 	attr_reader :verticalframe60
-	attr_reader :matrix46
+	attr_reader :matrix_cx320_settings
 	attr_reader :label96
 	attr_reader :combobox_cx320_driver
 	attr_reader :label98
 	attr_reader :spinner_cx320_printer_nr
+	attr_reader :label99
+	attr_reader :combobox_cx320_parallel_print
 	attr_reader :matrix48
 	attr_reader :button_cx320_update_status
 	attr_reader :scrollwindow_status
