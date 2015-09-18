@@ -248,6 +248,7 @@ class Printerview < Dialogbox_printerview
       cab = Mcc2::Printer::PrinterCab.new
       @text_cab_output.text = cab.send_command(@layout_file, data, &block).to_s
     rescue => e
+      DebugTools::write_exception('cab_send_command', e)
       FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Senden" , "Das Kommando konnte nicht ausgeführt werden\nBitte stellen Sie sicher, dass die Verbindungsparameter korrekt sind.\n\n" + e.to_s)
     end
   end
@@ -258,7 +259,8 @@ class Printerview < Dialogbox_printerview
       dev.layout_file = @layout_file
       dev.run_command(&block)
     rescue => e
-      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Senden" , "Das Kommando konnte nicht ausgeführt werden.\n\n#{e}}")
+      DebugTools::write_exception('cx320_run_command', e)
+      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Senden" , "Das Kommando konnte nicht ausgeführt werden.\n\n#{e}")
     end
   end
 
