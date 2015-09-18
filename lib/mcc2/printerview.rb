@@ -330,7 +330,7 @@ class Printerview < Dialogbox_printerview
           # READ-only parameter
 
           value = case attr.typ
-            when :set then attr.params[value]
+            when :set then attr.params[attr.value]
             else attr.value.to_s
           end
 
