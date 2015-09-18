@@ -269,7 +269,6 @@ class Dataview < Dialogbox_dataview
     disable_all_buttons
     @button_stop_printing.enabled = true
     @printing = true
-    printer = @layout_file.build_printer_instance
 
     marked_items = []
     (0 ... @iconlist_data.numRows).map do |i|
@@ -280,6 +279,7 @@ class Dataview < Dialogbox_dataview
 
     Thread.new do
       begin
+        printer = @layout_file.build_printer_instance
         chip = layout_file.build_chip_instance
 
         marked_items.each_with_index do |item, itemidx|
@@ -313,7 +313,7 @@ class Dataview < Dialogbox_dataview
           FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
         end
       rescue Exception => e
-        DebugTools::write_log_file('print_card_thread', DebugTools::unkown_error_message(e))
+        DebugTools::write_exception('print_card_thread', e)
         @parent.runOnUiThread do
           FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen des Druckbildes", DebugTools::unkown_error_message(e))
         end

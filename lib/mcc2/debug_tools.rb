@@ -13,7 +13,11 @@ module DebugTools
   end
   
   def self.unkown_error_message(e)
-    (["Es ist leider ein Fehler aufgetreten:\n\n#{e.to_s} #{e.class}\n"]+e.backtrace).join("\n")
+    "Es ist leider ein Fehler aufgetreten:\n\n#{e.to_s} #{e.class}"
+  end
+  
+  def self.write_exception(source, e)
+    write_log_file(source, "Es ist leider ein Fehler aufgetreten:\n\n#{e.to_s} #{e.class}\n#{e.backtrace.join("\n")}")
   end
 end
 end

@@ -258,7 +258,7 @@ class Printerview < Dialogbox_printerview
       dev.layout_file = @layout_file
       dev.run_command(&block)
     rescue => e
-      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Senden" , "Das Kommando konnte nicht ausgeführt werden\nBitte stellen Sie sicher, dass die Verbindungsparameter korrekt sind.\n\n#{e}\n#{e.backtrace[0,10].join("\n")}")
+      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Senden" , "Das Kommando konnte nicht ausgeführt werden.\n\n#{e}}")
     end
   end
 
@@ -286,25 +286,25 @@ class Printerview < Dialogbox_printerview
 
           w = case attr.typ
             when :byte
-              w = FXSpinner.new(matrix, 15)
+              w = FXSpinner.new(matrix, 19)
               w.range = attr.params || (0..0xff)
               w.value = attr.value if attr.value
               w.connect(SEL_COMMAND){ cx320_config_field_changed }
               w
             when :word
-              w = FXSpinner.new(matrix, 15)
+              w = FXSpinner.new(matrix, 19)
               w.range = attr.params || (0..0xffff)
               w.value = attr.value if attr.value
               w.connect(SEL_COMMAND){ cx320_config_field_changed }
               w
             when :dword
-              w = FXSpinner.new(matrix, 15)
+              w = FXSpinner.new(matrix, 19)
               w.range = attr.params || (0..0xffffffff)
               w.value = attr.value if attr.value
               w.connect(SEL_COMMAND){ cx320_config_field_changed }
               w
             when :set
-              w = FXComboBox.new(matrix, 15)
+              w = FXComboBox.new(matrix, 19)
               attr.params.each do |k, v|
                 w.appendItem(v, k)
               end
@@ -378,7 +378,7 @@ class Printerview < Dialogbox_printerview
 
   def cx320_read_config
     cx320_run_command do |dev|
-      attrs = dev.mode_sense(:all) + dev.log_sense(:log)
+      attrs = dev.mode_sense(:ink) + dev.mode_sense(:print) + dev.mode_sense(:mag) + dev.log_sense(:log)
       cx320_fill_config(attrs)
       cx320_config_field_changed
     end
@@ -391,8 +391,8 @@ class Printerview < Dialogbox_printerview
       config = JSON.parse(@layout_file.get_attr_value(S_CX320_CONFIG))
       dev.mode_select(:print, config.select{|k,v| k.to_s =~ /^print_/ })
       dev.mode_select(:mag, config.select{|k,v| k.to_s =~ /^mag_/ })
+      FXMessageBox.error(@parent.app, MBOX_OK, "Änderung der Konfiguration" , "Bitte führen Sie einen Drucker-Reset durch,\ndamit die Änderung der Konfiguration aktiv wird.")
     end
-    FXMessageBox.error(@parent.app, MBOX_OK, "Änderung der Konfiguration" , "Bitte führen Sie einen Drucker-Reset durch,\ndamit die Änderung der Konfiguration aktiv wird.")
   end
 
   def deactivate_printer_tabs

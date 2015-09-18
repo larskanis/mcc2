@@ -59,7 +59,7 @@ class PrinterCx320Direct < CardPrinter
 
     open_printer(layout_file) do |dev|
       # Aktuelle Konfig auslesen und mit gespeicherter Konfig vergleichen
-      attrs = dev.mode_sense(:all) + dev.log_sense(:log)
+      attrs = dev.mode_sense(:ink) + dev.mode_sense(:print) + dev.mode_sense(:mag) + dev.log_sense(:log)
       config_changed = attrs.find do |attr|
         value = config[attr.name.to_s]
         value && value != attr.value
@@ -69,6 +69,10 @@ class PrinterCx320Direct < CardPrinter
         dev.mode_select(:mag, config.select{|k,v| k.to_s =~ /^mag_/ })
 
         dev.rezero_unit
+        begin
+          dev.ready?
+        rescue LibCX320::ErrorHandling::MediumChanged
+        end
       end
 
       while_busy do
@@ -221,7 +225,7 @@ class PrinterCx320Direct < CardPrinter
   end
 
   def wait_for_card_position(dev, pos)
-    while dev.get_current_card_position[:position] != pos
+    while while_busy{ dev.get_current_card_position }[:position] != pos
       puts "Wait for card position #{pos}"
       sleep 0.1
     end
