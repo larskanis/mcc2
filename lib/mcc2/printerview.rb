@@ -222,16 +222,7 @@ class Printerview < Dialogbox_printerview
 
   def selected_PrinterCx320Direct
     if_driver_loadable('libcx320', 'libcx320', 'CX320-Drucker') do
-      attrs = LibCX320::CX320.mode_sense_attrs(:all) + LibCX320::CX320.log_sense_attrs(:log)
-      config = JSON.parse(@layout_file.get_attr_value(S_CX320_CONFIG))
-      attrs = attrs.map do |attr|
-        attr = attr.dup
-        if value=config[attr.name.to_s]
-          attr.value = value
-        end
-        attr
-      end
-      cx320_fill_config(attrs)
+      cx320_update_config_widgets
     end
   end
 
@@ -345,8 +336,10 @@ class Printerview < Dialogbox_printerview
           w.userData = attr
         end
       end
-      matrix.create if matrix.parent.created?
-      matrix.show; matrix.recalc
+
+      if matrix.parent.created?
+        matrix.create; matrix.show; matrix.recalc
+      end
     end
   end
 
@@ -373,7 +366,7 @@ class Printerview < Dialogbox_printerview
           when :ascii
             w.text
         end
-        hash[attr.name] = value
+        hash[attr.name.to_s] = value
       end
     end
 
@@ -441,6 +434,23 @@ class Printerview < Dialogbox_printerview
     Layout.set_combobox_by_data( @combobox_cx320_driver, @layout_file.get_attr_value(S_CX320_DRIVER))
     @spinner_cx320_printer_nr.value = @layout_file.get_attr_value(S_CX320_PRINTER_NR).to_i
     Layout.set_combobox_by_data( @combobox_cx320_parallel_print, @layout_file.get_attr_value(S_CX320_PARALLEL_PRINT))
+
+    if pd == 'PrinterCx320Direct'
+      cx320_update_config_widgets
+    end
+  end
+
+  def cx320_update_config_widgets
+    attrs = LibCX320::CX320.mode_sense_attrs(:all) + LibCX320::CX320.log_sense_attrs(:log)
+    config = JSON.parse(@layout_file.get_attr_value(S_CX320_CONFIG))
+    attrs = attrs.map do |attr|
+      attr = attr.dup
+      if value=config[attr.name.to_s]
+        attr.value = value
+      end
+      attr
+    end
+    cx320_fill_config(attrs)
   end
 
   def changed_attributes

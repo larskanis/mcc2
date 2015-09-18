@@ -835,9 +835,11 @@ class Dialogbox_printerview
 							@matrix_cx320_settings=w
 							w.wdg_name='matrix_cx320_settings'
 							w.layoutHints=1024
+							w.matrixStyle=131072
 							w.width=562
-							w.height=29
-							w.numColumns=6
+							w.height=54
+							w.numColumns=4
+							w.numRows=2
 							FX::Label.new(@matrix_cx320_settings){|w|
 								@label96=w
 								w.wdg_name='label96'
@@ -850,7 +852,7 @@ class Dialogbox_printerview
 							FX::ComboBox.new(@matrix_cx320_settings){|w|
 								@combobox_cx320_driver=w
 								w.wdg_name='combobox_cx320_driver'
-								w.x=57
+								w.x=112
 								w.y=4
 								w.width=101
 								w.height=21
@@ -859,7 +861,7 @@ class Dialogbox_printerview
 							FX::Label.new(@matrix_cx320_settings){|w|
 								@label98=w
 								w.wdg_name='label98'
-								w.x=162
+								w.x=217
 								w.y=4
 								w.width=73
 								w.height=19
@@ -869,7 +871,7 @@ class Dialogbox_printerview
 								@spinner_cx320_printer_nr=w
 								w.wdg_name='spinner_cx320_printer_nr'
 								w.range=-2147483648..2147483647
-								w.x=239
+								w.x=294
 								w.y=4
 								w.width=44
 								w.height=21
@@ -878,8 +880,8 @@ class Dialogbox_printerview
 							FX::Label.new(@matrix_cx320_settings){|w|
 								@label99=w
 								w.wdg_name='label99'
-								w.x=287
-								w.y=4
+								w.x=4
+								w.y=29
 								w.width=104
 								w.height=19
 								w.text="Paralleler Druck"
@@ -887,8 +889,8 @@ class Dialogbox_printerview
 							FX::ComboBox.new(@matrix_cx320_settings){|w|
 								@combobox_cx320_parallel_print=w
 								w.wdg_name='combobox_cx320_parallel_print'
-								w.x=395
-								w.y=4
+								w.x=112
+								w.y=29
 								w.width=101
 								w.height=21
 								w.numVisible=3
@@ -899,7 +901,7 @@ class Dialogbox_printerview
 							@matrix49=w
 							w.wdg_name='matrix49'
 							w.layoutHints=1024
-							w.y=29
+							w.y=54
 							w.width=562
 							w.height=31
 							w.numColumns=2
@@ -925,14 +927,14 @@ class Dialogbox_printerview
 						FX::ScrollWindow.new(@verticalframe60){|w|
 							@scrollwindow_config=w
 							w.wdg_name='scrollwindow_config'
-							w.y=60
+							w.y=85
 							w.width=562
-							w.height=555
+							w.height=530
 							FX::Packer.new(@scrollwindow_config){|w|
 								@packer_cx320_config=w
 								w.wdg_name='packer_cx320_config'
 								w.width=562
-								w.height=555
+								w.height=530
 							}
 						}
 						FX::Matrix.new(@verticalframe60){|w|

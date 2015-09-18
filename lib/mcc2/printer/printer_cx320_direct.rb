@@ -220,7 +220,7 @@ class PrinterCx320Direct < CardPrinter
     end
   end
 
-  def wait_for_card_position(pos)
+  def wait_for_card_position(dev, pos)
     while dev.get_current_card_position[:position] != pos
       puts "Wait for card position #{pos}"
       sleep 0.1
