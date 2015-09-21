@@ -76,13 +76,13 @@ lib/mcc2/printer/gdi_card_printer.rb
 lib/mcc2/printer/gdi_printer.rb
 lib/mcc2/printer/preview.rb
 lib/mcc2/printer/printer_cab.rb
+lib/mcc2/printer/printer_cx320_direct.rb
 lib/mcc2/printer/printer_epl.rb
 lib/mcc2/printer/printer_xid.rb
 lib/mcc2/printer/printer_zebra.rb
 lib/mcc2/printer/rmagick_drawer.rb
 lib/mcc2/printerview.rb
 lib/mcc2/printerview_dlg.rb
-lib/mcc2/thread_event_handler.rb
 test/dummy.rb
 test/layouts/bart_simpson.png
 test/layouts/cc_ausweise_2009_b.xml
