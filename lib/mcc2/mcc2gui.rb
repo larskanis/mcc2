@@ -198,8 +198,7 @@ class Mcc2Gui < MainWindow
       app.create
       app.run
     rescue Exception => e
-      file = File.basename(__FILE__, ".rb")
-      DebugTools.write_log_file('main', DebugTools.unkown_error_message(e))
+      DebugTools.write_exception('main', e)
       exit -1
     end
 
