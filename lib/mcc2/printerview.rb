@@ -283,25 +283,13 @@ class Printerview < Dialogbox_printerview
       attrs.each do |attr|
         FXLabel.new(matrix, attr.name.to_s)
 
-        if attr.offs_write
+        if attr.writeable
           # READ/WRITE parameter
 
           w = case attr.typ
-            when :byte
+            when :int
               w = FXSpinner.new(matrix, 19)
-              w.range = attr.params || (0..0xff)
-              w.value = attr.value if attr.value
-              w.connect(SEL_COMMAND){ cx320_config_field_changed }
-              w
-            when :word
-              w = FXSpinner.new(matrix, 19)
-              w.range = attr.params || (0..0xffff)
-              w.value = attr.value if attr.value
-              w.connect(SEL_COMMAND){ cx320_config_field_changed }
-              w
-            when :dword
-              w = FXSpinner.new(matrix, 19)
-              w.range = attr.params || (0..0xffffffff)
+              w.range = attr.params
               w.value = attr.value if attr.value
               w.connect(SEL_COMMAND){ cx320_config_field_changed }
               w
@@ -353,15 +341,11 @@ class Printerview < Dialogbox_printerview
       attr = w.userData
       next unless attr
 
-      if attr.offs_write
+      if attr.writeable
         # READ/WRITE parameter
 
         value = case attr.typ
-          when :byte
-            w.value
-          when :word
-            w.value
-          when :dword
+          when :int
             w.value
           when :set
             w.getItemData(w.currentItem)
