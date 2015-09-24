@@ -99,6 +99,11 @@ module Mcc2
   S_CX320_PARALLEL_PRINT = 'cx320_parallel_print'
   S_CX320_CONFIG = 'cx320_config'
 
+  S_FRONT_FLIP = 'front_flip'
+  S_FRONT_FLOP = 'front_flop'
+  S_BACK_FLIP = 'back_flip'
+  S_BACK_FLOP = 'back_flop'
+
   UP = 0
   DOWN = 1
 

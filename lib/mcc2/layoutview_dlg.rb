@@ -14,22 +14,22 @@ class Dialogbox_layoutview
 			w.wdg_name='dialogbox_layoutview'
 			w.layoutHints=768
 			w.shown=true
-			w.x=230
-			w.y=23
-			w.width=465
-			w.height=321
+			w.x=2289
+			w.y=295
+			w.width=525
+			w.height=467
 			w.title="Entwurfsansicht"
 			FX::Splitter.new(@dialogbox_layoutview){|w|
 				@splitter_layoutview=w
 				w.wdg_name='splitter_layoutview'
 				w.splitterStyle=163840
-				w.width=465
-				w.height=321
+				w.width=525
+				w.height=467
 				w.barSize=2
 				FX::Splitter.new(@splitter_layoutview){|w|
 					@splitter12=w
 					w.wdg_name='splitter12'
-					w.width=465
+					w.width=525
 					w.height=102
 					w.barSize=2
 					FX::VerticalFrame.new(@splitter12){|w|
@@ -107,7 +107,7 @@ class Dialogbox_layoutview
 						w.wdg_name='verticalframe_objectlist'
 						w.frameStyle=16384
 						w.x=56
-						w.width=409
+						w.width=469
 						w.height=102
 						w.shadowColor=Fox::FXRGBA(128,128,128,255)
 						FX::IconList.new(@verticalframe_objectlist){|w|
@@ -117,7 +117,7 @@ class Dialogbox_layoutview
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 							w.x=2
 							w.y=2
-							w.width=405
+							w.width=465
 							w.height=98
 						}
 					}
@@ -127,24 +127,23 @@ class Dialogbox_layoutview
 					w.wdg_name='horizontalframe_attributes'
 					w.frameStyle=16384
 					w.y=104
-					w.width=465
-					w.height=217
+					w.width=525
+					w.height=363
 					w.shadowColor=Fox::FXRGBA(128,128,128,255)
 					FX::TabBook.new(@horizontalframe_attributes){|w|
 						@tabbook_objectattributes=w
 						w.wdg_name='tabbook_objectattributes'
 						w.x=2
 						w.y=2
-						w.width=461
-						w.height=213
-						w.current=4
+						w.width=521
+						w.height=359
 						w.shadowColor=Fox::FXRGBA(128,128,128,255)
 						FX::TabItem.new(@tabbook_objectattributes){|w|
 							@tabitem_allgemein=w
 							w.wdg_name='tabitem_allgemein'
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.x=6
-							w.y=6
+							w.x=4
+							w.y=4
 							w.width=64
 							w.height=22
 							w.text="Allgemein"
@@ -154,18 +153,17 @@ class Dialogbox_layoutview
 						FX::VerticalFrame.new(@tabbook_objectattributes){|w|
 							@verticalframe52=w
 							w.wdg_name='verticalframe52'
-							w.shown=false
 							w.x=4
 							w.y=24
-							w.width=453
-							w.height=185
+							w.width=513
+							w.height=331
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							FX::HorizontalFrame.new(@verticalframe52){|w|
 								@horizontalframe74=w
 								w.wdg_name='horizontalframe74'
 								w.layoutHints=1024
 								w.padTop=10
-								w.width=453
+								w.width=513
 								w.height=31
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe74){|w|
@@ -187,7 +185,7 @@ class Dialogbox_layoutview
 									w.layoutHints=1024
 									w.x=85
 									w.y=10
-									w.width=368
+									w.width=428
 									w.height=21
 								}
 							}
@@ -196,7 +194,7 @@ class Dialogbox_layoutview
 								w.wdg_name='horizontalframe75'
 								w.layoutHints=1024
 								w.y=31
-								w.width=453
+								w.width=513
 								w.height=21
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe75){|w|
@@ -216,7 +214,7 @@ class Dialogbox_layoutview
 									w.comboStyle=1048576
 									w.layoutHints=1024
 									w.x=85
-									w.width=368
+									w.width=428
 									w.height=21
 								}
 							}
@@ -226,7 +224,7 @@ class Dialogbox_layoutview
 								w.layoutHints=1024
 								w.padTop=15
 								w.y=52
-								w.width=453
+								w.width=513
 								w.height=33
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe76){|w|
@@ -260,7 +258,7 @@ class Dialogbox_layoutview
 								w.wdg_name='horizontalframe77'
 								w.layoutHints=1024
 								w.y=85
-								w.width=453
+								w.width=513
 								w.height=18
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe77){|w|
@@ -292,7 +290,7 @@ class Dialogbox_layoutview
 								w.wdg_name='horizontalframe78'
 								w.layoutHints=1024
 								w.y=103
-								w.width=453
+								w.width=513
 								w.height=18
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe78){|w|
@@ -324,7 +322,7 @@ class Dialogbox_layoutview
 								w.wdg_name='horizontalframe81'
 								w.layoutHints=1024
 								w.y=121
-								w.width=453
+								w.width=513
 								w.height=20
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe81){|w|
@@ -345,7 +343,7 @@ class Dialogbox_layoutview
 									w.textFieldTextStyle=2097152
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.x=85
-									w.width=169
+									w.width=199
 									w.height=20
 									w.numColumns=10
 									w.tipText="Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben."
@@ -357,8 +355,8 @@ class Dialogbox_layoutview
 									w.layoutHints=1024
 									w.textFieldTextStyle=2097152
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.x=254
-									w.width=169
+									w.x=284
+									w.width=199
 									w.height=20
 									w.numColumns=10
 									w.tipText="Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben."
@@ -369,7 +367,7 @@ class Dialogbox_layoutview
 									w.wdg_name='label269'
 									w.justify=32768
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.x=423
+									w.x=483
 									w.width=30
 									w.height=18
 									w.text=" mm"
@@ -381,7 +379,7 @@ class Dialogbox_layoutview
 								w.wdg_name='horizontalframe80'
 								w.layoutHints=1024
 								w.y=141
-								w.width=453
+								w.width=513
 								w.height=20
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe80){|w|
@@ -402,7 +400,7 @@ class Dialogbox_layoutview
 									w.textFieldTextStyle=2097152
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.x=85
-									w.width=169
+									w.width=199
 									w.height=20
 									w.numColumns=10
 									w.tipText="Mit diesem Wert wird das gesamte Druckbild um die X-Achse verschoben."
@@ -414,8 +412,8 @@ class Dialogbox_layoutview
 									w.layoutHints=1024
 									w.textFieldTextStyle=2097152
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.x=254
-									w.width=169
+									w.x=284
+									w.width=199
 									w.height=20
 									w.numColumns=10
 									w.tipText="Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben."
@@ -426,7 +424,7 @@ class Dialogbox_layoutview
 									w.wdg_name='label418'
 									w.justify=32768
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.x=423
+									w.x=483
 									w.width=30
 									w.height=18
 									w.text=" mm"
@@ -438,7 +436,7 @@ class Dialogbox_layoutview
 								w.wdg_name='horizontalframe79'
 								w.layoutHints=1024
 								w.y=161
-								w.width=453
+								w.width=513
 								w.height=18
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe79){|w|
@@ -457,6 +455,7 @@ class Dialogbox_layoutview
 									w.wdg_name='checkbutton_duplex'
 									w.justify=32768
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.state=true
 									w.x=85
 									w.width=17
 									w.height=17
@@ -465,12 +464,77 @@ class Dialogbox_layoutview
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 							}
+							FX::Matrix.new(@verticalframe52){|w|
+								@matrix_flipflop=w
+								w.wdg_name='matrix_flipflop'
+								w.matrixStyle=131072
+								w.y=179
+								w.width=513
+								w.height=152
+								w.numColumns=3
+								w.numRows=2
+								FX::Label.new(@matrix_flipflop){|w|
+									@label440=w
+									w.wdg_name='label440'
+									w.x=4
+									w.y=4
+									w.width=78
+									w.height=19
+									w.text="Vorderseite"
+								}
+								FX::CheckButton.new(@matrix_flipflop){|w|
+									@checkbutton_flip_front=w
+									w.wdg_name='checkbutton_flip_front'
+									w.state=true
+									w.x=86
+									w.y=4
+									w.width=87
+									w.height=19
+									w.text="X spiegeln"
+								}
+								FX::CheckButton.new(@matrix_flipflop){|w|
+									@checkbutton_flop_front=w
+									w.wdg_name='checkbutton_flop_front'
+									w.x=177
+									w.y=4
+									w.width=86
+									w.height=19
+									w.text="Y spiegeln"
+								}
+								FX::Label.new(@matrix_flipflop){|w|
+									@label442=w
+									w.wdg_name='label442'
+									w.x=4
+									w.y=27
+									w.width=66
+									w.height=19
+									w.text="Rückseite"
+								}
+								FX::CheckButton.new(@matrix_flipflop){|w|
+									@checkbutton_flip_back=w
+									w.wdg_name='checkbutton_flip_back'
+									w.x=86
+									w.y=27
+									w.width=87
+									w.height=19
+									w.text="X spiegeln"
+								}
+								FX::CheckButton.new(@matrix_flipflop){|w|
+									@checkbutton_flop_back=w
+									w.wdg_name='checkbutton_flop_back'
+									w.x=177
+									w.y=27
+									w.width=86
+									w.height=19
+									w.text="Y spiegeln"
+								}
+							}
 						}
 						FX::TabItem.new(@tabbook_objectattributes){|w|
 							@tabitem_chip=w
 							w.wdg_name='tabitem_chip'
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.x=70
+							w.x=67
 							w.y=6
 							w.width=33
 							w.height=22
@@ -485,15 +549,15 @@ class Dialogbox_layoutview
 							w.shown=false
 							w.x=4
 							w.y=24
-							w.width=453
-							w.height=185
+							w.width=513
+							w.height=331
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 						}
 						FX::TabItem.new(@tabbook_objectattributes){|w|
 							@tabitem_magstripe=w
 							w.wdg_name='tabitem_magstripe'
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.x=103
+							w.x=100
 							w.y=6
 							w.width=93
 							w.height=22
@@ -511,8 +575,8 @@ class Dialogbox_layoutview
 							w.padTop=4
 							w.x=4
 							w.y=24
-							w.width=453
-							w.height=185
+							w.width=513
+							w.height=331
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							FX::HorizontalFrame.new(@verticalframe54){|w|
 								@horizontalframe112=w
@@ -520,7 +584,7 @@ class Dialogbox_layoutview
 								w.layoutHints=1024
 								w.x=2
 								w.y=6
-								w.width=449
+								w.width=509
 								w.height=22
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe112){|w|
@@ -539,7 +603,7 @@ class Dialogbox_layoutview
 									w.layoutHints=1024
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.x=35
-									w.width=394
+									w.width=454
 									w.height=20
 									w.numColumns=10
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
@@ -548,7 +612,7 @@ class Dialogbox_layoutview
 									@button_spur1=w
 									w.wdg_name='button_spur1'
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.x=429
+									w.x=489
 									w.width=20
 									w.height=22
 									w.text="..."
@@ -561,7 +625,7 @@ class Dialogbox_layoutview
 								w.layoutHints=1024
 								w.x=2
 								w.y=32
-								w.width=449
+								w.width=509
 								w.height=22
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe113){|w|
@@ -580,7 +644,7 @@ class Dialogbox_layoutview
 									w.layoutHints=1024
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.x=35
-									w.width=394
+									w.width=454
 									w.height=20
 									w.numColumns=10
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
@@ -589,7 +653,7 @@ class Dialogbox_layoutview
 									@button_spur2=w
 									w.wdg_name='button_spur2'
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.x=429
+									w.x=489
 									w.width=20
 									w.height=22
 									w.text="..."
@@ -602,7 +666,7 @@ class Dialogbox_layoutview
 								w.layoutHints=1024
 								w.x=2
 								w.y=58
-								w.width=449
+								w.width=509
 								w.height=22
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe114){|w|
@@ -621,7 +685,7 @@ class Dialogbox_layoutview
 									w.layoutHints=1024
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.x=35
-									w.width=394
+									w.width=454
 									w.height=20
 									w.numColumns=10
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
@@ -630,7 +694,7 @@ class Dialogbox_layoutview
 									@button_spur3=w
 									w.wdg_name='button_spur3'
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.x=429
+									w.x=489
 									w.width=20
 									w.height=22
 									w.text="..."
@@ -642,7 +706,7 @@ class Dialogbox_layoutview
 							@tabitem_object=w
 							w.wdg_name='tabitem_object'
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.x=196
+							w.x=193
 							w.y=6
 							w.width=44
 							w.height=22
@@ -657,8 +721,8 @@ class Dialogbox_layoutview
 							w.shown=false
 							w.x=4
 							w.y=24
-							w.width=453
-							w.height=185
+							w.width=513
+							w.height=331
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							FX::Matrix.new(@verticalframe_object){|w|
 								@matrix1=w
@@ -666,8 +730,8 @@ class Dialogbox_layoutview
 								w.matrixStyle=131072
 								w.x=2
 								w.y=2
-								w.width=449
-								w.height=181
+								w.width=509
+								w.height=327
 								w.numColumns=3
 								w.numRows=5
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
@@ -689,7 +753,7 @@ class Dialogbox_layoutview
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.x=137
 									w.y=4
-									w.width=284
+									w.width=344
 									w.height=20
 									w.numColumns=10
 									w.tipText="Der Name ist nur für die Anzeige in der Objektliste und bei bestimmten Aktionen notwendig, sollte aber dennoch in einen aussagekräftigen Namen geändert werden."
@@ -699,7 +763,7 @@ class Dialogbox_layoutview
 									@label185=w
 									w.wdg_name='label185'
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.x=425
+									w.x=485
 									w.y=4
 									w.width=4
 									w.height=4
@@ -724,7 +788,7 @@ class Dialogbox_layoutview
 									w.layoutHints=3073
 									w.x=137
 									w.y=28
-									w.width=284
+									w.width=344
 									w.height=54
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 									FX::Text.new(@verticalframe44){|w|
@@ -733,7 +797,7 @@ class Dialogbox_layoutview
 										w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 										w.x=1
 										w.y=1
-										w.width=282
+										w.width=342
 										w.height=52
 										w.tipText="Enthält die Daten, welche später auf der Karte gedruckt werden sollen.\nIn diesem Feld können mehrerer Zeilen eingegeben werden.\nPlatzhalter aus einer Datenquelle werden nach der Syntax\n{feldname[anfang,laenge]} gebildet."
 									}
@@ -742,7 +806,7 @@ class Dialogbox_layoutview
 									@button_enhanced_data_text_edit=w
 									w.wdg_name='button_enhanced_data_text_edit'
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.x=425
+									w.x=485
 									w.y=28
 									w.width=20
 									w.height=22
@@ -768,7 +832,7 @@ class Dialogbox_layoutview
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.x=137
 									w.y=86
-									w.width=284
+									w.width=344
 									w.height=20
 									w.numColumns=10
 									w.tipText="Enthält die Daten, welche später auf der Karte gedruckt werden sollen.\nIn diesem Feld kann nur 1 Zeile eingegeben werden.\nPlatzhalter aus einer Datenquelle werden nach der Syntax\n{feldname[anfang,laenge]} gebildet."
@@ -778,7 +842,7 @@ class Dialogbox_layoutview
 									@button_enhanced_data_edit=w
 									w.wdg_name='button_enhanced_data_edit'
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.x=425
+									w.x=485
 									w.y=86
 									w.width=20
 									w.height=22
@@ -804,7 +868,7 @@ class Dialogbox_layoutview
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.x=137
 									w.y=112
-									w.width=284
+									w.width=344
 									w.height=20
 									w.numColumns=10
 									w.tipText="Hier werden die Daten zur Anzeige in der\nEntwurfsansicht eingetragen."
@@ -814,7 +878,7 @@ class Dialogbox_layoutview
 									@button_sample_data=w
 									w.wdg_name='button_sample_data'
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.x=425
+									w.x=485
 									w.y=112
 									w.width=20
 									w.height=22
@@ -853,8 +917,8 @@ class Dialogbox_layoutview
 							@tabitem_posit=w
 							w.wdg_name='tabitem_posit'
 							w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-							w.x=238
-							w.y=4
+							w.x=237
+							w.y=6
 							w.width=52
 							w.height=22
 							w.text="Position"
@@ -865,10 +929,11 @@ class Dialogbox_layoutview
 							@verticalframe_posit=w
 							w.wdg_name='verticalframe_posit'
 							w.frameStyle=16384
+							w.shown=false
 							w.x=4
 							w.y=24
-							w.width=453
-							w.height=185
+							w.width=513
+							w.height=331
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							FX::Matrix.new(@verticalframe_posit){|w|
 								@matrix2=w
@@ -876,8 +941,8 @@ class Dialogbox_layoutview
 								w.matrixStyle=131072
 								w.x=2
 								w.y=2
-								w.width=449
-								w.height=181
+								w.width=509
+								w.height=327
 								w.numColumns=4
 								w.numRows=4
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
@@ -1043,7 +1108,7 @@ class Dialogbox_layoutview
 									@spinner_seiten_nr=w
 									w.wdg_name='spinner_seiten_nr'
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
-									w.range=0..1
+									w.range=-2147483648..2147483647
 									w.x=79
 									w.y=76
 									w.width=41
@@ -1053,25 +1118,24 @@ class Dialogbox_layoutview
 									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Label.new(@matrix2){|w|
-									@label142=w
-									w.wdg_name='label142'
+									@label443=w
+									w.wdg_name='label443'
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.x=159
 									w.y=76
 									w.width=36
 									w.height=18
 									w.text="Layer"
-									w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								}
 								FX::Spinner.new(@matrix2){|w|
 									@spinner_layer=w
 									w.wdg_name='spinner_layer'
-									w.range=-2147483648..2147483647
+									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
+									w.range=0..9
 									w.x=239
 									w.y=76
-									w.width=44
-									w.height=21
-									w.numColumns=3
+									w.width=27
+									w.height=20
 								}
 							}
 						}
@@ -1096,8 +1160,8 @@ class Dialogbox_layoutview
 							w.padTop=10
 							w.x=4
 							w.y=24
-							w.width=453
-							w.height=185
+							w.width=513
+							w.height=331
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							FX::HorizontalFrame.new(@verticalframe_font){|w|
 								@horizontalframe54=w
@@ -1105,7 +1169,7 @@ class Dialogbox_layoutview
 								w.layoutHints=1024
 								w.x=2
 								w.y=12
-								w.width=449
+								w.width=509
 								w.height=20
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe54){|w|
@@ -1139,19 +1203,19 @@ class Dialogbox_layoutview
 								w.layoutHints=1024
 								w.x=2
 								w.y=36
-								w.width=449
+								w.width=509
 								w.height=23
 								FX::TextField.new(@horizontalframe175){|w|
 									@textfield_font_file=w
 									w.wdg_name='textfield_font_file'
 									w.layoutHints=1024
-									w.width=429
+									w.width=489
 									w.height=21
 								}
 								FX::Button.new(@horizontalframe175){|w|
 									@button_fontfile_select=w
 									w.wdg_name='button_fontfile_select'
-									w.x=429
+									w.x=489
 									w.width=20
 									w.height=23
 									w.text="..."
@@ -1163,7 +1227,7 @@ class Dialogbox_layoutview
 								w.layoutHints=1024
 								w.x=2
 								w.y=63
-								w.width=449
+								w.width=509
 								w.height=20
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe61){|w|
@@ -1197,7 +1261,7 @@ class Dialogbox_layoutview
 								w.layoutHints=1024
 								w.x=2
 								w.y=87
-								w.width=449
+								w.width=509
 								w.height=22
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe63){|w|
@@ -1240,7 +1304,7 @@ class Dialogbox_layoutview
 								w.layoutHints=1024
 								w.x=2
 								w.y=113
-								w.width=449
+								w.width=509
 								w.height=54
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe62){|w|
@@ -1316,8 +1380,8 @@ class Dialogbox_layoutview
 							w.vSpacing=4
 							w.x=4
 							w.y=24
-							w.width=453
-							w.height=185
+							w.width=513
+							w.height=331
 							w.shadowColor=Fox::FXRGBA(128,128,128,255)
 							FX::HorizontalFrame.new(@verticalframe_barcode){|w|
 								@horizontalframe133=w
@@ -1327,7 +1391,7 @@ class Dialogbox_layoutview
 								w.padTop=10
 								w.x=2
 								w.y=2
-								w.width=449
+								w.width=509
 								w.height=30
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe133){|w|
@@ -1349,7 +1413,7 @@ class Dialogbox_layoutview
 									w.font=FX::Font.new.from_s('Tahoma|80|40|5|0|0|0').to_FXFont
 									w.x=80
 									w.y=10
-									w.width=369
+									w.width=429
 									w.height=20
 									w.numVisible=10
 									w.tipText="Hier kann die Schriftart ausgewählt werden."
@@ -1364,7 +1428,7 @@ class Dialogbox_layoutview
 								w.padTop=10
 								w.x=2
 								w.y=36
-								w.width=449
+								w.width=509
 								w.height=30
 								w.shadowColor=Fox::FXRGBA(128,128,128,255)
 								FX::Label.new(@horizontalframe134){|w|
@@ -1409,14 +1473,14 @@ class Dialogbox_layoutview
 							w.shown=false
 							w.x=4
 							w.y=24
-							w.width=453
-							w.height=185
+							w.width=513
+							w.height=331
 							FX::Matrix.new(@verticalframe_boxtab){|w|
 								@matrix_boxtab=w
 								w.wdg_name='matrix_boxtab'
 								w.matrixStyle=131072
-								w.width=453
-								w.height=185
+								w.width=513
+								w.height=331
 								w.numColumns=3
 								w.numRows=4
 								FX::Label.new(@matrix_boxtab){|w|
@@ -1590,6 +1654,13 @@ class Dialogbox_layoutview
 	attr_reader :horizontalframe79
 	attr_reader :label419
 	attr_reader :checkbutton_duplex
+	attr_reader :matrix_flipflop
+	attr_reader :label440
+	attr_reader :checkbutton_flip_front
+	attr_reader :checkbutton_flop_front
+	attr_reader :label442
+	attr_reader :checkbutton_flip_back
+	attr_reader :checkbutton_flop_back
 	attr_reader :tabitem_chip
 	attr_reader :verticalframe_chip
 	attr_reader :tabitem_magstripe
@@ -1641,7 +1712,7 @@ class Dialogbox_layoutview
 	attr_reader :label270
 	attr_reader :label141
 	attr_reader :spinner_seiten_nr
-	attr_reader :label142
+	attr_reader :label443
 	attr_reader :spinner_layer
 	attr_reader :tabitem_font
 	attr_reader :verticalframe_font

@@ -314,5 +314,12 @@ module RmagickDrawer
     body.rect( mm(go_width).round, mm(go_height).round ).round(mm(corner_radius)).styles(:fill=>'#'+fill_color, :stroke=>'#'+border_color, :stroke_width=>mm(border_width).round)
   end
 
+  def postprocess_image(pic, layout_file, page)
+    pic.flip! if page % 2 == 0 && layout_file.get_attr_value(S_FRONT_FLIP) == S_TRUE
+    pic.flop! if page % 2 == 0 && layout_file.get_attr_value(S_FRONT_FLOP) == S_TRUE
+    pic.flip! if page % 2 != 0 && layout_file.get_attr_value(S_BACK_FLIP) == S_TRUE
+    pic.flop! if page % 2 != 0 && layout_file.get_attr_value(S_BACK_FLOP) == S_TRUE
+    pic
+  end
 end
 end

@@ -63,6 +63,10 @@ class LayoutFile
     @xml_doc = nil
     @attributes = {}
     add_attr(S_DUPLEX, String, FALSE)
+    add_attr(S_FRONT_FLIP, String, FALSE)
+    add_attr(S_FRONT_FLOP, String, FALSE)
+    add_attr(S_BACK_FLIP, String, TRUE)
+    add_attr(S_BACK_FLOP, String, TRUE)
     add_attr(S_WIDTH, Integer,  LAYOUT_DEFAULT_WIDTH)
     add_attr(S_HEIGHT, Integer, LAYOUT_DEFAULT_HEIGHT)
     add_attr(S_X_OFFSET, Integer, LAYOUT_DEFAULT_X_OFFSET)

@@ -98,6 +98,10 @@ class Layoutview
 
     # der Checkbutton für die Einstellung Simplex/Duplex
     @lf.checkbutton_duplex.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_DUPLEX) }
+    @lf.checkbutton_flip_front.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_FRONT_FLIP) }
+    @lf.checkbutton_flop_front.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_FRONT_FLOP) }
+    @lf.checkbutton_flip_back.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_BACK_FLIP) }
+    @lf.checkbutton_flop_back.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_BACK_FLOP) }
 
     # der Button auf den Objektattributen, mit dem die Daten erweitert bearbeitet werden können (Variablen aus der Datenquelle verwenden usw.)
     @lf.button_enhanced_data_edit.connect(SEL_COMMAND){ enhanced_data_edit(@lf.textfield_data_non_text) }
@@ -152,6 +156,7 @@ class Layoutview
     @lf.matrix1.numColumns = 3
     @lf.matrix2.numColumns = 4
     @lf.matrix_boxtab.numColumns = 3
+    @lf.matrix_flipflop.numColumns = 3
     fill_objectlist
     object_selection_changed
   end
@@ -724,6 +729,10 @@ class Layoutview
     set_check_button('checkbutton_contact', @layout_file.get_attr_value(S_CONTACT), true)
     set_check_button('checkbutton_magstripe', @layout_file.get_attr_value(S_MAGSTRIPE), true)
     set_check_button('checkbutton_duplex', @layout_file.get_attr_value(S_DUPLEX), true)
+    set_check_button('checkbutton_flip_front', @layout_file.get_attr_value(S_FRONT_FLIP), true)
+    set_check_button('checkbutton_flop_front', @layout_file.get_attr_value(S_FRONT_FLOP), true)
+    set_check_button('checkbutton_flip_back', @layout_file.get_attr_value(S_BACK_FLIP), true)
+    set_check_button('checkbutton_flop_back', @layout_file.get_attr_value(S_BACK_FLOP), true)
   end
   #---------------------------------------------------------------------------------------------------------
 

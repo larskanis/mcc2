@@ -151,6 +151,7 @@ class GdiPrinter < CardPrinter
 
     # das RVG in ein Bitmap konvertieren
     pic = img.draw
+    pic = postprocess_image( pic, layout_file, page )
 
     # flip left to right and raster image
     lpvBits = pic.flop.to_blob{

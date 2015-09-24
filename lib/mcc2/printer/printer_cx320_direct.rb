@@ -165,8 +165,7 @@ class PrinterCx320Direct < CardPrinter
         draw(canvas1, layout_file, preview, selected_object_id, row, page, layers)
       end
     end.draw
-    pic.flip!.flop! if page % 2 > 0
-    pic
+    postprocess_image( pic, layout_file, page )
   end
 
   def generate_image_planes(layout_file, row, page, layers, x_offset, y_offset)
