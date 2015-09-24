@@ -66,7 +66,7 @@ class PrinterCx320Direct < CardPrinter
       end
       if config_changed
         # Wenn kein Konfig-Wert gespeichert, dann auf ausgelesenen Wert zurück greifen
-        config = attrs.map do |attr|
+        config = attrs.select(&:writeable).map do |attr|
           value = config[attr.name.to_s]
           [attr.name.to_s, value || attr.value]
         end
