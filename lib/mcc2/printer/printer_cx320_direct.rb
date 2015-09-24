@@ -156,7 +156,7 @@ class PrinterCx320Direct < CardPrinter
   end
 
   def draw_rvg_image(layout_file, row, page, layers, x_offset, y_offset)
-    Magick::RVG.new(1036, 664) do |canvas|
+    pic = Magick::RVG.new(1036, 664) do |canvas|
       canvas.background_fill = 'white'
       canvas.g.translate(mm(x_offset).round, mm(y_offset).round) do |canvas1|
         selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
@@ -165,6 +165,8 @@ class PrinterCx320Direct < CardPrinter
         draw(canvas1, layout_file, preview, selected_object_id, row, page, layers)
       end
     end.draw
+    pic.flip!.flop! if page % 2 > 0
+    pic
   end
 
   def generate_image_planes(layout_file, row, page, layers, x_offset, y_offset)
