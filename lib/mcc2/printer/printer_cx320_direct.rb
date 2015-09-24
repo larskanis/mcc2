@@ -59,12 +59,19 @@ class PrinterCx320Direct < CardPrinter
 
     open_printer(layout_file) do |dev|
       # Aktuelle Konfig auslesen und mit gespeicherter Konfig vergleichen
-      attrs = dev.mode_sense(:ink) + dev.mode_sense(:print) + dev.mode_sense(:mag) + dev.log_sense(:log)
+      attrs = dev.mode_sense(:print) + dev.mode_sense(:ink) + dev.mode_sense(:mag) + dev.log_sense(:log)
       config_changed = attrs.find do |attr|
         value = config[attr.name.to_s]
         value && value != attr.value
       end
       if config_changed
+        # Wenn kein Konfig-Wert gespeichert, dann auf ausgelesenen Wert zurück greifen
+        config = attrs.map do |attr|
+          value = config[attr.name.to_s]
+          [attr.name.to_s, value || attr.value]
+        end
+
+        # neue Konfig in Drucker speichern
         dev.mode_select(:print, config.select{|k,v| k.to_s =~ /^print_/ })
         dev.mode_select(:mag, config.select{|k,v| k.to_s =~ /^mag_/ })
 
