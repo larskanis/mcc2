@@ -7,10 +7,12 @@ source "https://rubygems.org/"
 gem "nokogiri", ">=1.4"
 gem "fastercsv", ">=1.2"
 gem "dbf", ">=1.2"
-gem "rmagick", ">=2.5"
+gem "rmagick", "~> 2.13.0"
 gem "barby", ">=0.5"
 gem "rqrcode", ">=0.4"
 gem "fxruby", ">=1.6.30"
+gem "libusb"
+gem "libcx320"
 
 gem "rdoc", "~>4.0", :group => [:development, :test]
 gem "hoe", "~>3.13", :group => [:development, :test]
