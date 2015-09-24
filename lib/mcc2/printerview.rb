@@ -364,7 +364,7 @@ class Printerview < Dialogbox_printerview
 
   def cx320_read_config
     cx320_run_command do |dev|
-      attrs = dev.mode_sense(:ink) + dev.mode_sense(:print) + dev.mode_sense(:mag) + dev.log_sense(:log)
+      attrs = dev.mode_sense(:print) + dev.mode_sense(:ink) + dev.mode_sense(:mag) + dev.log_sense(:log)
       cx320_fill_config(attrs)
       cx320_config_field_changed
     end
@@ -427,7 +427,10 @@ class Printerview < Dialogbox_printerview
   end
 
   def cx320_update_config_widgets
-    attrs = LibCX320::CX320.mode_sense_attrs(:all) + LibCX320::CX320.log_sense_attrs(:log)
+    attrs = LibCX320::CX320.mode_sense_attrs(:print) +
+            LibCX320::CX320.mode_sense_attrs(:ink) +
+            LibCX320::CX320.mode_sense_attrs(:mag) +
+            LibCX320::CX320.log_sense_attrs(:log)
     config = JSON.parse(@layout_file.get_attr_value(S_CX320_CONFIG))
     attrs = attrs.map do |attr|
       attr = attr.dup
