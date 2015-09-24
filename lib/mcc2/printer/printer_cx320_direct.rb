@@ -34,7 +34,7 @@ class PrinterCx320Direct < CardPrinter
   end
 
   def print_card(layout_file, row, chip)
-    self.dpi = layout_file.get_attr_value(S_EPLPRINTER_DPI).to_f
+    self.dpi = 300
     duplex = layout_file.get_attr_value(S_DUPLEX) == S_TRUE
     x_offset = layout_file.get_attr_value(S_X_OFFSET).to_f
     y_offset = layout_file.get_attr_value(S_Y_OFFSET).to_f
