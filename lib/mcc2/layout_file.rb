@@ -121,7 +121,7 @@ ZB
 GG%PAGE_OFFSET_X_PX%,%PAGE_OFFSET_Y_PX%,"image1"
 P1
 ')
-    add_attr(S_CX320_DRIVER, String, 'CX320_USB')
+    add_attr(S_CX320_DRIVER, String, 'CX320_DLL')
     add_attr(S_CX320_PRINTER_NR, Integer, 0)
     add_attr(S_CX320_PARALLEL_PRINT, String, 'second_card')
     add_attr(S_CX320_CONFIG, String, '{}')

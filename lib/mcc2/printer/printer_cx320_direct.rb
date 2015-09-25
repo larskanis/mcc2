@@ -246,7 +246,9 @@ class PrinterCx320Direct < CardPrinter
     raise "Printer #{printer_nr} not found" unless dev
 
     begin
-      dev.ready?
+      while_busy do
+        dev.ready?
+      end
       yield dev
     ensure
       dev.close
