@@ -58,29 +58,7 @@ class PrinterCx320Direct < CardPrinter
     end
 
     open_printer(layout_file) do |dev|
-      # Aktuelle Konfig auslesen und mit gespeicherter Konfig vergleichen
-      attrs = dev.mode_sense(:print) + dev.mode_sense(:ink) + dev.mode_sense(:mag) + dev.log_sense(:log)
-      config_changed = attrs.find do |attr|
-        value = config[attr.name.to_s]
-        value && value != attr.value
-      end
-      if config_changed
-        # Wenn kein Konfig-Wert gespeichert, dann auf ausgelesenen Wert zurück greifen
-        config = attrs.select(&:writeable).map do |attr|
-          value = config[attr.name.to_s]
-          [attr.name.to_s, value || attr.value]
-        end
-
-        # neue Konfig in Drucker speichern
-        dev.mode_select(:print, config.select{|k,v| k.to_s =~ /^print_/ })
-        dev.mode_select(:mag, config.select{|k,v| k.to_s =~ /^mag_/ })
-
-        dev.rezero_unit
-        begin
-          dev.ready?
-        rescue LibCX320::ErrorHandling::MediumChanged
-        end
-      end
+      write_config(config, dev)
 
       while_busy do
         dev.load_card(chip ? :contactless : :retransfer, false, false, parallel)
@@ -257,6 +235,32 @@ class PrinterCx320Direct < CardPrinter
 
   def run_command(&block)
     open_printer(layout_file, &block)
+  end
+
+  def write_config(config, dev)
+    # Aktuelle Konfig auslesen und mit gespeicherter Konfig vergleichen
+    attrs = dev.mode_sense(:print) + dev.mode_sense(:ink) + dev.mode_sense(:mag) + dev.log_sense(:log)
+    config_changed = attrs.find do |attr|
+      value = config[attr.name.to_s]
+      value && value != attr.value
+    end
+    if config_changed
+      # Wenn kein Konfig-Wert gespeichert, dann auf ausgelesenen Wert zurück greifen
+      config = attrs.select(&:writeable).map do |attr|
+        value = config[attr.name.to_s]
+        [attr.name.to_s, value || attr.value]
+      end
+
+      # neue Konfig in Drucker speichern
+      dev.mode_select(:print, config.select{|k,v| k.to_s =~ /^print_/ })
+      dev.mode_select(:mag, config.select{|k,v| k.to_s =~ /^mag_/ })
+
+      dev.rezero_unit
+      begin
+        dev.ready?
+      rescue LibCX320::ErrorHandling::MediumChanged
+      end
+    end
   end
 
 end

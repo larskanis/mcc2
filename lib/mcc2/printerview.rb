@@ -97,13 +97,14 @@ class Printerview < Dialogbox_printerview
     @combobox_cx320_parallel_print.appendItem("ab zweiter Karte", "second_card")
     @combobox_cx320_parallel_print.connect(SEL_COMMAND){ combobox_changed(@combobox_cx320_parallel_print, S_CX320_PARALLEL_PRINT) }
 
-    @button_cx320_reset.connect(SEL_COMMAND){ cx320_run_command{|dev| dev.rezero_unit } }
+    @button_cx320_reset.connect(SEL_COMMAND){ cx320_run_command{|printer, dev| dev.rezero_unit } }
     @button_cx320_move_to_0.connect(SEL_COMMAND){ cx320_move_to(0) }
     @button_cx320_move_to_2.connect(SEL_COMMAND){ cx320_move_to(2) }
     @button_cx320_move_to_4.connect(SEL_COMMAND){ cx320_move_to(4) }
 
     @button_cx320_read_config.connect(SEL_COMMAND){ cx320_read_config }
     @button_cx320_write_config.connect(SEL_COMMAND){ cx320_write_config }
+    @button_cx320_set_defaults.connect(SEL_COMMAND){ cx320_set_defaults }
 
     fill_printertype_list
     combobox_printertype_changed
@@ -255,9 +256,11 @@ class Printerview < Dialogbox_printerview
 
   def cx320_run_command(&block)
     begin
-      dev = Mcc2::Printer::PrinterCx320Direct.new
-      dev.layout_file = @layout_file
-      dev.run_command(&block)
+      printer = Mcc2::Printer::PrinterCx320Direct.new
+      printer.layout_file = @layout_file
+      printer.run_command do |dev|
+        yield printer, dev
+      end
     rescue => e
       DebugTools::write_exception('cx320_run_command', e)
       FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Senden" , "Das Kommando konnte nicht ausgeführt werden.\n\n#{e}")
@@ -265,7 +268,7 @@ class Printerview < Dialogbox_printerview
   end
 
   def cx320_move_to(pos)
-    cx320_run_command do |dev|
+    cx320_run_command do |printer, dev|
       begin
         dev.move_card(pos)
       rescue LibCX320::ErrorHandling::CommandSequenceError
@@ -275,16 +278,29 @@ class Printerview < Dialogbox_printerview
   end
 
   def cx320_fill_config(attrs)
+    attr_checked = {}
+    if c=@packer_cx320_config.children.first
+      c.children.each do |w|
+        attr, checkbutton = w.userData
+        next unless attr
+
+        attr_checked[attr.name.to_s] = checkbutton.checked? if attr.writeable
+      end
+    end
+
     @packer_cx320_config.children.each do |ch|
       @packer_cx320_config.removeChild(ch)
     end
 
     Fox::FXMatrix.new(@packer_cx320_config, 2, Fox::MATRIX_BY_COLUMNS) do |matrix|
-      attrs.each do |attr|
-        FXLabel.new(matrix, attr.name.to_s)
-
+      attrs.each do |attr, checked|
         if attr.writeable
           # READ/WRITE parameter
+
+          checkbutton = FXCheckButton.new(matrix, attr.name.to_s)
+          checked = attr_checked[attr.name.to_s] if checked.nil?
+          checkbutton.setCheck(checked.nil? ? true : checked )
+          checkbutton.connect(SEL_COMMAND){ cx320_config_field_changed }
 
           w = case attr.typ
             when :int
@@ -296,7 +312,7 @@ class Printerview < Dialogbox_printerview
             when :set
               w = FXComboBox.new(matrix, 19)
               attr.params.each do |k, v|
-                w.appendItem(v, k)
+                w.appendItem(k == attr.default ? "#{v} (default)" : v, k)
               end
               idx = -1
               if w.find{|text, data| idx+=1; data == attr.value }
@@ -313,9 +329,11 @@ class Printerview < Dialogbox_printerview
               w
           end
 
-          w.userData = attr
+          w.userData = [attr, checkbutton]
         else
           # READ-only parameter
+
+          FXLabel.new(matrix, attr.name.to_s)
 
           value = case attr.typ
             when :set then attr.params[attr.value]
@@ -338,10 +356,10 @@ class Printerview < Dialogbox_printerview
 
     hash = {}
     @packer_cx320_config.children.first.children.each do |w|
-      attr = w.userData
+      attr, checkbutton = w.userData
       next unless attr
 
-      if attr.writeable
+      if attr.writeable && checkbutton.checked?
         # READ/WRITE parameter
 
         value = case attr.typ
@@ -363,22 +381,25 @@ class Printerview < Dialogbox_printerview
   end
 
   def cx320_read_config
-    cx320_run_command do |dev|
+    cx320_run_command do |printer, dev|
       attrs = dev.mode_sense(:print) + dev.mode_sense(:ink) + dev.mode_sense(:mag) + dev.log_sense(:log)
-      cx320_fill_config(attrs)
+      cx320_fill_config(attrs.map{|a| [a, true]})
       cx320_config_field_changed
     end
   end
 
   def cx320_write_config
-    cx320_run_command do |dev|
+    cx320_run_command do |printer, dev|
       cx320_config_field_changed
-
       config = JSON.parse(@layout_file.get_attr_value(S_CX320_CONFIG))
-      dev.mode_select(:print, config.select{|k,v| k.to_s =~ /^print_/ })
-      dev.mode_select(:mag, config.select{|k,v| k.to_s =~ /^mag_/ })
-      FXMessageBox.error(@parent.app, MBOX_OK, "Änderung der Konfiguration" , "Bitte führen Sie einen Drucker-Reset durch,\ndamit die Änderung der Konfiguration aktiv wird.")
+      printer.write_config(config, dev)
     end
+  end
+
+  def cx320_set_defaults
+    @layout_file.set_attr_value(S_CX320_CONFIG, "{}")
+    cx320_update_config_widgets
+    changed_attributes
   end
 
   def deactivate_printer_tabs
@@ -433,11 +454,14 @@ class Printerview < Dialogbox_printerview
             LibCX320::CX320.log_sense_attrs(:log)
     config = JSON.parse(@layout_file.get_attr_value(S_CX320_CONFIG))
     attrs = attrs.map do |attr|
-      attr = attr.dup
       if value=config[attr.name.to_s]
         attr.value = value
+        checked = true
+      else
+        attr.value = attr.default
+        checked = false
       end
-      attr
+      [attr, checked]
     end
     cx320_fill_config(attrs)
   end

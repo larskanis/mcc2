@@ -12,7 +12,7 @@ gem "barby", ">=0.5"
 gem "rqrcode", ">=0.4"
 gem "fxruby", ">=1.6.30"
 gem "libusb"
-gem "libcx320"
+gem "libcx320", "~> 0.1.2"
 
 gem "rdoc", "~>4.0", :group => [:development, :test]
 gem "hoe", "~>3.13", :group => [:development, :test]

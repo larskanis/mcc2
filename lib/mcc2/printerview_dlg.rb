@@ -904,7 +904,7 @@ class Dialogbox_printerview
 							w.y=54
 							w.width=562
 							w.height=31
-							w.numColumns=2
+							w.numColumns=3
 							FX::Button.new(@matrix49){|w|
 								@button_cx320_read_config=w
 								w.wdg_name='button_cx320_read_config'
@@ -922,6 +922,15 @@ class Dialogbox_printerview
 								w.width=113
 								w.height=23
 								w.text="Konfig schreiben"
+							}
+							FX::Button.new(@matrix49){|w|
+								@button_cx320_set_defaults=w
+								w.wdg_name='button_cx320_set_defaults'
+								w.x=233
+								w.y=4
+								w.width=102
+								w.height=23
+								w.text="Standardwerte"
 							}
 						}
 						FX::ScrollWindow.new(@verticalframe60){|w|
@@ -1077,6 +1086,7 @@ class Dialogbox_printerview
 	attr_reader :matrix49
 	attr_reader :button_cx320_read_config
 	attr_reader :button_cx320_write_config
+	attr_reader :button_cx320_set_defaults
 	attr_reader :scrollwindow_config
 	attr_reader :packer_cx320_config
 	attr_reader :matrix47
