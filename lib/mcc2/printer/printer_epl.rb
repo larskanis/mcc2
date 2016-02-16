@@ -39,7 +39,7 @@ class PrinterEpl < CardPrinter
 
     # das RVG in ein Bitmap konvertieren
     pic = img.draw
-    pic = postprocess_image( pic, layout_file, page )
+    pic = postprocess_image( pic, layout_file, 0 )
 
     page_commands.gsub!("\\e", "\e")
     page_commands.gsub!("\n", "\r\n")

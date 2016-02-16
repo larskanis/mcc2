@@ -76,7 +76,7 @@ class FilePrinter < CardPrinter
 
     # das RVG in ein Bitmap konvertieren
     pic = img.draw
-    pic = postprocess_image( pic, layout_file, page )
+    pic = postprocess_image( pic, layout_file, page_nr )
 
     pic.write(documentName)
   end
