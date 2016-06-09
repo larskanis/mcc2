@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: UTF-8 -*-
-
+$stdout.sync = true
+$stderr.sync = true
 
 require "rubygems"
 
