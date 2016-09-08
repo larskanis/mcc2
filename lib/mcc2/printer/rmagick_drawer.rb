@@ -182,7 +182,7 @@ module RmagickDrawer
 
     if data != ""
       body.text(mm(text_x), mm(0), data).styles(
-        :font => ["'", font, "'"].join,
+        :font => font,
         :font_size => pt(fontsize),
         :fill => font_color,
         :text_anchor => just
@@ -232,9 +232,9 @@ module RmagickDrawer
     end
 
     body.styles(
-      :fill=>font_color,
-      :stroke=>'none',
-      :font => ["'", fontname, "'"].join,
+      :fill => font_color,
+      :stroke => 'none',
+      :font => fontname,
       :font_size => pt(fontsize)
     )
 
