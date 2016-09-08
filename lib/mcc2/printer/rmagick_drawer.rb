@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 require 'mcc2/dataman/base'
-require 'RMagick'           # für das Erzeugen der Druckbilder
+require 'rmagick'           # für das Erzeugen der Druckbilder
 require 'rvg/rvg'           # für RMagick die Vektorgraphik-Bibliothek
 
 # class Numeric
