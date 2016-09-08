@@ -4,8 +4,6 @@
 $stdout.sync = true
 $stderr.sync = true
 
-
-require "rubygems"
 require "mcc2"
 
-Mcc2::Mcc2Gui.run(ARGV)
+Mcc2::Mcc2Print.run(ARGV)
