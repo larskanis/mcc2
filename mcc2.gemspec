@@ -13,14 +13,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{Layout editor and card printer GUI.}
   spec.homepage      = "http://comdb1/projektverwaltung/projects/mcc2"
   spec.license       = "MIT"
-
-  # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
-  # delete this section to allow pushing this gem to any host.
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "http://ccgems"
-  else
-    raise "RubyGems 2.0 or newer is required to protect against public gem pushes."
-  end
+  spec.metadata['allowed_push_host'] = "http://ccgems"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
