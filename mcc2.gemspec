@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "nokogiri", "~> 1.4"
   spec.add_runtime_dependency "dbf", "~> 1.2"
-  spec.add_runtime_dependency "rmagick", "~> 2.14"
+  spec.add_runtime_dependency "rmagick", "~> 3.1"
   spec.add_runtime_dependency "barby", "~> 0.5"
   spec.add_runtime_dependency "rqrcode", "~> 0.4"
   spec.add_runtime_dependency "fxruby", "~> 1.6.30"

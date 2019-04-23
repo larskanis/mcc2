@@ -56,8 +56,10 @@ class PrinterEpl < CardPrinter
       pic = pic.level2(Magick::QuantumRange/2, Magick::QuantumRange/2)
       pic = pic.quantize(2, Magick::RGBColorspace, false)
       pic = pic.level2(Magick::QuantumRange/2, Magick::QuantumRange/2)
+      pic.class_type = Magick::PseudoClass
+      pic.image_type = Magick::BilevelType
       data = pic.to_blob do
-        self.format='pcx'
+        self.format = 'pcx'
       end
 #       File.write("test.pcx", data)
       "#{data.bytesize}\r\n#{data}"
