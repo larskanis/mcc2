@@ -10,6 +10,7 @@ class Picture < Graphic
     @go_attributes[GOA_TYP].attr_value = PICTUREOBJECT
     add_attr(@go_attributes, GOA_WIDTH, Integer, 20)
     add_attr(@go_attributes, GOA_HEIGHT, Integer, 28)
+    add_attr(@go_attributes, GOA_IMAGE_PAGE, Integer, 1)
     add_attr(@go_attributes, GOA_STRETCH, Integer, false)
     add_attr(@go_attributes, GOA_PRINTABLE, Integer, true)
     add_attr(@go_attributes, GOA_DATA, String, '')

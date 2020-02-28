@@ -37,6 +37,7 @@ module Mcc2
   GOA_DATA = 'data'
   GOA_SAMPLE_DATA = 'sample_data'
   GOA_PRINTLIST = 'view_in_printlist'
+  GOA_IMAGE_PAGE = 'image_page'
 
   GOA_FILL_COLOR = 'fill_color'
   GOA_BORDER_COLOR = 'border_color'

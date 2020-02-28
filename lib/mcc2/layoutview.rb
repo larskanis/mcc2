@@ -95,6 +95,8 @@ class Layoutview
     @lf.spinner_seiten_nr.connect(SEL_COMMAND){ obj_attr_changed(GOA_PAGE_NR, @lf.spinner_seiten_nr.value - 1) }
     @lf.spinner_seiten_nr.range = (1..999)
     @lf.spinner_layer.connect(SEL_COMMAND){ obj_attr_changed(GOA_LAYER, @lf.spinner_layer.value) }
+    @lf.spinner_image_page.connect(SEL_COMMAND){ obj_attr_changed(GOA_IMAGE_PAGE, @lf.spinner_image_page.value) }
+    @lf.spinner_image_page.range = (1..999)
 
     # der Checkbutton für die Einstellung Simplex/Duplex
     @lf.checkbutton_duplex.connect(SEL_COMMAND){|sender, sel, event| change_chkbtn(sender, S_DUPLEX) }

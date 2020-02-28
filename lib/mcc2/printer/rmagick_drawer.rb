@@ -195,14 +195,17 @@ module RmagickDrawer
       # kein Bildname angegeben -> dieses Objekt ignorieren
     elsif FileTest.file?(data)
       self_dpi = self.dpi
-      go_image = Magick::Image.read(data){
+      image_page = go[GOA_IMAGE_PAGE].to_i - 1
+      go_image = Magick::ImageList.new(data){
         # use view DPI for vector-graphics (PDF)
         self.density = self_dpi
-      }.first
+      }[image_page]
 
       # workaround: ImageMagick uses wrong colors when inserting into RVG
-      if [Magick::ColorSeparationType, Magick::ColorSeparationMatteType].include?(go_image.image_type)
-        go_image.image_type = Magick::TrueColorMatteType
+      if defined?(Magick::ColorSeparationMatteType)
+        if [Magick::ColorSeparationType, Magick::ColorSeparationMatteType].include?(go_image.image_type)
+          go_image.image_type = Magick::TrueColorMatteType
+        end
       end
 
       # if object size is not given, try to determine object size based on the DPI of the image
