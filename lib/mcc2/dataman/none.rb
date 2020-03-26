@@ -7,7 +7,7 @@ module DataMan
 class None < Base
   def initialize(datasource)
   end
-  
+
   def headers
   end
 
@@ -17,7 +17,7 @@ class None < Base
   end
 
   def rows
-    [nil]
+    [nil] * 100
   end
 
 end

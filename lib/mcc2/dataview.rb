@@ -270,11 +270,10 @@ class Dataview < Dialogbox_dataview
     @button_stop_printing.enabled = true
     @printing = true
 
-    marked_items = []
-    (0 ... @iconlist_data.numRows).map do |i|
-      if !only_selected || @iconlist_data.itemSelected?(i)
-        marked_items << @iconlist_data.getItemData(i)
-      end
+    marked_items = (0 ... @iconlist_data.numRows).select do |i|
+      !only_selected || @iconlist_data.itemSelected?(i)
+    end.map do |i|
+      [@iconlist_data.getItemData(i), i]
     end
 
     Thread.new do
@@ -282,13 +281,11 @@ class Dataview < Dialogbox_dataview
         printer = @layout_file.build_printer_instance
         chip = layout_file.build_chip_instance
 
-        marked_items.each_with_index do |item, itemidx|
-          it = nil
+        marked_items.each do |item, itemidx|
           @parent.runOnUiThread do
-            it = @iconlist_data.findItemByData(item)
-            @iconlist_data.makeItemVisible(it)
+            @iconlist_data.makeItemVisible(itemidx)
             @iconlist_data.setFocus
-            @iconlist_data.setCurrentItem(it, true)
+            @iconlist_data.setCurrentItem(itemidx, true)
           end
 
           erg = printer.print_card(layout_file, item, chip)
@@ -297,7 +294,8 @@ class Dataview < Dialogbox_dataview
             @parent.app.show_on_statusline "#{itemidx+1} von #{marked_items.length} Datensätzen gedruckt"
             # den aktuellen Datensatz deselektieren, wenn er erfolgreich gedruckt wurde
             begin
-              @iconlist_data.deselectItem(it) if erg
+              @iconlist_data.deselectItem(itemidx) if erg
+              @iconlist_data.repaint
             rescue RuntimeError => e
               raise unless e.to_s=~/already released/
             end
