@@ -125,8 +125,8 @@ class Preview < Base
 
       # ..........................................................................................
       # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
-      data = rvg.draw.to_blob do
-        self.format = 'PNG'
+      data = rvg.draw.to_blob do |image|
+        image.format = 'PNG'
       end
 
       @parent.runOnUiThread do

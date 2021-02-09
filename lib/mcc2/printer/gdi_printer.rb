@@ -154,10 +154,10 @@ class GdiPrinter < CardPrinter
     pic = postprocess_image( pic, layout_file, page_nr )
 
     # flip left to right and raster image
-    lpvBits = pic.flop.to_blob{
-      self.format='rgb'
-      self.depth = 8
-    }
+    lpvBits = pic.flop.to_blob do |image|
+      image.format='rgb'
+      image.depth = 8
+    end
     # Reversion the image data means:
     # - turning color order RGB to BGR (needed by win32api)
     # - mirroring bottom to up
@@ -166,10 +166,10 @@ class GdiPrinter < CardPrinter
 
     block_size = 4 # each scanline has to be DWORD padded
     # split the image in single rows
-    lpvBits = lpvBits.unpack("a#{pic.columns*3}" * pic.rows).map{|imgrow|
+    lpvBits = lpvBits.unpack("a#{pic.columns*3}" * pic.rows).map do |imgrow|
       # align each row to DWORD
       imgrow << "\0" * (block_size - 1 - (imgrow.length-1 & (block_size-1)))
-    }.join
+    end.join
 
     xDest, yDest, dwWidth, dwHeight, xSrc, ySrc = mm(draw_pos_x),mm(draw_pos_y), pic.columns,pic.rows, 0,0
     uStartScan, cScanLines = 0, dwHeight
