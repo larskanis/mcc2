@@ -196,9 +196,9 @@ module RmagickDrawer
     elsif FileTest.file?(data)
       self_dpi = self.dpi
       image_page = go[GOA_IMAGE_PAGE].to_i - 1
-      go_image = Magick::ImageList.new(data){
+      go_image = Magick::ImageList.new(data){|img|
         # use view DPI for vector-graphics (PDF)
-        self.density = self_dpi
+        img.density = self_dpi
       }[image_page]
 
       # workaround: ImageMagick uses wrong colors when inserting into RVG
