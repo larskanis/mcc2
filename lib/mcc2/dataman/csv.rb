@@ -18,7 +18,7 @@ class CSV < Base
     fn = datasource.strip
     return if fn.empty?
 
-    fail CanNotOpenFile, "Datei nicht gefunden: #{fn.inspect}" unless File.exists?(fn)
+    fail CanNotOpenFile, "Datei nicht gefunden: #{fn.inspect}" unless File.exist?(fn)
     @table = ::CSV.read(fn, col_sep: ';', encoding: "#{encoding}:UTF-8")
     fail DataNotAvailable, "Keine Daten in CSV-Datei #{fn} vorhanden" unless @table
 

@@ -249,7 +249,7 @@ class Layout
       }
     end
 
-    dest = FileTest.exists?(lds) ? lds : '.'
+    dest = FileTest.exist?(lds) ? lds : '.'
     s = FXFileDialog.getOpenFilename(textfield, textfield.tipText, lds, filepatterns, pat_idx || 0)
     unless s.empty?
       textfield.setText(s, true)

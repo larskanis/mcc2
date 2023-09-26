@@ -99,7 +99,7 @@ def hasExtension(filename, ext)
 end
 def loadImage(file)
 	img=load_dummy unless $dummy_img
-	unless File.exists? file 
+	unless File.exist? file
 		return img
 	end
 	begin

@@ -159,7 +159,7 @@ class Mcc2Gui < MainWindow
   #---------------------------------------------------------------------------------------------------------
 
   def open_layout(filename=nil)
-    unless filename && FileTest.exists?(filename)
+    unless filename && FileTest.exist?(filename)
       filename = FXFileDialog.getOpenFilename(@topwin, 'Laden', './', patterns = '*.xml', initial = 0)
     end
     unless filename.to_s.empty?
