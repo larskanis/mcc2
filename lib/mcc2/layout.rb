@@ -31,14 +31,8 @@ class Layout
   def initialize(parent, filename=nil)
     @parent = parent
     begin
-      require 'barby'
-      %w[
-          bookland code_25_iata code_25 code_93 ean_13 gs1_128 qr_code
-          code_128 code_25_interleaved code_39 ean_8 upc_supplemental
-        ].each do |code|
-        require "barby/barcode/#{code}"
-      end
-      require 'mcc2/barby_barcode_extensions'
+      require 'ruby-zint'
+      require 'mcc2/zint_barcode_extensions'
     rescue LoadError => e
       puts "Loading barcode driver failed: #{e}"
     end

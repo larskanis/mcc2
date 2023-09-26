@@ -218,6 +218,17 @@ module RmagickDrawer
     end
   end
 
+  BARCODE_ALIAS = {
+    EAN13: :Eanx,
+    EAN8: :Eanx,
+  }
+
+  HALIGNMENT = {
+    0 => :middle,
+    1 => :start,
+    2 => :end,
+  }
+
   def draw_barcode(body, go, go_width, go_height, data, optimized=true)
     return if data.nil? || data.empty?
 
@@ -242,7 +253,7 @@ module RmagickDrawer
     )
 
     begin
-      barcode = Barby.const_get(barcode_typ).new(data)
+      barcode = Zint.const_get(BARCODE_ALIAS[barcode_typ.to_sym] || barcode_typ).new(value: data)
     rescue => e
       raise Printer::Base::InvalidBarcodeData, "Fehler beim Generieren des Barcodes #{data.inspect}: #{e}"
     else
@@ -250,15 +261,15 @@ module RmagickDrawer
         barcode.narrow_width = 1
         barcode.wide_width = bar_ratio
       end
-      bcencoding = barcode.encoding
+      bcvector = barcode.to_vector
 
       eancode = %w[EAN13 EAN8].include?(barcode_typ)
 
       px_width, px_height = mm(go_width), mm(go_height)-pt(fontsize/5*4)
-      xbars, ybars = if barcode.two_dimensional?
-        [bcencoding.first.length, bcencoding.length] if barcode.two_dimensional?
+      xbars, ybars = if barcode.rows > 1
+        [bcvector.width, bcvector.height] # 2D - Code
       else
-        [bcencoding.length, 1]
+        [bcvector.width, 1] # 1D - Code
       end
       xdim, ydim = px_width/xbars, px_height/ybars
       xdim, ydim = xdim.to_i, ydim.to_i if optimized
@@ -267,44 +278,38 @@ module RmagickDrawer
       xgap = mm(go_width) - xdim*xbars
       body.translate( ({'links'=>0, 'mitte'=>xgap/2, 'rechts'=>xgap}[just] || 0).round, 0)
 
-      if barcode.two_dimensional?
+      if barcode.rows > 1
+        # 2D - Code
         x, y = 0, 0
-        bcencoding.each do |line|
-          line.split(//).map{|c| c == '1' }.each do |bar|
-            body.rect(xdim, ydim, x, y) if bar
-            x += xdim
-          end
-          x = 0
-          y += ydim
+        bcvector.each_rectangle do |r|
+          body.rect(xdim, ydim, r.x, r.y) if r.colour != 0
         end
       else
-        x = 0
-        bcencoding.split(//).map{|c| c == '1' }.each_with_index do |bar, bidx|
-  #         puts "#{xdim}, #{px_height}, #{x}" if bar
-          h = px_height
-          if eancode && (bidx<=3 || bidx>=xbars-3 || (bidx-xbars/2).abs<=1)
-            h += pt(fontsize/10*4)
-          end
-          body.rect(xdim-1, h, x, 0) if bar && xdim>=1
-          x += xdim
+        # 1D - Code
+        bcvector.each_rectangle do |bar|
+          # puts "#{xdim}, #{px_height}, #{bar.x}" if bar.colour != 0
+          body.rect(bar.width-1, bar.height, bar.x, 0) if bar.colour != 0
+        end
+        bcvector.each_string do |str|
+          body.text(str.x, str.y, str.text).styles(text_anchor: HALIGNMENT[str.halign])
         end
       end
 
       # Barcode - text
 
-      if eancode
-        data2 = barcode.numbers_with_checksum.join
-        data3 = if barcode_typ=='EAN8'
-          [nil, data2[0,4], data2[4,4]]
-        elsif barcode_typ=='EAN13'
-          [data2[0,1], data2[1,6], data2[7,6]]
-        end
-        body.text(0, mm(go_height), data3[0]).styles(:text_anchor => 'end') if data[0]
-        body.text(xdim * (xbars/4.0+1), mm(go_height), data3[1]).styles(:text_anchor => 'middle')
-        body.text(xdim * (xbars/4.0*3.0-1), mm(go_height), data3[2]).styles(:text_anchor => 'middle')
-      else
-        body.text(xdim * (xbars/2.0), mm(go_height), data).styles(:text_anchor => 'middle')
-      end
+      #if eancode
+        #data2 = barcode.text.to_s
+        #data3 = if barcode.symbology == Zint::BARCODE_EANX && data2.length == 8
+          #[nil, data2[0,4], data2[4,4]]
+        #elsif barcode.symbology == Zint::BARCODE_EANX && data2.length == 13
+          #[data2[0,1], data2[1,6], data2[7,6]]
+        #end
+        #body.text(0, mm(go_height), data3[0]).styles(:text_anchor => 'end') if data[0]
+        #body.text(xdim * (xbars/4.0+1), mm(go_height), data3[1]).styles(:text_anchor => 'middle')
+        #body.text(xdim * (xbars/4.0*3.0-1), mm(go_height), data3[2]).styles(:text_anchor => 'middle')
+      #else
+        #body.text(xdim * (xbars/2.0), mm(go_height), data).styles(:text_anchor => 'middle')
+      #end
     end
   end
 
