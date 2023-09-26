@@ -11,9 +11,9 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Layout editor and card printer GUI}
   spec.description   = %q{Layout editor and card printer GUI.}
-  spec.homepage      = "http://comdb1/projektverwaltung/projects/mcc2"
+  spec.homepage      = "https://comdb1/projektverwaltung/projects/mcc2"
   spec.license       = "MIT"
-  spec.metadata['allowed_push_host'] = "http://ccgems"
+  spec.metadata['allowed_push_host'] = "https://ccgems"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"

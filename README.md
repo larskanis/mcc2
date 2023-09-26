@@ -1,6 +1,6 @@
 # Mcc2
 
-* http://comdb1/projektverwaltung/projects/mcc2
+* https://comdb1/projektverwaltung/projects/mcc2
 
 Layout editor and card printer GUI
 
