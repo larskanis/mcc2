@@ -261,38 +261,33 @@ module RmagickDrawer
         barcode.narrow_width = 1
         barcode.wide_width = bar_ratio
       end
+      barcode.height = go_height.to_f / go_width.to_f * 50.0 #  50 is the default x-dimension for most of the barcodes
+      barcode.show_hrt = 0 if fontsize == 0
+      # barcode.fontsize = fontsize # not used in zint
+      # p [go_height, go_width, barcode.height]
+      barcode.whitespace_width = 0
       bcvector = barcode.to_vector
 
       eancode = %w[EAN13 EAN8].include?(barcode_typ)
 
-      px_width, px_height = mm(go_width), mm(go_height)-pt(fontsize/5*4)
-      xbars, ybars = if barcode.rows > 1
-        [bcvector.width, bcvector.height] # 2D - Code
-      else
-        [bcvector.width, 1] # 1D - Code
-      end
+      px_width, px_height = mm(go_width), mm(go_height)
+      # bcvector values are always a multiple of 2, but we need a multiple of 1 for to_i below.
+      # So all bcvector measurements are divided by 2.
+      xbars, ybars = bcvector.width/2, bcvector.height/2
+      # p vector_width: bcvector.width, vector_height: bcvector.height
       xdim, ydim = px_width/xbars, px_height/ybars
-      xdim, ydim = xdim.to_i, ydim.to_i if optimized
+      if optimized
+        xdim = xdim.to_i
+        ydim = ydim.to_i if barcode.rows > 1 # optimize y dimension only on 2D codes
+      end
 
-      just = go[GOA_JUSTIFICATION].downcase
-      xgap = mm(go_width) - xdim*xbars
-      body.translate( ({'links'=>0, 'mitte'=>xgap/2, 'rechts'=>xgap}[just] || 0).round, 0)
-
-      if barcode.rows > 1
-        # 2D - Code
-        x, y = 0, 0
-        bcvector.each_rectangle do |r|
-          body.rect(xdim, ydim, r.x, r.y) if r.colour != 0
-        end
-      else
-        # 1D - Code
-        bcvector.each_rectangle do |bar|
-          # puts "#{xdim}, #{px_height}, #{bar.x}" if bar.colour != 0
-          body.rect(bar.width-1, bar.height, bar.x, 0) if bar.colour != 0
-        end
-        bcvector.each_string do |str|
-          body.text(str.x, str.y, str.text).styles(text_anchor: HALIGNMENT[str.halign])
-        end
+      bcvector.each_rectangle do |bar|
+        # p [xdim*bar.width/2, ydim*bar.height/2, xdim*bar.x/2, ydim*bar.y/2]
+        body.rect([xdim*bar.width/2-1, 0].max, [ydim*bar.height/2-1, 0].max, xdim*bar.x/2, ydim*bar.y/2)
+      end
+      bcvector.each_string do |str|
+        # p [str.x, str.y, str.text, str.halign, str.fsize]
+        body.text(xdim*str.x/2, ydim*str.y/2, str.text).styles(text_anchor: HALIGNMENT[str.halign])
       end
 
       # Barcode - text
