@@ -103,7 +103,7 @@ module RmagickDrawer
             elsif typ == PICTUREOBJECT
               draw_pictureobject(body.g, go, go_width, go_height, data)
             elsif typ == BARCODEOBJECT
-              data = data.gsub(/\\x([0-9a-f][0-9a-f])/i){ [$1.hex].pack("C") }.gsub(/\\(.)/, '\\1')
+              data = data.gsub(/\\x([0-9a-f][0-9a-f])/i){ [$1.hex].pack("C") }
               draw_barcode(body.g, go, go_width, go_height, data, !preview)
             elsif typ == BOXOBJECT
               draw_boxobject(body.g, go, go_width, go_height)
