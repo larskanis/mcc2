@@ -183,6 +183,10 @@ class Layout
   #
   def load_from_xml(filename)
     self.layout_file = LayoutFile.load_from_xml(filename)
+    unless layout_file.warnings.empty?
+      wa = layout_file.warnings.join("\n\n")
+      FXMessageBox.warning( @parent.app, MBOX_OK, "Warnung beim Laden von #{filename}", wa)
+    end
   end
   #---------------------------------------------------------------------------------------------------------
 
