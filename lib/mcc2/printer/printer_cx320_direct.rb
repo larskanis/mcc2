@@ -150,6 +150,7 @@ class PrinterCx320Direct < CardPrinter
     if layers.include?(0)
       pic = draw_rvg_image(layout_file, row, page, [0], x_offset, y_offset)
 
+      # Convert RGB to CMY image by inversion of color values
       gradient_pic = Magick::Image.new(256, 1)
       gradient = 0.upto(255).map do |i|
         a = (255-i) / 255.0 * Magick::QuantumRange
