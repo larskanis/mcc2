@@ -147,7 +147,7 @@ class Preview < Base
       end
       @printing = false
     rescue => e
-      DebugTools::write_log_file('draw_preview_thread', DebugTools::unkown_error_message(e))
+      DebugTools::write_exception('draw_preview_thread', e)
       @parent.runOnUiThread do
         FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen der Layoutvorschau", DebugTools::unkown_error_message(e))
       end
