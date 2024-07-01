@@ -47,10 +47,8 @@ module Mcc2
         # ............................................................................................
         # der Chip-Teil, er muss nach dem start_doc und den pages kommen, falls dort Fehler auftreten, wird dieser dan nicht ausgeführt,
         # und keine Karte eingezogen, dann gibt es weniger Probleme mit dem Entfernen von Karten aus dem Drucker, wenn ein Fehler aufgetreten ist
-        if chip
-          # Kartenpersonalisierung
-          chip.pers_card(layout_file, row)
-        end
+        # Kartenpersonalisierung
+        chip&.pers_card(layout_file, row)
 
         @image_idx += 1
 

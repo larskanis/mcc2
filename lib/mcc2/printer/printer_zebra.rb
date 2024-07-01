@@ -126,7 +126,7 @@ module Mcc2
 
       def send_cmd(command, msg = nil)
         if !@handle
-          raise Exception.new("Es muss erst ein Drucker-Handle geöffnet werden!")
+          raise StandardError.new("Es muss erst ein Drucker-Handle geöffnet werden!")
         end
         err = DL.malloc(4)
         err.struct!("L", :err)

@@ -2045,7 +2045,7 @@ if __FILE__ == $0
   require "libGUIb16"
   app = FX::App.new
   mw = MainWindow.new app
-  w = LayoutFrame.new mw
+  LayoutFrame.new mw
   mw.show(Fox::PLACEMENT_SCREEN)
   app.create
   app.run

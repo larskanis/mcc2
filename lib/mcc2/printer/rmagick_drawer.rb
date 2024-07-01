@@ -54,7 +54,6 @@ module Mcc2
       end
 
       canvas.g.translate(mm(card_margin_left).round, mm(card_margin_top).round) do |canvas1|
-        barcodes = nil
         rx = mm(3)
         # ..........................................................................................
         # Kartenhintergrund füllen (für Vorschau)
@@ -262,7 +261,7 @@ module Mcc2
         if barcode.two_dimensional?
           x, y = 0, 0
           bcencoding.each do |line|
-            line.split("").map { |c| c == "1" }.each do |bar|
+            line.chars.map { |c| c == "1" }.each do |bar|
               body.rect(xdim, ydim, x, y) if bar
               x += xdim
             end
@@ -271,7 +270,7 @@ module Mcc2
           end
         else
           x = 0
-          bcencoding.split("").map { |c| c == "1" }.each_with_index do |bar, bidx|
+          bcencoding.chars.map { |c| c == "1" }.each_with_index do |bar, bidx|
             #         puts "#{xdim}, #{px_height}, #{x}" if bar
             h = px_height
             if eancode && (bidx <= 3 || bidx >= xbars - 3 || (bidx - xbars / 2).abs <= 1)

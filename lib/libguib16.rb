@@ -3,7 +3,7 @@
 # WITHOUT ANY IMPLIED WARRANTY OR FITNESS FOR ANY PURPOSE.
 require "fox16"
 def rel_path(a, b)
-  raise TypeError unless a.is_a? String and b.is_a? String
+  raise TypeError unless a.is_a?(String) && b.is_a?(String)
   a.tr!("\\", "/")
   b.tr!("\\", "/")
   a = a.split("/")
@@ -12,7 +12,7 @@ def rel_path(a, b)
   while (a[i] == b[i]) && (i < a.size)
     i += 1
   end
-  "../" * (a.size - i) + b[i..-1].join("/")
+  "../" * (a.size - i) + b[i..].join("/")
 end
 
 module FX
@@ -342,12 +342,10 @@ module FX
     def select radio_widget
       @selected = radio_widget
       event_selected @selected
-      for w in @radio_widgets
-        begin
-          w.state = (w == @selected) # only the selected widget is checked.
-        rescue Exception
-          puts $!
-        end
+      @radio_widgets.each do |w|
+        w.state = (w == @selected) # only the selected widget is checked.
+      rescue Exception
+        puts $!
       end
     end
 
@@ -371,7 +369,7 @@ module FX
     end
 
     def state
-      ((getCheckState == Fox::TRUE) ? true : false)
+      getCheckState == Fox::TRUE
     end
   end
 
@@ -422,7 +420,7 @@ module FX
         setState(Fox::STATE_DOWN)
       elsif x == false
         setState(Fox::STATE_UP)
-      elsif x.class == Integer
+      elsif x.instance_of?(Integer)
         setState(x)
       end
     end
@@ -1264,16 +1262,16 @@ module FX
     def initialize(parent)
       super
       boxMinusPNG_Str =
-        "9805e474d0a0a1a0000000d09484442500000090000000904030000010568bb25b000000704794d4" +
-        "54704d50016041822c41f2b600000090078495370000b0210000b021102ddde7cf000000407614d4" +
-        "1400001bf8b0cf16500000009005c44554484848ffffff0000003e75793f000000229444144587ad" +
-        "3606082062011a404cc82801c0402828c024a80221c2c28288584000525c10091d50980600000000" +
+        "9805e474d0a0a1a0000000d09484442500000090000000904030000010568bb25b000000704794d4" \
+        "54704d50016041822c41f2b600000090078495370000b0210000b021102ddde7cf000000407614d4" \
+        "1400001bf8b0cf16500000009005c44554484848ffffff0000003e75793f000000229444144587ad" \
+        "3606082062011a404cc82801c0402828c024a80221c2c28288584000525c10091d50980600000000" \
         "9454e444ea240628"
       boxPlusPNG_Str =
-        "9805e474d0a0a1a0000000d09484442500000090000000904030000010568bb25b000000704794d4" +
-        "54704d50016041c0ef71bcab00000090078495370000b0210000b021102ddde7cf000000407614d4" +
-        "1400001bf8b0cf16500000009005c44554484848ffffff0000003e75793f000000729444144587ad" +
-        "3606082062011a404cc8a801c0402828c024a8022142c2802a91505119840a8000c25a100daa1682" +
+        "9805e474d0a0a1a0000000d09484442500000090000000904030000010568bb25b000000704794d4" \
+        "54704d50016041c0ef71bcab00000090078495370000b0210000b021102ddde7cf000000407614d4" \
+        "1400001bf8b0cf16500000009005c44554484848ffffff0000003e75793f000000729444144587ad" \
+        "3606082062011a404cc8a801c0402828c024a8022142c2802a91505119840a8000c25a100daa1682" \
         "d9000000009454e444ea240628"
       self.padLeft = 0
       self.frameStyle = 12288
@@ -1349,9 +1347,7 @@ module RadioGroup1
   def radio_command w
     RadioGroup1_initialize unless @RadioGroup1_initialized
     return if @selected_radio_widget == w
-    if @selected_radio_widget
-      @selected_radio_widget.set_radio_state false
-    end
+    @selected_radio_widget&.set_radio_state false
     @selected_radio_widget = w
     @RadioGroup1_listeners.each { |l|
       l.on_event(@selected_radio_widget)
@@ -1379,7 +1375,7 @@ module RadioWidget
   end
   attr_accessor :state, :group, :lmbdown
   def lmb_press(*args)
-    if @group and @group.respond_to?(:radio_command)
+    if @group&.respond_to?(:radio_command)
       set_radio_state true
       @group.radio_command(self)
     else
@@ -1453,7 +1449,7 @@ module FX
           item.data = i
           i += 1
         }
-        if @autoresize_titles or totalsize == 0
+        if @autoresize_titles || (totalsize == 0)
           quant = (@header.width / total.to_f)
           offset = 0
           @header.each { |item|
@@ -1509,6 +1505,7 @@ class FlatStyle < StyleVisitor
       raise args.join(",")
     end
     w.backColor = @backColor
+    w
   end
 end
 
@@ -1572,7 +1569,7 @@ module FX
       @stdFont = Fox::FXFont.new($fxapp, "[helvetica] 90 700 1 1 0 0")
       @stdFont.create
       connect(Fox::SEL_PAINT) { |sender, sel, event|
-        resize parent.width, parent.height if width != parent.width or height != parent.height
+        resize parent.width, parent.height if (width != parent.width) || (height != parent.height)
         dc = DCWindow.new self
         dc.font = @stdFont
         event_draw(dc, event, self)

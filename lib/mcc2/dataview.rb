@@ -192,7 +192,7 @@ module Mcc2
     #---------------------------------------------------------------------------------------------------------
 
     def set_label_selected(count = nil)
-      count ||= @iconlist_data.inject(0) { |s, i| s += i.selected? ? 1 : 0 }
+      count ||= @iconlist_data.inject(0) { |s, i| (s + i.selected?) ? 1 : 0 }
       @parent.app.show_on_statusline "#{count} Datensätze markiert"
     end
 
@@ -310,7 +310,7 @@ module Mcc2
           enable_disable_print_select_button
           @button_stop_printing.enabled = false
         end
-        chip.close_reader if chip
+        chip&.close_reader
         # rescue
       end
     end

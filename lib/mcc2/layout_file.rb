@@ -150,7 +150,7 @@ P1
       # Chip definieren
       @xml_doc.root << node = Nokogiri::XML::Node.new(S_CHIP, @xml_doc)
       (1..CHIPPARAM_FIELD_COUNT).each do |i|
-        node << param = Nokogiri::XML::Node.new("#{S_PARAM}_#{i}", @xml_doc)
+        node << Nokogiri::XML::Node.new("#{S_PARAM}_#{i}", @xml_doc)
       end
 
       # Magstripe definieren
@@ -365,7 +365,7 @@ P1
     def get_attr_value(attr_name)
       lay_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{S_LAYOUT}")
       attr = lay_attrs.at_xpath(attr_name)
-      attr ? attr.content : nil
+      attr&.content
     end
     #---------------------------------------------------------------------------------------------------------
 

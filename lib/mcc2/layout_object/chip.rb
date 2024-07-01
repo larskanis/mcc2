@@ -27,7 +27,7 @@ module Mcc2
 
       # Schließen des Chip-Objekts
       def close_reader
-        @chip_obj.close if @chip_obj
+        @chip_obj&.close
         @chip_obj = nil
       end
 

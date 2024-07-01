@@ -466,11 +466,7 @@ module Mcc2
         @lf.spinner_layer.value = node.at_xpath(GOA_LAYER).content.to_i
         #      @lf.iconlist_justify.connect(SEL_CHANGED){iconlist_justify_exit } # todo
 
-        @lf.checkbutton_printlist.state = if node.at_xpath(GOA_PRINTLIST).content == "false" || node.at_xpath(GOA_PRINTLIST).content == "0"
-          false
-        else
-          true
-        end
+        @lf.checkbutton_printlist.state = !(node.at_xpath(GOA_PRINTLIST).content == "false" || node.at_xpath(GOA_PRINTLIST).content == "0")
 
         # Typ-spezifische Attribute auslesen
         if [BARCODEOBJECT, TEXTOBJECT, PICTUREOBJECT].include?(node.at_xpath(GOA_TYP).content)
@@ -577,7 +573,7 @@ module Mcc2
       # den gewählten Parameter in den entsprechenden Listen markieren
       bc_typ = node.at_xpath(GOA_BARCODE_TYP).content
       bc_id = @barcodes.index(bc_typ)
-      error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, "Der Barcode-Typ #{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes. Der Wert wird auf 'NONE' gesetzt.", ["&OK"]) unless bc_id
+      FXFehlerAuswahlDialog.new(@parent.app, "Der Barcode-Typ #{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes. Der Wert wird auf 'NONE' gesetzt.", ["&OK"]) unless bc_id
       @lf.listbox_barcode_typ.currentItem = bc_id if bc_id
     end
     #---------------------------------------------------------------------------------------------------------

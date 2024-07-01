@@ -26,7 +26,7 @@ module Mcc2
 
       def [](attr)
         goattr = @xml_elem.at_xpath(attr)
-        goattr.content if goattr
+        goattr&.content
       end
 
       def []=(attr, text)

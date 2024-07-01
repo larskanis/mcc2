@@ -37,8 +37,6 @@ module Mcc2
       def print_card(layout_file, row, chip)
         @layout_file = layout_file
         @chip = chip
-        preview = false
-        selected_object_id = nil
 
         devicename = device_name
 
@@ -65,7 +63,7 @@ module Mcc2
           end
 
           end_doc(hPrinter, row)
-        rescue => e
+        rescue
           # wenn ein Fehler aufgetreten ist, wird der Druckjob abgebrochen und somit aus der Warteschlange entfernt
           abort_doc(hPrinter, row)
           raise

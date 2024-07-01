@@ -119,13 +119,9 @@ module Mcc2
               while_busy do
                 dev.print(back_layer_syms, 1, parallel)
               end
-              while_busy do
-                dev.retransfer_and_eject(parallel)
-              end
-            else
-              while_busy do
-                dev.retransfer_and_eject(parallel)
-              end
+            end
+            while_busy do
+              dev.retransfer_and_eject(parallel)
             end
           rescue
             ignore_all_errors do

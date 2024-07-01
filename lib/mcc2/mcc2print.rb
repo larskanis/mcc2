@@ -40,10 +40,10 @@ module Mcc2
 
       begin
         rows.each do |row|
-          erg = printer.print_card(lf, row, chip)
+          printer.print_card(lf, row, chip)
         end
       ensure
-        chip.close_reader if chip
+        chip&.close_reader
       end
     end
 
