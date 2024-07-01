@@ -593,14 +593,12 @@ module FX
   class Matrix < Fox::FXMatrix
     def initialize(p, opts = 0)
       super(p, 1, opts | Fox::MATRIX_BY_ROWS | Fox::LAYOUT_FILL_X | Fox::LAYOUT_FILL_Y)
-      @cols = self.numColumns = 1
-      @rows = self.numRows = 1
     end
 
     def matrixStyle=code
       super
-      numColumns = @cols
-      numRows = @rows
+      self.numColumns = @cols
+      self.numRows = @rows
     end
 
     def numColumns=(int)
@@ -612,8 +610,8 @@ module FX
     end
 
     def dim_check int
-      return 1 if int < 1
       return 1 unless int.is_a?(Numeric)
+      return 1 if int < 1
       int
     end
   end

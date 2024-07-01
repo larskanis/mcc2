@@ -12,7 +12,6 @@ module Mcc2
       @splitter_dataview.reparent parent, nil
       @dialogbox_dataview.close
 
-      @matrix_printbuttons.numColumns = 3
       @search_pos = 0
       @visible = false
 

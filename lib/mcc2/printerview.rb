@@ -26,12 +26,6 @@ module Mcc2
       @verticalframe_printersetup.reparent parent, nil
       @dialogbox_printerview.close
 
-      @matrix_file.numColumns = 3
-      @matrix_gdi.numColumns = 3
-      @matrix_xid.numColumns = 3
-      @matrix_zebra.numColumns = 3
-      @matrix_cx320_settings.matrixStyle = Fox::MATRIX_BY_COLUMNS
-      @matrix_cx320_settings.numColumns = 4
       @combobox_printertype.connect(SEL_COMMAND) { combobox_printertype_changed }
       @textfield_file_save_as.connect(SEL_COMMAND) {
         @layout_file.set_attr_value(S_FILEPRINTER_SAVE_AS, @textfield_file_save_as.text)

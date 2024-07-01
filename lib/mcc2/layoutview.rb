@@ -148,11 +148,6 @@ module Mcc2
 
       create_chipparam_fields
 
-      # Korrektur, da der LIBGUI-Builder irgendwie einen Fehler macht
-      @lf.matrix1.numColumns = 3
-      @lf.matrix2.numColumns = 4
-      @lf.matrix_boxtab.numColumns = 3
-      @lf.matrix_flipflop.numColumns = 3
       fill_objectlist
       object_selection_changed
     end
@@ -165,33 +160,33 @@ module Mcc2
       @chipparam_textfields = []
 
       scrl_w = FX::ScrollWindow.new(@lf.verticalframe_chip, LAYOUT_FILL_X | LAYOUT_FILL_Y)
-      matrix_chipparams = FX::Matrix.new(scrl_w, LAYOUT_FILL_X | LAYOUT_FILL_Y) { |w|
+      matrix_chipparams = FX::Matrix.new(scrl_w, LAYOUT_FILL_X | LAYOUT_FILL_Y) do |w|
         @matrix3 = w
         w.wdg_name = "matrix_xyz"
         w.numRows = 4
+        w.numColumns = 2
         w.width = 650
         w.y = 2
         w.height = 0
         w.matrixStyle = MATRIX_BY_COLUMNS | LAYOUT_FILL_X | LAYOUT_FILL_Y
         w.x = 2
-      }
-      matrix_chipparams.numColumns = 2
+      end
 
-      (0...CHIPPARAM_FIELD_COUNT).each { |i|
-        FX::Label.new(matrix_chipparams) { |w|
+      (0...CHIPPARAM_FIELD_COUNT).each do |i|
+        FX::Label.new(matrix_chipparams) do |w|
           w.wdg_name = "label_chipparam_#{i}"
           w.text = ["Parameter", i + 1].join(" ")
           w.font = FX::Font.new.from_s("Helvetica|80|40|5|0|0|0").to_FXFont
-        }
-        tf = FX::TextField.new(matrix_chipparams, LAYOUT_FILL_X) { |w|
+        end
+        tf = FX::TextField.new(matrix_chipparams, LAYOUT_FILL_X) do |w|
           w.textFieldTextStyle = LAYOUT_FILL_X
           w.wdg_name = "textfield_chipparam_#{i}"
           w.font = FX::Font.new.from_s("Helvetica|80|40|5|0|0|0").to_FXFont
           w.numColumns = 40
-        }
+        end
         tf.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, S_CHIPPARAMS) }
         @chipparam_textfields << tf
-      }
+      end
     end
     #---------------------------------------------------------------------------------------------------------
 
