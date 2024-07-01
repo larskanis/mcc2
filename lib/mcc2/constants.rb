@@ -1,6 +1,4 @@
-# -*- coding: UTF-8 -*-
-
-#*****************************************************************************
+# *****************************************************************************
 
 module Mcc2
   # Konstanten-Definition
@@ -10,118 +8,117 @@ module Mcc2
   BACK = 1
 
   # das sind die Bezeichner von Attributen, die ein grafisches Objekt haben kann
-  GOA_NAME = 'object_name'
-  GOA_TYP  = 'object_typ'
-  GOA_PAGE_NR = 'page_nr'
-  GOA_LAYER = 'layer'
-  GOA_FONT_HEIGHT = 'font_height'
-  GOA_FONT_TYP = 'font_typ'
-  GOA_FONT_WEIGHT = 'font_weight'
-  GOA_FONT_STYLE = 'font_style'
-  GOA_FONT_STRETCH = 'font_stretch'
-  GOA_FONT_COLOR = 'font_color'
-  GOA_FONT_FILE = 'font_file'
-  GOA_BACK_COLOR = 'back_color'
-  GOA_JUSTIFICATION = 'justification'
-  GOA_X = 'x'
-  GOA_Y = 'y'
-  GOA_WIDTH = 'width'
-  GOA_HEIGHT = 'height'
-  GOA_ROTATION = 'rotation'
-  GOA_ID = 'id'
-  GOA_BARCODE_TYP = 'barcode_typ'
-  GOA_BAR_RATIO = 'bar_ratio'
-  GOA_HUMAN_READABLE = 'human_readable'
-  GOA_STRETCH = 'stretch'
-  GOA_PRINTABLE = 'printable'
-  GOA_DATA = 'data'
-  GOA_SAMPLE_DATA = 'sample_data'
-  GOA_PRINTLIST = 'view_in_printlist'
-  GOA_IMAGE_PAGE = 'image_page'
+  GOA_NAME = "object_name"
+  GOA_TYP = "object_typ"
+  GOA_PAGE_NR = "page_nr"
+  GOA_LAYER = "layer"
+  GOA_FONT_HEIGHT = "font_height"
+  GOA_FONT_TYP = "font_typ"
+  GOA_FONT_WEIGHT = "font_weight"
+  GOA_FONT_STYLE = "font_style"
+  GOA_FONT_STRETCH = "font_stretch"
+  GOA_FONT_COLOR = "font_color"
+  GOA_FONT_FILE = "font_file"
+  GOA_BACK_COLOR = "back_color"
+  GOA_JUSTIFICATION = "justification"
+  GOA_X = "x"
+  GOA_Y = "y"
+  GOA_WIDTH = "width"
+  GOA_HEIGHT = "height"
+  GOA_ROTATION = "rotation"
+  GOA_ID = "id"
+  GOA_BARCODE_TYP = "barcode_typ"
+  GOA_BAR_RATIO = "bar_ratio"
+  GOA_HUMAN_READABLE = "human_readable"
+  GOA_STRETCH = "stretch"
+  GOA_PRINTABLE = "printable"
+  GOA_DATA = "data"
+  GOA_SAMPLE_DATA = "sample_data"
+  GOA_PRINTLIST = "view_in_printlist"
+  GOA_IMAGE_PAGE = "image_page"
 
-  GOA_FILL_COLOR = 'fill_color'
-  GOA_BORDER_COLOR = 'border_color'
-  GOA_BORDER_WIDTH = 'border_width'
-  GOA_CORNER_RADIUS = 'corner_radius'
+  GOA_FILL_COLOR = "fill_color"
+  GOA_BORDER_COLOR = "border_color"
+  GOA_BORDER_WIDTH = "border_width"
+  GOA_CORNER_RADIUS = "corner_radius"
 
   # das sind die Objektbezeichner
-  GRAPHICOBJECTS = 'GraphicObjects'
-  GRAPHICOBJECT = 'GraphicObject'
-  TEXTOBJECT = 'TextObject'
-  BARCODEOBJECT = 'BarcodeObject'
-  PICTUREOBJECT = 'PictureObject'
-  BOXOBJECT = 'BoxObject'
+  GRAPHICOBJECTS = "GraphicObjects"
+  GRAPHICOBJECT = "GraphicObject"
+  TEXTOBJECT = "TextObject"
+  BARCODEOBJECT = "BarcodeObject"
+  PICTUREOBJECT = "PictureObject"
+  BOXOBJECT = "BoxObject"
 
+  S_LAYOUT = "Layout"
+  S_DUPLEX = "Duplex"
+  S_CONTACTLESS = "Contactless"
+  S_CONTACT = "Contact"
+  S_MAGSTRIPE = "Magstripe"
 
-  S_LAYOUT = 'Layout'
-  S_DUPLEX = 'Duplex'
-  S_CONTACTLESS = 'Contactless'
-  S_CONTACT = 'Contact'
-  S_MAGSTRIPE = 'Magstripe'
+  S_CHIP = "Chip_Params"
+  S_MAGSTRIPEPARAMS = "Magstripe_Params"
+  S_HEIGHT = "Height"
+  S_WIDTH = "Width"
+  S_PARAM = "Param"
+  S_ROOT = "Root"
+  S_X_OFFSET = "x_offset"
+  S_Y_OFFSET = "y_offset"
+  S_JUST_LEFT = "Links"
+  S_JUST_MID = "Mitte"
+  S_JUST_RIGHT = "Rechts"
 
-  S_CHIP = 'Chip_Params'
-  S_MAGSTRIPEPARAMS = 'Magstripe_Params'
-  S_HEIGHT = 'Height'
-  S_WIDTH = 'Width'
-  S_PARAM = 'Param'
-  S_ROOT = 'Root'
-  S_X_OFFSET = 'x_offset'
-  S_Y_OFFSET = 'y_offset'
-  S_JUST_LEFT = 'Links'
-  S_JUST_MID = 'Mitte'
-  S_JUST_RIGHT = 'Rechts'
+  S_DATASOURCE = "datasource"
+  S_DATASOURCETYP = "datasource_typ"
+  S_DATASOURCEENCODING = "datasource_encoding"
 
-  S_DATASOURCE = 'datasource'
-  S_DATASOURCETYP = 'datasource_typ'
-  S_DATASOURCEENCODING = 'datasource_encoding'
+  S_CHIPPARAMS = "chipparams"
+  S_PRINTERTYPE = "printertype"
 
-  S_CHIPPARAMS = 'chipparams'
-  S_PRINTERTYPE = 'printertype'
+  S_FILEPRINTER_SAVE_AS = "fileprinter_save_as"
+  S_FILEPRINTER_DPI = "fileprinter_dpi"
 
-  S_FILEPRINTER_SAVE_AS = 'fileprinter_save_as'
-  S_FILEPRINTER_DPI = 'fileprinter_dpi'
+  S_GDIPRINTER_NAME = "gdiprinter_name"
+  S_GDIPRINTER_INITDATA = "gdiprinter_initdata"
+  S_XIDPRINTER_NAME = "xidprinter_name"
+  S_XIDPRINTER_INITDATA = "xidprinter_initdata"
+  S_ZEBRAPRINTER_NAME = "zebraprinter_name"
+  S_ZEBRAPRINTER_INITDATA = "zebraprinter_initdata"
+  S_CABPRINTER_HOST = "cabprinter_host"
+  S_CABPRINTER_PORT = "cabprinter_port"
+  S_CABPRINTER_DPI = "cabprinter_dpi"
+  S_CABPRINTER_PAGE_COMMANDS = "cabprinter_page_commands"
+  S_EPLPRINTER_DEVICE = "eplprinter_device"
+  S_EPLPRINTER_DPI = "eplprinter_dpi"
+  S_EPLPRINTER_PAGE_COMMANDS = "eplprinter_page_commands"
 
-  S_GDIPRINTER_NAME = 'gdiprinter_name'
-  S_GDIPRINTER_INITDATA = 'gdiprinter_initdata'
-  S_XIDPRINTER_NAME = 'xidprinter_name'
-  S_XIDPRINTER_INITDATA = 'xidprinter_initdata'
-  S_ZEBRAPRINTER_NAME = 'zebraprinter_name'
-  S_ZEBRAPRINTER_INITDATA = 'zebraprinter_initdata'
-  S_CABPRINTER_HOST = 'cabprinter_host'
-  S_CABPRINTER_PORT = 'cabprinter_port'
-  S_CABPRINTER_DPI = 'cabprinter_dpi'
-  S_CABPRINTER_PAGE_COMMANDS = 'cabprinter_page_commands'
-  S_EPLPRINTER_DEVICE = 'eplprinter_device'
-  S_EPLPRINTER_DPI = 'eplprinter_dpi'
-  S_EPLPRINTER_PAGE_COMMANDS = 'eplprinter_page_commands'
+  S_CX320_DRIVER = "cx320_driver"
+  S_CX320_PRINTER_NR = "cx320_printer_nr"
+  S_CX320_PARALLEL_PRINT = "cx320_parallel_print"
+  S_CX320_CONFIG = "cx320_config"
 
-  S_CX320_DRIVER = 'cx320_driver'
-  S_CX320_PRINTER_NR = 'cx320_printer_nr'
-  S_CX320_PARALLEL_PRINT = 'cx320_parallel_print'
-  S_CX320_CONFIG = 'cx320_config'
-
-  S_FRONT_FLIP = 'front_flip'
-  S_FRONT_FLOP = 'front_flop'
-  S_BACK_FLIP = 'back_flip'
-  S_BACK_FLOP = 'back_flop'
+  S_FRONT_FLIP = "front_flip"
+  S_FRONT_FLOP = "front_flop"
+  S_BACK_FLIP = "back_flip"
+  S_BACK_FLOP = "back_flop"
 
   UP = 0
   DOWN = 1
 
-  NONE = 'none'
-  CSV = 'csv'
-  DBF = 'dbf'
-  DATABASE = 'database'
+  NONE = "none"
+  CSV = "csv"
+  DBF = "dbf"
+  DATABASE = "database"
 
-  NO = 'no'
-  YES = 'yes'
+  NO = "no"
+  YES = "yes"
 
-  S_FALSE = 'false'
-  S_TRUE = 'true'
+  S_FALSE = "false"
+  S_TRUE = "true"
 
-  ENC_UTF8 = 'UTF-8'
-  ENC_IBM850 = 'IBM850'
-  ENC_LATIN1 = 'LATIN1'
+  ENC_UTF8 = "UTF-8"
+  ENC_IBM850 = "IBM850"
+  ENC_LATIN1 = "LATIN1"
 
   VALID_ENCODINGS = [ENC_UTF8, ENC_IBM850, ENC_LATIN1]
   VALID_DATASOURCES = [DATABASE, CSV, DBF, NONE]
@@ -130,9 +127,9 @@ module Mcc2
   COPY = 1
   ADD = 2
 
-  S_MSSPUR1 = 'ms_spur1'
-  S_MSSPUR2 = 'ms_spur2'
-  S_MSSPUR3 = 'ms_spur3'
+  S_MSSPUR1 = "ms_spur1"
+  S_MSSPUR2 = "ms_spur2"
+  S_MSSPUR3 = "ms_spur3"
 
   PRINT_FROM = 0
   PRINT_TO = 1
