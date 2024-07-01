@@ -8,215 +8,214 @@ class MainWindow
 
   def construct_widget_tree(parent)
     @topwin =
-      FX::MainWindow.new(parent) { |w|
-        @mainWindow = w
-        w.wdg_name = "mainWindow"
-        w.width = 340
-        w.height = 246
-        w.shown = true
-        w.y = 351
-        w.x = 318
-        FX::MenuBar.new(@mainWindow) { |w|
-          @menubar = w
-          w.wdg_name = "menubar"
-          w.width = 340
-          w.height = 22
-          w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-          FX::MenuTitle.new(@menubar) { |w|
-            @menutitle_datei = w
-            w.wdg_name = "menutitle_datei"
-            w.width = 41
-            w.text = "Datei"
-            w.height = 18
-            w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-            w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-            w.y = 2
-            w.x = 3
-            FX::MenuPane.new(@menutitle_datei) { |w|
-              @menupane_datei = w
-              w.wdg_name = "menupane_datei"
-              w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-              w.y = 371
-              w.x = 320
-              FX::MenuCommand.new(@menupane_datei) { |w|
-                @mcmd_new = w
-                w.wdg_name = "mcmd_new"
-                w.width = 0
-                w.text = "_Neu"
-                w.height = 19
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w.y = 2
-                w.accelText = "Ctrl+N"
-                w.img = "mcc2/images/document-new.png"
-                w.x = 2
+      FX::MainWindow.new(parent) { |w_mainWindow|
+        @mainWindow = w_mainWindow
+        w_mainWindow.wdg_name = "mainWindow"
+        w_mainWindow.shown = true
+        w_mainWindow.x = 318
+        w_mainWindow.y = 351
+        w_mainWindow.width = 340
+        w_mainWindow.height = 246
+        FX::MenuBar.new(@mainWindow) { |w_menubar|
+          @menubar = w_menubar
+          w_menubar.wdg_name = "menubar"
+          w_menubar.width = 340
+          w_menubar.height = 22
+          w_menubar.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+          FX::MenuTitle.new(@menubar) { |w_menutitle_datei|
+            @menutitle_datei = w_menutitle_datei
+            w_menutitle_datei.wdg_name = "menutitle_datei"
+            w_menutitle_datei.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+            w_menutitle_datei.x = 3
+            w_menutitle_datei.y = 2
+            w_menutitle_datei.width = 42
+            w_menutitle_datei.height = 18
+            w_menutitle_datei.text = "Datei"
+            w_menutitle_datei.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+            FX::MenuPane.new(@menutitle_datei) { |w_menupane_datei|
+              @menupane_datei = w_menupane_datei
+              w_menupane_datei.wdg_name = "menupane_datei"
+              w_menupane_datei.x = 320
+              w_menupane_datei.y = 371
+              w_menupane_datei.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+              FX::MenuCommand.new(@menupane_datei) { |w_mcmd_new|
+                @mcmd_new = w_mcmd_new
+                w_mcmd_new.wdg_name = "mcmd_new"
+                w_mcmd_new.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_mcmd_new.img = "mcc2/images/document-new.png"
+                w_mcmd_new.x = 2
+                w_mcmd_new.y = 2
+                w_mcmd_new.width = 0
+                w_mcmd_new.height = 19
+                w_mcmd_new.accelText = "Ctrl+N"
+                w_mcmd_new.text = "_Neu"
+                w_mcmd_new.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
-              FX::MenuCommand.new(@menupane_datei) { |w|
-                @mcmd_open = w
-                w.wdg_name = "mcmd_open"
-                w.width = 0
-                w.text = "_\303\226ffnen"
-                w.height = 19
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w.y = 21
-                w.accelText = "Ctrl+O"
-                w.img = "mcc2/images/document-open.png"
-                w.x = 2
+              FX::MenuCommand.new(@menupane_datei) { |w_mcmd_open|
+                @mcmd_open = w_mcmd_open
+                w_mcmd_open.wdg_name = "mcmd_open"
+                w_mcmd_open.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_mcmd_open.img = "mcc2/images/document-open.png"
+                w_mcmd_open.x = 2
+                w_mcmd_open.y = 21
+                w_mcmd_open.width = 0
+                w_mcmd_open.height = 19
+                w_mcmd_open.accelText = "Ctrl+O"
+                w_mcmd_open.text = "_Öffnen"
+                w_mcmd_open.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
-              FX::MenuCommand.new(@menupane_datei) { |w|
-                @mcmd_save = w
-                w.wdg_name = "mcmd_save"
-                w.width = 0
-                w.text = "_Speichern"
-                w.height = 19
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w.y = 40
-                w.accelText = "Ctrl+S"
-                w.img = "mcc2/images/document-save.png"
-                w.x = 2
+              FX::MenuCommand.new(@menupane_datei) { |w_mcmd_save|
+                @mcmd_save = w_mcmd_save
+                w_mcmd_save.wdg_name = "mcmd_save"
+                w_mcmd_save.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_mcmd_save.img = "mcc2/images/document-save.png"
+                w_mcmd_save.x = 2
+                w_mcmd_save.y = 40
+                w_mcmd_save.width = 0
+                w_mcmd_save.height = 19
+                w_mcmd_save.accelText = "Ctrl+S"
+                w_mcmd_save.text = "_Speichern"
+                w_mcmd_save.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
-              FX::MenuCommand.new(@menupane_datei) { |w|
-                @mcmd_save_as = w
-                w.wdg_name = "mcmd_save_as"
-                w.width = 0
-                w.text = "Speichern _unter"
-                w.height = 19
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w.y = 59
-                w.accelText = "Shift-Ctrl-S"
-                w.img = "mcc2/images/document-save-as.png"
-                w.x = 2
+              FX::MenuCommand.new(@menupane_datei) { |w_mcmd_save_as|
+                @mcmd_save_as = w_mcmd_save_as
+                w_mcmd_save_as.wdg_name = "mcmd_save_as"
+                w_mcmd_save_as.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_mcmd_save_as.img = "mcc2/images/document-save-as.png"
+                w_mcmd_save_as.x = 2
+                w_mcmd_save_as.y = 59
+                w_mcmd_save_as.width = 0
+                w_mcmd_save_as.height = 19
+                w_mcmd_save_as.accelText = "Shift-Ctrl-S"
+                w_mcmd_save_as.text = "Speichern _unter"
+                w_mcmd_save_as.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
-              FX::MenuCommand.new(@menupane_datei) { |w|
-                @mcmd_close = w
-                w.wdg_name = "mcmd_close"
-                w.width = 0
-                w.text = "Schlie\303\237_en"
-                w.height = 19
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w.y = 78
-                w.accelText = "Ctrl+W"
-                w.img = "mcc2/images/document-close.png"
-                w.x = 2
+              FX::MenuCommand.new(@menupane_datei) { |w_mcmd_close|
+                @mcmd_close = w_mcmd_close
+                w_mcmd_close.wdg_name = "mcmd_close"
+                w_mcmd_close.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_mcmd_close.img = "mcc2/images/document-close.png"
+                w_mcmd_close.x = 2
+                w_mcmd_close.y = 78
+                w_mcmd_close.width = 0
+                w_mcmd_close.height = 19
+                w_mcmd_close.accelText = "Ctrl+W"
+                w_mcmd_close.text = "Schließ_en"
+                w_mcmd_close.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
-              FX::MenuSeparator.new(@menupane_datei) { |w|
-                @menuseparator1 = w
-                w.wdg_name = "menuseparator1"
-                w.width = 0
-                w.height = 2
-                w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w.y = 97
-                w.x = 2
+              FX::MenuSeparator.new(@menupane_datei) { |w_menuseparator1|
+                @menuseparator1 = w_menuseparator1
+                w_menuseparator1.wdg_name = "menuseparator1"
+                w_menuseparator1.x = 2
+                w_menuseparator1.y = 97
+                w_menuseparator1.width = 0
+                w_menuseparator1.height = 2
+                w_menuseparator1.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
-              FX::MenuCommand.new(@menupane_datei) { |w|
-                @mcmd_exit = w
-                w.wdg_name = "mcmd_exit"
-                w.width = 0
-                w.text = "_Beenden"
-                w.height = 19
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w.y = 99
-                w.accelText = "Alt+F4"
-                w.img = "mcc2/images/application-exit.png"
-                w.x = 2
+              FX::MenuCommand.new(@menupane_datei) { |w_mcmd_exit|
+                @mcmd_exit = w_mcmd_exit
+                w_mcmd_exit.wdg_name = "mcmd_exit"
+                w_mcmd_exit.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_mcmd_exit.img = "mcc2/images/application-exit.png"
+                w_mcmd_exit.x = 2
+                w_mcmd_exit.y = 99
+                w_mcmd_exit.width = 0
+                w_mcmd_exit.height = 19
+                w_mcmd_exit.accelText = "Alt+F4"
+                w_mcmd_exit.text = "_Beenden"
+                w_mcmd_exit.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
             }
           }
-          FX::MenuTitle.new(@menubar) { |w|
-            @menutitle_object = w
-            w.wdg_name = "menutitle_object"
-            w.width = 48
-            w.text = "Objekt"
-            w.height = 18
-            w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-            w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-            w.y = 2
-            w.x = 48
-            FX::MenuPane.new(@menutitle_object) { |w|
-              @menupane_object = w
-              w.wdg_name = "menupane_object"
-              w.width = 137
-              w.height = 80
-              w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-              w.y = 371
-              w.x = 365
-              FX::MenuCommand.new(@menupane_object) { |w|
-                @mcmd_text = w
-                w.wdg_name = "mcmd_text"
-                w.width = 133
-                w.text = "_Text"
-                w.height = 19
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w.y = 2
-                w.accelText = "Ctrl+T"
-                w.img = "mcc2/images/insert-text.png"
-                w.x = 2
+          FX::MenuTitle.new(@menubar) { |w_menutitle_object|
+            @menutitle_object = w_menutitle_object
+            w_menutitle_object.wdg_name = "menutitle_object"
+            w_menutitle_object.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+            w_menutitle_object.x = 49
+            w_menutitle_object.y = 2
+            w_menutitle_object.width = 48
+            w_menutitle_object.height = 18
+            w_menutitle_object.text = "Objekt"
+            w_menutitle_object.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+            FX::MenuPane.new(@menutitle_object) { |w_menupane_object|
+              @menupane_object = w_menupane_object
+              w_menupane_object.wdg_name = "menupane_object"
+              w_menupane_object.x = 365
+              w_menupane_object.y = 371
+              w_menupane_object.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+              FX::MenuCommand.new(@menupane_object) { |w_mcmd_text|
+                @mcmd_text = w_mcmd_text
+                w_mcmd_text.wdg_name = "mcmd_text"
+                w_mcmd_text.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_mcmd_text.img = "mcc2/images/insert-text.png"
+                w_mcmd_text.x = 2
+                w_mcmd_text.y = 2
+                w_mcmd_text.width = 0
+                w_mcmd_text.height = 19
+                w_mcmd_text.accelText = "Ctrl+T"
+                w_mcmd_text.text = "_Text"
+                w_mcmd_text.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
-              FX::MenuCommand.new(@menupane_object) { |w|
-                @mcmd_barcode = w
-                w.wdg_name = "mcmd_barcode"
-                w.width = 133
-                w.text = "_Barcode"
-                w.height = 19
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w.y = 21
-                w.accelText = "Ctrl+B"
-                w.img = "mcc2/images/measure.png"
-                w.x = 2
+              FX::MenuCommand.new(@menupane_object) { |w_mcmd_barcode|
+                @mcmd_barcode = w_mcmd_barcode
+                w_mcmd_barcode.wdg_name = "mcmd_barcode"
+                w_mcmd_barcode.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_mcmd_barcode.img = "mcc2/images/measure.png"
+                w_mcmd_barcode.x = 2
+                w_mcmd_barcode.y = 21
+                w_mcmd_barcode.width = 0
+                w_mcmd_barcode.height = 19
+                w_mcmd_barcode.accelText = "Ctrl+B"
+                w_mcmd_barcode.text = "_Barcode"
+                w_mcmd_barcode.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
-              FX::MenuCommand.new(@menupane_object) { |w|
-                @mcmd_picture = w
-                w.wdg_name = "mcmd_picture"
-                w.width = 133
-                w.text = "B_ild"
-                w.height = 19
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w.y = 40
-                w.accelText = "Ctrl+i"
-                w.img = "mcc2/images/insert-image.png"
-                w.x = 2
+              FX::MenuCommand.new(@menupane_object) { |w_mcmd_picture|
+                @mcmd_picture = w_mcmd_picture
+                w_mcmd_picture.wdg_name = "mcmd_picture"
+                w_mcmd_picture.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_mcmd_picture.img = "mcc2/images/insert-image.png"
+                w_mcmd_picture.x = 2
+                w_mcmd_picture.y = 40
+                w_mcmd_picture.width = 0
+                w_mcmd_picture.height = 19
+                w_mcmd_picture.accelText = "Ctrl+i"
+                w_mcmd_picture.text = "B_ild"
+                w_mcmd_picture.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
-              FX::MenuCommand.new(@menupane_object) { |w|
-                @mcmd_box = w
-                w.wdg_name = "mcmd_box"
-                w.width = 133
-                w.text = "_Rahmen"
-                w.height = 19
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w.y = 59
-                w.img = "mcc2/images/draw-rectangle.png"
-                w.x = 2
+              FX::MenuCommand.new(@menupane_object) { |w_mcmd_box|
+                @mcmd_box = w_mcmd_box
+                w_mcmd_box.wdg_name = "mcmd_box"
+                w_mcmd_box.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_mcmd_box.img = "mcc2/images/draw-rectangle.png"
+                w_mcmd_box.x = 2
+                w_mcmd_box.y = 59
+                w_mcmd_box.width = 0
+                w_mcmd_box.height = 19
+                w_mcmd_box.text = "_Rahmen"
+                w_mcmd_box.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
             }
           }
         }
-        FX::StatusBar.new(@mainWindow) { |w|
-          @statusbar = w
-          w.wdg_name = "statusbar"
-          w.width = 340
-          w.height = 25
-          w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-          w.y = 221
-          w.layoutHints = 1025
+        FX::StatusBar.new(@mainWindow) { |w_statusbar|
+          @statusbar = w_statusbar
+          w_statusbar.wdg_name = "statusbar"
+          w_statusbar.layoutHints = 1025
+          w_statusbar.y = 221
+          w_statusbar.width = 340
+          w_statusbar.height = 25
+          w_statusbar.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
         }
-        FX::MDIClient.new(@mainWindow) { |w|
-          @mdiclient = w
-          w.wdg_name = "mdiclient"
-          w.width = 340
-          w.height = 191
-          w.y = 26
-          w.backColor = Fox::FXRGBA(128, 128, 128, 255)
+        FX::MDIClient.new(@mainWindow) { |w_mdiclient|
+          @mdiclient = w_mdiclient
+          w_mdiclient.wdg_name = "mdiclient"
+          w_mdiclient.y = 26
+          w_mdiclient.width = 340
+          w_mdiclient.height = 191
+          w_mdiclient.backColor = Fox::FXRGBA(128, 128, 128, 255)
         }
       }
+    @topwin
   end
   attr_reader :topwin
   attr_reader :mainWindow

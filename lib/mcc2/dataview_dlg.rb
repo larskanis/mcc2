@@ -8,203 +8,204 @@ class Dialogbox_dataview
 
   def construct_widget_tree(parent)
     @topwin =
-      FX::DialogBox.new(parent) { |w|
-        @dialogbox_dataview = w
-        w.wdg_name = "dialogbox_dataview"
-        w.width = 398
-        w.height = 254
-        w.shown = true
-        w.y = 298
-        w.title = "Entwurfsansicht"
-        w.layoutHints = 768
-        w.x = 303
-        FX::Splitter.new(@dialogbox_dataview) { |w|
-          @splitter_dataview = w
-          w.wdg_name = "splitter_dataview"
-          w.width = 398
-          w.height = 254
-          w.splitterStyle = 163840
-          FX::VerticalFrame.new(@splitter_dataview) { |w|
-            @verticalframe_datalist = w
-            w.wdg_name = "verticalframe_datalist"
-            w.width = 398
-            w.frameStyle = 16384
-            w.height = 254
-            w.layoutHints = 2304
-            FX::HorizontalFrame.new(@verticalframe_datalist) { |w|
-              @horizontalframe74 = w
-              w.wdg_name = "horizontalframe74"
-              w.padLeft = 4
-              w.width = 394
-              w.height = 22
-              w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-              w.hSpacing = 2
-              w.y = 2
-              w.layoutHints = 1024
-              w.x = 2
-              FX::Label.new(@horizontalframe74) { |w|
-                @label409 = w
-                w.wdg_name = "label409"
-                w.width = 68
-                w.text = "Datenquelle"
-                w.height = 18
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w.layoutHints = 256
-                w.x = 4
+      FX::DialogBox.new(parent) { |w_dialogbox_dataview|
+        @dialogbox_dataview = w_dialogbox_dataview
+        w_dialogbox_dataview.wdg_name = "dialogbox_dataview"
+        w_dialogbox_dataview.layoutHints = 768
+        w_dialogbox_dataview.shown = true
+        w_dialogbox_dataview.x = 303
+        w_dialogbox_dataview.y = 298
+        w_dialogbox_dataview.width = 398
+        w_dialogbox_dataview.height = 254
+        w_dialogbox_dataview.title = "Entwurfsansicht"
+        FX::Splitter.new(@dialogbox_dataview) { |w_splitter_dataview|
+          @splitter_dataview = w_splitter_dataview
+          w_splitter_dataview.wdg_name = "splitter_dataview"
+          w_splitter_dataview.splitterStyle = 163840
+          w_splitter_dataview.width = 398
+          w_splitter_dataview.height = 254
+          FX::VerticalFrame.new(@splitter_dataview) { |w_verticalframe_datalist|
+            @verticalframe_datalist = w_verticalframe_datalist
+            w_verticalframe_datalist.wdg_name = "verticalframe_datalist"
+            w_verticalframe_datalist.frameStyle = 16384
+            w_verticalframe_datalist.layoutHints = 2304
+            w_verticalframe_datalist.width = 398
+            w_verticalframe_datalist.height = 254
+            FX::HorizontalFrame.new(@verticalframe_datalist) { |w_horizontalframe74|
+              @horizontalframe74 = w_horizontalframe74
+              w_horizontalframe74.wdg_name = "horizontalframe74"
+              w_horizontalframe74.layoutHints = 1024
+              w_horizontalframe74.hSpacing = 2
+              w_horizontalframe74.padLeft = 4
+              w_horizontalframe74.x = 2
+              w_horizontalframe74.y = 2
+              w_horizontalframe74.width = 394
+              w_horizontalframe74.height = 22
+              w_horizontalframe74.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+              FX::Label.new(@horizontalframe74) { |w_label409|
+                @label409 = w_label409
+                w_label409.wdg_name = "label409"
+                w_label409.layoutHints = 256
+                w_label409.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_label409.x = 4
+                w_label409.width = 68
+                w_label409.height = 18
+                w_label409.text = "Datenquelle"
+                w_label409.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
-              FX::TextField.new(@horizontalframe74) { |w|
-                @textfield_datasource = w
-                w.wdg_name = "textfield_datasource"
-                w.width = 298
-                w.height = 20
-                w.tipText = "Hier wird die Datendatei angegeben. Wenn keine verwendet wird, kann das Feld leer bleiben."
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w.numColumns = 30
-                w.layoutHints = 1024
-                w.x = 74
+              FX::TextField.new(@horizontalframe74) { |w_textfield_datasource|
+                @textfield_datasource = w_textfield_datasource
+                w_textfield_datasource.wdg_name = "textfield_datasource"
+                w_textfield_datasource.layoutHints = 1024
+                w_textfield_datasource.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_textfield_datasource.x = 74
+                w_textfield_datasource.width = 298
+                w_textfield_datasource.height = 20
+                w_textfield_datasource.numColumns = 30
+                w_textfield_datasource.tipText = "Hier wird die Datendatei angegeben. Wenn keine verwendet wird, kann das Feld leer bleiben."
+                w_textfield_datasource.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
-              FX::Button.new(@horizontalframe74) { |w|
-                @button_datasource = w
-                w.wdg_name = "button_datasource"
-                w.width = 20
-                w.text = "..."
-                w.height = 22
-                w.tipText = "CSV-Datei \303\274ber Dateiauswahl-Dialog laden"
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w.layoutHints = 256
-                w.x = 374
-              }
-            }
-            FX::Matrix.new(@verticalframe_datalist) { |w|
-              @matrix_printbuttons = w
-              w.wdg_name = "matrix_printbuttons"
-              w.width = 394
-              w.height = 29
-              w.hSpacing = 0
-              w.y = 24
-              w.numColumns = 3
-              w.matrixStyle = 131072
-              w.layoutHints = 1024
-              w.vSpacing = 0
-              w.x = 2
-              FX::Label.new(@matrix_printbuttons) { |w|
-                @label18 = w
-                w.wdg_name = "label18"
-                w.width = 69
-                w.text = "Suchbegriff"
-                w.height = 18
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.y = 4
-                w.layoutHints = 256
-                w.x = 4
-              }
-              FX::TextField.new(@matrix_printbuttons) { |w|
-                @textfield_search = w
-                w.wdg_name = "textfield_search"
-                w.width = 313
-                w.height = 21
-                w.tipText = "Durch Eingabe einer Zeichenkette werden alle angezeigten Felder\ndurchsucht und markiert. Durch mehrfaches Dr\303\274cken der Enter-\nTaste wird zur n\303\244chsten Fundstelle gesprungen."
-                w.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
-                w.y = 4
-                w.numColumns = 10
-                w.layoutHints = 1025
-                w.x = 73
-              }
-              FX::Label.new(@matrix_printbuttons) { |w|
-                @label_selected = w
-                w.wdg_name = "label_selected"
-                w.width = 4
-                w.text = ""
-                w.height = 4
-                w.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w.y = 4
-                w.x = 386
+              FX::Button.new(@horizontalframe74) { |w_button_datasource|
+                @button_datasource = w_button_datasource
+                w_button_datasource.wdg_name = "button_datasource"
+                w_button_datasource.layoutHints = 256
+                w_button_datasource.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_button_datasource.x = 374
+                w_button_datasource.width = 20
+                w_button_datasource.height = 22
+                w_button_datasource.text = "..."
+                w_button_datasource.tipText = "CSV-Datei über Dateiauswahl-Dialog laden"
+                w_button_datasource.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
             }
-            FX::Matrix.new(@verticalframe_datalist) { |w|
-              @matrix18 = w
-              w.wdg_name = "matrix18"
-              w.width = 394
-              w.height = 31
-              w.y = 53
-              w.numColumns = 5
-              w.layoutHints = 1024
-              w.x = 2
-              FX::Button.new(@matrix18) { |w|
-                @button_select_all = w
-                w.wdg_name = "button_select_all"
-                w.width = 28
-                w.text = "alle"
-                w.height = 23
-                w.tipText = "alle Datens\303\244tze markieren"
-                w.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
-                w.y = 4
-                w.x = 4
+            FX::Matrix.new(@verticalframe_datalist) { |w_matrix_printbuttons|
+              @matrix_printbuttons = w_matrix_printbuttons
+              w_matrix_printbuttons.wdg_name = "matrix_printbuttons"
+              w_matrix_printbuttons.layoutHints = 1024
+              w_matrix_printbuttons.matrixStyle = 131072
+              w_matrix_printbuttons.hSpacing = 0
+              w_matrix_printbuttons.vSpacing = 0
+              w_matrix_printbuttons.x = 2
+              w_matrix_printbuttons.y = 24
+              w_matrix_printbuttons.width = 394
+              w_matrix_printbuttons.height = 29
+              w_matrix_printbuttons.numColumns = 3
+              FX::Label.new(@matrix_printbuttons) { |w_label18|
+                @label18 = w_label18
+                w_label18.wdg_name = "label18"
+                w_label18.layoutHints = 256
+                w_label18.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_label18.x = 4
+                w_label18.y = 4
+                w_label18.width = 69
+                w_label18.height = 18
+                w_label18.text = "Suchbegriff"
               }
-              FX::Button.new(@matrix18) { |w|
-                @button_deselect_all = w
-                w.wdg_name = "button_deselect_all"
-                w.width = 25
-                w.text = "nix"
-                w.height = 23
-                w.tipText = "alle Datensatz-Markierungen entfernen"
-                w.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
-                w.y = 4
-                w.x = 36
+              FX::TextField.new(@matrix_printbuttons) { |w_textfield_search|
+                @textfield_search = w_textfield_search
+                w_textfield_search.wdg_name = "textfield_search"
+                w_textfield_search.layoutHints = 1025
+                w_textfield_search.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
+                w_textfield_search.x = 73
+                w_textfield_search.y = 4
+                w_textfield_search.width = 313
+                w_textfield_search.height = 21
+                w_textfield_search.numColumns = 10
+                w_textfield_search.tipText = "Durch Eingabe einer Zeichenkette werden alle angezeigten Felder\ndurchsucht und markiert. Durch mehrfaches Drücken der Enter-\nTaste wird zur nächsten Fundstelle gesprungen."
               }
-              FX::Button.new(@matrix18) { |w|
-                @button_print_selected = w
-                w.wdg_name = "button_print_selected"
-                w.width = 112
-                w.text = "markierte drucken"
-                w.height = 23
-                w.tipText = "alle markierten Datens\303\244tze drucken"
-                w.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
-                w.y = 4
-                w.img = "mcc2/images/document-print-frame.png"
-                w.x = 65
-              }
-              FX::Button.new(@matrix18) { |w|
-                @button_print_all = w
-                w.wdg_name = "button_print_all"
-                w.width = 78
-                w.text = "alle drucken"
-                w.height = 23
-                w.tipText = "Alle Datens\303\244tze drucken"
-                w.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
-                w.y = 4
-                w.img = "mcc2/images/document-print.png"
-                w.x = 181
-              }
-              FX::Button.new(@matrix18) { |w|
-                @button_stop_printing = w
-                w.wdg_name = "button_stop_printing"
-                w.width = 42
-                w.text = "Stopp"
-                w.height = 23
-                w.tipText = "Druck nach der aktuellen Karte anhalten"
-                w.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
-                w.y = 4
-                w.img = "mcc2/images/process-stop.png"
-                w.x = 263
+              FX::Label.new(@matrix_printbuttons) { |w_label_selected|
+                @label_selected = w_label_selected
+                w_label_selected.wdg_name = "label_selected"
+                w_label_selected.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_label_selected.x = 386
+                w_label_selected.y = 4
+                w_label_selected.width = 4
+                w_label_selected.height = 4
+                w_label_selected.text = ""
               }
             }
-            FX::IconList.new(@verticalframe_datalist) { |w|
-              @iconlist_data = w
-              w.wdg_name = "iconlist_data"
-              w.width = 394
-              w.height = 168
-              w.font = FX::Font.new.from_s("Arial|90|40|5|0|0|0").to_FXFont
-              w.y = 84
-              w.iconListStyle = 4194304
-              w.x = 2
+            FX::Matrix.new(@verticalframe_datalist) { |w_matrix18|
+              @matrix18 = w_matrix18
+              w_matrix18.wdg_name = "matrix18"
+              w_matrix18.layoutHints = 1024
+              w_matrix18.x = 2
+              w_matrix18.y = 53
+              w_matrix18.width = 394
+              w_matrix18.height = 31
+              w_matrix18.numColumns = 5
+              FX::Button.new(@matrix18) { |w_button_select_all|
+                @button_select_all = w_button_select_all
+                w_button_select_all.wdg_name = "button_select_all"
+                w_button_select_all.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
+                w_button_select_all.x = 4
+                w_button_select_all.y = 4
+                w_button_select_all.width = 28
+                w_button_select_all.height = 23
+                w_button_select_all.text = "alle"
+                w_button_select_all.tipText = "alle Datensätze markieren"
+              }
+              FX::Button.new(@matrix18) { |w_button_deselect_all|
+                @button_deselect_all = w_button_deselect_all
+                w_button_deselect_all.wdg_name = "button_deselect_all"
+                w_button_deselect_all.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
+                w_button_deselect_all.x = 36
+                w_button_deselect_all.y = 4
+                w_button_deselect_all.width = 24
+                w_button_deselect_all.height = 23
+                w_button_deselect_all.text = "nix"
+                w_button_deselect_all.tipText = "alle Datensatz-Markierungen entfernen"
+              }
+              FX::Button.new(@matrix18) { |w_button_print_selected|
+                @button_print_selected = w_button_print_selected
+                w_button_print_selected.wdg_name = "button_print_selected"
+                w_button_print_selected.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
+                w_button_print_selected.img = "mcc2/images/document-print-frame.png"
+                w_button_print_selected.x = 64
+                w_button_print_selected.y = 4
+                w_button_print_selected.width = 106
+                w_button_print_selected.height = 23
+                w_button_print_selected.text = "markierte drucken"
+                w_button_print_selected.tipText = "alle markierten Datensätze drucken"
+              }
+              FX::Button.new(@matrix18) { |w_button_print_all|
+                @button_print_all = w_button_print_all
+                w_button_print_all.wdg_name = "button_print_all"
+                w_button_print_all.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
+                w_button_print_all.img = "mcc2/images/document-print.png"
+                w_button_print_all.x = 174
+                w_button_print_all.y = 4
+                w_button_print_all.width = 75
+                w_button_print_all.height = 23
+                w_button_print_all.text = "alle drucken"
+                w_button_print_all.tipText = "Alle Datensätze drucken"
+              }
+              FX::Button.new(@matrix18) { |w_button_stop_printing|
+                @button_stop_printing = w_button_stop_printing
+                w_button_stop_printing.wdg_name = "button_stop_printing"
+                w_button_stop_printing.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
+                w_button_stop_printing.img = "mcc2/images/process-stop.png"
+                w_button_stop_printing.x = 253
+                w_button_stop_printing.y = 4
+                w_button_stop_printing.width = 40
+                w_button_stop_printing.height = 23
+                w_button_stop_printing.text = "Stopp"
+                w_button_stop_printing.tipText = "Druck nach der aktuellen Karte anhalten"
+              }
+            }
+            FX::IconList.new(@verticalframe_datalist) { |w_iconlist_data|
+              @iconlist_data = w_iconlist_data
+              w_iconlist_data.wdg_name = "iconlist_data"
+              w_iconlist_data.iconListStyle = 4194304
+              w_iconlist_data.font = FX::Font.new.from_s("Arial|90|40|5|0|0|0").to_FXFont
+              w_iconlist_data.x = 2
+              w_iconlist_data.y = 84
+              w_iconlist_data.width = 394
+              w_iconlist_data.height = 168
             }
           }
         }
       }
+    @topwin
   end
   attr_reader :topwin
   attr_reader :dialogbox_dataview

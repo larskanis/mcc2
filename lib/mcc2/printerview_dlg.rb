@@ -8,992 +8,992 @@ class Dialogbox_printerview
 
   def construct_widget_tree(parent)
     @topwin =
-      FX::DialogBox.new(parent) { |w|
-        @dialogbox_printerview = w
-        w.wdg_name = "dialogbox_printerview"
-        w.shown = true
-        w.x = 2320
-        w.y = 198
-        w.width = 570
-        w.height = 696
-        FX::VerticalFrame.new(@dialogbox_printerview) { |w|
-          @verticalframe_printersetup = w
-          w.wdg_name = "verticalframe_printersetup"
-          w.width = 570
-          w.height = 696
-          FX::ComboBox.new(@verticalframe_printersetup) { |w|
-            @combobox_printertype = w
-            w.wdg_name = "combobox_printertype"
-            w.comboStyle = 1048576
-            w.layoutHints = 1024
-            w.width = 570
-            w.height = 21
-            w.numVisible = 10
-            w.numColumns = 10
+      FX::DialogBox.new(parent) { |w_dialogbox_printerview|
+        @dialogbox_printerview = w_dialogbox_printerview
+        w_dialogbox_printerview.wdg_name = "dialogbox_printerview"
+        w_dialogbox_printerview.shown = true
+        w_dialogbox_printerview.x = 2320
+        w_dialogbox_printerview.y = 198
+        w_dialogbox_printerview.width = 570
+        w_dialogbox_printerview.height = 696
+        FX::VerticalFrame.new(@dialogbox_printerview) { |w_verticalframe_printersetup|
+          @verticalframe_printersetup = w_verticalframe_printersetup
+          w_verticalframe_printersetup.wdg_name = "verticalframe_printersetup"
+          w_verticalframe_printersetup.width = 570
+          w_verticalframe_printersetup.height = 696
+          FX::ComboBox.new(@verticalframe_printersetup) { |w_combobox_printertype|
+            @combobox_printertype = w_combobox_printertype
+            w_combobox_printertype.wdg_name = "combobox_printertype"
+            w_combobox_printertype.comboStyle = 1048576
+            w_combobox_printertype.layoutHints = 1024
+            w_combobox_printertype.width = 570
+            w_combobox_printertype.height = 21
+            w_combobox_printertype.numVisible = 10
+            w_combobox_printertype.numColumns = 10
           }
-          FX::TabBook.new(@verticalframe_printersetup) { |w|
-            @tabbook_printers = w
-            w.wdg_name = "tabbook_printers"
-            w.y = 21
-            w.width = 570
-            w.height = 675
-            w.current = 6
-            w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-            w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-            w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-            FX::TabItem.new(@tabbook_printers) { |w|
-              @tabitem4 = w
-              w.wdg_name = "tabitem4"
-              w.x = 6
-              w.y = 6
-              w.width = 93
-              w.height = 23
-              w.text = "Windows-GDI"
+          FX::TabBook.new(@verticalframe_printersetup) { |w_tabbook_printers|
+            @tabbook_printers = w_tabbook_printers
+            w_tabbook_printers.wdg_name = "tabbook_printers"
+            w_tabbook_printers.y = 21
+            w_tabbook_printers.width = 570
+            w_tabbook_printers.height = 675
+            w_tabbook_printers.backColor = Fox::FXRGBA(226, 226, 226, 255)
+            w_tabbook_printers.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+            w_tabbook_printers.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+            FX::TabItem.new(@tabbook_printers) { |w_tabitem4|
+              @tabitem4 = w_tabitem4
+              w_tabitem4.wdg_name = "tabitem4"
+              w_tabitem4.x = 4
+              w_tabitem4.y = 4
+              w_tabitem4.width = 93
+              w_tabitem4.height = 23
+              w_tabitem4.text = "Windows-GDI"
             }
-            FX::VerticalFrame.new(@tabbook_printers) { |w|
-              @verticalframe6 = w
-              w.wdg_name = "verticalframe6"
-              w.shown = false
-              w.x = 4
-              w.y = 25
-              w.width = 562
-              w.height = 646
-              FX::Matrix.new(@verticalframe6) { |w|
-                @matrix_gdi = w
-                w.wdg_name = "matrix_gdi"
-                w.matrixStyle = 131072
-                w.width = 562
-                w.height = 646
-                w.numColumns = 3
-                FX::Label.new(@matrix_gdi) { |w|
-                  @label9 = w
-                  w.wdg_name = "label9"
-                  w.x = 4
-                  w.y = 4
-                  w.width = 54
-                  w.height = 19
-                  w.text = "Drucker"
+            FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe6|
+              @verticalframe6 = w_verticalframe6
+              w_verticalframe6.wdg_name = "verticalframe6"
+              w_verticalframe6.x = 4
+              w_verticalframe6.y = 25
+              w_verticalframe6.width = 562
+              w_verticalframe6.height = 646
+              FX::Matrix.new(@verticalframe6) { |w_matrix_gdi|
+                @matrix_gdi = w_matrix_gdi
+                w_matrix_gdi.wdg_name = "matrix_gdi"
+                w_matrix_gdi.matrixStyle = 131072
+                w_matrix_gdi.width = 562
+                w_matrix_gdi.height = 646
+                w_matrix_gdi.numColumns = 3
+                FX::Label.new(@matrix_gdi) { |w_label9|
+                  @label9 = w_label9
+                  w_label9.wdg_name = "label9"
+                  w_label9.x = 4
+                  w_label9.y = 4
+                  w_label9.width = 54
+                  w_label9.height = 19
+                  w_label9.text = "Drucker"
                 }
-                FX::ComboBox.new(@matrix_gdi) { |w|
-                  @combobox_gdi_printer = w
-                  w.wdg_name = "combobox_gdi_printer"
-                  w.comboStyle = 1048576
-                  w.layoutHints = 1025
-                  w.x = 62
-                  w.y = 4
-                  w.width = 421
-                  w.height = 21
-                  w.numVisible = 10
+                FX::ComboBox.new(@matrix_gdi) { |w_combobox_gdi_printer|
+                  @combobox_gdi_printer = w_combobox_gdi_printer
+                  w_combobox_gdi_printer.wdg_name = "combobox_gdi_printer"
+                  w_combobox_gdi_printer.comboStyle = 1048576
+                  w_combobox_gdi_printer.layoutHints = 1025
+                  w_combobox_gdi_printer.x = 62
+                  w_combobox_gdi_printer.y = 4
+                  w_combobox_gdi_printer.width = 421
+                  w_combobox_gdi_printer.height = 21
+                  w_combobox_gdi_printer.numVisible = 10
                 }
-                FX::Button.new(@matrix_gdi) { |w|
-                  @button_gdi_printersetup = w
-                  w.wdg_name = "button_gdi_printersetup"
-                  w.layoutHints = 1024
-                  w.x = 487
-                  w.y = 4
-                  w.width = 71
-                  w.height = 23
-                  w.text = "Einrichten"
-                  w.tipText = "Dateiauswahl"
+                FX::Button.new(@matrix_gdi) { |w_button_gdi_printersetup|
+                  @button_gdi_printersetup = w_button_gdi_printersetup
+                  w_button_gdi_printersetup.wdg_name = "button_gdi_printersetup"
+                  w_button_gdi_printersetup.layoutHints = 1024
+                  w_button_gdi_printersetup.x = 487
+                  w_button_gdi_printersetup.y = 4
+                  w_button_gdi_printersetup.width = 71
+                  w_button_gdi_printersetup.height = 23
+                  w_button_gdi_printersetup.text = "Einrichten"
+                  w_button_gdi_printersetup.tipText = "Dateiauswahl"
                 }
               }
             }
-            FX::TabItem.new(@tabbook_printers) { |w|
-              @tabitem5 = w
-              w.wdg_name = "tabitem5"
-              w.x = 99
-              w.y = 6
-              w.width = 42
-              w.height = 23
-              w.text = "Datei"
+            FX::TabItem.new(@tabbook_printers) { |w_tabitem5|
+              @tabitem5 = w_tabitem5
+              w_tabitem5.wdg_name = "tabitem5"
+              w_tabitem5.x = 96
+              w_tabitem5.y = 6
+              w_tabitem5.width = 42
+              w_tabitem5.height = 23
+              w_tabitem5.text = "Datei"
             }
-            FX::VerticalFrame.new(@tabbook_printers) { |w|
-              @verticalframe7 = w
-              w.wdg_name = "verticalframe7"
-              w.shown = false
-              w.x = 4
-              w.y = 25
-              w.width = 562
-              w.height = 646
-              FX::Matrix.new(@verticalframe7) { |w|
-                @matrix_file = w
-                w.wdg_name = "matrix_file"
-                w.matrixStyle = 131072
-                w.width = 562
-                w.height = 646
-                w.numColumns = 3
-                w.numRows = 2
-                FX::Label.new(@matrix_file) { |w|
-                  @label3 = w
-                  w.wdg_name = "label3"
-                  w.x = 4
-                  w.y = 4
-                  w.width = 105
-                  w.height = 19
-                  w.text = "Speichern unter"
+            FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe7|
+              @verticalframe7 = w_verticalframe7
+              w_verticalframe7.wdg_name = "verticalframe7"
+              w_verticalframe7.shown = false
+              w_verticalframe7.x = 4
+              w_verticalframe7.y = 25
+              w_verticalframe7.width = 562
+              w_verticalframe7.height = 646
+              FX::Matrix.new(@verticalframe7) { |w_matrix_file|
+                @matrix_file = w_matrix_file
+                w_matrix_file.wdg_name = "matrix_file"
+                w_matrix_file.matrixStyle = 131072
+                w_matrix_file.width = 562
+                w_matrix_file.height = 646
+                w_matrix_file.numColumns = 3
+                w_matrix_file.numRows = 2
+                FX::Label.new(@matrix_file) { |w_label3|
+                  @label3 = w_label3
+                  w_label3.wdg_name = "label3"
+                  w_label3.x = 4
+                  w_label3.y = 4
+                  w_label3.width = 105
+                  w_label3.height = 19
+                  w_label3.text = "Speichern unter"
                 }
-                FX::TextField.new(@matrix_file) { |w|
-                  @textfield_file_save_as = w
-                  w.wdg_name = "textfield_file_save_as"
-                  w.layoutHints = 1025
-                  w.x = 113
-                  w.y = 4
-                  w.width = 418
-                  w.height = 21
-                  w.numColumns = 10
-                  w.tipText = "Speicherort der generierten Dateien\n%d - Nummer des Datensatzes\n%p - Seitennummer\n%i - Nummer der Karte im Druckjob"
+                FX::TextField.new(@matrix_file) { |w_textfield_file_save_as|
+                  @textfield_file_save_as = w_textfield_file_save_as
+                  w_textfield_file_save_as.wdg_name = "textfield_file_save_as"
+                  w_textfield_file_save_as.layoutHints = 1025
+                  w_textfield_file_save_as.x = 113
+                  w_textfield_file_save_as.y = 4
+                  w_textfield_file_save_as.width = 418
+                  w_textfield_file_save_as.height = 21
+                  w_textfield_file_save_as.numColumns = 10
+                  w_textfield_file_save_as.tipText = "Speicherort der generierten Dateien\n%d - Nummer des Datensatzes\n%p - Seitennummer\n%i - Nummer der Karte im Druckjob"
                 }
-                FX::Button.new(@matrix_file) { |w|
-                  @button_file_save_as = w
-                  w.wdg_name = "button_file_save_as"
-                  w.layoutHints = 1024
-                  w.x = 535
-                  w.y = 4
-                  w.width = 23
-                  w.height = 23
-                  w.text = "..."
-                  w.tipText = "Dateiauswahl"
+                FX::Button.new(@matrix_file) { |w_button_file_save_as|
+                  @button_file_save_as = w_button_file_save_as
+                  w_button_file_save_as.wdg_name = "button_file_save_as"
+                  w_button_file_save_as.layoutHints = 1024
+                  w_button_file_save_as.x = 535
+                  w_button_file_save_as.y = 4
+                  w_button_file_save_as.width = 23
+                  w_button_file_save_as.height = 23
+                  w_button_file_save_as.text = "..."
+                  w_button_file_save_as.tipText = "Dateiauswahl"
                 }
-                FX::Label.new(@matrix_file) { |w|
-                  @label4 = w
-                  w.wdg_name = "label4"
-                  w.x = 4
-                  w.y = 31
-                  w.width = 67
-                  w.height = 19
-                  w.text = "Auflösung"
+                FX::Label.new(@matrix_file) { |w_label4|
+                  @label4 = w_label4
+                  w_label4.wdg_name = "label4"
+                  w_label4.x = 4
+                  w_label4.y = 31
+                  w_label4.width = 67
+                  w_label4.height = 19
+                  w_label4.text = "Auflösung"
                 }
-                FX::Spinner.new(@matrix_file) { |w|
-                  @spinner_file_dpi = w
-                  w.wdg_name = "spinner_file_dpi"
-                  w.layoutHints = 1
-                  w.range = -2147483648..2147483647
-                  w.x = 113
-                  w.y = 31
-                  w.width = 68
-                  w.height = 21
-                  w.numColumns = 6
-                  w.value = 300
+                FX::Spinner.new(@matrix_file) { |w_spinner_file_dpi|
+                  @spinner_file_dpi = w_spinner_file_dpi
+                  w_spinner_file_dpi.wdg_name = "spinner_file_dpi"
+                  w_spinner_file_dpi.layoutHints = 1
+                  w_spinner_file_dpi.range = -2147483648..2147483647
+                  w_spinner_file_dpi.x = 113
+                  w_spinner_file_dpi.y = 31
+                  w_spinner_file_dpi.width = 68
+                  w_spinner_file_dpi.height = 21
+                  w_spinner_file_dpi.numColumns = 6
+                  w_spinner_file_dpi.value = 300
                 }
-                FX::Label.new(@matrix_file) { |w|
-                  @label5 = w
-                  w.wdg_name = "label5"
-                  w.x = 535
-                  w.y = 31
-                  w.width = 23
-                  w.height = 19
-                  w.text = "dpi"
-                }
-              }
-            }
-            FX::TabItem.new(@tabbook_printers) { |w|
-              @tabitem6 = w
-              w.wdg_name = "tabitem6"
-              w.x = 141
-              w.y = 6
-              w.width = 55
-              w.height = 23
-              w.text = "XID440"
-            }
-            FX::VerticalFrame.new(@tabbook_printers) { |w|
-              @verticalframe8 = w
-              w.wdg_name = "verticalframe8"
-              w.shown = false
-              w.x = 4
-              w.y = 25
-              w.width = 562
-              w.height = 646
-              FX::Matrix.new(@verticalframe8) { |w|
-                @matrix_xid = w
-                w.wdg_name = "matrix_xid"
-                w.matrixStyle = 131072
-                w.width = 562
-                w.height = 646
-                w.numColumns = 3
-                FX::Label.new(@matrix_xid) { |w|
-                  @label16 = w
-                  w.wdg_name = "label16"
-                  w.x = 4
-                  w.y = 4
-                  w.width = 54
-                  w.height = 19
-                  w.text = "Drucker"
-                }
-                FX::ComboBox.new(@matrix_xid) { |w|
-                  @combobox_xid_printer = w
-                  w.wdg_name = "combobox_xid_printer"
-                  w.comboStyle = 1048576
-                  w.layoutHints = 1025
-                  w.x = 62
-                  w.y = 4
-                  w.width = 421
-                  w.height = 21
-                  w.numVisible = 10
-                }
-                FX::Button.new(@matrix_xid) { |w|
-                  @button_xid_printersetup = w
-                  w.wdg_name = "button_xid_printersetup"
-                  w.layoutHints = 1024
-                  w.x = 487
-                  w.y = 4
-                  w.width = 71
-                  w.height = 23
-                  w.text = "Einrichten"
-                  w.tipText = "Dateiauswahl"
+                FX::Label.new(@matrix_file) { |w_label5|
+                  @label5 = w_label5
+                  w_label5.wdg_name = "label5"
+                  w_label5.x = 535
+                  w_label5.y = 31
+                  w_label5.width = 23
+                  w_label5.height = 19
+                  w_label5.text = "dpi"
                 }
               }
             }
-            FX::TabItem.new(@tabbook_printers) { |w|
-              @tabitem16 = w
-              w.wdg_name = "tabitem16"
-              w.frameStyle = 28672
-              w.x = 196
-              w.y = 6
-              w.width = 46
-              w.height = 23
-              w.text = "Zebra"
-              w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-              w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-              w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+            FX::TabItem.new(@tabbook_printers) { |w_tabitem6|
+              @tabitem6 = w_tabitem6
+              w_tabitem6.wdg_name = "tabitem6"
+              w_tabitem6.x = 138
+              w_tabitem6.y = 6
+              w_tabitem6.width = 55
+              w_tabitem6.height = 23
+              w_tabitem6.text = "XID440"
             }
-            FX::VerticalFrame.new(@tabbook_printers) { |w|
-              @verticalframe21 = w
-              w.wdg_name = "verticalframe21"
-              w.frameStyle = 8192
-              w.shown = false
-              w.padTop = 5
-              w.padLeft = 5
-              w.padRight = 5
-              w.padBottom = 5
-              w.x = 4
-              w.y = 25
-              w.width = 562
-              w.height = 646
-              w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-              w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-              w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-              FX::Matrix.new(@verticalframe21) { |w|
-                @matrix_zebra = w
-                w.wdg_name = "matrix_zebra"
-                w.matrixStyle = 131072
-                w.padLeft = 0
-                w.padRight = 0
-                w.x = 6
-                w.y = 6
-                w.width = 550
-                w.height = 69
-                w.numColumns = 3
-                w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                FX::Label.new(@matrix_zebra) { |w|
-                  @label22 = w
-                  w.wdg_name = "label22"
-                  w.layoutHints = 32
-                  w.y = 6
-                  w.width = 54
-                  w.height = 19
-                  w.text = "Drucker"
-                  w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+            FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe8|
+              @verticalframe8 = w_verticalframe8
+              w_verticalframe8.wdg_name = "verticalframe8"
+              w_verticalframe8.shown = false
+              w_verticalframe8.x = 4
+              w_verticalframe8.y = 25
+              w_verticalframe8.width = 562
+              w_verticalframe8.height = 646
+              FX::Matrix.new(@verticalframe8) { |w_matrix_xid|
+                @matrix_xid = w_matrix_xid
+                w_matrix_xid.wdg_name = "matrix_xid"
+                w_matrix_xid.matrixStyle = 131072
+                w_matrix_xid.width = 562
+                w_matrix_xid.height = 646
+                w_matrix_xid.numColumns = 3
+                FX::Label.new(@matrix_xid) { |w_label16|
+                  @label16 = w_label16
+                  w_label16.wdg_name = "label16"
+                  w_label16.x = 4
+                  w_label16.y = 4
+                  w_label16.width = 54
+                  w_label16.height = 19
+                  w_label16.text = "Drucker"
                 }
-                FX::ComboBox.new(@matrix_zebra) { |w|
-                  @combobox_zebra_printer = w
-                  w.wdg_name = "combobox_zebra_printer"
-                  w.comboStyle = 1048576
-                  w.layoutHints = 1057
-                  w.x = 58
-                  w.y = 5
-                  w.width = 417
-                  w.height = 21
-                  w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                  w.selBackColor = Fox::FXRGBA(190, 190, 190, 255)
-                  w.selTextColor = Fox::FXRGBA(0, 0, 0, 255)
+                FX::ComboBox.new(@matrix_xid) { |w_combobox_xid_printer|
+                  @combobox_xid_printer = w_combobox_xid_printer
+                  w_combobox_xid_printer.wdg_name = "combobox_xid_printer"
+                  w_combobox_xid_printer.comboStyle = 1048576
+                  w_combobox_xid_printer.layoutHints = 1025
+                  w_combobox_xid_printer.x = 62
+                  w_combobox_xid_printer.y = 4
+                  w_combobox_xid_printer.width = 421
+                  w_combobox_xid_printer.height = 21
+                  w_combobox_xid_printer.numVisible = 10
                 }
-                FX::Button.new(@matrix_zebra) { |w|
-                  @button_zebra_printersetup = w
-                  w.wdg_name = "button_zebra_printersetup"
-                  w.layoutHints = 1056
-                  w.x = 479
-                  w.y = 4
-                  w.width = 71
-                  w.height = 23
-                  w.text = "Einrichten"
-                  w.tipText = "Dateiauswahl"
-                  w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                }
-              }
-              FX::HorizontalSeparator.new(@verticalframe21) { |w|
-                @horizontalseparator6 = w
-                w.wdg_name = "horizontalseparator6"
-                w.padTop = 10
-                w.x = 6
-                w.y = 75
-                w.width = 550
-                w.height = 12
-                w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-              }
-              FX::Label.new(@verticalframe21) { |w|
-                @label30 = w
-                w.wdg_name = "label30"
-                w.font = FX::Font.new.from_s("Sans|90|100|0|0|0|0").to_FXFont
-                w.padBottom = 10
-                w.x = 6
-                w.y = 87
-                w.width = 101
-                w.height = 27
-                w.text = "Druckerbefehle"
-                w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-              }
-              FX::VerticalFrame.new(@verticalframe21) { |w|
-                @verticalframe27 = w
-                w.wdg_name = "verticalframe27"
-                w.vSpacing = 5
-                w.padBottom = 10
-                w.x = 6
-                w.y = 114
-                w.width = 550
-                w.height = 390
-                w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                FX::Button.new(@verticalframe27) { |w|
-                  @button_zebra_reset = w
-                  w.wdg_name = "button_zebra_reset"
-                  w.layoutHints = 1024
-                  w.width = 550
-                  w.height = 23
-                  w.text = "Reset"
-                  w.tipText = "Setzt den Drucker zurück."
-                  w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                }
-                FX::Button.new(@verticalframe27) { |w|
-                  @button_zebra_eject_card = w
-                  w.wdg_name = "button_zebra_eject_card"
-                  w.layoutHints = 1025
-                  w.y = 28
-                  w.width = 550
-                  w.height = 23
-                  w.text = "Karte auswerfen"
-                  w.tipText = "Wirft die Karte aus dem Drucker aus (z.B. wenn eine Karte im Drucker hängt)."
-                  w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                }
-                FX::Button.new(@verticalframe27) { |w|
-                  @button_zebra_eject_card2 = w
-                  w.wdg_name = "button_zebra_eject_card2"
-                  w.layoutHints = 1025
-                  w.y = 56
-                  w.width = 550
-                  w.height = 23
-                  w.text = "Karte auswerfen 2"
-                  w.tipText = "Wirft die Karte aus dem Drucker aus (z.B. wenn eine Karte im Drucker hängt). Wirft auch Karten aus, die in der Kartenzufuhr sind."
-                  w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                }
-                FX::Button.new(@verticalframe27) { |w|
-                  @button_zebra_move_contactless = w
-                  w.wdg_name = "button_zebra_move_contactless"
-                  w.layoutHints = 1024
-                  w.y = 84
-                  w.width = 550
-                  w.height = 23
-                  w.text = "Kontaktlos"
-                  w.tipText = "Fährt die Karte an die Position des kontaktlosen Lesers."
-                  w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                }
-                FX::Button.new(@verticalframe27) { |w|
-                  @button_zebra_print_testcard = w
-                  w.wdg_name = "button_zebra_print_testcard"
-                  w.layoutHints = 1024
-                  w.y = 112
-                  w.width = 550
-                  w.height = 23
-                  w.text = "Testkarte drucken"
-                  w.tipText = "Druckt eine Testkarte."
-                  w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                }
-                FX::Button.new(@verticalframe27) { |w|
-                  @button_zebra_printer_info = w
-                  w.wdg_name = "button_zebra_printer_info"
-                  w.layoutHints = 1024
-                  w.y = 140
-                  w.width = 550
-                  w.height = 23
-                  w.text = "Druckerinfo"
-                  w.tipText = "Zeigt den Druckertyp und die Firmwareversion an."
-                  w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                }
-              }
-              FX::Matrix.new(@verticalframe21) { |w|
-                @matrix22 = w
-                w.wdg_name = "matrix22"
-                w.padLeft = 0
-                w.padRight = 0
-                w.x = 6
-                w.y = 504
-                w.width = 550
-                w.height = 70
-                w.numColumns = 3
-                w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                FX::Label.new(@matrix22) { |w|
-                  @label50 = w
-                  w.wdg_name = "label50"
-                  w.layoutHints = 32
-                  w.y = 6
-                  w.width = 76
-                  w.height = 19
-                  w.text = "Kommando"
-                  w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                }
-                FX::TextField.new(@matrix22) { |w|
-                  @textfield_zebra_command = w
-                  w.wdg_name = "textfield_zebra_command"
-                  w.layoutHints = 1057
-                  w.x = 80
-                  w.y = 5
-                  w.width = 410
-                  w.height = 21
-                  w.numColumns = 10
-                  w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                  w.selBackColor = Fox::FXRGBA(190, 190, 190, 255)
-                  w.selTextColor = Fox::FXRGBA(0, 0, 0, 255)
-                }
-                FX::Button.new(@matrix22) { |w|
-                  @button_zebra_send = w
-                  w.wdg_name = "button_zebra_send"
-                  w.layoutHints = 32
-                  w.x = 494
-                  w.y = 4
-                  w.width = 56
-                  w.height = 23
-                  w.text = "Senden"
-                  w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                }
-              }
-              FX::Matrix.new(@verticalframe21) { |w|
-                @matrix21 = w
-                w.wdg_name = "matrix21"
-                w.padLeft = 0
-                w.padRight = 0
-                w.x = 6
-                w.y = 574
-                w.width = 550
-                w.height = 66
-                w.numColumns = 2
-                w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                FX::Label.new(@matrix21) { |w|
-                  @label49 = w
-                  w.wdg_name = "label49"
-                  w.y = 4
-                  w.width = 54
-                  w.height = 19
-                  w.text = "Antwort"
-                  w.backColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                }
-                FX::TextField.new(@matrix21) { |w|
-                  @textfield_zebra_answer = w
-                  w.wdg_name = "textfield_zebra_answer"
-                  w.layoutHints = 3105
-                  w.textFieldTextStyle = 4194304
-                  w.enabled = false
-                  w.x = 58
-                  w.y = 4
-                  w.width = 492
-                  w.height = 21
-                  w.numColumns = 50
-                  w.baseColor = Fox::FXRGBA(226, 226, 226, 255)
-                  w.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
-                  w.selBackColor = Fox::FXRGBA(190, 190, 190, 255)
-                  w.selTextColor = Fox::FXRGBA(0, 0, 0, 255)
+                FX::Button.new(@matrix_xid) { |w_button_xid_printersetup|
+                  @button_xid_printersetup = w_button_xid_printersetup
+                  w_button_xid_printersetup.wdg_name = "button_xid_printersetup"
+                  w_button_xid_printersetup.layoutHints = 1024
+                  w_button_xid_printersetup.x = 487
+                  w_button_xid_printersetup.y = 4
+                  w_button_xid_printersetup.width = 71
+                  w_button_xid_printersetup.height = 23
+                  w_button_xid_printersetup.text = "Einrichten"
+                  w_button_xid_printersetup.tipText = "Dateiauswahl"
                 }
               }
             }
-            FX::TabItem.new(@tabbook_printers) { |w|
-              @tabitem29 = w
-              w.wdg_name = "tabitem29"
-              w.x = 242
-              w.y = 6
-              w.width = 31
-              w.height = 23
-              w.text = "cab"
+            FX::TabItem.new(@tabbook_printers) { |w_tabitem16|
+              @tabitem16 = w_tabitem16
+              w_tabitem16.wdg_name = "tabitem16"
+              w_tabitem16.frameStyle = 28672
+              w_tabitem16.x = 193
+              w_tabitem16.y = 6
+              w_tabitem16.width = 46
+              w_tabitem16.height = 23
+              w_tabitem16.text = "Zebra"
+              w_tabitem16.backColor = Fox::FXRGBA(226, 226, 226, 255)
+              w_tabitem16.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+              w_tabitem16.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
             }
-            FX::VerticalFrame.new(@tabbook_printers) { |w|
-              @verticalframe40 = w
-              w.wdg_name = "verticalframe40"
-              w.shown = false
-              w.x = 4
-              w.y = 25
-              w.width = 562
-              w.height = 646
-              FX::Matrix.new(@verticalframe40) { |w|
-                @matrix_connection = w
-                w.wdg_name = "matrix_connection"
-                w.layoutHints = 1024
-                w.width = 562
-                w.height = 29
-                w.numColumns = 6
-                FX::Label.new(@matrix_connection) { |w|
-                  @label60 = w
-                  w.wdg_name = "label60"
-                  w.x = 4
-                  w.y = 4
-                  w.width = 33
-                  w.height = 19
-                  w.text = "Host"
+            FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe21|
+              @verticalframe21 = w_verticalframe21
+              w_verticalframe21.wdg_name = "verticalframe21"
+              w_verticalframe21.frameStyle = 8192
+              w_verticalframe21.shown = false
+              w_verticalframe21.padTop = 5
+              w_verticalframe21.padLeft = 5
+              w_verticalframe21.padRight = 5
+              w_verticalframe21.padBottom = 5
+              w_verticalframe21.x = 4
+              w_verticalframe21.y = 25
+              w_verticalframe21.width = 562
+              w_verticalframe21.height = 646
+              w_verticalframe21.backColor = Fox::FXRGBA(226, 226, 226, 255)
+              w_verticalframe21.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+              w_verticalframe21.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+              FX::Matrix.new(@verticalframe21) { |w_matrix_zebra|
+                @matrix_zebra = w_matrix_zebra
+                w_matrix_zebra.wdg_name = "matrix_zebra"
+                w_matrix_zebra.matrixStyle = 131072
+                w_matrix_zebra.padLeft = 0
+                w_matrix_zebra.padRight = 0
+                w_matrix_zebra.x = 6
+                w_matrix_zebra.y = 6
+                w_matrix_zebra.width = 550
+                w_matrix_zebra.height = 69
+                w_matrix_zebra.numColumns = 3
+                w_matrix_zebra.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                w_matrix_zebra.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                w_matrix_zebra.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                FX::Label.new(@matrix_zebra) { |w_label22|
+                  @label22 = w_label22
+                  w_label22.wdg_name = "label22"
+                  w_label22.layoutHints = 32
+                  w_label22.y = 6
+                  w_label22.width = 54
+                  w_label22.height = 19
+                  w_label22.text = "Drucker"
+                  w_label22.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_label22.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_label22.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
                 }
-                FX::TextField.new(@matrix_connection) { |w|
-                  @textfield_cab_host = w
-                  w.wdg_name = "textfield_cab_host"
-                  w.layoutHints = 1025
-                  w.x = 41
-                  w.y = 4
-                  w.width = 175
-                  w.height = 21
-                  w.numColumns = 10
+                FX::ComboBox.new(@matrix_zebra) { |w_combobox_zebra_printer|
+                  @combobox_zebra_printer = w_combobox_zebra_printer
+                  w_combobox_zebra_printer.wdg_name = "combobox_zebra_printer"
+                  w_combobox_zebra_printer.comboStyle = 1048576
+                  w_combobox_zebra_printer.layoutHints = 1057
+                  w_combobox_zebra_printer.x = 58
+                  w_combobox_zebra_printer.y = 5
+                  w_combobox_zebra_printer.width = 417
+                  w_combobox_zebra_printer.height = 21
+                  w_combobox_zebra_printer.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_combobox_zebra_printer.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                  w_combobox_zebra_printer.selBackColor = Fox::FXRGBA(190, 190, 190, 255)
+                  w_combobox_zebra_printer.selTextColor = Fox::FXRGBA(0, 0, 0, 255)
                 }
-                FX::Label.new(@matrix_connection) { |w|
-                  @label61 = w
-                  w.wdg_name = "label61"
-                  w.x = 220
-                  w.y = 4
-                  w.width = 30
-                  w.height = 19
-                  w.text = "Port"
-                }
-                FX::Spinner.new(@matrix_connection) { |w|
-                  @spinner_cab_port = w
-                  w.wdg_name = "spinner_cab_port"
-                  w.layoutHints = 1025
-                  w.range = -2147483648..2147483647
-                  w.x = 254
-                  w.y = 4
-                  w.width = 90
-                  w.height = 21
-                  w.numColumns = 3
-                }
-                FX::Label.new(@matrix_connection) { |w|
-                  @label79 = w
-                  w.wdg_name = "label79"
-                  w.x = 348
-                  w.y = 4
-                  w.width = 67
-                  w.height = 19
-                  w.text = "Auflösung"
-                }
-                FX::Spinner.new(@matrix_connection) { |w|
-                  @spinner_cab_dpi = w
-                  w.wdg_name = "spinner_cab_dpi"
-                  w.layoutHints = 1025
-                  w.range = -2147483648..2147483647
-                  w.x = 419
-                  w.y = 4
-                  w.width = 139
-                  w.height = 21
-                  w.numColumns = 6
-                  w.value = 300
+                FX::Button.new(@matrix_zebra) { |w_button_zebra_printersetup|
+                  @button_zebra_printersetup = w_button_zebra_printersetup
+                  w_button_zebra_printersetup.wdg_name = "button_zebra_printersetup"
+                  w_button_zebra_printersetup.layoutHints = 1056
+                  w_button_zebra_printersetup.x = 479
+                  w_button_zebra_printersetup.y = 4
+                  w_button_zebra_printersetup.width = 71
+                  w_button_zebra_printersetup.height = 23
+                  w_button_zebra_printersetup.text = "Einrichten"
+                  w_button_zebra_printersetup.tipText = "Dateiauswahl"
+                  w_button_zebra_printersetup.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_printersetup.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_printersetup.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
                 }
               }
-              FX::HorizontalFrame.new(@verticalframe40) { |w|
-                @horizontalframe1 = w
-                w.wdg_name = "horizontalframe1"
-                w.frameStyle = 16384
-                w.layoutHints = 1024
-                w.padTop = 10
-                w.padLeft = 3
-                w.padRight = 3
-                w.padBottom = 10
-                w.y = 29
-                w.width = 562
-                w.height = 159
-                FX::VerticalFrame.new(@horizontalframe1) { |w|
-                  @verticalframe41 = w
-                  w.wdg_name = "verticalframe41"
-                  w.vSpacing = 5
-                  w.x = 5
-                  w.y = 12
-                  w.width = 420
-                  w.height = 135
-                  FX::Button.new(@verticalframe41) { |w|
-                    @button_cab_info = w
-                    w.wdg_name = "button_cab_info"
-                    w.layoutHints = 1024
-                    w.width = 420
-                    w.height = 23
-                    w.text = "Printer Status Abfrage"
+              FX::HorizontalSeparator.new(@verticalframe21) { |w_horizontalseparator6|
+                @horizontalseparator6 = w_horizontalseparator6
+                w_horizontalseparator6.wdg_name = "horizontalseparator6"
+                w_horizontalseparator6.padTop = 10
+                w_horizontalseparator6.x = 6
+                w_horizontalseparator6.y = 75
+                w_horizontalseparator6.width = 550
+                w_horizontalseparator6.height = 12
+                w_horizontalseparator6.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                w_horizontalseparator6.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                w_horizontalseparator6.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+              }
+              FX::Label.new(@verticalframe21) { |w_label30|
+                @label30 = w_label30
+                w_label30.wdg_name = "label30"
+                w_label30.font = FX::Font.new.from_s("Sans|90|100|0|0|0|0").to_FXFont
+                w_label30.padBottom = 10
+                w_label30.x = 6
+                w_label30.y = 87
+                w_label30.width = 101
+                w_label30.height = 27
+                w_label30.text = "Druckerbefehle"
+                w_label30.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                w_label30.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                w_label30.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+              }
+              FX::VerticalFrame.new(@verticalframe21) { |w_verticalframe27|
+                @verticalframe27 = w_verticalframe27
+                w_verticalframe27.wdg_name = "verticalframe27"
+                w_verticalframe27.vSpacing = 5
+                w_verticalframe27.padBottom = 10
+                w_verticalframe27.x = 6
+                w_verticalframe27.y = 114
+                w_verticalframe27.width = 550
+                w_verticalframe27.height = 390
+                w_verticalframe27.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                w_verticalframe27.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                w_verticalframe27.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                FX::Button.new(@verticalframe27) { |w_button_zebra_reset|
+                  @button_zebra_reset = w_button_zebra_reset
+                  w_button_zebra_reset.wdg_name = "button_zebra_reset"
+                  w_button_zebra_reset.layoutHints = 1024
+                  w_button_zebra_reset.width = 550
+                  w_button_zebra_reset.height = 23
+                  w_button_zebra_reset.text = "Reset"
+                  w_button_zebra_reset.tipText = "Setzt den Drucker zurück."
+                  w_button_zebra_reset.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_reset.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_reset.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                }
+                FX::Button.new(@verticalframe27) { |w_button_zebra_eject_card|
+                  @button_zebra_eject_card = w_button_zebra_eject_card
+                  w_button_zebra_eject_card.wdg_name = "button_zebra_eject_card"
+                  w_button_zebra_eject_card.layoutHints = 1025
+                  w_button_zebra_eject_card.y = 28
+                  w_button_zebra_eject_card.width = 550
+                  w_button_zebra_eject_card.height = 23
+                  w_button_zebra_eject_card.text = "Karte auswerfen"
+                  w_button_zebra_eject_card.tipText = "Wirft die Karte aus dem Drucker aus (z.B. wenn eine Karte im Drucker hängt)."
+                  w_button_zebra_eject_card.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_eject_card.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_eject_card.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                }
+                FX::Button.new(@verticalframe27) { |w_button_zebra_eject_card2|
+                  @button_zebra_eject_card2 = w_button_zebra_eject_card2
+                  w_button_zebra_eject_card2.wdg_name = "button_zebra_eject_card2"
+                  w_button_zebra_eject_card2.layoutHints = 1025
+                  w_button_zebra_eject_card2.y = 56
+                  w_button_zebra_eject_card2.width = 550
+                  w_button_zebra_eject_card2.height = 23
+                  w_button_zebra_eject_card2.text = "Karte auswerfen 2"
+                  w_button_zebra_eject_card2.tipText = "Wirft die Karte aus dem Drucker aus (z.B. wenn eine Karte im Drucker hängt). Wirft auch Karten aus, die in der Kartenzufuhr sind."
+                  w_button_zebra_eject_card2.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_eject_card2.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_eject_card2.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                }
+                FX::Button.new(@verticalframe27) { |w_button_zebra_move_contactless|
+                  @button_zebra_move_contactless = w_button_zebra_move_contactless
+                  w_button_zebra_move_contactless.wdg_name = "button_zebra_move_contactless"
+                  w_button_zebra_move_contactless.layoutHints = 1024
+                  w_button_zebra_move_contactless.y = 84
+                  w_button_zebra_move_contactless.width = 550
+                  w_button_zebra_move_contactless.height = 23
+                  w_button_zebra_move_contactless.text = "Kontaktlos"
+                  w_button_zebra_move_contactless.tipText = "Fährt die Karte an die Position des kontaktlosen Lesers."
+                  w_button_zebra_move_contactless.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_move_contactless.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_move_contactless.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                }
+                FX::Button.new(@verticalframe27) { |w_button_zebra_print_testcard|
+                  @button_zebra_print_testcard = w_button_zebra_print_testcard
+                  w_button_zebra_print_testcard.wdg_name = "button_zebra_print_testcard"
+                  w_button_zebra_print_testcard.layoutHints = 1024
+                  w_button_zebra_print_testcard.y = 112
+                  w_button_zebra_print_testcard.width = 550
+                  w_button_zebra_print_testcard.height = 23
+                  w_button_zebra_print_testcard.text = "Testkarte drucken"
+                  w_button_zebra_print_testcard.tipText = "Druckt eine Testkarte."
+                  w_button_zebra_print_testcard.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_print_testcard.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_print_testcard.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                }
+                FX::Button.new(@verticalframe27) { |w_button_zebra_printer_info|
+                  @button_zebra_printer_info = w_button_zebra_printer_info
+                  w_button_zebra_printer_info.wdg_name = "button_zebra_printer_info"
+                  w_button_zebra_printer_info.layoutHints = 1024
+                  w_button_zebra_printer_info.y = 140
+                  w_button_zebra_printer_info.width = 550
+                  w_button_zebra_printer_info.height = 23
+                  w_button_zebra_printer_info.text = "Druckerinfo"
+                  w_button_zebra_printer_info.tipText = "Zeigt den Druckertyp und die Firmwareversion an."
+                  w_button_zebra_printer_info.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_printer_info.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_printer_info.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                }
+              }
+              FX::Matrix.new(@verticalframe21) { |w_matrix22|
+                @matrix22 = w_matrix22
+                w_matrix22.wdg_name = "matrix22"
+                w_matrix22.padLeft = 0
+                w_matrix22.padRight = 0
+                w_matrix22.x = 6
+                w_matrix22.y = 504
+                w_matrix22.width = 550
+                w_matrix22.height = 70
+                w_matrix22.numColumns = 3
+                w_matrix22.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                w_matrix22.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                w_matrix22.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                FX::Label.new(@matrix22) { |w_label50|
+                  @label50 = w_label50
+                  w_label50.wdg_name = "label50"
+                  w_label50.layoutHints = 32
+                  w_label50.y = 6
+                  w_label50.width = 76
+                  w_label50.height = 19
+                  w_label50.text = "Kommando"
+                  w_label50.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_label50.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_label50.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                }
+                FX::TextField.new(@matrix22) { |w_textfield_zebra_command|
+                  @textfield_zebra_command = w_textfield_zebra_command
+                  w_textfield_zebra_command.wdg_name = "textfield_zebra_command"
+                  w_textfield_zebra_command.layoutHints = 1057
+                  w_textfield_zebra_command.x = 80
+                  w_textfield_zebra_command.y = 5
+                  w_textfield_zebra_command.width = 410
+                  w_textfield_zebra_command.height = 21
+                  w_textfield_zebra_command.numColumns = 10
+                  w_textfield_zebra_command.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_textfield_zebra_command.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                  w_textfield_zebra_command.selBackColor = Fox::FXRGBA(190, 190, 190, 255)
+                  w_textfield_zebra_command.selTextColor = Fox::FXRGBA(0, 0, 0, 255)
+                }
+                FX::Button.new(@matrix22) { |w_button_zebra_send|
+                  @button_zebra_send = w_button_zebra_send
+                  w_button_zebra_send.wdg_name = "button_zebra_send"
+                  w_button_zebra_send.layoutHints = 32
+                  w_button_zebra_send.x = 494
+                  w_button_zebra_send.y = 4
+                  w_button_zebra_send.width = 56
+                  w_button_zebra_send.height = 23
+                  w_button_zebra_send.text = "Senden"
+                  w_button_zebra_send.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_send.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_send.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                }
+              }
+              FX::Matrix.new(@verticalframe21) { |w_matrix21|
+                @matrix21 = w_matrix21
+                w_matrix21.wdg_name = "matrix21"
+                w_matrix21.padLeft = 0
+                w_matrix21.padRight = 0
+                w_matrix21.x = 6
+                w_matrix21.y = 574
+                w_matrix21.width = 550
+                w_matrix21.height = 66
+                w_matrix21.numColumns = 2
+                w_matrix21.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                w_matrix21.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                w_matrix21.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                FX::Label.new(@matrix21) { |w_label49|
+                  @label49 = w_label49
+                  w_label49.wdg_name = "label49"
+                  w_label49.y = 4
+                  w_label49.width = 54
+                  w_label49.height = 19
+                  w_label49.text = "Antwort"
+                  w_label49.backColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_label49.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_label49.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                }
+                FX::TextField.new(@matrix21) { |w_textfield_zebra_answer|
+                  @textfield_zebra_answer = w_textfield_zebra_answer
+                  w_textfield_zebra_answer.wdg_name = "textfield_zebra_answer"
+                  w_textfield_zebra_answer.layoutHints = 3105
+                  w_textfield_zebra_answer.textFieldTextStyle = 4194304
+                  w_textfield_zebra_answer.enabled = false
+                  w_textfield_zebra_answer.x = 58
+                  w_textfield_zebra_answer.y = 4
+                  w_textfield_zebra_answer.width = 492
+                  w_textfield_zebra_answer.height = 21
+                  w_textfield_zebra_answer.numColumns = 50
+                  w_textfield_zebra_answer.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_textfield_zebra_answer.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
+                  w_textfield_zebra_answer.selBackColor = Fox::FXRGBA(190, 190, 190, 255)
+                  w_textfield_zebra_answer.selTextColor = Fox::FXRGBA(0, 0, 0, 255)
+                }
+              }
+            }
+            FX::TabItem.new(@tabbook_printers) { |w_tabitem29|
+              @tabitem29 = w_tabitem29
+              w_tabitem29.wdg_name = "tabitem29"
+              w_tabitem29.x = 239
+              w_tabitem29.y = 6
+              w_tabitem29.width = 31
+              w_tabitem29.height = 23
+              w_tabitem29.text = "cab"
+            }
+            FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe40|
+              @verticalframe40 = w_verticalframe40
+              w_verticalframe40.wdg_name = "verticalframe40"
+              w_verticalframe40.shown = false
+              w_verticalframe40.x = 4
+              w_verticalframe40.y = 25
+              w_verticalframe40.width = 562
+              w_verticalframe40.height = 646
+              FX::Matrix.new(@verticalframe40) { |w_matrix_connection|
+                @matrix_connection = w_matrix_connection
+                w_matrix_connection.wdg_name = "matrix_connection"
+                w_matrix_connection.layoutHints = 1024
+                w_matrix_connection.width = 562
+                w_matrix_connection.height = 29
+                w_matrix_connection.numColumns = 6
+                FX::Label.new(@matrix_connection) { |w_label60|
+                  @label60 = w_label60
+                  w_label60.wdg_name = "label60"
+                  w_label60.x = 4
+                  w_label60.y = 4
+                  w_label60.width = 33
+                  w_label60.height = 19
+                  w_label60.text = "Host"
+                }
+                FX::TextField.new(@matrix_connection) { |w_textfield_cab_host|
+                  @textfield_cab_host = w_textfield_cab_host
+                  w_textfield_cab_host.wdg_name = "textfield_cab_host"
+                  w_textfield_cab_host.layoutHints = 1025
+                  w_textfield_cab_host.x = 41
+                  w_textfield_cab_host.y = 4
+                  w_textfield_cab_host.width = 175
+                  w_textfield_cab_host.height = 21
+                  w_textfield_cab_host.numColumns = 10
+                }
+                FX::Label.new(@matrix_connection) { |w_label61|
+                  @label61 = w_label61
+                  w_label61.wdg_name = "label61"
+                  w_label61.x = 220
+                  w_label61.y = 4
+                  w_label61.width = 30
+                  w_label61.height = 19
+                  w_label61.text = "Port"
+                }
+                FX::Spinner.new(@matrix_connection) { |w_spinner_cab_port|
+                  @spinner_cab_port = w_spinner_cab_port
+                  w_spinner_cab_port.wdg_name = "spinner_cab_port"
+                  w_spinner_cab_port.layoutHints = 1025
+                  w_spinner_cab_port.range = -2147483648..2147483647
+                  w_spinner_cab_port.x = 254
+                  w_spinner_cab_port.y = 4
+                  w_spinner_cab_port.width = 90
+                  w_spinner_cab_port.height = 21
+                  w_spinner_cab_port.numColumns = 3
+                }
+                FX::Label.new(@matrix_connection) { |w_label79|
+                  @label79 = w_label79
+                  w_label79.wdg_name = "label79"
+                  w_label79.x = 348
+                  w_label79.y = 4
+                  w_label79.width = 67
+                  w_label79.height = 19
+                  w_label79.text = "Auflösung"
+                }
+                FX::Spinner.new(@matrix_connection) { |w_spinner_cab_dpi|
+                  @spinner_cab_dpi = w_spinner_cab_dpi
+                  w_spinner_cab_dpi.wdg_name = "spinner_cab_dpi"
+                  w_spinner_cab_dpi.layoutHints = 1025
+                  w_spinner_cab_dpi.range = -2147483648..2147483647
+                  w_spinner_cab_dpi.x = 419
+                  w_spinner_cab_dpi.y = 4
+                  w_spinner_cab_dpi.width = 139
+                  w_spinner_cab_dpi.height = 21
+                  w_spinner_cab_dpi.numColumns = 6
+                  w_spinner_cab_dpi.value = 300
+                }
+              }
+              FX::HorizontalFrame.new(@verticalframe40) { |w_horizontalframe1|
+                @horizontalframe1 = w_horizontalframe1
+                w_horizontalframe1.wdg_name = "horizontalframe1"
+                w_horizontalframe1.frameStyle = 16384
+                w_horizontalframe1.layoutHints = 1024
+                w_horizontalframe1.padTop = 10
+                w_horizontalframe1.padLeft = 3
+                w_horizontalframe1.padRight = 3
+                w_horizontalframe1.padBottom = 10
+                w_horizontalframe1.y = 29
+                w_horizontalframe1.width = 562
+                w_horizontalframe1.height = 159
+                FX::VerticalFrame.new(@horizontalframe1) { |w_verticalframe41|
+                  @verticalframe41 = w_verticalframe41
+                  w_verticalframe41.wdg_name = "verticalframe41"
+                  w_verticalframe41.vSpacing = 5
+                  w_verticalframe41.x = 5
+                  w_verticalframe41.y = 12
+                  w_verticalframe41.width = 420
+                  w_verticalframe41.height = 135
+                  FX::Button.new(@verticalframe41) { |w_button_cab_info|
+                    @button_cab_info = w_button_cab_info
+                    w_button_cab_info.wdg_name = "button_cab_info"
+                    w_button_cab_info.layoutHints = 1024
+                    w_button_cab_info.width = 420
+                    w_button_cab_info.height = 23
+                    w_button_cab_info.text = "Printer Status Abfrage"
                   }
-                  FX::Button.new(@verticalframe41) { |w|
-                    @button_cab_extended_info = w
-                    w.wdg_name = "button_cab_extended_info"
-                    w.layoutHints = 1024
-                    w.y = 28
-                    w.width = 420
-                    w.height = 23
-                    w.text = "Extended Status Abfrage"
+                  FX::Button.new(@verticalframe41) { |w_button_cab_extended_info|
+                    @button_cab_extended_info = w_button_cab_extended_info
+                    w_button_cab_extended_info.wdg_name = "button_cab_extended_info"
+                    w_button_cab_extended_info.layoutHints = 1024
+                    w_button_cab_extended_info.y = 28
+                    w_button_cab_extended_info.width = 420
+                    w_button_cab_extended_info.height = 23
+                    w_button_cab_extended_info.text = "Extended Status Abfrage"
                   }
-                  FX::Button.new(@verticalframe41) { |w|
-                    @button_cab_firmware_version = w
-                    w.wdg_name = "button_cab_firmware_version"
-                    w.layoutHints = 1024
-                    w.y = 56
-                    w.width = 420
-                    w.height = 23
-                    w.text = "Firmware-Version"
+                  FX::Button.new(@verticalframe41) { |w_button_cab_firmware_version|
+                    @button_cab_firmware_version = w_button_cab_firmware_version
+                    w_button_cab_firmware_version.wdg_name = "button_cab_firmware_version"
+                    w_button_cab_firmware_version.layoutHints = 1024
+                    w_button_cab_firmware_version.y = 56
+                    w_button_cab_firmware_version.width = 420
+                    w_button_cab_firmware_version.height = 23
+                    w_button_cab_firmware_version.text = "Firmware-Version"
                   }
-                  FX::Button.new(@verticalframe41) { |w|
-                    @button_cab_self_test = w
-                    w.wdg_name = "button_cab_self_test"
-                    w.layoutHints = 1024
-                    w.y = 84
-                    w.width = 420
-                    w.height = 23
-                    w.text = "Start Self Test"
+                  FX::Button.new(@verticalframe41) { |w_button_cab_self_test|
+                    @button_cab_self_test = w_button_cab_self_test
+                    w_button_cab_self_test.wdg_name = "button_cab_self_test"
+                    w_button_cab_self_test.layoutHints = 1024
+                    w_button_cab_self_test.y = 84
+                    w_button_cab_self_test.width = 420
+                    w_button_cab_self_test.height = 23
+                    w_button_cab_self_test.text = "Start Self Test"
                   }
-                  FX::Button.new(@verticalframe41) { |w|
-                    @button_cab_cancel_jobs = w
-                    w.wdg_name = "button_cab_cancel_jobs"
-                    w.layoutHints = 1024
-                    w.y = 112
-                    w.width = 420
-                    w.height = 23
-                    w.text = "Drucker zurücksetzen"
+                  FX::Button.new(@verticalframe41) { |w_button_cab_cancel_jobs|
+                    @button_cab_cancel_jobs = w_button_cab_cancel_jobs
+                    w_button_cab_cancel_jobs.wdg_name = "button_cab_cancel_jobs"
+                    w_button_cab_cancel_jobs.layoutHints = 1024
+                    w_button_cab_cancel_jobs.y = 112
+                    w_button_cab_cancel_jobs.width = 420
+                    w_button_cab_cancel_jobs.height = 23
+                    w_button_cab_cancel_jobs.text = "Drucker zurücksetzen"
                   }
                 }
-                FX::Text.new(@horizontalframe1) { |w|
-                  @text_cab_output = w
-                  w.wdg_name = "text_cab_output"
-                  w.x = 425
-                  w.y = 12
-                  w.width = 132
-                  w.height = 135
+                FX::Text.new(@horizontalframe1) { |w_text_cab_output|
+                  @text_cab_output = w_text_cab_output
+                  w_text_cab_output.wdg_name = "text_cab_output"
+                  w_text_cab_output.x = 425
+                  w_text_cab_output.y = 12
+                  w_text_cab_output.width = 132
+                  w_text_cab_output.height = 135
                 }
               }
-              FX::Label.new(@verticalframe40) { |w|
-                @label62 = w
-                w.wdg_name = "label62"
-                w.padTop = 10
-                w.y = 188
-                w.width = 625
-                w.height = 27
-                w.text = "Druckbefehle pro Ausgabeseite (siehe \"Programming Manual\" von cab Produktionstechnik GmbH)"
+              FX::Label.new(@verticalframe40) { |w_label62|
+                @label62 = w_label62
+                w_label62.wdg_name = "label62"
+                w_label62.padTop = 10
+                w_label62.y = 188
+                w_label62.width = 625
+                w_label62.height = 27
+                w_label62.text = "Druckbefehle pro Ausgabeseite (siehe \"Programming Manual\" von cab Produktionstechnik GmbH)"
               }
-              FX::Packer.new(@verticalframe40) { |w|
-                @packer3 = w
-                w.wdg_name = "packer3"
-                w.frameStyle = 16384
-                w.y = 215
-                w.width = 562
-                w.height = 431
-                FX::Text.new(@packer3) { |w|
-                  @text_cab_page_commands = w
-                  w.wdg_name = "text_cab_page_commands"
-                  w.x = 6
-                  w.y = 2
-                  w.width = 550
-                  w.height = 427
-                }
-              }
-            }
-            FX::TabItem.new(@tabbook_printers) { |w|
-              @tabitem35 = w
-              w.wdg_name = "tabitem35"
-              w.x = 273
-              w.y = 6
-              w.width = 31
-              w.height = 23
-              w.text = "EPL"
-            }
-            FX::VerticalFrame.new(@tabbook_printers) { |w|
-              @verticalframe50 = w
-              w.wdg_name = "verticalframe50"
-              w.shown = false
-              w.x = 4
-              w.y = 25
-              w.width = 562
-              w.height = 646
-              FX::Matrix.new(@verticalframe50) { |w|
-                @matrix37 = w
-                w.wdg_name = "matrix37"
-                w.layoutHints = 1024
-                w.width = 562
-                w.height = 29
-                w.numColumns = 4
-                FX::Label.new(@matrix37) { |w|
-                  @label75 = w
-                  w.wdg_name = "label75"
-                  w.x = 4
-                  w.y = 4
-                  w.width = 86
-                  w.height = 19
-                  w.text = "Device-Datei"
-                }
-                FX::TextField.new(@matrix37) { |w|
-                  @textfield_epl_device = w
-                  w.wdg_name = "textfield_epl_device"
-                  w.layoutHints = 1025
-                  w.x = 94
-                  w.y = 4
-                  w.width = 217
-                  w.height = 21
-                  w.numColumns = 10
-                }
-                FX::Label.new(@matrix37) { |w|
-                  @label78 = w
-                  w.wdg_name = "label78"
-                  w.x = 315
-                  w.y = 4
-                  w.width = 67
-                  w.height = 19
-                  w.text = "Auflösung"
-                }
-                FX::Spinner.new(@matrix37) { |w|
-                  @spinner_epl_dpi = w
-                  w.wdg_name = "spinner_epl_dpi"
-                  w.layoutHints = 1025
-                  w.range = -2147483648..2147483647
-                  w.x = 386
-                  w.y = 4
-                  w.width = 172
-                  w.height = 21
-                  w.numColumns = 6
-                  w.value = 300
-                }
-              }
-              FX::Label.new(@verticalframe50) { |w|
-                @label77 = w
-                w.wdg_name = "label77"
-                w.padTop = 10
-                w.y = 29
-                w.width = 204
-                w.height = 27
-                w.text = "Druckbefehle pro Ausgabeseite"
-              }
-              FX::Packer.new(@verticalframe50) { |w|
-                @packer5 = w
-                w.wdg_name = "packer5"
-                w.frameStyle = 16384
-                w.y = 56
-                w.width = 562
-                w.height = 590
-                FX::Text.new(@packer5) { |w|
-                  @text_epl_page_commands = w
-                  w.wdg_name = "text_epl_page_commands"
-                  w.x = 6
-                  w.y = 2
-                  w.width = 550
-                  w.height = 586
+              FX::Packer.new(@verticalframe40) { |w_packer3|
+                @packer3 = w_packer3
+                w_packer3.wdg_name = "packer3"
+                w_packer3.frameStyle = 16384
+                w_packer3.y = 215
+                w_packer3.width = 562
+                w_packer3.height = 431
+                FX::Text.new(@packer3) { |w_text_cab_page_commands|
+                  @text_cab_page_commands = w_text_cab_page_commands
+                  w_text_cab_page_commands.wdg_name = "text_cab_page_commands"
+                  w_text_cab_page_commands.x = 6
+                  w_text_cab_page_commands.y = 2
+                  w_text_cab_page_commands.width = 550
+                  w_text_cab_page_commands.height = 427
                 }
               }
             }
-            FX::TabItem.new(@tabbook_printers) { |w|
-              @tabitem42 = w
-              w.wdg_name = "tabitem42"
-              w.x = 302
-              w.y = 4
-              w.width = 50
-              w.height = 23
-              w.text = "CX320"
+            FX::TabItem.new(@tabbook_printers) { |w_tabitem35|
+              @tabitem35 = w_tabitem35
+              w_tabitem35.wdg_name = "tabitem35"
+              w_tabitem35.x = 270
+              w_tabitem35.y = 6
+              w_tabitem35.width = 31
+              w_tabitem35.height = 23
+              w_tabitem35.text = "EPL"
             }
-            FX::VerticalFrame.new(@tabbook_printers) { |w|
-              @verticalframe60 = w
-              w.wdg_name = "verticalframe60"
-              w.x = 4
-              w.y = 25
-              w.width = 562
-              w.height = 646
-              FX::Matrix.new(@verticalframe60) { |w|
-                @matrix_cx320_settings = w
-                w.wdg_name = "matrix_cx320_settings"
-                w.layoutHints = 1024
-                w.matrixStyle = 131072
-                w.width = 562
-                w.height = 54
-                w.numColumns = 4
-                w.numRows = 2
-                FX::Label.new(@matrix_cx320_settings) { |w|
-                  @label96 = w
-                  w.wdg_name = "label96"
-                  w.x = 4
-                  w.y = 4
-                  w.width = 49
-                  w.height = 19
-                  w.text = "Treiber"
+            FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe50|
+              @verticalframe50 = w_verticalframe50
+              w_verticalframe50.wdg_name = "verticalframe50"
+              w_verticalframe50.shown = false
+              w_verticalframe50.x = 4
+              w_verticalframe50.y = 25
+              w_verticalframe50.width = 562
+              w_verticalframe50.height = 646
+              FX::Matrix.new(@verticalframe50) { |w_matrix37|
+                @matrix37 = w_matrix37
+                w_matrix37.wdg_name = "matrix37"
+                w_matrix37.layoutHints = 1024
+                w_matrix37.width = 562
+                w_matrix37.height = 29
+                w_matrix37.numColumns = 4
+                FX::Label.new(@matrix37) { |w_label75|
+                  @label75 = w_label75
+                  w_label75.wdg_name = "label75"
+                  w_label75.x = 4
+                  w_label75.y = 4
+                  w_label75.width = 86
+                  w_label75.height = 19
+                  w_label75.text = "Device-Datei"
                 }
-                FX::ComboBox.new(@matrix_cx320_settings) { |w|
-                  @combobox_cx320_driver = w
-                  w.wdg_name = "combobox_cx320_driver"
-                  w.x = 112
-                  w.y = 4
-                  w.width = 101
-                  w.height = 21
-                  w.numColumns = 10
+                FX::TextField.new(@matrix37) { |w_textfield_epl_device|
+                  @textfield_epl_device = w_textfield_epl_device
+                  w_textfield_epl_device.wdg_name = "textfield_epl_device"
+                  w_textfield_epl_device.layoutHints = 1025
+                  w_textfield_epl_device.x = 94
+                  w_textfield_epl_device.y = 4
+                  w_textfield_epl_device.width = 217
+                  w_textfield_epl_device.height = 21
+                  w_textfield_epl_device.numColumns = 10
                 }
-                FX::Label.new(@matrix_cx320_settings) { |w|
-                  @label98 = w
-                  w.wdg_name = "label98"
-                  w.x = 217
-                  w.y = 4
-                  w.width = 73
-                  w.height = 19
-                  w.text = "Drucker-Nr"
+                FX::Label.new(@matrix37) { |w_label78|
+                  @label78 = w_label78
+                  w_label78.wdg_name = "label78"
+                  w_label78.x = 315
+                  w_label78.y = 4
+                  w_label78.width = 67
+                  w_label78.height = 19
+                  w_label78.text = "Auflösung"
                 }
-                FX::Spinner.new(@matrix_cx320_settings) { |w|
-                  @spinner_cx320_printer_nr = w
-                  w.wdg_name = "spinner_cx320_printer_nr"
-                  w.range = -2147483648..2147483647
-                  w.x = 294
-                  w.y = 4
-                  w.width = 44
-                  w.height = 21
-                  w.numColumns = 3
-                }
-                FX::Label.new(@matrix_cx320_settings) { |w|
-                  @label99 = w
-                  w.wdg_name = "label99"
-                  w.x = 4
-                  w.y = 29
-                  w.width = 104
-                  w.height = 19
-                  w.text = "Paralleler Druck"
-                }
-                FX::ComboBox.new(@matrix_cx320_settings) { |w|
-                  @combobox_cx320_parallel_print = w
-                  w.wdg_name = "combobox_cx320_parallel_print"
-                  w.x = 112
-                  w.y = 29
-                  w.width = 101
-                  w.height = 21
-                  w.numVisible = 3
-                  w.numColumns = 10
+                FX::Spinner.new(@matrix37) { |w_spinner_epl_dpi|
+                  @spinner_epl_dpi = w_spinner_epl_dpi
+                  w_spinner_epl_dpi.wdg_name = "spinner_epl_dpi"
+                  w_spinner_epl_dpi.layoutHints = 1025
+                  w_spinner_epl_dpi.range = -2147483648..2147483647
+                  w_spinner_epl_dpi.x = 386
+                  w_spinner_epl_dpi.y = 4
+                  w_spinner_epl_dpi.width = 172
+                  w_spinner_epl_dpi.height = 21
+                  w_spinner_epl_dpi.numColumns = 6
+                  w_spinner_epl_dpi.value = 300
                 }
               }
-              FX::Matrix.new(@verticalframe60) { |w|
-                @matrix49 = w
-                w.wdg_name = "matrix49"
-                w.layoutHints = 1024
-                w.y = 54
-                w.width = 562
-                w.height = 31
-                w.numColumns = 3
-                FX::Button.new(@matrix49) { |w|
-                  @button_cx320_read_config = w
-                  w.wdg_name = "button_cx320_read_config"
-                  w.x = 4
-                  w.y = 4
-                  w.width = 108
-                  w.height = 23
-                  w.text = "Konfig auslesen"
-                }
-                FX::Button.new(@matrix49) { |w|
-                  @button_cx320_write_config = w
-                  w.wdg_name = "button_cx320_write_config"
-                  w.x = 116
-                  w.y = 4
-                  w.width = 113
-                  w.height = 23
-                  w.text = "Konfig schreiben"
-                }
-                FX::Button.new(@matrix49) { |w|
-                  @button_cx320_set_defaults = w
-                  w.wdg_name = "button_cx320_set_defaults"
-                  w.x = 233
-                  w.y = 4
-                  w.width = 102
-                  w.height = 23
-                  w.text = "Standardwerte"
+              FX::Label.new(@verticalframe50) { |w_label77|
+                @label77 = w_label77
+                w_label77.wdg_name = "label77"
+                w_label77.padTop = 10
+                w_label77.y = 29
+                w_label77.width = 204
+                w_label77.height = 27
+                w_label77.text = "Druckbefehle pro Ausgabeseite"
+              }
+              FX::Packer.new(@verticalframe50) { |w_packer5|
+                @packer5 = w_packer5
+                w_packer5.wdg_name = "packer5"
+                w_packer5.frameStyle = 16384
+                w_packer5.y = 56
+                w_packer5.width = 562
+                w_packer5.height = 590
+                FX::Text.new(@packer5) { |w_text_epl_page_commands|
+                  @text_epl_page_commands = w_text_epl_page_commands
+                  w_text_epl_page_commands.wdg_name = "text_epl_page_commands"
+                  w_text_epl_page_commands.x = 6
+                  w_text_epl_page_commands.y = 2
+                  w_text_epl_page_commands.width = 550
+                  w_text_epl_page_commands.height = 586
                 }
               }
-              FX::ScrollWindow.new(@verticalframe60) { |w|
-                @scrollwindow_config = w
-                w.wdg_name = "scrollwindow_config"
-                w.y = 85
-                w.width = 562
-                w.height = 530
-                FX::Packer.new(@scrollwindow_config) { |w|
-                  @packer_cx320_config = w
-                  w.wdg_name = "packer_cx320_config"
-                  w.width = 562
-                  w.height = 530
+            }
+            FX::TabItem.new(@tabbook_printers) { |w_tabitem42|
+              @tabitem42 = w_tabitem42
+              w_tabitem42.wdg_name = "tabitem42"
+              w_tabitem42.x = 301
+              w_tabitem42.y = 6
+              w_tabitem42.width = 50
+              w_tabitem42.height = 23
+              w_tabitem42.text = "CX320"
+            }
+            FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe60|
+              @verticalframe60 = w_verticalframe60
+              w_verticalframe60.wdg_name = "verticalframe60"
+              w_verticalframe60.shown = false
+              w_verticalframe60.x = 4
+              w_verticalframe60.y = 25
+              w_verticalframe60.width = 562
+              w_verticalframe60.height = 646
+              FX::Matrix.new(@verticalframe60) { |w_matrix_cx320_settings|
+                @matrix_cx320_settings = w_matrix_cx320_settings
+                w_matrix_cx320_settings.wdg_name = "matrix_cx320_settings"
+                w_matrix_cx320_settings.layoutHints = 1024
+                w_matrix_cx320_settings.matrixStyle = 131072
+                w_matrix_cx320_settings.width = 562
+                w_matrix_cx320_settings.height = 54
+                w_matrix_cx320_settings.numColumns = 4
+                w_matrix_cx320_settings.numRows = 2
+                FX::Label.new(@matrix_cx320_settings) { |w_label96|
+                  @label96 = w_label96
+                  w_label96.wdg_name = "label96"
+                  w_label96.x = 4
+                  w_label96.y = 4
+                  w_label96.width = 49
+                  w_label96.height = 19
+                  w_label96.text = "Treiber"
+                }
+                FX::ComboBox.new(@matrix_cx320_settings) { |w_combobox_cx320_driver|
+                  @combobox_cx320_driver = w_combobox_cx320_driver
+                  w_combobox_cx320_driver.wdg_name = "combobox_cx320_driver"
+                  w_combobox_cx320_driver.x = 112
+                  w_combobox_cx320_driver.y = 4
+                  w_combobox_cx320_driver.width = 101
+                  w_combobox_cx320_driver.height = 21
+                  w_combobox_cx320_driver.numColumns = 10
+                }
+                FX::Label.new(@matrix_cx320_settings) { |w_label98|
+                  @label98 = w_label98
+                  w_label98.wdg_name = "label98"
+                  w_label98.x = 217
+                  w_label98.y = 4
+                  w_label98.width = 73
+                  w_label98.height = 19
+                  w_label98.text = "Drucker-Nr"
+                }
+                FX::Spinner.new(@matrix_cx320_settings) { |w_spinner_cx320_printer_nr|
+                  @spinner_cx320_printer_nr = w_spinner_cx320_printer_nr
+                  w_spinner_cx320_printer_nr.wdg_name = "spinner_cx320_printer_nr"
+                  w_spinner_cx320_printer_nr.range = -2147483648..2147483647
+                  w_spinner_cx320_printer_nr.x = 294
+                  w_spinner_cx320_printer_nr.y = 4
+                  w_spinner_cx320_printer_nr.width = 44
+                  w_spinner_cx320_printer_nr.height = 21
+                  w_spinner_cx320_printer_nr.numColumns = 3
+                }
+                FX::Label.new(@matrix_cx320_settings) { |w_label99|
+                  @label99 = w_label99
+                  w_label99.wdg_name = "label99"
+                  w_label99.x = 4
+                  w_label99.y = 29
+                  w_label99.width = 104
+                  w_label99.height = 19
+                  w_label99.text = "Paralleler Druck"
+                }
+                FX::ComboBox.new(@matrix_cx320_settings) { |w_combobox_cx320_parallel_print|
+                  @combobox_cx320_parallel_print = w_combobox_cx320_parallel_print
+                  w_combobox_cx320_parallel_print.wdg_name = "combobox_cx320_parallel_print"
+                  w_combobox_cx320_parallel_print.x = 112
+                  w_combobox_cx320_parallel_print.y = 29
+                  w_combobox_cx320_parallel_print.width = 101
+                  w_combobox_cx320_parallel_print.height = 21
+                  w_combobox_cx320_parallel_print.numVisible = 3
+                  w_combobox_cx320_parallel_print.numColumns = 10
                 }
               }
-              FX::Matrix.new(@verticalframe60) { |w|
-                @matrix47 = w
-                w.wdg_name = "matrix47"
-                w.layoutHints = 1024
-                w.y = 615
-                w.width = 562
-                w.height = 31
-                w.numColumns = 4
-                FX::Button.new(@matrix47) { |w|
-                  @button_cx320_reset = w
-                  w.wdg_name = "button_cx320_reset"
-                  w.x = 4
-                  w.y = 4
-                  w.width = 45
-                  w.height = 23
-                  w.text = "Reset"
+              FX::Matrix.new(@verticalframe60) { |w_matrix49|
+                @matrix49 = w_matrix49
+                w_matrix49.wdg_name = "matrix49"
+                w_matrix49.layoutHints = 1024
+                w_matrix49.y = 54
+                w_matrix49.width = 562
+                w_matrix49.height = 31
+                w_matrix49.numColumns = 3
+                FX::Button.new(@matrix49) { |w_button_cx320_read_config|
+                  @button_cx320_read_config = w_button_cx320_read_config
+                  w_button_cx320_read_config.wdg_name = "button_cx320_read_config"
+                  w_button_cx320_read_config.x = 4
+                  w_button_cx320_read_config.y = 4
+                  w_button_cx320_read_config.width = 108
+                  w_button_cx320_read_config.height = 23
+                  w_button_cx320_read_config.text = "Konfig auslesen"
                 }
-                FX::Button.new(@matrix47) { |w|
-                  @button_cx320_move_to_0 = w
-                  w.wdg_name = "button_cx320_move_to_0"
-                  w.x = 53
-                  w.y = 4
-                  w.width = 108
-                  w.height = 23
-                  w.text = "zu Druckstation"
+                FX::Button.new(@matrix49) { |w_button_cx320_write_config|
+                  @button_cx320_write_config = w_button_cx320_write_config
+                  w_button_cx320_write_config.wdg_name = "button_cx320_write_config"
+                  w_button_cx320_write_config.x = 116
+                  w_button_cx320_write_config.y = 4
+                  w_button_cx320_write_config.width = 113
+                  w_button_cx320_write_config.height = 23
+                  w_button_cx320_write_config.text = "Konfig schreiben"
                 }
-                FX::Button.new(@matrix47) { |w|
-                  @button_cx320_move_to_2 = w
-                  w.wdg_name = "button_cx320_move_to_2"
-                  w.x = 165
-                  w.y = 4
-                  w.width = 77
-                  w.height = 23
-                  w.text = "zu kont.los"
+                FX::Button.new(@matrix49) { |w_button_cx320_set_defaults|
+                  @button_cx320_set_defaults = w_button_cx320_set_defaults
+                  w_button_cx320_set_defaults.wdg_name = "button_cx320_set_defaults"
+                  w_button_cx320_set_defaults.x = 233
+                  w_button_cx320_set_defaults.y = 4
+                  w_button_cx320_set_defaults.width = 102
+                  w_button_cx320_set_defaults.height = 23
+                  w_button_cx320_set_defaults.text = "Standardwerte"
                 }
-                FX::Button.new(@matrix47) { |w|
-                  @button_cx320_move_to_4 = w
-                  w.wdg_name = "button_cx320_move_to_4"
-                  w.x = 246
-                  w.y = 4
-                  w.width = 59
-                  w.height = 23
-                  w.text = "Auswurf"
+              }
+              FX::ScrollWindow.new(@verticalframe60) { |w_scrollwindow_config|
+                @scrollwindow_config = w_scrollwindow_config
+                w_scrollwindow_config.wdg_name = "scrollwindow_config"
+                w_scrollwindow_config.y = 85
+                w_scrollwindow_config.width = 562
+                w_scrollwindow_config.height = 530
+                FX::Packer.new(@scrollwindow_config) { |w_packer_cx320_config|
+                  @packer_cx320_config = w_packer_cx320_config
+                  w_packer_cx320_config.wdg_name = "packer_cx320_config"
+                  w_packer_cx320_config.width = 562
+                  w_packer_cx320_config.height = 530
+                }
+              }
+              FX::Matrix.new(@verticalframe60) { |w_matrix47|
+                @matrix47 = w_matrix47
+                w_matrix47.wdg_name = "matrix47"
+                w_matrix47.layoutHints = 1024
+                w_matrix47.y = 615
+                w_matrix47.width = 562
+                w_matrix47.height = 31
+                w_matrix47.numColumns = 4
+                FX::Button.new(@matrix47) { |w_button_cx320_reset|
+                  @button_cx320_reset = w_button_cx320_reset
+                  w_button_cx320_reset.wdg_name = "button_cx320_reset"
+                  w_button_cx320_reset.x = 4
+                  w_button_cx320_reset.y = 4
+                  w_button_cx320_reset.width = 45
+                  w_button_cx320_reset.height = 23
+                  w_button_cx320_reset.text = "Reset"
+                }
+                FX::Button.new(@matrix47) { |w_button_cx320_move_to_0|
+                  @button_cx320_move_to_0 = w_button_cx320_move_to_0
+                  w_button_cx320_move_to_0.wdg_name = "button_cx320_move_to_0"
+                  w_button_cx320_move_to_0.x = 53
+                  w_button_cx320_move_to_0.y = 4
+                  w_button_cx320_move_to_0.width = 108
+                  w_button_cx320_move_to_0.height = 23
+                  w_button_cx320_move_to_0.text = "zu Druckstation"
+                }
+                FX::Button.new(@matrix47) { |w_button_cx320_move_to_2|
+                  @button_cx320_move_to_2 = w_button_cx320_move_to_2
+                  w_button_cx320_move_to_2.wdg_name = "button_cx320_move_to_2"
+                  w_button_cx320_move_to_2.x = 165
+                  w_button_cx320_move_to_2.y = 4
+                  w_button_cx320_move_to_2.width = 77
+                  w_button_cx320_move_to_2.height = 23
+                  w_button_cx320_move_to_2.text = "zu kont.los"
+                }
+                FX::Button.new(@matrix47) { |w_button_cx320_move_to_4|
+                  @button_cx320_move_to_4 = w_button_cx320_move_to_4
+                  w_button_cx320_move_to_4.wdg_name = "button_cx320_move_to_4"
+                  w_button_cx320_move_to_4.x = 246
+                  w_button_cx320_move_to_4.y = 4
+                  w_button_cx320_move_to_4.width = 59
+                  w_button_cx320_move_to_4.height = 23
+                  w_button_cx320_move_to_4.text = "Auswurf"
                 }
               }
             }
           }
         }
       }
+    @topwin
   end
   attr_reader :topwin
   attr_reader :dialogbox_printerview
