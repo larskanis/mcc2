@@ -35,9 +35,6 @@ module Mcc2
       def print_card(layout_file, row, chip)
         @layout_file = layout_file
 
-        datasourcename = layout_file.get_attr_value(S_DATASOURCE)
-        duplex = layout_file.get_attr_value(S_DUPLEX) == S_TRUE
-
         print_page(row, 0)
         duplex = layout_file.get_attr_value(S_DUPLEX) == S_TRUE
         if duplex
