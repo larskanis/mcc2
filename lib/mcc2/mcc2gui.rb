@@ -23,7 +23,10 @@ require "libguib16"
 alias loadImage_libguib16 loadImage
 def loadImage(file)
   file = File.join(File.dirname(__FILE__), "..", file)
-  loadImage_libguib16(file)
+  i = loadImage_libguib16(file)
+  i.scale($gui_scale * i.width, $gui_scale * i.height)
+  i.create
+  i
 end
 
 # die GUI's, alle mit FoxGUI-Builder erstellt
@@ -41,8 +44,9 @@ module Mcc2
   class Mcc2Gui < MainWindow
     include Fox
 
-    def initialize(parent, argv)
+    def initialize(parent, argv, gui_scale)
       @app = parent
+      @gui_scale = gui_scale
       super(parent)
       # Titel des Hauptfensters mit Programmname und Version setzen
 
@@ -73,8 +77,8 @@ module Mcc2
       connect_with_accel(@mcmd_picture) { new_object(PICTUREOBJECT) }
       connect_with_accel(@mcmd_box) { new_object(BOXOBJECT) }
 
-      @topwin.width = 1020
-      @topwin.height = 748
+      @topwin.width = (1020*@gui_scale).to_i
+      @topwin.height = (748*@gui_scale).to_i
 
       # ......................................................................
       @app.addChore {
@@ -144,7 +148,7 @@ module Mcc2
     #---------------------------------------------------------------------------------------------------------
 
     def new_layout
-      child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800, 600)
+      child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800*@gui_scale, 600*@gui_scale)
       child.userData = Layout.new(child)
       child.create
       child.show
@@ -159,16 +163,18 @@ module Mcc2
         filename = FXFileDialog.getOpenFilename(@topwin, "Laden", "./", patterns = "*.xml", initial = 0)
       end
       unless filename.to_s.empty?
-        child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800, 600)
+        child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800*@gui_scale, 600*@gui_scale)
         begin
           child.userData = Layout.new(child, filename)
         rescue LayoutFile::Error => e
           FXMessageBox.error(@topwin.app, MBOX_OK, "Fehler beim Laden der Datei", e.to_s)
         else
-          child.create
-          child.show
-          child.recalc
-          child.setFocus
+          if @topwin.created?
+            child.create
+            child.show
+            child.recalc
+            child.setFocus
+          end
           @mdiclient.setActiveChild(child)
         end
       end
@@ -181,14 +187,40 @@ module Mcc2
       end
     end
 
+    def self.hidpi_scale(fxapp)
+      fxapp.create
+      width = fxapp.rootWindow.width
+      scale = if (s=ENV['FOXSCALE'].to_f) > 0
+        s
+      elsif fxapp.rootWindow.width >= 3500 && fxapp.rootWindow.height >= 2000
+        2.0
+      else
+        1.0
+      end
+    end
+
+    def self.enable_hidpi(fxapp)
+      scale = hidpi_scale(fxapp)
+
+      fd = fxapp.normalFont.fontDesc
+      fd.size *= scale
+      fxapp.normalFont.destroy
+      fxapp.normalFont.fontDesc = fd
+      fxapp.normalFont.create
+
+      scale
+    end
+
     def self.run(argv)
       Thread.abort_on_exception = true
 
       begin
         app = FX::App.new("MCC2", "ComCard-Mcc2")
+        $gui_scale = enable_hidpi(app)
         Fox::FXToolTip.new(app, Fox::TOOLTIP_PERMANENT)
 
-        w = Mcc2Gui.new(app, argv)
+        w = Mcc2Gui.new(app, argv, $gui_scale)
+        w.topwin.create
         w.topwin.show(Fox::PLACEMENT_SCREEN)
 
         app.create

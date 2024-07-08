@@ -19,12 +19,12 @@ module Mcc2
       @lf = Dialogbox_layoutview.new parent
       @lf.splitter_layoutview.reparent parent, nil
       @lf.dialogbox_layoutview.close
-      @lf.iconlist_objects.appendHeader("ID", nil, 50)
-      @lf.iconlist_objects.appendHeader("Name", nil, 100)
-      @lf.iconlist_objects.appendHeader("Typ", nil, 100)
+      @lf.iconlist_objects.appendHeader("ID", nil, 50*$gui_scale)
+      @lf.iconlist_objects.appendHeader("Name", nil, 100*$gui_scale)
+      @lf.iconlist_objects.appendHeader("Typ", nil, 100*$gui_scale)
 
-      @lf.splitter_layoutview.setSplit(0, 170)
-      @lf.splitter12.setSplit(0, 100)
+      @lf.splitter_layoutview.setSplit(0, 170*$gui_scale)
+      @lf.splitter12.setSplit(0, 100*$gui_scale)
 
       # .............................................................................................
       # die Aktionen definieren, die ausgeführt werden, wenn am Layout irgend etwas gearbeitet wird
@@ -165,7 +165,7 @@ module Mcc2
         w.wdg_name = "matrix_xyz"
         w.numRows = 4
         w.numColumns = 2
-        w.width = 650
+        w.width = 650*$gui_scale
         w.y = 2
         w.height = 0
         w.matrixStyle = MATRIX_BY_COLUMNS | LAYOUT_FILL_X | LAYOUT_FILL_Y

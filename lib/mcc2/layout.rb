@@ -83,7 +83,7 @@ module Mcc2
         FXVerticalFrame.new(splitter1) do |frame_preview|
           @preview = Printer::Preview.new(frame_preview)
         end
-        splitter1.setSplit(0, 400)
+        splitter1.setSplit(0, 400 * $gui_scale)
       end
 
       @parent.connect(SEL_CLOSE) { |sender, selector, data|

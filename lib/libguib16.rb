@@ -143,7 +143,7 @@ def loadImage(file)
     end
     Fox::FXFileStream.open(file, Fox::FXStreamLoad) { |stream| img.loadPixels(stream) }
     img.filename = file
-    img.create
+    # img.create
   rescue Exception
     puts "load Image: #{$!}"
   end
@@ -224,6 +224,7 @@ module FX
 
     def from_s s
       @fd.from_s s
+      @fd.size *= $gui_scale
       self
     end
 
