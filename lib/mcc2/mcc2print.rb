@@ -1,29 +1,28 @@
 #!/usr/bin/env ruby
-# -*- coding: UTF-8 -*-
+
 $stdout.sync = true
 $stderr.sync = true
 
 require "rubygems"
 
-require 'mcc2'
-require 'fileutils'
+require "mcc2"
+require "fileutils"
 require "tempfile"
 require "optparse"
 
-require 'ruby-zint'
-require 'mcc2/zint_barcode_extensions'
+require "ruby-zint"
+require "mcc2/zint_barcode_extensions"
 
 module Mcc2
-# die Haupklasse des Programms
+  # die Haupklasse des Programms
   class Mcc2Print
-
     attr_accessor :verbose
 
     def initialize
       @xpath_changes = {}
     end
 
-    def start!(layout_fname, xpath_changes={})
+    def start!(layout_fname, xpath_changes = {})
       lf = Mcc2::LayoutFile.load_from_xml(layout_fname)
       @xpath_changes.merge(xpath_changes).each do |xpath, value|
         lf.change_first_xpath_value(xpath, value)
@@ -43,14 +42,14 @@ module Mcc2
     end
 
     def add_xpath_value(param)
-      xpath, value = param.split('~', 2)
+      xpath, value = param.split("~", 2)
       @xpath_changes[xpath] = value
     end
 
     def self.run(argv)
       Thread.abort_on_exception = true
 
-      app = self.new
+      app = new
 
       OptionParser.new do |opts|
         opts.banner = "Usage: #{$0} [options]"

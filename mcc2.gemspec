@@ -1,26 +1,25 @@
-# coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'mcc2/version'
+require "mcc2/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "mcc2"
-  spec.version       = Mcc2::VERSION
-  spec.authors       = ["Lars Kanis", 'Andreas Kosche']
-  spec.email         = ["kanis@comcard.de", 'kosche@comcard.de']
+  spec.name = "mcc2"
+  spec.version = Mcc2::VERSION
+  spec.authors = ["Lars Kanis", "Andreas Kosche"]
+  spec.email = ["kanis@comcard.de", "kosche@comcard.de"]
 
-  spec.summary       = %q{Layout editor and card printer GUI}
-  spec.description   = %q{Layout editor and card printer GUI.}
-  spec.homepage      = "https://comdb1/projektverwaltung/projects/mcc2"
-  spec.license       = "MIT"
-  spec.metadata['allowed_push_host'] = "https://ccgems"
+  spec.summary = "Layout editor and card printer GUI"
+  spec.description = "Layout editor and card printer GUI."
+  spec.homepage = "https://comdb1/projektverwaltung/projects/mcc2"
+  spec.license = "MIT"
+  spec.metadata["allowed_push_host"] = "https://ccgems"
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.files = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  spec.bindir = "exe"
+  spec.executables = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.required_ruby_version = ['>= 2.0', '< 4.0']
+  spec.required_ruby_version = [">= 2.0", "< 4.0"]
 
   spec.add_runtime_dependency "nokogiri", "~> 1.4.pre"
   spec.add_runtime_dependency "dbf", "~> 1.2"
