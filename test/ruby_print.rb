@@ -263,7 +263,6 @@ class RubyPrinting
 
   # --------------------------------------------------------------------------------------------------------------
   def print_graphic(devicename, datatype)
-
     Magick::RVG.dpi = 600
     crd_width = 85
     crd_height = 55

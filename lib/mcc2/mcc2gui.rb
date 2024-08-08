@@ -77,8 +77,8 @@ module Mcc2
       connect_with_accel(@mcmd_picture) { new_object(PICTUREOBJECT) }
       connect_with_accel(@mcmd_box) { new_object(BOXOBJECT) }
 
-      @topwin.width = (1020*@gui_scale).to_i
-      @topwin.height = (748*@gui_scale).to_i
+      @topwin.width = (1020 * @gui_scale).to_i
+      @topwin.height = (748 * @gui_scale).to_i
 
       # ......................................................................
       @app.addChore {
@@ -148,7 +148,7 @@ module Mcc2
     #---------------------------------------------------------------------------------------------------------
 
     def new_layout
-      child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800*@gui_scale, 600*@gui_scale)
+      child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800 * @gui_scale, 600 * @gui_scale)
       child.userData = Layout.new(child)
       child.create
       child.show
@@ -163,7 +163,7 @@ module Mcc2
         filename = FXFileDialog.getOpenFilename(@topwin, "Laden", "./", patterns = "*.xml", initial = 0)
       end
       unless filename.to_s.empty?
-        child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800*@gui_scale, 600*@gui_scale)
+        child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800 * @gui_scale, 600 * @gui_scale)
         begin
           child.userData = Layout.new(child, filename)
         rescue LayoutFile::Error => e
@@ -190,7 +190,7 @@ module Mcc2
     def self.hidpi_scale(fxapp)
       fxapp.create
       width = fxapp.rootWindow.width
-      scale = if (s=ENV['FOXSCALE'].to_f) > 0
+      scale = if (s = ENV["FOXSCALE"].to_f) > 0
         s
       elsif fxapp.rootWindow.width >= 3500 && fxapp.rootWindow.height >= 2000
         2.0
