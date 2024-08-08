@@ -136,8 +136,40 @@ module Mcc2
       @lf.textfield_spur2.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, S_MSSPUR2) }
       @lf.textfield_spur3.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, S_MSSPUR3) }
 
-      @barcodes = if Object.const_defined?(:Barby)
-        Barby.constants.map { |c| c.to_s }.sort.select { |c| Barby.const_get(c).ancestors.include?(Barby::Barcode) } - %w[Barcode Barcode1D Barcode2D Code128 GS1128]
+      @barcodes = if Object.const_defined?(:Zint)
+        [
+          :Aztec,
+          :Codabar,
+          :CodablockF,
+          :Code11,
+          :Code128,
+          :Code128b,
+          :Code16k,
+          :Code32,
+          :Code39,
+          :Code49,
+          :Code93,
+          :CodeOne,
+          :DataMatrix,
+          :DotCode,
+          :Ean128,
+          :Ean14,
+          :Eanx,
+          :EanxChk,
+          :Excode39,
+          :Gs1_128,
+          :MaxiCode,
+          :MicroPdf417,
+          :MicroQr,
+          :Pdf417,
+          :Pdf417comp,
+          :Pdf417trunc,
+          :Qr,
+          :UpcA,
+          :UpcAChk,
+          :UpcE,
+          :UpcEChk
+        ]
       else
         []
       end
@@ -558,7 +590,7 @@ module Mcc2
     def fill_barcode_typ_list
       @lf.listbox_barcode_typ.clearItems
       @barcodes.each { |bc|
-        @lf.listbox_barcode_typ.appendItem(bc)
+        @lf.listbox_barcode_typ.appendItem(bc.to_s)
       }
     end
     #---------------------------------------------------------------------------------------------------------

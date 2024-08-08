@@ -29,14 +29,8 @@ module Mcc2
     def initialize(parent, filename = nil)
       @parent = parent
       begin
-        require "barby"
-        %w[
-          bookland code_25_iata code_25 code_93 ean_13 gs1_128 qr_code
-          code_128 code_25_interleaved code_39 ean_8 upc_supplemental
-        ].each do |code|
-          require "barby/barcode/#{code}"
-        end
-        require "mcc2/barby_barcode_extensions"
+        require "ruby-zint"
+        require "mcc2/zint_barcode_extensions"
       rescue LoadError => e
         puts "Loading barcode driver failed: #{e}"
       end
@@ -182,6 +176,10 @@ module Mcc2
 
     def load_from_xml(filename)
       self.layout_file = LayoutFile.load_from_xml(filename)
+      unless layout_file.warnings.empty?
+        wa = layout_file.warnings.join("\n\n")
+        FXMessageBox.warning(@parent.app, MBOX_OK, "Warnung beim Laden von #{filename}", wa)
+      end
     end
     #---------------------------------------------------------------------------------------------------------
 

@@ -41,10 +41,11 @@ module Mcc2
     class InvalidFileVersion < Error
     end
 
-    FILE_VERSION_RANGE = 1..1
+    FILE_VERSION_RANGE = 1..2
 
     attr_accessor :attributes
     attr_accessor :filename
+    attr_reader :warnings
 
     def self.load_from_xml(filename)
       o = new
@@ -126,6 +127,8 @@ P1
       add_attr(S_CX320_PRINTER_NR, Integer, 0)
       add_attr(S_CX320_PARALLEL_PRINT, String, "second_card")
       add_attr(S_CX320_CONFIG, String, "{}")
+
+      @warnings = []
     end
 
     #---------------------------------------------------------------------------------------------------------
@@ -137,7 +140,6 @@ P1
       @xml_doc = Nokogiri::XML::Document.new
       @xml_doc.encoding = "UTF-8"
       @xml_doc.root = Nokogiri::XML::Node.new(S_ROOT, @xml_doc)
-      @xml_doc.root["version"] = FILE_VERSION_RANGE.last.to_s
 
       # Layout definieren
       @xml_doc.root << node = Nokogiri::XML::Node.new(S_LAYOUT, @xml_doc)
@@ -169,10 +171,18 @@ P1
 
       @xml_doc = File.open(filename) { |fd| Nokogiri::XML(fd) }
       @xml_doc.root["version"] ||= "1"
-      unless FILE_VERSION_RANGE.include?(@xml_doc.root["version"].to_i)
-        raise InvalidFileVersion, "Die Datei #{filename.inspect} ist nach Version #{@xml_doc.root["version"].to_i} aufgebaut, dieses Programm kann aber nur die Versionen #{FILE_VERSION_RANGE.inspect} verarbeiten"
+      filever = @xml_doc.root["version"].to_i
+      unless FILE_VERSION_RANGE.include?(filever)
+        raise InvalidFileVersion, "Die Datei #{filename.inspect} ist nach Version #{filever} aufgebaut, dieses Programm kann aber nur die Versionen #{FILE_VERSION_RANGE.inspect} verarbeiten"
       end
 
+      if filever == 1 && have_barcode_objects?
+        @warnings << <<~EOT
+          Diese Datei ist noch mit Barby-, statt den neueren Zint-Barcodes aufgebaut.
+          Daher müssen alle Barcodes geprüft und ggf. neu justiert werden!
+          Diese Warnung entfällt, sobald diese Datei einmal gespeichert wird.
+        EOT
+      end
       @filename = filename
       # ................................................................................................................................
       # die allgemeine Layout-Einstellungen auslesen
@@ -256,6 +266,13 @@ P1
       unless node_ms.at_xpath(S_MSSPUR3)
         node_ms << Nokogiri::XML::Node.new(S_MSSPUR3, @xml_doc)
         @changed = true
+      end
+    end
+
+    def have_barcode_objects?
+      sorted_id_list.find do |id|
+        go = find_graphic_object_by_id(id)
+        go[GOA_TYP] == BARCODEOBJECT
       end
     end
 
@@ -403,6 +420,7 @@ P1
     end
 
     def save
+      @xml_doc.root["version"] = FILE_VERSION_RANGE.last.to_s
       File.open(@filename, "w") do |fd|
         @xml_doc.write_to(fd, indent: 2)
       end

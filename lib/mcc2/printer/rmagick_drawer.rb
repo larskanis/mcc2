@@ -96,7 +96,7 @@ module Mcc2
               elsif typ == PICTUREOBJECT
                 draw_pictureobject(body.g, go, go_width, go_height, data)
               elsif typ == BARCODEOBJECT
-                data = data.gsub(/\\x([0-9a-f][0-9a-f])/i) { [$1.hex].pack("C") }.gsub(/\\(.)/, '\\1')
+                data = data.gsub(/\\x([0-9a-f][0-9a-f])/i) { [$1.hex].pack("C") }
                 draw_barcode(body.g, go, go_width, go_height, data, !preview)
               elsif typ == BOXOBJECT
                 draw_boxobject(body.g, go, go_width, go_height)
@@ -209,6 +209,17 @@ module Mcc2
       end
     end
 
+    BARCODE_ALIAS = {
+      EAN13: :Eanx,
+      EAN8: :Eanx
+    }
+
+    HALIGNMENT = {
+      0 => :middle,
+      1 => :start,
+      2 => :end
+    }
+
     def draw_barcode(body, go, go_width, go_height, data, optimized = true)
       return if data.nil? || data.empty?
 
@@ -233,7 +244,7 @@ module Mcc2
       )
 
       begin
-        barcode = Barby.const_get(barcode_typ).new(data)
+        barcode = Zint.const_get(BARCODE_ALIAS[barcode_typ.to_sym] || barcode_typ).new(value: data)
       rescue => e
         raise Printer::Base::InvalidBarcodeData, "Fehler beim Generieren des Barcodes #{data.inspect}: #{e}"
       else
@@ -241,61 +252,52 @@ module Mcc2
           barcode.narrow_width = 1
           barcode.wide_width = bar_ratio
         end
-        bcencoding = barcode.encoding
+        barcode.input_mode = Zint::DATA_MODE #  Zint::UNICODE_MODE | Zint::ESCAPE_MODE
+        # barcode.output_options = Zint::SMALL_TEXT
+        barcode.height = go_height.to_f / go_width.to_f * 20.0 #  50 is the default x-dimension for most of the barcodes
+        barcode.show_hrt = 0 if fontsize == 0
+        # barcode.fontsize = fontsize # not used in zint
+        # p [go_height, go_width, barcode.height]
+        barcode.whitespace_width = 0
+        bcvector = barcode.to_vector
 
         eancode = %w[EAN13 EAN8].include?(barcode_typ)
 
-        px_width, px_height = mm(go_width), mm(go_height) - pt(fontsize / 5 * 4)
-        xbars, ybars = if barcode.two_dimensional?
-          [bcencoding.first.length, bcencoding.length] if barcode.two_dimensional?
-        else
-          [bcencoding.length, 1]
-        end
+        px_width, px_height = mm(go_width), mm(go_height)
+        # bcvector values are always a multiple of 2, but we need a multiple of 1 for to_i below.
+        # So all bcvector measurements are divided by 2.
+        xbars, ybars = bcvector.width / 2, bcvector.height / 2
+        # p vector_width: bcvector.width, vector_height: bcvector.height
         xdim, ydim = px_width / xbars, px_height / ybars
-        xdim, ydim = xdim.to_i, ydim.to_i if optimized
+        if optimized
+          xdim = xdim.to_i
+          ydim = ydim.to_i if barcode.rows > 1 # optimize y dimension only on 2D codes
+        end
 
-        just = go[GOA_JUSTIFICATION].downcase
-        xgap = mm(go_width) - xdim * xbars
-        body.translate(({"links" => 0, "mitte" => xgap / 2, "rechts" => xgap}[just] || 0).round, 0)
-
-        if barcode.two_dimensional?
-          x, y = 0, 0
-          bcencoding.each do |line|
-            line.chars.map { |c| c == "1" }.each do |bar|
-              body.rect(xdim, ydim, x, y) if bar
-              x += xdim
-            end
-            x = 0
-            y += ydim
-          end
-        else
-          x = 0
-          bcencoding.chars.map { |c| c == "1" }.each_with_index do |bar, bidx|
-            #         puts "#{xdim}, #{px_height}, #{x}" if bar
-            h = px_height
-            if eancode && (bidx <= 3 || bidx >= xbars - 3 || (bidx - xbars / 2).abs <= 1)
-              h += pt(fontsize / 10 * 4)
-            end
-            body.rect(xdim - 1, h, x, 0) if bar && xdim >= 1
-            x += xdim
-          end
+        bcvector.each_rectangle do |bar|
+          # p [xdim*bar.width/2, ydim*bar.height/2, xdim*bar.x/2, ydim*bar.y/2]
+          body.rect([xdim * bar.width / 2 - 1, 0].max, [ydim * bar.height / 2 - 1, 0].max, xdim * bar.x / 2, ydim * bar.y / 2)
+        end
+        bcvector.each_string do |str|
+          # p [str.x, str.y, str.text, str.halign, str.fsize]
+          body.text(xdim * str.x / 2, ydim * str.y / 2, str.text).styles(text_anchor: HALIGNMENT[str.halign])
         end
 
         # Barcode - text
 
-        if eancode
-          data2 = barcode.numbers_with_checksum.join
-          data3 = if barcode_typ == "EAN8"
-            [nil, data2[0, 4], data2[4, 4]]
-          elsif barcode_typ == "EAN13"
-            [data2[0, 1], data2[1, 6], data2[7, 6]]
-          end
-          body.text(0, mm(go_height), data3[0]).styles(text_anchor: "end") if data[0]
-          body.text(xdim * (xbars / 4.0 + 1), mm(go_height), data3[1]).styles(text_anchor: "middle")
-          body.text(xdim * (xbars / 4.0 * 3.0 - 1), mm(go_height), data3[2]).styles(text_anchor: "middle")
-        else
-          body.text(xdim * (xbars / 2.0), mm(go_height), data).styles(text_anchor: "middle")
-        end
+        # if eancode
+        # data2 = barcode.text.to_s
+        # data3 = if barcode.symbology == Zint::BARCODE_EANX && data2.length == 8
+        # [nil, data2[0,4], data2[4,4]]
+        # elsif barcode.symbology == Zint::BARCODE_EANX && data2.length == 13
+        # [data2[0,1], data2[1,6], data2[7,6]]
+        # end
+        # body.text(0, mm(go_height), data3[0]).styles(:text_anchor => 'end') if data[0]
+        # body.text(xdim * (xbars/4.0+1), mm(go_height), data3[1]).styles(:text_anchor => 'middle')
+        # body.text(xdim * (xbars/4.0*3.0-1), mm(go_height), data3[2]).styles(:text_anchor => 'middle')
+        # else
+        # body.text(xdim * (xbars/2.0), mm(go_height), data).styles(:text_anchor => 'middle')
+        # end
       end
     end
 
