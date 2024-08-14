@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Layout editor and card printer GUI"
   spec.description = "Layout editor and card printer GUI."
-  spec.homepage = "https://comdb1/projektverwaltung/projects/mcc2"
+  spec.homepage = "https://gitlab/produktion/mcc2"
   spec.license = "MIT"
   spec.metadata["allowed_push_host"] = "https://ccgems"
 
@@ -23,9 +23,8 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "nokogiri", "~> 1.4.pre"
   spec.add_runtime_dependency "dbf", "~> 1.2"
-  spec.add_runtime_dependency "rmagick", ">= 3.0", "< 6.0"
+  spec.add_runtime_dependency "rmagick", ">= 3.0", "< 7.0"
   spec.add_runtime_dependency "ruby-zint", "~> 1.1"
-  spec.add_runtime_dependency "rqrcode", ">= 0.4", "< 2.0"
   spec.add_runtime_dependency "fxruby", "~> 1.6.30"
 
   spec.add_development_dependency "bundler", ">= 1.11", "<= 3.0"
