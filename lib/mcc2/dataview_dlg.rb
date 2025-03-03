@@ -15,87 +15,22 @@ class Dialogbox_dataview
         w_dialogbox_dataview.shown = true
         w_dialogbox_dataview.x = 743
         w_dialogbox_dataview.y = 306
-        w_dialogbox_dataview.width = 398
-        w_dialogbox_dataview.height = 254
+        w_dialogbox_dataview.width = 500
+        w_dialogbox_dataview.height = 400
         w_dialogbox_dataview.title = "Entwurfsansicht"
-        w_dialogbox_dataview.backColor = Fox::FXRGBA(212, 208, 200, 255)
         FX::Splitter.new(@dialogbox_dataview) { |w_splitter_dataview|
           @splitter_dataview = w_splitter_dataview
           w_splitter_dataview.wdg_name = "splitter_dataview"
           w_splitter_dataview.splitterStyle = 163840
-          w_splitter_dataview.width = 398
-          w_splitter_dataview.height = 254
-          w_splitter_dataview.backColor = Fox::FXRGBA(212, 208, 200, 255)
+          w_splitter_dataview.width = 500
+          w_splitter_dataview.height = 400
           FX::VerticalFrame.new(@splitter_dataview) { |w_verticalframe_datalist|
             @verticalframe_datalist = w_verticalframe_datalist
             w_verticalframe_datalist.wdg_name = "verticalframe_datalist"
             w_verticalframe_datalist.frameStyle = 16384
             w_verticalframe_datalist.layoutHints = 2304
-            w_verticalframe_datalist.width = 398
-            w_verticalframe_datalist.height = 254
-            w_verticalframe_datalist.backColor = Fox::FXRGBA(212, 208, 200, 255)
-            w_verticalframe_datalist.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-            w_verticalframe_datalist.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-            w_verticalframe_datalist.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
-            FX::HorizontalFrame.new(@verticalframe_datalist) { |w_horizontalframe74|
-              @horizontalframe74 = w_horizontalframe74
-              w_horizontalframe74.wdg_name = "horizontalframe74"
-              w_horizontalframe74.layoutHints = 1024
-              w_horizontalframe74.hSpacing = 2
-              w_horizontalframe74.padLeft = 4
-              w_horizontalframe74.x = 2
-              w_horizontalframe74.y = 2
-              w_horizontalframe74.width = 394
-              w_horizontalframe74.height = 21
-              w_horizontalframe74.backColor = Fox::FXRGBA(212, 208, 200, 255)
-              w_horizontalframe74.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-              w_horizontalframe74.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-              w_horizontalframe74.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-              FX::Label.new(@horizontalframe74) { |w_label409|
-                @label409 = w_label409
-                w_label409.wdg_name = "label409"
-                w_label409.layoutHints = 3132
-                w_label409.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_label409.x = 4
-                w_label409.width = 61
-                w_label409.height = 21
-                w_label409.text = "Datenquelle"
-                w_label409.backColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_label409.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_label409.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-                w_label409.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-              }
-              FX::TextField.new(@horizontalframe74) { |w_textfield_datasource|
-                @textfield_datasource = w_textfield_datasource
-                w_textfield_datasource.wdg_name = "textfield_datasource"
-                w_textfield_datasource.layoutHints = 1024
-                w_textfield_datasource.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_textfield_datasource.x = 4
-                w_textfield_datasource.width = 368
-                w_textfield_datasource.height = 19
-                w_textfield_datasource.numColumns = 30
-                w_textfield_datasource.tipText = "Hier wird die Datendatei angegeben. Wenn keine verwendet wird, kann das Feld leer bleiben."
-                w_textfield_datasource.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_textfield_datasource.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-                w_textfield_datasource.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                w_textfield_datasource.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
-              }
-              FX::Button.new(@horizontalframe74) { |w_button_datasource|
-                @button_datasource = w_button_datasource
-                w_button_datasource.wdg_name = "button_datasource"
-                w_button_datasource.layoutHints = 256
-                w_button_datasource.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_button_datasource.x = 374
-                w_button_datasource.width = 20
-                w_button_datasource.height = 21
-                w_button_datasource.text = "..."
-                w_button_datasource.tipText = "CSV-Datei über Dateiauswahl-Dialog laden"
-                w_button_datasource.backColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_button_datasource.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_button_datasource.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-                w_button_datasource.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-              }
-            }
+            w_verticalframe_datalist.width = 500
+            w_verticalframe_datalist.height = 400
             FX::Matrix.new(@verticalframe_datalist) { |w_matrix_printbuttons|
               @matrix_printbuttons = w_matrix_printbuttons
               w_matrix_printbuttons.wdg_name = "matrix_printbuttons"
@@ -104,58 +39,81 @@ class Dialogbox_dataview
               w_matrix_printbuttons.hSpacing = 0
               w_matrix_printbuttons.vSpacing = 0
               w_matrix_printbuttons.x = 2
-              w_matrix_printbuttons.y = 23
-              w_matrix_printbuttons.width = 394
-              w_matrix_printbuttons.height = 29
+              w_matrix_printbuttons.y = 2
+              w_matrix_printbuttons.width = 496
+              w_matrix_printbuttons.height = 51
               w_matrix_printbuttons.numColumns = 3
-              w_matrix_printbuttons.backColor = Fox::FXRGBA(212, 208, 200, 255)
-              w_matrix_printbuttons.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-              w_matrix_printbuttons.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-              w_matrix_printbuttons.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+              w_matrix_printbuttons.numRows = 2
+              FX::Label.new(@matrix_printbuttons) { |w_label409|
+                @label409 = w_label409
+                w_label409.wdg_name = "label409"
+                w_label409.layoutHints = 3132
+                w_label409.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_label409.x = 4
+                w_label409.y = 4
+                w_label409.width = 72
+                w_label409.height = 22
+                w_label409.text = "Datenquelle"
+                w_label409.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+              }
+              FX::TextField.new(@matrix_printbuttons) { |w_textfield_datasource|
+                @textfield_datasource = w_textfield_datasource
+                w_textfield_datasource.wdg_name = "textfield_datasource"
+                w_textfield_datasource.layoutHints = 3073
+                w_textfield_datasource.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_textfield_datasource.x = 76
+                w_textfield_datasource.y = 4
+                w_textfield_datasource.width = 396
+                w_textfield_datasource.height = 22
+                w_textfield_datasource.numColumns = 30
+                w_textfield_datasource.tipText = "Hier wird die Datendatei angegeben. Wenn keine verwendet wird, kann das Feld leer bleiben."
+                w_textfield_datasource.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+              }
+              FX::Button.new(@matrix_printbuttons) { |w_button_datasource|
+                @button_datasource = w_button_datasource
+                w_button_datasource.wdg_name = "button_datasource"
+                w_button_datasource.layoutHints = 256
+                w_button_datasource.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_button_datasource.x = 472
+                w_button_datasource.y = 4
+                w_button_datasource.width = 20
+                w_button_datasource.height = 22
+                w_button_datasource.text = "..."
+                w_button_datasource.tipText = "CSV-Datei über Dateiauswahl-Dialog laden"
+                w_button_datasource.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+              }
               FX::Label.new(@matrix_printbuttons) { |w_label18|
                 @label18 = w_label18
                 w_label18.wdg_name = "label18"
                 w_label18.layoutHints = 3072
                 w_label18.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                 w_label18.x = 4
-                w_label18.y = 4
-                w_label18.width = 59
+                w_label18.y = 26
+                w_label18.width = 72
                 w_label18.height = 21
                 w_label18.text = "Suchbegriff"
-                w_label18.backColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_label18.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_label18.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-                w_label18.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               }
               FX::TextField.new(@matrix_printbuttons) { |w_textfield_search|
                 @textfield_search = w_textfield_search
                 w_textfield_search.wdg_name = "textfield_search"
                 w_textfield_search.layoutHints = 1025
                 w_textfield_search.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
-                w_textfield_search.x = 63
-                w_textfield_search.y = 4
-                w_textfield_search.width = 323
+                w_textfield_search.x = 76
+                w_textfield_search.y = 26
+                w_textfield_search.width = 396
                 w_textfield_search.height = 21
                 w_textfield_search.numColumns = 10
                 w_textfield_search.tipText = "Durch Eingabe einer Zeichenkette werden alle angezeigten Felder\ndurchsucht und markiert. Durch mehrfaches Drücken der Enter-\nTaste wird zur nächsten Fundstelle gesprungen."
-                w_textfield_search.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_textfield_search.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-                w_textfield_search.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
-                w_textfield_search.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
               }
               FX::Label.new(@matrix_printbuttons) { |w_label_selected|
                 @label_selected = w_label_selected
                 w_label_selected.wdg_name = "label_selected"
                 w_label_selected.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_label_selected.x = 386
-                w_label_selected.y = 4
+                w_label_selected.x = 472
+                w_label_selected.y = 26
                 w_label_selected.width = 4
                 w_label_selected.height = 4
                 w_label_selected.text = ""
-                w_label_selected.backColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_label_selected.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_label_selected.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-                w_label_selected.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               }
             }
             FX::Matrix.new(@verticalframe_datalist) { |w_matrix18|
@@ -163,14 +121,10 @@ class Dialogbox_dataview
               w_matrix18.wdg_name = "matrix18"
               w_matrix18.layoutHints = 1024
               w_matrix18.x = 2
-              w_matrix18.y = 52
-              w_matrix18.width = 394
+              w_matrix18.y = 53
+              w_matrix18.width = 496
               w_matrix18.height = 31
               w_matrix18.numColumns = 5
-              w_matrix18.backColor = Fox::FXRGBA(212, 208, 200, 255)
-              w_matrix18.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-              w_matrix18.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-              w_matrix18.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               FX::Button.new(@matrix18) { |w_button_select_all|
                 @button_select_all = w_button_select_all
                 w_button_select_all.wdg_name = "button_select_all"
@@ -181,10 +135,6 @@ class Dialogbox_dataview
                 w_button_select_all.height = 23
                 w_button_select_all.text = "alle"
                 w_button_select_all.tipText = "alle Datensätze markieren"
-                w_button_select_all.backColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_button_select_all.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_button_select_all.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-                w_button_select_all.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               }
               FX::Button.new(@matrix18) { |w_button_deselect_all|
                 @button_deselect_all = w_button_deselect_all
@@ -192,30 +142,22 @@ class Dialogbox_dataview
                 w_button_deselect_all.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
                 w_button_deselect_all.x = 36
                 w_button_deselect_all.y = 4
-                w_button_deselect_all.width = 23
+                w_button_deselect_all.width = 24
                 w_button_deselect_all.height = 23
                 w_button_deselect_all.text = "nix"
                 w_button_deselect_all.tipText = "alle Datensatz-Markierungen entfernen"
-                w_button_deselect_all.backColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_button_deselect_all.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_button_deselect_all.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-                w_button_deselect_all.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               }
               FX::Button.new(@matrix18) { |w_button_print_selected|
                 @button_print_selected = w_button_print_selected
                 w_button_print_selected.wdg_name = "button_print_selected"
                 w_button_print_selected.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
                 w_button_print_selected.img = "mcc2/images/document-print-frame.png"
-                w_button_print_selected.x = 63
+                w_button_print_selected.x = 64
                 w_button_print_selected.y = 4
-                w_button_print_selected.width = 107
+                w_button_print_selected.width = 106
                 w_button_print_selected.height = 23
                 w_button_print_selected.text = "markierte drucken"
                 w_button_print_selected.tipText = "alle markierten Datensätze drucken"
-                w_button_print_selected.backColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_button_print_selected.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_button_print_selected.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-                w_button_print_selected.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               }
               FX::Button.new(@matrix18) { |w_button_print_all|
                 @button_print_all = w_button_print_all
@@ -228,10 +170,6 @@ class Dialogbox_dataview
                 w_button_print_all.height = 23
                 w_button_print_all.text = "alle drucken"
                 w_button_print_all.tipText = "Alle Datensätze drucken"
-                w_button_print_all.backColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_button_print_all.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_button_print_all.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-                w_button_print_all.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               }
               FX::Button.new(@matrix18) { |w_button_stop_printing|
                 @button_stop_printing = w_button_stop_printing
@@ -244,10 +182,6 @@ class Dialogbox_dataview
                 w_button_stop_printing.height = 23
                 w_button_stop_printing.text = "Stopp"
                 w_button_stop_printing.tipText = "Druck nach der aktuellen Karte anhalten"
-                w_button_stop_printing.backColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_button_stop_printing.baseColor = Fox::FXRGBA(212, 208, 200, 255)
-                w_button_stop_printing.borderColor = Fox::FXRGBA(0, 0, 0, 255)
-                w_button_stop_printing.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               }
             }
             FX::IconList.new(@verticalframe_datalist) { |w_iconlist_data|
@@ -256,10 +190,9 @@ class Dialogbox_dataview
               w_iconlist_data.iconListStyle = 4194304
               w_iconlist_data.font = FX::Font.new.from_s("Arial|90|40|5|0|0|0").to_FXFont
               w_iconlist_data.x = 2
-              w_iconlist_data.y = 83
-              w_iconlist_data.width = 394
-              w_iconlist_data.height = 169
-              w_iconlist_data.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
+              w_iconlist_data.y = 84
+              w_iconlist_data.width = 496
+              w_iconlist_data.height = 314
             }
           }
         }
@@ -270,11 +203,10 @@ class Dialogbox_dataview
   attr_reader :dialogbox_dataview
   attr_reader :splitter_dataview
   attr_reader :verticalframe_datalist
-  attr_reader :horizontalframe74
+  attr_reader :matrix_printbuttons
   attr_reader :label409
   attr_reader :textfield_datasource
   attr_reader :button_datasource
-  attr_reader :matrix_printbuttons
   attr_reader :label18
   attr_reader :textfield_search
   attr_reader :label_selected
