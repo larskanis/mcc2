@@ -579,8 +579,8 @@ module Mcc2
     def bc_modul_with_changed
       mw = @lf.spinner_barcode_ratio.value
       node = @layout_file.get_object_by_id(@selected_object_id, GOA_BAR_RATIO)
-      if mw != node.content.to_i
-        node.content = mw.to_s
+      if mw != node.to_i
+        @layout_file.set_object_by_id(@selected_object_id, GOA_BAR_RATIO, mw.to_s)
         changed_attributes
       end
     end
