@@ -282,22 +282,6 @@ module Mcc2
           # p [str.x, str.y, str.text, str.halign, str.fsize]
           body.text(xdim * str.x / 2, ydim * str.y / 2, str.text).styles(text_anchor: HALIGNMENT[str.halign])
         end
-
-        # Barcode - text
-
-        # if eancode
-        # data2 = barcode.text.to_s
-        # data3 = if barcode.symbology == Zint::BARCODE_EANX && data2.length == 8
-        # [nil, data2[0,4], data2[4,4]]
-        # elsif barcode.symbology == Zint::BARCODE_EANX && data2.length == 13
-        # [data2[0,1], data2[1,6], data2[7,6]]
-        # end
-        # body.text(0, mm(go_height), data3[0]).styles(:text_anchor => 'end') if data[0]
-        # body.text(xdim * (xbars/4.0+1), mm(go_height), data3[1]).styles(:text_anchor => 'middle')
-        # body.text(xdim * (xbars/4.0*3.0-1), mm(go_height), data3[2]).styles(:text_anchor => 'middle')
-        # else
-        # body.text(xdim * (xbars/2.0), mm(go_height), data).styles(:text_anchor => 'middle')
-        # end
       end
     end
 
