@@ -254,7 +254,7 @@ module Mcc2
         end
         barcode.input_mode = Zint::DATA_MODE #  Zint::UNICODE_MODE | Zint::ESCAPE_MODE
         # barcode.output_options = Zint::SMALL_TEXT
-        barcode.height = go_height.to_f / go_width.to_f * 20.0 #  50 is the default x-dimension for most of the barcodes
+        barcode.height = go[GOA_BARCODE_HEIGHT].to_f #  50 is the default x-dimension for most of the barcodes
         barcode.show_hrt = 0 if fontsize == 0
         # barcode.fontsize = fontsize # not used in zint
         # p [go_height, go_width, barcode.height]

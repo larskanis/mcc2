@@ -174,7 +174,12 @@ module Mcc2
         []
       end
       @lf.listbox_barcode_typ.connect(SEL_COMMAND) { |sender, sel, event| sel_list_box_changed(sender) }
-      @lf.spinner_barcode_ratio.connect(SEL_COMMAND) { bc_modul_with_changed }
+      @lf.spinner_barcode_ratio.connect(SEL_COMMAND) do
+        changed_attributes if @layout_file.set_object_by_id(@selected_object_id, GOA_BAR_RATIO, @lf.spinner_barcode_ratio.value)
+      end
+      @lf.spinner_barcode_height.connect(SEL_COMMAND) do
+        changed_attributes if @layout_file.set_object_by_id(@selected_object_id, GOA_BARCODE_HEIGHT, @lf.spinner_barcode_height.value)
+      end
       @lf.spinner_barcode_ratio.range = (1..100)
       # .............................................................................................
 
@@ -533,6 +538,7 @@ module Mcc2
         if node.at_xpath(GOA_TYP).content == BARCODEOBJECT
           @lf.tabitem_barcode.shown = true
           @lf.spinner_barcode_ratio.value = node.at_xpath(GOA_BAR_RATIO).content.to_i
+          @lf.spinner_barcode_height.value = node.at_xpath(GOA_BARCODE_HEIGHT).content.to_f
           fill_barcode_typ_list
           fill_barcode_fields(node)
           data_shown
@@ -572,17 +578,6 @@ module Mcc2
         raise "unbekannter Sender. Eingriff des Programmierers nötig. :-("
       end
       changed_attributes
-    end
-    #---------------------------------------------------------------------------------------------------------
-
-    # die Aktion, welche ausgeführt wird, wenn die Auswahl der Modulbreite des Barcodes geändert wird
-    def bc_modul_with_changed
-      mw = @lf.spinner_barcode_ratio.value
-      node = @layout_file.get_object_by_id(@selected_object_id, GOA_BAR_RATIO)
-      if mw != node.to_i
-        @layout_file.set_object_by_id(@selected_object_id, GOA_BAR_RATIO, mw.to_s)
-        changed_attributes
-      end
     end
     #---------------------------------------------------------------------------------------------------------
 

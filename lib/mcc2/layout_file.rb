@@ -320,9 +320,17 @@ P1
       node.at_xpath(attr).content if node
     end
 
+    # return true  - etwas verändert
+    #        false - nichts verändert
     def set_object_by_id(obj_id, attr, value)
-      node = get_objectnode_by_id(obj_id)
-      node.at_xpath(attr).content = value if node
+      node = get_objectnode_by_id(obj_id).at_xpath(attr)
+      value = value.to_s
+      if node.content != value
+        node.content = value
+        true
+      else
+        false
+      end
     end
 
     # Fügt ein Graphik-Objekt zur Layout-Definition hinzu

@@ -11,7 +11,7 @@ module Mcc2
         add_attr(@go_attributes, GOA_DATA, String, "")
         add_attr(@go_attributes, GOA_SAMPLE_DATA, String, "123456789012")
         add_attr(@go_attributes, GOA_BARCODE_TYP, String, "EAN13")
-        add_attr(@go_attributes, GOA_HUMAN_READABLE, Integer, true)
+        add_attr(@go_attributes, GOA_BARCODE_HEIGHT, Integer, 50)
         add_attr(@go_attributes, GOA_FONT_HEIGHT, Integer, 10)
         add_attr(@go_attributes, GOA_FONT_TYP, String, "Arial")
         add_attr(@go_attributes, GOA_FONT_COLOR, String, "000000FF")
