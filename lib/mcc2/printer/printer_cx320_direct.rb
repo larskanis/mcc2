@@ -144,7 +144,7 @@ module Mcc2
             selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
             preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
 
-            draw(canvas1, layout_file, preview, selected_object_id, row, page, layers)
+            draw(canvas1, layout_file, preview, selected_object_id, row, page, layers: layers)
           end
         end.draw
         postprocess_image(pic, layout_file, page)

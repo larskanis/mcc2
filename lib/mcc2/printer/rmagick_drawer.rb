@@ -42,7 +42,7 @@ module Mcc2
     end
     #---------------------------------------------------------------------------------------------------------
 
-    def draw(canvas, layout_file, preview, selected_object_id, row, page_nr, layers = [0])
+    def draw(canvas, layout_file, preview, selected_object_id, row, page_nr, layers: [0])
       @magick_font_list ||= Magick.fonts.map { |mf| mf.name }
 
       width = layout_file.get_attr_value(S_WIDTH).to_f

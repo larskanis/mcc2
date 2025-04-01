@@ -106,12 +106,12 @@ module Mcc2
           draw_pos_x = 0
           draw_pos_y = 0
           canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
-            draw(canvas1, @layout_file, preview, @selected_object_id, row, 0, :all) # Seite 1 drucken
+            draw(canvas1, @layout_file, preview, @selected_object_id, row, 0, layers: :all) # Seite 1 drucken
           end
 
           draw_pos_y = height_with_margins(height) + card_offset
           canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
-            draw(canvas1, @layout_file, preview, @selected_object_id, row, 1, :all) # Seite 2 drucken
+            draw(canvas1, @layout_file, preview, @selected_object_id, row, 1, layers: :all) # Seite 2 drucken
           end
 
           canvas.background_fill = "white"
