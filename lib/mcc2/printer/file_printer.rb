@@ -6,8 +6,6 @@ module Mcc2
     class FilePrinter < CardPrinter
       include RmagickDrawer
 
-      attr_accessor :layout_file
-
       def initialize
         super
         @image_idx = 0

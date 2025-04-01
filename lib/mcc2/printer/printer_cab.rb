@@ -7,8 +7,6 @@ module Mcc2
     class PrinterCab < CardPrinter
       include RmagickDrawer
 
-      attr_accessor :layout_file
-
       # die Ränder außerhalb der Karte, auf den maximal gedruckt werden darf (für vollflächige Bilder notwendig)
       def card_margin_left
         0

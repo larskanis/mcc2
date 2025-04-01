@@ -73,6 +73,7 @@ module Mcc2
       add_attr(S_HEIGHT, Integer, LAYOUT_DEFAULT_HEIGHT)
       add_attr(S_X_OFFSET, Integer, LAYOUT_DEFAULT_X_OFFSET)
       add_attr(S_Y_OFFSET, Integer, LAYOUT_DEFAULT_Y_OFFSET)
+      add_attr(S_BARCODE_DPI, Float, 203.2)
       add_attr(S_DATASOURCE, String, "")
       add_attr(S_DATASOURCETYP, String, NONE)
       add_attr(S_DATASOURCEENCODING, String, ENC_UTF8)
@@ -396,18 +397,21 @@ P1
 
     # setzt den Inhalt eines Attributes des Layout-Abschnittes
     # ==== Return
-    # true, wenn erfolgreich, ansonsten false
+    #   true wenn erfolgreich geändert
+    #   false wenn keine Änderung
     # ==== Parameter
     # +attr_name+:: der Name des Attributes z.Bsp. 'datasource' Bitte vorwiegend Konstanten verwenden z. Bsp. S_DATASOURCE [String]
     # +value+:: der Wert der geschrieben werden soll [String]
     def set_attr_value(attr_name, value)
       lay_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{S_LAYOUT}")
       attr = lay_attrs.at_xpath(attr_name)
-      if attr
+      value = value.to_s
+      if attr.content != value
         attr.content = value
-        return true
+        true
+      else
+        false
       end
-      false
     end
 
     # fügt ein neues Atrtribut zur Liste der Attribute (@attributes) hinzu

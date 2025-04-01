@@ -1437,11 +1437,22 @@ class Dialogbox_layoutview
                     w_listbox_barcode_typ.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_listbox_barcode_typ.x = 80
                     w_listbox_barcode_typ.y = 10
-                    w_listbox_barcode_typ.width = 379
+                    w_listbox_barcode_typ.width = 232
                     w_listbox_barcode_typ.height = 22
                     w_listbox_barcode_typ.numVisible = 15
                     w_listbox_barcode_typ.tipText = "Hier kann die Schriftart ausgewählt werden."
                     w_listbox_barcode_typ.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                  }
+                  FX::CheckButton.new(@horizontalframe133) { |w_checkbutton_barcode_optimized|
+                    @checkbutton_barcode_optimized = w_checkbutton_barcode_optimized
+                    w_checkbutton_barcode_optimized.wdg_name = "checkbutton_barcode_optimized"
+                    w_checkbutton_barcode_optimized.padLeft = 15
+                    w_checkbutton_barcode_optimized.x = 312
+                    w_checkbutton_barcode_optimized.y = 10
+                    w_checkbutton_barcode_optimized.width = 147
+                    w_checkbutton_barcode_optimized.height = 22
+                    w_checkbutton_barcode_optimized.text = "Auf DPI optimieren"
+                    w_checkbutton_barcode_optimized.tipText = "Barcode nicht skalieren, sondern\nauf Druckerauflösung anpassen.\nIn der Vorschau erfolgt die Anpassung\nauf die DPI-Angabe über der Vorschau.\n"
                   }
                 }
                 FX::HorizontalFrame.new(@verticalframe_barcode) { |w_horizontalframe134|
@@ -1653,6 +1664,7 @@ class Dialogbox_layoutview
                     w_label311.width = 24
                     w_label311.height = 20
                     w_label311.text = "mm"
+                    w_label311.tipText = "Barcode nicht skalieren, sondern\nauf Druckerauflösung anpassen.\nIn der Vorschau erfolgt die Anpassung\nauf die DPI-Angabe über der Vorschau.\nEinschalten für bessere Lesbarkeit.\n"
                   }
                 }
               }
@@ -1794,6 +1806,7 @@ class Dialogbox_layoutview
   attr_reader :horizontalframe133
   attr_reader :label528
   attr_reader :listbox_barcode_typ
+  attr_reader :checkbutton_barcode_optimized
   attr_reader :horizontalframe134
   attr_reader :label529
   attr_reader :spinner_barcode_ratio

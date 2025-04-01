@@ -29,6 +29,7 @@ module Mcc2
   GOA_ID = "id"
   GOA_BARCODE_TYP = "barcode_typ"
   GOA_BARCODE_HEIGHT = "barcode_height"
+  GOA_BARCODE_OPTIMIZED = "barcode_optimized"
   GOA_BAR_RATIO = "bar_ratio"
   GOA_DATA = "data"
   GOA_SAMPLE_DATA = "sample_data"
@@ -65,6 +66,7 @@ module Mcc2
   S_JUST_LEFT = "Links"
   S_JUST_MID = "Mitte"
   S_JUST_RIGHT = "Rechts"
+  S_BARCODE_DPI = "barcode_dpi"
 
   S_DATASOURCE = "datasource"
   S_DATASOURCETYP = "datasource_typ"

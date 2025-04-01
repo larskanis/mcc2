@@ -44,6 +44,7 @@ module Mcc2
 
     def draw(canvas, layout_file, preview, selected_object_id, row, page_nr, layers: [0])
       @magick_font_list ||= Magick.fonts.map { |mf| mf.name }
+      barcode_dpi = layout_file.get_attr_value(S_BARCODE_DPI).to_f
 
       width = layout_file.get_attr_value(S_WIDTH).to_f
       height = layout_file.get_attr_value(S_HEIGHT).to_f
@@ -97,7 +98,7 @@ module Mcc2
                 draw_pictureobject(body.g, go, go_width, go_height, data)
               elsif typ == BARCODEOBJECT
                 data = data.gsub(/\\x([0-9a-f][0-9a-f])/i) { [$1.hex].pack("C") }
-                draw_barcode(body.g, go, go_width, go_height, data, !preview)
+                draw_barcode(body.g, go, go_width, go_height, data, barcode_dpi)
               elsif typ == BOXOBJECT
                 draw_boxobject(body.g, go, go_width, go_height)
               end
@@ -220,7 +221,7 @@ module Mcc2
       2 => :end
     }
 
-    def draw_barcode(body, go, go_width, go_height, data, optimized = true)
+    def draw_barcode(body, go, go_width, go_height, data, barcode_dpi)
       return if data.nil? || data.empty?
 
       barcode_typ = go[GOA_BARCODE_TYP]
@@ -263,16 +264,21 @@ module Mcc2
 
         eancode = %w[EAN13 EAN8].include?(barcode_typ)
 
-        px_width, px_height = mm(go_width), mm(go_height)
         # bcvector values are always a multiple of 2, but we need a multiple of 1 for to_i below.
         # So all bcvector measurements are divided by 2.
         xbars, ybars = bcvector.width / 2, bcvector.height / 2
         # p vector_width: bcvector.width, vector_height: bcvector.height
+
+        optimized = (go[GOA_BARCODE_OPTIMIZED] || true).to_s == "true"
+        px_width, px_height = barcode_mm_to_px(go_width, barcode_dpi), barcode_mm_to_px(go_height, barcode_dpi)
         xdim, ydim = px_width / xbars, px_height / ybars
         if optimized
           xdim = xdim.to_i
           ydim = ydim.to_i if barcode.rows > 1 # optimize y dimension only on 2D codes
         end
+        go_width, go_height = barcode_px_to_mm(xdim * xbars, barcode_dpi), barcode_px_to_mm(ydim * ybars, barcode_dpi)
+        px_width, px_height = mm(go_width), mm(go_height)
+        xdim, ydim = px_width / xbars, px_height / ybars
 
         bcvector.each_rectangle do |bar|
           # p [xdim*bar.width/2, ydim*bar.height/2, xdim*bar.x/2, ydim*bar.y/2]
@@ -283,6 +289,14 @@ module Mcc2
           body.text(xdim * str.x / 2, ydim * str.y / 2, str.text).styles(text_anchor: HALIGNMENT[str.halign])
         end
       end
+    end
+
+    def barcode_mm_to_px(l, barcode_dpi)
+      barcode_dpi / 25.4 * l
+    end
+
+    def barcode_px_to_mm(l, barcode_dpi)
+      l / barcode_dpi * 25.4
     end
 
     def draw_boxobject(body, go, go_width, go_height)

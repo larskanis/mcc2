@@ -180,6 +180,9 @@ module Mcc2
       @lf.spinner_barcode_height.connect(SEL_COMMAND) do
         changed_attributes if @layout_file.set_object_by_id(@selected_object_id, GOA_BARCODE_HEIGHT, @lf.spinner_barcode_height.value)
       end
+      @lf.checkbutton_barcode_optimized.connect(SEL_COMMAND) do
+        changed_attributes if @layout_file.set_object_by_id(@selected_object_id, GOA_BARCODE_OPTIMIZED, @lf.checkbutton_barcode_optimized.checked?)
+      end
       @lf.spinner_barcode_ratio.range = (1..100)
       # .............................................................................................
 
@@ -539,6 +542,7 @@ module Mcc2
           @lf.tabitem_barcode.shown = true
           @lf.spinner_barcode_ratio.value = node.at_xpath(GOA_BAR_RATIO).content.to_i
           @lf.spinner_barcode_height.value = node.at_xpath(GOA_BARCODE_HEIGHT).content.to_f
+          @lf.checkbutton_barcode_optimized.setCheck(node.at_xpath(GOA_BARCODE_OPTIMIZED).content == "true")
           fill_barcode_typ_list
           fill_barcode_fields(node)
           data_shown

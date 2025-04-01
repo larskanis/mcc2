@@ -9,17 +9,31 @@ module Mcc2
 
       class InvalidBarcodeData < PrintError
       end
+      class DpiDoesntMatch < PrintError
+      end
 
       attr_reader :default_width
       attr_reader :default_height
       attr_reader :default_x_offset
       attr_reader :default_y_offset
-      attr_accessor :dpi
+      attr_reader :dpi
+      attr_accessor :layout_file
 
       def initialize
-        self.dpi = 300
+        @dpi = 300
         @default_x_offset = 0.0
         @default_y_offset = 0.0
+      end
+
+      def dpi=(v)
+        v = v.to_f
+        if layout_file
+          barcode_dpi = layout_file.get_attr_value(S_BARCODE_DPI).to_f
+          unless ((barcode_dpi - 0.9) .. (barcode_dpi + 0.9)) === v
+            raise DpiDoesntMatch, "Barcode-DPI in der Vorschau (#{format("%0.1f", barcode_dpi)}) und vom Druck (#{format("%0.1f", v)}) sind verschieden. Bitte DPI anpassen und Barcodes neu prüfen!"
+          end
+        end
+        @dpi = v
       end
 
       # mm to px

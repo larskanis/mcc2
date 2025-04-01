@@ -27,6 +27,15 @@ module Mcc2
             dial_zoom.value = @parent.app.reg.readRealEntry("settings", "preview_dpi", 90)
             dial_zoom.range = 1..1000
           end
+          FXLabel.new(frame1, "Barcodes optimieren auf")
+          @textfield_barcode_dpi = FXTextField.new(frame1, 4) do |tf|
+            tf.tipText = "DPI des Druckers"
+            tf.connect(SEL_COMMAND) do
+              @layout_file.set_attr_value(S_BARCODE_DPI, @textfield_barcode_dpi.text.to_f)
+              draw_preview(true, @row)
+            end
+          end
+          FXLabel.new(frame1, "DPI")
           @checkbutton_continous_update = FXCheckButton.new(frame1, "Vorschau aktuell halten") do |checkbutton|
             checkbutton.tipText = "Bei Fehlern in den Layout-Einstellungen kann die Vorschau\nabgeschaltet werden, um mehrfache Hinweise zu vermeiden."
             checkbutton.connect(SEL_COMMAND) do
@@ -42,7 +51,10 @@ module Mcc2
         set_zoom
       end
 
-      attr_writer :layout_file
+      def layout_file=(value)
+        super
+        @textfield_barcode_dpi.text = @layout_file.get_attr_value(S_BARCODE_DPI) || "203.2"
+      end
 
       def selected_object_id= id
         @selected_object_id = id

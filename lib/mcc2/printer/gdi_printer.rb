@@ -10,7 +10,6 @@ module Mcc2
     class GdiPrinter < CardPrinter
       include RmagickDrawer
 
-      attr_accessor :layout_file
       attr_accessor :chip
 
       def with_page(hPrinter, row, page_nr)
