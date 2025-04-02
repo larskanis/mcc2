@@ -290,8 +290,7 @@ module Mcc2
     # +sender+::    das Objekt, welches das Ereignis gesendet hat
     # +attr_name+:: der Name des Attributs
     def change_chkbtn(sender, attr_name)
-      if sender.state != @layout_file.get_attr_value(attr_name)
-        @layout_file.set_attr_value attr_name, sender.state.to_s
+      if @layout_file.set_attr_value attr_name, sender.state.to_s
         changed_attributes
       end
     end
@@ -359,15 +358,13 @@ module Mcc2
     #---------------------------------------------------------------------------------------------------------
 
     def attr_changed(attr, value)
-      if value != @layout_file.get_attr_value(attr)
-        @layout_file.set_attr_value(attr, value)
+      if @layout_file.set_attr_value(attr, value)
         changed_attributes
       end
     end
 
     def obj_attr_changed(attr, value)
-      if value.to_s != @layout_file.get_object_by_id(@selected_object_id, attr)
-        @layout_file.set_object_by_id(@selected_object_id, attr, value.to_s)
+      if @layout_file.set_object_by_id(@selected_object_id, attr, value.to_s)
         changed_attributes
         fill_objectlist if [GOA_NAME, GOA_TYP].include?(attr)
       end
@@ -391,8 +388,7 @@ module Mcc2
         attr_name = "#{S_PARAM}_#{id + 1}"
         node = chip_attrs.at_xpath(attr_name)
       elsif [S_X_OFFSET, S_Y_OFFSET, S_WIDTH, S_HEIGHT].include?(attr_name)
-        @layout_file.set_attr_value(attr_name, sender.text)
-        changed_attributes
+        changed_attributes if @layout_file.set_attr_value(attr_name, sender.text)
       elsif attr_name == S_X_OFFSET
         lay_attrs = @layout_file.xml_doc.at_xpath("//#{S_ROOT}/#{S_LAYOUT}")
         node = lay_attrs.at_xpath(S_X_OFFSET)
@@ -571,7 +567,7 @@ module Mcc2
     def sel_list_box_changed(sender)
       # ~ node.at_xpath(GOA_FONT_HEIGHT).content = (fontdesc.size.to_f/10).to_s
 
-      if sender.wdg_name == "listbox_fonts"
+      changed = if sender.wdg_name == "listbox_fonts"
         font = @lf.listbox_fonts.getItemData(@lf.listbox_fonts.currentItem)
         @lf.textfield_font_file.enabled = font == "from_file"
         @layout_file.set_object_by_id(@selected_object_id, GOA_FONT_TYP, font)
@@ -581,7 +577,7 @@ module Mcc2
       else
         raise "unbekannter Sender. Eingriff des Programmierers nötig. :-("
       end
-      changed_attributes
+      changed_attributes if changed
     end
     #---------------------------------------------------------------------------------------------------------
 
@@ -598,7 +594,7 @@ module Mcc2
     def fill_barcode_fields(node)
       # den gewählten Parameter in den entsprechenden Listen markieren
       bc_typ = node.at_xpath(GOA_BARCODE_TYP).content
-      bc_id = @barcodes.index(bc_typ)
+      bc_id = @barcodes.index(bc_typ.to_sym)
       FXFehlerAuswahlDialog.new(@parent.app, "Der Barcode-Typ #{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes. Der Wert wird auf 'NONE' gesetzt.", ["&OK"]) unless bc_id
       @lf.listbox_barcode_typ.currentItem = bc_id if bc_id
     end
