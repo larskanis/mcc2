@@ -483,10 +483,10 @@ P1
     def copy_object(node)
       return unless node
       o = add_object(node.at_xpath(GOA_TYP).content)
-      node.children do |element|
+      node.elements.each do |element|
         # alle Attribute, außer ID, Typ und Name kopieren, sofern sie vorhanden, ansonsten den Standard lassen
         if element.name != GOA_ID && element.name != GOA_TYP && element.name != GOA_NAME
-          o.at_xpath(element.name).content = element.content
+          o.at_xpath(element.name)&.content = element.content
         end
       end
     end
