@@ -405,7 +405,7 @@ module Mcc2
       else
         # in diesem Zweig werden alle Graphik-Objekte bearbeitet
         # das Attribut suchen
-        node = @layout_file.get_objectnode_by_id(@selected_object_id).at_xpath(attr_name)
+        node = @layout_file.get_objectnode_by_id(@selected_object_id)&.at_xpath(attr_name)
       end
 
       # nur wenn im Textfeld etwas geändert wurde, den Text in das Attribut schreiben und das changed-Flag setzen

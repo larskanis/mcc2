@@ -324,11 +324,15 @@ P1
     # return true  - etwas verändert
     #        false - nichts verändert
     def set_object_by_id(obj_id, attr, value)
-      node = get_objectnode_by_id(obj_id).at_xpath(attr)
-      value = value.to_s
-      if node.content != value
-        node.content = value
-        true
+      if obj_id
+        node = get_objectnode_by_id(obj_id).at_xpath(attr)
+        value = value.to_s
+        if node.content != value
+          node.content = value
+          true
+        else
+          false
+        end
       else
         false
       end
@@ -486,6 +490,7 @@ P1
       node.elements.each do |element|
         # alle Attribute, außer ID, Typ und Name kopieren, sofern sie vorhanden, ansonsten den Standard lassen
         if element.name != GOA_ID && element.name != GOA_TYP && element.name != GOA_NAME
+          # at_xpath kann nil liefern, wenn ein unbekanntes Attribut im Quellobjekt definiert ist
           o.at_xpath(element.name)&.content = element.content
         end
       end
