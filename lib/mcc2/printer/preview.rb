@@ -61,6 +61,12 @@ module Mcc2
         draw_preview false, @row
       end
 
+      # DPI zuweisen ohne Exception wegen Unstimmigkeit
+      def dpi=(v)
+        v = v.to_f
+        @dpi = v
+      end
+
       # verändert die Zoomstufe, wenn am Rädchen gedreht wird
       def set_zoom
         self.dpi = @dial_zoom.value
