@@ -513,7 +513,7 @@ module Mcc2
 
           # den Radiobutton der Ausrichtung setzen
           @lf.radiobutton_just_l.state = false
-          @lf.radiobutton_just_l.state = false
+          @lf.radiobutton_just_m.state = false
           @lf.radiobutton_just_r.state = false
           just = @layout_file.get_object_by_id(@selected_object_id, GOA_JUSTIFICATION)
           if just == S_JUST_LEFT
