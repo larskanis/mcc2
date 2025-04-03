@@ -28,16 +28,15 @@ module Mcc2
 
       @combobox_printertype.connect(SEL_COMMAND) { combobox_printertype_changed }
       @textfield_file_save_as.connect(SEL_COMMAND) {
-        @layout_file.set_attr_value(S_FILEPRINTER_SAVE_AS, @textfield_file_save_as.text)
-        changed_attributes
+        changed_attributes if @layout_file.set_attr_value(S_FILEPRINTER_SAVE_AS, @textfield_file_save_as.text)
+
       }
       # Button für das Auswählen einer Datenquelle an Textfeld knüpfen
       Layout.connect_filebutton_to_textfield(@button_file_save_as, @textfield_file_save_as,
         ["JPEG 24 Bit (*.jpeg)", "Portable Netork Graphics 24 Bit (*.png)", "TIFF (*.tiff)"])
 
       @spinner_file_dpi.connect(SEL_COMMAND) {
-        @layout_file.set_attr_value(S_FILEPRINTER_DPI, @spinner_file_dpi.value.to_s)
-        changed_attributes
+        changed_attributes if @layout_file.set_attr_value(S_FILEPRINTER_DPI, @spinner_file_dpi.value.to_s)
       }
       @combobox_gdi_printer.connect(SEL_COMMAND) { gdi_combobox_changed(@combobox_gdi_printer, S_GDIPRINTER_NAME, S_GDIPRINTER_INITDATA) }
       @button_gdi_printersetup.connect(SEL_COMMAND) { gdi_printersetup_pressed(@combobox_gdi_printer, S_GDIPRINTER_INITDATA) }
@@ -59,20 +58,16 @@ module Mcc2
         end
       end
       @textfield_cab_host.connect(SEL_COMMAND) {
-        @layout_file.set_attr_value(S_CABPRINTER_HOST, @textfield_cab_host.text)
-        changed_attributes
+        changed_attributes if @layout_file.set_attr_value(S_CABPRINTER_HOST, @textfield_cab_host.text)
       }
       @spinner_cab_port.connect(SEL_COMMAND) {
-        @layout_file.set_attr_value(S_CABPRINTER_PORT, @spinner_cab_port.value.to_s)
-        changed_attributes
+        changed_attributes if @layout_file.set_attr_value(S_CABPRINTER_PORT, @spinner_cab_port.value.to_s)
       }
       @spinner_cab_dpi.connect(SEL_COMMAND) {
-        @layout_file.set_attr_value(S_CABPRINTER_DPI, @spinner_cab_dpi.value.to_s)
-        changed_attributes
+        changed_attributes if @layout_file.set_attr_value(S_CABPRINTER_DPI, @spinner_cab_dpi.value.to_s)
       }
       @text_cab_page_commands.connect(SEL_CHANGED) {
-        @layout_file.set_attr_value(S_CABPRINTER_PAGE_COMMANDS, @text_cab_page_commands.text)
-        changed_attributes
+        changed_attributes if @layout_file.set_attr_value(S_CABPRINTER_PAGE_COMMANDS, @text_cab_page_commands.text)
       }
       @button_cab_info.connect(SEL_COMMAND) { cab_send_command("\es\r\n") { |s| s.read(9) } }
       @button_cab_extended_info.connect(SEL_COMMAND) { cab_send_command("\ez\r\n") { |s| s.gets("\r") } }
@@ -81,16 +76,13 @@ module Mcc2
       @button_cab_cancel_jobs.connect(SEL_COMMAND) { cab_send_command("\et\r\n") }
 
       @textfield_epl_device.connect(SEL_COMMAND) {
-        @layout_file.set_attr_value(S_EPLPRINTER_DEVICE, @textfield_epl_device.text)
-        changed_attributes
+        changed_attributes if @layout_file.set_attr_value(S_EPLPRINTER_DEVICE, @textfield_epl_device.text)
       }
       @text_epl_page_commands.connect(SEL_CHANGED) {
-        @layout_file.set_attr_value(S_EPLPRINTER_PAGE_COMMANDS, @text_epl_page_commands.text)
-        changed_attributes
+        changed_attributes if @layout_file.set_attr_value(S_EPLPRINTER_PAGE_COMMANDS, @text_epl_page_commands.text)
       }
       @spinner_epl_dpi.connect(SEL_COMMAND) {
-        @layout_file.set_attr_value(S_EPLPRINTER_DPI, @spinner_epl_dpi.value.to_s)
-        changed_attributes
+        changed_attributes if @layout_file.set_attr_value(S_EPLPRINTER_DPI, @spinner_epl_dpi.value.to_s)
       }
 
       @combobox_cx320_driver.appendItem("LIBUSB", "CX320_USB")
@@ -98,8 +90,7 @@ module Mcc2
       @combobox_cx320_driver.appendItem("Simulation", "CX320_SIMU")
       @combobox_cx320_driver.connect(SEL_COMMAND) { combobox_changed(@combobox_cx320_driver, S_CX320_DRIVER) }
       @spinner_cx320_printer_nr.connect(SEL_COMMAND) {
-        @layout_file.set_attr_value(S_CX320_PRINTER_NR, @spinner_cx320_printer_nr.value.to_s)
-        changed_attributes
+        changed_attributes if @layout_file.set_attr_value(S_CX320_PRINTER_NR, @spinner_cx320_printer_nr.value.to_s)
       }
       @combobox_cx320_parallel_print.appendItem("Ein", "on")
       @combobox_cx320_parallel_print.appendItem("Aus", "off")
@@ -121,8 +112,7 @@ module Mcc2
 
     def combobox_changed(combobox, attr)
       data = combobox.getItemData(combobox.currentItem)
-      if @layout_file.get_attr_value(attr) != data
-        @layout_file.set_attr_value(attr, data)
+      if @layout_file.set_attr_value(attr, data)
         changed_attributes
       end
     end
@@ -139,8 +129,7 @@ module Mcc2
       @tabbook_printers.childAtIndex(prdesc.tab_idx * 2).shown = true
 
       if @layout_file
-        if @layout_file.get_attr_value(S_PRINTERTYPE) != prdesc.class_name
-          @layout_file.set_attr_value(S_PRINTERTYPE, prdesc.class_name)
+        if @layout_file.set_attr_value(S_PRINTERTYPE, prdesc.class_name)
           changed_attributes
         end
         send :"selected_#{prdesc.class_name}"
@@ -184,8 +173,7 @@ module Mcc2
           FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Einrichten des Druckers", e.to_s)
         end
         if devmod
-          @layout_file.set_binary_attr(attr, devmod.pointer.read_bytes(devmod.pointer.size))
-          changed_attributes
+          changed_attributes if @layout_file.set_binary_attr(attr, devmod.pointer.read_bytes(devmod.pointer.size))
         end
       end
     end
@@ -379,8 +367,7 @@ module Mcc2
       end
 
       if hash != config
-        @layout_file.set_attr_value(S_CX320_CONFIG, hash.to_json)
-        changed_attributes
+        changed_attributes if @layout_file.set_attr_value(S_CX320_CONFIG, hash.to_json)
       end
     end
 
@@ -401,9 +388,10 @@ module Mcc2
     end
 
     def cx320_set_defaults
-      @layout_file.set_attr_value(S_CX320_CONFIG, "{}")
-      cx320_update_config_widgets
-      changed_attributes
+      if @layout_file.set_attr_value(S_CX320_CONFIG, "{}")
+        cx320_update_config_widgets
+        changed_attributes
+      end
     end
 
     def deactivate_printer_tabs
