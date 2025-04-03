@@ -216,8 +216,8 @@ module Mcc2
 
       begin
         app = FX::App.new("MCC2", "ComCard-Mcc2")
-        $gui_scale = enable_hidpi(app)
         Fox::FXToolTip.new(app, Fox::TOOLTIP_PERMANENT)
+        $gui_scale = enable_hidpi(app)
 
         w = Mcc2Gui.new(app, argv, $gui_scale)
         w.topwin.create
