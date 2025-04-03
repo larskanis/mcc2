@@ -23,8 +23,8 @@ module Mcc2
       @lf.iconlist_objects.appendHeader("Name", nil, 100 * $gui_scale)
       @lf.iconlist_objects.appendHeader("Typ", nil, 100 * $gui_scale)
 
-      @lf.splitter_layoutview.setSplit(0, 170 * $gui_scale)
-      @lf.splitter12.setSplit(0, 100 * $gui_scale)
+      @lf.splitter_layoutview.setSplit(0, 250 * $gui_scale)
+      @lf.splitter12.setSplit(0, 70 * $gui_scale)
 
       # .............................................................................................
       # die Aktionen definieren, die ausgeführt werden, wenn am Layout irgend etwas gearbeitet wird
