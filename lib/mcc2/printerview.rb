@@ -9,11 +9,12 @@ module Mcc2
     PrinterDescriptions = [
       PrinterDescription.new("normaler Windows-Drucker", "GdiPrinter", 0),
       PrinterDescription.new("als Bild speichern", "FilePrinter", 1),
-      PrinterDescription.new("XID-440", "PrinterXID", 2),
-      PrinterDescription.new("Zebra", "PrinterZebra", 3),
-      PrinterDescription.new("cab Produktionstechnik GmbH", "PrinterCab", 4),
-      PrinterDescription.new("EPL-Drucker", "PrinterEpl", 5),
-      PrinterDescription.new("CX-320 Direct", "PrinterCx320Direct", 6),
+      PrinterDescription.new("Linux-CUPS", "LinuxCupsPrinter", 2),
+      PrinterDescription.new("XID-440", "PrinterXID", 3),
+      PrinterDescription.new("Zebra", "PrinterZebra", 4),
+      PrinterDescription.new("cab Produktionstechnik GmbH", "PrinterCab", 5),
+      PrinterDescription.new("EPL-Drucker", "PrinterEpl", 6),
+      PrinterDescription.new("CX-320 Direct", "PrinterCx320Direct", 7),
       PrinterDescription.new("CX-320 Spooler", "PrinterCx320Gdi", 0)
     ]
 
@@ -37,6 +38,14 @@ module Mcc2
 
       @spinner_file_dpi.connect(SEL_COMMAND) {
         changed_attributes if @layout_file.set_attr_value(S_FILEPRINTER_DPI, @spinner_file_dpi.value.to_s)
+      }
+      @combobox_linux_printer.connect(SEL_COMMAND) do
+        prname = @combobox_linux_printer.getItemData(@combobox_linux_printer.currentItem)
+        @label_linux_printer_state.text = "Status: #{Cups::Printer.get_destination(prname).state}"
+        changed_attributes if @layout_file.set_attr_value(S_LINUX_CUPS_PRINTER, prname)
+      end
+      @spinner_linux_cups_dpi.connect(SEL_COMMAND) {
+        changed_attributes if @layout_file.set_attr_value(S_LINUX_CUPS_DPI, @spinner_linux_cups_dpi.value.to_s)
       }
       @combobox_gdi_printer.connect(SEL_COMMAND) { gdi_combobox_changed(@combobox_gdi_printer, S_GDIPRINTER_NAME, S_GDIPRINTER_INITDATA) }
       @button_gdi_printersetup.connect(SEL_COMMAND) { gdi_printersetup_pressed(@combobox_gdi_printer, S_GDIPRINTER_INITDATA) }
@@ -108,6 +117,53 @@ module Mcc2
 
       fill_printertype_list
       combobox_printertype_changed
+
+      FXSeparator.new(@verticalframe_linux_cups)
+      @linux_cups_options = []
+      FXMatrix.new(@verticalframe_linux_cups, opts: MATRIX_BY_COLUMNS|LAYOUT_FILL|FRAME_GROOVE, vSpacing: 0, hSpacing: 0) do |mat|
+        mat.numColumns = 2
+        10.times do
+          combo_val = nil
+          combo_key = FXComboBox.new(mat, 0, nil, 0,
+                    COMBOBOX_NO_REPLACE|FRAME_SUNKEN|LAYOUT_SIDE_TOP|LAYOUT_FILL_X|LAYOUT_FILL_COLUMN) do |combo|
+            combo.editable = true
+            # names = JSON.parse( app.reg.readStringEntry('login', 'usernames', '[]') )
+            combo.numVisible = 10
+            combo.connect(SEL_COMMAND) do
+              combo_val.clearItems
+              key = combo.getItemData(combo.currentItem)
+              if key
+                cs = Cups.constants
+                vals = cs.select { |c| c.to_s.start_with?("#{key}_") }
+                vals = vals.reject { |c| c.end_with?("_SUPPORTED") }
+                cvals = vals.map { |c| Cups.const_get(c) }
+                cvals.each do |name|
+                  combo_val.appendItem(name)
+                end
+              end
+              linux_cups_combobox_changed
+            end
+          end
+          combo_val = FXComboBox.new(mat, 0, nil, 0,
+                    COMBOBOX_NO_REPLACE|FRAME_SUNKEN|LAYOUT_SIDE_TOP|LAYOUT_FILL_X|LAYOUT_FILL_COLUMN) do |combo|
+            combo.editable = true
+            # names = JSON.parse( app.reg.readStringEntry('login', 'usernames', '[]') )
+            combo.numVisible = 10
+            combo.connect(SEL_COMMAND) do
+              linux_cups_combobox_changed
+            end
+          end
+          @linux_cups_options << [combo_key, combo_val]
+        end
+      end
+    end
+
+    def linux_cups_combobox_changed
+      opts = @linux_cups_options.each.with_object({}) do |(combo_key, combo_val), h|
+        h[combo_key.text] = combo_val.text unless combo_key.text.empty?
+      end
+      p opts
+      changed_attributes if @layout_file.set_attr_value(S_LINUX_CUPS_OPTIONS, JSON.dump(opts))
     end
 
     def combobox_changed(combobox, attr)
@@ -198,6 +254,32 @@ module Mcc2
     end
 
     def selected_FilePrinter
+    end
+
+    def selected_LinuxCupsPrinter
+      if_driver_loadable("ffi-cups", "ffi-cups", "die Linux-Druckerschnittstelle (also libcups2)") do
+        combobox = @combobox_linux_printer
+        combobox.clearItems
+
+        printers = Cups::Printer.get_destinations
+        printers.each { |printer|
+          prname = printer.name
+          combobox.appendItem(prname, prname)
+        }
+        prname = @layout_file.get_attr_value(S_LINUX_CUPS_PRINTER)
+        Layout.set_combobox_by_data(combobox, prname, false)
+
+        cs = Cups.constants.each.with_object({}){|c,h| h[c] = true }
+        keys = cs.select { |c, _| cs["#{c}_SUPPORTED".to_sym] }.keys
+        cvals = keys.map { |c| [c, Cups.const_get(c)] }
+        @linux_cups_options.each do |combo_key, combo_val|
+          combo_key.clearItems
+          combo_key.appendItem("", nil)
+          cvals.each do |name, val|
+            combo_key.appendItem(val, name)
+          end
+        end
+      end
     end
 
     def selected_PrinterXID

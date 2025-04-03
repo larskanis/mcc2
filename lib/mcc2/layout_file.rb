@@ -14,6 +14,7 @@ module Mcc2
     autoload :PrinterXID, "mcc2/printer/printer_xid"
     autoload :GdiPrinter, "mcc2/printer/gdi_printer"
     autoload :FilePrinter, "mcc2/printer/file_printer"
+    autoload :LinuxCupsPrinter, "mcc2/printer/linux_cups_printer"
     autoload :PrinterZebra, "mcc2/printer/printer_zebra"
     autoload :PrinterCab, "mcc2/printer/printer_cab"
     autoload :PrinterEpl, "mcc2/printer/printer_epl"
@@ -83,6 +84,9 @@ module Mcc2
       add_attr(S_PRINTERTYPE, String, "FilePrinter")
       add_attr(S_FILEPRINTER_SAVE_AS, String, "./mcc2_%d_%p.jpeg")
       add_attr(S_FILEPRINTER_DPI, Integer, 300)
+      add_attr(S_LINUX_CUPS_PRINTER, String, "")
+      add_attr(S_LINUX_CUPS_OPTIONS, String, "")
+      add_attr(S_LINUX_CUPS_DPI, Integer, 300)
       add_attr(S_GDIPRINTER_NAME, String, "")
       add_attr(S_GDIPRINTER_INITDATA, String, "")
       add_attr(S_XIDPRINTER_NAME, String, "")

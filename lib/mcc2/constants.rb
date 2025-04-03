@@ -78,6 +78,10 @@ module Mcc2
   S_FILEPRINTER_SAVE_AS = "fileprinter_save_as"
   S_FILEPRINTER_DPI = "fileprinter_dpi"
 
+  S_LINUX_CUPS_PRINTER = "linux_cups_printer"
+  S_LINUX_CUPS_DPI = "linux_cups_dpi"
+  S_LINUX_CUPS_OPTIONS = "linux_cups_options"
+
   S_GDIPRINTER_NAME = "gdiprinter_name"
   S_GDIPRINTER_INITDATA = "gdiprinter_initdata"
   S_XIDPRINTER_NAME = "xidprinter_name"
