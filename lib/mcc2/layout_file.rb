@@ -85,7 +85,7 @@ module Mcc2
       add_attr(S_FILEPRINTER_SAVE_AS, String, "./mcc2_%d_%p.jpeg")
       add_attr(S_FILEPRINTER_DPI, Integer, 300)
       add_attr(S_LINUX_CUPS_PRINTER, String, "")
-      add_attr(S_LINUX_CUPS_OPTIONS, String, "")
+      add_attr(S_LINUX_CUPS_OPTIONS, String, '{"print-scaling" => "100"}')
       add_attr(S_LINUX_CUPS_DPI, Integer, 300)
       add_attr(S_GDIPRINTER_NAME, String, "")
       add_attr(S_GDIPRINTER_INITDATA, String, "")

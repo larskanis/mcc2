@@ -162,8 +162,16 @@ module Mcc2
       opts = @linux_cups_options.each.with_object({}) do |(combo_key, combo_val), h|
         h[combo_key.text] = combo_val.text unless combo_key.text.empty?
       end
-      p opts
       changed_attributes if @layout_file.set_attr_value(S_LINUX_CUPS_OPTIONS, JSON.dump(opts))
+    end
+
+    def linux_cups_combobox_set
+      json_str = @layout_file.get_attr_value(S_LINUX_CUPS_OPTIONS)
+      hash = JSON.parse(json_str).to_a
+      @linux_cups_options.each_with_index do |(chk, chv), idx|
+        chk.text = hash[idx]&.[](0) || ""
+        chv.text = hash[idx]&.[](1) || ""
+      end
     end
 
     def combobox_changed(combobox, attr)
@@ -279,6 +287,8 @@ module Mcc2
             combo_key.appendItem(val, name)
           end
         end
+        @spinner_linux_cups_dpi.value = @layout_file.get_attr_value(S_LINUX_CUPS_DPI).to_i
+        linux_cups_combobox_set
       end
     end
 
