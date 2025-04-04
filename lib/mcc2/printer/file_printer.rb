@@ -78,7 +78,10 @@ module Mcc2
         pic = img.draw
         pic = postprocess_image(pic, layout_file, page_nr)
 
-        pic.write(documentName)
+        self_dpi = dpi
+        pic.write(documentName) do |img|
+          img.density = "#{self_dpi}x#{self_dpi}"
+        end
       end
     end
   end

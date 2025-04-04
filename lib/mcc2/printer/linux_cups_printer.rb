@@ -41,7 +41,10 @@ module Mcc2
         if duplex
           img_pdf << print_page(row, 1)
         end
-        img_pdf.write(file_pdf.path)
+        self_dpi = dpi
+        img_pdf.write(file_pdf.path) do |img|
+          img.density = "#{self_dpi}x#{self_dpi}"
+        end
 
         json_str = @layout_file.get_attr_value(S_LINUX_CUPS_OPTIONS)
         options = JSON.parse(json_str)
