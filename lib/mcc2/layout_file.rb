@@ -86,7 +86,7 @@ module Mcc2
       add_attr(S_FILEPRINTER_DPI, Integer, 300)
       add_attr(S_LINUX_CUPS_PRINTER, String, "")
       add_attr(S_LINUX_CUPS_OPTIONS, String, '{"print-scaling":"none"}')
-      add_attr(S_LINUX_CUPS_DPI, Integer, 300)
+      add_attr(S_LINUX_CUPS_DPI, Integer, 200)
       add_attr(S_GDIPRINTER_NAME, String, "")
       add_attr(S_GDIPRINTER_INITDATA, String, "")
       add_attr(S_XIDPRINTER_NAME, String, "")
