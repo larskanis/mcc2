@@ -15,6 +15,7 @@ module Mcc2
       PrinterDescription.new("cab Produktionstechnik GmbH", "PrinterCab", 5),
       PrinterDescription.new("EPL-Drucker", "PrinterEpl", 6),
       PrinterDescription.new("CX-320 Direct", "PrinterCx320Direct", 7),
+      PrinterDescription.new("TSC TTP 343M", "PrinterTTP343", 8),
       PrinterDescription.new("CX-320 Spooler", "PrinterCx320Gdi", 0)
     ]
 
@@ -93,6 +94,18 @@ module Mcc2
       @spinner_epl_dpi.connect(SEL_COMMAND) {
         changed_attributes if @layout_file.set_attr_value(S_EPLPRINTER_DPI, @spinner_epl_dpi.value.to_s)
       }
+
+
+      @textfield_ttp343_device.connect(SEL_COMMAND) {
+        changed_attributes if @layout_file.set_attr_value(S_TTP343PRINTER_DEVICE, @textfield_ttp343_device.text)
+      }
+      @text_ttp343_page_commands.connect(SEL_CHANGED) {
+        changed_attributes if @layout_file.set_attr_value(S_TTP343PRINTER_PAGE_COMMANDS, @text_ttp343_page_commands.text)
+      }
+      @spinner_ttp343_dpi.connect(SEL_COMMAND) {
+        changed_attributes if @layout_file.set_attr_value(S_TTP343PRINTER_DPI, @spinner_ttp343_dpi.value.to_s)
+      }
+
 
       @combobox_cx320_driver.appendItem("LIBUSB", "CX320_USB")
       @combobox_cx320_driver.appendItem("DLL", "CX320_DLL")
@@ -307,6 +320,8 @@ module Mcc2
 
     def selected_PrinterEpl
     end
+
+    def selected_PrinterTTP343; end
 
     def selected_PrinterCx320Direct
       if_driver_loadable("libcx320", "libcx320", "CX320-Drucker") do

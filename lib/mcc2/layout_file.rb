@@ -20,6 +20,7 @@ module Mcc2
     autoload :PrinterEpl, "mcc2/printer/printer_epl"
     autoload :PrinterCx320Direct, "mcc2/printer/printer_cx320_direct"
     autoload :PrinterCx320Gdi, "mcc2/printer/printer_cx320_gdi"
+    autoload :PrinterTTP343, "mcc2/printer/printer_ttp343"
   end
 
   module DataMan
