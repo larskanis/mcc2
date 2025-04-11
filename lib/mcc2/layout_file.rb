@@ -129,6 +129,16 @@ ZB
 GG%PAGE_OFFSET_X_PX%,%PAGE_OFFSET_Y_PX%,"image1"
 P1
 ')
+
+add_attr(S_TTP343PRINTER_DEVICE, String, "/dev/usb/lp0")
+add_attr(S_TTP343PRINTER_DPI, Integer, 300)
+add_attr(S_TTP343PRINTER_PAGE_COMMANDS, String,
+'
+PUTPCX %PAGE_OFFSET_X_PX%,%PAGE_OFFSET_Y_PX%,"image1"
+PRINT 1
+'
+)
+
       add_attr(S_CX320_DRIVER, String, "CX320_DLL")
       add_attr(S_CX320_PRINTER_NR, Integer, 0)
       add_attr(S_CX320_PARALLEL_PRINT, String, "second_card")
