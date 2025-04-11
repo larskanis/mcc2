@@ -58,16 +58,16 @@ module Mcc2
         page_commands.gsub!("%PAGE_OFFSET_X_PX%", mm(draw_pos_x).to_i.to_s)
         page_commands.gsub!("%PAGE_OFFSET_Y_PX%", mm(draw_pos_y).to_i.to_s)
 
-        page_commands.gsub!("%IMAGE_LEN_DATA_BMP%") do
+        page_commands.gsub!("%IMAGE_LEN_DATA_PCX%") do
           pic = pic.level2(Magick::QuantumRange / 2, Magick::QuantumRange / 2)
           pic = pic.quantize(2, Magick::RGBColorspace, false)
           pic = pic.level2(Magick::QuantumRange / 2, Magick::QuantumRange / 2)
           pic.class_type = Magick::PseudoClass
           pic.image_type = Magick::BilevelType
           data = pic.to_blob do |image|
-            image.format = "bmp"
+            image.format = "pcx"
           end
-          #       File.write("test.bmp", data)
+          #       File.write("test.pcx", data)
           "#{data.bytesize}\r\n#{data}"
         end
 
