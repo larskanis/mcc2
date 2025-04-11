@@ -1,5 +1,7 @@
 /.bundle/
 /.yardoc
+/.icarukTime.json
+/2
 /Gemfile.lock
 /_yardoc/
 /coverage/
