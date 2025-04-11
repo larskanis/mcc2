@@ -12,317 +12,473 @@ class Dialogbox_printerview
         @dialogbox_printerview = w_dialogbox_printerview
         w_dialogbox_printerview.wdg_name = "dialogbox_printerview"
         w_dialogbox_printerview.shown = true
-        w_dialogbox_printerview.x = 251
-        w_dialogbox_printerview.y = 1051
+        w_dialogbox_printerview.x = 1289
+        w_dialogbox_printerview.y = 211
         w_dialogbox_printerview.width = 570
         w_dialogbox_printerview.height = 696
+        w_dialogbox_printerview.backColor = Fox::FXRGBA(212, 208, 200, 255)
         FX::VerticalFrame.new(@dialogbox_printerview) { |w_verticalframe_printersetup|
           @verticalframe_printersetup = w_verticalframe_printersetup
           w_verticalframe_printersetup.wdg_name = "verticalframe_printersetup"
           w_verticalframe_printersetup.width = 570
           w_verticalframe_printersetup.height = 696
+          w_verticalframe_printersetup.backColor = Fox::FXRGBA(212, 208, 200, 255)
+          w_verticalframe_printersetup.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+          w_verticalframe_printersetup.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+          w_verticalframe_printersetup.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
           FX::ComboBox.new(@verticalframe_printersetup) { |w_combobox_printertype|
             @combobox_printertype = w_combobox_printertype
             w_combobox_printertype.wdg_name = "combobox_printertype"
             w_combobox_printertype.comboStyle = 1048576
             w_combobox_printertype.layoutHints = 1024
+            w_combobox_printertype.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
             w_combobox_printertype.width = 570
-            w_combobox_printertype.height = 24
+            w_combobox_printertype.height = 21
             w_combobox_printertype.numVisible = 10
             w_combobox_printertype.numColumns = 10
+            w_combobox_printertype.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+            w_combobox_printertype.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+            w_combobox_printertype.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+            w_combobox_printertype.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
           }
           FX::TabBook.new(@verticalframe_printersetup) { |w_tabbook_printers|
             @tabbook_printers = w_tabbook_printers
             w_tabbook_printers.wdg_name = "tabbook_printers"
-            w_tabbook_printers.y = 24
+            w_tabbook_printers.y = 21
             w_tabbook_printers.width = 570
-            w_tabbook_printers.height = 672
-            w_tabbook_printers.current = 2
+            w_tabbook_printers.height = 675
+            w_tabbook_printers.current = 8
             w_tabbook_printers.backColor = Fox::FXRGBA(226, 226, 226, 255)
             w_tabbook_printers.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+            w_tabbook_printers.borderColor = Fox::FXRGBA(0, 0, 0, 255)
             w_tabbook_printers.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
             FX::TabItem.new(@tabbook_printers) { |w_tabitem4|
               @tabitem4 = w_tabitem4
               w_tabitem4.wdg_name = "tabitem4"
+              w_tabitem4.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
               w_tabitem4.x = 6
               w_tabitem4.y = 6
-              w_tabitem4.width = 89
-              w_tabitem4.height = 26
+              w_tabitem4.width = 84
+              w_tabitem4.height = 23
               w_tabitem4.text = "Windows-GDI"
+              w_tabitem4.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem4.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem4.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_tabitem4.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
             }
             FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe6|
               @verticalframe6 = w_verticalframe6
               w_verticalframe6.wdg_name = "verticalframe6"
               w_verticalframe6.shown = false
               w_verticalframe6.x = 4
-              w_verticalframe6.y = 28
+              w_verticalframe6.y = 25
               w_verticalframe6.width = 562
-              w_verticalframe6.height = 640
+              w_verticalframe6.height = 646
+              w_verticalframe6.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe6.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe6.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_verticalframe6.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               FX::Matrix.new(@verticalframe6) { |w_matrix_gdi|
                 @matrix_gdi = w_matrix_gdi
                 w_matrix_gdi.wdg_name = "matrix_gdi"
                 w_matrix_gdi.matrixStyle = 131072
                 w_matrix_gdi.width = 562
-                w_matrix_gdi.height = 640
+                w_matrix_gdi.height = 646
                 w_matrix_gdi.numColumns = 3
+                w_matrix_gdi.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix_gdi.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix_gdi.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_matrix_gdi.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Label.new(@matrix_gdi) { |w_label9|
                   @label9 = w_label9
                   w_label9.wdg_name = "label9"
+                  w_label9.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_label9.x = 4
                   w_label9.y = 4
-                  w_label9.width = 51
-                  w_label9.height = 22
+                  w_label9.width = 47
+                  w_label9.height = 19
                   w_label9.text = "Drucker"
+                  w_label9.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label9.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label9.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label9.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::ComboBox.new(@matrix_gdi) { |w_combobox_gdi_printer|
                   @combobox_gdi_printer = w_combobox_gdi_printer
                   w_combobox_gdi_printer.wdg_name = "combobox_gdi_printer"
                   w_combobox_gdi_printer.comboStyle = 1048576
                   w_combobox_gdi_printer.layoutHints = 1025
-                  w_combobox_gdi_printer.x = 59
+                  w_combobox_gdi_printer.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_combobox_gdi_printer.x = 55
                   w_combobox_gdi_printer.y = 4
-                  w_combobox_gdi_printer.width = 427
-                  w_combobox_gdi_printer.height = 24
+                  w_combobox_gdi_printer.width = 436
+                  w_combobox_gdi_printer.height = 21
+                  w_combobox_gdi_printer.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_combobox_gdi_printer.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_combobox_gdi_printer.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                  w_combobox_gdi_printer.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
                 FX::Button.new(@matrix_gdi) { |w_button_gdi_printersetup|
                   @button_gdi_printersetup = w_button_gdi_printersetup
                   w_button_gdi_printersetup.wdg_name = "button_gdi_printersetup"
                   w_button_gdi_printersetup.layoutHints = 1024
-                  w_button_gdi_printersetup.x = 490
+                  w_button_gdi_printersetup.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_button_gdi_printersetup.x = 495
                   w_button_gdi_printersetup.y = 4
-                  w_button_gdi_printersetup.width = 68
-                  w_button_gdi_printersetup.height = 26
+                  w_button_gdi_printersetup.width = 63
+                  w_button_gdi_printersetup.height = 23
                   w_button_gdi_printersetup.text = "Einrichten"
                   w_button_gdi_printersetup.tipText = "Dateiauswahl"
+                  w_button_gdi_printersetup.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_gdi_printersetup.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_gdi_printersetup.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_button_gdi_printersetup.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
               }
             }
             FX::TabItem.new(@tabbook_printers) { |w_tabitem5|
               @tabitem5 = w_tabitem5
               w_tabitem5.wdg_name = "tabitem5"
-              w_tabitem5.x = 95
+              w_tabitem5.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+              w_tabitem5.x = 90
               w_tabitem5.y = 6
-              w_tabitem5.width = 39
-              w_tabitem5.height = 26
+              w_tabitem5.width = 37
+              w_tabitem5.height = 23
               w_tabitem5.text = "Datei"
+              w_tabitem5.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem5.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem5.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_tabitem5.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
             }
             FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe7|
               @verticalframe7 = w_verticalframe7
               w_verticalframe7.wdg_name = "verticalframe7"
               w_verticalframe7.shown = false
               w_verticalframe7.x = 4
-              w_verticalframe7.y = 28
+              w_verticalframe7.y = 25
               w_verticalframe7.width = 562
-              w_verticalframe7.height = 640
+              w_verticalframe7.height = 646
+              w_verticalframe7.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe7.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe7.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_verticalframe7.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               FX::Matrix.new(@verticalframe7) { |w_matrix_file|
                 @matrix_file = w_matrix_file
                 w_matrix_file.wdg_name = "matrix_file"
                 w_matrix_file.matrixStyle = 131072
                 w_matrix_file.width = 562
-                w_matrix_file.height = 640
+                w_matrix_file.height = 646
                 w_matrix_file.numColumns = 3
                 w_matrix_file.numRows = 2
+                w_matrix_file.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix_file.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix_file.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_matrix_file.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Label.new(@matrix_file) { |w_label3|
                   @label3 = w_label3
                   w_label3.wdg_name = "label3"
+                  w_label3.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_label3.x = 4
                   w_label3.y = 4
-                  w_label3.width = 99
-                  w_label3.height = 22
+                  w_label3.width = 91
+                  w_label3.height = 19
                   w_label3.text = "Speichern unter"
+                  w_label3.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label3.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label3.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label3.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::TextField.new(@matrix_file) { |w_textfield_file_save_as|
                   @textfield_file_save_as = w_textfield_file_save_as
                   w_textfield_file_save_as.wdg_name = "textfield_file_save_as"
                   w_textfield_file_save_as.layoutHints = 1025
-                  w_textfield_file_save_as.x = 107
+                  w_textfield_file_save_as.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_textfield_file_save_as.x = 99
                   w_textfield_file_save_as.y = 4
-                  w_textfield_file_save_as.width = 424
-                  w_textfield_file_save_as.height = 24
+                  w_textfield_file_save_as.width = 434
+                  w_textfield_file_save_as.height = 21
                   w_textfield_file_save_as.numColumns = 10
                   w_textfield_file_save_as.tipText = "Speicherort der generierten Dateien\n%d - Nummer des Datensatzes\n%p - Seitennummer\n%i - Nummer der Karte im Druckjob"
+                  w_textfield_file_save_as.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_textfield_file_save_as.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_textfield_file_save_as.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                  w_textfield_file_save_as.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
                 FX::Button.new(@matrix_file) { |w_button_file_save_as|
                   @button_file_save_as = w_button_file_save_as
                   w_button_file_save_as.wdg_name = "button_file_save_as"
                   w_button_file_save_as.layoutHints = 1024
-                  w_button_file_save_as.x = 535
+                  w_button_file_save_as.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_button_file_save_as.x = 537
                   w_button_file_save_as.y = 4
-                  w_button_file_save_as.width = 23
-                  w_button_file_save_as.height = 26
+                  w_button_file_save_as.width = 21
+                  w_button_file_save_as.height = 23
                   w_button_file_save_as.text = "..."
                   w_button_file_save_as.tipText = "Dateiauswahl"
+                  w_button_file_save_as.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_file_save_as.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_file_save_as.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_button_file_save_as.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::Label.new(@matrix_file) { |w_label4|
                   @label4 = w_label4
                   w_label4.wdg_name = "label4"
+                  w_label4.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_label4.x = 4
-                  w_label4.y = 34
-                  w_label4.width = 65
-                  w_label4.height = 22
+                  w_label4.y = 31
+                  w_label4.width = 59
+                  w_label4.height = 19
                   w_label4.text = "Auflösung"
+                  w_label4.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label4.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label4.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label4.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::Spinner.new(@matrix_file) { |w_spinner_file_dpi|
                   @spinner_file_dpi = w_spinner_file_dpi
                   w_spinner_file_dpi.wdg_name = "spinner_file_dpi"
                   w_spinner_file_dpi.layoutHints = 1
+                  w_spinner_file_dpi.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_spinner_file_dpi.range = -2147483648..2147483647
-                  w_spinner_file_dpi.x = 107
-                  w_spinner_file_dpi.y = 34
+                  w_spinner_file_dpi.x = 99
+                  w_spinner_file_dpi.y = 31
                   w_spinner_file_dpi.width = 62
-                  w_spinner_file_dpi.height = 24
+                  w_spinner_file_dpi.height = 21
                   w_spinner_file_dpi.numColumns = 6
                   w_spinner_file_dpi.value = 300
+                  w_spinner_file_dpi.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_spinner_file_dpi.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_spinner_file_dpi.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_spinner_file_dpi.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                  w_spinner_file_dpi.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
                 FX::Label.new(@matrix_file) { |w_label5|
                   @label5 = w_label5
                   w_label5.wdg_name = "label5"
-                  w_label5.x = 535
-                  w_label5.y = 34
-                  w_label5.width = 23
-                  w_label5.height = 22
+                  w_label5.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_label5.x = 537
+                  w_label5.y = 31
+                  w_label5.width = 21
+                  w_label5.height = 19
                   w_label5.text = "dpi"
+                  w_label5.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label5.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label5.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label5.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
               }
             }
             FX::TabItem.new(@tabbook_printers) { |w_tabitem64|
               @tabitem64 = w_tabitem64
               w_tabitem64.wdg_name = "tabitem64"
-              w_tabitem64.x = 132
-              w_tabitem64.y = 4
-              w_tabitem64.width = 77
-              w_tabitem64.height = 26
+              w_tabitem64.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+              w_tabitem64.x = 127
+              w_tabitem64.y = 6
+              w_tabitem64.width = 75
+              w_tabitem64.height = 23
               w_tabitem64.text = "Linux-CUPS"
+              w_tabitem64.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem64.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem64.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_tabitem64.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
             }
             FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe_linux_cups|
               @verticalframe_linux_cups = w_verticalframe_linux_cups
               w_verticalframe_linux_cups.wdg_name = "verticalframe_linux_cups"
+              w_verticalframe_linux_cups.shown = false
               w_verticalframe_linux_cups.x = 4
-              w_verticalframe_linux_cups.y = 28
+              w_verticalframe_linux_cups.y = 25
               w_verticalframe_linux_cups.width = 562
-              w_verticalframe_linux_cups.height = 640
+              w_verticalframe_linux_cups.height = 646
+              w_verticalframe_linux_cups.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe_linux_cups.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe_linux_cups.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_verticalframe_linux_cups.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               FX::Matrix.new(@verticalframe_linux_cups) { |w_matrix_linux_cups|
                 @matrix_linux_cups = w_matrix_linux_cups
                 w_matrix_linux_cups.wdg_name = "matrix_linux_cups"
                 w_matrix_linux_cups.matrixStyle = 131072
                 w_matrix_linux_cups.width = 562
-                w_matrix_linux_cups.height = 640
+                w_matrix_linux_cups.height = 646
                 w_matrix_linux_cups.numColumns = 3
                 w_matrix_linux_cups.numRows = 2
+                w_matrix_linux_cups.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix_linux_cups.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix_linux_cups.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_matrix_linux_cups.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Label.new(@matrix_linux_cups) { |w_label181|
                   @label181 = w_label181
                   w_label181.wdg_name = "label181"
+                  w_label181.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_label181.x = 4
                   w_label181.y = 4
-                  w_label181.width = 51
-                  w_label181.height = 22
+                  w_label181.width = 47
+                  w_label181.height = 19
                   w_label181.text = "Drucker"
+                  w_label181.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label181.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label181.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label181.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::ComboBox.new(@matrix_linux_cups) { |w_combobox_linux_printer|
                   @combobox_linux_printer = w_combobox_linux_printer
                   w_combobox_linux_printer.wdg_name = "combobox_linux_printer"
                   w_combobox_linux_printer.comboStyle = 1048576
                   w_combobox_linux_printer.layoutHints = 1025
-                  w_combobox_linux_printer.x = 73
+                  w_combobox_linux_printer.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_combobox_linux_printer.x = 67
                   w_combobox_linux_printer.y = 4
-                  w_combobox_linux_printer.width = 439
-                  w_combobox_linux_printer.height = 24
+                  w_combobox_linux_printer.width = 448
+                  w_combobox_linux_printer.height = 21
                   w_combobox_linux_printer.numVisible = 10
+                  w_combobox_linux_printer.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_combobox_linux_printer.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_combobox_linux_printer.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                  w_combobox_linux_printer.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
                 FX::Label.new(@matrix_linux_cups) { |w_label_linux_printer_state|
                   @label_linux_printer_state = w_label_linux_printer_state
                   w_label_linux_printer_state.wdg_name = "label_linux_printer_state"
-                  w_label_linux_printer_state.x = 516
+                  w_label_linux_printer_state.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_label_linux_printer_state.x = 519
                   w_label_linux_printer_state.y = 4
-                  w_label_linux_printer_state.width = 42
-                  w_label_linux_printer_state.height = 22
+                  w_label_linux_printer_state.width = 39
+                  w_label_linux_printer_state.height = 19
                   w_label_linux_printer_state.text = "Status"
+                  w_label_linux_printer_state.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label_linux_printer_state.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label_linux_printer_state.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label_linux_printer_state.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::Label.new(@matrix_linux_cups) { |w_label158|
                   @label158 = w_label158
                   w_label158.wdg_name = "label158"
+                  w_label158.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_label158.x = 4
-                  w_label158.y = 32
-                  w_label158.width = 65
-                  w_label158.height = 22
+                  w_label158.y = 29
+                  w_label158.width = 59
+                  w_label158.height = 19
                   w_label158.text = "Auflösung"
+                  w_label158.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label158.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label158.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label158.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::Spinner.new(@matrix_linux_cups) { |w_spinner_linux_cups_dpi|
                   @spinner_linux_cups_dpi = w_spinner_linux_cups_dpi
                   w_spinner_linux_cups_dpi.wdg_name = "spinner_linux_cups_dpi"
                   w_spinner_linux_cups_dpi.layoutHints = 1
+                  w_spinner_linux_cups_dpi.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_spinner_linux_cups_dpi.range = -2147483648..2147483647
-                  w_spinner_linux_cups_dpi.x = 73
-                  w_spinner_linux_cups_dpi.y = 32
+                  w_spinner_linux_cups_dpi.x = 67
+                  w_spinner_linux_cups_dpi.y = 29
                   w_spinner_linux_cups_dpi.width = 62
-                  w_spinner_linux_cups_dpi.height = 24
+                  w_spinner_linux_cups_dpi.height = 21
                   w_spinner_linux_cups_dpi.numColumns = 6
                   w_spinner_linux_cups_dpi.value = 300
+                  w_spinner_linux_cups_dpi.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_spinner_linux_cups_dpi.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_spinner_linux_cups_dpi.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_spinner_linux_cups_dpi.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                  w_spinner_linux_cups_dpi.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
                 FX::Label.new(@matrix_linux_cups) { |w_label159|
                   @label159 = w_label159
                   w_label159.wdg_name = "label159"
-                  w_label159.x = 516
-                  w_label159.y = 32
-                  w_label159.width = 23
-                  w_label159.height = 22
+                  w_label159.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_label159.x = 519
+                  w_label159.y = 29
+                  w_label159.width = 21
+                  w_label159.height = 19
                   w_label159.text = "dpi"
+                  w_label159.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label159.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label159.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label159.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
               }
             }
             FX::TabItem.new(@tabbook_printers) { |w_tabitem6|
               @tabitem6 = w_tabitem6
               w_tabitem6.wdg_name = "tabitem6"
-              w_tabitem6.x = 208
+              w_tabitem6.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+              w_tabitem6.x = 202
               w_tabitem6.y = 6
-              w_tabitem6.width = 49
-              w_tabitem6.height = 26
+              w_tabitem6.width = 48
+              w_tabitem6.height = 23
               w_tabitem6.text = "XID440"
+              w_tabitem6.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem6.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem6.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_tabitem6.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
             }
             FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe8|
               @verticalframe8 = w_verticalframe8
               w_verticalframe8.wdg_name = "verticalframe8"
               w_verticalframe8.shown = false
               w_verticalframe8.x = 4
-              w_verticalframe8.y = 28
+              w_verticalframe8.y = 25
               w_verticalframe8.width = 562
-              w_verticalframe8.height = 640
+              w_verticalframe8.height = 646
+              w_verticalframe8.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe8.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe8.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_verticalframe8.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               FX::Matrix.new(@verticalframe8) { |w_matrix_xid|
                 @matrix_xid = w_matrix_xid
                 w_matrix_xid.wdg_name = "matrix_xid"
                 w_matrix_xid.matrixStyle = 131072
                 w_matrix_xid.width = 562
-                w_matrix_xid.height = 640
+                w_matrix_xid.height = 646
                 w_matrix_xid.numColumns = 3
+                w_matrix_xid.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix_xid.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix_xid.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_matrix_xid.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Label.new(@matrix_xid) { |w_label16|
                   @label16 = w_label16
                   w_label16.wdg_name = "label16"
+                  w_label16.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_label16.x = 4
                   w_label16.y = 4
-                  w_label16.width = 51
-                  w_label16.height = 22
+                  w_label16.width = 47
+                  w_label16.height = 19
                   w_label16.text = "Drucker"
+                  w_label16.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label16.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label16.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label16.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::ComboBox.new(@matrix_xid) { |w_combobox_xid_printer|
                   @combobox_xid_printer = w_combobox_xid_printer
                   w_combobox_xid_printer.wdg_name = "combobox_xid_printer"
                   w_combobox_xid_printer.comboStyle = 1048576
                   w_combobox_xid_printer.layoutHints = 1025
-                  w_combobox_xid_printer.x = 59
+                  w_combobox_xid_printer.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_combobox_xid_printer.x = 55
                   w_combobox_xid_printer.y = 4
-                  w_combobox_xid_printer.width = 427
-                  w_combobox_xid_printer.height = 24
+                  w_combobox_xid_printer.width = 436
+                  w_combobox_xid_printer.height = 21
+                  w_combobox_xid_printer.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_combobox_xid_printer.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_combobox_xid_printer.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                  w_combobox_xid_printer.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
                 FX::Button.new(@matrix_xid) { |w_button_xid_printersetup|
                   @button_xid_printersetup = w_button_xid_printersetup
                   w_button_xid_printersetup.wdg_name = "button_xid_printersetup"
                   w_button_xid_printersetup.layoutHints = 1024
-                  w_button_xid_printersetup.x = 490
+                  w_button_xid_printersetup.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_button_xid_printersetup.x = 495
                   w_button_xid_printersetup.y = 4
-                  w_button_xid_printersetup.width = 68
-                  w_button_xid_printersetup.height = 26
+                  w_button_xid_printersetup.width = 63
+                  w_button_xid_printersetup.height = 23
                   w_button_xid_printersetup.text = "Einrichten"
                   w_button_xid_printersetup.tipText = "Dateiauswahl"
+                  w_button_xid_printersetup.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_xid_printersetup.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_xid_printersetup.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_button_xid_printersetup.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
               }
             }
@@ -330,11 +486,16 @@ class Dialogbox_printerview
               @tabitem16 = w_tabitem16
               w_tabitem16.wdg_name = "tabitem16"
               w_tabitem16.frameStyle = 28672
-              w_tabitem16.x = 257
+              w_tabitem16.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+              w_tabitem16.x = 250
               w_tabitem16.y = 6
-              w_tabitem16.width = 42
-              w_tabitem16.height = 26
+              w_tabitem16.width = 40
+              w_tabitem16.height = 23
               w_tabitem16.text = "Zebra"
+              w_tabitem16.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem16.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem16.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_tabitem16.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
             }
             FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe21|
               @verticalframe21 = w_verticalframe21
@@ -346,9 +507,13 @@ class Dialogbox_printerview
               w_verticalframe21.padRight = 5
               w_verticalframe21.padBottom = 5
               w_verticalframe21.x = 4
-              w_verticalframe21.y = 28
+              w_verticalframe21.y = 25
               w_verticalframe21.width = 562
-              w_verticalframe21.height = 640
+              w_verticalframe21.height = 646
+              w_verticalframe21.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe21.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe21.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_verticalframe21.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               FX::Matrix.new(@verticalframe21) { |w_matrix_zebra|
                 @matrix_zebra = w_matrix_zebra
                 w_matrix_zebra.wdg_name = "matrix_zebra"
@@ -358,27 +523,38 @@ class Dialogbox_printerview
                 w_matrix_zebra.x = 6
                 w_matrix_zebra.y = 6
                 w_matrix_zebra.width = 550
-                w_matrix_zebra.height = 68
+                w_matrix_zebra.height = 69
                 w_matrix_zebra.numColumns = 3
+                w_matrix_zebra.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix_zebra.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix_zebra.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_matrix_zebra.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Label.new(@matrix_zebra) { |w_label22|
                   @label22 = w_label22
                   w_label22.wdg_name = "label22"
                   w_label22.layoutHints = 32
+                  w_label22.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_label22.y = 6
-                  w_label22.width = 51
-                  w_label22.height = 22
+                  w_label22.width = 47
+                  w_label22.height = 19
                   w_label22.text = "Drucker"
+                  w_label22.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label22.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label22.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label22.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::ComboBox.new(@matrix_zebra) { |w_combobox_zebra_printer|
                   @combobox_zebra_printer = w_combobox_zebra_printer
                   w_combobox_zebra_printer.wdg_name = "combobox_zebra_printer"
                   w_combobox_zebra_printer.comboStyle = 1048576
                   w_combobox_zebra_printer.layoutHints = 1057
-                  w_combobox_zebra_printer.x = 55
+                  w_combobox_zebra_printer.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_combobox_zebra_printer.x = 51
                   w_combobox_zebra_printer.y = 5
-                  w_combobox_zebra_printer.width = 423
-                  w_combobox_zebra_printer.height = 24
+                  w_combobox_zebra_printer.width = 432
+                  w_combobox_zebra_printer.height = 21
                   w_combobox_zebra_printer.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_combobox_zebra_printer.borderColor = Fox::FXRGBA(0, 0, 0, 255)
                   w_combobox_zebra_printer.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
                   w_combobox_zebra_printer.selBackColor = Fox::FXRGBA(190, 190, 190, 255)
                   w_combobox_zebra_printer.selTextColor = Fox::FXRGBA(0, 0, 0, 255)
@@ -387,14 +563,16 @@ class Dialogbox_printerview
                   @button_zebra_printersetup = w_button_zebra_printersetup
                   w_button_zebra_printersetup.wdg_name = "button_zebra_printersetup"
                   w_button_zebra_printersetup.layoutHints = 1056
-                  w_button_zebra_printersetup.x = 482
+                  w_button_zebra_printersetup.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_button_zebra_printersetup.x = 487
                   w_button_zebra_printersetup.y = 4
-                  w_button_zebra_printersetup.width = 68
-                  w_button_zebra_printersetup.height = 26
+                  w_button_zebra_printersetup.width = 63
+                  w_button_zebra_printersetup.height = 23
                   w_button_zebra_printersetup.text = "Einrichten"
                   w_button_zebra_printersetup.tipText = "Dateiauswahl"
                   w_button_zebra_printersetup.backColor = Fox::FXRGBA(226, 226, 226, 255)
                   w_button_zebra_printersetup.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_printersetup.borderColor = Fox::FXRGBA(0, 0, 0, 255)
                   w_button_zebra_printersetup.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
                 }
               }
@@ -403,9 +581,13 @@ class Dialogbox_printerview
                 w_horizontalseparator6.wdg_name = "horizontalseparator6"
                 w_horizontalseparator6.padTop = 10
                 w_horizontalseparator6.x = 6
-                w_horizontalseparator6.y = 74
+                w_horizontalseparator6.y = 75
                 w_horizontalseparator6.width = 550
                 w_horizontalseparator6.height = 12
+                w_horizontalseparator6.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_horizontalseparator6.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_horizontalseparator6.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_horizontalseparator6.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               }
               FX::Label.new(@verticalframe21) { |w_label30|
                 @label30 = w_label30
@@ -413,10 +595,14 @@ class Dialogbox_printerview
                 w_label30.font = FX::Font.new.from_s("Sans|90|100|0|0|0|0").to_FXFont
                 w_label30.padBottom = 10
                 w_label30.x = 6
-                w_label30.y = 86
-                w_label30.width = 95
-                w_label30.height = 30
+                w_label30.y = 87
+                w_label30.width = 92
+                w_label30.height = 27
                 w_label30.text = "Druckerbefehle"
+                w_label30.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_label30.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_label30.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_label30.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               }
               FX::VerticalFrame.new(@verticalframe21) { |w_verticalframe27|
                 @verticalframe27 = w_verticalframe27
@@ -424,84 +610,100 @@ class Dialogbox_printerview
                 w_verticalframe27.vSpacing = 5
                 w_verticalframe27.padBottom = 10
                 w_verticalframe27.x = 6
-                w_verticalframe27.y = 116
+                w_verticalframe27.y = 114
                 w_verticalframe27.width = 550
-                w_verticalframe27.height = 385
+                w_verticalframe27.height = 390
+                w_verticalframe27.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_verticalframe27.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_verticalframe27.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_verticalframe27.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Button.new(@verticalframe27) { |w_button_zebra_reset|
                   @button_zebra_reset = w_button_zebra_reset
                   w_button_zebra_reset.wdg_name = "button_zebra_reset"
                   w_button_zebra_reset.layoutHints = 1024
+                  w_button_zebra_reset.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_button_zebra_reset.width = 550
-                  w_button_zebra_reset.height = 26
+                  w_button_zebra_reset.height = 23
                   w_button_zebra_reset.text = "Reset"
                   w_button_zebra_reset.tipText = "Setzt den Drucker zurück."
                   w_button_zebra_reset.backColor = Fox::FXRGBA(226, 226, 226, 255)
                   w_button_zebra_reset.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_reset.borderColor = Fox::FXRGBA(0, 0, 0, 255)
                   w_button_zebra_reset.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
                 }
                 FX::Button.new(@verticalframe27) { |w_button_zebra_eject_card|
                   @button_zebra_eject_card = w_button_zebra_eject_card
                   w_button_zebra_eject_card.wdg_name = "button_zebra_eject_card"
                   w_button_zebra_eject_card.layoutHints = 1025
-                  w_button_zebra_eject_card.y = 31
+                  w_button_zebra_eject_card.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_button_zebra_eject_card.y = 28
                   w_button_zebra_eject_card.width = 550
-                  w_button_zebra_eject_card.height = 26
+                  w_button_zebra_eject_card.height = 23
                   w_button_zebra_eject_card.text = "Karte auswerfen"
                   w_button_zebra_eject_card.tipText = "Wirft die Karte aus dem Drucker aus (z.B. wenn eine Karte im Drucker hängt)."
                   w_button_zebra_eject_card.backColor = Fox::FXRGBA(226, 226, 226, 255)
                   w_button_zebra_eject_card.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_eject_card.borderColor = Fox::FXRGBA(0, 0, 0, 255)
                   w_button_zebra_eject_card.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
                 }
                 FX::Button.new(@verticalframe27) { |w_button_zebra_eject_card2|
                   @button_zebra_eject_card2 = w_button_zebra_eject_card2
                   w_button_zebra_eject_card2.wdg_name = "button_zebra_eject_card2"
                   w_button_zebra_eject_card2.layoutHints = 1025
-                  w_button_zebra_eject_card2.y = 62
+                  w_button_zebra_eject_card2.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_button_zebra_eject_card2.y = 56
                   w_button_zebra_eject_card2.width = 550
-                  w_button_zebra_eject_card2.height = 26
+                  w_button_zebra_eject_card2.height = 23
                   w_button_zebra_eject_card2.text = "Karte auswerfen 2"
                   w_button_zebra_eject_card2.tipText = "Wirft die Karte aus dem Drucker aus (z.B. wenn eine Karte im Drucker hängt). Wirft auch Karten aus, die in der Kartenzufuhr sind."
                   w_button_zebra_eject_card2.backColor = Fox::FXRGBA(226, 226, 226, 255)
                   w_button_zebra_eject_card2.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_eject_card2.borderColor = Fox::FXRGBA(0, 0, 0, 255)
                   w_button_zebra_eject_card2.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
                 }
                 FX::Button.new(@verticalframe27) { |w_button_zebra_move_contactless|
                   @button_zebra_move_contactless = w_button_zebra_move_contactless
                   w_button_zebra_move_contactless.wdg_name = "button_zebra_move_contactless"
                   w_button_zebra_move_contactless.layoutHints = 1024
-                  w_button_zebra_move_contactless.y = 93
+                  w_button_zebra_move_contactless.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_button_zebra_move_contactless.y = 84
                   w_button_zebra_move_contactless.width = 550
-                  w_button_zebra_move_contactless.height = 26
+                  w_button_zebra_move_contactless.height = 23
                   w_button_zebra_move_contactless.text = "Kontaktlos"
                   w_button_zebra_move_contactless.tipText = "Fährt die Karte an die Position des kontaktlosen Lesers."
                   w_button_zebra_move_contactless.backColor = Fox::FXRGBA(226, 226, 226, 255)
                   w_button_zebra_move_contactless.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_move_contactless.borderColor = Fox::FXRGBA(0, 0, 0, 255)
                   w_button_zebra_move_contactless.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
                 }
                 FX::Button.new(@verticalframe27) { |w_button_zebra_print_testcard|
                   @button_zebra_print_testcard = w_button_zebra_print_testcard
                   w_button_zebra_print_testcard.wdg_name = "button_zebra_print_testcard"
                   w_button_zebra_print_testcard.layoutHints = 1024
-                  w_button_zebra_print_testcard.y = 124
+                  w_button_zebra_print_testcard.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_button_zebra_print_testcard.y = 112
                   w_button_zebra_print_testcard.width = 550
-                  w_button_zebra_print_testcard.height = 26
+                  w_button_zebra_print_testcard.height = 23
                   w_button_zebra_print_testcard.text = "Testkarte drucken"
                   w_button_zebra_print_testcard.tipText = "Druckt eine Testkarte."
                   w_button_zebra_print_testcard.backColor = Fox::FXRGBA(226, 226, 226, 255)
                   w_button_zebra_print_testcard.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_print_testcard.borderColor = Fox::FXRGBA(0, 0, 0, 255)
                   w_button_zebra_print_testcard.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
                 }
                 FX::Button.new(@verticalframe27) { |w_button_zebra_printer_info|
                   @button_zebra_printer_info = w_button_zebra_printer_info
                   w_button_zebra_printer_info.wdg_name = "button_zebra_printer_info"
                   w_button_zebra_printer_info.layoutHints = 1024
-                  w_button_zebra_printer_info.y = 155
+                  w_button_zebra_printer_info.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_button_zebra_printer_info.y = 140
                   w_button_zebra_printer_info.width = 550
-                  w_button_zebra_printer_info.height = 26
+                  w_button_zebra_printer_info.height = 23
                   w_button_zebra_printer_info.text = "Druckerinfo"
                   w_button_zebra_printer_info.tipText = "Zeigt den Druckertyp und die Firmwareversion an."
                   w_button_zebra_printer_info.backColor = Fox::FXRGBA(226, 226, 226, 255)
                   w_button_zebra_printer_info.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_printer_info.borderColor = Fox::FXRGBA(0, 0, 0, 255)
                   w_button_zebra_printer_info.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
                 }
               }
@@ -511,29 +713,40 @@ class Dialogbox_printerview
                 w_matrix22.padLeft = 0
                 w_matrix22.padRight = 0
                 w_matrix22.x = 6
-                w_matrix22.y = 501
+                w_matrix22.y = 504
                 w_matrix22.width = 550
-                w_matrix22.height = 68
+                w_matrix22.height = 70
                 w_matrix22.numColumns = 3
+                w_matrix22.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix22.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix22.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_matrix22.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Label.new(@matrix22) { |w_label50|
                   @label50 = w_label50
                   w_label50.wdg_name = "label50"
                   w_label50.layoutHints = 32
+                  w_label50.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_label50.y = 6
-                  w_label50.width = 75
-                  w_label50.height = 22
+                  w_label50.width = 69
+                  w_label50.height = 19
                   w_label50.text = "Kommando"
+                  w_label50.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label50.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label50.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label50.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::TextField.new(@matrix22) { |w_textfield_zebra_command|
                   @textfield_zebra_command = w_textfield_zebra_command
                   w_textfield_zebra_command.wdg_name = "textfield_zebra_command"
                   w_textfield_zebra_command.layoutHints = 1057
-                  w_textfield_zebra_command.x = 79
+                  w_textfield_zebra_command.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_textfield_zebra_command.x = 73
                   w_textfield_zebra_command.y = 5
-                  w_textfield_zebra_command.width = 414
-                  w_textfield_zebra_command.height = 24
+                  w_textfield_zebra_command.width = 422
+                  w_textfield_zebra_command.height = 21
                   w_textfield_zebra_command.numColumns = 10
                   w_textfield_zebra_command.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_textfield_zebra_command.borderColor = Fox::FXRGBA(0, 0, 0, 255)
                   w_textfield_zebra_command.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
                   w_textfield_zebra_command.selBackColor = Fox::FXRGBA(190, 190, 190, 255)
                   w_textfield_zebra_command.selTextColor = Fox::FXRGBA(0, 0, 0, 255)
@@ -542,13 +755,15 @@ class Dialogbox_printerview
                   @button_zebra_send = w_button_zebra_send
                   w_button_zebra_send.wdg_name = "button_zebra_send"
                   w_button_zebra_send.layoutHints = 32
-                  w_button_zebra_send.x = 497
+                  w_button_zebra_send.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_button_zebra_send.x = 499
                   w_button_zebra_send.y = 4
-                  w_button_zebra_send.width = 53
-                  w_button_zebra_send.height = 26
+                  w_button_zebra_send.width = 51
+                  w_button_zebra_send.height = 23
                   w_button_zebra_send.text = "Senden"
                   w_button_zebra_send.backColor = Fox::FXRGBA(226, 226, 226, 255)
                   w_button_zebra_send.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_button_zebra_send.borderColor = Fox::FXRGBA(0, 0, 0, 255)
                   w_button_zebra_send.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
                 }
               }
@@ -558,30 +773,41 @@ class Dialogbox_printerview
                 w_matrix21.padLeft = 0
                 w_matrix21.padRight = 0
                 w_matrix21.x = 6
-                w_matrix21.y = 569
+                w_matrix21.y = 574
                 w_matrix21.width = 550
-                w_matrix21.height = 65
+                w_matrix21.height = 66
                 w_matrix21.numColumns = 2
+                w_matrix21.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix21.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix21.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_matrix21.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Label.new(@matrix21) { |w_label49|
                   @label49 = w_label49
                   w_label49.wdg_name = "label49"
+                  w_label49.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_label49.y = 4
-                  w_label49.width = 53
-                  w_label49.height = 22
+                  w_label49.width = 44
+                  w_label49.height = 19
                   w_label49.text = "Antwort"
+                  w_label49.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label49.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label49.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label49.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::TextField.new(@matrix21) { |w_textfield_zebra_answer|
                   @textfield_zebra_answer = w_textfield_zebra_answer
                   w_textfield_zebra_answer.wdg_name = "textfield_zebra_answer"
                   w_textfield_zebra_answer.layoutHints = 3105
                   w_textfield_zebra_answer.textFieldTextStyle = 4194304
+                  w_textfield_zebra_answer.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_textfield_zebra_answer.enabled = false
-                  w_textfield_zebra_answer.x = 57
+                  w_textfield_zebra_answer.x = 48
                   w_textfield_zebra_answer.y = 4
-                  w_textfield_zebra_answer.width = 493
-                  w_textfield_zebra_answer.height = 24
+                  w_textfield_zebra_answer.width = 502
+                  w_textfield_zebra_answer.height = 21
                   w_textfield_zebra_answer.numColumns = 50
                   w_textfield_zebra_answer.baseColor = Fox::FXRGBA(226, 226, 226, 255)
+                  w_textfield_zebra_answer.borderColor = Fox::FXRGBA(0, 0, 0, 255)
                   w_textfield_zebra_answer.shadowColor = Fox::FXRGBA(180, 180, 180, 255)
                   w_textfield_zebra_answer.selBackColor = Fox::FXRGBA(190, 190, 190, 255)
                   w_textfield_zebra_answer.selTextColor = Fox::FXRGBA(0, 0, 0, 255)
@@ -591,86 +817,131 @@ class Dialogbox_printerview
             FX::TabItem.new(@tabbook_printers) { |w_tabitem29|
               @tabitem29 = w_tabitem29
               w_tabitem29.wdg_name = "tabitem29"
-              w_tabitem29.x = 299
+              w_tabitem29.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+              w_tabitem29.x = 290
               w_tabitem29.y = 6
-              w_tabitem29.width = 29
-              w_tabitem29.height = 26
+              w_tabitem29.width = 28
+              w_tabitem29.height = 23
               w_tabitem29.text = "cab"
+              w_tabitem29.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem29.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem29.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_tabitem29.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
             }
             FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe40|
               @verticalframe40 = w_verticalframe40
               w_verticalframe40.wdg_name = "verticalframe40"
               w_verticalframe40.shown = false
               w_verticalframe40.x = 4
-              w_verticalframe40.y = 28
+              w_verticalframe40.y = 25
               w_verticalframe40.width = 562
-              w_verticalframe40.height = 640
+              w_verticalframe40.height = 646
+              w_verticalframe40.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe40.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe40.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_verticalframe40.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               FX::Matrix.new(@verticalframe40) { |w_matrix_connection|
                 @matrix_connection = w_matrix_connection
                 w_matrix_connection.wdg_name = "matrix_connection"
                 w_matrix_connection.layoutHints = 1024
                 w_matrix_connection.width = 562
-                w_matrix_connection.height = 32
+                w_matrix_connection.height = 29
                 w_matrix_connection.numColumns = 6
+                w_matrix_connection.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix_connection.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix_connection.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_matrix_connection.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Label.new(@matrix_connection) { |w_label60|
                   @label60 = w_label60
                   w_label60.wdg_name = "label60"
+                  w_label60.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_label60.x = 4
                   w_label60.y = 4
-                  w_label60.width = 32
-                  w_label60.height = 22
+                  w_label60.width = 30
+                  w_label60.height = 19
                   w_label60.text = "Host"
+                  w_label60.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label60.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label60.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label60.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::TextField.new(@matrix_connection) { |w_textfield_cab_host|
                   @textfield_cab_host = w_textfield_cab_host
                   w_textfield_cab_host.wdg_name = "textfield_cab_host"
                   w_textfield_cab_host.layoutHints = 1025
-                  w_textfield_cab_host.x = 40
+                  w_textfield_cab_host.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_textfield_cab_host.x = 38
                   w_textfield_cab_host.y = 4
-                  w_textfield_cab_host.width = 172
-                  w_textfield_cab_host.height = 24
+                  w_textfield_cab_host.width = 177
+                  w_textfield_cab_host.height = 21
                   w_textfield_cab_host.numColumns = 10
+                  w_textfield_cab_host.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_textfield_cab_host.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_textfield_cab_host.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                  w_textfield_cab_host.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
                 FX::Label.new(@matrix_connection) { |w_label61|
                   @label61 = w_label61
                   w_label61.wdg_name = "label61"
-                  w_label61.x = 216
+                  w_label61.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_label61.x = 219
                   w_label61.y = 4
-                  w_label61.width = 30
-                  w_label61.height = 22
+                  w_label61.width = 26
+                  w_label61.height = 19
                   w_label61.text = "Port"
+                  w_label61.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label61.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label61.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label61.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::Spinner.new(@matrix_connection) { |w_spinner_cab_port|
                   @spinner_cab_port = w_spinner_cab_port
                   w_spinner_cab_port.wdg_name = "spinner_cab_port"
                   w_spinner_cab_port.layoutHints = 1025
+                  w_spinner_cab_port.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_spinner_cab_port.range = -2147483648..2147483647
-                  w_spinner_cab_port.x = 250
+                  w_spinner_cab_port.x = 249
                   w_spinner_cab_port.y = 4
-                  w_spinner_cab_port.width = 94
-                  w_spinner_cab_port.height = 24
+                  w_spinner_cab_port.width = 96
+                  w_spinner_cab_port.height = 21
                   w_spinner_cab_port.numColumns = 3
+                  w_spinner_cab_port.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_spinner_cab_port.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_spinner_cab_port.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_spinner_cab_port.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                  w_spinner_cab_port.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
                 FX::Label.new(@matrix_connection) { |w_label79|
                   @label79 = w_label79
                   w_label79.wdg_name = "label79"
-                  w_label79.x = 348
+                  w_label79.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_label79.x = 349
                   w_label79.y = 4
-                  w_label79.width = 65
-                  w_label79.height = 22
+                  w_label79.width = 59
+                  w_label79.height = 19
                   w_label79.text = "Auflösung"
+                  w_label79.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label79.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label79.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label79.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::Spinner.new(@matrix_connection) { |w_spinner_cab_dpi|
                   @spinner_cab_dpi = w_spinner_cab_dpi
                   w_spinner_cab_dpi.wdg_name = "spinner_cab_dpi"
                   w_spinner_cab_dpi.layoutHints = 1025
+                  w_spinner_cab_dpi.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_spinner_cab_dpi.range = -2147483648..2147483647
-                  w_spinner_cab_dpi.x = 417
+                  w_spinner_cab_dpi.x = 412
                   w_spinner_cab_dpi.y = 4
-                  w_spinner_cab_dpi.width = 141
-                  w_spinner_cab_dpi.height = 24
+                  w_spinner_cab_dpi.width = 146
+                  w_spinner_cab_dpi.height = 21
                   w_spinner_cab_dpi.numColumns = 6
                   w_spinner_cab_dpi.value = 300
+                  w_spinner_cab_dpi.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_spinner_cab_dpi.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_spinner_cab_dpi.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_spinner_cab_dpi.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                  w_spinner_cab_dpi.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
               }
               FX::HorizontalFrame.new(@verticalframe40) { |w_horizontalframe1|
@@ -682,363 +953,631 @@ class Dialogbox_printerview
                 w_horizontalframe1.padLeft = 3
                 w_horizontalframe1.padRight = 3
                 w_horizontalframe1.padBottom = 10
-                w_horizontalframe1.y = 32
+                w_horizontalframe1.y = 29
                 w_horizontalframe1.width = 562
-                w_horizontalframe1.height = 174
+                w_horizontalframe1.height = 159
+                w_horizontalframe1.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_horizontalframe1.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_horizontalframe1.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_horizontalframe1.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::VerticalFrame.new(@horizontalframe1) { |w_verticalframe41|
                   @verticalframe41 = w_verticalframe41
                   w_verticalframe41.wdg_name = "verticalframe41"
                   w_verticalframe41.vSpacing = 5
                   w_verticalframe41.x = 5
                   w_verticalframe41.y = 12
-                  w_verticalframe41.width = 414
-                  w_verticalframe41.height = 150
+                  w_verticalframe41.width = 404
+                  w_verticalframe41.height = 135
+                  w_verticalframe41.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_verticalframe41.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_verticalframe41.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_verticalframe41.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                   FX::Button.new(@verticalframe41) { |w_button_cab_info|
                     @button_cab_info = w_button_cab_info
                     w_button_cab_info.wdg_name = "button_cab_info"
                     w_button_cab_info.layoutHints = 1024
-                    w_button_cab_info.width = 414
-                    w_button_cab_info.height = 26
+                    w_button_cab_info.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                    w_button_cab_info.width = 404
+                    w_button_cab_info.height = 23
                     w_button_cab_info.text = "Printer Status Abfrage"
+                    w_button_cab_info.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                    w_button_cab_info.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                    w_button_cab_info.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                    w_button_cab_info.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                   }
                   FX::Button.new(@verticalframe41) { |w_button_cab_extended_info|
                     @button_cab_extended_info = w_button_cab_extended_info
                     w_button_cab_extended_info.wdg_name = "button_cab_extended_info"
                     w_button_cab_extended_info.layoutHints = 1024
-                    w_button_cab_extended_info.y = 31
-                    w_button_cab_extended_info.width = 414
-                    w_button_cab_extended_info.height = 26
+                    w_button_cab_extended_info.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                    w_button_cab_extended_info.y = 28
+                    w_button_cab_extended_info.width = 404
+                    w_button_cab_extended_info.height = 23
                     w_button_cab_extended_info.text = "Extended Status Abfrage"
+                    w_button_cab_extended_info.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                    w_button_cab_extended_info.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                    w_button_cab_extended_info.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                    w_button_cab_extended_info.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                   }
                   FX::Button.new(@verticalframe41) { |w_button_cab_firmware_version|
                     @button_cab_firmware_version = w_button_cab_firmware_version
                     w_button_cab_firmware_version.wdg_name = "button_cab_firmware_version"
                     w_button_cab_firmware_version.layoutHints = 1024
-                    w_button_cab_firmware_version.y = 62
-                    w_button_cab_firmware_version.width = 414
-                    w_button_cab_firmware_version.height = 26
+                    w_button_cab_firmware_version.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                    w_button_cab_firmware_version.y = 56
+                    w_button_cab_firmware_version.width = 404
+                    w_button_cab_firmware_version.height = 23
                     w_button_cab_firmware_version.text = "Firmware-Version"
+                    w_button_cab_firmware_version.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                    w_button_cab_firmware_version.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                    w_button_cab_firmware_version.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                    w_button_cab_firmware_version.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                   }
                   FX::Button.new(@verticalframe41) { |w_button_cab_self_test|
                     @button_cab_self_test = w_button_cab_self_test
                     w_button_cab_self_test.wdg_name = "button_cab_self_test"
                     w_button_cab_self_test.layoutHints = 1024
-                    w_button_cab_self_test.y = 93
-                    w_button_cab_self_test.width = 414
-                    w_button_cab_self_test.height = 26
+                    w_button_cab_self_test.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                    w_button_cab_self_test.y = 84
+                    w_button_cab_self_test.width = 404
+                    w_button_cab_self_test.height = 23
                     w_button_cab_self_test.text = "Start Self Test"
+                    w_button_cab_self_test.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                    w_button_cab_self_test.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                    w_button_cab_self_test.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                    w_button_cab_self_test.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                   }
                   FX::Button.new(@verticalframe41) { |w_button_cab_cancel_jobs|
                     @button_cab_cancel_jobs = w_button_cab_cancel_jobs
                     w_button_cab_cancel_jobs.wdg_name = "button_cab_cancel_jobs"
                     w_button_cab_cancel_jobs.layoutHints = 1024
-                    w_button_cab_cancel_jobs.y = 124
-                    w_button_cab_cancel_jobs.width = 414
-                    w_button_cab_cancel_jobs.height = 26
+                    w_button_cab_cancel_jobs.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                    w_button_cab_cancel_jobs.y = 112
+                    w_button_cab_cancel_jobs.width = 404
+                    w_button_cab_cancel_jobs.height = 23
                     w_button_cab_cancel_jobs.text = "Drucker zurücksetzen"
+                    w_button_cab_cancel_jobs.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                    w_button_cab_cancel_jobs.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                    w_button_cab_cancel_jobs.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                    w_button_cab_cancel_jobs.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                   }
                 }
                 FX::Text.new(@horizontalframe1) { |w_text_cab_output|
                   @text_cab_output = w_text_cab_output
                   w_text_cab_output.wdg_name = "text_cab_output"
-                  w_text_cab_output.x = 419
+                  w_text_cab_output.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_text_cab_output.x = 409
                   w_text_cab_output.y = 12
-                  w_text_cab_output.width = 138
-                  w_text_cab_output.height = 150
+                  w_text_cab_output.width = 148
+                  w_text_cab_output.height = 135
+                  w_text_cab_output.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
               }
               FX::Label.new(@verticalframe40) { |w_label62|
                 @label62 = w_label62
                 w_label62.wdg_name = "label62"
+                w_label62.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                 w_label62.padTop = 10
-                w_label62.y = 206
-                w_label62.width = 587
-                w_label62.height = 30
+                w_label62.y = 188
+                w_label62.width = 541
+                w_label62.height = 27
                 w_label62.text = "Druckbefehle pro Ausgabeseite (siehe \"Programming Manual\" von cab Produktionstechnik GmbH)"
+                w_label62.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_label62.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_label62.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_label62.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               }
               FX::Packer.new(@verticalframe40) { |w_packer3|
                 @packer3 = w_packer3
                 w_packer3.wdg_name = "packer3"
                 w_packer3.frameStyle = 16384
-                w_packer3.y = 236
+                w_packer3.y = 215
                 w_packer3.width = 562
-                w_packer3.height = 404
+                w_packer3.height = 431
+                w_packer3.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_packer3.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_packer3.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_packer3.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Text.new(@packer3) { |w_text_cab_page_commands|
                   @text_cab_page_commands = w_text_cab_page_commands
                   w_text_cab_page_commands.wdg_name = "text_cab_page_commands"
+                  w_text_cab_page_commands.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_text_cab_page_commands.x = 6
                   w_text_cab_page_commands.y = 2
                   w_text_cab_page_commands.width = 550
-                  w_text_cab_page_commands.height = 400
+                  w_text_cab_page_commands.height = 427
+                  w_text_cab_page_commands.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
               }
             }
             FX::TabItem.new(@tabbook_printers) { |w_tabitem35|
               @tabitem35 = w_tabitem35
               w_tabitem35.wdg_name = "tabitem35"
-              w_tabitem35.x = 328
+              w_tabitem35.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+              w_tabitem35.x = 318
               w_tabitem35.y = 6
-              w_tabitem35.width = 30
-              w_tabitem35.height = 26
+              w_tabitem35.width = 31
+              w_tabitem35.height = 23
               w_tabitem35.text = "EPL"
+              w_tabitem35.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem35.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem35.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_tabitem35.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
             }
             FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe50|
               @verticalframe50 = w_verticalframe50
               w_verticalframe50.wdg_name = "verticalframe50"
               w_verticalframe50.shown = false
               w_verticalframe50.x = 4
-              w_verticalframe50.y = 28
+              w_verticalframe50.y = 25
               w_verticalframe50.width = 562
-              w_verticalframe50.height = 640
+              w_verticalframe50.height = 646
+              w_verticalframe50.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe50.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe50.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_verticalframe50.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               FX::Matrix.new(@verticalframe50) { |w_matrix37|
                 @matrix37 = w_matrix37
                 w_matrix37.wdg_name = "matrix37"
                 w_matrix37.layoutHints = 1024
                 w_matrix37.width = 562
-                w_matrix37.height = 32
+                w_matrix37.height = 29
                 w_matrix37.numColumns = 4
+                w_matrix37.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix37.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix37.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_matrix37.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Label.new(@matrix37) { |w_label75|
                   @label75 = w_label75
                   w_label75.wdg_name = "label75"
+                  w_label75.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_label75.x = 4
                   w_label75.y = 4
-                  w_label75.width = 77
-                  w_label75.height = 22
+                  w_label75.width = 74
+                  w_label75.height = 19
                   w_label75.text = "Device-Datei"
+                  w_label75.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label75.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label75.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label75.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::TextField.new(@matrix37) { |w_textfield_epl_device|
                   @textfield_epl_device = w_textfield_epl_device
                   w_textfield_epl_device.wdg_name = "textfield_epl_device"
                   w_textfield_epl_device.layoutHints = 1025
-                  w_textfield_epl_device.x = 85
+                  w_textfield_epl_device.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_textfield_epl_device.x = 82
                   w_textfield_epl_device.y = 4
-                  w_textfield_epl_device.width = 220
-                  w_textfield_epl_device.height = 24
+                  w_textfield_epl_device.width = 225
+                  w_textfield_epl_device.height = 21
                   w_textfield_epl_device.numColumns = 10
+                  w_textfield_epl_device.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_textfield_epl_device.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_textfield_epl_device.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                  w_textfield_epl_device.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
                 FX::Label.new(@matrix37) { |w_label78|
                   @label78 = w_label78
                   w_label78.wdg_name = "label78"
-                  w_label78.x = 309
+                  w_label78.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_label78.x = 311
                   w_label78.y = 4
-                  w_label78.width = 65
-                  w_label78.height = 22
+                  w_label78.width = 59
+                  w_label78.height = 19
                   w_label78.text = "Auflösung"
+                  w_label78.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label78.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label78.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label78.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::Spinner.new(@matrix37) { |w_spinner_epl_dpi|
                   @spinner_epl_dpi = w_spinner_epl_dpi
                   w_spinner_epl_dpi.wdg_name = "spinner_epl_dpi"
                   w_spinner_epl_dpi.layoutHints = 1025
+                  w_spinner_epl_dpi.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_spinner_epl_dpi.range = -2147483648..2147483647
-                  w_spinner_epl_dpi.x = 378
+                  w_spinner_epl_dpi.x = 374
                   w_spinner_epl_dpi.y = 4
-                  w_spinner_epl_dpi.width = 180
-                  w_spinner_epl_dpi.height = 24
+                  w_spinner_epl_dpi.width = 184
+                  w_spinner_epl_dpi.height = 21
                   w_spinner_epl_dpi.numColumns = 6
                   w_spinner_epl_dpi.value = 300
+                  w_spinner_epl_dpi.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_spinner_epl_dpi.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_spinner_epl_dpi.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_spinner_epl_dpi.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                  w_spinner_epl_dpi.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
               }
               FX::Label.new(@verticalframe50) { |w_label77|
                 @label77 = w_label77
                 w_label77.wdg_name = "label77"
+                w_label77.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                 w_label77.padTop = 10
-                w_label77.y = 32
-                w_label77.width = 190
-                w_label77.height = 30
+                w_label77.y = 29
+                w_label77.width = 177
+                w_label77.height = 27
                 w_label77.text = "Druckbefehle pro Ausgabeseite"
+                w_label77.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_label77.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_label77.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_label77.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               }
               FX::Packer.new(@verticalframe50) { |w_packer5|
                 @packer5 = w_packer5
                 w_packer5.wdg_name = "packer5"
                 w_packer5.frameStyle = 16384
-                w_packer5.y = 62
+                w_packer5.y = 56
                 w_packer5.width = 562
-                w_packer5.height = 578
+                w_packer5.height = 590
+                w_packer5.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_packer5.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_packer5.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_packer5.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Text.new(@packer5) { |w_text_epl_page_commands|
                   @text_epl_page_commands = w_text_epl_page_commands
                   w_text_epl_page_commands.wdg_name = "text_epl_page_commands"
+                  w_text_epl_page_commands.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_text_epl_page_commands.x = 6
                   w_text_epl_page_commands.y = 2
                   w_text_epl_page_commands.width = 550
-                  w_text_epl_page_commands.height = 574
+                  w_text_epl_page_commands.height = 586
+                  w_text_epl_page_commands.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
               }
             }
             FX::TabItem.new(@tabbook_printers) { |w_tabitem42|
               @tabitem42 = w_tabitem42
               w_tabitem42.wdg_name = "tabitem42"
-              w_tabitem42.x = 358
+              w_tabitem42.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+              w_tabitem42.x = 349
               w_tabitem42.y = 6
-              w_tabitem42.width = 44
-              w_tabitem42.height = 26
+              w_tabitem42.width = 45
+              w_tabitem42.height = 23
               w_tabitem42.text = "CX320"
+              w_tabitem42.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem42.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_tabitem42.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_tabitem42.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
             }
             FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe60|
               @verticalframe60 = w_verticalframe60
               w_verticalframe60.wdg_name = "verticalframe60"
               w_verticalframe60.shown = false
               w_verticalframe60.x = 4
-              w_verticalframe60.y = 28
+              w_verticalframe60.y = 25
               w_verticalframe60.width = 562
-              w_verticalframe60.height = 640
+              w_verticalframe60.height = 646
+              w_verticalframe60.backColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe60.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+              w_verticalframe60.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+              w_verticalframe60.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
               FX::Matrix.new(@verticalframe60) { |w_matrix_cx320_settings|
                 @matrix_cx320_settings = w_matrix_cx320_settings
                 w_matrix_cx320_settings.wdg_name = "matrix_cx320_settings"
                 w_matrix_cx320_settings.layoutHints = 1024
                 w_matrix_cx320_settings.matrixStyle = 131072
                 w_matrix_cx320_settings.width = 562
-                w_matrix_cx320_settings.height = 60
+                w_matrix_cx320_settings.height = 54
                 w_matrix_cx320_settings.numColumns = 4
                 w_matrix_cx320_settings.numRows = 2
+                w_matrix_cx320_settings.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix_cx320_settings.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix_cx320_settings.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_matrix_cx320_settings.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Label.new(@matrix_cx320_settings) { |w_label96|
                   @label96 = w_label96
                   w_label96.wdg_name = "label96"
+                  w_label96.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_label96.x = 4
                   w_label96.y = 4
-                  w_label96.width = 46
-                  w_label96.height = 22
+                  w_label96.width = 43
+                  w_label96.height = 19
                   w_label96.text = "Treiber"
+                  w_label96.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label96.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label96.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label96.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::ComboBox.new(@matrix_cx320_settings) { |w_combobox_cx320_driver|
                   @combobox_cx320_driver = w_combobox_cx320_driver
                   w_combobox_cx320_driver.wdg_name = "combobox_cx320_driver"
-                  w_combobox_cx320_driver.x = 105
+                  w_combobox_cx320_driver.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_combobox_cx320_driver.x = 100
                   w_combobox_cx320_driver.y = 4
                   w_combobox_cx320_driver.width = 91
-                  w_combobox_cx320_driver.height = 24
+                  w_combobox_cx320_driver.height = 21
                   w_combobox_cx320_driver.numColumns = 10
+                  w_combobox_cx320_driver.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_combobox_cx320_driver.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_combobox_cx320_driver.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                  w_combobox_cx320_driver.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
                 FX::Label.new(@matrix_cx320_settings) { |w_label98|
                   @label98 = w_label98
                   w_label98.wdg_name = "label98"
-                  w_label98.x = 200
+                  w_label98.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_label98.x = 195
                   w_label98.y = 4
-                  w_label98.width = 70
-                  w_label98.height = 22
+                  w_label98.width = 64
+                  w_label98.height = 19
                   w_label98.text = "Drucker-Nr"
+                  w_label98.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label98.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label98.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label98.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::Spinner.new(@matrix_cx320_settings) { |w_spinner_cx320_printer_nr|
                   @spinner_cx320_printer_nr = w_spinner_cx320_printer_nr
                   w_spinner_cx320_printer_nr.wdg_name = "spinner_cx320_printer_nr"
+                  w_spinner_cx320_printer_nr.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_spinner_cx320_printer_nr.range = -2147483648..2147483647
-                  w_spinner_cx320_printer_nr.x = 274
+                  w_spinner_cx320_printer_nr.x = 263
                   w_spinner_cx320_printer_nr.y = 4
                   w_spinner_cx320_printer_nr.width = 41
-                  w_spinner_cx320_printer_nr.height = 24
+                  w_spinner_cx320_printer_nr.height = 21
                   w_spinner_cx320_printer_nr.numColumns = 3
+                  w_spinner_cx320_printer_nr.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_spinner_cx320_printer_nr.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_spinner_cx320_printer_nr.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_spinner_cx320_printer_nr.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                  w_spinner_cx320_printer_nr.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
                 FX::Label.new(@matrix_cx320_settings) { |w_label99|
                   @label99 = w_label99
                   w_label99.wdg_name = "label99"
+                  w_label99.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_label99.x = 4
-                  w_label99.y = 32
-                  w_label99.width = 97
-                  w_label99.height = 22
+                  w_label99.y = 29
+                  w_label99.width = 92
+                  w_label99.height = 19
                   w_label99.text = "Paralleler Druck"
+                  w_label99.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label99.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_label99.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_label99.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::ComboBox.new(@matrix_cx320_settings) { |w_combobox_cx320_parallel_print|
                   @combobox_cx320_parallel_print = w_combobox_cx320_parallel_print
                   w_combobox_cx320_parallel_print.wdg_name = "combobox_cx320_parallel_print"
-                  w_combobox_cx320_parallel_print.x = 105
-                  w_combobox_cx320_parallel_print.y = 32
+                  w_combobox_cx320_parallel_print.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_combobox_cx320_parallel_print.x = 100
+                  w_combobox_cx320_parallel_print.y = 29
                   w_combobox_cx320_parallel_print.width = 91
-                  w_combobox_cx320_parallel_print.height = 24
+                  w_combobox_cx320_parallel_print.height = 21
                   w_combobox_cx320_parallel_print.numVisible = 15
                   w_combobox_cx320_parallel_print.numColumns = 10
+                  w_combobox_cx320_parallel_print.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_combobox_cx320_parallel_print.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_combobox_cx320_parallel_print.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                  w_combobox_cx320_parallel_print.selBackColor = Fox::FXRGBA(10, 36, 106, 255)
                 }
               }
               FX::Matrix.new(@verticalframe60) { |w_matrix49|
                 @matrix49 = w_matrix49
                 w_matrix49.wdg_name = "matrix49"
                 w_matrix49.layoutHints = 1024
-                w_matrix49.y = 60
+                w_matrix49.y = 54
                 w_matrix49.width = 562
-                w_matrix49.height = 34
+                w_matrix49.height = 31
                 w_matrix49.numColumns = 3
+                w_matrix49.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix49.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix49.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_matrix49.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Button.new(@matrix49) { |w_button_cx320_read_config|
                   @button_cx320_read_config = w_button_cx320_read_config
                   w_button_cx320_read_config.wdg_name = "button_cx320_read_config"
+                  w_button_cx320_read_config.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_button_cx320_read_config.x = 4
                   w_button_cx320_read_config.y = 4
-                  w_button_cx320_read_config.width = 102
-                  w_button_cx320_read_config.height = 26
+                  w_button_cx320_read_config.width = 98
+                  w_button_cx320_read_config.height = 23
                   w_button_cx320_read_config.text = "Konfig auslesen"
+                  w_button_cx320_read_config.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_cx320_read_config.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_cx320_read_config.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_button_cx320_read_config.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::Button.new(@matrix49) { |w_button_cx320_write_config|
                   @button_cx320_write_config = w_button_cx320_write_config
                   w_button_cx320_write_config.wdg_name = "button_cx320_write_config"
-                  w_button_cx320_write_config.x = 110
+                  w_button_cx320_write_config.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_button_cx320_write_config.x = 106
                   w_button_cx320_write_config.y = 4
-                  w_button_cx320_write_config.width = 108
-                  w_button_cx320_write_config.height = 26
+                  w_button_cx320_write_config.width = 101
+                  w_button_cx320_write_config.height = 23
                   w_button_cx320_write_config.text = "Konfig schreiben"
+                  w_button_cx320_write_config.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_cx320_write_config.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_cx320_write_config.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_button_cx320_write_config.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::Button.new(@matrix49) { |w_button_cx320_set_defaults|
                   @button_cx320_set_defaults = w_button_cx320_set_defaults
                   w_button_cx320_set_defaults.wdg_name = "button_cx320_set_defaults"
-                  w_button_cx320_set_defaults.x = 222
+                  w_button_cx320_set_defaults.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_button_cx320_set_defaults.x = 211
                   w_button_cx320_set_defaults.y = 4
-                  w_button_cx320_set_defaults.width = 97
-                  w_button_cx320_set_defaults.height = 26
+                  w_button_cx320_set_defaults.width = 88
+                  w_button_cx320_set_defaults.height = 23
                   w_button_cx320_set_defaults.text = "Standardwerte"
+                  w_button_cx320_set_defaults.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_cx320_set_defaults.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_cx320_set_defaults.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_button_cx320_set_defaults.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
               }
               FX::ScrollWindow.new(@verticalframe60) { |w_scrollwindow_config|
                 @scrollwindow_config = w_scrollwindow_config
                 w_scrollwindow_config.wdg_name = "scrollwindow_config"
-                w_scrollwindow_config.y = 94
+                w_scrollwindow_config.y = 85
                 w_scrollwindow_config.width = 562
-                w_scrollwindow_config.height = 512
+                w_scrollwindow_config.height = 530
                 FX::Packer.new(@scrollwindow_config) { |w_packer_cx320_config|
                   @packer_cx320_config = w_packer_cx320_config
                   w_packer_cx320_config.wdg_name = "packer_cx320_config"
                   w_packer_cx320_config.width = 562
-                  w_packer_cx320_config.height = 512
+                  w_packer_cx320_config.height = 530
+                  w_packer_cx320_config.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_packer_cx320_config.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_packer_cx320_config.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_packer_cx320_config.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
               }
               FX::Matrix.new(@verticalframe60) { |w_matrix47|
                 @matrix47 = w_matrix47
                 w_matrix47.wdg_name = "matrix47"
                 w_matrix47.layoutHints = 1024
-                w_matrix47.y = 606
+                w_matrix47.y = 615
                 w_matrix47.width = 562
-                w_matrix47.height = 34
+                w_matrix47.height = 31
                 w_matrix47.numColumns = 4
+                w_matrix47.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix47.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                w_matrix47.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                w_matrix47.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 FX::Button.new(@matrix47) { |w_button_cx320_reset|
                   @button_cx320_reset = w_button_cx320_reset
                   w_button_cx320_reset.wdg_name = "button_cx320_reset"
+                  w_button_cx320_reset.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_button_cx320_reset.x = 4
                   w_button_cx320_reset.y = 4
                   w_button_cx320_reset.width = 41
-                  w_button_cx320_reset.height = 26
+                  w_button_cx320_reset.height = 23
                   w_button_cx320_reset.text = "Reset"
+                  w_button_cx320_reset.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_cx320_reset.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_cx320_reset.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_button_cx320_reset.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::Button.new(@matrix47) { |w_button_cx320_move_to_0|
                   @button_cx320_move_to_0 = w_button_cx320_move_to_0
                   w_button_cx320_move_to_0.wdg_name = "button_cx320_move_to_0"
+                  w_button_cx320_move_to_0.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
                   w_button_cx320_move_to_0.x = 49
                   w_button_cx320_move_to_0.y = 4
-                  w_button_cx320_move_to_0.width = 102
-                  w_button_cx320_move_to_0.height = 26
+                  w_button_cx320_move_to_0.width = 92
+                  w_button_cx320_move_to_0.height = 23
                   w_button_cx320_move_to_0.text = "zu Druckstation"
+                  w_button_cx320_move_to_0.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_cx320_move_to_0.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_cx320_move_to_0.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_button_cx320_move_to_0.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::Button.new(@matrix47) { |w_button_cx320_move_to_2|
                   @button_cx320_move_to_2 = w_button_cx320_move_to_2
                   w_button_cx320_move_to_2.wdg_name = "button_cx320_move_to_2"
-                  w_button_cx320_move_to_2.x = 155
+                  w_button_cx320_move_to_2.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_button_cx320_move_to_2.x = 145
                   w_button_cx320_move_to_2.y = 4
-                  w_button_cx320_move_to_2.width = 73
-                  w_button_cx320_move_to_2.height = 26
+                  w_button_cx320_move_to_2.width = 66
+                  w_button_cx320_move_to_2.height = 23
                   w_button_cx320_move_to_2.text = "zu kont.los"
+                  w_button_cx320_move_to_2.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_cx320_move_to_2.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_cx320_move_to_2.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_button_cx320_move_to_2.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
                 }
                 FX::Button.new(@matrix47) { |w_button_cx320_move_to_4|
                   @button_cx320_move_to_4 = w_button_cx320_move_to_4
                   w_button_cx320_move_to_4.wdg_name = "button_cx320_move_to_4"
-                  w_button_cx320_move_to_4.x = 232
+                  w_button_cx320_move_to_4.font = FX::Font.new.from_s("Sans|90|0|0|0|0|0").to_FXFont
+                  w_button_cx320_move_to_4.x = 215
                   w_button_cx320_move_to_4.y = 4
-                  w_button_cx320_move_to_4.width = 57
-                  w_button_cx320_move_to_4.height = 26
+                  w_button_cx320_move_to_4.width = 52
+                  w_button_cx320_move_to_4.height = 23
                   w_button_cx320_move_to_4.text = "Auswurf"
+                  w_button_cx320_move_to_4.backColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_cx320_move_to_4.baseColor = Fox::FXRGBA(212, 208, 200, 255)
+                  w_button_cx320_move_to_4.borderColor = Fox::FXRGBA(0, 0, 0, 255)
+                  w_button_cx320_move_to_4.shadowColor = Fox::FXRGBA(139, 137, 132, 255)
+                }
+              }
+            }
+            FX::TabItem.new(@tabbook_printers) { |w_tabitem81|
+              @tabitem81 = w_tabitem81
+              w_tabitem81.wdg_name = "tabitem81"
+              w_tabitem81.x = 392
+              w_tabitem81.y = 4
+              w_tabitem81.width = 85
+              w_tabitem81.height = 23
+              w_tabitem81.text = "TSC TTP 343M"
+            }
+            FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe115|
+              @verticalframe115 = w_verticalframe115
+              w_verticalframe115.wdg_name = "verticalframe115"
+              w_verticalframe115.x = 4
+              w_verticalframe115.y = 25
+              w_verticalframe115.width = 562
+              w_verticalframe115.height = 646
+              FX::Matrix.new(@verticalframe115) { |w_matrix108|
+                @matrix108 = w_matrix108
+                w_matrix108.wdg_name = "matrix108"
+                w_matrix108.layoutHints = 1024
+                w_matrix108.width = 562
+                w_matrix108.height = 29
+                w_matrix108.numColumns = 4
+                FX::Label.new(@matrix108) { |w_label206|
+                  @label206 = w_label206
+                  w_label206.wdg_name = "label206"
+                  w_label206.x = 4
+                  w_label206.y = 4
+                  w_label206.width = 71
+                  w_label206.height = 19
+                  w_label206.text = "Device-Datei"
+                }
+                FX::TextField.new(@matrix108) { |w_textfield_ttp343_device|
+                  @textfield_ttp343_device = w_textfield_ttp343_device
+                  w_textfield_ttp343_device.wdg_name = "textfield_ttp343_device"
+                  w_textfield_ttp343_device.x = 79
+                  w_textfield_ttp343_device.y = 4
+                  w_textfield_ttp343_device.width = 66
+                  w_textfield_ttp343_device.height = 21
+                  w_textfield_ttp343_device.numColumns = 10
+                }
+                FX::Label.new(@matrix108) { |w_label207|
+                  @label207 = w_label207
+                  w_label207.wdg_name = "label207"
+                  w_label207.x = 149
+                  w_label207.y = 4
+                  w_label207.width = 59
+                  w_label207.height = 19
+                  w_label207.text = "Auflösung"
+                }
+                FX::Spinner.new(@matrix108) { |w_spinner_ttp343_dpi|
+                  @spinner_ttp343_dpi = w_spinner_ttp343_dpi
+                  w_spinner_ttp343_dpi.wdg_name = "spinner_ttp343_dpi"
+                  w_spinner_ttp343_dpi.layoutHints = 1025
+                  w_spinner_ttp343_dpi.range = -2147483648..2147483647
+                  w_spinner_ttp343_dpi.x = 212
+                  w_spinner_ttp343_dpi.y = 4
+                  w_spinner_ttp343_dpi.width = 346
+                  w_spinner_ttp343_dpi.height = 21
+                  w_spinner_ttp343_dpi.numColumns = 3
+                  w_spinner_ttp343_dpi.value = 300
+                }
+              }
+              FX::Label.new(@verticalframe115) { |w_label208|
+                @label208 = w_label208
+                w_label208.wdg_name = "label208"
+                w_label208.y = 29
+                w_label208.width = 168
+                w_label208.height = 19
+                w_label208.text = "Druckbefehle pro Ausgabeseite"
+              }
+              FX::Packer.new(@verticalframe115) { |w_packer25|
+                @packer25 = w_packer25
+                w_packer25.wdg_name = "packer25"
+                w_packer25.y = 48
+                w_packer25.width = 562
+                w_packer25.height = 598
+                FX::Text.new(@packer25) { |w_text_ttp343_page_commands|
+                  @text_ttp343_page_commands = w_text_ttp343_page_commands
+                  w_text_ttp343_page_commands.wdg_name = "text_ttp343_page_commands"
+                  w_text_ttp343_page_commands.x = 4
+                  w_text_ttp343_page_commands.width = 554
+                  w_text_ttp343_page_commands.height = 598
                 }
               }
             }
@@ -1154,6 +1693,16 @@ class Dialogbox_printerview
   attr_reader :button_cx320_move_to_0
   attr_reader :button_cx320_move_to_2
   attr_reader :button_cx320_move_to_4
+  attr_reader :tabitem81
+  attr_reader :verticalframe115
+  attr_reader :matrix108
+  attr_reader :label206
+  attr_reader :textfield_ttp343_device
+  attr_reader :label207
+  attr_reader :spinner_ttp343_dpi
+  attr_reader :label208
+  attr_reader :packer25
+  attr_reader :text_ttp343_page_commands
 end
 
 # unit test
