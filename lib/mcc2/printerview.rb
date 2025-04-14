@@ -537,6 +537,11 @@ module Mcc2
       @spinner_epl_dpi.value = @layout_file.get_attr_value(S_EPLPRINTER_DPI).to_i
       @text_epl_page_commands.text = @layout_file.get_attr_value(S_EPLPRINTER_PAGE_COMMANDS)
 
+      # TSC TTP 343M Pro
+      @textfield_ttp343_device.text = @layout_file.get_attr_value(S_TTP343PRINTER_DEVICE)
+      @spinner_ttp343_dpi.value = @layout_file.get_attr_value(S_TTP343PRINTER_DPI).to_i
+      @text_ttp343_page_commands.text = @layout_file.get_attr_value(S_TTP343PRINTER_PAGE_COMMANDS)
+
       Layout.set_combobox_by_data(@combobox_cx320_driver, @layout_file.get_attr_value(S_CX320_DRIVER))
       @spinner_cx320_printer_nr.value = @layout_file.get_attr_value(S_CX320_PRINTER_NR).to_i
       Layout.set_combobox_by_data(@combobox_cx320_parallel_print, @layout_file.get_attr_value(S_CX320_PARALLEL_PRINT))
