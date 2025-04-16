@@ -97,13 +97,13 @@ module Mcc2
 
 
       @textfield_ttp343_device.connect(SEL_COMMAND) {
-        changed_attributes if @layout_file.set_attr_value(S_TTP343PRINTER_DEVICE, @textfield_ttp343_device.text)
+        changed_attributes if @layout_file.set_attr_value(S_TTP34XPRINTER_DEVICE, @textfield_ttp343_device.text)
       }
       @text_ttp343_page_commands.connect(SEL_CHANGED) {
-        changed_attributes if @layout_file.set_attr_value(S_TTP343PRINTER_PAGE_COMMANDS, @text_ttp343_page_commands.text)
+        changed_attributes if @layout_file.set_attr_value(S_TTP34XPRINTER_PAGE_COMMANDS, @text_ttp343_page_commands.text)
       }
       @spinner_ttp343_dpi.connect(SEL_COMMAND) {
-        changed_attributes if @layout_file.set_attr_value(S_TTP343PRINTER_DPI, @spinner_ttp343_dpi.value.to_s)
+        changed_attributes if @layout_file.set_attr_value(S_TTP34XPRINTER_DPI, @spinner_ttp343_dpi.value.to_s)
       }
 
 
@@ -538,9 +538,9 @@ module Mcc2
       @text_epl_page_commands.text = @layout_file.get_attr_value(S_EPLPRINTER_PAGE_COMMANDS)
 
       # TSC TTP 343M Pro
-      @textfield_ttp343_device.text = @layout_file.get_attr_value(S_TTP343PRINTER_DEVICE)
-      @spinner_ttp343_dpi.value = @layout_file.get_attr_value(S_TTP343PRINTER_DPI).to_i
-      @text_ttp343_page_commands.text = @layout_file.get_attr_value(S_TTP343PRINTER_PAGE_COMMANDS)
+      @textfield_ttp343_device.text = @layout_file.get_attr_value(S_TTP34XPRINTER_DEVICE)
+      @spinner_ttp343_dpi.value = @layout_file.get_attr_value(S_TTP34XPRINTER_DPI).to_i
+      @text_ttp343_page_commands.text = @layout_file.get_attr_value(S_TTP34XPRINTER_PAGE_COMMANDS)
 
       Layout.set_combobox_by_data(@combobox_cx320_driver, @layout_file.get_attr_value(S_CX320_DRIVER))
       @spinner_cx320_printer_nr.value = @layout_file.get_attr_value(S_CX320_PRINTER_NR).to_i

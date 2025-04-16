@@ -130,11 +130,16 @@ GG%PAGE_OFFSET_X_PX%,%PAGE_OFFSET_Y_PX%,"image1"
 P1
 ')
 
-      add_attr(S_TTP343PRINTER_DEVICE, String, "/dev/usb/lp0")
-      add_attr(S_TTP343PRINTER_DPI, Integer, 300)
-      add_attr(S_TTP343PRINTER_PAGE_COMMANDS, String,
+      add_attr(S_TTP34XPRINTER_DEVICE, String, "/dev/usb/lp0")
+      add_attr(S_TTP34XPRINTER_DPI, Integer, 600)
+      add_attr(S_TTP34XPRINTER_PAGE_COMMANDS, String,
 '
-PUTPCX %PAGE_OFFSET_X_PX%,%PAGE_OFFSET_Y_PX%,"image1"
+CLS
+SPEED 8
+DENSITY 10
+SIZE %PAGE_WIDTH_PX%,%PAGE_HEIGHT_PX%
+DOWNLOAD "label.pcx",%IMAGE_LEN_DATA_PCX%
+PUTPCX %PAGE_OFFSET_X_PX%,%PAGE_OFFSET_Y_PX%,"label.pcx"
 PRINT 1
 '
 )
