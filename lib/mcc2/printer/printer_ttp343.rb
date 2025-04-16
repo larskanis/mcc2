@@ -53,8 +53,8 @@ module Mcc2
         page_commands.gsub!("%PAGE_HEIGHT_MM%", page_height.to_s)
         page_commands.gsub!("%PAGE_OFFSET_X_MM%", draw_pos_x.to_s)
         page_commands.gsub!("%PAGE_OFFSET_Y_MM%", draw_pos_y.to_s)
-        page_commands.gsub!("%PAGE_WIDTH_PX%", mm(page_width).to_i.to_s)
-        page_commands.gsub!("%PAGE_HEIGHT_PX%", mm(page_height).to_i.to_s)
+        page_commands.gsub!("%PAGE_WIDTH_MM%", page_width.to_s)
+        page_commands.gsub!("%PAGE_HEIGHT_MM%", page_heigh.to_s)
         page_commands.gsub!("%PAGE_OFFSET_X_PX%", mm(draw_pos_x).to_i.to_s)
         page_commands.gsub!("%PAGE_OFFSET_Y_PX%", mm(draw_pos_y).to_i.to_s)
 
