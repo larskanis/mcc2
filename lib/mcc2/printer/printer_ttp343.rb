@@ -27,9 +27,9 @@ module Mcc2
       #--------------------------------------------------------------------------------------------------------------
 
       def print_card(layout_file, row, chip)
-        self.dpi = layout_file.get_attr_value(S_TTP343PRINTER_DPI).to_f
+        self.dpi = layout_file.get_attr_value(S_TTP34XPRINTER_DPI).to_f
 
-        page_commands = layout_file.get_attr_value(S_TTP343PRINTER_PAGE_COMMANDS)
+        page_commands = layout_file.get_attr_value(S_TTP34XPRINTER_PAGE_COMMANDS)
         page_width = layout_file.get_attr_value(S_WIDTH).to_f
         page_height = layout_file.get_attr_value(S_HEIGHT).to_f
         draw_pos_x = layout_file.get_attr_value(S_X_OFFSET).to_f
@@ -67,8 +67,9 @@ module Mcc2
           data = pic.to_blob do |image|
             image.format = "pcx"
           end
-          #       File.write("test.pcx", data)
-          "#{data.bytesize}\r\n#{data}"
+
+          # File.write("test.pcx", data)
+          "#{data.bytesize},#{data}"
         end
 
         open_socket(layout_file) do |sock|
@@ -81,7 +82,7 @@ module Mcc2
       #--------------------------------------------------------------------------------------------------------------
 
       def open_socket(layout_file)
-        dev = layout_file.get_attr_value(S_TTP343PRINTER_DEVICE)
+        dev = layout_file.get_attr_value(S_TTP34XPRINTER_DEVICE)
         sock = File.open(dev, "wb")
         if block_given?
           begin
