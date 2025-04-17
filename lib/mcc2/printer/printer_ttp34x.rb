@@ -64,7 +64,8 @@ module Mcc2
             image.format = "pcx"
           end
 
-          File.write("TSC-TTP346M.pcx", data)
+          # File.write("TSC-TTP346M.pcx", data)
+
           "#{data.bytesize},#{data}"
         end
 
