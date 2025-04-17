@@ -20,7 +20,7 @@ module Mcc2
     autoload :PrinterEpl, "mcc2/printer/printer_epl"
     autoload :PrinterCx320Direct, "mcc2/printer/printer_cx320_direct"
     autoload :PrinterCx320Gdi, "mcc2/printer/printer_cx320_gdi"
-    autoload :PrinterTTP343, "mcc2/printer/printer_ttp343"
+    autoload :PrinterTTP34x, "mcc2/printer/printer_ttp34x"
   end
 
   module DataMan
@@ -137,9 +137,9 @@ P1
 CLS
 SPEED 8
 DENSITY 10
-SIZE %PAGE_WIDTH_PX%,%PAGE_HEIGHT_PX%
+SIZE %PAGE_WIDTH_MM% mm,%PAGE_HEIGHT_MM% mm
 DOWNLOAD "label.pcx",%IMAGE_LEN_DATA_PCX%
-PUTPCX %PAGE_OFFSET_X_PX%,%PAGE_OFFSET_Y_PX%,"label.pcx"
+PUTPCX %PAGE_OFFSET_X_MM% mm,%PAGE_OFFSET_Y_MM% mm,"label.pcx"
 PRINT 1
 '
 )

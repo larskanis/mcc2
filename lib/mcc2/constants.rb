@@ -97,9 +97,9 @@ module Mcc2
   S_EPLPRINTER_PAGE_COMMANDS = "eplprinter_page_commands"
 
   # TSC TTP 343M Pro
-  S_TTP34XPRINTER_DEVICE = "ttp343printer_device"
-  S_TTP34XPRINTER_DPI = "ttp343printer_dpi"
-  S_TTP34XPRINTER_PAGE_COMMANDS = "ttp343printer_page_commands"
+  S_TTP34XPRINTER_DEVICE = "ttp34xprinter_device"
+  S_TTP34XPRINTER_DPI = "ttp34xprinter_dpi"
+  S_TTP34XPRINTER_PAGE_COMMANDS = "ttp34xprinter_page_commands"
 
   S_CX320_DRIVER = "cx320_driver"
   S_CX320_PRINTER_NR = "cx320_printer_nr"

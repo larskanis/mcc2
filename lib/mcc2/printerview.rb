@@ -15,7 +15,7 @@ module Mcc2
       PrinterDescription.new("cab Produktionstechnik GmbH", "PrinterCab", 5),
       PrinterDescription.new("EPL-Drucker", "PrinterEpl", 6),
       PrinterDescription.new("CX-320 Direct", "PrinterCx320Direct", 7),
-      PrinterDescription.new("TSC TTP 346M PRO", "PrinterTTP343", 8),
+      PrinterDescription.new("TSC TTP 346M PRO", "PrinterTTP34x", 8),
       PrinterDescription.new("CX-320 Spooler", "PrinterCx320Gdi", 0)
     ]
 
@@ -321,7 +321,7 @@ module Mcc2
     def selected_PrinterEpl
     end
 
-    def selected_PrinterTTP343; end
+    def selected_PrinterTTP34x; end
 
     def selected_PrinterCx320Direct
       if_driver_loadable("libcx320", "libcx320", "CX320-Drucker") do

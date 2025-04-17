@@ -4,7 +4,7 @@ require "socket"
 
 module Mcc2
   module Printer
-    class PrinterTTP343 < CardPrinter
+    class PrinterTTP34x < CardPrinter
       include RmagickDrawer
 
       # die Ränder außerhalb der Karte, auf den maximal gedruckt werden darf (für vollflächige Bilder notwendig)
