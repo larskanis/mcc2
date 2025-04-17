@@ -12,8 +12,8 @@ class Dialogbox_printerview
         @dialogbox_printerview = w_dialogbox_printerview
         w_dialogbox_printerview.wdg_name = "dialogbox_printerview"
         w_dialogbox_printerview.shown = true
-        w_dialogbox_printerview.x = 1289
-        w_dialogbox_printerview.y = 211
+        w_dialogbox_printerview.x = 1143
+        w_dialogbox_printerview.y = 761
         w_dialogbox_printerview.width = 570
         w_dialogbox_printerview.height = 696
         w_dialogbox_printerview.backColor = Fox::FXRGBA(212, 208, 200, 255)
@@ -1500,9 +1500,9 @@ class Dialogbox_printerview
               w_tabitem81.wdg_name = "tabitem81"
               w_tabitem81.x = 392
               w_tabitem81.y = 4
-              w_tabitem81.width = 85
+              w_tabitem81.width = 89
               w_tabitem81.height = 23
-              w_tabitem81.text = "TSC TTP 343M"
+              w_tabitem81.text = "TSC TTP 34X M"
             }
             FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe115|
               @verticalframe115 = w_verticalframe115
