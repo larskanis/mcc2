@@ -60,10 +60,13 @@ module Mcc2
 
         page_commands.gsub!("%IMAGE_LEN_DATA_PCX%") do
           pic = pic.quantize(2, Magick::RGBColorspace, false)
-          data = pic.to_blob do |image|
+          # wir müssen die Farben invertieren, da TTP anscheinend das Negativ druckt !!!
+          pic_negate = pic.negate
+          data = pic_negate.to_blob do |image|
             image.format = "pcx"
           end
 
+          # pic_negate.display # bitte NUR unter LINUX aktivieren
           # File.write("TSC-TTP346M.pcx", data)
 
           "#{data.bytesize},#{data}"
