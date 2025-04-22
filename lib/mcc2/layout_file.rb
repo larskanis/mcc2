@@ -133,12 +133,12 @@ P1
       add_attr(S_TTP34XPRINTER_DEVICE, String, "/dev/usb/lp0")
       add_attr(S_TTP34XPRINTER_DPI, Integer, 300)
       add_attr(S_TTP34XPRINTER_PAGE_COMMANDS, String,
-'SPEED 8
-DENSITY 10
+'SPEED 8 REM Wertebereich: 1-8
+DENSITY 12 REM Wertebereich: 0-15
 SIZE %PAGE_WIDTH_MM% mm,%PAGE_HEIGHT_MM% mm
 CLS
 DOWNLOAD "label.pcx",%IMAGE_LEN_DATA_PCX%
-PUTPCX %PAGE_OFFSET_X_PX% mm,%PAGE_OFFSET_Y_PX% mm,"label.pcx"
+PUTPCX %PAGE_OFFSET_X_PX%,%PAGE_OFFSET_Y_PX%,"label.pcx"
 PRINT 1
 '
 )
