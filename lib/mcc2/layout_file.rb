@@ -302,7 +302,7 @@ PRINT 1
       ).parent
       typ = go.at_xpath(GOA_TYP).content
 
-      LayoutObject::Graphic.get_object_by_typ(typ, go)
+      LayoutObject::Graphic.get_object_by_typ(typ, xml_elem: go, layout_file: self)
     end
 
     def magstripe_object
@@ -531,6 +531,7 @@ PRINT 1
     def build_dataman_instance
       datamantyp = get_attr_value(S_DATASOURCETYP)
       datasource = get_attr_value(S_DATASOURCE)
+      datasource = expand_path(datasource)
       encoding = get_attr_value(S_DATASOURCEENCODING)
       # Ruby-1.9 kennt kein LATIN1
       encoding = "iso-8859-1" if /latin1/i.match?(encoding)
@@ -563,6 +564,24 @@ PRINT 1
 
     def set_binary_attr(attr, bindata)
       set_attr_value(attr, bindata.unpack1("H*"))
+    end
+
+    def expand_path(path)
+      path = path.gsub("%D", File.dirname(File.expand_path(@filename))) if @filename
+      File.expand_path(path)
+    end
+
+    def shrink_path(path)
+      if @filename
+        path = path.sub(File.dirname(File.expand_path(@filename)), "%D")
+      end
+      if pwd=Dir.pwd
+        path = path.sub(pwd+"/", "")
+      end
+      if home=Dir.home
+        path = path.sub(home+"/", "~/")
+      end
+      path
     end
   end
 end

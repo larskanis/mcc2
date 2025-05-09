@@ -7,10 +7,9 @@ module Mcc2
       class CanNotOpenFile < RuntimeError
       end
 
-      def initialize(datasource, encoding)
+      def initialize(fn, encoding)
         @table = nil
 
-        fn = datasource.strip
         return if fn.empty?
 
         raise CanNotOpenFile, "file not found: #{fn.inspect}" unless File.exist?(fn)

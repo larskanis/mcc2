@@ -105,12 +105,13 @@ module Mcc2
       @lf.button_enhanced_data_edit.connect(SEL_COMMAND) { enhanced_data_edit(@lf.textfield_data_non_text) }
       @lf.button_enhanced_data_text_edit.connect(SEL_COMMAND) { enhanced_data_edit(@lf.textfield_data) }
       @lf.button_sample_data.connect(SEL_COMMAND) { button_sample_data }
+      @layout.add_tipText_to_filedialog_for_textfield(@lf.textfield_sample_data)
 
       # die Listbox zum Auswählen der Schriftart
       @lf.listbox_fonts.connect(SEL_COMMAND) { |sender, sel, event| sel_list_box_changed(sender) }
       @lf.textfield_font_file.connect(SEL_COMMAND) { |sender, sel, event| textfield_exit(sender, GOA_FONT_FILE) }
-      Layout.connect_filebutton_to_textfield(@lf.button_fontfile_select, @lf.textfield_font_file,
-        ["Truetype/Opentype font (*.ttf,*.otf)", "PS-type1 font (*.pfb)", "All Files (*)"])
+      @layout.connect_filebutton_to_textfield(@lf.button_fontfile_select, @lf.textfield_font_file,
+        filepatterns: ["Truetype/Opentype font (*.ttf,*.otf)", "PS-type1 font (*.pfb)", "All Files (*)"])
       @lf.textfield_fontsize.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, GOA_FONT_HEIGHT) }
 
       # der Checkbuttons für die Einstellung, ob Magnestreifen, Kontaktchip und Kontaktlos personalisiert werden sollen
@@ -283,7 +284,7 @@ module Mcc2
     def button_sample_data
       typ = @layout_file.get_object_by_id(@selected_object_id, GOA_TYP)
       if typ == PICTUREOBJECT
-        Layout.execute_filedialog_for_textfield(@lf.textfield_sample_data, filepatterns = "*")
+        @layout.execute_filedialog_for_textfield(@lf.textfield_sample_data, filepatterns: "*")
       end
     end
 

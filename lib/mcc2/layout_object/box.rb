@@ -3,7 +3,7 @@ require "mcc2/layout_object/graphic"
 module Mcc2
   module LayoutObject
     class Box < Graphic
-      def initialize(xml_elem = nil)
+      def initialize(xml_elem: nil, layout_file: nil)
         super
         @go_attributes[GOA_TYP].attr_value = BOXOBJECT
         add_attr(@go_attributes, GOA_WIDTH, Float, 30)

@@ -3,7 +3,7 @@ require "mcc2/layout_object/graphic"
 module Mcc2
   module LayoutObject
     class Picture < Graphic
-      def initialize(xml_elem = nil)
+      def initialize(xml_elem: nil, layout_file: nil)
         super
         @go_attributes[GOA_TYP].attr_value = PICTUREOBJECT
         add_attr(@go_attributes, GOA_WIDTH, Integer, 20)

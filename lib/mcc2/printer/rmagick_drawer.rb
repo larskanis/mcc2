@@ -150,7 +150,7 @@ module Mcc2
     def draw_textobject(body, go, go_width, go_height, data)
       font = go[GOA_FONT_TYP]
       if font == "from_file"
-        font = go[GOA_FONT_FILE]
+        font = go.layout_file.expand_path(go[GOA_FONT_FILE])
       end
       fontsize = go[GOA_FONT_HEIGHT].to_f
       font_color = ["#", go[GOA_FONT_COLOR]].join
@@ -185,10 +185,10 @@ module Mcc2
     def draw_pictureobject(body, go, go_width, go_height, data)
       if data.nil? || data.empty? || (data.tr("\\", "/") =~ /\/$/)
         # kein Bildname angegeben -> dieses Objekt ignorieren
-      elsif FileTest.file?(data)
+      elsif (path=go.layout_file.expand_path(data)) && FileTest.file?(path)
         self_dpi = dpi
         image_page = go[GOA_IMAGE_PAGE].to_i - 1
-        go_image = Magick::ImageList.new(data) { |img|
+        go_image = Magick::ImageList.new(path) { |img|
           # use view DPI for vector-graphics (PDF)
           img.density = self_dpi
         }[image_page]
@@ -206,7 +206,7 @@ module Mcc2
 
         body.image(go_image, mm(im_width), mm(im_height))
       else
-        raise Printer::Base::ResourceNotFoundError, "Das Bild '#{data}' konnte nicht gefunden werden. Der Druck wird angehalten."
+        raise Printer::Base::ResourceNotFoundError, "Das Bild '#{path}' konnte nicht gefunden werden. Der Druck wird angehalten."
       end
     end
 
@@ -228,7 +228,7 @@ module Mcc2
       bar_ratio = go[GOA_BAR_RATIO].to_i
       fontname = go[GOA_FONT_TYP]
       if fontname == "from_file"
-        fontname = go[GOA_FONT_FILE]
+        fontname = go.layout_file.expand_path(go[GOA_FONT_FILE])
       end
       fontsize = go[GOA_FONT_HEIGHT].to_f
       font_color = ["#", go[GOA_FONT_COLOR]].join

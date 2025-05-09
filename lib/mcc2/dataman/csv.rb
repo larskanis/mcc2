@@ -10,10 +10,9 @@ module Mcc2
       class DataNotAvailable < RuntimeError
       end
 
-      def initialize(datasource, encoding)
+      def initialize(fn, encoding)
         @table = nil
 
-        fn = datasource.strip
         return if fn.empty?
 
         fail CanNotOpenFile, "Datei nicht gefunden: #{fn.inspect}" unless File.exist?(fn)

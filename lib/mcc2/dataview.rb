@@ -23,8 +23,8 @@ module Mcc2
         changed_attributes
       end
       # Button für das Auswählen einer Datenquelle an Textfeld knüpfen
-      Layout.connect_filebutton_to_textfield(@button_datasource, @textfield_datasource,
-        ["Semicolon seperated file (*.csv,*.dbf)", "All Files (*)"])
+      @layout.connect_filebutton_to_textfield(@button_datasource, @textfield_datasource,
+        filepatterns: ["Semicolon seperated file (*.csv,*.dbf)", "All Files (*)"])
 
       @button_select_all.connect(SEL_COMMAND) { select_all }
       @button_deselect_all.connect(SEL_COMMAND) { deselect_all }

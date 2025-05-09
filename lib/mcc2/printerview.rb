@@ -34,8 +34,8 @@ module Mcc2
 
       }
       # Button für das Auswählen einer Datenquelle an Textfeld knüpfen
-      Layout.connect_filebutton_to_textfield(@button_file_save_as, @textfield_file_save_as,
-        ["JPEG 24 Bit (*.jpeg)", "Portable Netork Graphics 24 Bit (*.png)", "TIFF (*.tiff)"])
+      @layout.connect_filebutton_to_textfield(@button_file_save_as, @textfield_file_save_as,
+        filepatterns: ["JPEG 24 Bit (*.jpeg)", "Portable Netork Graphics 24 Bit (*.png)", "TIFF (*.tiff)"])
 
       @spinner_file_dpi.connect(SEL_COMMAND) {
         changed_attributes if @layout_file.set_attr_value(S_FILEPRINTER_DPI, @spinner_file_dpi.value.to_s)

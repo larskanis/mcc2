@@ -218,13 +218,18 @@ module Mcc2
       @preview.draw_preview immediately, nil
     end
 
-    def self.connect_filebutton_to_textfield(button, textfield, filepatterns = "*")
-      button.connect(SEL_COMMAND) {
-        execute_filedialog_for_textfield(textfield, filepatterns)
-      }
+    def connect_filebutton_to_textfield(button, textfield, filepatterns: "*")
+      button.connect(SEL_COMMAND) do
+        execute_filedialog_for_textfield(textfield, filepatterns: filepatterns)
+      end
+      add_tipText_to_filedialog_for_textfield(textfield)
     end
 
-    def self.execute_filedialog_for_textfield(textfield, filepatterns = "*")
+    def add_tipText_to_filedialog_for_textfield(textfield)
+      textfield.tipText += "\nFolgende Ersetzungszeichen können verwendet werden:\n%D  - Pfad der aktuellen Layoutdatei\n~  - Benutzerverzeichnis\nrelativer Pfad - aktuelles Verzeichnis in dem MCC2 gestartet wurde"
+    end
+
+    def execute_filedialog_for_textfield(textfield, filepatterns: "*")
       filepatterns = filepatterns.join("\n") if filepatterns.is_a?(Array)
       lds = textfield.text
       if lds =~ /(\.\w+?)$/i
@@ -238,9 +243,10 @@ module Mcc2
         }
       end
 
-      dest = FileTest.exist?(lds) ? lds : "."
-      s = FXFileDialog.getOpenFilename(textfield, textfield.tipText, lds, filepatterns, pat_idx || 0)
+      dest = @layout_file.expand_path(lds)
+      s = FXFileDialog.getOpenFilename(textfield, textfield.tipText, dest, filepatterns, pat_idx || 0)
       unless s.empty?
+        s = @layout_file.shrink_path(s)
         textfield.setText(s, true)
       end
     end
