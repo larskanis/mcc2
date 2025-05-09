@@ -15,7 +15,7 @@ module Mcc2
       PrinterDescription.new("cab Produktionstechnik GmbH", "PrinterCab", 5),
       PrinterDescription.new("EPL-Drucker", "PrinterEpl", 6),
       PrinterDescription.new("CX-320 Direct", "PrinterCx320Direct", 7),
-      PrinterDescription.new("TSC TTP 343M", "PrinterTTP343", 8),
+      PrinterDescription.new("TSC TTP 346M PRO", "PrinterTTP34x", 8),
       PrinterDescription.new("CX-320 Spooler", "PrinterCx320Gdi", 0)
     ]
 
@@ -97,13 +97,13 @@ module Mcc2
 
 
       @textfield_ttp343_device.connect(SEL_COMMAND) {
-        changed_attributes if @layout_file.set_attr_value(S_TTP343PRINTER_DEVICE, @textfield_ttp343_device.text)
+        changed_attributes if @layout_file.set_attr_value(S_TTP34XPRINTER_DEVICE, @textfield_ttp343_device.text)
       }
       @text_ttp343_page_commands.connect(SEL_CHANGED) {
-        changed_attributes if @layout_file.set_attr_value(S_TTP343PRINTER_PAGE_COMMANDS, @text_ttp343_page_commands.text)
+        changed_attributes if @layout_file.set_attr_value(S_TTP34XPRINTER_PAGE_COMMANDS, @text_ttp343_page_commands.text)
       }
       @spinner_ttp343_dpi.connect(SEL_COMMAND) {
-        changed_attributes if @layout_file.set_attr_value(S_TTP343PRINTER_DPI, @spinner_ttp343_dpi.value.to_s)
+        changed_attributes if @layout_file.set_attr_value(S_TTP34XPRINTER_DPI, @spinner_ttp343_dpi.value.to_s)
       }
 
 
@@ -321,7 +321,7 @@ module Mcc2
     def selected_PrinterEpl
     end
 
-    def selected_PrinterTTP343; end
+    def selected_PrinterTTP34x; end
 
     def selected_PrinterCx320Direct
       if_driver_loadable("libcx320", "libcx320", "CX320-Drucker") do
@@ -536,6 +536,11 @@ module Mcc2
       @textfield_epl_device.text = @layout_file.get_attr_value(S_EPLPRINTER_DEVICE)
       @spinner_epl_dpi.value = @layout_file.get_attr_value(S_EPLPRINTER_DPI).to_i
       @text_epl_page_commands.text = @layout_file.get_attr_value(S_EPLPRINTER_PAGE_COMMANDS)
+
+      # TSC TTP 343M Pro
+      @textfield_ttp343_device.text = @layout_file.get_attr_value(S_TTP34XPRINTER_DEVICE)
+      @spinner_ttp343_dpi.value = @layout_file.get_attr_value(S_TTP34XPRINTER_DPI).to_i
+      @text_ttp343_page_commands.text = @layout_file.get_attr_value(S_TTP34XPRINTER_PAGE_COMMANDS)
 
       Layout.set_combobox_by_data(@combobox_cx320_driver, @layout_file.get_attr_value(S_CX320_DRIVER))
       @spinner_cx320_printer_nr.value = @layout_file.get_attr_value(S_CX320_PRINTER_NR).to_i

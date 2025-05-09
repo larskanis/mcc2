@@ -4,7 +4,7 @@ require "socket"
 
 module Mcc2
   module Printer
-    class PrinterTTP343 < CardPrinter
+    class PrinterTTP34x < CardPrinter
       include RmagickDrawer
 
       # die Ränder außerhalb der Karte, auf den maximal gedruckt werden darf (für vollflächige Bilder notwendig)
@@ -27,13 +27,13 @@ module Mcc2
       #--------------------------------------------------------------------------------------------------------------
 
       def print_card(layout_file, row, chip)
-        self.dpi = layout_file.get_attr_value(S_TTP343PRINTER_DPI).to_f
+        self.dpi = layout_file.get_attr_value(S_TTP34XPRINTER_DPI).to_f
 
-        page_commands = layout_file.get_attr_value(S_TTP343PRINTER_PAGE_COMMANDS)
-        page_width = layout_file.get_attr_value(S_WIDTH).to_f
-        page_height = layout_file.get_attr_value(S_HEIGHT).to_f
-        draw_pos_x = layout_file.get_attr_value(S_X_OFFSET).to_f
-        draw_pos_y = layout_file.get_attr_value(S_Y_OFFSET).to_f
+        page_commands = layout_file.get_attr_value(S_TTP34XPRINTER_PAGE_COMMANDS)
+        page_width    = layout_file.get_attr_value(S_WIDTH).to_f
+        page_height   = layout_file.get_attr_value(S_HEIGHT).to_f
+        draw_pos_x    = layout_file.get_attr_value(S_X_OFFSET).to_f
+        draw_pos_y    = layout_file.get_attr_value(S_Y_OFFSET).to_f
 
         # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
         selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
@@ -51,24 +51,26 @@ module Mcc2
         page_commands.gsub!("\n", "\r\n")
         page_commands.gsub!("%PAGE_WIDTH_MM%", page_width.to_s)
         page_commands.gsub!("%PAGE_HEIGHT_MM%", page_height.to_s)
-        page_commands.gsub!("%PAGE_OFFSET_X_MM%", draw_pos_x.to_s)
-        page_commands.gsub!("%PAGE_OFFSET_Y_MM%", draw_pos_y.to_s)
         page_commands.gsub!("%PAGE_WIDTH_PX%", mm(page_width).to_i.to_s)
         page_commands.gsub!("%PAGE_HEIGHT_PX%", mm(page_height).to_i.to_s)
+        page_commands.gsub!("%PAGE_OFFSET_X_MM%", draw_pos_x.to_s)
+        page_commands.gsub!("%PAGE_OFFSET_Y_MM%", draw_pos_y.to_s)
         page_commands.gsub!("%PAGE_OFFSET_X_PX%", mm(draw_pos_x).to_i.to_s)
         page_commands.gsub!("%PAGE_OFFSET_Y_PX%", mm(draw_pos_y).to_i.to_s)
 
         page_commands.gsub!("%IMAGE_LEN_DATA_PCX%") do
-          pic = pic.level2(Magick::QuantumRange / 2, Magick::QuantumRange / 2)
           pic = pic.quantize(2, Magick::RGBColorspace, false)
-          pic = pic.level2(Magick::QuantumRange / 2, Magick::QuantumRange / 2)
-          pic.class_type = Magick::PseudoClass
-          pic.image_type = Magick::BilevelType
-          data = pic.to_blob do |image|
+          # wir müssen die Farben invertieren, da TTP anscheinend das Negativ druckt !!!
+          # seit 2025-04-23 druckt TTP 346M korrekt, daher .negate DEAKTIVIERT
+          pic_negate = pic # pic.negate
+          data = pic_negate.to_blob do |image|
             image.format = "pcx"
           end
-          #       File.write("test.pcx", data)
-          "#{data.bytesize}\r\n#{data}"
+
+          # pic_negate.display # bitte NUR unter LINUX aktivieren
+          # File.write("TSC-TTP346M.pcx", data)
+
+          "#{data.bytesize},#{data}"
         end
 
         open_socket(layout_file) do |sock|
@@ -81,7 +83,7 @@ module Mcc2
       #--------------------------------------------------------------------------------------------------------------
 
       def open_socket(layout_file)
-        dev = layout_file.get_attr_value(S_TTP343PRINTER_DEVICE)
+        dev = layout_file.get_attr_value(S_TTP34XPRINTER_DEVICE)
         sock = File.open(dev, "wb")
         if block_given?
           begin

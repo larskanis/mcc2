@@ -20,7 +20,7 @@ module Mcc2
     autoload :PrinterEpl, "mcc2/printer/printer_epl"
     autoload :PrinterCx320Direct, "mcc2/printer/printer_cx320_direct"
     autoload :PrinterCx320Gdi, "mcc2/printer/printer_cx320_gdi"
-    autoload :PrinterTTP343, "mcc2/printer/printer_ttp343"
+    autoload :PrinterTTP34x, "mcc2/printer/printer_ttp34x"
   end
 
   module DataMan
@@ -130,11 +130,15 @@ GG%PAGE_OFFSET_X_PX%,%PAGE_OFFSET_Y_PX%,"image1"
 P1
 ')
 
-      add_attr(S_TTP343PRINTER_DEVICE, String, "/dev/usb/lp0")
-      add_attr(S_TTP343PRINTER_DPI, Integer, 300)
-      add_attr(S_TTP343PRINTER_PAGE_COMMANDS, String,
-'
-PUTPCX %PAGE_OFFSET_X_PX%,%PAGE_OFFSET_Y_PX%,"image1"
+      add_attr(S_TTP34XPRINTER_DEVICE, String, "/dev/usb/lp0")
+      add_attr(S_TTP34XPRINTER_DPI, Integer, 300)
+      add_attr(S_TTP34XPRINTER_PAGE_COMMANDS, String,
+'SPEED 8 REM Wertebereich: 1-8
+DENSITY 12 REM Wertebereich: 0-15
+SIZE %PAGE_WIDTH_MM% mm,%PAGE_HEIGHT_MM% mm
+CLS
+DOWNLOAD "label.pcx",%IMAGE_LEN_DATA_PCX%
+PUTPCX %PAGE_OFFSET_X_PX%,%PAGE_OFFSET_Y_PX%,"label.pcx"
 PRINT 1
 '
 )
