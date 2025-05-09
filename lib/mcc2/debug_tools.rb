@@ -14,7 +14,7 @@ module Mcc2
     end
 
     def self.write_exception(source, e)
-      write_log_file(source, "Es ist leider ein Fehler aufgetreten:\n\n#{e} #{e.class}\n#{e.backtrace.join("\n")}")
+      write_log_file(source, "Es ist leider ein Fehler aufgetreten:\n\n#{e} (#{e.class})\n#{e.backtrace.join("\n")}")
     end
   end
 end
