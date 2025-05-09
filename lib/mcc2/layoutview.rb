@@ -139,6 +139,8 @@ module Mcc2
       @barcodes = if Object.const_defined?(:Zint)
         [
           :Aztec,
+          :C25inter,
+          :C25standard,
           :Codabar,
           :CodablockF,
           :Code11,
