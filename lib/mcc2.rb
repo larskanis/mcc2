@@ -1,4 +1,3 @@
-require "mcc2/compat"
 require "mcc2/constants"
 require "mcc2/layout_file"
 
