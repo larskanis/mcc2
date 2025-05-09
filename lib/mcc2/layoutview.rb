@@ -613,7 +613,7 @@ module Mcc2
       idx = @lf.listbox_fonts.appendItem("aus Font-Datei") # die humanreadable
       @lf.listbox_fonts.setItemData(idx, "from_file")         # die Werte
 
-      rmfl.each_with_index { |rmf, idx|
+      rmfl.each { |rmf|
         idx = @lf.listbox_fonts.appendItem(rmf.tr("-", " ")) # die humanreadable
         @lf.listbox_fonts.setItemData(idx, rmf)         # die Werte
       }
