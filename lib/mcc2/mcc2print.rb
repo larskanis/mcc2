@@ -1,10 +1,5 @@
 #!/usr/bin/env ruby
 
-$stdout.sync = true
-$stderr.sync = true
-
-require "rubygems"
-
 require "mcc2"
 require "fileutils"
 require "tempfile"

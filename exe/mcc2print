@@ -1,6 +1,4 @@
 #!/usr/bin/env ruby
-$stdout.sync = true
-$stderr.sync = true
 
 require "mcc2"
 
