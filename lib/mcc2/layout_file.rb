@@ -572,6 +572,7 @@ PRINT 1
     end
 
     def shrink_path(path)
+      path = path.gsub("\\", "/")
       if @filename
         path = path.sub(File.dirname(File.expand_path(@filename)), "%D")
       end
