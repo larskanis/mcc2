@@ -26,7 +26,7 @@ module Mcc2
     # definiert die Aktionen, welche bei bestimmten Ereignissen auf bestimmten Elementen des Dialogs ausgeführt werden sollen
     # ==== Parameter
     # +parent+:: parent-fx-window
-    def initialize(parent, filename = nil)
+    def initialize(parent, filename = nil, xpath_changes = {})
       @parent = parent
       begin
         require "ruby-zint"
@@ -85,11 +85,11 @@ module Mcc2
       }
 
       if filename
-        load_from_xml(filename)
         @changed = false
+        load_from_xml(filename, xpath_changes)
       else
-        create_xml
         @changed = true
+        create_xml
       end
 
       draw_preview(true)
@@ -174,8 +174,13 @@ module Mcc2
       end
     end
 
-    def load_from_xml(filename)
-      self.layout_file = LayoutFile.load_from_xml(filename)
+    def load_from_xml(filename, xpath_changes)
+      lf = LayoutFile.load_from_xml(filename)
+      xpath_changes.each do |xpath, value|
+        lf.change_first_xpath_value(xpath, value)
+        @changed = true
+      end
+      self.layout_file = lf
       unless layout_file.warnings.empty?
         wa = layout_file.warnings.join("\n\n")
         FXMessageBox.warning(@parent.app, MBOX_OK, "Warnung beim Laden von #{filename}", wa)

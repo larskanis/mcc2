@@ -17,6 +17,7 @@ require "fox16"
 require "fox16/colors"
 require "fox16/responder"
 require "libguib16"
+require "optparse"
 
 # convert relative image file path to absolute one
 # based on dir of this file.
@@ -44,9 +45,11 @@ module Mcc2
   class Mcc2Gui < MainWindow
     include Fox
 
-    def initialize(parent, argv, gui_scale)
+    def initialize(parent, gui_scale)
       @app = parent
       @gui_scale = gui_scale
+      @xpath_changes = {}
+
       super(parent)
       # Titel des Hauptfensters mit Programmname und Version setzen
 
@@ -79,13 +82,6 @@ module Mcc2
 
       @topwin.width = (1020 * @gui_scale).to_i
       @topwin.height = (748 * @gui_scale).to_i
-
-      # ......................................................................
-      @app.addChore {
-        argv.each do |arg|
-          open_layout(arg)
-        end
-      }
 
       @topwin.connect(SEL_CLOSE) { |sender, selector, data|
         can_close? ? 0 : 1
@@ -129,6 +125,11 @@ module Mcc2
       # end work-a-round:
     end
 
+    def add_xpath_value(param)
+      xpath, value = param.split("~", 2)
+      @xpath_changes[xpath] = value
+    end
+
     #---------------------------------------------------------------------------------------------------------
 
     def new_object(typ)
@@ -165,7 +166,7 @@ module Mcc2
       unless filename.to_s.empty?
         child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800 * @gui_scale, 600 * @gui_scale)
         begin
-          child.userData = Layout.new(child, filename)
+          child.userData = Layout.new(child, filename, @xpath_changes)
         rescue LayoutFile::Error => e
           FXMessageBox.error(@topwin.app, MBOX_OK, "Fehler beim Laden der Datei", e.to_s)
         else
@@ -214,12 +215,26 @@ module Mcc2
     def self.run(argv)
       Thread.abort_on_exception = true
 
-      begin
-        app = FX::App.new("MCC2", "ComCard-Mcc2")
-        Fox::FXToolTip.new(app, Fox::TOOLTIP_PERMANENT)
-        $gui_scale = enable_hidpi(app)
+      app = FX::App.new("MCC2", "ComCard-Mcc2")
+      Fox::FXToolTip.new(app, Fox::TOOLTIP_PERMANENT)
+      $gui_scale = enable_hidpi(app)
 
-        w = Mcc2Gui.new(app, argv, $gui_scale)
+      w = Mcc2Gui.new(app, $gui_scale)
+
+      OptionParser.new do |opts|
+        opts.banner = "Usage: #{$0} <layout.xml>* [options]"
+
+        opts.on("-x", "--xpath-value XPATH~VALUE", "Replace XML-value on the given xpath", &w.method(:add_xpath_value))
+        opts.separator "\tExamples:"
+        opts.separator "\t -x //Layout/datasource~mydata.csv"
+        opts.separator "\t -x //Layout/fileprinter_save_as~image_%d_%p.png"
+      end.parse!(argv)
+
+      argv.each do |arg|
+        w.open_layout(arg)
+      end
+
+      begin
         w.topwin.create
         w.topwin.show(Fox::PLACEMENT_SCREEN)
 
