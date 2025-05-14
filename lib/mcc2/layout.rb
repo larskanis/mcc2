@@ -177,8 +177,9 @@ module Mcc2
     def load_from_xml(filename, xpath_changes)
       lf = LayoutFile.load_from_xml(filename)
       xpath_changes.each do |xpath, value|
-        lf.change_first_xpath_value(xpath, value)
-        @changed = true
+        if lf.change_first_xpath_value(xpath, value)
+          @changed = true
+        end
       end
       self.layout_file = lf
       unless layout_file.warnings.empty?

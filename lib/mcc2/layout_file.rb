@@ -451,7 +451,12 @@ PRINT 1
       attr = @xml_doc.at_xpath(xpath)
       raise "Kein Element unter XPath #{xpath.inspect} in Datei #{@filename} gefunden" unless attr
       puts "Setze Element unter XPath #{xpath.inspect} in Datei #{@filename} auf #{value.inspect}"
-      attr.content = value
+      if attr.content != value
+        attr.content = value
+        true
+      else
+        false
+      end
     end
 
     def save
