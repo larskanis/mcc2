@@ -42,6 +42,7 @@ module Mcc2
         elsif typ == BARCODEOBJECT then Barcode.new xml_elem: xml_elem, layout_file: layout_file
         elsif typ == PICTUREOBJECT then Picture.new xml_elem: xml_elem, layout_file: layout_file
         elsif typ == BOXOBJECT then Box.new xml_elem: xml_elem, layout_file: layout_file
+        elsif typ == EMBEDOBJECT then Embed.new xml_elem: xml_elem, layout_file: layout_file
         end
       end
     end

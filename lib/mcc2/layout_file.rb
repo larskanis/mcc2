@@ -8,6 +8,7 @@ require "mcc2/layout_object/text"       # grafische Text-Objekte
 require "mcc2/layout_object/box"
 require "mcc2/layout_object/magstripe"
 require "mcc2/layout_object/chip"
+require "mcc2/layout_object/embed"
 
 module Mcc2
   module Printer

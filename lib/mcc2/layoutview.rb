@@ -505,7 +505,7 @@ module Mcc2
         @lf.checkbutton_printlist.state = !(node.at_xpath(GOA_PRINTLIST).content == "false" || node.at_xpath(GOA_PRINTLIST).content == "0")
 
         # Typ-spezifische Attribute auslesen
-        if [BARCODEOBJECT, TEXTOBJECT, PICTUREOBJECT].include?(node.at_xpath(GOA_TYP).content)
+        if [BARCODEOBJECT, TEXTOBJECT, PICTUREOBJECT, EMBEDOBJECT].include?(node.at_xpath(GOA_TYP).content)
           @lf.textfield_sample_data.text = node.at_xpath(GOA_SAMPLE_DATA).content
           @lf.textfield_data.text = node.at_xpath(GOA_DATA).content
           @lf.textfield_data_non_text.text = node.at_xpath(GOA_DATA).content
@@ -562,6 +562,10 @@ module Mcc2
           @lf.textfield_box_border_width.text = node.at_xpath(GOA_BORDER_WIDTH).content
           @lf.textfield_box_corner_radius.text = node.at_xpath(GOA_CORNER_RADIUS).content
           no_data_shown
+        end
+
+        if node.at_xpath(GOA_TYP).content == EMBEDOBJECT
+          data_shown
         end
       end
 

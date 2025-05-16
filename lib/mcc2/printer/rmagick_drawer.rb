@@ -101,6 +101,8 @@ module Mcc2
                 draw_barcode(body.g, go, go_width, go_height, data, barcode_dpi)
               elsif typ == BOXOBJECT
                 draw_boxobject(body.g, go, go_width, go_height)
+              elsif typ == EMBEDOBJECT
+                draw_embedobject(body, go, go_width, go_height, data)
               end
 
               # ............................................................................................................
@@ -306,6 +308,21 @@ module Mcc2
       border_width = go[GOA_BORDER_WIDTH].to_f
 
       body.rect(mm(go_width).round, mm(go_height).round).round(mm(corner_radius)).styles(fill: "#" + fill_color, stroke: "#" + border_color, stroke_width: mm(border_width).round)
+    end
+
+    def draw_embedobject(body, go, go_width, go_height, data)
+      if data.nil? || data.empty? || (data.tr("\\", "/") =~ /\/$/)
+        # kein Layout angegeben -> dieses Objekt ignorieren
+      elsif (path=go.layout_file.expand_path(data)) && FileTest.file?(path)
+        nup = go[GOA_NUP].to_i
+
+        layout_file = LayoutFile.load_from_xml(path)
+        row = 0
+        page_nr = 0
+        draw(body, layout_file, false, false, row, page_nr, layers: [0])
+      else
+        raise Printer::Base::ResourceNotFoundError, "Das Layout '#{path}' konnte nicht gefunden werden. Der Druck wird angehalten."
+      end
     end
 
     def postprocess_image(pic, layout_file, page)

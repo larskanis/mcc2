@@ -79,6 +79,7 @@ module Mcc2
       connect_with_accel(@mcmd_barcode) { new_object(BARCODEOBJECT) }
       connect_with_accel(@mcmd_picture) { new_object(PICTUREOBJECT) }
       connect_with_accel(@mcmd_box) { new_object(BOXOBJECT) }
+      connect_with_accel(@mcmd_embed) { new_object(EMBEDOBJECT) }
 
       @topwin.width = (1020 * @gui_scale).to_i
       @topwin.height = (748 * @gui_scale).to_i
