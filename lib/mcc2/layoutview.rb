@@ -102,9 +102,10 @@ module Mcc2
       @lf.checkbutton_flop_back.connect(SEL_COMMAND) { |sender, sel, event| change_chkbtn(sender, S_BACK_FLOP) }
 
       # der Button auf den Objektattributen, mit dem die Daten erweitert bearbeitet werden können (Variablen aus der Datenquelle verwenden usw.)
-      @lf.button_enhanced_data_edit.connect(SEL_COMMAND) { enhanced_data_edit(@lf.textfield_data_non_text) }
-      @lf.button_enhanced_data_text_edit.connect(SEL_COMMAND) { enhanced_data_edit(@lf.textfield_data) }
-      @lf.button_sample_data.connect(SEL_COMMAND) { button_sample_data }
+      @lf.menubutton_enhanced_data_edit.connect(SEL_LEFTBUTTONPRESS) { enhanced_data_edit(@lf.menubutton_enhanced_data_edit, @lf.textfield_data_non_text) }
+      @lf.menubutton_enhanced_data_text_edit.connect(SEL_LEFTBUTTONPRESS) { enhanced_data_edit(@lf.menubutton_enhanced_data_text_edit, @lf.textfield_data) }
+
+      @lf.menubutton_sample_data.connect(SEL_LEFTBUTTONPRESS) { button_sample_data }
       @layout.add_tipText_to_filedialog_for_textfield(@lf.textfield_sample_data)
 
       # die Listbox zum Auswählen der Schriftart
@@ -263,21 +264,20 @@ module Mcc2
       draw_preview(true)
     end
 
-    def enhanced_data_edit(textfield)
+    def enhanced_data_edit(menubutton, textfield)
       if (dm = @layout.dataman) && dm.headers
-        filemenu = FXMenuPane.new(textfield)
-        dm.headers.each { |col|
-          FXMenuCommand.new(filemenu, col).connect(SEL_COMMAND) {
+        menupane = menubutton.menu
+        menupane.each_child {|ch| menupane.removeChild(ch) }
+        dm.headers.each do |col|
+          FXMenuCommand.new(menupane, col).connect(SEL_COMMAND) do
             text = textfield.text
             text[textfield.cursorPos, 0] = "{#{col}[0,999]}"
             textfield.setText(text, true)
-          }
-        }
-        x = textfield.x
-        y = textfield.y
-        filemenu.x, filemenu.y = *textfield.parent.translateCoordinatesTo(@parent, x, y)
-        filemenu.create
-        filemenu.show
+          end
+        end
+        menupane.create
+        menupane.resize(menupane.getDefaultWidth, menupane.getDefaultHeight)
+        menubutton.handle(menubutton, Fox.FXSEL(Fox::SEL_COMMAND, Fox::FXMenuButton::ID_POST), nil);
       end
     end
 
@@ -659,8 +659,8 @@ module Mcc2
       @lf.label_textblock.shown = false
       @lf.textfield_data_non_text.shown = true
       @lf.label_textfield.shown = true
-      @lf.button_enhanced_data_edit.shown = true
-      @lf.button_enhanced_data_text_edit.shown = false
+      @lf.menubutton_enhanced_data_edit.shown = true
+      @lf.menubutton_enhanced_data_text_edit.shown = false
     end
 
     #---------------------------------------------------------------------------------------------------------
@@ -670,8 +670,8 @@ module Mcc2
       @lf.label_textblock.shown = false
       @lf.textfield_data_non_text.shown = false
       @lf.label_textfield.shown = false
-      @lf.button_enhanced_data_edit.shown = false
-      @lf.button_enhanced_data_text_edit.shown = false
+      @lf.menubutton_enhanced_data_edit.shown = false
+      @lf.menubutton_enhanced_data_text_edit.shown = false
     end
 
     # aktiviert ein mehrzeiliges Textfeld für die Eingabe der Daten (wird für Text gebraucht)
@@ -680,8 +680,8 @@ module Mcc2
       @lf.label_textblock.shown = true
       @lf.textfield_data_non_text.shown = false
       @lf.label_textfield.shown = false
-      @lf.button_enhanced_data_edit.shown = false
-      @lf.button_enhanced_data_text_edit.shown = true
+      @lf.menubutton_enhanced_data_edit.shown = false
+      @lf.menubutton_enhanced_data_text_edit.shown = true
     end
 
     #---------------------------------------------------------------------------------------------------------

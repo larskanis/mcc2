@@ -13,8 +13,8 @@ class Dialogbox_layoutview
         w_dialogbox_layoutview.wdg_name = "dialogbox_layoutview"
         w_dialogbox_layoutview.layoutHints = 768
         w_dialogbox_layoutview.shown = true
-        w_dialogbox_layoutview.x = 291
-        w_dialogbox_layoutview.y = 1081
+        w_dialogbox_layoutview.x = 1195
+        w_dialogbox_layoutview.y = 1113
         w_dialogbox_layoutview.width = 475
         w_dialogbox_layoutview.height = 545
         w_dialogbox_layoutview.title = "Entwurfsansicht"
@@ -135,13 +135,14 @@ class Dialogbox_layoutview
               w_tabbook_objectattributes.y = 2
               w_tabbook_objectattributes.width = 471
               w_tabbook_objectattributes.height = 339
+              w_tabbook_objectattributes.current = 3
               w_tabbook_objectattributes.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               FX::TabItem.new(@tabbook_objectattributes) { |w_tabitem_allgemein|
                 @tabitem_allgemein = w_tabitem_allgemein
                 w_tabitem_allgemein.wdg_name = "tabitem_allgemein"
                 w_tabitem_allgemein.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_allgemein.x = 4
-                w_tabitem_allgemein.y = 4
+                w_tabitem_allgemein.x = 6
+                w_tabitem_allgemein.y = 6
                 w_tabitem_allgemein.width = 60
                 w_tabitem_allgemein.height = 24
                 w_tabitem_allgemein.text = "Allgemein"
@@ -151,6 +152,7 @@ class Dialogbox_layoutview
               FX::VerticalFrame.new(@tabbook_objectattributes) { |w_verticalframe52|
                 @verticalframe52 = w_verticalframe52
                 w_verticalframe52.wdg_name = "verticalframe52"
+                w_verticalframe52.shown = false
                 w_verticalframe52.x = 4
                 w_verticalframe52.y = 26
                 w_verticalframe52.width = 463
@@ -544,7 +546,7 @@ class Dialogbox_layoutview
                 @tabitem_chip = w_tabitem_chip
                 w_tabitem_chip.wdg_name = "tabitem_chip"
                 w_tabitem_chip.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_chip.x = 63
+                w_tabitem_chip.x = 66
                 w_tabitem_chip.y = 6
                 w_tabitem_chip.width = 32
                 w_tabitem_chip.height = 24
@@ -567,7 +569,7 @@ class Dialogbox_layoutview
                 @tabitem_magstripe = w_tabitem_magstripe
                 w_tabitem_magstripe.wdg_name = "tabitem_magstripe"
                 w_tabitem_magstripe.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_magstripe.x = 95
+                w_tabitem_magstripe.x = 98
                 w_tabitem_magstripe.y = 6
                 w_tabitem_magstripe.width = 88
                 w_tabitem_magstripe.height = 24
@@ -716,8 +718,8 @@ class Dialogbox_layoutview
                 @tabitem_object = w_tabitem_object
                 w_tabitem_object.wdg_name = "tabitem_object"
                 w_tabitem_object.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_object.x = 183
-                w_tabitem_object.y = 6
+                w_tabitem_object.x = 184
+                w_tabitem_object.y = 4
                 w_tabitem_object.width = 43
                 w_tabitem_object.height = 24
                 w_tabitem_object.text = "Objekt"
@@ -728,7 +730,6 @@ class Dialogbox_layoutview
                 @verticalframe_object = w_verticalframe_object
                 w_verticalframe_object.wdg_name = "verticalframe_object"
                 w_verticalframe_object.frameStyle = 16384
-                w_verticalframe_object.shown = false
                 w_verticalframe_object.x = 4
                 w_verticalframe_object.y = 26
                 w_verticalframe_object.width = 463
@@ -763,7 +764,7 @@ class Dialogbox_layoutview
                     w_textfield_name.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_textfield_name.x = 127
                     w_textfield_name.y = 4
-                    w_textfield_name.width = 307
+                    w_textfield_name.width = 305
                     w_textfield_name.height = 22
                     w_textfield_name.numColumns = 10
                     w_textfield_name.tipText = "Der Name ist nur für die Anzeige in der Objektliste und bei bestimmten Aktionen notwendig, sollte aber dennoch in einen aussagekräftigen Namen geändert werden."
@@ -773,7 +774,7 @@ class Dialogbox_layoutview
                     @label185 = w_label185
                     w_label185.wdg_name = "label185"
                     w_label185.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_label185.x = 438
+                    w_label185.x = 436
                     w_label185.y = 4
                     w_label185.width = 4
                     w_label185.height = 4
@@ -798,7 +799,7 @@ class Dialogbox_layoutview
                     w_verticalframe44.layoutHints = 3073
                     w_verticalframe44.x = 127
                     w_verticalframe44.y = 30
-                    w_verticalframe44.width = 307
+                    w_verticalframe44.width = 305
                     w_verticalframe44.height = 54
                     w_verticalframe44.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                     FX::Text.new(@verticalframe44) { |w_textfield_data|
@@ -807,22 +808,26 @@ class Dialogbox_layoutview
                       w_textfield_data.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                       w_textfield_data.x = 1
                       w_textfield_data.y = 1
-                      w_textfield_data.width = 305
+                      w_textfield_data.width = 303
                       w_textfield_data.height = 52
                       w_textfield_data.tipText = "Enthält die Daten, welche später auf der Karte gedruckt werden sollen.\nIn diesem Feld können mehrerer Zeilen eingegeben werden.\nPlatzhalter aus einer Datenquelle werden nach der Syntax\n{feldname[anfang,laenge]} gebildet."
                     }
                   }
-                  FX::Button.new(@matrix1) { |w_button_enhanced_data_text_edit|
-                    @button_enhanced_data_text_edit = w_button_enhanced_data_text_edit
-                    w_button_enhanced_data_text_edit.wdg_name = "button_enhanced_data_text_edit"
-                    w_button_enhanced_data_text_edit.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_button_enhanced_data_text_edit.x = 438
-                    w_button_enhanced_data_text_edit.y = 30
-                    w_button_enhanced_data_text_edit.width = 17
-                    w_button_enhanced_data_text_edit.height = 24
-                    w_button_enhanced_data_text_edit.text = "..."
-                    w_button_enhanced_data_text_edit.tipText = "Fügt an der Cusor-Position ein Datenfeld\naus der ausgewälten Datenquelle ein"
-                    w_button_enhanced_data_text_edit.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                  FX::MenuButton.new(@matrix1) { |w_menubutton_enhanced_data_text_edit|
+                    @menubutton_enhanced_data_text_edit = w_menubutton_enhanced_data_text_edit
+                    w_menubutton_enhanced_data_text_edit.wdg_name = "menubutton_enhanced_data_text_edit"
+                    w_menubutton_enhanced_data_text_edit.x = 436
+                    w_menubutton_enhanced_data_text_edit.y = 30
+                    w_menubutton_enhanced_data_text_edit.width = 19
+                    w_menubutton_enhanced_data_text_edit.height = 13
+                    w_menubutton_enhanced_data_text_edit.text = ""
+                    w_menubutton_enhanced_data_text_edit.tipText = "Fügt an der Cusor-Position ein Datenfeld\naus der ausgewälten Datenquelle ein"
+                    FX::MenuPane.new(@menubutton_enhanced_data_text_edit) { |w_menupane_enhanced_data_text_edit|
+                      @menupane_enhanced_data_text_edit = w_menupane_enhanced_data_text_edit
+                      w_menupane_enhanced_data_text_edit.wdg_name = "menupane_enhanced_data_text_edit"
+                      w_menupane_enhanced_data_text_edit.x = 1639
+                      w_menupane_enhanced_data_text_edit.y = 1388
+                    }
                   }
                   FX::Label.new(@matrix1) { |w_label_textfield|
                     @label_textfield = w_label_textfield
@@ -842,30 +847,34 @@ class Dialogbox_layoutview
                     w_textfield_data_non_text.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_textfield_data_non_text.x = 127
                     w_textfield_data_non_text.y = 88
-                    w_textfield_data_non_text.width = 307
+                    w_textfield_data_non_text.width = 305
                     w_textfield_data_non_text.height = 22
                     w_textfield_data_non_text.numColumns = 10
                     w_textfield_data_non_text.tipText = "Enthält die Daten, welche später auf der Karte gedruckt werden sollen.\nIn diesem Feld kann nur 1 Zeile eingegeben werden.\nPlatzhalter aus einer Datenquelle werden nach der Syntax\n{feldname[anfang,laenge]} gebildet."
                     w_textfield_data_non_text.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   }
-                  FX::Button.new(@matrix1) { |w_button_enhanced_data_edit|
-                    @button_enhanced_data_edit = w_button_enhanced_data_edit
-                    w_button_enhanced_data_edit.wdg_name = "button_enhanced_data_edit"
-                    w_button_enhanced_data_edit.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_button_enhanced_data_edit.x = 438
-                    w_button_enhanced_data_edit.y = 88
-                    w_button_enhanced_data_edit.width = 17
-                    w_button_enhanced_data_edit.height = 24
-                    w_button_enhanced_data_edit.text = "..."
-                    w_button_enhanced_data_edit.tipText = "Fügt an der Cusor-Position ein Datenfeld\naus der ausgewälten Datenquelle ein"
-                    w_button_enhanced_data_edit.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                  FX::MenuButton.new(@matrix1) { |w_menubutton_enhanced_data_edit|
+                    @menubutton_enhanced_data_edit = w_menubutton_enhanced_data_edit
+                    w_menubutton_enhanced_data_edit.wdg_name = "menubutton_enhanced_data_edit"
+                    w_menubutton_enhanced_data_edit.x = 436
+                    w_menubutton_enhanced_data_edit.y = 88
+                    w_menubutton_enhanced_data_edit.width = 19
+                    w_menubutton_enhanced_data_edit.height = 13
+                    w_menubutton_enhanced_data_edit.text = ""
+                    w_menubutton_enhanced_data_edit.tipText = "Fügt an der Cusor-Position ein Datenfeld\naus der ausgewälten Datenquelle ein"
+                    FX::MenuPane.new(@menubutton_enhanced_data_edit) { |w_menupane3|
+                      @menupane3 = w_menupane3
+                      w_menupane3.wdg_name = "menupane3"
+                      w_menupane3.x = 1639
+                      w_menupane3.y = 1388
+                    }
                   }
                   FX::Label.new(@matrix1) { |w_label27|
                     @label27 = w_label27
                     w_label27.wdg_name = "label27"
                     w_label27.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_label27.x = 4
-                    w_label27.y = 116
+                    w_label27.y = 114
                     w_label27.width = 74
                     w_label27.height = 20
                     w_label27.text = "Beispieldaten"
@@ -877,31 +886,35 @@ class Dialogbox_layoutview
                     w_textfield_sample_data.layoutHints = 1025
                     w_textfield_sample_data.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_textfield_sample_data.x = 127
-                    w_textfield_sample_data.y = 116
-                    w_textfield_sample_data.width = 307
+                    w_textfield_sample_data.y = 114
+                    w_textfield_sample_data.width = 305
                     w_textfield_sample_data.height = 22
                     w_textfield_sample_data.numColumns = 10
                     w_textfield_sample_data.tipText = "Hier werden die Daten zur Anzeige in der\nEntwurfsansicht eingetragen."
                     w_textfield_sample_data.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   }
-                  FX::Button.new(@matrix1) { |w_button_sample_data|
-                    @button_sample_data = w_button_sample_data
-                    w_button_sample_data.wdg_name = "button_sample_data"
-                    w_button_sample_data.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_button_sample_data.x = 438
-                    w_button_sample_data.y = 116
-                    w_button_sample_data.width = 17
-                    w_button_sample_data.height = 24
-                    w_button_sample_data.text = "..."
-                    w_button_sample_data.tipText = "Auswahl einer Datei\n(nur bei Bild-Objekten)"
-                    w_button_sample_data.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                  FX::MenuButton.new(@matrix1) { |w_menubutton_sample_data|
+                    @menubutton_sample_data = w_menubutton_sample_data
+                    w_menubutton_sample_data.wdg_name = "menubutton_sample_data"
+                    w_menubutton_sample_data.x = 436
+                    w_menubutton_sample_data.y = 114
+                    w_menubutton_sample_data.width = 19
+                    w_menubutton_sample_data.height = 13
+                    w_menubutton_sample_data.text = ""
+                    w_menubutton_sample_data.tipText = "Auswahl einer Datei\n(nur bei Bild-Objekten)"
+                    FX::MenuPane.new(@menubutton_sample_data) { |w_menupane4|
+                      @menupane4 = w_menupane4
+                      w_menupane4.wdg_name = "menupane4"
+                      w_menupane4.x = 1639
+                      w_menupane4.y = 1388
+                    }
                   }
                   FX::Label.new(@matrix1) { |w_label61|
                     @label61 = w_label61
                     w_label61.wdg_name = "label61"
                     w_label61.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_label61.x = 4
-                    w_label61.y = 144
+                    w_label61.y = 140
                     w_label61.width = 119
                     w_label61.height = 20
                     w_label61.text = "in Druckliste anzeigen"
@@ -914,7 +927,7 @@ class Dialogbox_layoutview
                     w_checkbutton_printlist.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_checkbutton_printlist.state = true
                     w_checkbutton_printlist.x = 127
-                    w_checkbutton_printlist.y = 144
+                    w_checkbutton_printlist.y = 140
                     w_checkbutton_printlist.width = 17
                     w_checkbutton_printlist.height = 17
                     w_checkbutton_printlist.text = ""
@@ -1763,13 +1776,16 @@ class Dialogbox_layoutview
   attr_reader :label_textblock
   attr_reader :verticalframe44
   attr_reader :textfield_data
-  attr_reader :button_enhanced_data_text_edit
+  attr_reader :menubutton_enhanced_data_text_edit
+  attr_reader :menupane_enhanced_data_text_edit
   attr_reader :label_textfield
   attr_reader :textfield_data_non_text
-  attr_reader :button_enhanced_data_edit
+  attr_reader :menubutton_enhanced_data_edit
+  attr_reader :menupane3
   attr_reader :label27
   attr_reader :textfield_sample_data
-  attr_reader :button_sample_data
+  attr_reader :menubutton_sample_data
+  attr_reader :menupane4
   attr_reader :label61
   attr_reader :checkbutton_printlist
   attr_reader :tabitem_posit
