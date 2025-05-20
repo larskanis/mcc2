@@ -82,7 +82,7 @@ module Mcc2
 
             if !go[GOA_DATA]
               data = nil
-            elsif row
+            elsif row && (row.keys - DataMan.meta_headers).any?
               data = DataMan.replace_variables(go[GOA_DATA], row)
             elsif go[GOA_DATA]
               data_nosub = go[GOA_DATA].to_s
@@ -102,7 +102,7 @@ module Mcc2
               elsif typ == BOXOBJECT
                 draw_boxobject(body.g, go, go_width, go_height)
               elsif typ == EMBEDOBJECT
-                draw_embedobject(body, go, go_width, go_height, data)
+                draw_embedobject(body, go, go_width, go_height, data, row ? row['row_number'] : "1")
               end
 
               # ............................................................................................................
@@ -314,16 +314,37 @@ module Mcc2
       body.rect(mm(go_width).round, mm(go_height).round).round(mm(corner_radius)).styles(fill: "#" + fill_color, stroke: "#" + border_color, stroke_width: mm(border_width).round)
     end
 
-    def draw_embedobject(body, go, go_width, go_height, data)
+    def draw_embedobject(body, go, go_width, go_height, data, row_number)
       if data.nil? || data.empty? || (data.tr("\\", "/") =~ /\/$/)
         # kein Layout angegeben -> dieses Objekt ignorieren
       elsif (path=go.layout_file.expand_path(data)) && FileTest.file?(path)
         nup = go[GOA_NUP].to_i
 
         layout_file = LayoutFile.load_from_xml(path)
-        row = 0
+
+        obj_w = layout_file.get_attr_value(S_WIDTH).to_f
+        obj_h = layout_file.get_attr_value(S_HEIGHT).to_f
+
+        num_w = (go_width / obj_w).round
+        num_h = (go_height / obj_h).round
+        num_up = num_h * num_w
+
+        dataman = layout_file.build_dataman_instance
+        row_num = row_number.to_i - 1
+
         page_nr = 0
-        draw(body, layout_file, false, false, row, page_nr, layers: [0])
+        num_w.times do |idx_w|
+          num_h.times do |idx_h|
+            if row_num >= 0
+              row = dataman.row(row_num * num_up + idx_h * num_w + idx_w)
+              if row
+                body.g.translate(mm(idx_w * obj_w).round, mm(idx_h * obj_h).round) do |canvas1|
+                  draw(canvas1, layout_file, false, false, row, page_nr, layers: [0])
+                end
+              end
+            end
+          end
+        end
       else
         raise Printer::Base::ResourceNotFoundError, "Das Layout '#{path}' konnte nicht gefunden werden. Der Druck wird angehalten."
       end

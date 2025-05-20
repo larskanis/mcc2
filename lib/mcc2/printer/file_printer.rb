@@ -53,7 +53,7 @@ module Mcc2
       #--------------------------------------------------------------------------------------------------------------
 
       def print_page(row, page_nr)
-        row_idx = row["mcc2_row_index"] if row
+        row_idx = row["row_number"] if row
         documentName = @layout_file.get_attr_value(S_FILEPRINTER_SAVE_AS).gsub("%i", @image_idx.to_s).gsub("%p", page_nr.to_s).gsub("%d", row_idx.to_s)
         documentName = @layout_file.expand_path(documentName)
 

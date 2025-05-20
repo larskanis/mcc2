@@ -18,17 +18,17 @@ module Mcc2
 
         # convert DBF::Table to Array of Hashs
         @table = []
-        table.each { |row|
-          h = {}
-          row.to_a.each_with_index { |text, idx|
+        table.each.with_index(1) do |row, row_number|
+          h = { 'row_number' => row_number.to_s }
+          row.to_a.each_with_index do |text, idx|
             h[@header_row[idx]] = text.to_s.encode("utf-8", encoding)
-          }
+          end
           @table << h
-        }
+        end
         @filename = fn
       end
 
-      def headers
+      def data_headers
         @header_row
       end
 

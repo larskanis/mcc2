@@ -22,17 +22,17 @@ module Mcc2
         @header_row = @table.slice!(0) if @table && @table.size > 0
 
         # convert Array of Arrays to Array of Hashs
-        @table = @table.map { |row|
-          h = {}
-          row.each_with_index { |text, idx|
+        @table = @table.map.with_index(1) do |row, row_number|
+          h = { 'row_number' => row_number.to_s }
+          row.each_with_index do |text, idx|
             h[@header_row[idx]] = text
-          }
+          end
           h
-        }
+        end
         @filename = fn
       end
 
-      def headers
+      def data_headers
         @header_row
       end
 

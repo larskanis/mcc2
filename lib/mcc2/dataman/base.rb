@@ -40,10 +40,22 @@ module Mcc2
       }
     end
 
+    def self.meta_headers
+      ['row_number']
+    end
+
     class Base
       class BadEncodingError < RuntimeError
       end
       attr_reader :filename
+
+      def headers
+        data_headers + meta_headers
+      end
+
+      def meta_headers
+        DataMan.meta_headers
+      end
     end
   end
 end

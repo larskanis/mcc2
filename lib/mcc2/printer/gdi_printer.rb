@@ -80,7 +80,7 @@ module Mcc2
       def start_doc(hPrinter, row)
         datasourcename = layout_file.get_attr_value(S_DATASOURCE)
         # set document title
-        row_text = row["mcc2_row_index"] if row
+        row_text = row["row_number"] if row
         if !row_text && row
           row_text = row.sort.map { |k, v| v }.select { |v| v && !v.empty? }.join(",")[0, 50]  # take row-values
         end

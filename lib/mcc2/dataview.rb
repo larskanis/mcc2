@@ -93,12 +93,12 @@ module Mcc2
       @iconlist_data.header.clearItems
 
       if @dataman && @layout_file
-        @iconlist_data.appendHeader("Datensatz", nil, 60)
-
-        first_row = @dataman.headers
+        first_row = @dataman.meta_headers + @dataman.data_headers
+        first_col = true
         felder = if first_row
           first_row.map do |feldname|
-            @iconlist_data.appendHeader(feldname, nil, 100)
+            @iconlist_data.appendHeader(feldname, nil, first_col ? 60 : 100)
+            first_col = false
             feldname
           end
         else
@@ -110,8 +110,7 @@ module Mcc2
           big_icon = nil
           mini_icon = nil
           rows.each_with_index do |row, idx|
-            row["mcc2_row_index"] = (idx + 1).to_s if row
-            itemtext = "#{idx + 1}\t" + felder.map do |feld|
+            itemtext = felder.map do |feld|
               row[feld]
             end.join("\t")
             @iconlist_data.appendItem(itemtext, big_icon, mini_icon, row)
@@ -210,7 +209,7 @@ module Mcc2
         row_nr = @iconlist_data.currentItem
         if row_nr >= 0
           @iconlist_data.makeItemVisible(row_nr)
-          draw_preview @dataman.row(row_nr)
+          draw_preview @iconlist_data.getItemData(row_nr)
         end
       end
     end
