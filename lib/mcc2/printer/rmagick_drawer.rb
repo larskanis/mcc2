@@ -262,7 +262,11 @@ module Mcc2
         # barcode.fontsize = fontsize # not used in zint
         # p [go_height, go_width, barcode.height]
         barcode.whitespace_width = 0
-        bcvector = barcode.to_vector
+        begin
+          bcvector = barcode.to_vector
+        rescue Zint::ErrorInvalidData => err
+          raise err, "#{err.message} Barcode text: #{data.inspect}"
+        end
 
         eancode = %w[EAN13 EAN8].include?(barcode_typ)
 
