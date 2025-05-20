@@ -41,8 +41,6 @@ module Mcc2
   GOA_BORDER_WIDTH = "border_width"
   GOA_CORNER_RADIUS = "corner_radius"
 
-  GOA_NUP = "n_up"
-
   # das sind die Objektbezeichner
   GRAPHICOBJECTS = "GraphicObjects"
   GRAPHICOBJECT = "GraphicObject"

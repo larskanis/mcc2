@@ -318,8 +318,6 @@ module Mcc2
       if data.nil? || data.empty? || (data.tr("\\", "/") =~ /\/$/)
         # kein Layout angegeben -> dieses Objekt ignorieren
       elsif (path=go.layout_file.expand_path(data)) && FileTest.file?(path)
-        nup = go[GOA_NUP].to_i
-
         layout_file = LayoutFile.load_from_xml(path)
 
         obj_w = layout_file.get_attr_value(S_WIDTH).to_f
