@@ -14,7 +14,7 @@ class Dialogbox_layoutview
         w_dialogbox_layoutview.layoutHints = 768
         w_dialogbox_layoutview.shown = true
         w_dialogbox_layoutview.x = 1195
-        w_dialogbox_layoutview.y = 1113
+        w_dialogbox_layoutview.y = 1076
         w_dialogbox_layoutview.width = 475
         w_dialogbox_layoutview.height = 545
         w_dialogbox_layoutview.title = "Entwurfsansicht"
@@ -135,14 +135,13 @@ class Dialogbox_layoutview
               w_tabbook_objectattributes.y = 2
               w_tabbook_objectattributes.width = 471
               w_tabbook_objectattributes.height = 339
-              w_tabbook_objectattributes.current = 3
               w_tabbook_objectattributes.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               FX::TabItem.new(@tabbook_objectattributes) { |w_tabitem_allgemein|
                 @tabitem_allgemein = w_tabitem_allgemein
                 w_tabitem_allgemein.wdg_name = "tabitem_allgemein"
                 w_tabitem_allgemein.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_allgemein.x = 6
-                w_tabitem_allgemein.y = 6
+                w_tabitem_allgemein.x = 4
+                w_tabitem_allgemein.y = 4
                 w_tabitem_allgemein.width = 60
                 w_tabitem_allgemein.height = 24
                 w_tabitem_allgemein.text = "Allgemein"
@@ -152,7 +151,6 @@ class Dialogbox_layoutview
               FX::VerticalFrame.new(@tabbook_objectattributes) { |w_verticalframe52|
                 @verticalframe52 = w_verticalframe52
                 w_verticalframe52.wdg_name = "verticalframe52"
-                w_verticalframe52.shown = false
                 w_verticalframe52.x = 4
                 w_verticalframe52.y = 26
                 w_verticalframe52.width = 463
@@ -188,6 +186,7 @@ class Dialogbox_layoutview
                     w_combobox_datasource_typ.y = 10
                     w_combobox_datasource_typ.width = 363
                     w_combobox_datasource_typ.height = 22
+                    w_combobox_datasource_typ.numVisible = 10
                   }
                 }
                 FX::HorizontalFrame.new(@verticalframe52) { |w_horizontalframe75|
@@ -546,7 +545,7 @@ class Dialogbox_layoutview
                 @tabitem_chip = w_tabitem_chip
                 w_tabitem_chip.wdg_name = "tabitem_chip"
                 w_tabitem_chip.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_chip.x = 66
+                w_tabitem_chip.x = 63
                 w_tabitem_chip.y = 6
                 w_tabitem_chip.width = 32
                 w_tabitem_chip.height = 24
@@ -569,7 +568,7 @@ class Dialogbox_layoutview
                 @tabitem_magstripe = w_tabitem_magstripe
                 w_tabitem_magstripe.wdg_name = "tabitem_magstripe"
                 w_tabitem_magstripe.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_magstripe.x = 98
+                w_tabitem_magstripe.x = 95
                 w_tabitem_magstripe.y = 6
                 w_tabitem_magstripe.width = 88
                 w_tabitem_magstripe.height = 24
@@ -718,8 +717,8 @@ class Dialogbox_layoutview
                 @tabitem_object = w_tabitem_object
                 w_tabitem_object.wdg_name = "tabitem_object"
                 w_tabitem_object.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_object.x = 184
-                w_tabitem_object.y = 4
+                w_tabitem_object.x = 183
+                w_tabitem_object.y = 6
                 w_tabitem_object.width = 43
                 w_tabitem_object.height = 24
                 w_tabitem_object.text = "Objekt"
@@ -730,6 +729,7 @@ class Dialogbox_layoutview
                 @verticalframe_object = w_verticalframe_object
                 w_verticalframe_object.wdg_name = "verticalframe_object"
                 w_verticalframe_object.frameStyle = 16384
+                w_verticalframe_object.shown = false
                 w_verticalframe_object.x = 4
                 w_verticalframe_object.y = 26
                 w_verticalframe_object.width = 463

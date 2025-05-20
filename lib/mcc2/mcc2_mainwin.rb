@@ -200,7 +200,7 @@ class MainWindow
                 @mcmd_embed = w_mcmd_embed
                 w_mcmd_embed.wdg_name = "mcmd_embed"
                 w_mcmd_embed.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_mcmd_embed.img = "mcc2/images/draw-rectangle.png"
+                w_mcmd_embed.img = "mcc2/images/libreoffice-oasis-master-document.png"
                 w_mcmd_embed.x = 2
                 w_mcmd_embed.y = 86
                 w_mcmd_embed.width = 123
