@@ -102,7 +102,7 @@ module Mcc2
               elsif typ == BOXOBJECT
                 draw_boxobject(body.g, go, go_width, go_height)
               elsif typ == EMBEDOBJECT
-                draw_embedobject(body, go, go_width, go_height, data, row ? row['row_number'] : "1")
+                draw_embedobject(body, go, go_width, go_height, data, row ? row['row_number'] : "1", barcode_dpi)
               end
 
               # ............................................................................................................
@@ -314,11 +314,16 @@ module Mcc2
       body.rect(mm(go_width).round, mm(go_height).round).round(mm(corner_radius)).styles(fill: "#" + fill_color, stroke: "#" + border_color, stroke_width: mm(border_width).round)
     end
 
-    def draw_embedobject(body, go, go_width, go_height, data, row_number)
+    def draw_embedobject(body, go, go_width, go_height, data, row_number, barcode_dpi)
       if data.nil? || data.empty? || (data.tr("\\", "/") =~ /\/$/)
         # kein Layout angegeben -> dieses Objekt ignorieren
       elsif (path=go.layout_file.expand_path(data)) && FileTest.file?(path)
         layout_file = LayoutFile.load_from_xml(path)
+
+        barcode_dpi2 = layout_file.get_attr_value(S_BARCODE_DPI).to_f
+        unless ((barcode_dpi - 0.01) .. (barcode_dpi + 0.01)) === barcode_dpi2
+          raise Printer::Base::DpiDoesntMatch, "Barcode-DPI in der Vorschau (#{format("%0.1f", barcode_dpi)}) und #{go[GOA_NAME].inspect} (#{format("%0.1f", barcode_dpi2)}) sind verschieden. Bitte DPI anpassen und Barcodes neu prüfen!"
+        end
 
         obj_w = layout_file.get_attr_value(S_WIDTH).to_f
         obj_h = layout_file.get_attr_value(S_HEIGHT).to_f
