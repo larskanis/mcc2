@@ -82,7 +82,7 @@ module Mcc2
         @row = row
         return unless @checkbutton_continous_update.checked?
 
-        @draw_preview_at = Time.now + (immediately ? 0 : 1)
+        @draw_preview_at = Time.now + (immediately ? 0 : 0.1)
         start_preview_timer
       end
 
@@ -141,9 +141,14 @@ module Mcc2
           image.format = "PNG"
         end
 
+        # das erzeugte Bild als Icon anzeigen
+        fx_image = Fox::FXPNGImage.new(@parent.app)
+        # in contrast to FXPNGImage.new, loadPixels releases the GVL
+        Fox::FXMemoryStream.open(Fox::FXStreamLoad, data) do |infile|
+          fx_image.loadPixels(infile)
+        end
+
         @parent.runOnUiThread do
-          # das erzeugte Bild als Icon anzeigen
-          fx_image = FXPNGImage.new(@parent.app, data)
           fx_image.create
           begin
             @image_view.image = fx_image
