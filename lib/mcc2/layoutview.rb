@@ -286,7 +286,7 @@ module Mcc2
 
     def button_sample_data
       typ = @layout_file.get_object_by_id(@selected_object_id, GOA_TYP)
-      if typ == PICTUREOBJECT
+      if [PICTUREOBJECT, EMBEDOBJECT].include?(typ)
         @layout.execute_filedialog_for_textfield(@lf.textfield_sample_data, filepatterns: "*")
       end
     end
