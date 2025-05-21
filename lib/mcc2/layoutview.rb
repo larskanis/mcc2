@@ -265,14 +265,17 @@ module Mcc2
     end
 
     def enhanced_data_edit(menubutton, textfield)
-      if (dm = @layout.dataman) && dm.headers
+      if (dm = @layout.dataman)
         menupane = menubutton.menu
         menupane.each_child {|ch| menupane.removeChild(ch) }
-        dm.headers.each do |col|
-          FXMenuCommand.new(menupane, col).connect(SEL_COMMAND) do
-            text = textfield.text
-            text[textfield.cursorPos, 0] = "{#{col}[0,999]}"
-            textfield.setText(text, true)
+        [dm.data_headers, dm.meta_headers].each_with_index do |headers, idx|
+          FXMenuSeparator.new(menupane) if idx > 0
+          headers.each do |col|
+            FXMenuCommand.new(menupane, col).connect(SEL_COMMAND) do
+              text = textfield.text
+              text[textfield.cursorPos, 0] = "{#{col}[0,999]}"
+              textfield.setText(text, true)
+            end
           end
         end
         menupane.create
