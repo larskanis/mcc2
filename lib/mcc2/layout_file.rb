@@ -198,7 +198,9 @@ PRINT 1
       @xml_doc = File.open(filename) { |fd| Nokogiri::XML(fd) }
 
       xpath_changes.each do |xpath, value|
-        change_first_xpath_value(xpath, value)
+        if !(m=/^\{(.*)\}(.*)$/.match(xpath)) || m[1] == File.basename(filename)
+          change_first_xpath_value(m&.[](2) || xpath, value)
+        end
       end
       @xpath_changes = xpath_changes
 

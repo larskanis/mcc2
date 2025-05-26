@@ -50,7 +50,7 @@ module Mcc2
         opts.on("-x", "--xpath-value XPATH~VALUE", "Replace XML-value on the given xpath", &app.method(:add_xpath_value))
         opts.separator "\tExamples:"
         opts.separator "\t -x //Layout/datasource~mydata.csv"
-        opts.separator "\t -x //Layout/fileprinter_save_as~image_%d_%p.png"
+        opts.separator "\t -x {layo.xml}//Layout/fileprinter_save_as~image_%d_%p.png"
       end.parse!
 
       app.start!(argv[0])
