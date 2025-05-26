@@ -65,6 +65,7 @@ module Mcc2
     #---------------------------------------------------------------------------------------------------------
 
     def initialize
+      @changed = true
       @xml_doc = nil
       @attributes = {}
       add_attr(S_DUPLEX, String, false)
@@ -181,6 +182,7 @@ PRINT 1
 
       # Container für die GraphikObjekte definieren definieren
       @xml_doc.root << node = Nokogiri::XML::Node.new(GRAPHICOBJECTS, @xml_doc)
+      changed!
     end
     #---------------------------------------------------------------------------------------------------------
 
@@ -190,6 +192,7 @@ PRINT 1
     def load_from_xml(filename)
       return nil if filename == ""
 
+      @changed = false
       @xml_doc = File.open(filename) { |fd| Nokogiri::XML(fd) }
       @xml_doc.root["version"] ||= "1"
       filever = @xml_doc.root["version"].to_i
@@ -216,7 +219,7 @@ PRINT 1
           n = Nokogiri::XML::Node.new(attr.attr_name, @xml_doc)
           n.content = attr.attr_value.to_s
           lay_attrs << n
-          @changed = true
+          changed!
         end
       end
 
@@ -238,7 +241,7 @@ PRINT 1
         element = chip_attrs.at_xpath("#{S_PARAM}_#{i}")
         unless element
           # ~ chip_attrs << param = Nokogiri::XML::Node.new(attr_name , "")
-          @changed = true
+          changed!
         end
       }
 
@@ -257,7 +260,7 @@ PRINT 1
             n = Nokogiri::XML::Node.new(go_attr.attr_name, @xml_doc)
             n.content = go_attr.attr_value.to_s
             go_struct << n
-            @changed = true
+            changed!
           end
         end
       end
@@ -274,19 +277,19 @@ PRINT 1
       unless node_ms
         node_ms = Nokogiri::XML::Node.new(S_MAGSTRIPEPARAMS, @xml_doc)
         node_lay << node_ms
-        @changed = true
+        changed!
       end
       unless node_ms.at_xpath(S_MSSPUR1)
         node_ms << Nokogiri::XML::Node.new(S_MSSPUR1, @xml_doc)
-        @changed = true
+        changed!
       end
       unless node_ms.at_xpath(S_MSSPUR2)
         node_ms << Nokogiri::XML::Node.new(S_MSSPUR2, @xml_doc)
-        @changed = true
+        changed!
       end
       unless node_ms.at_xpath(S_MSSPUR3)
         node_ms << Nokogiri::XML::Node.new(S_MSSPUR3, @xml_doc)
-        @changed = true
+        changed!
       end
     end
 
@@ -349,7 +352,7 @@ PRINT 1
         value = value.to_s
         if node.content != value
           node.content = value
-          true
+          changed!
         else
           false
         end
@@ -385,6 +388,7 @@ PRINT 1
           go << n
         end
       end
+      changed!
       go
     end
 
@@ -432,7 +436,7 @@ PRINT 1
       value = value.to_s
       if attr.content != value
         attr.content = value
-        true
+        changed!
       else
         false
       end
@@ -454,7 +458,7 @@ PRINT 1
       puts "Setze Element unter XPath #{xpath.inspect} in Datei #{@filename} auf #{value.inspect}"
       if attr.content != value
         attr.content = value
-        true
+        changed!
       else
         false
       end
@@ -465,6 +469,7 @@ PRINT 1
       File.open(@filename, "w") do |fd|
         @xml_doc.write_to(fd, indent: 2)
       end
+      @changed = false
     end
 
     # überprüft, ob der Wert Datasourcetyp in der Layoutdefinition ein gültiger Wert ist.
@@ -526,6 +531,7 @@ PRINT 1
     # ==== Parameter
     def delete_object(node)
       node.remove
+      changed!
     end
 
     def build_printer_instance
@@ -589,6 +595,14 @@ PRINT 1
         path = path.sub(home+"/", "~/")
       end
       path
+    end
+
+    def changed?
+      @changed
+    end
+
+    def changed!
+      @changed = true
     end
   end
 end

@@ -9,9 +9,10 @@ module Mcc2
       include CardPrinting
       include Fox
 
-      def initialize parent
+      def initialize(parent, layout)
         super()
         @parent = parent
+        @layout = layout
         @selected_object_id = nil
         @thread = nil
 
@@ -32,6 +33,7 @@ module Mcc2
             tf.tipText = "DPI des Druckers"
             tf.connect(SEL_COMMAND) do
               @layout_file.set_attr_value(S_BARCODE_DPI, @textfield_barcode_dpi.text.to_f)
+              @layout.changed_attributes
               draw_preview(true, @row)
             end
           end

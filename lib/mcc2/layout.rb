@@ -10,9 +10,6 @@ module Mcc2
   class Layout
     include Fox
 
-    # definiert, ob an den Einstellungen seit dem letzten speichern oder laden etwas geändert wurde
-    attr_accessor :changed
-
     # enthält die kompletten Einstellungen des Kartenlayouts
     attr_reader :layout_file
 
@@ -75,7 +72,7 @@ module Mcc2
           end
         end
         FXVerticalFrame.new(splitter1) do |frame_preview|
-          @preview = Printer::Preview.new(frame_preview)
+          @preview = Printer::Preview.new(frame_preview, self)
         end
         splitter1.setSplit(0, 400 * $gui_scale)
       end
@@ -85,10 +82,8 @@ module Mcc2
       }
 
       if filename
-        @changed = false
         load_from_xml(filename, xpath_changes)
       else
-        @changed = true
         create_xml
       end
 
@@ -122,7 +117,6 @@ module Mcc2
     # sollte jedesmal dann aufgerufen werden, wenn ein Attribut des Layouts geändert wurde
     # es wird das changed-Flag gesetzt und der Titel aktualisiert und die Vorschau neu gezeichnet
     def changed_attributes
-      @changed = true
       set_title
 
       # Any datasource related values changed? -> reopen
@@ -139,7 +133,7 @@ module Mcc2
     # * die verbunden Datenquelle (coming soon)
     # * ein Zeichen *, ob das Layout seit dem letzten Laden oder Speichern geändert wurde
     def set_title
-      @parent.title = "#{@layout_file.filename} #{@changed ? " *" : ""}"
+      @parent.title = "#{@layout_file.filename} #{@layout_file.changed? ? " *" : ""}"
     end
     #---------------------------------------------------------------------------------------------------------
 
@@ -154,19 +148,18 @@ module Mcc2
         @layout_file.filename = fn
       end
       @layout_file.save
-      @changed = false
       set_title
     end
     #---------------------------------------------------------------------------------------------------------
 
     def can_close?
-      return true if !changed
+      return true if !@layout_file.changed?
 
       res = FXMessageBox.question(@parent.app, MBOX_YES_NO_CANCEL, "Datei speichern", "Datei #{@layout_file.filename} speichern ?")
       case res
       when MBOX_CLICKED_YES
         store_to_xml
-        changed ? false : true
+        @layout_file.changed? ? false : true
       when MBOX_CLICKED_NO
         true
       when MBOX_CLICKED_CANCEL
@@ -177,9 +170,7 @@ module Mcc2
     def load_from_xml(filename, xpath_changes)
       lf = LayoutFile.load_from_xml(filename)
       xpath_changes.each do |xpath, value|
-        if lf.change_first_xpath_value(xpath, value)
-          @changed = true
-        end
+        lf.change_first_xpath_value(xpath, value)
       end
       self.layout_file = lf
       unless layout_file.warnings.empty?
