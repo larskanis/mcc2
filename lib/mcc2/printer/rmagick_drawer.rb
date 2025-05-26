@@ -318,7 +318,7 @@ module Mcc2
       if data.nil? || data.empty? || (data.tr("\\", "/") =~ /\/$/)
         # kein Layout angegeben -> dieses Objekt ignorieren
       elsif (path=go.layout_file.expand_path(data)) && FileTest.file?(path)
-        layout_file = LayoutFile.load_from_xml(path)
+        layout_file = LayoutFile.load_from_xml(path, go.layout_file.xpath_changes)
 
         barcode_dpi2 = layout_file.get_attr_value(S_BARCODE_DPI).to_f
         unless ((barcode_dpi - 0.01) .. (barcode_dpi + 0.01)) === barcode_dpi2

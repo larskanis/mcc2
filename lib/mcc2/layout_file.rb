@@ -49,10 +49,11 @@ module Mcc2
     attr_accessor :attributes
     attr_accessor :filename
     attr_reader :warnings
+    attr_reader :xpath_changes
 
-    def self.load_from_xml(filename)
+    def self.load_from_xml(filename, xpath_changes={})
       o = new
-      o.load_from_xml(filename)
+      o.load_from_xml(filename, xpath_changes)
       o
     end
     #---------------------------------------------------------------------------------------------------------
@@ -189,11 +190,18 @@ PRINT 1
     # lädt das XML-File und initialisiert die entsprechenden Variablen und Objekte
     # ==== Parameter
     # +filename+:: der NAme des XML-Files in welchem die Layout-Spezifikation gespeichert werden soll
-    def load_from_xml(filename)
+    def load_from_xml(filename, xpath_changes={})
       return nil if filename == ""
 
+      @filename = filename
       @changed = false
       @xml_doc = File.open(filename) { |fd| Nokogiri::XML(fd) }
+
+      xpath_changes.each do |xpath, value|
+        change_first_xpath_value(xpath, value)
+      end
+      @xpath_changes = xpath_changes
+
       @xml_doc.root["version"] ||= "1"
       filever = @xml_doc.root["version"].to_i
       unless FILE_VERSION_RANGE.include?(filever)
@@ -207,7 +215,6 @@ PRINT 1
           Diese Warnung entfällt, sobald diese Datei einmal gespeichert wird.
         EOT
       end
-      @filename = filename
       # ................................................................................................................................
       # die allgemeine Layout-Einstellungen auslesen
 

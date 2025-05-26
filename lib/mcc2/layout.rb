@@ -168,10 +168,7 @@ module Mcc2
     end
 
     def load_from_xml(filename, xpath_changes)
-      lf = LayoutFile.load_from_xml(filename)
-      xpath_changes.each do |xpath, value|
-        lf.change_first_xpath_value(xpath, value)
-      end
+      lf = LayoutFile.load_from_xml(filename, xpath_changes)
       self.layout_file = lf
       unless layout_file.warnings.empty?
         wa = layout_file.warnings.join("\n\n")
