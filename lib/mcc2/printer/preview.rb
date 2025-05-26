@@ -114,24 +114,29 @@ module Mcc2
         # allgemeine Einstellungen des Image vornehmen
         width = @layout_file.get_attr_value(S_WIDTH).to_f
         height = @layout_file.get_attr_value(S_HEIGHT).to_f
+        duplex = @layout_file.get_attr_value(S_DUPLEX) == S_TRUE
 
         preview = true
 
         card_offset = 0
 
         image_width = width_with_margins(width)
-        image_height = 2 * height_with_margins(height) + card_offset
+        image_height = (duplex ? 2 : 1) * height_with_margins(height) + card_offset
 
         rvg = Magick::RVG.new(mm(image_width), mm(image_height)) do |canvas|
+          # Vorderseite
           draw_pos_x = 0
           draw_pos_y = 0
           canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
-            draw(canvas1, @layout_file, preview, @selected_object_id, row, 0, layers: :all) # Seite 1 drucken
+            draw(canvas1, @layout_file, preview, @selected_object_id, row, 0, layers: :all)
           end
 
-          draw_pos_y = height_with_margins(height) + card_offset
-          canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
-            draw(canvas1, @layout_file, preview, @selected_object_id, row, 1, layers: :all) # Seite 2 drucken
+          # Rückseite
+          if duplex
+            draw_pos_y = height_with_margins(height) + card_offset
+            canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
+              draw(canvas1, @layout_file, preview, @selected_object_id, row, 1, layers: :all)
+            end
           end
 
           canvas.background_fill = "white"
