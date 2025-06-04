@@ -329,11 +329,11 @@ module Mcc2
         changed_attributes
 
         # Objekt-Liste aktualisieren
+        currentItem = @lf.iconlist_objects.currentItem
         fill_objectlist
 
         # Cursor in Liste setzen
         notify = true
-        currentItem = @lf.iconlist_objects.currentItem
         if currentItem > 1 && dest == UP
           @lf.iconlist_objects.setCurrentItem(currentItem - 1, notify)
           @lf.iconlist_objects.selectItem(currentItem - 1, notify)
@@ -460,39 +460,39 @@ module Mcc2
         @lf.button_up.enabled = item_ID > 1
         @lf.button_down.enabled = item_ID < @layout_file.sorted_id_list.length
 
-        node = @layout_file.get_objectnode_by_id(@selected_object_id)
+        obj = @layout_file.find_graphic_object_by_id(@selected_object_id)
 
         # allgemeine Attribute auslesen
         @lf.tabitem_object.shown = true
         @lf.tabitem_posit.shown = true
 
         # Daten-Attribute
-        @lf.textfield_name.text = node.at_xpath(GOA_NAME).content
+        @lf.textfield_name.text = obj[GOA_NAME]
 
         # Positionsattribute
-        @lf.textfield_x.text = node.at_xpath(GOA_X).content
-        @lf.textfield_y.text = node.at_xpath(GOA_Y).content
-        @lf.textfield_width.text = node.at_xpath(GOA_WIDTH).content
-        @lf.textfield_height.text = node.at_xpath(GOA_HEIGHT).content
-        @lf.textfield_rotation.text = node.at_xpath(GOA_ROTATION).content
-        @lf.textfield_rotation.text = node.at_xpath(GOA_ROTATION).content
-        @lf.spinner_seiten_nr.value = node.at_xpath(GOA_PAGE_NR).content.to_i + 1
-        @lf.spinner_layer.value = node.at_xpath(GOA_LAYER).content.to_i
+        @lf.textfield_x.text = obj[GOA_X]
+        @lf.textfield_y.text = obj[GOA_Y]
+        @lf.textfield_width.text = obj[GOA_WIDTH]
+        @lf.textfield_height.text = obj[GOA_HEIGHT]
+        @lf.textfield_rotation.text = obj[GOA_ROTATION]
+        @lf.textfield_rotation.text = obj[GOA_ROTATION]
+        @lf.spinner_seiten_nr.value = obj[GOA_PAGE_NR].to_i + 1
+        @lf.spinner_layer.value = obj[GOA_LAYER].to_i
         #      @lf.iconlist_justify.connect(SEL_CHANGED){iconlist_justify_exit } # todo
 
-        @lf.checkbutton_printlist.state = !(node.at_xpath(GOA_PRINTLIST).content == "false" || node.at_xpath(GOA_PRINTLIST).content == "0")
+        @lf.checkbutton_printlist.state = !(obj[GOA_PRINTLIST] == "false" || obj[GOA_PRINTLIST] == "0")
 
         # Typ-spezifische Attribute auslesen
-        if [BARCODEOBJECT, TEXTOBJECT, PICTUREOBJECT, EMBEDOBJECT].include?(node.at_xpath(GOA_TYP).content)
-          @lf.textfield_sample_data.text = node.at_xpath(GOA_SAMPLE_DATA).content
-          @lf.textfield_data.text = node.at_xpath(GOA_DATA).content
-          @lf.textfield_data_non_text.text = node.at_xpath(GOA_DATA).content
+        if [BARCODEOBJECT, TEXTOBJECT, PICTUREOBJECT, EMBEDOBJECT].include?(obj[GOA_TYP])
+          @lf.textfield_sample_data.text = obj[GOA_SAMPLE_DATA]
+          @lf.textfield_data.text = obj[GOA_DATA]
+          @lf.textfield_data_non_text.text = obj[GOA_DATA]
         end
 
         # Attribute, die Barcode und Texte haben
-        if node.at_xpath(GOA_TYP).content == TEXTOBJECT || node.at_xpath(GOA_TYP).content == BARCODEOBJECT
+        if obj[GOA_TYP] == TEXTOBJECT || obj[GOA_TYP] == BARCODEOBJECT
           @lf.tabitem_font.shown = true
-          @lf.textfield_text_color.text = node.at_xpath(GOA_FONT_COLOR).content
+          @lf.textfield_text_color.text = obj[GOA_FONT_COLOR]
 
           # den Radiobutton der Ausrichtung setzen
           @lf.radiobutton_just_l.state = false
@@ -508,41 +508,41 @@ module Mcc2
           end
 
           fill_font_list
-          fill_font_fields(node)
+          fill_font_fields(obj)
         end
 
         # Attribute, die nur Texte haben
-        if node.at_xpath(GOA_TYP).content == TEXTOBJECT
+        if obj[GOA_TYP] == TEXTOBJECT
           data_block_shown
         end
 
         # Attribute, die nur Barcodes haben
-        if node.at_xpath(GOA_TYP).content == BARCODEOBJECT
+        if obj[GOA_TYP] == BARCODEOBJECT
           @lf.tabitem_barcode.shown = true
-          @lf.spinner_barcode_ratio.value = node.at_xpath(GOA_BAR_RATIO).content.to_i
-          @lf.spinner_barcode_height.value = node.at_xpath(GOA_BARCODE_HEIGHT).content.to_f
-          @lf.checkbutton_barcode_optimized.setCheck(node.at_xpath(GOA_BARCODE_OPTIMIZED).content == "true")
+          @lf.spinner_barcode_ratio.value = obj[GOA_BAR_RATIO].to_i
+          @lf.spinner_barcode_height.value = obj[GOA_BARCODE_HEIGHT].to_f
+          @lf.checkbutton_barcode_optimized.setCheck(obj[GOA_BARCODE_OPTIMIZED] == "true")
           fill_barcode_typ_list
-          fill_barcode_fields(node)
+          fill_barcode_fields(obj)
           data_shown
         end
 
         # Attribute, die nur Bilder haben
-        if node.at_xpath(GOA_TYP).content == PICTUREOBJECT
+        if obj[GOA_TYP] == PICTUREOBJECT
           data_shown
         end
 
-        if node.at_xpath(GOA_TYP).content == BOXOBJECT
+        if obj[GOA_TYP] == BOXOBJECT
           @lf.tabitem_box.shown = true
           @lf.tabitem_box.recalc
-          @lf.textfield_box_fill_color.text = node.at_xpath(GOA_FILL_COLOR).content
-          @lf.textfield_box_border_color.text = node.at_xpath(GOA_BORDER_COLOR).content
-          @lf.textfield_box_border_width.text = node.at_xpath(GOA_BORDER_WIDTH).content
-          @lf.textfield_box_corner_radius.text = node.at_xpath(GOA_CORNER_RADIUS).content
+          @lf.textfield_box_fill_color.text = obj[GOA_FILL_COLOR]
+          @lf.textfield_box_border_color.text = obj[GOA_BORDER_COLOR]
+          @lf.textfield_box_border_width.text = obj[GOA_BORDER_WIDTH]
+          @lf.textfield_box_corner_radius.text = obj[GOA_CORNER_RADIUS]
           no_data_shown
         end
 
-        if node.at_xpath(GOA_TYP).content == EMBEDOBJECT
+        if obj[GOA_TYP] == EMBEDOBJECT
           data_shown
         end
       end
@@ -552,7 +552,7 @@ module Mcc2
     #---------------------------------------------------------------------------------------------------------
 
     def sel_list_box_changed(sender)
-      # ~ node.at_xpath(GOA_FONT_HEIGHT).content = (fontdesc.size.to_f/10).to_s
+      # ~ obj[GOA_FONT_HEIGHT] = (fontdesc.size.to_f/10).to_s
 
       changed = if sender.wdg_name == "listbox_fonts"
         font = @lf.listbox_fonts.getItemData(@lf.listbox_fonts.currentItem)
@@ -578,9 +578,9 @@ module Mcc2
     #---------------------------------------------------------------------------------------------------------
 
     # füllt die Barcode-spezifischen Felder mit den gewählten Optionen aus dem Layout
-    def fill_barcode_fields(node)
+    def fill_barcode_fields(obj)
       # den gewählten Parameter in den entsprechenden Listen markieren
-      bc_typ = node.at_xpath(GOA_BARCODE_TYP).content
+      bc_typ = obj[GOA_BARCODE_TYP]
       bc_id = @barcodes.index(bc_typ.to_sym)
       FXFehlerAuswahlDialog.new(@parent.app, "Der Barcode-Typ #{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes. Der Wert wird auf 'NONE' gesetzt.", ["&OK"]) unless bc_id
       @lf.listbox_barcode_typ.currentItem = bc_id if bc_id
@@ -604,15 +604,15 @@ module Mcc2
     #---------------------------------------------------------------------------------------------------------
 
     # füllt die Font-spezifischen Felder mit den gewählten Optionen aus dem Layout
-    def fill_font_fields(node)
+    def fill_font_fields(obj)
       # die Schriftgröße zurücklesen
-      @lf.textfield_fontsize.text = node.at_xpath(GOA_FONT_HEIGHT).content
+      @lf.textfield_fontsize.text = obj[GOA_FONT_HEIGHT]
 
-      font_typ = node.at_xpath(GOA_FONT_TYP).content
+      font_typ = obj[GOA_FONT_TYP]
       # den gewählten Parameter in den entsprechenden Listen markieren
       set_listbox_value("listbox_fonts", font_typ)
       @lf.textfield_font_file.enabled = font_typ == "from_file"
-      @lf.textfield_font_file.text = node.at_xpath(GOA_FONT_FILE).content
+      @lf.textfield_font_file.text = obj[GOA_FONT_FILE]
     end
     #---------------------------------------------------------------------------------------------------------
 
@@ -671,21 +671,21 @@ module Mcc2
     # ==== Parameter
     # +typ+:: der Typ des Objekts (Bild, Text, Barcode)
     def manage_objects(action, typ = nil)
-      node = @layout_file.get_objectnode_by_id(@selected_object_id) if @selected_object_id
+      obj = @layout_file.find_graphic_object_by_id(@selected_object_id) if @selected_object_id
       if action == ADD
         @layout_file.add_object(typ)
         changed_attributes
       elsif action == DELETE
-        nn = node.at_xpath(GOA_NAME).content
+        nn = obj[GOA_NAME]
         s = "Wollen Sie wirklich das Objekt '#{nn}' löschen?\nDieser Vorgang lässt sich nicht rückgängig machen!"
         error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, s, ["&Löschen", "&Abbrechen"])
         error_WahlMessage.execute
         if error_WahlMessage.selection == 0
-          @layout_file.delete_object(node)
+          @layout_file.delete_object(obj)
           changed_attributes
         end
       elsif action == COPY
-        @layout_file.copy_object(node)
+        @layout_file.copy_object(obj)
         changed_attributes
       end
 

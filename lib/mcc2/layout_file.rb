@@ -328,7 +328,7 @@ PRINT 1
     # holt den Zweig mit den Einstellungen eines graphischen Objekts aus dem XML-File mit der Layout-Spezifikation
     # ==== Parameter
     # +id+:: die Nummer, unter welcher das Attribut gespeichert ist
-    def get_objectnode_by_id(id)
+    private def get_objectnode_by_id(id)
       @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each do |go_struct|
         if go_struct.at_xpath(GOA_ID).content.to_i == id
           return go_struct
@@ -395,7 +395,8 @@ PRINT 1
         end
       end
       changed!
-      go
+
+      LayoutObject::Graphic.get_object_by_typ(typ, xml_elem: go, layout_file: self)
     end
 
     # ermittelt die nächst höhere ID (beeinflusst die Darstellungsebene)
@@ -425,9 +426,10 @@ PRINT 1
       # Wenn es anders herum versucht wird, d.h. das Array durchlaufen und dann das Objekt im XML gesucht, dann werden die ID's schon verändert und die Suche schlägt dann fehl.
       @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each do |go_struct|
         id = go_struct.at_xpath(GOA_ID).content.to_i
-        new_id = obj_arr.index(id)
+        new_id = obj_ids.index(id)
         go_struct.at_xpath(GOA_ID).content = new_id.to_s
       end
+      changed!
     end
 
     # ermittelt den Inhalt eines Attributes des Layout-Abschnittes
@@ -532,22 +534,22 @@ PRINT 1
     # ersetllt ein neues Graphik-Objekt und kopiert alle Attributte des übergebenen, außer ID, Typ und Name
     # ==== Parameter
     # +node+:: die XML-Node des zu kopierenden Objekts, fals nil übergeben wurde, kehrt die Methode unverrichteter Dinge zurück
-    def copy_object(node)
-      return unless node
-      o = add_object(node.at_xpath(GOA_TYP).content)
-      node.elements.each do |element|
+    def copy_object(obj)
+      return unless obj
+      o = add_object(obj[GOA_TYP])
+      obj.attributes.each do |attr|
         # alle Attribute, außer ID, Typ und Name kopieren, sofern sie vorhanden, ansonsten den Standard lassen
-        if element.name != GOA_ID && element.name != GOA_TYP && element.name != GOA_NAME
-          # at_xpath kann nil liefern, wenn ein unbekanntes Attribut im Quellobjekt definiert ist
-          o.at_xpath(element.name)&.content = element.content
+        unless [GOA_ID, GOA_TYP, GOA_NAME].include?(attr)
+          o[attr] = obj[attr]
         end
       end
+      changed!
     end
 
     # löscht sie übergebene XML-Node aus dem Layout ohne Rückfrage, diese muss in der aufrufenden Methode durchgeführt werden
     # ==== Parameter
-    def delete_object(node)
-      node.remove
+    def delete_object(obj)
+      obj.delete
       changed!
     end
 

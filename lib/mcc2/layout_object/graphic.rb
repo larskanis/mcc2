@@ -37,6 +37,14 @@ module Mcc2
         goattr.content = text if goattr
       end
 
+      def attributes
+        @go_attributes.keys
+      end
+
+      def delete
+        @xml_elem.remove
+      end
+
       def self.get_object_by_typ(typ, xml_elem: nil, layout_file: nil)
         if typ == TEXTOBJECT then Text.new xml_elem: xml_elem, layout_file: layout_file
         elsif typ == BARCODEOBJECT then Barcode.new xml_elem: xml_elem, layout_file: layout_file
