@@ -37,7 +37,10 @@ module Mcc2
       #      text_field_trigger = SEL_CHANGED # geht sehr langsam und macht bei Barcode und Bild Probleme
 
       # Objektliste
-      @lf.iconlist_objects.connect(SEL_SELECTED) { object_selection_changed }
+      @lf.iconlist_objects.connect(SEL_SELECTED) do
+        item_ID = @lf.iconlist_objects.currentItem
+        @layout.selected_object_id = @lf.iconlist_objects.getItemData(item_ID).to_i
+      end
       @lf.iconlist_objects.connect(SEL_DESELECTED) { object_deselected }
 
       # die allgemeinen Objektattribute
@@ -190,14 +193,11 @@ module Mcc2
         changed_attributes if @layout_file.set_object_by_id(@selected_object_id, GOA_BARCODE_OPTIMIZED, @lf.checkbutton_barcode_optimized.checked?)
       end
       @lf.spinner_barcode_ratio.range = (1..100)
-      # .............................................................................................
 
       create_chipparam_fields
 
       fill_objectlist
-      object_selection_changed
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # erzeugt Textfelder für die Eingabe der Chip-Parameter
     # erzeugt so viele Felder, wie in der Methode anz_params der Klasse Chip definiert sind
@@ -234,7 +234,6 @@ module Mcc2
         @chipparam_textfields << tf
       end
     end
-    #---------------------------------------------------------------------------------------------------------
 
     def layoutview_tab_activated(active = true)
       draw_preview if active
@@ -291,7 +290,6 @@ module Mcc2
       end
     end
 
-    #---------------------------------------------------------------------------------------------------------
     # die Reaktion, wenn der Status eines Checkbuttons geänderrt wurde
     # setzt das changed-Flag
     # ==== Parameter
@@ -343,7 +341,6 @@ module Mcc2
         end
       end
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # öffnet einen Dialog, mit dem die Textfarbe gewählt werden kann und
     # trägt diese in das Textfeld für die Farbangabe ein
@@ -355,7 +352,6 @@ module Mcc2
         textfield.setText([s[6, 2], s[4, 2], s[2, 2], s[0, 2]].join, true)
       end
     end
-    #---------------------------------------------------------------------------------------------------------
 
     def attr_changed(attr, value)
       if @layout_file.set_attr_value(attr, value)
@@ -425,40 +421,44 @@ module Mcc2
     attr_reader :selected_object_id
     def selected_object_id= id
       @selected_object_id = id
-      @layout.selected_object_id = id
+      object_selection_changed
     end
-
-    #---------------------------------------------------------------------------------------------------------
 
     # deaktiviert die Tabs im Layout-Dialog, welche Objekt-spezifisch sind
     def object_deselected
-      activate_object_tabs(false)
-      self.selected_object_id = nil
-      activate_up_down(false)
-      activate_copy_delete(false)
+      @layout.selected_object_id = nil
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # wenn in der Objektliste ein anderes Objekt selektiert wird, dann werden mit dieser Methode die Anzeigen aktualisiert,
     # z.Bsp, nur die Tabs aktiviert, die zum Objekttyp passen, usw.
     def object_selection_changed
-      item_ID = @lf.iconlist_objects.currentItem
-      self.selected_object_id = @lf.iconlist_objects.getItemData(item_ID).to_i
+      if !@selected_object_id
+        # No object selected
+        activate_object_tabs(false)
+        activate_up_down(false)
+        activate_copy_delete(false)
+        @lf.iconlist_objects.killSelection
 
-      if @selected_object_id == JobSetupObjID
+      elsif @selected_object_id == JobSetupObjID
+        # Job-Setup selected
         object_deselected
         activate_job_tabs
         @lf.tabbook_objectattributes.current = 0
 
       else
+        # Graphic object selected
+        pos = @lf.iconlist_objects.findItemByData(@selected_object_id)
+        @lf.iconlist_objects.setCurrentItem(pos)
+        @lf.iconlist_objects.selectItem(pos)
+
         # erst einmal alle Objekt-Tabs deaktivieren, damit sicher gestellt ist, dass nur die Objekt-typischen angezeigt werden
         activate_object_tabs(false)
         activate_job_tabs(false)
         activate_copy_delete
 
         # die Buttons für das Ändern der Reihenfolge aktivieren
-        @lf.button_up.enabled = item_ID > 1
-        @lf.button_down.enabled = item_ID < @layout_file.sorted_id_list.length
+        @lf.button_up.enabled = pos > 1
+        @lf.button_down.enabled = pos < @layout_file.sorted_id_list.length
 
         obj = @layout_file.find_graphic_object_by_id(@selected_object_id)
 

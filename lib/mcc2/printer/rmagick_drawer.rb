@@ -32,19 +32,68 @@ end
 
 module Mcc2
   module RmagickDrawer
+    class Rectangle
+      def initialize(v1, v2, v3, v4, obj_id)
+        @v1 = v1
+        @v2 = v2
+        @v3 = v3
+        @v4 = v4
+        @obj_id = obj_id
+      end
+
+      private def sign(p1, p2, p3)
+        (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y)
+      end
+
+      def point_inside(pt)
+        d1 = sign(pt, @v1, @v2);
+        d2 = sign(pt, @v2, @v3);
+        d3 = sign(pt, @v3, @v4);
+        d4 = sign(pt, @v4, @v1);
+
+        has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0) || (d4 < 0);
+        has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0) || (d4 > 0);
+
+        return !(has_neg && has_pos);
+      end
+
+      attr_reader :obj_id
+    end
+
+    class RectangeList
+      def initialize
+        @objs = []
+      end
+
+      def add(rect)
+        if rect.is_a?(RectangeList)
+          @objs += rect.objs
+        else
+          @objs << rect
+        end
+      end
+
+      def point_inside(pt)
+        @objs.select do |obj|
+          obj.point_inside(pt)
+        end
+      end
+
+      attr_reader :objs
+    end
+
     def width_with_margins(width)
       width + card_margin_left + card_margin_right
     end
-    #---------------------------------------------------------------------------------------------------------
 
     def height_with_margins(height)
       height + card_margin_bottom + card_margin_top
     end
-    #---------------------------------------------------------------------------------------------------------
 
-    def draw(canvas, layout_file, preview, selected_object_id, row, page_nr, layers: [0])
+    def draw(canvas, layout_file, preview, selected_object_id, row, page_nr, layers: [0], transform: nil)
       @magick_font_list ||= Magick.fonts.map { |mf| mf.name }
       barcode_dpi = layout_file.get_attr_value(S_BARCODE_DPI).to_f
+      rect_list = RectangeList.new if transform
 
       width = layout_file.get_attr_value(S_WIDTH).to_f
       height = layout_file.get_attr_value(S_HEIGHT).to_f
@@ -55,13 +104,13 @@ module Mcc2
       end
 
       canvas.g.translate(mm(card_margin_left).round, mm(card_margin_top).round) do |canvas1|
-        rx = mm(3)
-        # ..........................................................................................
+
+        tra = transform&.translate(mm(card_margin_left).round, mm(card_margin_top).round)
         # Kartenhintergrund füllen (für Vorschau)
+        rx = mm(3)
         if preview
           canvas1.rect(mm(width), mm(height)).round(rx).styles(fill: "lightgray", stroke: "none")
         end
-        # ..........................................................................................
         # die graphischen Elemnte zeichnen
 
         # Text-Objekte
@@ -90,7 +139,15 @@ module Mcc2
             end
 
             canvas1.g.translate(mm(x).round, mm(y).round).rotate(rotation) do |body|
-              # ............................................................................................................
+              if tra
+                rec1 = tra.translate(mm(x).round, mm(y).round)&.rotate(rotation)
+                rec2 = rec1.translate(mm(go_width), 0)
+                rec3 = rec1.translate(mm(go_width), mm(go_height))
+                rec4 = rec1.translate(0, mm(go_height))
+                rec = Rectangle.new(rec1.vector2d, rec2.vector2d, rec3.vector2d, rec4.vector2d, id)
+                rect_list.add(rec)
+              end
+
               # die Objekt-spezifischen Attribute ermitteln
               if typ == TEXTOBJECT
                 draw_textobject(body.g, go, go_width, go_height, data.empty? ? data_nosub : data)
@@ -105,8 +162,6 @@ module Mcc2
                 draw_embedobject(body, go, go_width, go_height, data, row ? row['row_number'] : "1", barcode_dpi)
               end
 
-              # ............................................................................................................
-
               # in Vorschau einen Rahmen um das selektierte Objekt zeichnen
               if preview && selected_object_id == id
                 body.rect(mm(go_width), mm(go_height)).styles(fill: "none", stroke: "red")
@@ -115,7 +170,6 @@ module Mcc2
           end
         end
 
-        # ..........................................................................................
         # Rand zeichnen (für Vorschau)
         if preview
           canvas1.rect(mm(width), mm(height)).round(rx).styles(fill: "none", stroke: "blue")
@@ -147,6 +201,8 @@ module Mcc2
           end
         end
       end
+
+      rect_list
     end
 
     def draw_textobject(body, go, go_width, go_height, data)

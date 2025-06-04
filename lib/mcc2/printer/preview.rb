@@ -49,6 +49,7 @@ module Mcc2
         end
 
         @image_view = FXImageView.new(parent, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y)
+        @image_view.connect(SEL_LEFTBUTTONPRESS, &method(:image_view_clicked))
 
         set_zoom
       end
@@ -69,13 +70,26 @@ module Mcc2
         @dpi = v
       end
 
+      def image_view_clicked(sender, sel, event)
+        content_x = (@image_view.viewportWidth - @image_view.contentWidth) / 2
+        content_y = (@image_view.viewportHeight - @image_view.contentHeight) / 2
+        point = Vector2d.new(
+          event.win_x - @image_view.xPosition - content_x,
+          event.win_y - @image_view.yPosition - content_y)
+        p point
+
+        if @rect_list
+          rects = @rect_list.point_inside(point)
+          @layout.selected_object_id = rects.first&.obj_id
+        end
+      end
+
       # verändert die Zoomstufe, wenn am Rädchen gedreht wird
       def set_zoom
         self.dpi = @dial_zoom.value
         @label_zoom.text = "#{dpi} DPI"
         @parent.app.reg.writeRealEntry("settings", "preview_dpi", dpi)
       end
-      #---------------------------------------------------------------------------------------------------------
 
       # zeichnet die Vorschau im Layout-Modus
       # hier ist noch einiges zu tun, im speziellen sind einige Werte "hart" kodiert,
@@ -110,6 +124,42 @@ module Mcc2
         end
       end
 
+      class Transformation
+        def initialize(x = 0.0, y = 0.0, a = 0.0)
+          @x = x
+          @y = y
+          @a = a
+        end
+
+        def translate(x, y)
+          self.class.new @x + x * Math.cos(@a) + y * Math.sin(@a),
+            @y + y * Math.cos(@a) + x * Math.sin(@a),
+            @a
+        end
+
+        def rotate(a)
+          self.class.new @x, @y, @a + a
+        end
+
+        def vector2d
+          Vector2d.new(@x, @y)
+        end
+
+        attr_reader :x
+        attr_reader :y
+        attr_reader :a
+      end
+
+      class Vector2d
+        def initialize(x, y)
+          @x = x
+          @y = y
+        end
+
+        attr_reader :x
+        attr_reader :y
+      end
+
       def draw_preview_now(row = nil)
         # allgemeine Einstellungen des Image vornehmen
         width = @layout_file.get_attr_value(S_WIDTH).to_f
@@ -123,26 +173,30 @@ module Mcc2
         image_width = width_with_margins(width)
         image_height = (duplex ? 2 : 1) * height_with_margins(height) + card_offset
 
+        rect_list = nil
         rvg = Magick::RVG.new(mm(image_width), mm(image_height)) do |canvas|
+
           # Vorderseite
           draw_pos_x = 0
           draw_pos_y = 0
+          tra = Transformation.new
           canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
-            draw(canvas1, @layout_file, preview, @selected_object_id, row, 0, layers: :all)
+            rect_list = draw(canvas1, @layout_file, preview, @selected_object_id, row, 0, layers: :all,
+                 transform: tra.translate(mm(draw_pos_x), mm(draw_pos_y)))
           end
 
           # Rückseite
           if duplex
             draw_pos_y = height_with_margins(height) + card_offset
             canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
-              draw(canvas1, @layout_file, preview, @selected_object_id, row, 1, layers: :all)
+              rect_list.add draw(canvas1, @layout_file, preview, @selected_object_id, row, 1, layers: :all,
+                  transform: tra.translate(mm(draw_pos_x), mm(draw_pos_y)))
             end
           end
 
           canvas.background_fill = "white"
         end
 
-        # ..........................................................................................
         # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
         data = rvg.draw.to_blob do |image|
           image.format = "PNG"
@@ -156,6 +210,7 @@ module Mcc2
         end
 
         @parent.runOnUiThread do
+          @rect_list = rect_list
           fx_image.create
           begin
             @image_view.image = fx_image
@@ -177,7 +232,6 @@ module Mcc2
         end
         # rescue
       end
-      #---------------------------------------------------------------------------------------------------------
 
       def check_if_font_exist(fontdesc)
         rmfl = []
@@ -187,7 +241,6 @@ module Mcc2
         return fontdesc if rmfl.index(fontdesc.face.tr(" ", "-").delete("@"))
         fdlg.execute
       end
-      #---------------------------------------------------------------------------------------------------------
     end
   end
 end

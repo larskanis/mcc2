@@ -135,7 +135,6 @@ module Mcc2
     def set_title
       @parent.title = "#{@layout_file.filename} #{@layout_file.changed? ? " *" : ""}"
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # speichert alle GraphicObjekte und Layout-Einstellungen im XML-File
     def store_to_xml(filename_dialog = false)
@@ -150,7 +149,6 @@ module Mcc2
       @layout_file.save
       set_title
     end
-    #---------------------------------------------------------------------------------------------------------
 
     def can_close?
       return true if !@layout_file.changed?
@@ -175,7 +173,6 @@ module Mcc2
         FXMessageBox.warning(@parent.app, MBOX_OK, "Warnung beim Laden von #{filename}", wa)
       end
     end
-    #---------------------------------------------------------------------------------------------------------
 
     def layout_file= layout_file
       @layout_file = layout_file
@@ -187,6 +184,7 @@ module Mcc2
     end
 
     def selected_object_id= id
+      @layoutview.selected_object_id = id
       @preview.selected_object_id = id if @preview
     end
 
