@@ -311,8 +311,6 @@ module Mcc2
     # +dest+:: die Richtung (UP, oder DOWN)
     def object_move_up_down(dest)
       if @selected_object_id
-        @layout_file.get_objectnode_by_id(@selected_object_id)
-
         # erst einmal eine sortierte Liste aller ID's der Grafikobjekte holen
         obj_arr = @layout_file.sorted_id_list
 
@@ -324,16 +322,8 @@ module Mcc2
           obj_arr[pos], obj_arr[pos + 1] = obj_arr[pos + 1], obj_arr[pos]
         end
 
-        # dann die ID's im XML entsprechend des ARRAY-Indexes über die alte ID setzen (ist automatisch eine Re-Indizierung zum Entfernen von Löschern
-        # dabei alle Objekte durchlaufen und im Array die Position der alten ID suchen und in die ID schreiben
-        # dies muss so getan werden
-        # wenn es anders herum versucht wird, d.h. das Array durchlaufen und dann das Objekt im XML gesucht, dann werden die ID's schon verändert und die Suche schlägt dann fehl
-        @layout_file.xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each { |go_struct|
-          id = go_struct.at_xpath(GOA_ID).content.to_i
-          new_id = obj_arr.index(id)
-          go_struct.at_xpath(GOA_ID).content = new_id.to_s
-        }
-        currentItem = @lf.iconlist_objects.currentItem
+        # Nun im XML reindexieren
+        @layout_file.reorder_id_list(obj_arr)
 
         # changed-Flag setzen
         changed_attributes
@@ -341,7 +331,9 @@ module Mcc2
         # Objekt-Liste aktualisieren
         fill_objectlist
 
+        # Cursor in Liste setzen
         notify = true
+        currentItem = @lf.iconlist_objects.currentItem
         if currentItem > 1 && dest == UP
           @lf.iconlist_objects.setCurrentItem(currentItem - 1, notify)
           @lf.iconlist_objects.selectItem(currentItem - 1, notify)
@@ -385,40 +377,24 @@ module Mcc2
     # +sender+::    das Objekt, welches das Ereignis gesendet hat
     # +attr_name+:: der Name des Attributs
     def textfield_exit(sender, attr_name)
-      if attr_name == S_CHIPPARAMS
+      changed = if attr_name == S_CHIPPARAMS
         # aus dem Namen des Textfeldes die ID ermitteln (sind durchnummeriert)
         id = sender.wdg_name.split("_")[-1].to_i
 
-        # die die Route zu den Chipparams suchen
-        chip_attrs = @layout_file.xml_doc.at_xpath("//#{S_ROOT}/#{S_CHIP}")
-
         # den entsprechenden Parameter suchen
         attr_name = "#{S_PARAM}_#{id + 1}"
-        node = chip_attrs.at_xpath(attr_name)
+        @layout_file.set_attr_value(attr_name, sender.text, S_CHIP)
       elsif [S_X_OFFSET, S_Y_OFFSET, S_WIDTH, S_HEIGHT].include?(attr_name)
-        changed_attributes if @layout_file.set_attr_value(attr_name, sender.text)
-      elsif attr_name == S_X_OFFSET
-        lay_attrs = @layout_file.xml_doc.at_xpath("//#{S_ROOT}/#{S_LAYOUT}")
-        node = lay_attrs.at_xpath(S_X_OFFSET)
-      elsif attr_name == S_MSSPUR1
-        node = @layout_file.xml_doc.at_xpath("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}/#{S_MSSPUR1}")
-      elsif attr_name == S_MSSPUR2
-        node = @layout_file.xml_doc.at_xpath("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}/#{S_MSSPUR2}")
-      elsif attr_name == S_MSSPUR3
-        node = @layout_file.xml_doc.at_xpath("//#{S_ROOT}/#{S_MAGSTRIPEPARAMS}/#{S_MSSPUR3}")
+        @layout_file.set_attr_value(attr_name, sender.text)
+      elsif [S_MSSPUR1, S_MSSPUR2, S_MSSPUR3].include?(attr_name)
+        @layout_file.set_attr_value(attr_name, sender.text, S_MAGSTRIPEPARAMS)
       else
         # in diesem Zweig werden alle Graphik-Objekte bearbeitet
         # das Attribut suchen
-        node = @layout_file.get_objectnode_by_id(@selected_object_id)&.at_xpath(attr_name)
+        @layout_file.set_object_by_id(@selected_object_id, attr_name, sender.text)
       end
-
-      # nur wenn im Textfeld etwas geändert wurde, den Text in das Attribut schreiben und das changed-Flag setzen
-      if node && sender.text != node.content
-        node.content = sender.text
-        changed_attributes
-      end
+      changed_attributes if changed
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # deaktivieren der Anzeige der Objektattribute, wenn kein Objekt selektiert ist
     def activate_object_tabs(on = true)
@@ -434,7 +410,6 @@ module Mcc2
       @lf.tabitem_chip.shown = on
       @lf.tabitem_magstripe.shown = on
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # deaktiviert die Buttons für das Verschieben der Objekte in der Objektliste (zum Beispiel, wenn kein Objekt selektiert ist)
     def activate_up_down(on = true)

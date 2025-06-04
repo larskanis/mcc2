@@ -154,9 +154,6 @@ PRINT 1
       @warnings = []
     end
 
-    #---------------------------------------------------------------------------------------------------------
-    attr_reader :xml_doc
-    #---------------------------------------------------------------------------------------------------------
 
     # erzeugt eine neue XML-Datei und initialisiert die entsprechenden Variablen und Objekte
     def create_xml
@@ -310,7 +307,7 @@ PRINT 1
     end
 
     def find_graphic_object_by_id(id)
-      go = xml_doc.at_xpath(
+      go = @xml_doc.at_xpath(
         "//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[.='#{id}']"
       ).parent
       typ = go.at_xpath(GOA_TYP).content
@@ -319,12 +316,12 @@ PRINT 1
     end
 
     def magstripe_object
-      ms_node = xml_doc.at_xpath("//#{S_ROOT}//#{S_MAGSTRIPEPARAMS}")
+      ms_node = @xml_doc.at_xpath("//#{S_ROOT}//#{S_MAGSTRIPEPARAMS}")
       LayoutObject::Magstripe.new(ms_node)
     end
 
     def chip_object
-      chip_attrs = xml_doc.at_xpath("//#{S_ROOT}/#{S_CHIP}")
+      chip_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{S_CHIP}")
       LayoutObject::Chip.new chip_attrs
     end
 
@@ -404,9 +401,9 @@ PRINT 1
     # ermittelt die nächst höhere ID (beeinflusst die Darstellungsebene)
     def get_new_id
       id = 0
-      @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each { |go|
+      @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each do |go|
         id = go.at_xpath(GOA_ID).content.to_i + 1 if go.at_xpath(GOA_ID).content.to_i >= id
-      }
+      end
       id
     end
 
@@ -415,9 +412,22 @@ PRINT 1
     # ==== Return
     # die sortierte Liste mit ID's [Array]
     def sorted_id_list
-      @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").collect { |go_struct|
+      @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").collect do |go_struct|
         go_struct.at_xpath(GOA_ID).content.to_i
-      }.sort!
+      end.sort!
+    end
+
+    # Reindex the objects according to the passed array of obj_ids
+    def reorder_id_list(obj_ids)
+      # Die ID's im XML entsprechend des ARRAY-Indexes über die alte ID setzen (ist automatisch eine Re-Indizierung zum Entfernen von Löschern.
+      # Dabei alle Objekte durchlaufen und im Array die Position der alten ID suchen und in die ID schreiben.
+      # Dies muss so getan werden.
+      # Wenn es anders herum versucht wird, d.h. das Array durchlaufen und dann das Objekt im XML gesucht, dann werden die ID's schon verändert und die Suche schlägt dann fehl.
+      @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each do |go_struct|
+        id = go_struct.at_xpath(GOA_ID).content.to_i
+        new_id = obj_arr.index(id)
+        go_struct.at_xpath(GOA_ID).content = new_id.to_s
+      end
     end
 
     # ermittelt den Inhalt eines Attributes des Layout-Abschnittes
@@ -425,12 +435,11 @@ PRINT 1
     # den Inhalt des Attributes [String]
     # ==== Parameter
     # +attr_name+:: der Name des Attributes z.Bsp. 'datasource' Bitte vorwiegend Konstanten verwenden z. Bsp. S_DATASOURCE [String]
-    def get_attr_value(attr_name)
-      lay_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{S_LAYOUT}")
+    def get_attr_value(attr_name, base=S_LAYOUT)
+      lay_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{base}")
       attr = lay_attrs.at_xpath(attr_name)
       attr&.content
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # setzt den Inhalt eines Attributes des Layout-Abschnittes
     # ==== Return
@@ -439,8 +448,8 @@ PRINT 1
     # ==== Parameter
     # +attr_name+:: der Name des Attributes z.Bsp. 'datasource' Bitte vorwiegend Konstanten verwenden z. Bsp. S_DATASOURCE [String]
     # +value+:: der Wert der geschrieben werden soll [String]
-    def set_attr_value(attr_name, value)
-      lay_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{S_LAYOUT}")
+    def set_attr_value(attr_name, value, base=S_LAYOUT)
+      lay_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{base}")
       attr = lay_attrs.at_xpath(attr_name)
       value = value.to_s
       if attr.content != value
@@ -534,7 +543,6 @@ PRINT 1
         end
       end
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # löscht sie übergebene XML-Node aus dem Layout ohne Rückfrage, diese muss in der aufrufenden Methode durchgeführt werden
     # ==== Parameter
