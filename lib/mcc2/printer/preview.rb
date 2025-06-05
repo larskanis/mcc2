@@ -71,16 +71,25 @@ module Mcc2
       end
 
       def image_view_clicked(sender, sel, event)
-        content_x = (@image_view.viewportWidth - @image_view.contentWidth) / 2
-        content_y = (@image_view.viewportHeight - @image_view.contentHeight) / 2
+        # There is no accessor for the content position in FXImageView.
+        # So the calculation is a bit awkward.
+        if @image_view.viewportWidth >= @image_view.contentWidth
+          content_x = (@image_view.viewportWidth - @image_view.contentWidth) / 2
+        else
+          content_x = @image_view.xPosition
+        end
+        if @image_view.viewportHeight >= @image_view.contentHeight
+          content_y = (@image_view.viewportHeight - @image_view.contentHeight) / 2
+        else
+          content_y = @image_view.yPosition
+        end
         point = Vector2d.new(
-          event.win_x - @image_view.xPosition - content_x,
-          event.win_y - @image_view.yPosition - content_y)
-        p point
+          event.win_x - content_x,
+          event.win_y - content_y)
 
         if @rect_list
           rects = @rect_list.point_inside(point)
-          @layout.selected_object_id = rects.first&.obj_id
+          @layout.selected_object_id = rects.last&.obj_id
         end
       end
 
