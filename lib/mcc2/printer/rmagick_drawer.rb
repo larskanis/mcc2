@@ -32,7 +32,7 @@ end
 
 module Mcc2
   module RmagickDrawer
-    class Rectangle
+    class ObjRectangle
       def initialize(v1, v2, v3, v4, obj_id)
         @v1 = v1
         @v2 = v2
@@ -60,13 +60,13 @@ module Mcc2
       attr_reader :obj_id
     end
 
-    class RectangeList
+    class ObjRectangeList
       def initialize
         @objs = []
       end
 
       def add(rect)
-        if rect.is_a?(RectangeList)
+        if rect.is_a?(self.class)
           @objs += rect.objs
         else
           @objs << rect
@@ -93,7 +93,7 @@ module Mcc2
     def draw(canvas, layout_file, preview, selected_object_id, row, page_nr, layers: [0], transform: nil)
       @magick_font_list ||= Magick.fonts.map { |mf| mf.name }
       barcode_dpi = layout_file.get_attr_value(S_BARCODE_DPI).to_f
-      rect_list = RectangeList.new if transform
+      rect_list = ObjRectangeList.new if transform
 
       width = layout_file.get_attr_value(S_WIDTH).to_f
       height = layout_file.get_attr_value(S_HEIGHT).to_f
@@ -147,8 +147,8 @@ module Mcc2
                 rec2 = rec1.translate(mm(go_width), 0)
                 rec3 = rec1.translate(mm(go_width), mm(go_height) + text_y)
                 rec4 = rec1.translate(0, mm(go_height) + text_y)
-                rec = Rectangle.new(rec1.vector2d, rec2.vector2d, rec3.vector2d, rec4.vector2d, id)
-                rect_list.add(rec)
+                orec = ObjRectangle.new(rec1.vector2d, rec2.vector2d, rec3.vector2d, rec4.vector2d, id)
+                rect_list.add(orec)
               end
 
               # die Objekt-spezifischen Attribute ermitteln
