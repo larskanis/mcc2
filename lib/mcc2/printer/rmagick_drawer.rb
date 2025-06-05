@@ -140,10 +140,12 @@ module Mcc2
 
             canvas1.g.translate(mm(x).round, mm(y).round).rotate(rotation) do |body|
               if tra
-                rec1 = tra.translate(mm(x).round, mm(y).round).rotate(rotation)
+                # Text is written on top of the basis object point, so add the fontsize to the click box
+                text_y = typ == TEXTOBJECT ? pt(go[GOA_FONT_HEIGHT].to_f) : 0
+                rec1 = tra.translate(mm(x).round, (mm(y) - text_y).round).rotate(rotation)
                 rec2 = rec1.translate(mm(go_width), 0)
-                rec3 = rec1.translate(mm(go_width), mm(go_height))
-                rec4 = rec1.translate(0, mm(go_height))
+                rec3 = rec1.translate(mm(go_width), mm(go_height) + text_y)
+                rec4 = rec1.translate(0, mm(go_height) + text_y)
                 rec = Rectangle.new(rec1.vector2d, rec2.vector2d, rec3.vector2d, rec4.vector2d, id)
                 rect_list.add(rec)
               end
