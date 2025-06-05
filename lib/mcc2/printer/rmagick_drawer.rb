@@ -140,7 +140,7 @@ module Mcc2
 
             canvas1.g.translate(mm(x).round, mm(y).round).rotate(rotation) do |body|
               if tra
-                rec1 = tra.translate(mm(x).round, mm(y).round)&.rotate(rotation)
+                rec1 = tra.translate(mm(x).round, mm(y).round).rotate(rotation)
                 rec2 = rec1.translate(mm(go_width), 0)
                 rec3 = rec1.translate(mm(go_width), mm(go_height))
                 rec4 = rec1.translate(0, mm(go_height))

@@ -141,8 +141,8 @@ module Mcc2
         end
 
         def translate(x, y)
-          self.class.new @x + x * Math.cos(@a) + y * Math.sin(@a),
-            @y + y * Math.cos(@a) + x * Math.sin(@a),
+          self.class.new @x + x * Math.cos(@a*Math::PI/180) - y * Math.sin(@a*Math::PI/180),
+            @y + y * Math.cos(@a*Math::PI/180) + x * Math.sin(@a*Math::PI/180),
             @a
         end
 
