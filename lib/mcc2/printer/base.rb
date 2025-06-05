@@ -29,7 +29,7 @@ module Mcc2
         v = v.to_f
         if layout_file
           barcode_dpi = layout_file.get_attr_value(S_BARCODE_DPI).to_f
-          unless ((barcode_dpi - 0.9) .. (barcode_dpi + 0.9)) === v
+          unless ((barcode_dpi - 0.009) .. (barcode_dpi + 0.009)) === v
             raise DpiDoesntMatch, "Barcode-DPI in der Vorschau (#{format("%0.1f", barcode_dpi)}) und vom Druck (#{format("%0.1f", v)}) sind verschieden. Bitte DPI anpassen und Barcodes neu prüfen!"
           end
         end

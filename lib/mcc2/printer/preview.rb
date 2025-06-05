@@ -56,7 +56,7 @@ module Mcc2
 
       def layout_file=(value)
         super
-        @textfield_barcode_dpi.text = @layout_file.get_attr_value(S_BARCODE_DPI) || "203.2"
+        @textfield_barcode_dpi.text = @layout_file.get_attr_value(S_BARCODE_DPI) || "203.0"
       end
 
       def selected_object_id= id
