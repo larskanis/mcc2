@@ -197,6 +197,7 @@ module Mcc2
       create_chipparam_fields
 
       fill_objectlist
+      object_selection_changed
     end
 
     # erzeugt Textfelder für die Eingabe der Chip-Parameter
@@ -441,7 +442,6 @@ module Mcc2
 
       elsif @selected_object_id == JobSetupObjID
         # Job-Setup selected
-        object_deselected
         activate_job_tabs
         @lf.tabbook_objectattributes.current = 0
 
