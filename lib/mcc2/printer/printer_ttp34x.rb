@@ -60,9 +60,13 @@ module Mcc2
 
         page_commands.gsub!("%IMAGE_LEN_DATA_PCX%") do
           pic = pic.quantize(2, Magick::RGBColorspace, false)
+          pic = pic.level2(Magick::QuantumRange / 2, Magick::QuantumRange / 2)
+          pic = pic.quantize(2, Magick::RGBColorspace, false)
+          pic = pic.level2(Magick::QuantumRange / 2, Magick::QuantumRange / 2)
+          pic.class_type = Magick::PseudoClass
+          pic.image_type = Magick::BilevelType
           # wir müssen die Farben invertieren, da TTP anscheinend das Negativ druckt !!!
-          # seit 2025-04-23 druckt TTP 346M korrekt, daher .negate DEAKTIVIERT
-          pic_negate = pic # pic.negate
+          pic_negate = pic.negate
           data = pic_negate.to_blob do |image|
             image.format = "pcx"
           end
