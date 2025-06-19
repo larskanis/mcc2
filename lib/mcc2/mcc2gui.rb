@@ -231,15 +231,15 @@ module Mcc2
         opts.separator "\t -x {layo.xml}//Layout/fileprinter_save_as~image_%d_%p.png"
       end.parse!(argv)
 
-      argv.each do |arg|
-        w.open_layout(arg)
-      end
-
       begin
         w.topwin.create
         w.topwin.show(Fox::PLACEMENT_SCREEN)
 
         app.create
+        argv.each do |arg|
+          w.open_layout(arg)
+        end
+
         app.run
       rescue Exception => e
         DebugTools.write_exception("main", e)
