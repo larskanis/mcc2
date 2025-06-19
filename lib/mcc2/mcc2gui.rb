@@ -149,9 +149,10 @@ module Mcc2
     end
     #---------------------------------------------------------------------------------------------------------
 
-    def new_layout
+    def new_layout(filename=nil)
       child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800 * @gui_scale, 600 * @gui_scale)
       child.userData = Layout.new(child)
+      child.userData.filename = filename
       child.create
       child.show
       child.recalc
@@ -161,8 +162,11 @@ module Mcc2
     #---------------------------------------------------------------------------------------------------------
 
     def open_layout(filename = nil)
-      unless filename && FileTest.exist?(filename)
+      unless filename
         filename = FXFileDialog.getOpenFilename(@topwin, "Laden", "./", patterns = "*.xml", initial = 0)
+      end
+      unless FileTest.exist?(filename)
+        return new_layout(filename)
       end
       unless filename.to_s.empty?
         child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800 * @gui_scale, 600 * @gui_scale)

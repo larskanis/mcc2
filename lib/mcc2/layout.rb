@@ -125,14 +125,18 @@ module Mcc2
         open_dataman
       end
     end
-    #---------------------------------------------------------------------------------------------------------
+
+    def filename=(string)
+      @layout_file.filename = string
+      set_title
+    end
 
     # aktualisiert den Titel des Layout-Fensters
     # es werden eingetragen
     # * der Dateiname des Layouts
     # * die verbunden Datenquelle (coming soon)
     # * ein Zeichen *, ob das Layout seit dem letzten Laden oder Speichern geändert wurde
-    def set_title
+    private def set_title
       @parent.title = "#{@layout_file.filename} #{@layout_file.changed? ? " *" : ""}"
     end
 
