@@ -671,11 +671,11 @@ module Mcc2
     # ==== Parameter
     # +typ+:: der Typ des Objekts (Bild, Text, Barcode)
     def manage_objects(action, typ = nil)
-      obj = @layout_file.find_graphic_object_by_id(@selected_object_id) if @selected_object_id
       if action == ADD
         @layout_file.add_object(typ)
         changed_attributes
       elsif action == DELETE
+        obj = @layout_file.find_graphic_object_by_id(@selected_object_id) if @selected_object_id
         nn = obj[GOA_NAME]
         s = "Wollen Sie wirklich das Objekt '#{nn}' löschen?\nDieser Vorgang lässt sich nicht rückgängig machen!"
         error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, s, ["&Löschen", "&Abbrechen"])
@@ -685,6 +685,7 @@ module Mcc2
           changed_attributes
         end
       elsif action == COPY
+        obj = @layout_file.find_graphic_object_by_id(@selected_object_id) if @selected_object_id
         @layout_file.copy_object(obj)
         changed_attributes
       end
