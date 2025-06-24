@@ -51,16 +51,16 @@ module Mcc2
     attr_reader :warnings
     attr_reader :xpath_changes
 
-    def self.load_from_xml(filename, xpath_changes={})
+    def self.load_from_xml(*args)
       o = new
-      o.load_from_xml(filename, xpath_changes)
+      o.load_from_xml(*args)
       o
     end
     #---------------------------------------------------------------------------------------------------------
 
-    def self.create_xml
+    def self.create_xml(*args)
       o = new
-      o.create_xml
+      o.create_xml(*args)
       o
     end
     #---------------------------------------------------------------------------------------------------------
@@ -154,9 +154,18 @@ PRINT 1
       @warnings = []
     end
 
+    private def apply_xpath_changes(xpath_changes)
+      xpath_changes.each do |xpath, value|
+        if !(m=/^\{(.*)\}(.*)$/.match(xpath)) || (filename && m[1] == File.basename(filename))
+          change_first_xpath_value(m&.[](2) || xpath, value)
+        end
+      end
+      @xpath_changes = xpath_changes
+    end
 
     # erzeugt eine neue XML-Datei und initialisiert die entsprechenden Variablen und Objekte
-    def create_xml
+    def create_xml(filename, xpath_changes={})
+      @filename = filename
       @xml_doc = Nokogiri::XML::Document.new
       @xml_doc.encoding = "UTF-8"
       @xml_doc.root = Nokogiri::XML::Node.new(S_ROOT, @xml_doc)
@@ -180,9 +189,11 @@ PRINT 1
 
       # Container für die GraphikObjekte definieren definieren
       @xml_doc.root << node = Nokogiri::XML::Node.new(GRAPHICOBJECTS, @xml_doc)
+
+      apply_xpath_changes(xpath_changes)
+
       changed!
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # lädt das XML-File und initialisiert die entsprechenden Variablen und Objekte
     # ==== Parameter
@@ -194,12 +205,7 @@ PRINT 1
       @changed = false
       @xml_doc = File.open(filename) { |fd| Nokogiri::XML(fd) }
 
-      xpath_changes.each do |xpath, value|
-        if !(m=/^\{(.*)\}(.*)$/.match(xpath)) || m[1] == File.basename(filename)
-          change_first_xpath_value(m&.[](2) || xpath, value)
-        end
-      end
-      @xpath_changes = xpath_changes
+      apply_xpath_changes(xpath_changes)
 
       @xml_doc.root["version"] ||= "1"
       filever = @xml_doc.root["version"].to_i

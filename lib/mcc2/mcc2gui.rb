@@ -149,10 +149,9 @@ module Mcc2
     end
     #---------------------------------------------------------------------------------------------------------
 
-    def new_layout(filename=nil)
+    def new_layout(filename=nil, xpath_changes=nil)
       child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800 * @gui_scale, 600 * @gui_scale)
-      child.userData = Layout.new(child)
-      child.userData.filename = filename
+      child.userData = Layout.new(child, filename: filename, xpath_changes: @xpath_changes, new_file: true)
       child.create
       child.show
       child.recalc
@@ -166,12 +165,12 @@ module Mcc2
         filename = FXFileDialog.getOpenFilename(@topwin, "Laden", "./", patterns = "*.xml", initial = 0)
       end
       unless FileTest.exist?(filename)
-        return new_layout(filename)
+        return new_layout(filename, @xpath_changes)
       end
       unless filename.to_s.empty?
         child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800 * @gui_scale, 600 * @gui_scale)
         begin
-          child.userData = Layout.new(child, filename, @xpath_changes)
+          child.userData = Layout.new(child, filename: filename, xpath_changes: @xpath_changes, new_file: false)
         rescue LayoutFile::Error => e
           FXMessageBox.error(@topwin.app, MBOX_OK, "Fehler beim Laden der Datei", e.to_s)
         else

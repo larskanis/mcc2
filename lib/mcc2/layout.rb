@@ -23,7 +23,7 @@ module Mcc2
     # definiert die Aktionen, welche bei bestimmten Ereignissen auf bestimmten Elementen des Dialogs ausgeführt werden sollen
     # ==== Parameter
     # +parent+:: parent-fx-window
-    def initialize(parent, filename = nil, xpath_changes = {})
+    def initialize(parent, filename: nil, xpath_changes: {}, new_file: false)
       @parent = parent
       begin
         require "ruby-zint"
@@ -81,10 +81,10 @@ module Mcc2
         can_close? ? 0 : 1
       }
 
-      if filename
-        load_from_xml(filename, xpath_changes)
+      if new_file
+        create_xml(filename, xpath_changes)
       else
-        create_xml
+        load_from_xml(filename, xpath_changes)
       end
 
       draw_preview(true)
@@ -192,8 +192,8 @@ module Mcc2
       @preview.selected_object_id = id if @preview
     end
 
-    def create_xml
-      layout_file = LayoutFile.create_xml
+    def create_xml(filename, xpath_changes)
+      layout_file = LayoutFile.create_xml(filename, xpath_changes)
       self.layout_file = layout_file
     end
 
