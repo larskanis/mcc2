@@ -273,7 +273,7 @@ module Mcc2
           headers.each do |col|
             FXMenuCommand.new(menupane, col).connect(SEL_COMMAND) do
               text = textfield.text
-              text[textfield.cursorPos, 0] = "{#{col}[0,999]}"
+              text.bytesplice(textfield.cursorPos, 0, "{#{col}[0,999]}")
               textfield.setText(text, true)
             end
           end
