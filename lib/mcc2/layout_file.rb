@@ -605,7 +605,9 @@ PRINT 1
 
     def expand_path(path)
       path = path.gsub("%D", File.dirname(File.expand_path(@filename))) if @filename
-      File.expand_path(path)
+      pa = File.expand_path(path)
+      pa += "/" if path.end_with?("/")
+      pa
     end
 
     def shrink_path(path)

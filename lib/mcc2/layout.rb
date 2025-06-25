@@ -143,7 +143,8 @@ module Mcc2
     # speichert alle GraphicObjekte und Layout-Einstellungen im XML-File
     def store_to_xml(filename_dialog = false)
       if filename_dialog || !@layout_file.filename
-        fn = FXFileDialog.getSaveFilename(@parent, "Speichern", "./", patterns = "*.xml", initial = 0)
+        dest = @layout_file.expand_path(@layout_file.filename.to_s.empty? ? "./" : @layout_file.filename)
+        fn = FXFileDialog.getSaveFilename(@parent, "Speichern", dest, patterns = "*.xml", initial = 0)
         return if fn.empty?
         unless fn.split(".")[-1].downcase == "xml"
           fn = [fn, "xml"].join(".")
@@ -228,6 +229,8 @@ module Mcc2
     def execute_filedialog_for_textfield(textfield, filepatterns: "*")
       filepatterns = filepatterns.join("\n") if filepatterns.is_a?(Array)
       lds = textfield.text
+
+      # Aktuellen File-Pattern auswählen
       if lds =~ /(\.\w+?)$/i
         ext = $1
         pat_idx = nil
@@ -239,7 +242,9 @@ module Mcc2
         }
       end
 
-      dest = @layout_file.expand_path(lds)
+      # Aktuelles Verzeichnis auswählen (oder Default: Verzeichnis der Layoutdatei)
+      dest = @layout_file.expand_path(lds.to_s.empty? ? "%D/" : lds)
+
       s = FXFileDialog.getOpenFilename(textfield, textfield.tipText, dest, filepatterns, pat_idx || 0)
       unless s.empty?
         s = @layout_file.shrink_path(s)

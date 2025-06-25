@@ -162,8 +162,12 @@ module Mcc2
 
     def open_layout(filename = nil)
       unless filename
-        filename = FXFileDialog.getOpenFilename(@topwin, "Laden", "./", patterns = "*.xml", initial = 0)
+        if child=@mdiclient.activeChild
+          dest = child.userData.layout_file.expand_path("%D/")
+        end
+        filename = FXFileDialog.getOpenFilename(@topwin, "Laden", dest || "./", patterns = "*.xml", initial = 0)
       end
+      return if filename.empty?
       unless FileTest.exist?(filename)
         return new_layout(filename, @xpath_changes)
       end
