@@ -113,7 +113,8 @@ module Mcc2
             itemtext = felder.map do |feld|
               row[feld]
             end.join("\t")
-            @iconlist_data.appendItem(itemtext, big_icon, mini_icon, row)
+            item = FxColoredItem.new(itemtext, bigIcon: big_icon, miniIcon: mini_icon, data: row)
+            @iconlist_data.appendItem item
           end
 
           update_preview
