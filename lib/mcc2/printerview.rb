@@ -216,7 +216,7 @@ module Mcc2
     end
 
     def selected_GdiPrinter(combobox = @combobox_gdi_printer, attr = S_GDIPRINTER_NAME)
-      if_driver_loadable("win32api4ruby", "win32api4ruby", "die Windows-Druckerschnittstelle") do
+      if_driver_loadable("win32api4ruby", "win32api4ruby", "die Windows-Druckerschnittstelle", verify_code: "Win32api4ruby::Winspool") do
         Win32api4ruby::Base.unicode = true
 
         combobox.clearItems
@@ -335,11 +335,12 @@ module Mcc2
       end
     end
 
-    def if_driver_loadable(gem_name, require_name, human_name)
+    def if_driver_loadable(gem_name, require_name, human_name, verify_code: nil)
       gem gem_name
       require require_name
+      eval(verify_code) if verify_code
     rescue LoadError, RuntimeError => e
-      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Laden des Treibers für #{human_name}", "Der Treiber für #{human_name} konnte nicht geladen werden.\nBitte stellen Sie sicher, dass das Gem-Paket '#{gem_name}' installiert ist.\n\n" + e.to_s)
+      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Laden des Treibers für #{human_name}", "Der Treiber für #{human_name} konnte nicht geladen werden.\nBitte stellen Sie sicher, dass das Gem-Paket '#{gem_name}' installiert ist.\n\n#{e.to_s.force_encoding("UTF-8")}")
     else
       yield
     end
