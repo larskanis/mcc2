@@ -27,7 +27,6 @@ module Mcc2
       @parent = parent
       begin
         require "ruby-zint"
-        require "mcc2/zint_barcode_extensions"
       rescue LoadError => e
         puts "Loading barcode driver failed: #{e}"
       end

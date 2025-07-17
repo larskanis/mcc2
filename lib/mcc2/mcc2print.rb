@@ -6,7 +6,6 @@ require "tempfile"
 require "optparse"
 
 require "ruby-zint"
-require "mcc2/zint_barcode_extensions"
 
 module Mcc2
   # die Haupklasse des Programms
