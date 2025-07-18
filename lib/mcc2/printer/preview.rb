@@ -154,6 +154,11 @@ module Mcc2
           Vector2d.new(@x, @y)
         end
 
+        def inverse
+          i = self.class.new 0.0, 0.0, -a
+          i.translate(x, y).rotate(a)
+        end
+
         attr_reader :x
         attr_reader :y
         attr_reader :a
@@ -183,31 +188,26 @@ module Mcc2
         image_height = (duplex ? 2 : 1) * height_with_margins(height) + card_offset
 
         rect_list = nil
-        rvg = Magick::RVG.new(mm(image_width), mm(image_height)) do |canvas|
+        canvas = Magick::ImageList.new
+        canvas.new_image(mm(image_width), mm(image_height)){ |options| options.background_color = "white" }
+        drawing = Magick::Draw.new
+        drawing.text_antialias(false)
 
-          # Vorderseite
-          draw_pos_x = 0
-          draw_pos_y = 0
-          tra = Transformation.new
-          canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
-            rect_list = draw(canvas1, @layout_file, preview, @selected_object_id, row, 0, layers: :all,
-                 transform: tra.translate(mm(draw_pos_x), mm(draw_pos_y)))
-          end
+        # Vorderseite
+        draw_pos_x = 0
+        draw_pos_y = 0
+        tra = Transformation.new
+        rect_list = draw(drawing, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_id, row, 0, layers: :all)
 
-          # Rückseite
-          if duplex
-            draw_pos_y = height_with_margins(height) + card_offset
-            canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
-              rect_list.add draw(canvas1, @layout_file, preview, @selected_object_id, row, 1, layers: :all,
-                  transform: tra.translate(mm(draw_pos_x), mm(draw_pos_y)))
-            end
-          end
-
-          canvas.background_fill = "white"
+        # Rückseite
+        if duplex
+          draw_pos_y = height_with_margins(height) + card_offset
+          rect_list.add draw(drawing, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_id, row, 1, layers: :all)
         end
 
+        drawing.draw(canvas)
         # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
-        data = rvg.draw.to_blob do |image|
+        data = canvas.to_blob do |image|
           image.format = "PNG"
         end
 
