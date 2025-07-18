@@ -10,3 +10,16 @@ langbak ? (ENV["LANG"] = langbak) : ENV.delete("LANG")
 require "mcc2"
 
 Mcc2::Mcc2Gui.run(ARGV)
+
+# require "stackprof"
+# StackProf.run(mode: :cpu, out: 'stackprof-cpu-myapp.dump') do
+#   Mcc2::Mcc2Gui.run(ARGV)
+# end
+
+
+# require 'ruby-prof'
+# result = RubyProf::Profile.profile do
+#   Mcc2::Mcc2Gui.run(ARGV)
+# end
+# printer = RubyProf::GraphPrinter.new(result)
+# printer.print(STDOUT, {})
