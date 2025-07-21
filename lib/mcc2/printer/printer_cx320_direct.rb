@@ -136,15 +136,19 @@ module Mcc2
       end
 
       def draw_rvg_image(layout_file, row, page, layers, x_offset, y_offset)
-        pic = Magick::RVG.new(1036, 664) do |canvas|
-          canvas.background_fill = "white"
-          canvas.g.translate(mm(x_offset).round, mm(y_offset).round) do |canvas1|
-            selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
-            preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
+        selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
+        preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
 
-            draw(canvas1, layout_file, preview, selected_object_id, row, page, layers: layers)
-          end
-        end.draw
+        pic = Magick::ImageList.new
+        pic.new_image(1036, 664){ |options| options.background_color = "white" }
+        drawing = Magick::Draw.new
+        drawing.text_antialias(false)
+
+        tra = Transformation.new
+        draw(drawing, tra.translate(mm(x_offset).round, mm(y_offset).round), layout_file, preview, selected_object_id, row, page, layers: layers)
+
+        # Draw in ein Image zeichnen
+        drawing.draw(pic)
         postprocess_image(pic, layout_file, page)
       end
 

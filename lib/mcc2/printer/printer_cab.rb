@@ -38,13 +38,17 @@ module Mcc2
         # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
         selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
         preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
-        img = Magick::RVG.new(mm(page_width), mm(page_height)) do |canvas|
-          canvas.background_fill = "white"
-          draw(canvas, layout_file, preview, selected_object_id, row, 0)
-        end
 
-        # das RVG in ein Bitmap konvertieren
-        pic = img.draw
+        pic = Magick::ImageList.new
+        pic.new_image(mm(page_width), mm(page_height)){ |options| options.background_color = "white" }
+        drawing = Magick::Draw.new
+        drawing.text_antialias(false)
+
+        tra = Transformation.new
+        draw(drawing, tra, layout_file, preview, selected_object_id, row, 0)
+
+        # Draw in ein Image zeichnen
+        drawing.draw(pic)
         pic = postprocess_image(pic, layout_file, 0)
 
         page_commands.gsub!("\\e", "\e")
