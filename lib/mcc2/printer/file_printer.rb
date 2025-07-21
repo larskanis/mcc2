@@ -58,7 +58,6 @@ module Mcc2
         documentName = @layout_file.expand_path(documentName)
 
         self.dpi = @layout_file.get_attr_value(S_FILEPRINTER_DPI).to_f
-        #    Magick::RVG::dpi = self.dpi
 
         page_width = @layout_file.get_attr_value(S_WIDTH).to_f
         page_height = @layout_file.get_attr_value(S_HEIGHT).to_f
@@ -68,15 +67,17 @@ module Mcc2
         # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
         selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
         preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
-        img = Magick::RVG.new(mm(page_width), mm(page_height)) do |canvas|
-          canvas.background_fill = "white"
-          canvas.g.translate(mm(draw_pos_x), mm(draw_pos_y)) do |canvas1|
-            draw(canvas1, layout_file, preview, selected_object_id, row, page_nr)
-          end
-        end
 
-        # das RVG in ein Bitmap konvertieren
-        pic = img.draw
+        pic = Magick::ImageList.new
+        pic.new_image(mm(page_width), mm(page_height)){ |options| options.background_color = "white" }
+        drawing = Magick::Draw.new
+        drawing.text_antialias(false)
+
+        tra = Transformation.new
+        draw(drawing, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), layout_file, preview, selected_object_id, row, page_nr)
+
+        # Draw in ein Image zeichnen
+        drawing.draw(pic)
         pic = postprocess_image(pic, layout_file, page_nr)
 
         self_dpi = dpi

@@ -133,47 +133,6 @@ module Mcc2
         end
       end
 
-      class Transformation
-        def initialize(x = 0.0, y = 0.0, a = 0.0)
-          @x = x
-          @y = y
-          @a = a
-        end
-
-        def translate(x, y)
-          self.class.new @x + x * Math.cos(@a*Math::PI/180) - y * Math.sin(@a*Math::PI/180),
-            @y + y * Math.cos(@a*Math::PI/180) + x * Math.sin(@a*Math::PI/180),
-            @a
-        end
-
-        def rotate(a)
-          self.class.new @x, @y, @a + a
-        end
-
-        def vector2d
-          Vector2d.new(@x, @y)
-        end
-
-        def inverse
-          i = self.class.new 0.0, 0.0, -a
-          i.translate(x, y).rotate(a)
-        end
-
-        attr_reader :x
-        attr_reader :y
-        attr_reader :a
-      end
-
-      class Vector2d
-        def initialize(x, y)
-          @x = x
-          @y = y
-        end
-
-        attr_reader :x
-        attr_reader :y
-      end
-
       def draw_preview_now(row = nil)
         # allgemeine Einstellungen des Image vornehmen
         width = @layout_file.get_attr_value(S_WIDTH).to_f
