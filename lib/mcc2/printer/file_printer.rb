@@ -74,7 +74,7 @@ module Mcc2
         drawing.text_antialias(false)
 
         tra = Transformation.new
-        draw(drawing, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), layout_file, preview, selected_object_id, row, page_nr)
+        draw(drawing, tra.translate(mm(draw_pos_x).round, mm(draw_pos_y).round), layout_file, preview, selected_object_id, row, page_nr)
 
         # Draw in ein Image zeichnen
         drawing.draw(pic)

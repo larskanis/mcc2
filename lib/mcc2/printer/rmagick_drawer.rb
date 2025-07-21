@@ -271,9 +271,9 @@ module Mcc2
     }
 
     HALIGNMENT = {
-      0 => :middle,
-      1 => :start,
-      2 => :end
+      0 => Magick::MiddleAnchor,
+      1 => Magick::StartAnchor,
+      2 => Magick::EndAnchor
     }
 
     def draw_barcode(drawing, tra, go, go_width, go_height, data, barcode_dpi)
