@@ -26,7 +26,7 @@ module Mcc2
     # +row+::    ein Datensatz im FasteCSV-Format
     def self.replace_variables(data, row)
       return data unless row # die unveränderten Daten zurückgeben, wenn kein Datensatz übergeben wurde
-      pattern = /\{ *([-\._\w]*)\[ *(\d{1,3}) *, *(\d{1,3}) *\] *\}/
+      pattern = /\{ *([-\._\w]*)\[ *(\d{1,5}) *, *(\d{1,5}) *\] *\}/
       data.gsub(pattern) {
         feld = $1
         von = $2.to_i
