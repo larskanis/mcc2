@@ -302,13 +302,14 @@ module Mcc2
       rescue => e
         raise Printer::Base::InvalidBarcodeData, "Fehler beim Generieren des Barcodes #{data.inspect}: #{e}"
       else
-        if barcode.respond_to?(:wide_width=)
-          barcode.narrow_width = 1
-          barcode.wide_width = bar_ratio
-        end
+        # TODO: bar_ratio wird nicht gesetzt
+        # barcode.narrow_width = 1
+        # barcode.wide_width = bar_ratio
         barcode.input_mode = Zint::DATA_MODE #  Zint::UNICODE_MODE | Zint::ESCAPE_MODE
         # barcode.output_options = Zint::SMALL_TEXT
-        barcode.height = go[GOA_BARCODE_HEIGHT].to_f #  50 is the default x-dimension for most of the barcodes
+
+        # 50 is the default x-dimension for most of the 1D barcodes:
+        barcode.height = go[GOA_BARCODE_HEIGHT].to_f if go[GOA_BARCODE_HEIGHT].to_f.round(3) != 0
         barcode.show_hrt = 0 if fontsize == 0
         # barcode.fontsize = fontsize # not used in zint
         # p [go_height, go_width, barcode.height]
@@ -321,9 +322,11 @@ module Mcc2
 
         eancode = %w[EAN13 EAN8].include?(barcode_typ)
 
-        # bcvector values are always a multiple of 2, but we need a multiple of 1 for to_i below.
-        # So all bcvector measurements are divided by 2.
-        xbars, ybars = bcvector.width / 2, bcvector.height / 2
+        # bcvector values are always a multiple of 2 or more, but we need a multiple of 1 for to_i below.
+        # So all bcvector measurements are divided by 2 or more.
+        xgran = bcvector.width.round / barcode.width
+        ygran = bcvector.height.round / barcode.rows
+        xbars, ybars = bcvector.width / xgran, bcvector.height / ygran
         # p vector_width: bcvector.width, vector_height: bcvector.height
 
         optimized = (go[GOA_BARCODE_OPTIMIZED] || true).to_s == "true"
@@ -338,16 +341,18 @@ module Mcc2
         xdim, ydim = px_width / xbars, px_height / ybars
 
         bcvector.each_rectangle do |bar|
-          # p [xdim*bar.width/2, ydim*bar.height/2, xdim*bar.x/2, ydim*bar.y/2]
-          apos = tra.translate(xdim * bar.x / 2, ydim * bar.y / 2)
-          cpos = apos.translate([xdim * bar.width / 2 - 1, 0].max, [ydim * bar.height / 2 - 1, 0].max)
+          # p [bar.x, bar.y, bar.width, bar.height]
+          # p [xdim*bar.width/xgran, ydim*bar.height/ygran, xdim*bar.x/xgran, ydim*bar.y/ygran]
+          apos = tra.translate(xdim * bar.x / xgran, ydim * bar.y / ygran)
+          cpos = apos.translate([xdim * bar.width / xgran - 1, 0].max, [ydim * bar.height / ygran - 1, 0].max)
+          # p [optimized, apos.x, apos.y, cpos.x, cpos.y]
           drawing.rectangle(apos.x, apos.y, cpos.x, cpos.y)
           # body.rect([xdim * bar.width / 2 - 1, 0].max, [ydim * bar.height / 2 - 1, 0].max, xdim * bar.x / 2, ydim * bar.y / 2)
         end
         bcvector.each_string do |str|
           # p [str.x, str.y, str.text, str.halign, str.fsize]
           drawing.text_anchor(HALIGNMENT[str.halign])
-          apos = tra.translate(xdim * str.x / 2, ydim * str.y / 2)
+          apos = tra.translate(xdim * str.x / xgran, ydim * str.y / ygran)
           drawing.text(apos.x, apos.y, str.text)
           # body.text(xdim * str.x / 2, ydim * str.y / 2, str.text).styles(text_anchor: HALIGNMENT[str.halign])
         end
