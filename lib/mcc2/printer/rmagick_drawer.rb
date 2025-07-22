@@ -218,7 +218,7 @@ module Mcc2
         raise Printer::Base::ResourceNotFoundError, "Die Schriftart '#{font}' konnte nicht gefunden werden. Der Druck wird angehalten."
       end
 
-      if data != ""
+      if data && !data.empty?
         drawing.font font
         drawing.font_size pt(fontsize)
         drawing.fill font_color
