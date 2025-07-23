@@ -159,37 +159,76 @@ module Mcc2
 
       # Rand zeichnen (für Vorschau)
       if preview
+        drawing.push
         drawing.fill('none')
         drawing.stroke('blue')
         cpos = tra.translate(mm(width), mm(height))
         drawing.roundrectangle(tra.x, tra.y, cpos.x, cpos.y, rx, rx)
         # canvas1.rect(mm(width), mm(height)).round(rx).styles(fill: "none", stroke: "blue")
-        # if page_nr == 1 && layout_file.get_attr_value(S_MAGSTRIPE) == S_TRUE
-        #   canvas1.g.translate(mm(0), mm(4)) { |ms_rect|
-        #     ms_rect.rect(mm(width), mm(12.5)).styles(fill: "black", stroke: "none", opacity: 0.5)
-        #     ms_obj = layout_file.magstripe_object
-        #     (1..3).each { |spurnr|
-        #       spur_data = ms_obj["ms_spur" + spurnr.to_s]
-        #       ms_rect.text(mm(3), mm((3.5 * spurnr) + 0.5), "Spur #{spurnr}: #{spur_data}").styles(
-        #         font: "Courier-New-Bold",
-        #         font_size: pt(10),
-        #         fill: "white"
-        #       )
-        #     }
-        #   }
-        # end
-        # if page_nr == 0 && layout_file.get_attr_value(S_CONTACTLESS) == S_TRUE
-        #   rx = mm(0.5)
-        #   canvas1.g.translate(mm(3), mm(3)).rect(mm(5), mm(5)).round(rx).styles(fill: "gray", stroke: "none", opacity: 0.5)
-        #   rx = mm(3)
-        #   canvas1.g.translate(mm(4), mm(4)).rect(mm(75), mm(45)).round(rx).styles(fill: "none", stroke: "gray", stroke_opacity: 0.5)
-        #   canvas1.g.translate(mm(5), mm(5)).rect(mm(73), mm(43)).round(rx).styles(fill: "none", stroke: "gray", stroke_opacity: 0.5)
-        #   canvas1.g.translate(mm(6), mm(6)).rect(mm(71), mm(41)).round(rx).styles(fill: "none", stroke: "gray", stroke_opacity: 0.5)
-        # end
-        # if page_nr == 0 && layout_file.get_attr_value(S_CONTACT) == S_TRUE
-        #   rx = mm(2)
-        #   canvas1.g.translate(mm(8), mm(18)).rect(mm(13), mm(12)).round(rx).styles(fill: "yellow", stroke: "gray")
-        # end
+
+        if page_nr == 1 && layout_file.get_attr_value(S_MAGSTRIPE) == S_TRUE
+          rs_rect = tra.translate(mm(0), mm(4))
+          rs_rect2 = rs_rect.translate(mm(width), mm(12.5))
+          drawing.fill("black")
+          drawing.stroke("none")
+          drawing.opacity(0.5)
+          drawing.rectangle(rs_rect.x, rs_rect.y, rs_rect2.x, rs_rect2.y)
+          # canvas1.g.translate(mm(0), mm(4)) { |ms_rect|
+          #   ms_rect.rect(mm(width), mm(12.5)).styles(fill: "black", stroke: "none", opacity: 0.5)
+          ms_obj = layout_file.magstripe_object
+          (1..3).each do |spurnr|
+            spur_data = ms_obj["ms_spur" + spurnr.to_s]
+            spurpos = rs_rect.translate(mm(3), mm((3.5 * spurnr) + 0.5))
+            drawing.font("Courier-New-Bold")
+            drawing.font_size(pt(10))
+            drawing.fill("white")
+            drawing.text(spurpos.x, spurpos.y, "Spur #{spurnr}: #{spur_data}")
+
+            # ms_rect.text(mm(3), mm((3.5 * spurnr) + 0.5), "Spur #{spurnr}: #{spur_data}").styles(
+            #   font: "Courier-New-Bold",
+            #   font_size: pt(10),
+            #   fill: "white"
+            # )
+          end
+        end
+        if page_nr == 0 && layout_file.get_attr_value(S_CONTACTLESS) == S_TRUE
+          rx = mm(0.5)
+          clpa = tra.translate(mm(3), mm(3))
+          clpe = clpa.translate(mm(5), mm(5))
+          drawing.opacity(0.5)
+          drawing.fill("gray")
+          drawing.stroke("none")
+          drawing.roundrectangle(clpa.x, clpa.y, clpe.x, clpe.y, rx, rx)
+          # canvas1.g.translate(mm(3), mm(3)).rect(mm(5), mm(5)).round(rx).styles(fill: "gray", stroke: "none", opacity: 0.5)
+          rx = mm(3)
+          drawing.opacity(1)
+          drawing.fill("none")
+          drawing.stroke_opacity(0.5)
+          drawing.stroke("gray")
+          clpa = tra.translate(mm(4), mm(4))
+          clpe = clpa.translate(mm(75), mm(45))
+          drawing.roundrectangle(clpa.x, clpa.y, clpe.x, clpe.y, rx, rx)
+          # canvas1.g.translate(mm(4), mm(4)).rect(mm(75), mm(45)).round(rx).styles(fill: "none", stroke: "gray", stroke_opacity: 0.5)
+          clpa = tra.translate(mm(5), mm(5))
+          clpe = clpa.translate(mm(73), mm(43))
+          drawing.roundrectangle(clpa.x, clpa.y, clpe.x, clpe.y, rx, rx)
+          # canvas1.g.translate(mm(5), mm(5)).rect(mm(73), mm(43)).round(rx).styles(fill: "none", stroke: "gray", stroke_opacity: 0.5)
+          clpa = tra.translate(mm(6), mm(6))
+          clpe = clpa.translate(mm(71), mm(41))
+          drawing.roundrectangle(clpa.x, clpa.y, clpe.x, clpe.y, rx, rx)
+          # canvas1.g.translate(mm(6), mm(6)).rect(mm(71), mm(41)).round(rx).styles(fill: "none", stroke: "gray", stroke_opacity: 0.5)
+        end
+        if page_nr == 0 && layout_file.get_attr_value(S_CONTACT) == S_TRUE
+          rx = mm(2)
+          drawing.opacity(0.8)
+          drawing.fill("yellow")
+          drawing.stroke("gray")
+          clpa = tra.translate(mm(8), mm(18))
+          clpe = clpa.translate(mm(13), mm(12))
+          drawing.roundrectangle(clpa.x, clpa.y, clpe.x, clpe.y, rx, rx)
+          # canvas1.g.translate(mm(8), mm(18)).rect(mm(13), mm(12)).round(rx).styles(fill: "yellow", stroke: "gray")
+        end
+        drawing.pop
       end
 
       rect_list
