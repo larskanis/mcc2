@@ -101,8 +101,6 @@ module Mcc2
       end
 
       # zeichnet die Vorschau im Layout-Modus
-      # hier ist noch einiges zu tun, im speziellen sind einige Werte "hart" kodiert,
-      # die z.Bsp abhängig von anderen Einstellungen sein sollten
       def draw_preview(immediately = false, row = nil)
         @row = row
         return unless @checkbutton_continous_update.checked?
@@ -115,19 +113,23 @@ module Mcc2
         return unless @draw_preview_at
 
         delay = @draw_preview_at - Time.now
-        # delay*1010, damit immer etwas größer als Zeitspanne mit Time.now
-        @parent.app.addTimeout((delay > 0) ? delay * 1010 : 0) do
-          if @draw_preview_at && Time.now >= @draw_preview_at && !@thread
-            @draw_preview_at = nil
-            @thread = Thread.new do
-              draw_preview_now(@row)
+        @parent.app.addTimeout((delay > 0) ? delay * 1000 : 0) do
+          if @draw_preview_at && !@thread
+            if Time.now >= @draw_preview_at
+              @draw_preview_at = nil
+              @thread = Thread.new do
+                draw_preview_now(@row)
 
-              @thread = nil
-              # requeue preview generation, when something was changed
-              # while the thread was running.
-              @parent.runOnUiThread do
-                start_preview_timer
+                @thread = nil
+                # requeue preview generation, when something was changed
+                # while the thread was running.
+                @parent.runOnUiThread do
+                  start_preview_timer
+                end
               end
+            else
+              # addTimeout didn't wait as long as expected per Time.now -> re-schedule
+              start_preview_timer
             end
           end
         end
