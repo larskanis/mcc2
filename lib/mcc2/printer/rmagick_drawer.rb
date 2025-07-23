@@ -127,31 +127,33 @@ module Mcc2
           end
 
           drawing.push
+          drawing.rotate rec.a
+          opos = rec.inverse
+
           # die Objekt-spezifischen Attribute ermitteln
           if typ == TEXTOBJECT
-            draw_textobject(drawing, rec, go, go_width, go_height, data.empty? ? data_nosub : data)
+            draw_textobject(drawing, opos, go, go_width, go_height, data.empty? ? data_nosub : data)
           elsif typ == PICTUREOBJECT
-            draw_pictureobject(drawing, rec, go, go_width, go_height, data)
+            draw_pictureobject(drawing, opos, go, go_width, go_height, data)
           elsif typ == BARCODEOBJECT
             data = data.gsub(/\\x([0-9a-f][0-9a-f])/i) { [$1.hex].pack("C") }
-            draw_barcode(drawing, rec, go, go_width, go_height, data, barcode_dpi)
+            draw_barcode(drawing, opos, go, go_width, go_height, data, barcode_dpi)
           elsif typ == BOXOBJECT
-            draw_boxobject(drawing, rec, go, go_width, go_height)
+            draw_boxobject(drawing, opos, go, go_width, go_height)
           elsif typ == EMBEDOBJECT
-            draw_embedobject(drawing, rec, go, go_width, go_height, data, row ? row['row_number'] : "1", barcode_dpi)
+            draw_embedobject(drawing, opos, go, go_width, go_height, data, row ? row['row_number'] : "1", barcode_dpi)
           end
-          drawing.pop
 
           # in Vorschau einen Rahmen um das selektierte Objekt zeichnen
           if preview && selected_object_id == id
-            drawing.push
             drawing.fill('none')
             drawing.stroke('red')
-            cpos = rec.translate(mm(go_width), mm(go_height))
-            drawing.rectangle(rec.x, rec.y, cpos.x, cpos.y)
+            drawing.stroke_width(1)
+            cpos = opos.translate(mm(go_width), mm(go_height))
+            drawing.rectangle(opos.x, opos.y, cpos.x, cpos.y)
             # body.rect(mm(go_width), mm(go_height)).styles(fill: "none", stroke: "red")
-            drawing.pop
           end
+          drawing.pop
         end
       end
 
@@ -223,8 +225,7 @@ module Mcc2
         drawing.font_size pt(fontsize)
         drawing.fill font_color
         drawing.text_anchor just
-        drawing.rotate tra.a
-        apos = tra.inverse.translate(mm(text_x), mm(0))
+        apos = tra.translate(mm(text_x), mm(0))
         drawing.text(apos.x, apos.y, data)
         # body.text(mm(text_x), mm(0), data).styles(
         #   font: font,
@@ -258,7 +259,7 @@ module Mcc2
         im_height = (go_height == 0 && go_image.y_resolution > 0) ? go_image.rows / go_image.y_resolution * 25.4 : go_height
 
         cpos = tra.translate(mm(im_width), mm(im_height))
-        drawing.composite(tra.x, tra.y, cpos.x, cpos.y, go_image)
+        drawing.composite(tra.x, tra.y, cpos.x - tra.x, cpos.y - tra.y, go_image)
         # body.image(go_image, mm(im_width), mm(im_height))
       else
         raise Printer::Base::ResourceNotFoundError, "Das Bild '#{path}' konnte nicht gefunden werden. Der Druck wird angehalten."
@@ -338,22 +339,26 @@ module Mcc2
         end
         go_width, go_height = barcode_px_to_mm(xdim * xbars, barcode_dpi), barcode_px_to_mm(ydim * ybars, barcode_dpi)
         px_width, px_height = mm(go_width), mm(go_height)
-        xdim, ydim = px_width / xbars, px_height / ybars
+        xdim = px_width / xbars / xgran
+        ydim = px_height / ybars / ygran
 
         bcvector.each_rectangle do |bar|
           # p [bar.x, bar.y, bar.width, bar.height]
-          # p [xdim*bar.width/xgran, ydim*bar.height/ygran, xdim*bar.x/xgran, ydim*bar.y/ygran]
-          apos = tra.translate(xdim * bar.x / xgran, ydim * bar.y / ygran)
-          cpos = apos.translate([xdim * bar.width / xgran - 1, 0].max, [ydim * bar.height / ygran - 1, 0].max)
-          # p [optimized, apos.x, apos.y, cpos.x, cpos.y]
-          drawing.rectangle(apos.x, apos.y, cpos.x, cpos.y)
+          # p [xdim*bar.width, ydim*bar.height, xdim*bar.x, ydim*bar.y]
+          x = tra.x + xdim * bar.x
+          y = tra.y + ydim * bar.y
+          drawing.rectangle(
+            x,
+            y,
+            x + [xdim * bar.width - 1, 0].max,
+            y + [ydim * bar.height - 1, 0].max)
           # body.rect([xdim * bar.width / 2 - 1, 0].max, [ydim * bar.height / 2 - 1, 0].max, xdim * bar.x / 2, ydim * bar.y / 2)
         end
         bcvector.each_string do |str|
           # p [str.x, str.y, str.text, str.halign, str.fsize]
           drawing.text_anchor(HALIGNMENT[str.halign])
-          apos = tra.translate(xdim * str.x / xgran, ydim * str.y / ygran)
-          drawing.text(apos.x, apos.y, str.text)
+          # apos = tra.translate(xdim * str.x / xgran, )
+          drawing.text(tra.x + xdim * str.x, tra.y + ydim * str.y, str.text)
           # body.text(xdim * str.x / 2, ydim * str.y / 2, str.text).styles(text_anchor: HALIGNMENT[str.halign])
         end
       end
