@@ -297,8 +297,26 @@ module Mcc2
         im_width = (go_width == 0 && go_image.x_resolution > 0) ? go_image.columns / go_image.x_resolution * 25.4 : go_width
         im_height = (go_height == 0 && go_image.y_resolution > 0) ? go_image.rows / go_image.y_resolution * 25.4 : go_height
 
-        cpos = tra.translate(mm(im_width), mm(im_height))
-        drawing.composite(tra.x, tra.y, cpos.x - tra.x, cpos.y - tra.y, go_image)
+        aspect_ratio_img = go_image.columns.to_f / go_image.rows.to_f
+        aspect_ratio_box = im_width / im_height
+        if aspect_ratio_box > aspect_ratio_img
+          # box is wider than image -> add space left and right
+          space = im_width - aspect_ratio_img * im_height
+          im_width -= space
+          apos = tra.translate(mm(space / 2.0), 0.0)
+
+        elsif aspect_ratio_box < aspect_ratio_img
+          # image is wider than box -> add space top and bottom
+          space = im_height - im_width / aspect_ratio_img
+          im_height -= space
+          apos = tra.translate(0.0, mm(space / 2.0))
+
+        else
+          apos = tra
+        end
+
+        cpos = apos.translate(mm(im_width), mm(im_height))
+        drawing.composite(apos.x.round, apos.y.round, (cpos.x - apos.x).round, (cpos.y - apos.y).round, go_image)
         # body.image(go_image, mm(im_width), mm(im_height))
       else
         raise Printer::Base::ResourceNotFoundError, "Das Bild '#{path}' konnte nicht gefunden werden. Der Druck wird angehalten."
