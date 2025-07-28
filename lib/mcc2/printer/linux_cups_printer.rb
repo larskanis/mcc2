@@ -48,6 +48,9 @@ module Mcc2
 
         json_str = @layout_file.get_attr_value(S_LINUX_CUPS_OPTIONS)
         options = JSON.parse(json_str)
+        options.transform_values! do |value|
+          value =~ /=(.*)\z/ ? $1 : value # Wert bei "CONST=wert" herausselektieren
+        end
         job = printer.print_file(file_pdf.path, "MCC2 - #{layout_file.filename}", options)
 
         chip&.pers_card(layout_file, row)

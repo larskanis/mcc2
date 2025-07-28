@@ -149,9 +149,9 @@ module Mcc2
                 cs = Cups.constants
                 vals = cs.select { |c| c.to_s.start_with?("#{key}_") }
                 vals = vals.reject { |c| c.end_with?("_SUPPORTED") }
-                cvals = vals.map { |c| Cups.const_get(c) }
-                cvals.each do |name|
-                  combo_val.appendItem(name)
+                cvals = vals.map { |c| [c, Cups.const_get(c)] }
+                cvals.each do |name, name_val|
+                  combo_val.appendItem("#{name}=#{name_val}", name_val)
                 end
               end
               linux_cups_combobox_changed
@@ -173,7 +173,8 @@ module Mcc2
 
     def linux_cups_combobox_changed
       opts = @linux_cups_options.each.with_object({}) do |(combo_key, combo_val), h|
-        h[combo_key.text] = combo_val.text unless combo_key.text.empty?
+        text = combo_val.text
+        h[combo_key.text] = text unless text.empty?
       end
       changed_attributes if @layout_file.set_attr_value(S_LINUX_CUPS_OPTIONS, JSON.dump(opts))
     end
