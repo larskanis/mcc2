@@ -144,8 +144,7 @@ module Mcc2
         tra = Transformation.new
         draw(drawing, tra, layout_file, preview, selected_object_id, row, page_nr)
 
-        # Draw in ein Image zeichnen
-        drawing.draw(pic)
+        drawing.draw(pic) # Draw ins Image zeichnen
         pic = postprocess_image(pic, layout_file, page_nr)
 
         # flip left to right and raster image

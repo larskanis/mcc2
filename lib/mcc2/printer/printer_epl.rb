@@ -46,6 +46,7 @@ module Mcc2
 
         tra = Transformation.new
         draw(drawing, tra, layout_file, preview, selected_object_id, row, 0)
+        drawing.draw(pic) # Draw ins Image zeichnen
         pic = postprocess_image(pic, layout_file, 0)
 
         page_commands.gsub!("\\e", "\e")
