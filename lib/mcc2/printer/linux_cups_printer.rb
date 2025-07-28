@@ -33,7 +33,7 @@ module Mcc2
 
         printer = Cups::Printer.get_destination(printer_name)
 
-        file_pdf = Tempfile.new(['mcc2', '.png'])
+        file_pdf = Tempfile.new(['mcc2', '.pdf'])
 
         img_pdf = Magick::ImageList.new
         img_pdf << print_page(row, 0)
