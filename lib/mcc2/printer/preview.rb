@@ -171,7 +171,7 @@ module Mcc2
         canvas = Magick::ImageList.new
         canvas.new_image(mm(image_width), mm(image_height)){ |options| options.background_color = "white" }
         drawing = Magick::Draw.new
-        drawing.text_antialias(false)
+        drawing.text_antialias(true)
 
         # Vorderseite
         draw_pos_x = 0
