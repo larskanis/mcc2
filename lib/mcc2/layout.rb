@@ -227,7 +227,13 @@ module Mcc2
     end
 
     def add_tipText_to_filedialog_for_textfield(textfield)
-      textfield.tipText += "\nFolgende Ersetzungszeichen können verwendet werden:\n%D  - Pfad der aktuellen Layoutdatei\n~  - Benutzerverzeichnis\nrelativer Pfad - aktuelles Verzeichnis in dem MCC2 gestartet wurde"
+      textfield.tipText += <<~EOT
+        Folgende Ersetzungszeichen können verwendet werden:
+        %D  - Pfad der aktuellen Layoutdatei
+        %F  - Name der aktuellen Layoutdatei ohne ".xml"
+        ~   - Benutzerverzeichnis
+        relativer Pfad - aktuelles Verzeichnis in dem MCC2 gestartet wurde
+      EOT
     end
 
     def execute_filedialog_for_textfield(textfield, filepatterns: "*")

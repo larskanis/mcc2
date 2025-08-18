@@ -607,6 +607,7 @@ PRINT 1
 
     def expand_path(path)
       path = path.gsub("%D", File.dirname(File.expand_path(@filename))) if @filename
+      path = path.gsub("%F", File.basename(@filename, ".*")) if @filename
       pa = File.expand_path(path)
       pa += "/" if path.end_with?("/")
       pa
