@@ -143,10 +143,10 @@ module Mcc2
     def store_to_xml(filename_dialog = false)
       if filename_dialog || !@layout_file.filename
         dest = @layout_file.expand_path(@layout_file.filename.to_s.empty? ? "./" : @layout_file.filename)
-        fn = FXFileDialog.getSaveFilename(@parent, "Speichern", dest, patterns = "*.xml", initial = 0)
+        fn = FXFileDialog.getSaveFilename(@parent, "Speichern", dest, patterns = "*.mcc2,*.xml", initial = 0)
         return if fn.empty?
-        unless fn.split(".")[-1].downcase == "xml"
-          fn = [fn, "xml"].join(".")
+        unless fn.split(".")[-1].downcase == "mcc2"
+          fn = "#{fn}.mcc2"
         end
         @layout_file.filename = fn
       end
@@ -230,7 +230,7 @@ module Mcc2
       textfield.tipText += <<~EOT
         Folgende Ersetzungszeichen können verwendet werden:
         %D  - Pfad der aktuellen Layoutdatei
-        %F  - Name der aktuellen Layoutdatei ohne ".xml"
+        %F  - Name der aktuellen Layoutdatei ohne ".mcc2"
         ~   - Benutzerverzeichnis
         relativer Pfad - aktuelles Verzeichnis in dem MCC2 gestartet wurde
       EOT

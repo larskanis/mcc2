@@ -155,7 +155,7 @@ module Mcc2
         if child=@mdiclient.activeChild
           dest = child.userData.layout_file.expand_path("%D/")
         end
-        filename = FXFileDialog.getOpenFilename(@topwin, "Laden", dest || "./", patterns = "*.xml", initial = 0)
+        filename = FXFileDialog.getOpenFilename(@topwin, "Laden", dest || "./", patterns = "*.mcc2,*.xml", initial = 0)
       end
       return if filename.empty?
       unless FileTest.exist?(filename)
@@ -220,12 +220,12 @@ module Mcc2
       w = Mcc2Gui.new(app, $gui_scale)
 
       OptionParser.new do |opts|
-        opts.banner = "Usage: #{$0} <layout.xml>* [options]"
+        opts.banner = "Usage: #{$0} <layout.mcc2>* [options]"
 
         opts.on("-x", "--xpath-value XPATH~VALUE", "Replace XML-value on the given xpath", &w.method(:add_xpath_value))
         opts.separator "\tExamples:"
         opts.separator "\t -x //Layout/datasource~mydata.csv"
-        opts.separator "\t -x {layo.xml}//Layout/fileprinter_save_as~image_%d_%p.png"
+        opts.separator "\t -x {layout.mcc2}//Layout/fileprinter_save_as~image_%d_%p.png"
       end.parse!(argv)
 
       begin
