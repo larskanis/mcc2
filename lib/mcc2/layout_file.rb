@@ -313,9 +313,7 @@ PRINT 1
     end
 
     def find_graphic_object_by_id(id)
-      go = @xml_doc.at_xpath(
-        "//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}/#{GOA_ID}[.='#{id}']"
-      ).parent
+      go = get_objectnode_by_id(id)
       typ = go.at_xpath(GOA_TYP).content
 
       LayoutObject::Graphic.get_object_by_typ(typ, xml_elem: go, layout_file: self)
@@ -335,12 +333,7 @@ PRINT 1
     # ==== Parameter
     # +id+:: die Nummer, unter welcher das Attribut gespeichert ist
     private def get_objectnode_by_id(id)
-      @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each do |go_struct|
-        if go_struct.at_xpath(GOA_ID).content.to_i == id
-          return go_struct
-        end
-      end
-      nil
+      @xml_doc.at_xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}[#{GOA_ID}='#{id}']")
     end
 
     def get_layers_of_page(page_nr)
