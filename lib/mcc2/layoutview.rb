@@ -316,7 +316,7 @@ module Mcc2
 
       # die Positionen in dieser Liste ermitteln und von oben nach unten abarbeiten
       positions = @selected_object_ids.map do |object_id|
-        pos = obj_arr.index(object_id)
+        obj_arr.index(object_id)
       end.sort
       # bzw. von unten nach oben, wenn Objekte nach unten geschoben werden
       positions.reverse! if dest == DOWN
@@ -328,25 +328,31 @@ module Mcc2
         elsif dest == DOWN
           obj_arr[pos], obj_arr[pos + 1] = obj_arr[pos + 1], obj_arr[pos]
         end
+      end
 
-        # Nun im XML reindexieren
-        @layout_file.reorder_id_list(obj_arr)
+      # Nun im XML reindexieren
+      @layout_file.reorder_id_list(obj_arr)
 
-        # changed-Flag setzen
-        changed_attributes
+      # changed-Flag setzen
+      changed_attributes
 
-        # Objekt-Liste aktualisieren
-        currentItem = @lf.iconlist_objects.currentItem
-        fill_objectlist
+      # Objekt-Liste aktualisieren
+      currentItem = @lf.iconlist_objects.currentItem
+      selected_items = @lf.iconlist_objects.map.with_index.select{|i, x| i.selected? }.map(&:last)
+      fill_objectlist
+      @selected_object_ids = []
 
-        # Cursor in Liste setzen
-        notify = true
-        if currentItem > 1 && dest == UP
-          @lf.iconlist_objects.setCurrentItem(currentItem - 1, notify)
-          @lf.iconlist_objects.selectItem(currentItem - 1, notify)
-        elsif currentItem > 0 && currentItem < @lf.iconlist_objects.numItems && dest == DOWN
-          @lf.iconlist_objects.setCurrentItem(currentItem + 1, notify)
-          @lf.iconlist_objects.selectItem(currentItem + 1, notify)
+      # Cursor in Liste setzen
+      notify = true
+      if currentItem > 1 && dest == UP
+        @lf.iconlist_objects.setCurrentItem(currentItem - 1, notify)
+        selected_items.each do |idx|
+          @lf.iconlist_objects.selectItem(idx - 1, notify)
+        end
+      elsif currentItem > 0 && currentItem < @lf.iconlist_objects.numItems && dest == DOWN
+        @lf.iconlist_objects.setCurrentItem(currentItem + 1, notify)
+        selected_items.each do |idx|
+          @lf.iconlist_objects.selectItem(idx + 1, notify)
         end
       end
     end
@@ -473,8 +479,10 @@ module Mcc2
         activate_copy_delete
 
         # die Buttons für das Ändern der Reihenfolge aktivieren
-        @lf.button_up.enabled = pos > 1
-        @lf.button_down.enabled = pos < @layout_file.sorted_id_list.length
+        positions = @selected_object_ids.map { |id| @lf.iconlist_objects.findItemByData(id) }
+        @lf.button_up.enabled = positions.all? { |po| po > 1 }
+        num_objects = @layout_file.sorted_id_list.length
+        @lf.button_down.enabled = positions.all? { |po| po < num_objects }
 
         obj = @layout_file.find_graphic_object_by_id(@selected_object_ids.last)
 
