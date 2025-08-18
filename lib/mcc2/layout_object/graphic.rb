@@ -35,6 +35,7 @@ module Mcc2
       def []=(attr, text)
         goattr = @xml_elem.at_xpath(attr)
         goattr.content = text if goattr
+        @layout_file.changed!
       end
 
       def attributes

@@ -13,8 +13,8 @@ class Dialogbox_layoutview
         w_dialogbox_layoutview.wdg_name = "dialogbox_layoutview"
         w_dialogbox_layoutview.layoutHints = 768
         w_dialogbox_layoutview.shown = true
-        w_dialogbox_layoutview.x = 1195
-        w_dialogbox_layoutview.y = 1039
+        w_dialogbox_layoutview.x = 1200
+        w_dialogbox_layoutview.y = 1041
         w_dialogbox_layoutview.width = 475
         w_dialogbox_layoutview.height = 545
         w_dialogbox_layoutview.title = "Entwurfsansicht"
@@ -34,7 +34,7 @@ class Dialogbox_layoutview
               @verticalframe_steuerung = w_verticalframe_steuerung
               w_verticalframe_steuerung.wdg_name = "verticalframe_steuerung"
               w_verticalframe_steuerung.frameStyle = 16384
-              w_verticalframe_steuerung.width = 59
+              w_verticalframe_steuerung.width = 71
               w_verticalframe_steuerung.height = 200
               w_verticalframe_steuerung.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               FX::Button.new(@verticalframe_steuerung) { |w_button_up|
@@ -44,7 +44,7 @@ class Dialogbox_layoutview
                 w_button_up.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                 w_button_up.x = 2
                 w_button_up.y = 2
-                w_button_up.width = 55
+                w_button_up.width = 67
                 w_button_up.height = 24
                 w_button_up.text = "hoch ^"
                 w_button_up.tipText = "Mit diesem Button wird das Objekt eine Zeile nach oben verschoben."
@@ -57,7 +57,7 @@ class Dialogbox_layoutview
                 w_button_down.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                 w_button_down.x = 2
                 w_button_down.y = 26
-                w_button_down.width = 55
+                w_button_down.width = 67
                 w_button_down.height = 24
                 w_button_down.text = "runter v"
                 w_button_down.tipText = "Mit diesem Button wird das Objekt eine Zeile nach oben verschoben."
@@ -66,10 +66,10 @@ class Dialogbox_layoutview
               FX::Packer.new(@verticalframe_steuerung) { |w_packer1|
                 @packer1 = w_packer1
                 w_packer1.wdg_name = "packer1"
-                w_packer1.layoutHints = 1024
+                w_packer1.layoutHints = 1072
                 w_packer1.x = 2
                 w_packer1.y = 50
-                w_packer1.width = 55
+                w_packer1.width = 67
                 w_packer1.height = 0
                 w_packer1.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
@@ -80,7 +80,7 @@ class Dialogbox_layoutview
                 w_button_copy.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                 w_button_copy.x = 2
                 w_button_copy.y = 50
-                w_button_copy.width = 55
+                w_button_copy.width = 67
                 w_button_copy.height = 24
                 w_button_copy.text = "kopieren"
                 w_button_copy.tipText = "kopiert das selektierte Objekt und übernimmt alle Eigenschaften, außer dem Namen"
@@ -93,29 +93,106 @@ class Dialogbox_layoutview
                 w_button_delete.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                 w_button_delete.x = 2
                 w_button_delete.y = 74
-                w_button_delete.width = 55
+                w_button_delete.width = 67
                 w_button_delete.height = 24
                 w_button_delete.text = "löschen"
                 w_button_delete.tipText = "Löscht das selektierte Objekt nach Bestätigung einer Sicherheistabfrage."
                 w_button_delete.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+              }
+              FX::Matrix.new(@verticalframe_steuerung) { |w_matrix97|
+                @matrix97 = w_matrix97
+                w_matrix97.wdg_name = "matrix97"
+                w_matrix97.layoutHints = 1024
+                w_matrix97.matrixStyle = 131072
+                w_matrix97.x = 2
+                w_matrix97.y = 98
+                w_matrix97.width = 67
+                w_matrix97.height = 56
+                w_matrix97.numColumns = 3
+                w_matrix97.numRows = 2
+                FX::Packer.new(@matrix97) { |w_packer73|
+                  @packer73 = w_packer73
+                  w_packer73.wdg_name = "packer73"
+                  w_packer73.layoutHints = 3075
+                  w_packer73.x = 4
+                  w_packer73.y = 4
+                  w_packer73.width = 17
+                  w_packer73.height = 22
+                }
+                FX::Button.new(@matrix97) { |w_button_move_up|
+                  @button_move_up = w_button_move_up
+                  w_button_move_up.wdg_name = "button_move_up"
+                  w_button_move_up.layoutHints = 3075
+                  w_button_move_up.font = FX::Font.new.from_s("DejaVu Sans [PfEd]|80|40|5|0|0|0").to_FXFont
+                  w_button_move_up.x = 25
+                  w_button_move_up.y = 4
+                  w_button_move_up.width = 17
+                  w_button_move_up.height = 22
+                  w_button_move_up.text = "↑"
+                  w_button_move_up.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                }
+                FX::Packer.new(@matrix97) { |w_packer75|
+                  @packer75 = w_packer75
+                  w_packer75.wdg_name = "packer75"
+                  w_packer75.layoutHints = 3075
+                  w_packer75.x = 46
+                  w_packer75.y = 4
+                  w_packer75.width = 17
+                  w_packer75.height = 22
+                }
+                FX::Button.new(@matrix97) { |w_button_move_left|
+                  @button_move_left = w_button_move_left
+                  w_button_move_left.wdg_name = "button_move_left"
+                  w_button_move_left.layoutHints = 3075
+                  w_button_move_left.font = FX::Font.new.from_s("DejaVu Sans [PfEd]|80|40|5|0|0|0").to_FXFont
+                  w_button_move_left.x = 4
+                  w_button_move_left.y = 30
+                  w_button_move_left.width = 17
+                  w_button_move_left.height = 22
+                  w_button_move_left.text = "←"
+                  w_button_move_left.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                }
+                FX::Button.new(@matrix97) { |w_button_move_down|
+                  @button_move_down = w_button_move_down
+                  w_button_move_down.wdg_name = "button_move_down"
+                  w_button_move_down.layoutHints = 3075
+                  w_button_move_down.font = FX::Font.new.from_s("DejaVu Sans [PfEd]|80|40|5|0|0|0").to_FXFont
+                  w_button_move_down.x = 25
+                  w_button_move_down.y = 30
+                  w_button_move_down.width = 17
+                  w_button_move_down.height = 22
+                  w_button_move_down.text = "↓"
+                  w_button_move_down.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                }
+                FX::Button.new(@matrix97) { |w_button_move_right|
+                  @button_move_right = w_button_move_right
+                  w_button_move_right.wdg_name = "button_move_right"
+                  w_button_move_right.layoutHints = 3075
+                  w_button_move_right.font = FX::Font.new.from_s("DejaVu Sans [PfEd]|80|40|5|0|0|0").to_FXFont
+                  w_button_move_right.x = 46
+                  w_button_move_right.y = 30
+                  w_button_move_right.width = 17
+                  w_button_move_right.height = 22
+                  w_button_move_right.text = "→"
+                  w_button_move_right.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                }
               }
             }
             FX::VerticalFrame.new(@splitter12) { |w_verticalframe_objectlist|
               @verticalframe_objectlist = w_verticalframe_objectlist
               w_verticalframe_objectlist.wdg_name = "verticalframe_objectlist"
               w_verticalframe_objectlist.frameStyle = 16384
-              w_verticalframe_objectlist.x = 63
-              w_verticalframe_objectlist.width = 412
+              w_verticalframe_objectlist.x = 75
+              w_verticalframe_objectlist.width = 400
               w_verticalframe_objectlist.height = 200
               w_verticalframe_objectlist.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               FX::IconList.new(@verticalframe_objectlist) { |w_iconlist_objects|
                 @iconlist_objects = w_iconlist_objects
                 w_iconlist_objects.wdg_name = "iconlist_objects"
-                w_iconlist_objects.iconListStyle = 1048576
                 w_iconlist_objects.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                 w_iconlist_objects.x = 2
                 w_iconlist_objects.y = 2
-                w_iconlist_objects.width = 408
+                w_iconlist_objects.width = 396
                 w_iconlist_objects.height = 196
               }
             }
@@ -135,14 +212,13 @@ class Dialogbox_layoutview
               w_tabbook_objectattributes.y = 2
               w_tabbook_objectattributes.width = 471
               w_tabbook_objectattributes.height = 339
-              w_tabbook_objectattributes.current = 3
               w_tabbook_objectattributes.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               FX::TabItem.new(@tabbook_objectattributes) { |w_tabitem_allgemein|
                 @tabitem_allgemein = w_tabitem_allgemein
                 w_tabitem_allgemein.wdg_name = "tabitem_allgemein"
                 w_tabitem_allgemein.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_allgemein.x = 6
-                w_tabitem_allgemein.y = 6
+                w_tabitem_allgemein.x = 4
+                w_tabitem_allgemein.y = 4
                 w_tabitem_allgemein.width = 60
                 w_tabitem_allgemein.height = 24
                 w_tabitem_allgemein.text = "Allgemein"
@@ -152,7 +228,6 @@ class Dialogbox_layoutview
               FX::VerticalFrame.new(@tabbook_objectattributes) { |w_verticalframe52|
                 @verticalframe52 = w_verticalframe52
                 w_verticalframe52.wdg_name = "verticalframe52"
-                w_verticalframe52.shown = false
                 w_verticalframe52.x = 4
                 w_verticalframe52.y = 26
                 w_verticalframe52.width = 463
@@ -546,7 +621,7 @@ class Dialogbox_layoutview
                 @tabitem_chip = w_tabitem_chip
                 w_tabitem_chip.wdg_name = "tabitem_chip"
                 w_tabitem_chip.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_chip.x = 66
+                w_tabitem_chip.x = 63
                 w_tabitem_chip.y = 6
                 w_tabitem_chip.width = 32
                 w_tabitem_chip.height = 24
@@ -569,7 +644,7 @@ class Dialogbox_layoutview
                 @tabitem_magstripe = w_tabitem_magstripe
                 w_tabitem_magstripe.wdg_name = "tabitem_magstripe"
                 w_tabitem_magstripe.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_magstripe.x = 98
+                w_tabitem_magstripe.x = 95
                 w_tabitem_magstripe.y = 6
                 w_tabitem_magstripe.width = 88
                 w_tabitem_magstripe.height = 24
@@ -718,8 +793,8 @@ class Dialogbox_layoutview
                 @tabitem_object = w_tabitem_object
                 w_tabitem_object.wdg_name = "tabitem_object"
                 w_tabitem_object.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_object.x = 184
-                w_tabitem_object.y = 4
+                w_tabitem_object.x = 183
+                w_tabitem_object.y = 6
                 w_tabitem_object.width = 43
                 w_tabitem_object.height = 24
                 w_tabitem_object.text = "Objekt"
@@ -730,6 +805,7 @@ class Dialogbox_layoutview
                 @verticalframe_object = w_verticalframe_object
                 w_verticalframe_object.wdg_name = "verticalframe_object"
                 w_verticalframe_object.frameStyle = 16384
+                w_verticalframe_object.shown = false
                 w_verticalframe_object.x = 4
                 w_verticalframe_object.y = 26
                 w_verticalframe_object.width = 463
@@ -1722,6 +1798,13 @@ class Dialogbox_layoutview
   attr_reader :packer1
   attr_reader :button_copy
   attr_reader :button_delete
+  attr_reader :matrix97
+  attr_reader :packer73
+  attr_reader :button_move_up
+  attr_reader :packer75
+  attr_reader :button_move_left
+  attr_reader :button_move_down
+  attr_reader :button_move_right
   attr_reader :verticalframe_objectlist
   attr_reader :iconlist_objects
   attr_reader :horizontalframe_attributes

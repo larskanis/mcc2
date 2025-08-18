@@ -178,7 +178,7 @@ module Mcc2
       end
     end
 
-    def layout_file= layout_file
+    def layout_file=(layout_file)
       @layout_file = layout_file
       @preview.layout_file = layout_file
       @layoutview.layout_file = layout_file
@@ -187,9 +187,9 @@ module Mcc2
       open_dataman
     end
 
-    def selected_object_id= id
-      @layoutview.selected_object_id = id
-      @preview.selected_object_id = id if @preview
+    def selected_object_ids=(ids)
+      @layoutview.selected_object_ids = ids
+      @preview.selected_object_ids = ids if @preview
     end
 
     def create_xml(filename, xpath_changes)
@@ -200,6 +200,11 @@ module Mcc2
     def add_object(typ)
       @layoutview.manage_objects(ADD, typ)
     end
+
+    def move_selected(x, y)
+      @layoutview.move_selected(x, y)
+    end
+
 
     #---------------------------------------------------------------------------------------------------------
 

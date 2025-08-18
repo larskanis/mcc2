@@ -61,7 +61,7 @@ module Mcc2
       height + card_margin_bottom + card_margin_top
     end
 
-    def draw(drawing, transform, layout_file, preview, selected_object_id, row, page_nr, layers: [0])
+    def draw(drawing, transform, layout_file, preview, selected_object_ids, row, page_nr, layers: [0])
       @magick_font_list ||= Magick.fonts.map { |mf| mf.name }
       barcode_dpi = layout_file.get_attr_value(S_BARCODE_DPI).to_f
       rect_list = ObjRectangeList.new
@@ -145,7 +145,7 @@ module Mcc2
           end
 
           # in Vorschau einen Rahmen um das selektierte Objekt zeichnen
-          if preview && selected_object_id == id
+          if preview && selected_object_ids.include?(id)
             drawing.fill('none')
             drawing.stroke('red')
             drawing.stroke_width(1)

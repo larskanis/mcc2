@@ -15,6 +15,7 @@ module Mcc2
       @layout = layout
       @parent = parent
       @layout_file = nil
+      @selected_object_ids = []
 
       @lf = Dialogbox_layoutview.new parent
       @lf.splitter_layoutview.reparent parent, nil
@@ -33,15 +34,12 @@ module Mcc2
       @lf.button_up.connect(SEL_COMMAND) { object_move_up_down(UP) }
       @lf.button_down.connect(SEL_COMMAND) { object_move_up_down(DOWN) }
 
-      @text_field_trigger = SEL_COMMAND
+      @text_field_trigger = SEL_CHANGED
       #      text_field_trigger = SEL_CHANGED # geht sehr langsam und macht bei Barcode und Bild Probleme
 
       # Objektliste
-      @lf.iconlist_objects.connect(SEL_SELECTED) do
-        item_ID = @lf.iconlist_objects.currentItem
-        @layout.selected_object_id = @lf.iconlist_objects.getItemData(item_ID).to_i
-      end
-      @lf.iconlist_objects.connect(SEL_DESELECTED) { object_deselected }
+      @lf.iconlist_objects.connect(SEL_SELECTED) { object_selected }
+      @lf.iconlist_objects.connect(SEL_DESELECTED) { object_selected }
 
       # die allgemeinen Objektattribute
       @lf.textfield_name.connect(SEL_COMMAND) { obj_attr_changed(GOA_NAME, @lf.textfield_name.text) }
@@ -135,6 +133,10 @@ module Mcc2
       @lf.button_copy.connect(SEL_COMMAND) { manage_objects(COPY) }
       @lf.button_delete.enabled = false
       @lf.button_delete.connect(SEL_COMMAND) { manage_objects(DELETE) }
+      @lf.button_move_up.connect(SEL_COMMAND) { move_selected(0, -1) }
+      @lf.button_move_down.connect(SEL_COMMAND) { move_selected(0, 1) }
+      @lf.button_move_left.connect(SEL_COMMAND) { move_selected(-1, 0) }
+      @lf.button_move_right.connect(SEL_COMMAND) { move_selected(1, 0) }
 
       # die Textfelder für die Magnetstreifenattribute
       @lf.textfield_spur1.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, S_MSSPUR1) }
@@ -184,13 +186,13 @@ module Mcc2
       end
       @lf.listbox_barcode_typ.connect(SEL_COMMAND) { |sender, sel, event| sel_list_box_changed(sender) }
       @lf.spinner_barcode_ratio.connect(SEL_COMMAND) do
-        changed_attributes if @layout_file.set_object_by_id(@selected_object_id, GOA_BAR_RATIO, @lf.spinner_barcode_ratio.value)
+        changed_attributes if @layout_file.set_object_by_ids(@selected_object_ids, GOA_BAR_RATIO, @lf.spinner_barcode_ratio.value)
       end
       @lf.spinner_barcode_height.connect(SEL_COMMAND) do
-        changed_attributes if @layout_file.set_object_by_id(@selected_object_id, GOA_BARCODE_HEIGHT, @lf.spinner_barcode_height.value)
+        changed_attributes if @layout_file.set_object_by_ids(@selected_object_ids, GOA_BARCODE_HEIGHT, @lf.spinner_barcode_height.value)
       end
       @lf.checkbutton_barcode_optimized.connect(SEL_COMMAND) do
-        changed_attributes if @layout_file.set_object_by_id(@selected_object_id, GOA_BARCODE_OPTIMIZED, @lf.checkbutton_barcode_optimized.checked?)
+        changed_attributes if @layout_file.set_object_by_ids(@selected_object_ids, GOA_BARCODE_OPTIMIZED, @lf.checkbutton_barcode_optimized.checked?)
       end
       @lf.spinner_barcode_ratio.range = (1..100)
 
@@ -285,7 +287,7 @@ module Mcc2
     end
 
     def button_sample_data
-      typ = @layout_file.get_object_by_id(@selected_object_id, GOA_TYP)
+      typ = @layout_file.get_object_by_id(@selected_object_ids.last, GOA_TYP)
       if [PICTUREOBJECT, EMBEDOBJECT].include?(typ)
         @layout.execute_filedialog_for_textfield(@lf.textfield_sample_data, filepatterns: "*")
       end
@@ -309,12 +311,18 @@ module Mcc2
     # ==== Parameter
     # +dest+:: die Richtung (UP, oder DOWN)
     def object_move_up_down(dest)
-      if @selected_object_id
-        # erst einmal eine sortierte Liste aller ID's der Grafikobjekte holen
-        obj_arr = @layout_file.sorted_id_list
+      # erst einmal eine sortierte Liste aller ID's der Grafikobjekte holen
+      obj_arr = @layout_file.sorted_id_list
 
-        # dann das entsprechende Objekt verschieben
-        pos = obj_arr.index(@selected_object_id)
+      # die Positionen in dieser Liste ermitteln und von oben nach unten abarbeiten
+      positions = @selected_object_ids.map do |object_id|
+        pos = obj_arr.index(object_id)
+      end.sort
+      # bzw. von unten nach oben, wenn Objekte nach unten geschoben werden
+      positions.reverse! if dest == DOWN
+
+      positions.each do |pos|
+        # dann das entsprechende Objekt mit dem nächstgelegenen tauschen
         if dest == UP
           obj_arr[pos], obj_arr[pos - 1] = obj_arr[pos - 1], obj_arr[pos]
         elsif dest == DOWN
@@ -361,7 +369,7 @@ module Mcc2
     end
 
     def obj_attr_changed(attr, value)
-      if @layout_file.set_object_by_id(@selected_object_id, attr, value.to_s)
+      if @layout_file.set_object_by_ids(@selected_object_ids, attr, value.to_s)
         changed_attributes
         fill_objectlist if [GOA_NAME, GOA_TYP].include?(attr)
       end
@@ -388,7 +396,7 @@ module Mcc2
       else
         # in diesem Zweig werden alle Graphik-Objekte bearbeitet
         # das Attribut suchen
-        @layout_file.set_object_by_id(@selected_object_id, attr_name, sender.text)
+        @layout_file.set_object_by_ids(@selected_object_ids, attr_name, sender.text)
       end
       changed_attributes if changed
     end
@@ -417,39 +425,47 @@ module Mcc2
     def activate_copy_delete(on = true)
       @lf.button_copy.enabled = on
       @lf.button_delete.enabled = on
+      @lf.button_move_up.enabled = on
+      @lf.button_move_down.enabled = on
+      @lf.button_move_left.enabled = on
+      @lf.button_move_right.enabled = on
     end
 
-    attr_reader :selected_object_id
-    def selected_object_id= id
-      @selected_object_id = id
+    def object_selected
+      item_ids = @lf.iconlist_objects.select { |i| i.selected? }.map { |i| i.data }
+      @layout.selected_object_ids = item_ids
+    end
+
+    attr_reader :selected_object_ids
+    def selected_object_ids=(ids)
+      @selected_object_ids = ids
       object_selection_changed
-    end
-
-    # deaktiviert die Tabs im Layout-Dialog, welche Objekt-spezifisch sind
-    def object_deselected
-      @layout.selected_object_id = nil
     end
 
     # wenn in der Objektliste ein anderes Objekt selektiert wird, dann werden mit dieser Methode die Anzeigen aktualisiert,
     # z.Bsp, nur die Tabs aktiviert, die zum Objekttyp passen, usw.
     def object_selection_changed
-      if !@selected_object_id
+      if @selected_object_ids.empty?
         # No object selected
         activate_object_tabs(false)
         activate_up_down(false)
         activate_copy_delete(false)
         @lf.iconlist_objects.killSelection
 
-      elsif @selected_object_id == JobSetupObjID
+      elsif @selected_object_ids == [JobSetupObjID]
         # Job-Setup selected
         activate_job_tabs
         @lf.tabbook_objectattributes.current = 0
 
       else
         # Graphic object selected
-        pos = @lf.iconlist_objects.findItemByData(@selected_object_id)
-        @lf.iconlist_objects.setCurrentItem(pos)
-        @lf.iconlist_objects.selectItem(pos)
+        pos = @lf.iconlist_objects.findItemByData(@selected_object_ids.last)
+        @lf.iconlist_objects.setCurrentItem(pos) if @lf.iconlist_objects.currentItem == -1
+        @lf.iconlist_objects.killSelection
+        @selected_object_ids.each do |id|
+          pos = @lf.iconlist_objects.findItemByData(id)
+          @lf.iconlist_objects.selectItem(pos)
+        end
 
         # erst einmal alle Objekt-Tabs deaktivieren, damit sicher gestellt ist, dass nur die Objekt-typischen angezeigt werden
         activate_object_tabs(false)
@@ -460,7 +476,7 @@ module Mcc2
         @lf.button_up.enabled = pos > 1
         @lf.button_down.enabled = pos < @layout_file.sorted_id_list.length
 
-        obj = @layout_file.find_graphic_object_by_id(@selected_object_id)
+        obj = @layout_file.find_graphic_object_by_id(@selected_object_ids.last)
 
         # allgemeine Attribute auslesen
         @lf.tabitem_object.shown = true
@@ -498,13 +514,13 @@ module Mcc2
           @lf.radiobutton_just_l.state = false
           @lf.radiobutton_just_m.state = false
           @lf.radiobutton_just_r.state = false
-          just = @layout_file.get_object_by_id(@selected_object_id, GOA_JUSTIFICATION)
-          if just == S_JUST_LEFT
-            @lf.radiobutton_just_l.state = true
-          elsif just == S_JUST_MID
-            @lf.radiobutton_just_m.state = true
-          elsif just == S_JUST_RIGHT
-            @lf.radiobutton_just_r.state = true
+          case obj[GOA_JUSTIFICATION]
+            when S_JUST_LEFT
+              @lf.radiobutton_just_l.state = true
+            when S_JUST_MID
+              @lf.radiobutton_just_m.state = true
+            when S_JUST_RIGHT
+              @lf.radiobutton_just_r.state = true
           end
 
           fill_font_list
@@ -557,10 +573,10 @@ module Mcc2
       changed = if sender.wdg_name == "listbox_fonts"
         font = @lf.listbox_fonts.getItemData(@lf.listbox_fonts.currentItem)
         @lf.textfield_font_file.enabled = font == "from_file"
-        @layout_file.set_object_by_id(@selected_object_id, GOA_FONT_TYP, font)
+        @layout_file.set_object_by_ids(@selected_object_ids, GOA_FONT_TYP, font)
       elsif sender.wdg_name == "listbox_barcode_typ"
         bc = @lf.listbox_barcode_typ.getItemText(@lf.listbox_barcode_typ.currentItem)
-        @layout_file.set_object_by_id(@selected_object_id, GOA_BARCODE_TYP, bc)
+        @layout_file.set_object_by_ids(@selected_object_ids, GOA_BARCODE_TYP, bc)
       else
         raise "unbekannter Sender. Eingriff des Programmierers nötig. :-("
       end
@@ -585,7 +601,6 @@ module Mcc2
       FXFehlerAuswahlDialog.new(@parent.app, "Der Barcode-Typ #{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes. Der Wert wird auf 'NONE' gesetzt.", ["&OK"]) unless bc_id
       @lf.listbox_barcode_typ.currentItem = bc_id if bc_id
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # füllt die Font-Auswahlliste mit den möglichen Fonts
     def fill_font_list
@@ -601,7 +616,6 @@ module Mcc2
         @lf.listbox_fonts.setItemData(idx, rmf)         # die Werte
       }
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # füllt die Font-spezifischen Felder mit den gewählten Optionen aus dem Layout
     def fill_font_fields(obj)
@@ -614,7 +628,6 @@ module Mcc2
       @lf.textfield_font_file.enabled = font_typ == "from_file"
       @lf.textfield_font_file.text = obj[GOA_FONT_FILE]
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # selectiert in der über listbox_name angegebenen Listbox den Eintrag, der Value entspricht
     # wird beim Laden benötigt, um aus den Layoutdaten die Einstellungen zu restaurieren
@@ -633,7 +646,6 @@ module Mcc2
         @lf.send(listbox_name.intern).currentItem = ft_idx
       end
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # aktiviert ein einzeiliges Textfeld für die Eingabe der Daten (wird für Barcode und Bilder gebraucht)
     def data_shown
@@ -645,7 +657,6 @@ module Mcc2
       @lf.menubutton_enhanced_data_text_edit.shown = false
     end
 
-    #---------------------------------------------------------------------------------------------------------
     # deaktiviert die Textfelder für Dateneingabe
     def no_data_shown
       @lf.textfield_data.shown = false
@@ -666,7 +677,6 @@ module Mcc2
       @lf.menubutton_enhanced_data_text_edit.shown = true
     end
 
-    #---------------------------------------------------------------------------------------------------------
     # fügt ein GraphicObjekt zur Objektliste hinzu und zeichnet die Vorschau und die Objektliste neu
     # ==== Parameter
     # +typ+:: der Typ des Objekts (Bild, Text, Barcode)
@@ -675,34 +685,38 @@ module Mcc2
         @layout_file.add_object(typ)
         changed_attributes
       elsif action == DELETE
-        obj = @layout_file.find_graphic_object_by_id(@selected_object_id) if @selected_object_id
-        nn = obj[GOA_NAME]
-        s = "Wollen Sie wirklich das Objekt '#{nn}' löschen?\nDieser Vorgang lässt sich nicht rückgängig machen!"
+        names = @selected_object_ids.map do |id|
+          obj = @layout_file.find_graphic_object_by_id(id)
+          "'#{ obj[GOA_NAME] }'"
+        end
+        nn = names.join(", ")
+        s = "Wollen Sie wirklich #{names.size > 1 ? "die Objekte" : "das Objekt"} #{nn} löschen?\nDieser Vorgang lässt sich nicht rückgängig machen!"
         error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, s, ["&Löschen", "&Abbrechen"])
         error_WahlMessage.execute
         if error_WahlMessage.selection == 0
-          @layout_file.delete_object(obj)
+          @layout_file.delete_objects(@selected_object_ids)
           changed_attributes
         end
       elsif action == COPY
-        obj = @layout_file.find_graphic_object_by_id(@selected_object_id) if @selected_object_id
-        @layout_file.copy_object(obj)
+        @layout_file.copy_objects(@selected_object_ids)
         changed_attributes
       end
+      num_objs = @selected_object_ids.size
 
-      object_deselected
+      @selected_object_ids = []
       fill_objectlist
 
       if action == ADD || action == COPY
         # neu hinzugefügtes Objekt aktiv schalten
         notify = true
         @lf.iconlist_objects.setCurrentItem(@lf.iconlist_objects.numItems - 1, notify)
-        @lf.iconlist_objects.selectItem(@lf.iconlist_objects.numItems - 1, notify)
+        (@lf.iconlist_objects.numItems - num_objs .. @lf.iconlist_objects.numItems - 1).each do |pos|
+          @lf.iconlist_objects.selectItem(pos, notify)
+        end
       end
 
       draw_preview(true)
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # füllt die Objektliste des Layout-Dialogs mit den Name der graphischen Objekte
     def fill_objectlist
@@ -718,7 +732,6 @@ module Mcc2
         }
       end
     end
-    #---------------------------------------------------------------------------------------------------------
 
     # diese Methode liest die allgemeinen Einstellungen des Layouts aus dem XML aus und befüllt damit die Bearbeitungsfelder im Tab 'Allgemein'
     def fill_layout_attr_tab
@@ -737,14 +750,22 @@ module Mcc2
       set_check_button("checkbutton_flip_back", @layout_file.get_attr_value(S_BACK_FLIP), true)
       set_check_button("checkbutton_flop_back", @layout_file.get_attr_value(S_BACK_FLOP), true)
     end
-    #---------------------------------------------------------------------------------------------------------
 
     def set_check_button(objectname, state, enabled)
       @lf.send(objectname).state = state == S_TRUE
       @lf.send(objectname).enabled = enabled
     end
-    #---------------------------------------------------------------------------------------------------------
-    #
+
+    def move_selected(x, y)
+      @selected_object_ids.each do |id|
+        next if id < 0
+        go = @layout_file.find_graphic_object_by_id(id)
+        go[GOA_X] = go[GOA_X].to_f + x
+        go[GOA_Y] = go[GOA_Y].to_f + y
+      end
+
+      changed_attributes if x != 0 || y != 0
+    end
 
     def draw_preview(immediately = false)
       @layout.draw_preview(immediately)

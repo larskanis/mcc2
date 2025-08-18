@@ -13,7 +13,7 @@ module Mcc2
         super()
         @parent = parent
         @layout = layout
-        @selected_object_id = nil
+        @selected_object_ids = []
         @thread = nil
 
         FXHorizontalFrame.new(parent, opts: LAYOUT_FILL_X) do |frame1|
@@ -50,6 +50,7 @@ module Mcc2
 
         @image_view = FXImageView.new(parent, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y)
         @image_view.connect(SEL_LEFTBUTTONPRESS, &method(:image_view_clicked))
+        @image_view.connect(SEL_KEYPRESS, &method(:image_view_keypress))
 
         set_zoom
       end
@@ -59,8 +60,8 @@ module Mcc2
         @textfield_barcode_dpi.text = @layout_file.get_attr_value(S_BARCODE_DPI) || "203.0"
       end
 
-      def selected_object_id= id
-        @selected_object_id = id
+      def selected_object_ids=(ids)
+        @selected_object_ids = ids
         draw_preview false, @row
       end
 
@@ -88,8 +89,26 @@ module Mcc2
           event.win_y - content_y)
 
         if @rect_list
-          rects = @rect_list.point_inside(point)
-          @layout.selected_object_id = rects.last&.obj_id
+          rect_ids = [@rect_list.point_inside(point).last&.obj_id].compact
+          obj_ids = event.state & Fox::CONTROLMASK != 0 ? @selected_object_ids : []
+          @layout.selected_object_ids = obj_ids + rect_ids - (obj_ids & rect_ids)
+        end
+      end
+
+      def image_view_keypress(sender, sel, event)
+        if event.type == 1 # Keypress
+          case event.code
+          when Fox::KEY_Up
+            @layout.move_selected(0, -1)
+          when Fox::KEY_Down
+            @layout.move_selected(0, 1)
+          when Fox::KEY_Left
+            @layout.move_selected(-1, 0)
+          when Fox::KEY_Right
+            @layout.move_selected(1, 0)
+          else
+            return 0
+          end
         end
       end
 
@@ -158,12 +177,12 @@ module Mcc2
         draw_pos_x = 0
         draw_pos_y = 0
         tra = Transformation.new
-        rect_list = draw(drawing, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_id, row, 0, layers: :all)
+        rect_list = draw(drawing, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 0, layers: :all)
 
         # Rückseite
         if duplex
           draw_pos_y = height_with_margins(height) + card_offset
-          rect_list.add draw(drawing, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_id, row, 1, layers: :all)
+          rect_list.add draw(drawing, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 1, layers: :all)
         end
 
         drawing.draw(canvas)

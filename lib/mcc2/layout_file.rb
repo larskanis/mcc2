@@ -351,19 +351,21 @@ PRINT 1
 
     # return true  - etwas verändert
     #        false - nichts verändert
-    def set_object_by_id(obj_id, attr, value)
-      if obj_id
+    def set_object_by_ids(obj_ids, attr, value)
+      ch = false
+      obj_ids.each do |obj_id|
         node = get_objectnode_by_id(obj_id).at_xpath(attr)
+
+        # When multiple objects are selected -> ignore attributes not available for this object
+        next if !node && obj_ids.size > 1
+
         value = value.to_s
         if node.content != value
           node.content = value
-          changed!
-        else
-          false
+          ch ||= changed!
         end
-      else
-        false
       end
+      ch
     end
 
     # Fügt ein Graphik-Objekt zur Layout-Definition hinzu
@@ -402,7 +404,8 @@ PRINT 1
     def get_new_id
       id = 0
       @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each do |go|
-        id = go.at_xpath(GOA_ID).content.to_i + 1 if go.at_xpath(GOA_ID).content.to_i >= id
+        oid = go.at_xpath(GOA_ID).content.to_i
+        id = oid + 1 if oid >= id
       end
       id
     end
@@ -533,13 +536,16 @@ PRINT 1
     # ersetllt ein neues Graphik-Objekt und kopiert alle Attributte des übergebenen, außer ID, Typ und Name
     # ==== Parameter
     # +node+:: die XML-Node des zu kopierenden Objekts, fals nil übergeben wurde, kehrt die Methode unverrichteter Dinge zurück
-    def copy_object(obj)
-      return unless obj
-      o = add_object(obj[GOA_TYP])
-      obj.attributes.each do |attr|
-        # alle Attribute, außer ID, Typ und Name kopieren, sofern sie vorhanden, ansonsten den Standard lassen
-        unless [GOA_ID, GOA_TYP, GOA_NAME].include?(attr)
-          o[attr] = obj[attr]
+    def copy_objects(ids)
+      ids.each do |id|
+        obj = find_graphic_object_by_id(id)
+
+        o = add_object(obj[GOA_TYP])
+        obj.attributes.each do |attr|
+          # alle Attribute, außer ID, Typ und Name kopieren, sofern sie vorhanden, ansonsten den Standard lassen
+          unless [GOA_ID, GOA_TYP, GOA_NAME].include?(attr)
+            o[attr] = obj[attr]
+          end
         end
       end
       changed!
@@ -547,8 +553,11 @@ PRINT 1
 
     # löscht sie übergebene XML-Node aus dem Layout ohne Rückfrage, diese muss in der aufrufenden Methode durchgeführt werden
     # ==== Parameter
-    def delete_object(obj)
-      obj.delete
+    def delete_objects(ids)
+      ids.each do |id|
+        obj = find_graphic_object_by_id(id)
+        obj.delete
+      end
       changed!
     end
 
