@@ -113,17 +113,7 @@ module Mcc2
       button.text = button.text.tr("_", "&")
       button.connect(SEL_COMMAND, &block)
 
-      # work-a-round:
-      # FXPseudoTarget is not correctly marked as used in some fxruby-versions
-      # and is therefore GC'ed.
-      # @topwin.accelTable.addAccel(fxparseAccel(button.accelText), block)
-      tgt = FXPseudoTarget.new
-      seldn = FXSEL(SEL_KEYPRESS, 0)
-      tgt.pconnect(SEL_KEYPRESS, block)
-      @accelTargets ||= []
-      @accelTargets << tgt
-      @topwin.accelTable.addAccel(fxparseAccel(button.accelText), tgt, seldn)
-      # end work-a-round:
+      @topwin.accelTable.addAccel(fxparseAccel(button.accelText), block)
     end
 
     def add_xpath_value(param)
