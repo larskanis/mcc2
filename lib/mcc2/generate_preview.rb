@@ -3,9 +3,13 @@ require "pmap"
 module Mcc2
   class GeneratePreview
     attr_accessor :verbose
+    attr_accessor :dpi
+    attr_accessor :skip_when
 
     def initialize
       @mcc2print = Mcc2::Mcc2Print.new
+      @dpi = 200
+      @skip_when = "uptodate"
     end
 
     def start!(fnames)
@@ -14,8 +18,15 @@ module Mcc2
       end
       fnames.each do |fname|
         fname_png = "#{fname}.png"
-        if File.exist?(fname_png) && File.mtime(fname) <= File.mtime(fname_png)
-          puts "Skip #{fname} (is up-to-date)" if verbose
+        sk = case skip_when
+          when "existing" then File.exist?(fname_png)
+          when "uptodate" then File.exist?(fname_png) && File.mtime(fname) <= File.mtime(fname_png)
+          when "none" then false
+          else
+            raise "invalid skip mode: #{skip_when}"
+        end
+        if sk
+          puts "Skip #{fname} (is #{skip_when})" if verbose
           next
         end
 
@@ -23,11 +34,11 @@ module Mcc2
         kwargs = {
           "//Layout/datasource_typ" => "none",
           "//Layout/datasource" => "3",
-          "//Layout/barcode_dpi" => "200",
+          "//Layout/barcode_dpi" => dpi.to_s,
           "{#{fna}}//Layout/datasource" => "1",
           "{#{fna}}//Layout/printertype" => "FilePrinter",
           "{#{fna}}//Layout/fileprinter_save_as" => fname_png,
-          "{#{fna}}//Layout/fileprinter_dpi" => "200",
+          "{#{fna}}//Layout/fileprinter_dpi" => dpi.to_s,
         }
 
         begin
@@ -46,6 +57,8 @@ module Mcc2
         opts.banner = "Usage: #{$0} <layout.mcc2>* [options]"
 
         opts.on("-v", "--[no-]verbose", "Run verbosely", &app.method(:verbose=))
+        opts.on("--dpi INT", "Generate previews with INT DPI [#{app.dpi}]", &app.method(:dpi=))
+        opts.on("--skip MODE", "Skip files when: uptodate|existing|none [#{app.skip_when}]", &app.method(:skip_when=))
       end.parse!
 
       app.start!(argv)
