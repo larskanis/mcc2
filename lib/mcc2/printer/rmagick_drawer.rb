@@ -255,9 +255,7 @@ module Mcc2
         just = Magick::StartAnchor # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
       end
 
-      unless @magick_font_list.index(font) || File.exist?(font)
-        raise Printer::Base::ResourceNotFoundError, "Die Schriftart '#{font}' konnte nicht gefunden werden. Der Druck wird angehalten."
-      end
+      check_font(font, go)
 
       if data && !data.empty?
         drawing.font font
@@ -345,6 +343,8 @@ module Mcc2
       end
       fontsize = go[GOA_FONT_HEIGHT].to_f
       font_color = ["#", go[GOA_FONT_COLOR]].join
+
+      check_font(fontname, go)
 
       unless @magick_font_list.index(fontname) || File.exist?(fontname)
         raise Printer::Base::ResourceNotFoundError, "Die Schriftart '#{fontname}' konnte nicht gefunden werden. Der Druck wird angehalten."
@@ -479,6 +479,12 @@ module Mcc2
         end
       else
         raise Printer::Base::ResourceNotFoundError, "Das Layout '#{path}' konnte nicht gefunden werden. Der Druck wird angehalten."
+      end
+    end
+
+    def check_font(font, obj)
+      unless @magick_font_list.index(font) || File.exist?(font)
+        raise Printer::Base::ResourceNotFoundError, "Die Schriftart '#{font}' in Objekt '#{obj[GOA_NAME]}' konnte nicht gefunden werden. Der Druck wird angehalten."
       end
     end
 

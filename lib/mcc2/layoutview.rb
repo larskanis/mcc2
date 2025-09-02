@@ -617,12 +617,13 @@ module Mcc2
       rmfl = Magick.fonts.map { |mf| mf.name }
       rmfl.sort!
       @lf.listbox_fonts.clearItems
-      idx = @lf.listbox_fonts.appendItem("aus Font-Datei") # die humanreadable
-      @lf.listbox_fonts.setItemData(idx, "from_file")         # die Werte
+      @lf.listbox_fonts.appendItem("")
+      idx = @lf.listbox_fonts.appendItem("aus Font-Datei") # humanreadable
+      @lf.listbox_fonts.setItemData(idx, "from_file")      # font name or file
 
       rmfl.each do |rmf|
-        idx = @lf.listbox_fonts.appendItem(rmf.tr("-", " ")) # die humanreadable
-        @lf.listbox_fonts.setItemData(idx, rmf)         # die Werte
+        idx = @lf.listbox_fonts.appendItem(rmf.tr("-", " ")) # humanreadable
+        @lf.listbox_fonts.setItemData(idx, rmf)         # font name or file
       end
     end
 
@@ -641,10 +642,9 @@ module Mcc2
     # selectiert in der über listbox_name angegebenen Listbox den Eintrag, der Value entspricht
     # wird beim Laden benötigt, um aus den Layoutdaten die Einstellungen zu restaurieren
     def set_listbox_value(listbox_name, value)
-      # ~ p "#{self.class.name}::set_listbox_value => listbox_name: #{listbox_name}; value: #{value.inspect}"
       ft_idx = nil
       idx = 0
-      @lf.send(listbox_name.intern).each do |t, i, d|
+      @lf.send(listbox_name).each do |t, i, d|
         if d == value
           ft_idx = idx
           break
@@ -652,7 +652,7 @@ module Mcc2
         idx += 1
       end
       if ft_idx
-        @lf.send(listbox_name.intern).currentItem = ft_idx
+        @lf.send(listbox_name).currentItem = ft_idx
       end
     end
 

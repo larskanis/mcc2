@@ -231,7 +231,9 @@ module Mcc2
 
     def connect_filebutton_to_textfield(button, textfield, filepatterns: "*")
       button.connect(SEL_COMMAND) do
-        execute_filedialog_for_textfield(textfield, filepatterns: filepatterns)
+        if textfield.enabled?
+          execute_filedialog_for_textfield(textfield, filepatterns: filepatterns)
+        end
       end
       add_tipText_to_filedialog_for_textfield(textfield)
     end
