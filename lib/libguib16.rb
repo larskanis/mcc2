@@ -924,7 +924,6 @@ module FX
   class Text < Fox::FXText
     def initialize(p, opts = 0)
       super(p, nil, 0, opts | Fox::LAYOUT_FILL_X | Fox::LAYOUT_FILL_Y)
-      text = "Text"
     end
     alias_method :textTextStyle=, :textStyle=
     alias_method :textTextStyle, :textStyle
@@ -933,7 +932,6 @@ module FX
   class TextField < Fox::FXTextField
     def initialize(p, opts = 0)
       super(p, 10, nil, 0, opts | Fox::FRAME_SUNKEN)
-      text = "TextField"
     end
 
     def text=(*args)

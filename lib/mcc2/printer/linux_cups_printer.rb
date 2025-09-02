@@ -1,6 +1,6 @@
 require "mcc2/printer/card_printer"
 require "mcc2/printer/rmagick_drawer"
-require 'ffi-cups'
+require "ffi-cups"
 
 module Mcc2
   module Printer
@@ -33,7 +33,7 @@ module Mcc2
 
         printer = Cups::Printer.get_destination(printer_name)
 
-        file_pdf = Tempfile.new(['mcc2', '.pdf'])
+        file_pdf = Tempfile.new(["mcc2", ".pdf"])
 
         img_pdf = Magick::ImageList.new
         img_pdf << print_page(row, 0)
@@ -49,9 +49,9 @@ module Mcc2
         json_str = @layout_file.get_attr_value(S_LINUX_CUPS_OPTIONS)
         options = JSON.parse(json_str)
         options.transform_values! do |value|
-          value =~ /=(.*)\z/ ? $1 : value # Wert bei "CONST=wert" herausselektieren
+          (value =~ /=(.*)\z/) ? $1 : value # Wert bei "CONST=wert" herausselektieren
         end
-        job = printer.print_file(file_pdf.path, "MCC2 - #{layout_file.filename}", options)
+        printer.print_file(file_pdf.path, "MCC2 - #{layout_file.filename}", options)
 
         chip&.pers_card(layout_file, row)
 
@@ -72,7 +72,7 @@ module Mcc2
         selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
         preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
 
-        pic = Magick::Image.new(mm(page_width), mm(page_height)){ |options| options.background_color = "white" }
+        pic = Magick::Image.new(mm(page_width), mm(page_height)) { |options| options.background_color = "white" }
         drawing = Magick::Draw.new
         drawing.text_antialias(false)
 
@@ -81,8 +81,7 @@ module Mcc2
 
         # Draw in ein Image zeichnen
         drawing.draw(pic)
-        pic = postprocess_image(pic, layout_file, page_nr)
-        pic
+        postprocess_image(pic, layout_file, page_nr)
       end
     end
   end

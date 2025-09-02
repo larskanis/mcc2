@@ -31,7 +31,6 @@ module Mcc2
       @combobox_printertype.connect(SEL_COMMAND) { combobox_printertype_changed }
       @textfield_file_save_as.connect(SEL_COMMAND) {
         changed_attributes if @layout_file.set_attr_value(S_FILEPRINTER_SAVE_AS, @textfield_file_save_as.text)
-
       }
       # Button für das Auswählen einer Datenquelle an Textfeld knüpfen
       @layout.connect_filebutton_to_textfield(@button_file_save_as, @textfield_file_save_as,
@@ -95,7 +94,6 @@ module Mcc2
         changed_attributes if @layout_file.set_attr_value(S_EPLPRINTER_DPI, @spinner_epl_dpi.value.to_s)
       }
 
-
       @textfield_ttp343_device.connect(SEL_COMMAND) {
         changed_attributes if @layout_file.set_attr_value(S_TTP34XPRINTER_DEVICE, @textfield_ttp343_device.text)
       }
@@ -105,7 +103,6 @@ module Mcc2
       @spinner_ttp343_dpi.connect(SEL_COMMAND) {
         changed_attributes if @layout_file.set_attr_value(S_TTP34XPRINTER_DPI, @spinner_ttp343_dpi.value.to_s)
       }
-
 
       @combobox_cx320_driver.appendItem("LIBUSB", "CX320_USB")
       @combobox_cx320_driver.appendItem("DLL", "CX320_DLL")
@@ -133,12 +130,12 @@ module Mcc2
 
       FXSeparator.new(@verticalframe_linux_cups)
       @linux_cups_options = []
-      FXMatrix.new(@verticalframe_linux_cups, opts: MATRIX_BY_COLUMNS|LAYOUT_FILL|FRAME_GROOVE, vSpacing: 0, hSpacing: 0) do |mat|
+      FXMatrix.new(@verticalframe_linux_cups, opts: MATRIX_BY_COLUMNS | LAYOUT_FILL | FRAME_GROOVE, vSpacing: 0, hSpacing: 0) do |mat|
         mat.numColumns = 2
         10.times do
           combo_val = nil
           combo_key = FXComboBox.new(mat, 0, nil, 0,
-                    COMBOBOX_NO_REPLACE|FRAME_SUNKEN|LAYOUT_SIDE_TOP|LAYOUT_FILL_X|LAYOUT_FILL_COLUMN) do |combo|
+            COMBOBOX_NO_REPLACE | FRAME_SUNKEN | LAYOUT_SIDE_TOP | LAYOUT_FILL_X | LAYOUT_FILL_COLUMN) do |combo|
             combo.editable = true
             # names = JSON.parse( app.reg.readStringEntry('login', 'usernames', '[]') )
             combo.numVisible = 10
@@ -158,7 +155,7 @@ module Mcc2
             end
           end
           combo_val = FXComboBox.new(mat, 0, nil, 0,
-                    COMBOBOX_NO_REPLACE|FRAME_SUNKEN|LAYOUT_SIDE_TOP|LAYOUT_FILL_X|LAYOUT_FILL_COLUMN) do |combo|
+            COMBOBOX_NO_REPLACE | FRAME_SUNKEN | LAYOUT_SIDE_TOP | LAYOUT_FILL_X | LAYOUT_FILL_COLUMN) do |combo|
             combo.editable = true
             # names = JSON.parse( app.reg.readStringEntry('login', 'usernames', '[]') )
             combo.numVisible = 10
@@ -291,8 +288,8 @@ module Mcc2
         prname = @layout_file.get_attr_value(S_LINUX_CUPS_PRINTER)
         Layout.set_combobox_by_data(combobox, prname, false)
 
-        cs = Cups.constants.each.with_object({}){|c,h| h[c] = true }
-        keys = cs.select { |c, _| cs["#{c}_SUPPORTED".to_sym] }.keys
+        cs = Cups.constants.each.with_object({}) { |c, h| h[c] = true }
+        keys = cs.select { |c, _| cs[:"#{c}_SUPPORTED"] }.keys
         cvals = keys.map { |c| [c, Cups.const_get(c)] }
         @linux_cups_options.each do |combo_key, combo_val|
           combo_key.clearItems
@@ -322,7 +319,8 @@ module Mcc2
     def selected_PrinterEpl
     end
 
-    def selected_PrinterTTP34x; end
+    def selected_PrinterTTP34x
+    end
 
     def selected_PrinterCx320Direct
       if_driver_loadable("libcx320", "libcx320", "CX320-Drucker") do
@@ -395,7 +393,7 @@ module Mcc2
 
             checkbutton = FXCheckButton.new(matrix, attr.name.to_s)
             checked = attr_checked[attr.name.to_s] if checked.nil?
-            checkbutton.setCheck(checked.nil? ? true : checked)
+            checkbutton.setCheck(checked.nil? || checked)
             checkbutton.connect(SEL_COMMAND) { cx320_config_field_changed }
 
             w = case attr.typ

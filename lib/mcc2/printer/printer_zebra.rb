@@ -108,7 +108,7 @@ module Mcc2
         err.struct!("L", :err)
 
         #				puts("---\nGet handle '#{devicename}'")
-        start = Time.now
+        Time.now
         result = ZebraDll.get_handle(h_printer, devicename, printer_type, err)
 
         @handle = h_printer[:handle]
@@ -131,7 +131,7 @@ module Mcc2
         err = DL.malloc(4)
         err.struct!("L", :err)
         #				puts("---\nSend command #{command}")
-        start = Time.now
+        Time.now
         result = ZebraDll.send_cmd(@handle, @type, "#{command}\r", err)
         error = err[:err]
 
@@ -157,7 +157,7 @@ module Mcc2
         #				result = ZebraDll.send_cmdex(@handle, @type, "#{command.to_s_win32}\r", response, resp_size, err)
         result = ZebraDll.send_cmdex(@handle, @type, "#{command}\r", response, resp_size, err)
 
-        size = resp_size[:size]
+        resp_size[:size]
         error = err[:err]
 
         #				puts("result = #{result}")
@@ -178,7 +178,7 @@ module Mcc2
           err = DL.malloc(4)
           err.struct!("L", :err)
           #					puts("---\nClose handle")
-          start = Time.now
+          Time.now
           result = ZebraDll.close_handle(@handle, err)
           error = err[:err]
 

@@ -78,23 +78,24 @@ module Mcc2
       def image_view_clicked(sender, sel, event)
         # There is no accessor for the content position in FXImageView.
         # So the calculation is a bit awkward.
-        if @image_view.viewportWidth >= @image_view.contentWidth
-          content_x = (@image_view.viewportWidth - @image_view.contentWidth) / 2
+        content_x = if @image_view.viewportWidth >= @image_view.contentWidth
+          (@image_view.viewportWidth - @image_view.contentWidth) / 2
         else
-          content_x = @image_view.xPosition
+          @image_view.xPosition
         end
-        if @image_view.viewportHeight >= @image_view.contentHeight
-          content_y = (@image_view.viewportHeight - @image_view.contentHeight) / 2
+        content_y = if @image_view.viewportHeight >= @image_view.contentHeight
+          (@image_view.viewportHeight - @image_view.contentHeight) / 2
         else
-          content_y = @image_view.yPosition
+          @image_view.yPosition
         end
         point = Vector2d.new(
           event.win_x - content_x,
-          event.win_y - content_y)
+          event.win_y - content_y
+        )
 
         if @rect_list
           rect_ids = [@rect_list.point_inside(point).last&.obj_id].compact
-          obj_ids = event.state & Fox::CONTROLMASK != 0 ? @selected_object_ids : []
+          obj_ids = (event.state & Fox::CONTROLMASK != 0) ? @selected_object_ids : []
           @layout.selected_object_ids = obj_ids + rect_ids - (obj_ids & rect_ids)
         end
 
@@ -113,7 +114,7 @@ module Mcc2
           when Fox::KEY_Right
             @layout.move_selected(1, 0)
           else
-            return 0
+            0
           end
         end
       end
@@ -175,7 +176,7 @@ module Mcc2
 
         rect_list = nil
         canvas = Magick::ImageList.new
-        canvas.new_image(mm(image_width), mm(image_height)){ |options| options.background_color = "white" }
+        canvas.new_image(mm(image_width), mm(image_height)) { |options| options.background_color = "white" }
         drawing = Magick::Draw.new
         drawing.text_antialias(true)
 

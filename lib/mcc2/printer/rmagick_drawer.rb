@@ -17,15 +17,15 @@ module Mcc2
       end
 
       def point_inside(pt)
-        d1 = sign(pt, @v1, @v2);
-        d2 = sign(pt, @v2, @v3);
-        d3 = sign(pt, @v3, @v4);
-        d4 = sign(pt, @v4, @v1);
+        d1 = sign(pt, @v1, @v2)
+        d2 = sign(pt, @v2, @v3)
+        d3 = sign(pt, @v3, @v4)
+        d4 = sign(pt, @v4, @v1)
 
-        has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0) || (d4 < 0);
-        has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0) || (d4 > 0);
+        has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0) || (d4 < 0)
+        has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0) || (d4 > 0)
 
-        return !(has_neg && has_pos);
+        !(has_neg && has_pos)
       end
 
       attr_reader :obj_id
@@ -70,8 +70,8 @@ module Mcc2
       height = layout_file.get_attr_value(S_HEIGHT).to_f
       if preview
         # todo -0.5, damit die rechten und unteren Ränder zu sehen sind, jetzt sitzt die Karte aber unsymetrisch auf dem Rechteck
-        drawing.fill('none')
-        drawing.stroke('black')
+        drawing.fill("none")
+        drawing.stroke("black")
         cpos = transform.translate(mm(width_with_margins(width - 0.5)), mm(height_with_margins(height - 0.5)))
         drawing.rectangle(transform.x, transform.y, cpos.x, cpos.y)
         # canvas.rect(mm(width_with_margins(width - 0.5)), mm(height_with_margins(height - 0.5))).styles(fill: "none", stroke: "black")
@@ -81,8 +81,8 @@ module Mcc2
       # Kartenhintergrund füllen (für Vorschau)
       rx = mm(3)
       if preview
-        drawing.fill('lightgray')
-        drawing.stroke('none')
+        drawing.fill("lightgray")
+        drawing.stroke("none")
         cpos = tra.translate(mm(width), mm(height))
         drawing.roundrectangle(tra.x, tra.y, cpos.x, cpos.y, rx, rx)
         # canvas1.rect(mm(width), mm(height)).round(rx).styles(fill: "lightgray", stroke: "none")
@@ -117,7 +117,7 @@ module Mcc2
           if tra
             rec = tra.translate(mm(x).round, mm(y).round).rotate(rotation)
             # Text is written on top of the basis object point, so add the fontsize to the click box
-            text_y = typ == TEXTOBJECT ? pt(go[GOA_FONT_HEIGHT].to_f) : 0
+            text_y = (typ == TEXTOBJECT) ? pt(go[GOA_FONT_HEIGHT].to_f) : 0
             rec1 = rec.translate(0, -text_y)
             rec2 = rec1.translate(mm(go_width), 0)
             rec3 = rec1.translate(mm(go_width), mm(go_height) + text_y)
@@ -141,13 +141,13 @@ module Mcc2
           elsif typ == BOXOBJECT
             draw_boxobject(drawing, opos, go, go_width, go_height)
           elsif typ == EMBEDOBJECT
-            draw_embedobject(drawing, opos, go, go_width, go_height, data, row ? row['row_number'] : "1", barcode_dpi)
+            draw_embedobject(drawing, opos, go, go_width, go_height, data, row ? row["row_number"] : "1", barcode_dpi)
           end
 
           # in Vorschau einen Rahmen um das selektierte Objekt zeichnen
           if preview && selected_object_ids.include?(id)
-            drawing.fill('none')
-            drawing.stroke('red')
+            drawing.fill("none")
+            drawing.stroke("red")
             drawing.stroke_width(1)
             cpos = opos.translate(mm(go_width), mm(go_height))
             drawing.rectangle(opos.x, opos.y, cpos.x, cpos.y)
@@ -160,8 +160,8 @@ module Mcc2
       # Rand zeichnen (für Vorschau)
       if preview
         drawing.push
-        drawing.fill('none')
-        drawing.stroke('blue')
+        drawing.fill("none")
+        drawing.stroke("blue")
         cpos = tra.translate(mm(width), mm(height))
         drawing.roundrectangle(tra.x, tra.y, cpos.x, cpos.y, rx, rx)
         # canvas1.rect(mm(width), mm(height)).round(rx).styles(fill: "none", stroke: "blue")
@@ -278,7 +278,7 @@ module Mcc2
     def draw_pictureobject(drawing, tra, go, go_width, go_height, data)
       if data.nil? || data.empty? || (data.tr("\\", "/") =~ /\/$/)
         # kein Bildname angegeben -> dieses Objekt ignorieren
-      elsif (path=go.layout_file.expand_path(data)) && FileTest.file?(path)
+      elsif (path = go.layout_file.expand_path(data)) && FileTest.file?(path)
         self_dpi = dpi
         image_page = go[GOA_IMAGE_PAGE].to_i - 1
         go_image = Magick::ImageList.new(path) { |img|
@@ -338,7 +338,7 @@ module Mcc2
       return if data.nil? || data.empty?
 
       barcode_typ = go[GOA_BARCODE_TYP]
-      bar_ratio = go[GOA_BAR_RATIO].to_i
+      go[GOA_BAR_RATIO].to_i
       fontname = go[GOA_FONT_TYP]
       if fontname == "from_file"
         fontname = go.layout_file.expand_path(go[GOA_FONT_FILE])
@@ -351,7 +351,7 @@ module Mcc2
       end
 
       drawing.fill(font_color)
-      drawing.stroke('none')
+      drawing.stroke("none")
       drawing.font(fontname)
       drawing.font_size(pt(fontsize))
 
@@ -378,7 +378,7 @@ module Mcc2
           raise err, "#{err.message} Barcode text: #{data.inspect}"
         end
 
-        eancode = %w[EAN13 EAN8].include?(barcode_typ)
+        %w[EAN13 EAN8].include?(barcode_typ)
 
         # bcvector values are always a multiple of 2 or more, but we need a multiple of 1 for to_i below.
         # So all bcvector measurements are divided by 2 or more.
@@ -408,7 +408,8 @@ module Mcc2
             x,
             y,
             x + [xdim * bar.width - 1, 0].max,
-            y + [ydim * bar.height - 1, 0].max)
+            y + [ydim * bar.height - 1, 0].max
+          )
           # body.rect([xdim * bar.width / 2 - 1, 0].max, [ydim * bar.height / 2 - 1, 0].max, xdim * bar.x / 2, ydim * bar.y / 2)
         end
         bcvector.each_string do |str|
@@ -445,11 +446,11 @@ module Mcc2
     def draw_embedobject(drawing, tra, go, go_width, go_height, data, row_number, barcode_dpi)
       if data.nil? || data.empty? || (data.tr("\\", "/") =~ /\/$/)
         # kein Layout angegeben -> dieses Objekt ignorieren
-      elsif (path=go.layout_file.expand_path(data)) && FileTest.file?(path)
+      elsif (path = go.layout_file.expand_path(data)) && FileTest.file?(path)
         layout_file = LayoutFile.load_from_xml(path, go.layout_file.xpath_changes)
 
         barcode_dpi2 = layout_file.get_attr_value(S_BARCODE_DPI).to_f
-        unless ((barcode_dpi - 0.01) .. (barcode_dpi + 0.01)) === barcode_dpi2
+        unless ((barcode_dpi - 0.01)..(barcode_dpi + 0.01)) === barcode_dpi2
           raise Printer::Base::DpiDoesntMatch, "Barcode-DPI in der Vorschau (#{format("%0.1f", barcode_dpi)}) und #{go[GOA_NAME].inspect} (#{format("%0.1f", barcode_dpi2)}) sind verschieden. Bitte DPI anpassen und Barcodes neu prüfen!"
         end
 

@@ -214,14 +214,14 @@ class RubyPrinting
   def parse_devmode(devmode)
     p devmode
     #      p devmode.unpack("p").to_s
-    devicename, orient, duplex, formname = devmode.to_s.unpack("A32x12Sx16Sx6A32")
+    _, _, _, _ = devmode.to_s.unpack("A32x12Sx16Sx6A32")
   end
 
   # --------------------------------------------------------------------------------------------------------------
   def print_doc_from_dialog(docString, docName, pageLength = 50)
     # need a more reasonable default for pageLength
-    devmode, dc = show_print_dialog
-    devicename, orient, duplex, formname = parse_devmode(devmode)
+    devmode, _ = show_print_dialog
+    devicename, _, _, _ = parse_devmode(devmode)
     _print_doc(docString, devicename, devmode, docName, pageLength)
   end
 
@@ -311,9 +311,8 @@ class RubyPrinting
 
     # ~ devMode, dc = show_print_dialog
     # ~ devicename, orient, duplex, formname = parse_devmode(devMode)
-    written = ""
     devMode = 0
-    datatype = (devMode == 0) ? nil : "TEXT"
+    (devMode == 0) ? nil : "TEXT"
 
     with_doc("Test", hPrinter) do
       with_page(hPrinter) do

@@ -41,7 +41,7 @@ module Mcc2
     end
 
     def self.meta_headers
-      ['row_number']
+      ["row_number"]
     end
 
     class Base

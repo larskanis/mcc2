@@ -30,17 +30,17 @@ module Mcc2
         self.dpi = layout_file.get_attr_value(S_TTP34XPRINTER_DPI).to_f
 
         page_commands = layout_file.get_attr_value(S_TTP34XPRINTER_PAGE_COMMANDS)
-        page_width    = layout_file.get_attr_value(S_WIDTH).to_f
-        page_height   = layout_file.get_attr_value(S_HEIGHT).to_f
-        draw_pos_x    = layout_file.get_attr_value(S_X_OFFSET).to_f
-        draw_pos_y    = layout_file.get_attr_value(S_Y_OFFSET).to_f
+        page_width = layout_file.get_attr_value(S_WIDTH).to_f
+        page_height = layout_file.get_attr_value(S_HEIGHT).to_f
+        draw_pos_x = layout_file.get_attr_value(S_X_OFFSET).to_f
+        draw_pos_y = layout_file.get_attr_value(S_Y_OFFSET).to_f
 
         # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
         selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
         preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
 
         pic = Magick::ImageList.new
-        pic.new_image(mm(page_width - draw_pos_x), mm(page_height - draw_pos_y)){ |options| options.background_color = "white" }
+        pic.new_image(mm(page_width - draw_pos_x), mm(page_height - draw_pos_y)) { |options| options.background_color = "white" }
         drawing = Magick::Draw.new
         drawing.text_antialias(false)
 

@@ -23,7 +23,7 @@ module Mcc2
 
         # convert Array of Arrays to Array of Hashs
         @table = @table.map.with_index(1) do |row, row_number|
-          h = { 'row_number' => row_number.to_s }
+          h = {"row_number" => row_number.to_s}
           row.each_with_index do |text, idx|
             h[@header_row[idx]] = text
           end

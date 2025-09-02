@@ -84,9 +84,9 @@ module Mcc2
       @topwin.width = (1020 * @gui_scale).to_i
       @topwin.height = (748 * @gui_scale).to_i
 
-      @topwin.connect(SEL_CLOSE) { |sender, selector, data|
+      @topwin.connect(SEL_CLOSE) do |sender, selector, data|
         can_close? ? 0 : 1
-      }
+      end
 
       class << @app
         attr_writer :statusline
@@ -101,10 +101,10 @@ module Mcc2
     end
 
     def can_close?
-      @mdiclient.each_child { |child|
+      @mdiclient.each_child do |child|
         res = child.userData.can_close?
         return false unless res
-      }
+      end
       true
     end
 
@@ -139,7 +139,7 @@ module Mcc2
     end
     #---------------------------------------------------------------------------------------------------------
 
-    def new_layout(filename=nil, xpath_changes=nil)
+    def new_layout(filename = nil, xpath_changes = nil)
       child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800 * @gui_scale, 600 * @gui_scale)
       child.userData = Layout.new(child, filename: filename, xpath_changes: @xpath_changes, new_file: true)
       child.create
@@ -152,10 +152,10 @@ module Mcc2
 
     def open_layout(filename = nil)
       unless filename
-        if child=@mdiclient.activeChild
+        if child = @mdiclient.activeChild
           dest = child.userData.layout_file.expand_path("%D/")
         end
-        filename = FXFileDialog.getOpenFilename(@topwin, "Laden", dest || "./", patterns = "*.mcc2,*.xml", initial = 0)
+        filename = FXFileDialog.getOpenFilename(@topwin, "Laden", dest || "./", "*.mcc2,*.xml", 0)
       end
       return if filename.empty?
       unless FileTest.exist?(filename)
@@ -188,8 +188,8 @@ module Mcc2
 
     def self.hidpi_scale(fxapp)
       fxapp.create
-      width = fxapp.rootWindow.width
-      scale = if (s = ENV["FOXSCALE"].to_f) > 0
+
+      if (s = ENV["FOXSCALE"].to_f) > 0
         s
       elsif fxapp.rootWindow.width >= 3500 && fxapp.rootWindow.height >= 2000
         2.0

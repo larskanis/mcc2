@@ -40,7 +40,7 @@ module Mcc2
         preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
 
         pic = Magick::ImageList.new
-        pic.new_image(mm(page_width), mm(page_height)){ |options| options.background_color = "white" }
+        pic.new_image(mm(page_width), mm(page_height)) { |options| options.background_color = "white" }
         drawing = Magick::Draw.new
         drawing.text_antialias(false)
 

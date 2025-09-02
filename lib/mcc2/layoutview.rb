@@ -253,9 +253,9 @@ module Mcc2
 
       # die Chip-Attribute
       chip = @layout_file.chip_object
-      chip.params.each_with_index { |param, idx|
+      chip.params.each_with_index do |param, idx|
         @chipparam_textfields[idx].text = param
-      }
+      end
 
       # die Magnetstreifenattribute
       mag_attrs = @layout_file.magstripe_object
@@ -269,7 +269,7 @@ module Mcc2
     def enhanced_data_edit(menubutton, textfield)
       if (dm = @layout.dataman)
         menupane = menubutton.menu
-        menupane.each_child {|ch| menupane.removeChild(ch) }
+        menupane.each_child { |ch| menupane.removeChild(ch) }
         [dm.data_headers, dm.meta_headers].each_with_index do |headers, idx|
           FXMenuSeparator.new(menupane) if idx > 0
           headers.each do |col|
@@ -282,7 +282,7 @@ module Mcc2
         end
         menupane.create
         menupane.resize(menupane.getDefaultWidth, menupane.getDefaultHeight)
-        menubutton.handle(menubutton, Fox.FXSEL(Fox::SEL_COMMAND, Fox::FXMenuButton::ID_POST), nil);
+        menubutton.handle(menubutton, Fox.FXSEL(Fox::SEL_COMMAND, Fox::FXMenuButton::ID_POST), nil)
       end
     end
 
@@ -338,7 +338,7 @@ module Mcc2
 
       # Objekt-Liste aktualisieren
       currentItem = @lf.iconlist_objects.currentItem
-      selected_items = @lf.iconlist_objects.map.with_index.select{|i, x| i.selected? }.map(&:last)
+      selected_items = @lf.iconlist_objects.map.with_index.select { |i, x| i.selected? }.map(&:last)
       fill_objectlist
       @selected_object_ids = []
 
@@ -524,12 +524,12 @@ module Mcc2
           @lf.radiobutton_just_m.state = false
           @lf.radiobutton_just_r.state = false
           case obj[GOA_JUSTIFICATION]
-            when S_JUST_LEFT
-              @lf.radiobutton_just_l.state = true
-            when S_JUST_MID
-              @lf.radiobutton_just_m.state = true
-            when S_JUST_RIGHT
-              @lf.radiobutton_just_r.state = true
+          when S_JUST_LEFT
+            @lf.radiobutton_just_l.state = true
+          when S_JUST_MID
+            @lf.radiobutton_just_m.state = true
+          when S_JUST_RIGHT
+            @lf.radiobutton_just_r.state = true
           end
 
           fill_font_list
@@ -596,9 +596,9 @@ module Mcc2
     # füllt die Barcode-Typ-Auswahlliste mit den möglichen Barcodes
     def fill_barcode_typ_list
       @lf.listbox_barcode_typ.clearItems
-      @barcodes.each { |bc|
+      @barcodes.each do |bc|
         @lf.listbox_barcode_typ.appendItem(bc.to_s)
-      }
+      end
     end
     #---------------------------------------------------------------------------------------------------------
 
@@ -620,10 +620,10 @@ module Mcc2
       idx = @lf.listbox_fonts.appendItem("aus Font-Datei") # die humanreadable
       @lf.listbox_fonts.setItemData(idx, "from_file")         # die Werte
 
-      rmfl.each { |rmf|
+      rmfl.each do |rmf|
         idx = @lf.listbox_fonts.appendItem(rmf.tr("-", " ")) # die humanreadable
         @lf.listbox_fonts.setItemData(idx, rmf)         # die Werte
-      }
+      end
     end
 
     # füllt die Font-spezifischen Felder mit den gewählten Optionen aus dem Layout
@@ -644,13 +644,13 @@ module Mcc2
       # ~ p "#{self.class.name}::set_listbox_value => listbox_name: #{listbox_name}; value: #{value.inspect}"
       ft_idx = nil
       idx = 0
-      @lf.send(listbox_name.intern).each { |t, i, d|
+      @lf.send(listbox_name.intern).each do |t, i, d|
         if d == value
           ft_idx = idx
           break
         end
         idx += 1
-      }
+      end
       if ft_idx
         @lf.send(listbox_name.intern).currentItem = ft_idx
       end
@@ -696,10 +696,10 @@ module Mcc2
       elsif action == DELETE
         names = @selected_object_ids.map do |id|
           obj = @layout_file.find_graphic_object_by_id(id)
-          "'#{ obj[GOA_NAME] }'"
+          "'#{obj[GOA_NAME]}'"
         end
         nn = names.join(", ")
-        s = "Wollen Sie wirklich #{names.size > 1 ? "die Objekte" : "das Objekt"} #{nn} löschen?\nDieser Vorgang lässt sich nicht rückgängig machen!"
+        s = "Wollen Sie wirklich #{(names.size > 1) ? "die Objekte" : "das Objekt"} #{nn} löschen?\nDieser Vorgang lässt sich nicht rückgängig machen!"
         error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, s, ["&Löschen", "&Abbrechen"])
         error_WahlMessage.execute
         if error_WahlMessage.selection == 0
@@ -719,7 +719,7 @@ module Mcc2
         # neu hinzugefügtes Objekt aktiv schalten
         notify = true
         @lf.iconlist_objects.setCurrentItem(@lf.iconlist_objects.numItems - 1, notify)
-        (@lf.iconlist_objects.numItems - num_objs .. @lf.iconlist_objects.numItems - 1).each do |pos|
+        (@lf.iconlist_objects.numItems - num_objs..@lf.iconlist_objects.numItems - 1).each do |pos|
           @lf.iconlist_objects.selectItem(pos, notify)
         end
       end
@@ -735,10 +735,10 @@ module Mcc2
 
       if @layout_file
         # Array mit sortierten Objekt-ID's holen
-        @layout_file.sorted_id_list.each { |id|
+        @layout_file.sorted_id_list.each do |id|
           go = @layout_file.find_graphic_object_by_id(id)
           @lf.iconlist_objects.appendItem([id, go[GOA_NAME], go[GOA_TYP]].join("\t"), nil, nil, id)
-        }
+        end
       end
     end
 

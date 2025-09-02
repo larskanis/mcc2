@@ -19,7 +19,7 @@ module Mcc2
         # convert DBF::Table to Array of Hashs
         @table = []
         table.each.with_index(1) do |row, row_number|
-          h = { 'row_number' => row_number.to_s }
+          h = {"row_number" => row_number.to_s}
           row.to_a.each_with_index do |text, idx|
             h[@header_row[idx]] = text.to_s.encode("utf-8", encoding)
           end

@@ -9,6 +9,7 @@ module Mcc2
 
       class InvalidBarcodeData < PrintError
       end
+
       class DpiDoesntMatch < PrintError
       end
 
@@ -20,8 +21,8 @@ module Mcc2
         end
 
         def translate(x, y)
-          self.class.new @x + x * Math.cos(@a*Math::PI/180) - y * Math.sin(@a*Math::PI/180),
-            @y + y * Math.cos(@a*Math::PI/180) + x * Math.sin(@a*Math::PI/180),
+          self.class.new @x + x * Math.cos(@a * Math::PI / 180) - y * Math.sin(@a * Math::PI / 180),
+            @y + y * Math.cos(@a * Math::PI / 180) + x * Math.sin(@a * Math::PI / 180),
             @a
         end
 
@@ -70,7 +71,7 @@ module Mcc2
         v = v.to_f
         if layout_file
           barcode_dpi = layout_file.get_attr_value(S_BARCODE_DPI).to_f
-          unless ((barcode_dpi - 0.009) .. (barcode_dpi + 0.009)) === v
+          unless ((barcode_dpi - 0.009)..(barcode_dpi + 0.009)) === v
             raise DpiDoesntMatch, "Barcode-DPI in der Vorschau (#{format("%0.1f", barcode_dpi)}) und vom Druck (#{format("%0.1f", v)}) sind verschieden. Bitte DPI anpassen und Barcodes neu prüfen!"
           end
         end

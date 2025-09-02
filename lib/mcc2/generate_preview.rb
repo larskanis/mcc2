@@ -19,11 +19,11 @@ module Mcc2
       fnames.each do |fname|
         fname_png = "#{fname}.png"
         sk = case skip_when
-          when "existing" then File.exist?(fname_png)
-          when "uptodate" then File.exist?(fname_png) && File.mtime(fname) <= File.mtime(fname_png)
-          when "none" then false
-          else
-            raise "invalid skip mode: #{skip_when}"
+        when "existing" then File.exist?(fname_png)
+        when "uptodate" then File.exist?(fname_png) && File.mtime(fname) <= File.mtime(fname_png)
+        when "none" then false
+        else
+          raise "invalid skip mode: #{skip_when}"
         end
         if sk
           puts "Skip #{fname} (is #{skip_when})" if verbose
@@ -38,14 +38,14 @@ module Mcc2
           "{#{fna}}//Layout/datasource" => "1",
           "{#{fna}}//Layout/printertype" => "FilePrinter",
           "{#{fna}}//Layout/fileprinter_save_as" => fname_png,
-          "{#{fna}}//Layout/fileprinter_dpi" => dpi.to_s,
+          "{#{fna}}//Layout/fileprinter_dpi" => dpi.to_s
         }
 
         begin
           puts "Processing #{fname}" if verbose
           @mcc2print.start!(fname, kwargs)
         rescue => err
-          $stderr.puts "#{fname}: #{err}"
+          warn "#{fname}: #{err}"
         end
       end
     end

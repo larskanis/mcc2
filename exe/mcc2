@@ -16,7 +16,6 @@ Mcc2::Mcc2Gui.run(ARGV)
 #   Mcc2::Mcc2Gui.run(ARGV)
 # end
 
-
 # require 'ruby-prof'
 # result = RubyProf::Profile.profile do
 #   Mcc2::Mcc2Gui.run(ARGV)

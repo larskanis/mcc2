@@ -136,15 +136,14 @@ P1
       add_attr(S_TTP34XPRINTER_DEVICE, String, "/dev/usb/lp0")
       add_attr(S_TTP34XPRINTER_DPI, Integer, 300)
       add_attr(S_TTP34XPRINTER_PAGE_COMMANDS, String,
-'SPEED 8 REM Wertebereich: 1-8
+        'SPEED 8 REM Wertebereich: 1-8
 DENSITY 12 REM Wertebereich: 0-15
 SIZE %PAGE_WIDTH_MM% mm,%PAGE_HEIGHT_MM% mm
 CLS
 DOWNLOAD "label.pcx",%IMAGE_LEN_DATA_PCX%
 PUTPCX %PAGE_OFFSET_X_PX%,%PAGE_OFFSET_Y_PX%,"label.pcx"
 PRINT 1
-'
-)
+')
 
       add_attr(S_CX320_DRIVER, String, "CX320_DLL")
       add_attr(S_CX320_PRINTER_NR, Integer, 0)
@@ -156,7 +155,7 @@ PRINT 1
 
     private def apply_xpath_changes(xpath_changes)
       xpath_changes.each do |xpath, value|
-        if !(m=/^\{(?<filematch>.*)\}(?<xpath>.*)$/.match(xpath)) || (filename && File.fnmatch?(m[:filematch], File.basename(filename)))
+        if !(m = /^\{(?<filematch>.*)\}(?<xpath>.*)$/.match(xpath)) || (filename && File.fnmatch?(m[:filematch], File.basename(filename)))
           change_first_xpath_value(m&.[](:xpath) || xpath, value)
         end
       end
@@ -164,7 +163,7 @@ PRINT 1
     end
 
     # erzeugt eine neue XML-Datei und initialisiert die entsprechenden Variablen und Objekte
-    def create_xml(filename, xpath_changes={})
+    def create_xml(filename, xpath_changes = {})
       @filename = filename
       @xml_doc = Nokogiri::XML::Document.new
       @xml_doc.encoding = "UTF-8"
@@ -198,7 +197,7 @@ PRINT 1
     # lädt das XML-File und initialisiert die entsprechenden Variablen und Objekte
     # ==== Parameter
     # +filename+:: der NAme des XML-Files in welchem die Layout-Spezifikation gespeichert werden soll
-    def load_from_xml(filename, xpath_changes={})
+    def load_from_xml(filename, xpath_changes = {})
       return nil if filename == ""
 
       @filename = filename
@@ -249,13 +248,13 @@ PRINT 1
 
       # kontrollieren, ob alle Nodes des Chips existieren, ansonsten anlegen und als 'changed' markieren
       chip_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{S_CHIP}")
-      (1..CHIPPARAM_FIELD_COUNT).each { |i|
+      (1..CHIPPARAM_FIELD_COUNT).each do |i|
         element = chip_attrs.at_xpath("#{S_PARAM}_#{i}")
         unless element
           # ~ chip_attrs << param = Nokogiri::XML::Node.new(attr_name , "")
           changed!
         end
-      }
+      end
 
       ensure_magsripe_attrs
 
@@ -439,7 +438,7 @@ PRINT 1
     # den Inhalt des Attributes [String]
     # ==== Parameter
     # +attr_name+:: der Name des Attributes z.Bsp. 'datasource' Bitte vorwiegend Konstanten verwenden z. Bsp. S_DATASOURCE [String]
-    def get_attr_value(attr_name, base=S_LAYOUT)
+    def get_attr_value(attr_name, base = S_LAYOUT)
       lay_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{base}")
       attr = lay_attrs.at_xpath(attr_name)
       attr&.content
@@ -452,7 +451,7 @@ PRINT 1
     # ==== Parameter
     # +attr_name+:: der Name des Attributes z.Bsp. 'datasource' Bitte vorwiegend Konstanten verwenden z. Bsp. S_DATASOURCE [String]
     # +value+:: der Wert der geschrieben werden soll [String]
-    def set_attr_value(attr_name, value, base=S_LAYOUT)
+    def set_attr_value(attr_name, value, base = S_LAYOUT)
       lay_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{base}")
       attr = lay_attrs.at_xpath(attr_name)
       value = value.to_s
@@ -615,15 +614,15 @@ PRINT 1
     end
 
     def shrink_path(path)
-      path = path.gsub("\\", "/")
+      path = path.tr("\\", "/")
       if @filename
         path = path.sub(File.dirname(File.expand_path(@filename)), "%D")
       end
-      if pwd=Dir.pwd
-        path = path.sub(pwd+"/", "")
+      if pwd = Dir.pwd
+        path = path.sub(pwd + "/", "")
       end
-      if home=Dir.home
-        path = path.sub(home+"/", "~/")
+      if home = Dir.home
+        path = path.sub(home + "/", "~/")
       end
       path
     end

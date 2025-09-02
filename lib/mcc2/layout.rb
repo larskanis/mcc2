@@ -43,11 +43,11 @@ module Mcc2
           #             puts "#{se}: #{sender}, #{sel}, #{event}"
           #           }
           #         }
-          tabbook.connect(SEL_COMMAND) { |sender, sel, event|
+          tabbook.connect(SEL_COMMAND) do |sender, sel, event|
             @layoutview.layoutview_tab_activated(event == 0)
             @printerview.printerview_tab_activated(event == 1)
             @dataview.dataview_tab_activated(event == 2)
-          }
+          end
           FX::TabItem.new(tabbook) do |tabitem_layoutview|
             tabitem_layoutview.text = "&Entwurf"
             tabitem_layoutview.img = "mcc2/images/document-edit.png"
@@ -76,9 +76,9 @@ module Mcc2
         splitter1.setSplit(0, 400 * $gui_scale)
       end
 
-      @parent.connect(SEL_CLOSE) { |sender, selector, data|
+      @parent.connect(SEL_CLOSE) do |sender, selector, data|
         can_close? ? 0 : 1
-      }
+      end
 
       if new_file
         create_xml(filename, xpath_changes)
@@ -105,9 +105,9 @@ module Mcc2
       @dataman = @layout_file.build_dataman_instance
       @dataview.dataman = @dataman
 
-      @current_dataman_settings = DatamanAttributes.each_with_object({}) { |a, s|
+      @current_dataman_settings = DatamanAttributes.each_with_object({}) do |a, s|
         s[a] = @layout_file.get_attr_value(a)
-      }
+      end
     rescue => e
       FXMessageBox.error(@parent.app, MBOX_OK, "Fehler bei Datenverbindung", "Die Datenverbindung konnte nicht hergestellt werden.\n\n#{e}")
     end
@@ -143,7 +143,7 @@ module Mcc2
     def store_to_xml(filename_dialog = false)
       if filename_dialog || !@layout_file.filename
         dest = @layout_file.expand_path(@layout_file.filename.to_s.empty? ? "./" : @layout_file.filename)
-        fn = FXFileDialog.getSaveFilename(@parent, "Speichern", dest, patterns = "*.mcc2,*.xml", initial = 0)
+        fn = FXFileDialog.getSaveFilename(@parent, "Speichern", dest, "*.mcc2,*.xml", 0)
         return if fn.empty?
         unless fn.split(".")[-1].downcase == "mcc2"
           fn = "#{fn}.mcc2"
@@ -205,7 +205,6 @@ module Mcc2
       @layoutview.move_selected(x, y)
     end
 
-
     #---------------------------------------------------------------------------------------------------------
 
     def draw_preview_with_row row, immediately = false
@@ -221,12 +220,12 @@ module Mcc2
 
     def set_focus(to)
       case to
-        when :preview
-          @preview.set_focus(to)
-        when :layout
-          @fxtabbook.setCurrent(0, true)
-        else
-          raise "set_focus(#{to}) is not defined"
+      when :preview
+        @preview.set_focus(to)
+      when :layout
+        @fxtabbook.setCurrent(0, true)
+      else
+        raise "set_focus(#{to}) is not defined"
       end
     end
 
@@ -255,12 +254,12 @@ module Mcc2
       if lds =~ /(\.\w+?)$/i
         ext = $1
         pat_idx = nil
-        filepatterns.split("\n").each_with_index { |pat, idx|
+        filepatterns.split("\n").each_with_index do |pat, idx|
           if pat =~ /\*#{ext}/i || pat =~ /(\(\*\))/
             pat_idx = idx
             break
           end
-        }
+        end
       end
 
       # Aktuelles Verzeichnis auswählen (oder Default: Verzeichnis der Layoutdatei)
