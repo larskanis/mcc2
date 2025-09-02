@@ -11,3 +11,5 @@
 /tmp/
 /.history/
 /vendor/
+*.orig
+*.pp_failsave*
