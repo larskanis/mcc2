@@ -467,6 +467,7 @@ module Mcc2
         # Graphic object selected
         pos = @lf.iconlist_objects.findItemByData(@selected_object_ids.last)
         @lf.iconlist_objects.setCurrentItem(pos) if @lf.iconlist_objects.currentItem == -1
+        @lf.iconlist_objects.makeItemVisible(pos)
         @lf.iconlist_objects.killSelection
         @selected_object_ids.each do |id|
           pos = @lf.iconlist_objects.findItemByData(id)

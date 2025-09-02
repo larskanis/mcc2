@@ -97,6 +97,8 @@ module Mcc2
           obj_ids = event.state & Fox::CONTROLMASK != 0 ? @selected_object_ids : []
           @layout.selected_object_ids = obj_ids + rect_ids - (obj_ids & rect_ids)
         end
+
+        @layout.set_focus(:layout)
       end
 
       def image_view_keypress(sender, sel, event)

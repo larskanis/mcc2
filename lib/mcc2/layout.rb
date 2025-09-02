@@ -37,7 +37,7 @@ module Mcc2
       close_dataman
 
       FXSplitter.new(parent) do |splitter1|
-        FXTabBook.new(splitter1) do |tabbook|
+        @fxtabbook = FXTabBook.new(splitter1) do |tabbook|
           #         %w[SEL_MAP SEL_CONFIGURE SEL_ENTER SEL_FOCUSIN SEL_UPDATE SEL_UNGRABBED SEL_COMMAND].each{|se|
           #           tabbook.connect(Fox.const_get(se)){|sender, sel, event|
           #             puts "#{se}: #{sender}, #{sel}, #{event}"
@@ -223,6 +223,8 @@ module Mcc2
       case to
         when :preview
           @preview.set_focus(to)
+        when :layout
+          @fxtabbook.setCurrent(0, true)
         else
           raise "set_focus(#{to}) is not defined"
       end
