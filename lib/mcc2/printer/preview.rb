@@ -71,6 +71,10 @@ module Mcc2
         @dpi = v
       end
 
+      def set_focus(to)
+        @image_view.setFocus
+      end
+
       def image_view_clicked(sender, sel, event)
         # There is no accessor for the content position in FXImageView.
         # So the calculation is a bit awkward.

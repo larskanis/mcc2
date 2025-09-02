@@ -773,6 +773,7 @@ module Mcc2
       end
 
       changed_attributes if x != 0 || y != 0
+      @layout.set_focus(:preview)
     end
 
     def draw_preview(immediately = false)

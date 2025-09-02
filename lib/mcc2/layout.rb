@@ -219,6 +219,15 @@ module Mcc2
       @preview.draw_preview immediately, nil
     end
 
+    def set_focus(to)
+      case to
+        when :preview
+          @preview.set_focus(to)
+        else
+          raise "set_focus(#{to}) is not defined"
+      end
+    end
+
     def connect_filebutton_to_textfield(button, textfield, filepatterns: "*")
       button.connect(SEL_COMMAND) do
         execute_filedialog_for_textfield(textfield, filepatterns: filepatterns)
