@@ -1,0 +1,16 @@
+require "mcc2"
+
+Mcc2::GeneratePreview.run(ARGV)
+
+# require "stackprof"
+# StackProf.run(mode: :cpu, out: 'stackprof-cpu-myapp.dump') do
+#   Mcc2::GeneratePreview.run(ARGV)
+# end
+
+
+# require 'ruby-prof'
+# result = RubyProf::Profile.profile do
+#   Mcc2::GeneratePreview.run(ARGV)
+# end
+# printer = RubyProf::GraphPrinter.new(result)
+# printer.print(STDOUT, {})

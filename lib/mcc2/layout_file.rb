@@ -156,8 +156,8 @@ PRINT 1
 
     private def apply_xpath_changes(xpath_changes)
       xpath_changes.each do |xpath, value|
-        if !(m=/^\{(.*)\}(.*)$/.match(xpath)) || (filename && m[1] == File.basename(filename))
-          change_first_xpath_value(m&.[](2) || xpath, value)
+        if !(m=/^\{(?<filematch>.*)\}(?<xpath>.*)$/.match(xpath)) || (filename && File.fnmatch?(m[:filematch], File.basename(filename)))
+          change_first_xpath_value(m&.[](:xpath) || xpath, value)
         end
       end
       @xpath_changes = xpath_changes
@@ -501,15 +501,15 @@ PRINT 1
       unless DataMan.valid_datasourcetyp?(datasourcetyp)
         default = @attributes[S_DATASOURCETYP].attr_value
         set_attr_value(S_DATASOURCETYP, default)
-        raise WrongDataSourceType, <<-EOTXT
-        Der eingestellte Datenquellentyp '#{datasourcetyp}' ist ungültig.
+        raise WrongDataSourceType, <<~EOTXT
+          Der eingestellte Datenquellentyp '#{datasourcetyp}' ist ungültig.
 
-        Gültige Werte sind '#{VALID_DATASOURCES.join("', '")}'.
+          Gültige Werte sind '#{VALID_DATASOURCES.join("', '")}'.
 
-        Der Wert wird jetzt auf den Standardwert '#{default}'  gesetzt.
+          Der Wert wird jetzt auf den Standardwert '#{default}'  gesetzt.
 
-        Bitte stellen Sie in den Layouteigenschaften den korrekten Datenquellentyp
-        ein und speichern Sie die Einstellungen.
+          Bitte stellen Sie in den Layouteigenschaften den korrekten Datenquellentyp
+          ein und speichern Sie die Einstellungen.
         EOTXT
       end
     end
@@ -570,7 +570,6 @@ PRINT 1
     def build_dataman_instance
       datamantyp = get_attr_value(S_DATASOURCETYP)
       datasource = get_attr_value(S_DATASOURCE)
-      datasource = expand_path(datasource)
       encoding = get_attr_value(S_DATASOURCEENCODING)
       # Ruby-1.9 kennt kein LATIN1
       encoding = "iso-8859-1" if /latin1/i.match?(encoding)
@@ -578,8 +577,10 @@ PRINT 1
       if datamantyp == DATABASE
         DataMan::Database.new(datasource)
       elsif datamantyp == CSV
+        datasource = expand_path(datasource)
         DataMan::CSV.new(datasource, encoding)
       elsif datamantyp == DBF
+        datasource = expand_path(datasource)
         DataMan::DBF.new(datasource, encoding)
       elsif datamantyp == NONE
         DataMan::None.new(datasource)
