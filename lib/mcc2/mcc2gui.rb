@@ -57,10 +57,14 @@ module Mcc2
 
       @mdimenu = FXMDIMenu.new(@topwin, @mdiclient)
       FXMDIWindowButton.new(@menubar, @mdimenu, @mdiclient, FXMDIClient::ID_MDI_MENUWINDOW, LAYOUT_LEFT)
+      @mdititle = FXMenuCommand.new(@menubar, "", target: @mdiclient, selector: FXMDIClient::ID_MDI_MENUMINIMIZE, opts: FRAME_SUNKEN)
       FXMDIDeleteButton.new(@menubar, @mdiclient, FXMDIClient::ID_MDI_MENUCLOSE, FRAME_RAISED | LAYOUT_RIGHT)
       FXMDIRestoreButton.new(@menubar, @mdiclient, FXMDIClient::ID_MDI_MENURESTORE, FRAME_RAISED | LAYOUT_RIGHT)
       FXMDIMinimizeButton.new(@menubar, @mdiclient, FXMDIClient::ID_MDI_MENUMINIMIZE, FRAME_RAISED | LAYOUT_RIGHT)
 
+      @mdiclient.connect(SEL_CHANGED) do |sender, sel, mdichild|
+        @mdititle.text = mdichild.title
+      end
       # ......................................................................
       # die Menue-Einträge modifizieren
 
@@ -141,7 +145,7 @@ module Mcc2
 
     def new_layout(filename = nil, xpath_changes = nil)
       child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800 * @gui_scale, 600 * @gui_scale)
-      child.userData = Layout.new(child, filename: filename, xpath_changes: @xpath_changes, new_file: true)
+      child.userData = Layout.new(child, @mdititle, filename: filename, xpath_changes: @xpath_changes, new_file: true)
       child.create
       child.show
       child.recalc
@@ -164,7 +168,7 @@ module Mcc2
       unless filename.to_s.empty?
         child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800 * @gui_scale, 600 * @gui_scale)
         begin
-          child.userData = Layout.new(child, filename: filename, xpath_changes: @xpath_changes, new_file: false)
+          child.userData = Layout.new(child, @mdititle, filename: filename, xpath_changes: @xpath_changes, new_file: false)
         rescue LayoutFile::Error => e
           FXMessageBox.error(@topwin.app, MBOX_OK, "Fehler beim Laden der Datei", e.to_s)
         else

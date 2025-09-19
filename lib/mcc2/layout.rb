@@ -23,8 +23,9 @@ module Mcc2
     # definiert die Aktionen, welche bei bestimmten Ereignissen auf bestimmten Elementen des Dialogs ausgeführt werden sollen
     # ==== Parameter
     # +parent+:: parent-fx-window
-    def initialize(parent, filename: nil, xpath_changes: {}, new_file: false)
+    def initialize(parent, mdititle, filename: nil, xpath_changes: {}, new_file: false)
       @parent = parent
+      @mdititle = mdititle
       begin
         require "ruby-zint"
       rescue LoadError => e
@@ -137,6 +138,7 @@ module Mcc2
     # * ein Zeichen *, ob das Layout seit dem letzten Laden oder Speichern geändert wurde
     private def set_title
       @parent.title = "#{@layout_file.filename} #{@layout_file.changed? ? " *" : ""}"
+      @mdititle.text = @parent.title
     end
 
     # speichert alle GraphicObjekte und Layout-Einstellungen im XML-File
