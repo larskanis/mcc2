@@ -46,6 +46,7 @@ module Mcc2
 
       # die Daten-Attribute
       @lf.textfield_data_non_text.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, GOA_DATA) }
+      @lf.textfield_data_non_text.connect(SEL_COMMAND) { |sender, sel, event| textfield_exit(sender, GOA_DATA) }
       @lf.textfield_data.connect(SEL_CHANGED) { |sender, sel, event| textfield_exit(sender, GOA_DATA) }
       @lf.textfield_sample_data.connect(SEL_CHANGED) { |sender, sel, event| textfield_exit(sender, GOA_SAMPLE_DATA) }
 
