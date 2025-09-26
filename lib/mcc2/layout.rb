@@ -147,7 +147,7 @@ module Mcc2
         dest = @layout_file.expand_path(@layout_file.filename.to_s.empty? ? "./" : @layout_file.filename)
         fn = FXFileDialog.getSaveFilename(@parent, "Speichern", dest, "*.mcc2,*.xml", 0)
         return if fn.empty?
-        unless fn.split(".")[-1].downcase == "mcc2"
+        unless ["mcc2", "xml"].include?(fn.split(".")[-1].downcase)
           fn = "#{fn}.mcc2"
         end
         @layout_file.filename = fn
