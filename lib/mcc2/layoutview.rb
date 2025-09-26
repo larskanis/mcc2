@@ -618,7 +618,7 @@ module Mcc2
       rmfl = Magick.fonts.map { |mf| mf.name }
       rmfl.sort!
       @lf.listbox_fonts.clearItems
-      @lf.listbox_fonts.appendItem("")
+      @lf.listbox_fonts.appendItem("Bitte auswählen")
       idx = @lf.listbox_fonts.appendItem("aus Font-Datei") # humanreadable
       @lf.listbox_fonts.setItemData(idx, "from_file")      # font name or file
 
