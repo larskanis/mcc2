@@ -10,3 +10,7 @@ gem "libusb"
 source "https://ccgems" do
   gem "libcx320", "~> 0.1.2"
 end
+
+group :development do
+  gem "foxguib"
+end
