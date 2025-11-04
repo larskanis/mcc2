@@ -13,8 +13,8 @@ class Dialogbox_dataview
         w_dialogbox_dataview.wdg_name = "dialogbox_dataview"
         w_dialogbox_dataview.layoutHints = 768
         w_dialogbox_dataview.shown = true
-        w_dialogbox_dataview.x = 743
-        w_dialogbox_dataview.y = 306
+        w_dialogbox_dataview.x = 699
+        w_dialogbox_dataview.y = 1128
         w_dialogbox_dataview.width = 500
         w_dialogbox_dataview.height = 400
         w_dialogbox_dataview.title = "Entwurfsansicht"
@@ -41,7 +41,7 @@ class Dialogbox_dataview
               w_matrix_printbuttons.x = 2
               w_matrix_printbuttons.y = 2
               w_matrix_printbuttons.width = 496
-              w_matrix_printbuttons.height = 51
+              w_matrix_printbuttons.height = 53
               w_matrix_printbuttons.numColumns = 3
               w_matrix_printbuttons.numRows = 2
               FX::Label.new(@matrix_printbuttons) { |w_label409|
@@ -51,8 +51,8 @@ class Dialogbox_dataview
                 w_label409.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                 w_label409.x = 4
                 w_label409.y = 4
-                w_label409.width = 72
-                w_label409.height = 22
+                w_label409.width = 67
+                w_label409.height = 24
                 w_label409.text = "Datenquelle"
                 w_label409.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
@@ -61,12 +61,12 @@ class Dialogbox_dataview
                 w_textfield_datasource.wdg_name = "textfield_datasource"
                 w_textfield_datasource.layoutHints = 3073
                 w_textfield_datasource.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_textfield_datasource.x = 76
+                w_textfield_datasource.x = 71
                 w_textfield_datasource.y = 4
-                w_textfield_datasource.width = 396
-                w_textfield_datasource.height = 22
+                w_textfield_datasource.width = 401
+                w_textfield_datasource.height = 24
                 w_textfield_datasource.numColumns = 30
-                w_textfield_datasource.tipText = "Hier wird die Datendatei angegeben. Wenn keine verwendet wird, kann das Feld leer bleiben."
+                w_textfield_datasource.tipText = "Hier wird die Datendatei angegeben.\nBei statischem Layout kann hier die Anzahl der Seiten angegeben werden.\n\n"
                 w_textfield_datasource.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
               FX::Button.new(@matrix_printbuttons) { |w_button_datasource|
@@ -77,7 +77,7 @@ class Dialogbox_dataview
                 w_button_datasource.x = 472
                 w_button_datasource.y = 4
                 w_button_datasource.width = 20
-                w_button_datasource.height = 22
+                w_button_datasource.height = 24
                 w_button_datasource.text = "..."
                 w_button_datasource.tipText = "CSV-Datei über Dateiauswahl-Dialog laden"
                 w_button_datasource.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
@@ -88,8 +88,8 @@ class Dialogbox_dataview
                 w_label18.layoutHints = 3072
                 w_label18.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                 w_label18.x = 4
-                w_label18.y = 26
-                w_label18.width = 72
+                w_label18.y = 28
+                w_label18.width = 67
                 w_label18.height = 21
                 w_label18.text = "Suchbegriff"
               }
@@ -98,9 +98,9 @@ class Dialogbox_dataview
                 w_textfield_search.wdg_name = "textfield_search"
                 w_textfield_search.layoutHints = 1025
                 w_textfield_search.font = FX::Font.new.from_s("arial|90|0|0|0|0|0").to_FXFont
-                w_textfield_search.x = 76
-                w_textfield_search.y = 26
-                w_textfield_search.width = 396
+                w_textfield_search.x = 71
+                w_textfield_search.y = 28
+                w_textfield_search.width = 401
                 w_textfield_search.height = 21
                 w_textfield_search.numColumns = 10
                 w_textfield_search.tipText = "Durch Eingabe einer Zeichenkette werden alle angezeigten Felder\ndurchsucht und markiert. Durch mehrfaches Drücken der Enter-\nTaste wird zur nächsten Fundstelle gesprungen."
@@ -110,7 +110,7 @@ class Dialogbox_dataview
                 w_label_selected.wdg_name = "label_selected"
                 w_label_selected.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                 w_label_selected.x = 472
-                w_label_selected.y = 26
+                w_label_selected.y = 28
                 w_label_selected.width = 4
                 w_label_selected.height = 4
                 w_label_selected.text = ""
@@ -121,7 +121,7 @@ class Dialogbox_dataview
               w_matrix18.wdg_name = "matrix18"
               w_matrix18.layoutHints = 1024
               w_matrix18.x = 2
-              w_matrix18.y = 53
+              w_matrix18.y = 55
               w_matrix18.width = 496
               w_matrix18.height = 31
               w_matrix18.numColumns = 5
@@ -190,9 +190,9 @@ class Dialogbox_dataview
               w_iconlist_data.iconListStyle = 4194304
               w_iconlist_data.font = FX::Font.new.from_s("Arial|90|40|5|0|0|0").to_FXFont
               w_iconlist_data.x = 2
-              w_iconlist_data.y = 84
+              w_iconlist_data.y = 86
               w_iconlist_data.width = 496
-              w_iconlist_data.height = 314
+              w_iconlist_data.height = 312
             }
           }
         }

@@ -263,6 +263,7 @@ class Dialogbox_layoutview
                     w_combobox_datasource_typ.y = 10
                     w_combobox_datasource_typ.width = 363
                     w_combobox_datasource_typ.height = 22
+                    w_combobox_datasource_typ.numVisible = 4
                   }
                 }
                 FX::HorizontalFrame.new(@verticalframe52) { |w_horizontalframe75|
