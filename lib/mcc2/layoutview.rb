@@ -51,8 +51,8 @@ module Mcc2
       @lf.textfield_sample_data.connect(SEL_CHANGED) { |sender, sel, event| textfield_exit(sender, GOA_SAMPLE_DATA) }
 
       # die Font-Attribute
-      @lf.textfield_text_color.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, GOA_FONT_COLOR) }
-      @lf.button_text_color.connect(@text_field_trigger) { text_color_dialog(@lf.textfield_text_color) }
+      @lf.textfield_text_color.connect(SEL_COMMAND) { |sender, sel, event| textfield_exit(sender, GOA_FONT_COLOR) }
+      @lf.button_text_color.connect(SEL_COMMAND) { text_color_dialog(@lf.textfield_text_color) }
       @lf.radiomutex_justify.on_event_selected { |r| obj_attr_changed(GOA_JUSTIFICATION, r) }
 
       # die Positions-Attribute
