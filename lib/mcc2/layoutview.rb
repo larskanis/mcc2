@@ -694,6 +694,7 @@ module Mcc2
       if action == ADD
         @layout_file.add_object(typ)
         changed_attributes
+        num_objs = 1
       elsif action == DELETE
         names = @selected_object_ids.map do |id|
           obj = @layout_file.find_graphic_object_by_id(id)
@@ -710,8 +711,8 @@ module Mcc2
       elsif action == COPY
         @layout_file.copy_objects(@selected_object_ids)
         changed_attributes
+        num_objs = @selected_object_ids.size
       end
-      num_objs = @selected_object_ids.size
 
       @selected_object_ids = []
       fill_objectlist
