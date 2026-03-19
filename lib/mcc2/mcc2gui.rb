@@ -63,7 +63,7 @@ module Mcc2
       FXMDIMinimizeButton.new(@menubar, @mdiclient, FXMDIClient::ID_MDI_MENUMINIMIZE, FRAME_RAISED | LAYOUT_RIGHT)
 
       @mdiclient.connect(SEL_CHANGED) do |sender, sel, mdichild|
-        @mdititle.text = mdichild.title
+        @mdititle.text = mdichild&.title || ""
       end
       # ......................................................................
       # die Menue-Einträge modifizieren
