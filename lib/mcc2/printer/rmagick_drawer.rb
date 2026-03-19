@@ -130,18 +130,22 @@ module Mcc2
           drawing.rotate rec.a
           opos = rec.inverse
 
-          # die Objekt-spezifischen Attribute ermitteln
-          if typ == TEXTOBJECT
-            draw_textobject(drawing, opos, go, go_width, go_height, data.empty? ? data_nosub : data)
-          elsif typ == PICTUREOBJECT
-            draw_pictureobject(drawing, opos, go, go_width, go_height, data)
-          elsif typ == BARCODEOBJECT
-            data = data.gsub(/\\x([0-9a-f][0-9a-f])/i) { [$1.hex].pack("C") }
-            draw_barcode(drawing, opos, go, go_width, go_height, data, barcode_dpi)
-          elsif typ == BOXOBJECT
-            draw_boxobject(drawing, opos, go, go_width, go_height)
-          elsif typ == EMBEDOBJECT
-            draw_embedobject(drawing, opos, go, go_width, go_height, data, row ? row["row_number"] : "1", barcode_dpi)
+          begin
+            # die Objekt-spezifischen Attribute ermitteln
+            if typ == TEXTOBJECT
+              draw_textobject(drawing, opos, go, go_width, go_height, data.empty? ? data_nosub : data)
+            elsif typ == PICTUREOBJECT
+              draw_pictureobject(drawing, opos, go, go_width, go_height, data)
+            elsif typ == BARCODEOBJECT
+              data = data.gsub(/\\x([0-9a-f][0-9a-f])/i) { [$1.hex].pack("C") }
+              draw_barcode(drawing, opos, go, go_width, go_height, data, barcode_dpi)
+            elsif typ == BOXOBJECT
+              draw_boxobject(drawing, opos, go, go_width, go_height)
+            elsif typ == EMBEDOBJECT
+              draw_embedobject(drawing, opos, go, go_width, go_height, data, row ? row["row_number"] : "1", barcode_dpi)
+            end
+          rescue => err
+            raise err, "#{go[GOA_NAME]}: #{err}"
           end
 
           # in Vorschau einen Rahmen um das selektierte Objekt zeichnen
@@ -317,7 +321,7 @@ module Mcc2
         drawing.composite(apos.x.round, apos.y.round, (cpos.x - apos.x).round, (cpos.y - apos.y).round, go_image)
         # body.image(go_image, mm(im_width), mm(im_height))
       else
-        raise Printer::Base::ResourceNotFoundError, "Das Bild '#{path}' konnte nicht gefunden werden. Der Druck wird angehalten."
+        raise Printer::Base::ResourceNotFoundError, "Das Bild '#{path}' konnte nicht gefunden werden."
       end
     end
 
@@ -347,7 +351,7 @@ module Mcc2
       check_font(fontname, go)
 
       unless @magick_font_list.index(fontname) || File.exist?(fontname)
-        raise Printer::Base::ResourceNotFoundError, "Die Schriftart '#{fontname}' konnte nicht gefunden werden. Der Druck wird angehalten."
+        raise Printer::Base::ResourceNotFoundError, "Die Schriftart '#{fontname}' konnte nicht gefunden werden."
       end
 
       drawing.fill(font_color)
@@ -478,13 +482,13 @@ module Mcc2
           end
         end
       else
-        raise Printer::Base::ResourceNotFoundError, "Das Layout '#{path}' konnte nicht gefunden werden. Der Druck wird angehalten."
+        raise Printer::Base::ResourceNotFoundError, "Das Layout '#{path}' konnte nicht gefunden werden."
       end
     end
 
     def check_font(font, obj)
       unless @magick_font_list.index(font) || File.exist?(font)
-        raise Printer::Base::ResourceNotFoundError, "Die Schriftart '#{font}' in Objekt '#{obj[GOA_NAME]}' konnte nicht gefunden werden. Der Druck wird angehalten."
+        raise Printer::Base::ResourceNotFoundError, "Die Schriftart '#{font}' konnte nicht gefunden werden."
       end
     end
 
