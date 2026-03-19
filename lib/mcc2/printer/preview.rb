@@ -48,11 +48,26 @@ module Mcc2
           end
         end
 
-        @image_view = FXImageView.new(parent, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y)
+        @image_view = FXImageView.new(parent, opts: LAYOUT_FILL)
         @image_view.connect(SEL_LEFTBUTTONPRESS, &method(:image_view_clicked))
         @image_view.connect(SEL_KEYPRESS, &method(:image_view_keypress))
 
+        @error_view = FXText.new(parent, opts: LAYOUT_FILL|TEXT_WORDWRAP)
+        @error_view.editable = false
+        enable_error_view(false)
         set_zoom
+      end
+
+      def enable_error_view(text = nil, error = nil)
+        if text
+          @image_view.visible = false
+          @error_view.visible = true
+          @error_view.text = "#{text}\n\n#{error}"
+        else
+          @image_view.visible = true
+          @error_view.visible = false
+          @error_view.text = ""
+        end
       end
 
       def layout_file=(value)
@@ -206,6 +221,7 @@ module Mcc2
         end
 
         @parent.runOnUiThread do
+          enable_error_view(false)
           @rect_list = rect_list
           fx_image.create
           begin
@@ -218,15 +234,14 @@ module Mcc2
         end
       rescue Printer::Base::PrintError => e
         @parent.runOnUiThread do
-          FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
+          enable_error_view("Fehler beim Erstellen eines Grafikobjekts", e.to_s)
         end
         @printing = false
       rescue => e
         DebugTools.write_exception("draw_preview_thread", e)
         @parent.runOnUiThread do
-          FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen der Layoutvorschau", DebugTools.unkown_error_message(e))
+          enable_error_view("Fehler beim Erstellen der Layoutvorschau", DebugTools.unkown_error_message(e))
         end
-        # rescue
       end
 
       def check_if_font_exist(fontdesc)
