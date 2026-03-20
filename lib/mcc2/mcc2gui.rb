@@ -25,7 +25,7 @@ alias loadImage_libguib16 loadImage
 def loadImage(file)
   file = File.join(File.dirname(__FILE__), "..", file)
   i = loadImage_libguib16(file)
-  i.scale($gui_scale * i.width, $gui_scale * i.height)
+  i.scale($gui_scale * 16, $gui_scale * 16)
   i.create
   i
 end
@@ -84,6 +84,11 @@ module Mcc2
       connect_with_accel(@mcmd_picture) { new_object(PICTUREOBJECT) }
       connect_with_accel(@mcmd_box) { new_object(BOXOBJECT) }
       connect_with_accel(@mcmd_embed) { new_object(EMBEDOBJECT) }
+
+      @menutitle_window.text = "&Fenster"
+      connect_with_accel(@mcmd_horizontal) { @mdiclient.horizontal }
+      connect_with_accel(@mcmd_vertical) { @mdiclient.vertical }
+      connect_with_accel(@mcmd_cascade) { @mdiclient.cascade }
 
       @topwin.width = (1020 * @gui_scale).to_i
       @topwin.height = (748 * @gui_scale).to_i
@@ -179,7 +184,16 @@ module Mcc2
             child.setFocus
           end
           @mdiclient.setActiveChild(child)
+          auto_place_children
         end
+      end
+    end
+
+    def auto_place_children
+      if @mdiclient.numChildren == 1
+        @mdiclient.each_child(&:maximize)
+      elsif @mdiclient.numChildren > 1
+        @mdiclient.horizontal
       end
     end
 
