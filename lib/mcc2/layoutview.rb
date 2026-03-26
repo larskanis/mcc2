@@ -5,6 +5,7 @@ module Mcc2
     include Fox
 
     JobSetupObjID = -1
+    DRAG_TYPE_NAME = "application/x-mcc2+xml"
 
     # initialisiert zusätzliche Elemente im Layout-Dialog, die nicht oder schlecht im Fox-GUI-Builder erzeugt werden können
     # setzt Parameter bei Dialog-Elementen
@@ -196,6 +197,9 @@ module Mcc2
         changed_attributes if @layout_file.set_object_by_ids(@selected_object_ids, GOA_BARCODE_OPTIMIZED, @lf.checkbutton_barcode_optimized.checked?)
       end
       @lf.spinner_barcode_ratio.range = (1..100)
+
+      # Register the drag type for copy and paste by the clipboard
+      @drag_type = @parent.app.registerDragType(DRAG_TYPE_NAME)
 
       create_chipparam_fields
 

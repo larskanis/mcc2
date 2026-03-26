@@ -77,6 +77,12 @@ module Mcc2
       connect_with_accel(@mcmd_save_as) { save_layout(true) }
       connect_with_accel(@mcmd_exit) { @app.stop if can_close? }
 
+      @menutitle_edit.text = "&Bearbeiten"
+
+      connect_with_accel(@mcmd_cut) { edit_cut }
+      connect_with_accel(@mcmd_copy) { edit_copy }
+      connect_with_accel(@mcmd_paste) { edit_paste }
+
       @menutitle_object.text = "Neues &Objekt"
 
       connect_with_accel(@mcmd_text) { new_object(TEXTOBJECT) }
