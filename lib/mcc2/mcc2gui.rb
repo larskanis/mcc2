@@ -79,9 +79,9 @@ module Mcc2
 
       @menutitle_edit.text = "&Bearbeiten"
 
-      connect_with_accel(@mcmd_cut) { edit_cut }
-      connect_with_accel(@mcmd_copy) { edit_copy }
-      connect_with_accel(@mcmd_paste) { edit_paste }
+      connect_with_accel(@mcmd_cut) { clipboard_action(:cut) }
+      connect_with_accel(@mcmd_copy) { clipboard_action(:copy) }
+      connect_with_accel(@mcmd_paste) { clipboard_action(:paste) }
 
       @menutitle_object.text = "Neues &Objekt"
 
@@ -136,7 +136,12 @@ module Mcc2
       @xpath_changes[xpath] = value
     end
 
-    #---------------------------------------------------------------------------------------------------------
+    def clipboard_action(action)
+      child = @mdiclient.activeChild
+      if child
+        child.userData.clipboard_action(action)
+      end
+    end
 
     def new_object(typ)
       child = @mdiclient.activeChild
@@ -144,7 +149,6 @@ module Mcc2
         child.userData.add_object(typ)
       end
     end
-    #---------------------------------------------------------------------------------------------------------
 
     def save_layout(filename_dialog = false)
       child = @mdiclient.activeChild

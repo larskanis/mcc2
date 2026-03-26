@@ -207,6 +207,10 @@ module Mcc2
       @layoutview.move_selected(x, y)
     end
 
+    def clipboard_action(action)
+      @layoutview.clipboard_action(action)
+    end
+
     #---------------------------------------------------------------------------------------------------------
 
     def draw_preview_with_row row, immediately = false
