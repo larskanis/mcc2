@@ -332,7 +332,7 @@ PRINT 1
     # ==== Parameter
     # +id+:: die Nummer, unter welcher das Attribut gespeichert ist
     private def get_objectnode_by_id(id)
-      @xml_doc.at_xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}[#{GOA_ID}='#{id}']")
+      @xml_doc.at_xpath("(//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT})[#{id+1}]")
     end
 
     def get_layers_of_page(page_nr)
@@ -388,7 +388,7 @@ PRINT 1
       n.content = "#{typ}##{id}"
       go << n
       o.go_attributes.each_pair do |goa_name, go_attribute|
-        unless [GOA_ID, GOA_TYP, GOA_NAME].include?(go_attribute.attr_name)
+        unless [GOA_TYP, GOA_NAME].include?(go_attribute.attr_name)
           n = Nokogiri::XML::Node.new(go_attribute.attr_name, @xml_doc)
           n.content = go_attribute.attr_value.to_s
           go << n
@@ -401,12 +401,7 @@ PRINT 1
 
     # ermittelt die nächst höhere ID (beeinflusst die Darstellungsebene)
     def get_new_id
-      id = 0
-      @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each do |go|
-        oid = go.at_xpath(GOA_ID).content.to_i
-        id = oid + 1 if oid >= id
-      end
-      id
+      @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").size
     end
 
     # liest die ID's der graphischen Objekte aus der Layout-Definition (XML) aus und
@@ -414,9 +409,7 @@ PRINT 1
     # ==== Return
     # die sortierte Liste mit ID's [Array]
     def sorted_id_list
-      @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").collect do |go_struct|
-        go_struct.at_xpath(GOA_ID).content.to_i
-      end.sort!
+      @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").size.times.to_a
     end
 
     # Reindex the objects according to the passed array of obj_ids
@@ -425,10 +418,10 @@ PRINT 1
       # Dabei alle Objekte durchlaufen und im Array die Position der alten ID suchen und in die ID schreiben.
       # Dies muss so getan werden.
       # Wenn es anders herum versucht wird, d.h. das Array durchlaufen und dann das Objekt im XML gesucht, dann werden die ID's schon verändert und die Suche schlägt dann fehl.
-      @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each do |go_struct|
-        id = go_struct.at_xpath(GOA_ID).content.to_i
-        new_id = obj_ids.index(id)
-        go_struct.at_xpath(GOA_ID).content = new_id.to_s
+      base = @xml_doc.at_xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}")
+      elements = base.elements
+      obj_ids.each do |id|
+        elements[id].parent = base
       end
       changed!
     end
@@ -486,6 +479,11 @@ PRINT 1
     end
 
     def save
+      # IDs sequenziell nummerieren für Kompatibilität mit älteren mcc2
+      @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each_with_index do |go_struct, idx|
+        go_struct.at_xpath(GOA_ID).content = idx
+      end
+
       @xml_doc.root["version"] = FILE_VERSION_RANGE.last.to_s
       File.open(@filename, "w") do |fd|
         @xml_doc.write_to(fd, indent: 2)
@@ -541,8 +539,8 @@ PRINT 1
 
         o = add_object(obj[GOA_TYP])
         obj.attributes.each do |attr|
-          # alle Attribute, außer ID, Typ und Name kopieren, sofern sie vorhanden, ansonsten den Standard lassen
-          unless [GOA_ID, GOA_TYP, GOA_NAME].include?(attr)
+          # alle Attribute, außer Typ und Name kopieren, sofern sie vorhanden, ansonsten den Standard lassen
+          unless [GOA_TYP, GOA_NAME].include?(attr)
             o[attr] = obj[attr]
           end
         end
@@ -574,9 +572,6 @@ PRINT 1
         node << frag
       end
 
-      @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each_with_index do |go_struct, idx|
-        go_struct.at_xpath(GOA_ID).content = idx
-      end
       changed! if num_elements > 0
     end
 
