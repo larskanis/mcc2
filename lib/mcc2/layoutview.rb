@@ -710,11 +710,13 @@ module Mcc2
         p received: data
         after_id = @selected_object_ids.last
         after_id = nil if after_id == JobSetupObjID
-        changed = @layout_file.clipboard_paste(data, after_id: after_id)
+        new_ids = @layout_file.clipboard_paste(data, after_id: after_id)
       end
-      if changed
+      if changed || new_ids&.any?
         changed_attributes
         fill_objectlist
+
+        self.selected_object_ids = new_ids if new_ids
       end
     end
 

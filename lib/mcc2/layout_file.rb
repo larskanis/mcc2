@@ -569,10 +569,11 @@ PRINT 1
         node.add_next_sibling(frag)
       else
         node = @xml_doc.at_xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}")
-        node << frag
+        node.prepend_child(frag)
       end
 
       changed! if num_elements > 0
+      num_elements.times.map {|t| after_id ? t + after_id + 1 : t }
     end
 
     # löscht sie übergebene XML-Node aus dem Layout ohne Rückfrage, diese muss in der aufrufenden Methode durchgeführt werden
