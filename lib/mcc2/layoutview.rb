@@ -700,7 +700,7 @@ module Mcc2
       if [:cut, :copy].include?(action)
         if @parent.acquireClipboard([@drag_type])
           p :acquireClipboard_success
-          @clipboard_xml_frag, changed = @layout_file.send("clipboard_#{action}", @selected_object_ids)
+          @clipboard_xml_frag, changed = @layout_file.send("clipboard_#{action}", @selected_object_ids - [JobSetupObjID])
         else
           p :acquireClipboard_failed
         end
@@ -708,7 +708,9 @@ module Mcc2
       elsif [:paste].include?(action)
         data = @parent.getDNDData(FROM_CLIPBOARD, @drag_type)
         p received: data
-        changed = @layout_file.clipboard_paste(data, after_id: @selected_object_ids.last)
+        after_id = @selected_object_ids.last
+        after_id = nil if after_id == JobSetupObjID
+        changed = @layout_file.clipboard_paste(data, after_id: after_id)
       end
       if changed
         changed_attributes

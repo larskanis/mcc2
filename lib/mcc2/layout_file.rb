@@ -564,13 +564,20 @@ PRINT 1
 
     def clipboard_paste(xml_data, after_id:)
       frag = Nokogiri::XML.fragment(xml_data)
-      node = get_objectnode_by_id(after_id)
-      node.add_next_sibling(xml_data)
+      num_elements = frag.elements.size
+      p num_elements: num_elements
+      if after_id && after_id != Layoutview::JobSetupObjID
+        node = get_objectnode_by_id(after_id)
+        node.add_next_sibling(frag)
+      else
+        node = @xml_doc.at_xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}")
+        node << frag
+      end
 
       @xml_doc.xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}/#{GRAPHICOBJECT}").each_with_index do |go_struct, idx|
         go_struct.at_xpath(GOA_ID).content = idx
       end
-      changed! unless xml_data.to_s.strip.empty?
+      changed! if num_elements > 0
     end
 
     # löscht sie übergebene XML-Node aus dem Layout ohne Rückfrage, diese muss in der aufrufenden Methode durchgeführt werden
