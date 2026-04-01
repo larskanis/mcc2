@@ -21,8 +21,7 @@ module Mcc2
       @lf = Dialogbox_layoutview.new parent
       @lf.splitter_layoutview.reparent parent, nil
       @lf.dialogbox_layoutview.close
-      @lf.iconlist_objects.appendHeader("ID", nil, 50 * $gui_scale)
-      @lf.iconlist_objects.appendHeader("Name", nil, 100 * $gui_scale)
+      @lf.iconlist_objects.appendHeader("Name", nil, 130 * $gui_scale)
       @lf.iconlist_objects.appendHeader("Typ", nil, 100 * $gui_scale)
 
       @lf.splitter_layoutview.setSplit(0, 250 * $gui_scale)
@@ -760,13 +759,13 @@ module Mcc2
     def fill_objectlist
       # Objekt-Liste leeren
       @lf.iconlist_objects.clearItems
-      @lf.iconlist_objects.appendItem(["", "", "Job-Einstellungen"].join("\t"), nil, nil, JobSetupObjID)
+      @lf.iconlist_objects.appendItem(["", "Job-Einstellungen"].join("\t"), nil, nil, JobSetupObjID)
 
       if @layout_file
         # Array mit sortierten Objekt-ID's holen
         @layout_file.sorted_id_list.each do |id|
           go = @layout_file.find_graphic_object_by_id(id)
-          @lf.iconlist_objects.appendItem([id, go[GOA_NAME], go[GOA_TYP]].join("\t"), nil, nil, id)
+          @lf.iconlist_objects.appendItem([go[GOA_NAME], go[GOA_TYP]].join("\t"), nil, nil, id)
         end
       end
     end
