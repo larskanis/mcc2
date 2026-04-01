@@ -563,7 +563,6 @@ PRINT 1
     def clipboard_paste(xml_data, after_id:)
       frag = Nokogiri::XML.fragment(xml_data)
       num_elements = frag.elements.size
-      p num_elements: num_elements
       if after_id && after_id != Layoutview::JobSetupObjID
         node = get_objectnode_by_id(after_id)
         node.add_next_sibling(frag)

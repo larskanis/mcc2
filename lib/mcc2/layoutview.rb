@@ -202,7 +202,6 @@ module Mcc2
       @drag_type = @parent.app.registerDragType(DRAG_TYPE_NAME)
       # Handle request for DND data
       @parent.connect(SEL_CLIPBOARD_REQUEST) do |sender, sel, event|
-        p :SEL_CLIPBOARD_REQUEST
         @parent.setDNDData(FROM_CLIPBOARD, @drag_type, @clipboard_xml_frag) if event.target == @drag_type
       end
 
@@ -699,15 +698,11 @@ module Mcc2
     def clipboard_action(action)
       if [:cut, :copy].include?(action)
         if @parent.acquireClipboard([@drag_type])
-          p :acquireClipboard_success
           @clipboard_xml_frag, changed = @layout_file.send("clipboard_#{action}", @selected_object_ids - [JobSetupObjID])
-        else
-          p :acquireClipboard_failed
         end
 
       elsif [:paste].include?(action)
         data = @parent.getDNDData(FROM_CLIPBOARD, @drag_type)
-        p received: data
         after_id = @selected_object_ids.last
         after_id = nil if after_id == JobSetupObjID
         new_ids = @layout_file.clipboard_paste(data, after_id: after_id)
