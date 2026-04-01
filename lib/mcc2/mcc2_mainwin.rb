@@ -147,7 +147,7 @@ class MainWindow
                 @mcmd_cut = w_mcmd_cut
                 w_mcmd_cut.wdg_name = "mcmd_cut"
                 w_mcmd_cut.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_mcmd_cut.img = "mcc2/images/insert-text.png"
+                w_mcmd_cut.img = "mcc2/images/cut.png"
                 w_mcmd_cut.x = 2
                 w_mcmd_cut.y = 2
                 w_mcmd_cut.width = 0
@@ -160,7 +160,7 @@ class MainWindow
                 @mcmd_copy = w_mcmd_copy
                 w_mcmd_copy.wdg_name = "mcmd_copy"
                 w_mcmd_copy.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_mcmd_copy.img = "mcc2/images/measure.png"
+                w_mcmd_copy.img = "mcc2/images/copy.png"
                 w_mcmd_copy.x = 2
                 w_mcmd_copy.y = 21
                 w_mcmd_copy.width = 0
@@ -173,7 +173,7 @@ class MainWindow
                 @mcmd_paste = w_mcmd_paste
                 w_mcmd_paste.wdg_name = "mcmd_paste"
                 w_mcmd_paste.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_mcmd_paste.img = "mcc2/images/insert-image.png"
+                w_mcmd_paste.img = "mcc2/images/paste.png"
                 w_mcmd_paste.x = 2
                 w_mcmd_paste.y = 40
                 w_mcmd_paste.width = 0
