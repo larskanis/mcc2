@@ -5,6 +5,7 @@ module Mcc2
     include Fox
 
     JobSetupObjID = -1
+    DRAG_TYPE_NAME = "application/x-mcc2+xml"
 
     # initialisiert zusätzliche Elemente im Layout-Dialog, die nicht oder schlecht im Fox-GUI-Builder erzeugt werden können
     # setzt Parameter bei Dialog-Elementen
@@ -196,6 +197,13 @@ module Mcc2
         changed_attributes if @layout_file.set_object_by_ids(@selected_object_ids, GOA_BARCODE_OPTIMIZED, @lf.checkbutton_barcode_optimized.checked?)
       end
       @lf.spinner_barcode_ratio.range = (1..100)
+
+      # Register the drag type for copy and paste by the clipboard
+      @drag_type = @parent.app.registerDragType(DRAG_TYPE_NAME)
+      # Handle request for DND data
+      @parent.connect(SEL_CLIPBOARD_REQUEST) do |sender, sel, event|
+        @parent.setDNDData(FROM_CLIPBOARD, @drag_type, @clipboard_xml_frag) if event.target == @drag_type
+      end
 
       create_chipparam_fields
 
@@ -685,6 +693,25 @@ module Mcc2
       @lf.label_textfield.shown = false
       @lf.menubutton_enhanced_data_edit.shown = false
       @lf.menubutton_enhanced_data_text_edit.shown = true
+    end
+
+    def clipboard_action(action)
+      if [:cut, :copy].include?(action)
+        if @parent.acquireClipboard([@drag_type])
+          @clipboard_xml_frag, changed = @layout_file.send("clipboard_#{action}", @selected_object_ids - [JobSetupObjID])
+        end
+
+      elsif [:paste].include?(action)
+        data = @parent.getDNDData(FROM_CLIPBOARD, @drag_type)
+        after_id = @selected_object_ids.last
+        new_ids = @layout_file.clipboard_paste(data, after_id: after_id)
+      end
+      if changed || new_ids&.any?
+        changed_attributes
+        fill_objectlist
+
+        self.selected_object_ids = new_ids if new_ids
+      end
     end
 
     # fügt ein GraphicObjekt zur Objektliste hinzu und zeichnet die Vorschau und die Objektliste neu
