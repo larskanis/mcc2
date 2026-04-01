@@ -698,6 +698,7 @@ module Mcc2
       if [:cut, :copy].include?(action)
         if @parent.acquireClipboard([@drag_type])
           @clipboard_xml_frag, changed = @layout_file.send("clipboard_#{action}", @selected_object_ids - [JobSetupObjID])
+          @selected_object_ids = [] if action == :cut
         end
 
       elsif [:paste].include?(action)

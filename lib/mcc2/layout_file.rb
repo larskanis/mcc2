@@ -585,7 +585,7 @@ PRINT 1
     # ==== Parameter
     def delete_objects(ids)
       changed = false
-      ids.each do |id|
+      ids.sort.reverse.each do |id|
         obj = find_graphic_object_by_id(id)
         obj.delete
         changed = true
