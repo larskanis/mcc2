@@ -563,12 +563,18 @@ PRINT 1
     def clipboard_paste(xml_data, after_id:)
       frag = Nokogiri::XML.fragment(xml_data)
       num_elements = frag.elements.size
-      if after_id && after_id != Layoutview::JobSetupObjID
+      if after_id
         node = get_objectnode_by_id(after_id)
-        node.add_next_sibling(frag)
+        if node
+          node.add_next_sibling(frag)
+        else
+          node = @xml_doc.at_xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}")
+          node.prepend_child(frag)
+        end
       else
         node = @xml_doc.at_xpath("//#{S_ROOT}/#{GRAPHICOBJECTS}")
-        node.prepend_child(frag)
+        after_id = node.elements.size - 1
+        node << frag
       end
 
       changed! if num_elements > 0

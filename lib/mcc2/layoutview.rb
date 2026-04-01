@@ -704,7 +704,6 @@ module Mcc2
       elsif [:paste].include?(action)
         data = @parent.getDNDData(FROM_CLIPBOARD, @drag_type)
         after_id = @selected_object_ids.last
-        after_id = nil if after_id == JobSetupObjID
         new_ids = @layout_file.clipboard_paste(data, after_id: after_id)
       end
       if changed || new_ids&.any?
