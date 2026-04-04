@@ -203,8 +203,8 @@ module Mcc2
       @layoutview.manage_objects(ADD, typ)
     end
 
-    def move_selected(x, y)
-      @layoutview.move_selected(x, y)
+    def move_selected(x, y, modifier)
+      @layoutview.move_selected(x, y, modifier)
     end
 
     def clipboard_action(action)

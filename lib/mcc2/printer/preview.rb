@@ -121,13 +121,13 @@ module Mcc2
         if event.type == 1 # Keypress
           case event.code
           when Fox::KEY_Up
-            @layout.move_selected(0, -1)
+            @layout.move_selected(0, -1, event.state)
           when Fox::KEY_Down
-            @layout.move_selected(0, 1)
+            @layout.move_selected(0, 1, event.state)
           when Fox::KEY_Left
-            @layout.move_selected(-1, 0)
+            @layout.move_selected(-1, 0, event.state)
           when Fox::KEY_Right
-            @layout.move_selected(1, 0)
+            @layout.move_selected(1, 0, event.state)
           else
             0
           end

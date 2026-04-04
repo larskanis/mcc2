@@ -134,10 +134,10 @@ module Mcc2
       @lf.button_copy.connect(SEL_COMMAND) { manage_objects(COPY) }
       @lf.button_delete.enabled = false
       @lf.button_delete.connect(SEL_COMMAND) { manage_objects(DELETE) }
-      @lf.button_move_up.connect(SEL_COMMAND) { move_selected(0, -1) }
-      @lf.button_move_down.connect(SEL_COMMAND) { move_selected(0, 1) }
-      @lf.button_move_left.connect(SEL_COMMAND) { move_selected(-1, 0) }
-      @lf.button_move_right.connect(SEL_COMMAND) { move_selected(1, 0) }
+      @lf.button_move_up.connect(SEL_COMMAND) {|sender, sel, event| move_selected(0, -1) }
+      @lf.button_move_down.connect(SEL_COMMAND) {|sender, sel, event| move_selected(0, 1) }
+      @lf.button_move_left.connect(SEL_COMMAND) {|sender, sel, event| move_selected(-1, 0) }
+      @lf.button_move_right.connect(SEL_COMMAND) {|sender, sel, event| move_selected(1, 0) }
 
       # die Textfelder für die Magnetstreifenattribute
       @lf.textfield_spur1.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, S_MSSPUR1) }
@@ -794,12 +794,19 @@ module Mcc2
       @lf.send(objectname).enabled = enabled
     end
 
-    def move_selected(x, y)
+    def move_selected(x, y, modifier=0)
+      step = if modifier & Fox::SHIFTMASK != 0
+        0.1
+      elsif modifier & Fox::CONTROLMASK != 0
+        10
+      else
+        1
+      end
       @selected_object_ids.each do |id|
         next if id < 0
         go = @layout_file.find_graphic_object_by_id(id)
-        go[GOA_X] = go[GOA_X].to_f + x
-        go[GOA_Y] = go[GOA_Y].to_f + y
+        go[GOA_X] = go[GOA_X].to_f + x * step
+        go[GOA_Y] = go[GOA_Y].to_f + y * step
       end
 
       changed_attributes if x != 0 || y != 0
