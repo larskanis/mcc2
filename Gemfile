@@ -13,4 +13,5 @@ end
 
 group :development do
   gem "foxguib"
+  gem 'i18n-tasks', '~> 1.1'
 end
