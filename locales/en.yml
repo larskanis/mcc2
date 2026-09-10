@@ -1,0 +1,6 @@
+# -*- coding: utf-8 -*-
+en:
+  activerecord:
+    errors:
+      messages:
+        invalid: is invalid

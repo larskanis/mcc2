@@ -217,7 +217,7 @@ module Mcc2
     def self.hidpi_scale(fxapp)
       fxapp.create
 
-      if (s = ENV["FOXSCALE"].to_f) > 0
+      if (s=ENV['FOXSCALE'].to_f) > 0
         s
       elsif fxapp.rootWindow.width >= 3500 && fxapp.rootWindow.height >= 2000
         2.0
@@ -227,36 +227,54 @@ module Mcc2
     end
 
     def self.enable_hidpi(fxapp)
-      scale = hidpi_scale(fxapp)
+      tooltip = Fox::FXToolTip.new(fxapp, Fox::TOOLTIP_PERMANENT)
+      gui_scale = hidpi_scale(fxapp)
 
+      fxapp.normalFont = Fox::FXFont.new(fxapp, "arial,100")
       fd = fxapp.normalFont.fontDesc
-      fd.size *= scale
+      fd.size *= gui_scale
       fxapp.normalFont.destroy
       fxapp.normalFont.fontDesc = fd
       fxapp.normalFont.create
+      tooltip.setFont(fxapp.normalFont)
+      gui_scale
+    end
 
-      scale
+    def self.supported_language_files
+      Dir[File.expand_path("../../locales/*.yml", __dir__)]
     end
 
     def self.run(argv)
       Thread.abort_on_exception = true
+      I18n.load_path = supported_language_files
+      I18n.enforce_available_locales = true
 
       app = FX::App.new("MCC2", "ComCard-Mcc2")
       Fox::FXToolTip.new(app, Fox::TOOLTIP_PERMANENT)
       $gui_scale = enable_hidpi(app)
 
-      w = Mcc2Gui.new(app, $gui_scale)
+      language = nil
+      options = []
 
       OptionParser.new do |opts|
         opts.banner = "Usage: #{$0} <layout.mcc2>* [options]"
 
-        opts.on("-x", "--xpath-value XPATH~VALUE", "Replace XML-value on the given xpath", &w.method(:add_xpath_value))
+        langs = supported_language_files.map{|f| File.basename(f, ".*") }.join(", ")
+        opts.on( '-l', '--lang ISO2', "Set language of the GUI (#{langs})"){|o| language = o }
+        opts.on("-x", "--xpath-value XPATH~VALUE", "Replace XML-value on the given xpath"){|o| options << [:add_xpath_value, o] }
         opts.separator "\tExamples:"
         opts.separator "\t -x //Layout/datasource~mydata.csv"
         opts.separator "\t -x {layout.mcc2}//Layout/fileprinter_save_as~image_%d_%p.png"
       end.parse!(argv)
 
       begin
+        I18n.locale = language || app.reg.readStringEntry("SETTINGS", "language", "de")
+
+        w = Mcc2Gui.new(app, $gui_scale)
+        options.each do |meth, arg|
+          w.send(meth, arg)
+        end
+
         w.topwin.create
         w.topwin.show(Fox::PLACEMENT_SCREEN)
 
