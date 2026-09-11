@@ -1,0 +1,402 @@
+---
+rs:
+  activerecord:
+    errors:
+      messages:
+        invalid: је неважеће
+  barcode_is_not_avaliable: Баркод-тип %{bc_typ} не постоји у листи доступних баркодова. Вредност се поставља на 'NONE'.
+  cab_send_command_error:
+  - Грешка при слању
+  - |-
+    Команда није могла бити извршена
+    Молимо вас да проверите да ли су параметри везе исправни.
+
+    %{e}
+  cancel_button: Дугме за отказивање
+  chipparam_label: Параметар
+  columns_object_list:
+  - - Име
+    - 130
+  - - Тип
+    - 100
+  cx320_from_second_card: од друге карте
+  cx320_printer_driver_load_caption: CX320-штампач
+  cx320_send_command_error:
+  - Грешка при слању
+  - |-
+    Команда није могла бити извршена
+
+    %{e}
+  dataman_current_record: 'тренутни запис: %{recno}'
+  dataman_error_at_open_dataman:
+  - Greška u vezi sa podacima
+  - |-
+    Подаци о вези нису могли бити успостављени.
+
+    %{e}
+  dataman_error_printing_exception:
+  - Грешка при креирању слике за штампу
+  - "%{e}"
+  dataman_error_printing_object:
+  - Грешка при креирању графичког објекта
+  - "%{e}"
+  dataman_found_n_records: "%{finding_count} записа пронађено \n- %{curr_text}"
+  dataman_loaded_records: "%{count} података је учитано"
+  dataman_n_records_marked: "%{count} података је означено"
+  dataman_no_further_record: није пронађен ниједан додатни запис
+  dataman_no_record: није пронађен ниједан запис
+  dataman_records_printed: "%{recno} од %{of} записа одштампано"
+  datasource_type_csv: ЦСВ датотека
+  datasource_type_database: База података
+  datasource_type_dbf: ДБФ-датотека
+  datasource_type_none: нема података - статички изглед
+  delete_button: "&Лисрaj"
+  delete_object_confirmation: |-
+    Да ли заиста желите да обришете %{count} %{nameslist}?
+    Овај поступак се не може опозвати!
+  dialogbox_dataview:
+    button_datasource_text: "..."
+    button_datasource_tipText: Учитавање CSV датотеке преко дијалога за избор датотека
+    button_deselect_all_text: ништа
+    button_deselect_all_tipText: уклонити све ознаке података
+    button_print_all_text: све одштампај
+    button_print_all_tipText: Штампај све скупове података
+    button_print_selected_text: одштампај означено
+    button_print_selected_tipText: одштампати све означене записе
+    button_select_all_text: све
+    button_select_all_tipText: означи све скупове података
+    button_stop_printing_text: Стоп
+    button_stop_printing_tipText: Зауставити штампање према тренутној карти
+    dialogbox_dataview_title: Приказ у изради
+    label_datasource_text: Извор података
+    label_search_text: Појам за претрагу
+    label_selected_text: Означи изабрани текст
+    textfield_datasource_tipText: |+
+      Овде се наводи датотека са подацима.
+      Код статичког распореда овде се може навести број страница.
+
+    textfield_search_tipText: |-
+      Уносом ниске знакова претражују се и означавају сва приказана поља
+      . Вишеструким притиском на тастер Enter
+       прелази се на следећи резултат претраге.
+  dialogbox_layoutview:
+    button_box_border_color_text: "..."
+    button_box_fill_color_text: "..."
+    button_copy_text: копирати
+    button_copy_tipText: копира се селектовани објекат и преузимају се све особине, осим имена
+    button_delete_text: обrisati
+    button_delete_tipText: Брише изабрани објекат након потврде безбедносног упита.
+    button_down_text: доле v
+    button_down_tipText: Овим дугметом објекат се помера за један ред нагоре.
+    button_fontfile_select_text: "..."
+    button_move_down_text: "↓"
+    button_move_down_tipText: |-
+      помери означене објекте
+      такође помоћу тастера са стрелицама
+      0,1 mm уз тастер Shift
+      10 mm уз тастер Ctrl
+    button_move_left_text: "←"
+    button_move_left_tipText: |-
+      обележени објекти померају се
+      такође помоћу тастера са стрелицама
+      0,1 mm са тастером Shift
+      10 mm са тастером Ctrl
+    button_move_right_text: "→"
+    button_move_right_tipText: |-
+      означени објекти помери
+      такође преко тастера са стрелицама
+      0.1mm са тастером Shift
+      10mm са тастером Ctrl
+    button_move_up_text: "↑"
+    button_move_up_tipText: |-
+      обележени објекти померају се
+      такође помоћу тастера са стрелицама
+      0,1 mm са тастером Shift
+      10 mm са тастером Ctrl
+    button_spur1_text: "..."
+    button_spur2_text: "..."
+    button_spur3_text: "..."
+    button_text_color_text: изабрати
+    button_text_color_tipText: Овде се помоћу дијалога може изабрати боја.
+    button_up_text: висoko
+    button_up_tipText: Овим дугметом објекат се помера за један ред нагоре.
+    checkbutton_barcode_optimized_text: Оптимизуј за ДПИ
+    checkbutton_barcode_optimized_tipText: |
+      Баркод не скалирати, већ
+      прилагодити резолуцији штампача.
+      У прегледу се прилагођавање врши
+      на основу DPI вредности изнад прегледа.
+    checkbutton_contact_text: Текст дугмета за потврду контакта
+    checkbutton_contact_tipText: Активирајте ово поље ако желите да персонализујете контактни чип на картици.
+    checkbutton_contactless_text: Дугме за потврду бесконтактног текста
+    checkbutton_contactless_tipText: 'Активирајте ово поље ако желите да персонализујете бесконтактни чип на картици. '
+    checkbutton_duplex_text: Дуplex текст поља за потврду
+    checkbutton_duplex_tipText: Активирајте ово поље ако желите да се картица персонализује обострано.
+    checkbutton_flip_back_text: X огледај
+    checkbutton_flip_front_text: X рефлектовати
+    checkbutton_flop_back_text: Y рефлектују
+    checkbutton_flop_front_text: Y огледају
+    checkbutton_magstripe_text: Дугме за избор магнетне траке текст
+    checkbutton_magstripe_tipText: Активирајте ово поље ако желите да персонализујете магнетну траку на картици.
+    checkbutton_printlist_text: Текст дугмета за потврду листе за штампање
+    checkbutton_printlist_tipText: Ово дугме тренутно нема функцију.
+    dialogbox_layoutview_title: Приказ у изради
+    label_barcode_height_text: "     Висина:"
+    label_barcode_ratio_text: 'Однос:'
+    label_barcode_typ_text: 'Тип:'
+    label_box_border_color_text: Боја оквира
+    label_box_border_width_mm_text: мм
+    label_box_border_width_text: Ширина рама
+    label_box_corner_radius_mm_text: мм
+    label_box_corner_radius_mm_tipText: |
+      Баркод не скалирати, већ
+      прилагодити резолуцији штампача.
+      У прегледу се прилагођавање врши
+      према ДПИ вредности изнад прегледа.
+      Укључите за бољу читкост.
+    label_box_corner_radius_text: Радијус заобљења угла
+    label_box_fill_color_text: Боја за пуњење
+    label_contact_text: Чип
+    label_contactless_text: Контактно
+    label_datasource_encoding_text: Кодирање
+    label_datasource_typ_text: Извор података
+    label_duplex_text: Дуплекс штампа
+    label_flip_back_text: Позадина
+    label_flip_front_text: Предња страна
+    label_fonts_text: Фонт
+    label_fontsize_text: Величина фонта
+    label_image_page_text: Слика страна
+    label_justify_text: Оријентација
+    label_layer_text: Лејер
+    label_magstripe_text: Магнетна трака
+    label_name_empty_text: Текст празне ознаκε назива
+    label_name_text: Име
+    label_offset_mm_text: " мм"
+    label_offset_x_y_text: Офсет X/Y
+    label_page_size_mm_text: " мм"
+    label_page_size_text: Величина странице
+    label_posit_mm_text: мм
+    label_posit_x_y_text: Позиција X/Y
+    label_printlist_text: прикажи у листи за штампање
+    label_rotation_degree_text: "° "
+    label_rotation_empty_text: Ротация ознаке празан текст
+    label_rotation_text: Ротација
+    label_sample_data_text: Пример података
+    label_seiten_nr_text: Страна
+    label_size_empty_text: мм
+    label_size_text: Величина X/Y
+    label_spur1_text: Колосек 1
+    label_spur2_text: Траг2
+    label_spur3_text: Траг 3
+    label_text_color_text: Боја текста
+    label_textblock_text: Подаци
+    label_textfield_text: Подаци
+    listbox_barcode_typ_tipText: |
+      Овде се може изабрати тип бар-кода.
+
+      За EAN13 молимо изаберите „Eanx“.
+    listbox_fonts_tipText: Овде се може изабрати фонт.
+    menubutton_enhanced_data_edit_text: Дугме менија за напредно уређивање података
+    menubutton_enhanced_data_edit_tipText: |-
+      Убацује поље података
+      из изабраног извора података на позицију курсора
+    menubutton_enhanced_data_text_edit_text: Дугме менија побољшан текст података уреди текст
+    menubutton_enhanced_data_text_edit_tipText: |-
+      Убацује поље података
+      из изабраног извора података на позицију курсора
+    menubutton_sample_data_text: Текст узорка дугмета менија
+    menubutton_sample_data_tipText: |-
+      Избор датотеке
+      (само код објеката слике)
+    radiobutton_just_l_text: Линкови
+    radiobutton_just_l_tipText: Поравнајте текст лево.
+    radiobutton_just_m_text: Центар
+    radiobutton_just_m_tipText: Поравнајте текст цензурисно са ширином објекта.
+    radiobutton_just_r_text: Право
+    radiobutton_just_r_tipText: Поравнајте текст десно у односу на ширину објекта.
+    spinner_barcode_height_tipText: Однос између висине бар-кода и висине текста.
+    spinner_image_page_tipText: Избор странице из уметнуте слике.
+    spinner_layer_tipText: Трака у боји са којом треба да се одштампа објекат.
+    spinner_seiten_nr_tipText: Ova vrednost označava na kojoj strani objekta treba da se štampa. Kod kartica je br. 1 prednja strana, a br. 2 poleđina. Pažnja! Ako u drajveru štampača nije podešena dvostrana štampa (dupleks), odštampaće se 2 kartice.
+    tabitem_allgemein_text: Опште
+    tabitem_allgemein_tipText: Овде се врше сва општа подешавања која се односе на целокупан изглед.
+    tabitem_barcode_text: Баркод
+    tabitem_box_text: Оквир
+    tabitem_chip_text: Чип
+    tabitem_chip_tipText: Овде се уносе сви параметри чипа, без обзира на то да ли ће до кодирања чипа заиста доћи.
+    tabitem_font_text: Писмо
+    tabitem_font_tipText: У овој картици можете подесити фонт.
+    tabitem_magstripe_text: Магнетна трака
+    tabitem_magstripe_tipText: Овде се врше сва подешавања магнетне траке, без обзира на то да ли се магнетна трака стварно персонализује.
+    tabitem_object_text: Објекат
+    tabitem_object_tipText: Ovdje se vrše sva opća podešavanja za izabrani grafički objekat.
+    tabitem_posit_text: Позиција
+    tabitem_posit_tipText: У овој картици се врше сва подешавања која се односе на позиционирање објекта.
+    textfield_data_non_text_tipText: |-
+      Садржи податке који ће касније бити одштампани на карти.
+      У ово поље може се унети само 1 ред.
+      Променљиве из извора података формирају се према синтакси
+      {naziv_polja[pocetak,duzina]} gebildet.
+    textfield_data_tipText: |-
+      Садржи податке који ће касније бити одштампани на картици.
+      У ово поље се може унети више редова.
+      Чувари места из извора података формирају се по синтакси
+      {feldname[anfang,laenge]}.
+    textfield_fontsize_tipText: Овде се подешава величина фонта у тачкама. Могуће је и уношење реалних бројева (са тачком као децималним одвојиоцем).
+    textfield_height_tipText: Ова вредност је висина објекta. Тренутно има утицај само код слика.
+    textfield_name_tipText: Име је неопходно само за приказ у листи објеката и при одређеним акцијама, али би га ипак требало променити у неко значајније име.
+    textfield_page_height_tipText: Овом вредношћу се целокупна сличност штампе помера дуж Y-осе.
+    textfield_page_width_tipText: Овом вредношћу се целокупна сличност штампе помера по Y-оси.
+    textfield_rotation_tipText: Ова вредност означава угао за који објекат треба да буде ротиран. Могуће су и реалне вредности (са тачком као децималним одвојиоцем).
+    textfield_sample_data_tipText: |-
+      Садржи податке који ће касније бити одштампани на картици.
+      У ово поље се може унети више редова.
+      Решери за место из извора података формирају се по синтакси
+      {feldname[anfang,laenge]} унетог назива.
+    textfield_text_color_tipText: Овде се боja текста може унети као хексадецимална вредност. Да бисте изабрали боју, користите дугме са десне стране.
+    textfield_width_tipText: Ova vrednost označava širinu objekta. Kod tekstualnih polja ova vrednost trenutno ima uticaj samo ako je izabrano poravnanje po sredini ili desno.
+    textfield_x_offset_tipText: Са овом вредношћу се целокупна слике штампе помера дуж X-осе.
+    textfield_x_tipText: Ова вредност означава удаљеност објекта од леве стране карте.
+    textfield_y_offset_tipText: Овом вредношћу се целокупна штампана слика помера дуж Y-осе.
+    textfield_y_tipText: Ова вредност означава растојање објекта од горње ивице карте. Код текстовима, ова вредност се односи на доњу ивицу текста.
+  dialogbox_printerview:
+    button_cab_cancel_jobs_text: Ресетуј штампач
+    button_cab_extended_info_text: Упит за проширени статус
+    button_cab_firmware_version_text: Верзија фирмвера
+    button_cab_info_text: Упит о статусу штампача
+    button_cab_self_test_text: Почетак самотестирања
+    button_cx320_move_to_0_text: до штампарске станице
+    button_cx320_move_to_2_text: цу конт.лос
+    button_cx320_move_to_4_text: Избацивање
+    button_cx320_read_config_text: Ичитај конфигурацију
+    button_cx320_reset_text: Ресет
+    button_cx320_set_defaults_text: Стандардне вредности
+    button_cx320_write_config_text: Писање конфигурације
+    button_file_save_as_text: "..."
+    button_file_save_as_tipText: Избор датотеке
+    button_gdi_printersetup_text: Подешавање
+    button_gdi_printersetup_tipText: Избор датотеке
+    button_xid_printersetup_text: Подешавање
+    button_xid_printersetup_tipText: Избор датотеке
+    button_zebra_eject_card2_text: Избаци картицу 2
+    button_zebra_eject_card2_tipText: Избацује картицу из штампача (нпр. ако се картица заглавила у штампачу). Такође избацује картице које се налазе у дозатору картица.
+    button_zebra_eject_card_text: Избаци картицу
+    button_zebra_eject_card_tipText: Избацује картицу из штампача (нпр. ако се картица заглавила у штампачу).
+    button_zebra_move_contactless_text: Бесконтактно
+    button_zebra_move_contactless_tipText: Приближите картицу позицији бесконтактног читача.
+    button_zebra_print_testcard_text: Одштампајте тест картицу
+    button_zebra_print_testcard_tipText: Штампа тест картицу.
+    button_zebra_printer_info_text: Информације о штампачу
+    button_zebra_printer_info_tipText: Приказује тип штампача и верзију фирмвера.
+    button_zebra_printersetup_text: Подешавање
+    button_zebra_printersetup_tipText: Избор датотеке
+    button_zebra_reset_text: Ресет
+    button_zebra_reset_tipText: Врати штампач на фабричка подешавања.
+    button_zebra_send_text: Пошаљи
+    label_cab_host_text: Домаћин
+    label_cab_page_commands_text: Коandне команде по излазној страници (погледајте „Programming Manual“ од компаније cab Produktionstechnik GmbH)
+    label_cab_port_text: Порт
+    label_cab_resolution_text: Резолуција
+    label_cx320_driver_text: Драјвер
+    label_cx320_parallel_print_text: Паралелна штампа
+    label_cx320_printer_nr_text: Број штампача
+    label_epl_device_text: Фајл уређаја
+    label_epl_page_commands_text: Команде за штампање по излазној страници
+    label_epl_resolution_text: Резолуција
+    label_fileprinter_dpi_text: дпи
+    label_fileprinter_resolution_text: Резолуција
+    label_fileprinter_save_as_text: Сачувај као
+    label_gdi_printer_text: Штампач
+    label_linux_cups_dpi_text: дпи
+    label_linux_cups_printer_text: Штампач
+    label_linux_cups_resolution_text: Резолуција
+    label_linux_printer_state_text: Статус
+    label_ttp343_device_text: Фајл уређаја
+    label_ttp343_page_commands_text: Команнде штампања по излазној страни
+    label_ttp343_resolution_text: Разрешење
+    label_xid_printer_text: Штампач
+    label_zebra_answer_text: Одговор
+    label_zebra_command_text: Команда
+    label_zebra_commands_text: Команде штампача
+    label_zebra_printer_text: Штампач
+    tabitem_cab_printer_text: каб
+    tabitem_cx320_text: CX320
+    tabitem_epl_text: ЕПЛ
+    tabitem_file_printer_text: Датотека
+    tabitem_gdi_printer_text: Windows-GDI
+    tabitem_linux_cups_text: Линукс-ЦУПС
+    tabitem_ttp343_text: TSC TTP 34X M
+    tabitem_xid_printer_text: XID440
+    tabitem_zebra_printer_text: Зебра
+    textfield_file_save_as_tipText: |-
+      Локација чувања генерисаних датотека
+      %d - број записа
+      %p - број странице
+      %i - број картице у задатку штампања
+  error_loading_layout_file: Грешка при учитавању датотеке
+  font_selection_from_file: из датотеке фонта
+  font_selection_please_select_entry: Молимо изаберите
+  gdi_printer_driver_load_caption: винддоус интерфејс за штампач
+  gdi_printer_error_at_setup: Грешка при подешавању штампача
+  linux_cups_printer_driver_load_caption: линукс штампарски интерфејс (односно libcups2)
+  mainWindow:
+    mcmd_barcode_accelText: Ctrl+B
+    mcmd_barcode_text: Баркод
+    mcmd_box_text: _Оквир
+    mcmd_cascade_text: Каскаде
+    mcmd_close_accelText: Ctrl+W
+    mcmd_close_text: Затвори
+    mcmd_copy_accelText: Ctrl+C
+    mcmd_copy_text: Копирај
+    mcmd_cut_accelText: Ctrl+X
+    mcmd_cut_text: Исеци
+    mcmd_embed_text: _Лајоут-X-фах
+    mcmd_exit_accelText: Alt+F4
+    mcmd_exit_text: Крај
+    mcmd_horizontal_text: Хоризонтално
+    mcmd_new_accelText: Ctrl+N
+    mcmd_new_text: Ново
+    mcmd_open_accelText: Ctrl+O
+    mcmd_open_text: Отвори
+    mcmd_paste_accelText: Ctrl+V
+    mcmd_paste_text: Убацивање
+    mcmd_picture_accelText: Ctrl+i
+    mcmd_picture_text: Слика
+    mcmd_save_accelText: Ctrl+S
+    mcmd_save_as_accelText: Shift-Ctrl-S
+    mcmd_save_as_text: Сачувај _као
+    mcmd_save_text: Сачувај
+    mcmd_text_accelText: Ctrl+T
+    mcmd_text_text: _Текст
+    mcmd_vertical_text: Вектикално
+    menutitle_datei_text: Фајл
+    menutitle_edit_text: _Уреди
+    menutitle_object_text: Нови _објекат
+    menutitle_window_text: _Прозор
+  new_layout_name: Изглед
+  objectlist_job_settings: Подешавања посла
+  'off': Из
+  ok_button: "&У РЕДУ"
+  'on': Један
+  open_layout_file_dialog_caption: Продавница
+  open_layout_file_warning: Упозорење при учитавању датотеке %{filename}
+  printer_driver_load_error:
+  - Грешка при учитавању драјвера за %{human_name}
+  - |-
+    Драјвер за %{human_name} није могао бити учитан.
+    Молимо вас да се уверите да је гем пакет '%{gem_name}' инсталиран.
+
+    %{e}
+  question_dialog_caption: Избор режима (притисните подвучено слово)
+  save_layout_file_dialog_caption: Сачувај
+  save_layout_file_dialog_question:
+  - Сачувај датотеку
+  - Сачувај датотеку %{filename}?
+  text_color_dialog_caption: Боја текста
+  zebra_printer_driver_load_caption: Зебра-штампачи
+  zebra_printer_error_send_cmd:
+  - 'Грешка при слању команде ''%{command}'' штампачу:'
+  - |-
+    %{e}
+
+    %{backtrace}

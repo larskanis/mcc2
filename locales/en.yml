@@ -4,398 +4,398 @@ en:
     errors:
       messages:
         invalid: is invalid
-  barcode_is_not_avaliable: Der Barcode-Typ %{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes. Der Wert wird auf 'NONE' gesetzt.
+  barcode_is_not_avaliable: The barcode type %{bc_typ} does not exist in the list of available barcodes. The value is set to 'NONE'.
   cab_send_command_error:
-  - Fehler beim Senden
+  - Error sending
   - |-
-    Das Kommando konnte nicht ausgeführt werden
-    Bitte stellen Sie sicher, dass die Verbindungsparameter korrekt sind.
+    The command could not be executed
+    Please ensure that the connection parameters are correct.
 
     %{e}
-  cancel_button: Cancel button
+  cancel_button: Abbrechen-Button
   chipparam_label: Parameter
   columns_object_list:
   - - Name
     - 130
   - - Type
     - 100
-  cx320_from_second_card: ab zweiter Karte
-  cx320_printer_driver_load_caption: CX320-Drucker
+  cx320_from_second_card: from the second card on
+  cx320_printer_driver_load_caption: CX320 Printer
   cx320_send_command_error:
-  - Fehler beim Senden
+  - Error sending
   - |-
-    Das Kommando konnte nicht ausgeführt werden
+    The command could not be executed
 
     %{e}
-  dataman_current_record: 'aktueller Datensatz: %{recno}'
+  dataman_current_record: 'current dataset: %{recno}'
   dataman_error_at_open_dataman:
-  - Fehler bei Datenverbindung
+  - Data connection error
   - |-
-    Die Datenverbindung konnte nicht hergestellt werden.
+    The data connection could not be established.
 
     %{e}
   dataman_error_printing_exception:
-  - Fehler beim Erstellen des Druckbildes
+  - Error creating the print image
   - "%{e}"
   dataman_error_printing_object:
-  - Fehler beim Erstellen eines Grafikobjekts
+  - Error creating graphic object
   - "%{e}"
-  dataman_found_n_records: "%{finding_count} Datensätze gefunden \n- %{curr_text}"
-  dataman_loaded_records: "%{count} Datensätze geladen"
-  dataman_n_records_marked: "%{count} Datensätze markiert"
-  dataman_no_further_record: kein weiterer Datensatz gefunden
-  dataman_no_record: kein Datensatz gefunden
-  dataman_records_printed: "%{recno} von %{of} Datensätzen gedruckt"
-  datasource_type_csv: CSV-Datei
-  datasource_type_database: Datenbank
-  datasource_type_dbf: DBF-Datei
-  datasource_type_none: keine Daten - statisches Layout
-  delete_button: "&Löschen"
+  dataman_found_n_records: "%{finding_count} records found \n- %{curr_text}"
+  dataman_loaded_records: "%{count} records loaded"
+  dataman_n_records_marked: "%{count} records selected"
+  dataman_no_further_record: no further record found
+  dataman_no_record: no record found
+  dataman_records_printed: "%{recno} of %{of} records printed"
+  datasource_type_csv: CSV file
+  datasource_type_database: Database
+  datasource_type_dbf: DBF file
+  datasource_type_none: no data - static layout
+  delete_button: "&Delete"
   delete_object_confirmation: |-
-    Wollen Sie wirklich %{count} %{nameslist} löschen?
-    Dieser Vorgang lässt sich nicht rückgängig machen!
+    Do you really want to delete %{count} %{nameslist}?
+    This action cannot be undone!
   dialogbox_dataview:
     button_datasource_text: "..."
-    button_datasource_tipText: CSV-Datei über Dateiauswahl-Dialog laden
-    button_deselect_all_text: nix
-    button_deselect_all_tipText: alle Datensatz-Markierungen entfernen
-    button_print_all_text: alle drucken
-    button_print_all_tipText: Alle Datensätze drucken
-    button_print_selected_text: markierte drucken
-    button_print_selected_tipText: alle markierten Datensätze drucken
-    button_select_all_text: alle
-    button_select_all_tipText: alle Datensätze markieren
-    button_stop_printing_text: Stopp
-    button_stop_printing_tipText: Druck nach der aktuellen Karte anhalten
-    dialogbox_dataview_title: Entwurfsansicht
-    label_datasource_text: Datenquelle
-    label_search_text: Suchbegriff
-    label_selected_text: Label selected text
+    button_datasource_tipText: Load CSV file via file selection dialog
+    button_deselect_all_text: nothing
+    button_deselect_all_tipText: remove all record markers
+    button_print_all_text: print all
+    button_print_all_tipText: Print all records
+    button_print_selected_text: print selected
+    button_print_selected_tipText: print all selected records
+    button_select_all_text: all
+    button_select_all_tipText: select all data sets
+    button_stop_printing_text: Stop
+    button_stop_printing_tipText: Stop printing according to the current map
+    dialogbox_dataview_title: Draft view
+    label_datasource_text: Data source
+    label_search_text: Search term
+    label_selected_text: Markierten Text beschriften
     textfield_datasource_tipText: |+
-      Hier wird die Datendatei angegeben.
-      Bei statischem Layout kann hier die Anzahl der Seiten angegeben werden.
+      The data file is specified here.
+      For a static layout, the number of pages can be specified here.
 
     textfield_search_tipText: |-
-      Durch Eingabe einer Zeichenkette werden alle angezeigten Felder
-      durchsucht und markiert. Durch mehrfaches Drücken der Enter-
-      Taste wird zur nächsten Fundstelle gesprungen.
+      By entering a character string, all displayed fields
+       are searched and highlighted. Pressing the Enter
+       key multiple times jumps to the next match.
   dialogbox_layoutview:
     button_box_border_color_text: "..."
     button_box_fill_color_text: "..."
-    button_copy_text: kopieren
-    button_copy_tipText: kopiert das selektierte Objekt und übernimmt alle Eigenschaften, außer dem Namen
-    button_delete_text: löschen
-    button_delete_tipText: Löscht das selektierte Objekt nach Bestätigung einer Sicherheistabfrage.
-    button_down_text: runter v
-    button_down_tipText: Mit diesem Button wird das Objekt eine Zeile nach oben verschoben.
+    button_copy_text: copy
+    button_copy_tipText: copies the selected object and adopts all properties except the name
+    button_delete_text: delete
+    button_delete_tipText: Deletes the selected object after confirming a security prompt.
+    button_down_text: down v
+    button_down_tipText: This button moves the object up one line.
     button_fontfile_select_text: "..."
     button_move_down_text: "↓"
     button_move_down_tipText: |-
-      markierte Objekte verschieben
-      auch über Cursortasten
-      0.1mm mit Shift-Taste
-      10mm mit Ctrl-Taste
+      move selected objects
+      also using arrow keys
+      0.1mm with Shift key
+      10mm with Ctrl key
     button_move_left_text: "←"
     button_move_left_tipText: |-
-      markierte Objekte verschieben
-      auch über Cursortasten
-      0.1mm mit Shift-Taste
-      10mm mit Ctrl-Taste
+      move selected objects
+      also using cursor keys
+      0.1mm with Shift key
+      10mm with Ctrl key
     button_move_right_text: "→"
     button_move_right_tipText: |-
-      markierte Objekte verschieben
-      auch über Cursortasten
-      0.1mm mit Shift-Taste
-      10mm mit Ctrl-Taste
+      move selected objects
+      also using arrow keys
+      0.1mm with Shift key
+      10mm with Ctrl key
     button_move_up_text: "↑"
     button_move_up_tipText: |-
-      markierte Objekte verschieben
-      auch über Cursortasten
-      0.1mm mit Shift-Taste
-      10mm mit Ctrl-Taste
+      move marked objects
+      also using cursor keys
+      0.1mm with Shift key
+      10mm with Ctrl key
     button_spur1_text: "..."
     button_spur2_text: "..."
     button_spur3_text: "..."
-    button_text_color_text: auswählen
-    button_text_color_tipText: Hier kann mit Hilfe eines Dialogs eine Farbe ausgewählt werden.
-    button_up_text: hoch ^
-    button_up_tipText: Mit diesem Button wird das Objekt eine Zeile nach oben verschoben.
-    checkbutton_barcode_optimized_text: Auf DPI optimieren
+    button_text_color_text: select
+    button_text_color_tipText: Here, a color can be selected using a dialog.
+    button_up_text: high
+    button_up_tipText: This button moves the object up one line.
+    checkbutton_barcode_optimized_text: Optimize for DPI
     checkbutton_barcode_optimized_tipText: |
-      Barcode nicht skalieren, sondern
-      auf Druckerauflösung anpassen.
-      In der Vorschau erfolgt die Anpassung
-      auf die DPI-Angabe über der Vorschau.
+      Do not scale the barcode, but
+      adjust it to the printer resolution.
+      In the preview, the adjustment is made
+      to the DPI specification above the preview.
     checkbutton_contact_text: Checkbutton contact text
-    checkbutton_contact_tipText: Aktivieren Sie dieses Kästchen, wenn bei der Karte ein Kontakt-Chip personalisiert werden soll.
+    checkbutton_contact_tipText: Activate this check box if a contact chip is to be personalized on the card.
     checkbutton_contactless_text: Checkbutton contactless text
-    checkbutton_contactless_tipText: 'Aktivieren Sie dieses Kästchen, wenn bei der Karte ein kontaktloser Chip personalisiert werden soll. '
+    checkbutton_contactless_tipText: 'Activate this box if a contactless chip is to be personalized for the card. '
     checkbutton_duplex_text: Checkbutton duplex text
-    checkbutton_duplex_tipText: Aktivieren Sie dieses Kästchen, wenn die Karte Duplex personalisiert werden soll.
-    checkbutton_flip_back_text: X spiegeln
-    checkbutton_flip_front_text: X spiegeln
-    checkbutton_flop_back_text: Y spiegeln
-    checkbutton_flop_front_text: Y spiegeln
+    checkbutton_duplex_tipText: Activate this box if the card is to be personalized in duplex.
+    checkbutton_flip_back_text: Mirror X
+    checkbutton_flip_front_text: mirror X
+    checkbutton_flop_back_text: Y mirror
+    checkbutton_flop_front_text: Y mirror
     checkbutton_magstripe_text: Checkbutton magstripe text
-    checkbutton_magstripe_tipText: Aktivieren Sie dieses Kästchen, wenn bei der Karte der Magnetstreifen personalisiert werden soll.
+    checkbutton_magstripe_tipText: Activate this box if the magnetic stripe on the card is to be personalized.
     checkbutton_printlist_text: Checkbutton printlist text
-    checkbutton_printlist_tipText: Dieser Button ist momentan ohne Funktion.
-    dialogbox_layoutview_title: Entwurfsansicht
+    checkbutton_printlist_tipText: This button currently has no function.
+    dialogbox_layoutview_title: Draft view
     label_barcode_height_text: "     Height:"
     label_barcode_ratio_text: 'Ratio:'
-    label_barcode_typ_text: 'Typ:'
-    label_box_border_color_text: Rahmenfarbe
+    label_barcode_typ_text: 'Type:'
+    label_box_border_color_text: Frame color
     label_box_border_width_mm_text: mm
-    label_box_border_width_text: Rahmenbreite
+    label_box_border_width_text: Frame width
     label_box_corner_radius_mm_text: mm
     label_box_corner_radius_mm_tipText: |
-      Barcode nicht skalieren, sondern
-      auf Druckerauflösung anpassen.
-      In der Vorschau erfolgt die Anpassung
-      auf die DPI-Angabe über der Vorschau.
-      Einschalten für bessere Lesbarkeit.
-    label_box_corner_radius_text: Eckenradius
-    label_box_fill_color_text: Füllfarbe
+      Do not scale the barcode, but
+      adjust it to the printer resolution.
+      In the preview, the adjustment is made
+      to the DPI specification above the preview.
+      Enable for better readability.
+    label_box_corner_radius_text: Corner radius
+    label_box_fill_color_text: Fill color
     label_contact_text: Chip
-    label_contactless_text: Kontaktlos
-    label_datasource_encoding_text: Kodierung
-    label_datasource_typ_text: Datenquelle
-    label_duplex_text: Duplexdruck
-    label_flip_back_text: Rückseite
-    label_flip_front_text: Vorderseite
-    label_fonts_text: Schriftart
-    label_fontsize_text: Schriftgröße
-    label_image_page_text: Bild Seite
-    label_justify_text: Ausrichtung
+    label_contactless_text: Contactless
+    label_datasource_encoding_text: Coding
+    label_datasource_typ_text: Data source
+    label_duplex_text: Duplex printing
+    label_flip_back_text: Back side
+    label_flip_front_text: Front
+    label_fonts_text: Font
+    label_fontsize_text: Font size
+    label_image_page_text: Image page
+    label_justify_text: Alignment
     label_layer_text: Layer
-    label_magstripe_text: Magnetstreifen
+    label_magstripe_text: Magnetic stripe
     label_name_empty_text: Label name empty text
     label_name_text: Name
     label_offset_mm_text: " mm"
     label_offset_x_y_text: Offset X/Y
     label_page_size_mm_text: " mm"
-    label_page_size_text: Seitengröße
+    label_page_size_text: Page size
     label_posit_mm_text: mm
     label_posit_x_y_text: Position X/Y
-    label_printlist_text: in Druckliste anzeigen
+    label_printlist_text: Show in print list
     label_rotation_degree_text: "° "
     label_rotation_empty_text: Label rotation empty text
-    label_rotation_text: Drehung
-    label_sample_data_text: Beispieldaten
-    label_seiten_nr_text: Seite
+    label_rotation_text: Rotation
+    label_sample_data_text: Sample data
+    label_seiten_nr_text: Page
     label_size_empty_text: mm
-    label_size_text: Größe X/Y
-    label_spur1_text: Spur1
-    label_spur2_text: Spur2
-    label_spur3_text: Spur3
-    label_text_color_text: Textfarbe
-    label_textblock_text: Daten
-    label_textfield_text: Daten
+    label_size_text: Size X/Y
+    label_spur1_text: Track 1
+    label_spur2_text: Track 2
+    label_spur3_text: Track 3
+    label_text_color_text: Text color
+    label_textblock_text: Data
+    label_textfield_text: Data
     listbox_barcode_typ_tipText: |
-      Hier kann der Barcodetyp ausgewählt werden.
+      Here the barcode type can be selected.
 
-      Für EAN13 bitte "Eanx" wählen.
-    listbox_fonts_tipText: Hier kann die Schriftart ausgewählt werden.
+      For EAN13 please select "Eanx".
+    listbox_fonts_tipText: Here the font can be selected.
     menubutton_enhanced_data_edit_text: Menubutton enhanced data edit text
     menubutton_enhanced_data_edit_tipText: |-
-      Fügt an der Cusor-Position ein Datenfeld
-      aus der ausgewälten Datenquelle ein
-    menubutton_enhanced_data_text_edit_text: Menubutton enhanced data text edit text
+      Inserts a data field
+      from the selected data source at the cursor position
+    menubutton_enhanced_data_text_edit_text: Menu button enhanced data text edit text
     menubutton_enhanced_data_text_edit_tipText: |-
-      Fügt an der Cusor-Position ein Datenfeld
-      aus der ausgewälten Datenquelle ein
+      Inserts a data field
+      from the selected data source at the cursor position
     menubutton_sample_data_text: Menubutton sample data text
     menubutton_sample_data_tipText: |-
-      Auswahl einer Datei
-      (nur bei Bild-Objekten)
+      Selecting a file
+      (only for image objects)
     radiobutton_just_l_text: Links
-    radiobutton_just_l_tipText: Richtet den Text linksbündig aus.
+    radiobutton_just_l_tipText: Align the text to the left.
     radiobutton_just_m_text: Mitte
-    radiobutton_just_m_tipText: Richtet den Text mittig zur Objektbreite aus.
-    radiobutton_just_r_text: Rechts
-    radiobutton_just_r_tipText: Richtet den Text rechtsbündig zur Objektbreite aus.
-    spinner_barcode_height_tipText: Verhältnis zwischen Barcodehöhe und Texthöhe.
-    spinner_image_page_tipText: Auswahl der Seite aus dem eingefügten Bild.
-    spinner_layer_tipText: Das Farbband mit dem das Objekt gedruckt werden soll.
-    spinner_seiten_nr_tipText: Dieser Wert kennzeichnet, auf welche Seite das Objekt gedruckt werden soll. Bei Karten ist die Nr. 1 die Vorderseite und die Nr. 2 die Rückseite. Achtung! Wenn im Druckertreiber kein Duplex eingestellt ist, werden 2 Karten gedruckt.
-    tabitem_allgemein_text: Allgemein
-    tabitem_allgemein_tipText: Hier werden alle allgemeinen Einstellungen vorgenommen, die das gesamte Layout betreffen.
+    radiobutton_just_m_tipText: Align the text centrally with the object width.
+    radiobutton_just_r_text: Right
+    radiobutton_just_r_tipText: Align the text flush right to the object width.
+    spinner_barcode_height_tipText: Relationship between barcode height and text height.
+    spinner_image_page_tipText: Selection of the page from the inserted image.
+    spinner_layer_tipText: The ink ribbon with which the object is to be printed.
+    spinner_seiten_nr_tipText: This value specifies which side of the object is to be printed. For cards, no. 1 is the front and no. 2 is the back. Please note! If duplex printing is not set in the printer driver, 2 cards will be printed.
+    tabitem_allgemein_text: General
+    tabitem_allgemein_tipText: All general settings that affect the entire layout are made here.
     tabitem_barcode_text: Barcode
-    tabitem_box_text: Rahmen
+    tabitem_box_text: Framework
     tabitem_chip_text: Chip
-    tabitem_chip_tipText: Hier werden alle Chipparameter eingetragen, unabhängig davon, ob dann tatsächlich die Chipkodierung stattfindet
-    tabitem_font_text: Schrift
-    tabitem_font_tipText: In diesem Tab können die Einstellungen zur Schriftart vorgenommen werden.
-    tabitem_magstripe_text: Magnetstreifen
-    tabitem_magstripe_tipText: Hier werden alle Magnetstreifeneinstellungen vorgenommen, unabhängig davon, ob der Magnetstreifen tatsächlich personalisiert wird.
-    tabitem_object_text: Objekt
-    tabitem_object_tipText: Hier werden alle allgemeinen Einstellungen zum ausgewählten Graphik-Objekt durchgeführt.
+    tabitem_chip_tipText: All chip parameters are entered here, regardless of whether the chip encoding actually takes place or not.
+    tabitem_font_text: Font
+    tabitem_font_tipText: In this tab, font settings can be configured.
+    tabitem_magstripe_text: Magnetic stripe
+    tabitem_magstripe_tipText: All magnetic stripe settings are made here, regardless of whether the magnetic stripe is actually being personalized.
+    tabitem_object_text: Object
+    tabitem_object_tipText: All general settings for the selected graphic object are made here.
     tabitem_posit_text: Position
-    tabitem_posit_tipText: In diesem Tab werden alle Einstellungen zu Positionierung des Objekts vorgenommen.
+    tabitem_posit_tipText: All settings regarding the positioning of the object are made in this tab.
     textfield_data_non_text_tipText: |-
-      Enthält die Daten, welche später auf der Karte gedruckt werden sollen.
-      In diesem Feld kann nur 1 Zeile eingegeben werden.
-      Platzhalter aus einer Datenquelle werden nach der Syntax
-      {feldname[anfang,laenge]} gebildet.
+      Contains the data that will later be printed on the card.
+      Only 1 line can be entered in this field.
+      Placeholders from a data source are formed according to the syntax
+      {fieldname[start,length]}.
     textfield_data_tipText: |-
-      Enthält die Daten, welche später auf der Karte gedruckt werden sollen.
-      In diesem Feld können mehrerer Zeilen eingegeben werden.
-      Platzhalter aus einer Datenquelle werden nach der Syntax
-      {feldname[anfang,laenge]} gebildet.
-    textfield_fontsize_tipText: Hier wird die Schriftgröße in Punkt eingestellt. Es ist auch die Angabe von Realzahlen möglich (Punkt als Dezimaltrenner)
-    textfield_height_tipText: Dieser Wert ist die Höhe des Objekts. Er hat momentan nur bei Bildern einen Einfluss.
-    textfield_name_tipText: Der Name ist nur für die Anzeige in der Objektliste und bei bestimmten Aktionen notwendig, sollte aber dennoch in einen aussagekräftigen Namen geändert werden.
-    textfield_page_height_tipText: Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben.
-    textfield_page_width_tipText: Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben.
-    textfield_rotation_tipText: Dieser Wert kennzeichnet den Winkel, um den das Objekt gedreht werden soll. Es sind auch Realzahlen möglich (mit Punkt als Dezimaltrenner).
+      Contains the data to be printed on the card later.
+      Multiple lines can be entered in this field.
+      Placeholders from a data source are formed according to the syntax
+      {fieldname[start,length]}.
+    textfield_fontsize_tipText: Here the font size is set in points. It is also possible to specify real numbers (using a period as the decimal separator).
+    textfield_height_tipText: This value is the height of the object. Currently, it only has an effect on images.
+    textfield_name_tipText: The name is only necessary for the display in the object list and for certain actions, but should nevertheless be changed to a meaningful name.
+    textfield_page_height_tipText: This value shifts the entire print image along the Y-axis.
+    textfield_page_width_tipText: This value shifts the entire print image along the Y-axis.
+    textfield_rotation_tipText: This value specifies the angle by which the object is to be rotated. Real numbers are also possible (with a decimal point as the separator).
     textfield_sample_data_tipText: |-
-      Enthält die Daten, welche später auf der Karte gedruckt werden sollen.
-      In diesem Feld können mehrerer Zeilen eingegeben werden.
-      Platzhalter aus einer Datenquelle werden nach der Syntax
-      {feldname[anfang,laenge]} gebildet.
-    textfield_text_color_tipText: Hier kann die Schriftfarbe als Hexadezimalwert eingetragen werden. Um eine Farbe auszuwählen, nutzen Sie den Button rechts.
-    textfield_width_tipText: Dieser Wert bezeichnet die Breite des Objektes. Bei Textfeldern hat dieser Wert momentan nur einen Einfluss, wenn die Ausrichtung Mitte oder Rechts gewählt wurde.
-    textfield_x_offset_tipText: Mit diesem Wert wird das gesamte Druckbild um die X-Achse verschoben.
-    textfield_x_tipText: Dieser Wert bezeichnet den Abstand des Objekts von der linken Kartenseite.
-    textfield_y_offset_tipText: Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben.
-    textfield_y_tipText: Dieser Wert bezeichnet den Abstand des Objekts von der Oberkannte der Karte. Bei Textfeldern ist dieser Wert bezogen auf die Unterkante des Textes.
+      Contains the data to be printed on the card later.
+      Multiple lines can be entered in this field.
+      Placeholders from a data source are formed according to the syntax
+      {fieldname[start,length]}.
+    textfield_text_color_tipText: Here, the font color can be entered as a hexadecimal value. To select a color, use the button on the right.
+    textfield_width_tipText: This value specifies the width of the object. For text fields, this value currently only has an effect if the alignment is set to center or right.
+    textfield_x_offset_tipText: This value shifts the entire print image along the X-axis.
+    textfield_x_tipText: This value indicates the distance of the object from the left side of the map.
+    textfield_y_offset_tipText: This value shifts the entire print image along the Y-axis.
+    textfield_y_tipText: This value specifies the distance of the object from the top edge of the map. For text fields, this value refers to the bottom edge of the text.
   dialogbox_printerview:
-    button_cab_cancel_jobs_text: Drucker zurücksetzen
-    button_cab_extended_info_text: Extended Status Abfrage
-    button_cab_firmware_version_text: Firmware-Version
-    button_cab_info_text: Printer Status Abfrage
+    button_cab_cancel_jobs_text: Reset printer
+    button_cab_extended_info_text: Extended Status Query
+    button_cab_firmware_version_text: Firmware version
+    button_cab_info_text: Printer Status Query
     button_cab_self_test_text: Start Self Test
-    button_cx320_move_to_0_text: zu Druckstation
-    button_cx320_move_to_2_text: zu kont.los
-    button_cx320_move_to_4_text: Auswurf
-    button_cx320_read_config_text: Konfig auslesen
+    button_cx320_move_to_0_text: to print station
+    button_cx320_move_to_2_text: too contact-free
+    button_cx320_move_to_4_text: Ejection
+    button_cx320_read_config_text: Read out config
     button_cx320_reset_text: Reset
-    button_cx320_set_defaults_text: Standardwerte
-    button_cx320_write_config_text: Konfig schreiben
+    button_cx320_set_defaults_text: Default values
+    button_cx320_write_config_text: Write config
     button_file_save_as_text: "..."
-    button_file_save_as_tipText: Dateiauswahl
-    button_gdi_printersetup_text: Einrichten
-    button_gdi_printersetup_tipText: Dateiauswahl
-    button_xid_printersetup_text: Einrichten
-    button_xid_printersetup_tipText: Dateiauswahl
-    button_zebra_eject_card2_text: Karte auswerfen 2
-    button_zebra_eject_card2_tipText: Wirft die Karte aus dem Drucker aus (z.B. wenn eine Karte im Drucker hängt). Wirft auch Karten aus, die in der Kartenzufuhr sind.
-    button_zebra_eject_card_text: Karte auswerfen
-    button_zebra_eject_card_tipText: Wirft die Karte aus dem Drucker aus (z.B. wenn eine Karte im Drucker hängt).
-    button_zebra_move_contactless_text: Kontaktlos
-    button_zebra_move_contactless_tipText: Fährt die Karte an die Position des kontaktlosen Lesers.
-    button_zebra_print_testcard_text: Testkarte drucken
-    button_zebra_print_testcard_tipText: Druckt eine Testkarte.
-    button_zebra_printer_info_text: Druckerinfo
-    button_zebra_printer_info_tipText: Zeigt den Druckertyp und die Firmwareversion an.
-    button_zebra_printersetup_text: Einrichten
-    button_zebra_printersetup_tipText: Dateiauswahl
+    button_file_save_as_tipText: File selection
+    button_gdi_printersetup_text: Setup
+    button_gdi_printersetup_tipText: File selection
+    button_xid_printersetup_text: Setting up
+    button_xid_printersetup_tipText: File selection
+    button_zebra_eject_card2_text: Eject card 2
+    button_zebra_eject_card2_tipText: Ejects the card from the printer (e.g., if a card is stuck in the printer). Also ejects cards that are in the card feeder.
+    button_zebra_eject_card_text: Eject card
+    button_zebra_eject_card_tipText: Ejects the card from the printer (e.g. if a card is jammed in the printer).
+    button_zebra_move_contactless_text: Contactless
+    button_zebra_move_contactless_tipText: Move the card to the position of the contactless reader.
+    button_zebra_print_testcard_text: Print test card
+    button_zebra_print_testcard_tipText: Prints a test card.
+    button_zebra_printer_info_text: Printer info
+    button_zebra_printer_info_tipText: Displays the printer type and firmware version.
+    button_zebra_printersetup_text: Setting up
+    button_zebra_printersetup_tipText: File selection
     button_zebra_reset_text: Reset
-    button_zebra_reset_tipText: Setzt den Drucker zurück.
-    button_zebra_send_text: Senden
+    button_zebra_reset_tipText: Reset the printer.
+    button_zebra_send_text: Send
     label_cab_host_text: Host
-    label_cab_page_commands_text: Druckbefehle pro Ausgabeseite (siehe "Programming Manual" von cab Produktionstechnik GmbH)
+    label_cab_page_commands_text: Print commands per output page (see "Programming Manual" by cab Produktionstechnik GmbH)
     label_cab_port_text: Port
-    label_cab_resolution_text: Auflösung
-    label_cx320_driver_text: Treiber
-    label_cx320_parallel_print_text: Paralleler Druck
-    label_cx320_printer_nr_text: Drucker-Nr
-    label_epl_device_text: Device-Datei
-    label_epl_page_commands_text: Druckbefehle pro Ausgabeseite
-    label_epl_resolution_text: Auflösung
+    label_cab_resolution_text: Resolution
+    label_cx320_driver_text: Drivers
+    label_cx320_parallel_print_text: Parallel printing
+    label_cx320_printer_nr_text: Printer No.
+    label_epl_device_text: Device file
+    label_epl_page_commands_text: Print commands per output page
+    label_epl_resolution_text: Resolution
     label_fileprinter_dpi_text: dpi
-    label_fileprinter_resolution_text: Auflösung
-    label_fileprinter_save_as_text: Speichern unter
-    label_gdi_printer_text: Drucker
+    label_fileprinter_resolution_text: Resolution
+    label_fileprinter_save_as_text: Save as
+    label_gdi_printer_text: Printer
     label_linux_cups_dpi_text: dpi
-    label_linux_cups_printer_text: Drucker
-    label_linux_cups_resolution_text: Auflösung
+    label_linux_cups_printer_text: Printer
+    label_linux_cups_resolution_text: Resolution
     label_linux_printer_state_text: Status
-    label_ttp343_device_text: Device-Datei
-    label_ttp343_page_commands_text: Druckbefehle pro Ausgabeseite
-    label_ttp343_resolution_text: Auflösung
-    label_xid_printer_text: Drucker
-    label_zebra_answer_text: Antwort
-    label_zebra_command_text: Kommando
-    label_zebra_commands_text: Druckerbefehle
-    label_zebra_printer_text: Drucker
+    label_ttp343_device_text: Device file
+    label_ttp343_page_commands_text: Print commands per output page
+    label_ttp343_resolution_text: Resolution
+    label_xid_printer_text: Printer
+    label_zebra_answer_text: Answer
+    label_zebra_command_text: Command
+    label_zebra_commands_text: Printer commands
+    label_zebra_printer_text: Printer
     tabitem_cab_printer_text: cab
     tabitem_cx320_text: CX320
     tabitem_epl_text: EPL
-    tabitem_file_printer_text: Datei
-    tabitem_gdi_printer_text: Windows-GDI
+    tabitem_file_printer_text: File
+    tabitem_gdi_printer_text: Windows GDI
     tabitem_linux_cups_text: Linux-CUPS
     tabitem_ttp343_text: TSC TTP 34X M
     tabitem_xid_printer_text: XID440
     tabitem_zebra_printer_text: Zebra
     textfield_file_save_as_tipText: |-
-      Speicherort der generierten Dateien
-      %d - Nummer des Datensatzes
-      %p - Seitennummer
-      %i - Nummer der Karte im Druckjob
-  error_loading_layout_file: Fehler beim Laden der Datei
-  font_selection_from_file: aus Font-Datei
-  font_selection_please_select_entry: Bitte auswählen
-  gdi_printer_driver_load_caption: die Windows-Druckerschnittstelle
-  gdi_printer_error_at_setup: Fehler beim Einrichten des Druckers
-  linux_cups_printer_driver_load_caption: die Linux-Druckerschnittstelle (also libcups2)
+      Storage location of the generated files
+      %d - Record number
+      %p - Page number
+      %i - Number of the card in the print job
+  error_loading_layout_file: Error loading file
+  font_selection_from_file: from font file
+  font_selection_please_select_entry: Please select
+  gdi_printer_driver_load_caption: the Windows printer interface
+  gdi_printer_error_at_setup: Error setting up the printer
+  linux_cups_printer_driver_load_caption: the Linux printer interface (i.e. libcups2)
   mainWindow:
     mcmd_barcode_accelText: Ctrl+B
     mcmd_barcode_text: _Barcode
-    mcmd_box_text: _Rahmen
-    mcmd_cascade_text: _Kaskade
+    mcmd_box_text: _Frame
+    mcmd_cascade_text: Cascade
     mcmd_close_accelText: Ctrl+W
-    mcmd_close_text: Schließ_en
+    mcmd_close_text: Close
     mcmd_copy_accelText: Ctrl+C
-    mcmd_copy_text: _Kopieren
+    mcmd_copy_text: _Copy
     mcmd_cut_accelText: Ctrl+X
-    mcmd_cut_text: _Ausschneiden
-    mcmd_embed_text: _Layout-X-fach
+    mcmd_cut_text: _Cut
+    mcmd_embed_text: _Layout-X-fold
     mcmd_exit_accelText: Alt+F4
-    mcmd_exit_text: _Beenden
+    mcmd_exit_text: _Exit
     mcmd_horizontal_text: _Horizontal
     mcmd_new_accelText: Ctrl+N
-    mcmd_new_text: _Neu
+    mcmd_new_text: _New
     mcmd_open_accelText: Ctrl+O
-    mcmd_open_text: _Öffnen
+    mcmd_open_text: Open
     mcmd_paste_accelText: Ctrl+V
-    mcmd_paste_text: _Einfügen
+    mcmd_paste_text: _Insert
     mcmd_picture_accelText: Ctrl+i
-    mcmd_picture_text: B_ild
+    mcmd_picture_text: Image
     mcmd_save_accelText: Ctrl+S
     mcmd_save_as_accelText: Shift-Ctrl-S
-    mcmd_save_as_text: Speichern _unter
-    mcmd_save_text: _Speichern
+    mcmd_save_as_text: Save _as
+    mcmd_save_text: _Save
     mcmd_text_accelText: Ctrl+T
     mcmd_text_text: _Text
-    mcmd_vertical_text: _Vertikal
-    menutitle_datei_text: _Datei
-    menutitle_edit_text: _Bearbeiten
-    menutitle_object_text: Neues _Objekt
-    menutitle_window_text: _Fenster
+    mcmd_vertical_text: _Vertical
+    menutitle_datei_text: _File
+    menutitle_edit_text: _Edit
+    menutitle_object_text: New _Object
+    menutitle_window_text: _Windows
   new_layout_name: Layout
-  objectlist_job_settings: Job-Einstellungen
-  'off': Aus
+  objectlist_job_settings: Job Settings
+  'off': From
   ok_button: "&OK"
-  'on': Ein
-  open_layout_file_dialog_caption: Laden
-  open_layout_file_warning: Warnung beim Laden von %{filename}
+  'on': A
+  open_layout_file_dialog_caption: Shop
+  open_layout_file_warning: Warning while loading %{filename}
   printer_driver_load_error:
-  - Fehler beim Laden des Treibers für %{human_name}
+  - Error loading the driver for %{human_name}
   - |-
-    Der Treiber für %{human_name} konnte nicht geladen werden.
-    Bitte stellen Sie sicher, dass das Gem-Paket '%{gem_name}' installiert ist.
+    The driver for %{human_name} could not be loaded.
+    Please ensure that the gem package '%{gem_name}' is installed.
 
     %{e}
-  question_dialog_caption: Modusauswahl (bitte unterstrichenen Buchstabe drücken)
-  save_layout_file_dialog_caption: Speichern
+  question_dialog_caption: Mode selection (please press the underlined letter)
+  save_layout_file_dialog_caption: Save
   save_layout_file_dialog_question:
-  - Datei speichern
-  - Datei %{filename} speichern ?
-  text_color_dialog_caption: Textfarbe
-  zebra_printer_driver_load_caption: Zebra-Drucker
+  - Save file
+  - Save file %{filename}?
+  text_color_dialog_caption: Text color
+  zebra_printer_driver_load_caption: Zebra printers
   zebra_printer_error_send_cmd:
-  - 'Fehler beim Senden des Kommandos ''%{command}'' an den Drucker:'
+  - 'Error sending command ''%{command}'' to the printer:'
   - |-
     %{e}
 
