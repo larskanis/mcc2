@@ -68,7 +68,10 @@ module Mcc2
       # ......................................................................
       # die Menue-Einträge modifizieren
 
-      @menutitle_datei.text = "&Datei"
+      # Add & accelText to menu captions
+      [@menutitle_datei, @menutitle_edit, @menutitle_object, @menutitle_window].each do |m|
+        m.text = m.text.tr("_", "&")
+      end
 
       connect_with_accel(@mcmd_new) { new_layout }
       connect_with_accel(@mcmd_open) { open_layout }
@@ -77,13 +80,9 @@ module Mcc2
       connect_with_accel(@mcmd_save_as) { save_layout(true) }
       connect_with_accel(@mcmd_exit) { @app.stop if can_close? }
 
-      @menutitle_edit.text = "&Bearbeiten"
-
       connect_with_accel(@mcmd_cut) { clipboard_action(:cut) }
       connect_with_accel(@mcmd_copy) { clipboard_action(:copy) }
       connect_with_accel(@mcmd_paste) { clipboard_action(:paste) }
-
-      @menutitle_object.text = "Neues &Objekt"
 
       connect_with_accel(@mcmd_text) { new_object(TEXTOBJECT) }
       connect_with_accel(@mcmd_barcode) { new_object(BARCODEOBJECT) }
@@ -91,7 +90,6 @@ module Mcc2
       connect_with_accel(@mcmd_box) { new_object(BOXOBJECT) }
       connect_with_accel(@mcmd_embed) { new_object(EMBEDOBJECT) }
 
-      @menutitle_window.text = "&Fenster"
       connect_with_accel(@mcmd_horizontal) { @mdiclient.horizontal }
       connect_with_accel(@mcmd_vertical) { @mdiclient.vertical }
       connect_with_accel(@mcmd_cascade) { @mdiclient.cascade }
@@ -159,7 +157,7 @@ module Mcc2
     #---------------------------------------------------------------------------------------------------------
 
     def new_layout(filename = nil, xpath_changes = nil)
-      child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800 * @gui_scale, 600 * @gui_scale)
+      child = FXMDIChild.new(@mdiclient, I18n.t(:new_layout_name, default: "Layout"), nil, @mdimenu, 0, 0, 0, 800 * @gui_scale, 600 * @gui_scale)
       child.userData = Layout.new(child, @mdititle, filename: filename, xpath_changes: @xpath_changes, new_file: true)
       child.create
       child.show
@@ -174,18 +172,18 @@ module Mcc2
         if child = @mdiclient.activeChild
           dest = child.userData.layout_file.expand_path("%D/")
         end
-        filename = FXFileDialog.getOpenFilename(@topwin, "Laden", dest || "./", "*.mcc2,*.xml", 0)
+        filename = FXFileDialog.getOpenFilename(@topwin, I18n.t(:open_layout_file_dialog_caption, default: "Laden"), dest || "./", "*.mcc2,*.xml", 0)
       end
       return if filename.empty?
       unless FileTest.exist?(filename)
         return new_layout(filename, @xpath_changes)
       end
       unless filename.to_s.empty?
-        child = FXMDIChild.new(@mdiclient, "Layout", nil, @mdimenu, 0, 0, 0, 800 * @gui_scale, 600 * @gui_scale)
+        child = FXMDIChild.new(@mdiclient, I18n.t(:new_layout_name, default: "Layout"), nil, @mdimenu, 0, 0, 0, 800 * @gui_scale, 600 * @gui_scale)
         begin
           child.userData = Layout.new(child, @mdititle, filename: filename, xpath_changes: @xpath_changes, new_file: false)
         rescue LayoutFile::Error => e
-          FXMessageBox.error(@topwin.app, MBOX_OK, "Fehler beim Laden der Datei", e.to_s)
+          FXMessageBox.error(@topwin.app, MBOX_OK, I18n.t(:error_loading_layout_file, default: "Fehler beim Laden der Datei"), e.to_s)
         else
           if @topwin.created?
             child.create

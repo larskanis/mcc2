@@ -110,7 +110,7 @@ module Mcc2
         s[a] = @layout_file.get_attr_value(a)
       end
     rescue => e
-      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler bei Datenverbindung", "Die Datenverbindung konnte nicht hergestellt werden.\n\n#{e}")
+      FXMessageBox.error(@parent.app, MBOX_OK, *I18n.t(:dataman_error_at_open_dataman, default: [["Fehler bei Datenverbindung", "Die Datenverbindung konnte nicht hergestellt werden.\n\n%{e}"]], e: ))
     end
     #---------------------------------------------------------------------------------------------------------
 
@@ -145,7 +145,7 @@ module Mcc2
     def store_to_xml(filename_dialog = false)
       if filename_dialog || !@layout_file.filename
         dest = @layout_file.expand_path(@layout_file.filename.to_s.empty? ? "./" : @layout_file.filename)
-        fn = FXFileDialog.getSaveFilename(@parent, "Speichern", dest, "*.mcc2,*.xml", 0)
+        fn = FXFileDialog.getSaveFilename(@parent, I18n.t(:save_layout_file_dialog_caption, default: "Speichern"), dest, "*.mcc2,*.xml", 0)
         return if fn.empty?
         unless ["mcc2", "xml"].include?(fn.split(".")[-1].downcase)
           fn = "#{fn}.mcc2"
@@ -159,7 +159,7 @@ module Mcc2
     def can_close?
       return true if !@layout_file.changed?
 
-      res = FXMessageBox.question(@parent.app, MBOX_YES_NO_CANCEL, "Datei speichern", "Datei #{@layout_file.filename} speichern ?")
+      res = FXMessageBox.question(@parent.app, MBOX_YES_NO_CANCEL, *I18n.t(:save_layout_file_dialog_question, default: [["Datei speichern", "Datei %{filename} speichern ?"]], filename: @layout_file.filename))
       case res
       when MBOX_CLICKED_YES
         store_to_xml
@@ -176,7 +176,7 @@ module Mcc2
       self.layout_file = lf
       unless layout_file.warnings.empty?
         wa = layout_file.warnings.join("\n\n")
-        FXMessageBox.warning(@parent.app, MBOX_OK, "Warnung beim Laden von #{filename}", wa)
+        FXMessageBox.warning(@parent.app, MBOX_OK, I18n.t(:open_layout_file_warning, default: "Warnung beim Laden von %{filename}", filename: wa))
       end
     end
 

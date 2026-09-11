@@ -4,6 +4,56 @@ en:
     errors:
       messages:
         invalid: is invalid
+  barcode_is_not_avaliable: Der Barcode-Typ %{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes. Der Wert wird auf 'NONE' gesetzt.
+  cab_send_command_error:
+  - Fehler beim Senden
+  - |-
+    Das Kommando konnte nicht ausgeführt werden
+    Bitte stellen Sie sicher, dass die Verbindungsparameter korrekt sind.
+
+    %{e}
+  cancel_button: Cancel button
+  chipparam_label: Parameter
+  columns_object_list:
+  - - Name
+    - 130
+  - - Type
+    - 100
+  cx320_from_second_card: ab zweiter Karte
+  cx320_printer_driver_load_caption: CX320-Drucker
+  cx320_send_command_error:
+  - Fehler beim Senden
+  - |-
+    Das Kommando konnte nicht ausgeführt werden
+
+    %{e}
+  dataman_current_record: 'aktueller Datensatz: %{recno}'
+  dataman_error_at_open_dataman:
+  - Fehler bei Datenverbindung
+  - |-
+    Die Datenverbindung konnte nicht hergestellt werden.
+
+    %{e}
+  dataman_error_printing_exception:
+  - Fehler beim Erstellen des Druckbildes
+  - "%{e}"
+  dataman_error_printing_object:
+  - Fehler beim Erstellen eines Grafikobjekts
+  - "%{e}"
+  dataman_found_n_records: "%{finding_count} Datensätze gefunden \n- %{curr_text}"
+  dataman_loaded_records: "%{count} Datensätze geladen"
+  dataman_n_records_marked: "%{count} Datensätze markiert"
+  dataman_no_further_record: kein weiterer Datensatz gefunden
+  dataman_no_record: kein Datensatz gefunden
+  dataman_records_printed: "%{recno} von %{of} Datensätzen gedruckt"
+  datasource_type_csv: CSV-Datei
+  datasource_type_database: Datenbank
+  datasource_type_dbf: DBF-Datei
+  datasource_type_none: keine Daten - statisches Layout
+  delete_button: "&Löschen"
+  delete_object_confirmation: |-
+    Wollen Sie wirklich %{count} %{nameslist} löschen?
+    Dieser Vorgang lässt sich nicht rückgängig machen!
   dialogbox_dataview:
     button_datasource_text: "..."
     button_datasource_tipText: CSV-Datei über Dateiauswahl-Dialog laden
@@ -283,6 +333,12 @@ en:
       %d - Nummer des Datensatzes
       %p - Seitennummer
       %i - Nummer der Karte im Druckjob
+  error_loading_layout_file: Fehler beim Laden der Datei
+  font_selection_from_file: aus Font-Datei
+  font_selection_please_select_entry: Bitte auswählen
+  gdi_printer_driver_load_caption: die Windows-Druckerschnittstelle
+  gdi_printer_error_at_setup: Fehler beim Einrichten des Druckers
+  linux_cups_printer_driver_load_caption: die Linux-Druckerschnittstelle (also libcups2)
   mainWindow:
     mcmd_barcode_accelText: Ctrl+B
     mcmd_barcode_text: _Barcode
@@ -313,7 +369,34 @@ en:
     mcmd_text_accelText: Ctrl+T
     mcmd_text_text: _Text
     mcmd_vertical_text: _Vertikal
-    menutitle_datei_text: Datei
+    menutitle_datei_text: _Datei
     menutitle_edit_text: _Bearbeiten
-    menutitle_object_text: Objekt
-    menutitle_window_text: Fenster
+    menutitle_object_text: Neues _Objekt
+    menutitle_window_text: _Fenster
+  new_layout_name: Layout
+  objectlist_job_settings: Job-Einstellungen
+  'off': Aus
+  ok_button: "&OK"
+  'on': Ein
+  open_layout_file_dialog_caption: Laden
+  open_layout_file_warning: Warnung beim Laden von %{filename}
+  printer_driver_load_error:
+  - Fehler beim Laden des Treibers für %{human_name}
+  - |-
+    Der Treiber für %{human_name} konnte nicht geladen werden.
+    Bitte stellen Sie sicher, dass das Gem-Paket '%{gem_name}' installiert ist.
+
+    %{e}
+  question_dialog_caption: Modusauswahl (bitte unterstrichenen Buchstabe drücken)
+  save_layout_file_dialog_caption: Speichern
+  save_layout_file_dialog_question:
+  - Datei speichern
+  - Datei %{filename} speichern ?
+  text_color_dialog_caption: Textfarbe
+  zebra_printer_driver_load_caption: Zebra-Drucker
+  zebra_printer_error_send_cmd:
+  - 'Fehler beim Senden des Kommandos ''%{command}'' an den Drucker:'
+  - |-
+    %{e}
+
+    %{backtrace}

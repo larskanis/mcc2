@@ -21,8 +21,13 @@ module Mcc2
       @lf = Dialogbox_layoutview.new parent
       @lf.splitter_layoutview.reparent parent, nil
       @lf.dialogbox_layoutview.close
-      @lf.iconlist_objects.appendHeader("Name", nil, 130 * $gui_scale)
-      @lf.iconlist_objects.appendHeader("Typ", nil, 100 * $gui_scale)
+      columns = I18n.t(:columns_object_list, default:
+             [[["Name", 130],
+               ["Typ", 100],
+               ]])
+      columns.each do |name, width|
+        @lf.iconlist_objects.appendHeader(name, nil, width * $gui_scale)
+      end
 
       @lf.splitter_layoutview.setSplit(0, 250 * $gui_scale)
       @lf.splitter12.setSplit(0, 70 * $gui_scale)
@@ -72,10 +77,10 @@ module Mcc2
       @lf.textfield_page_height.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, S_HEIGHT) }
       l = @lf.combobox_datasource_typ
       l.clearItems
-      l.appendItem("keine Daten - statisches Layout", NONE)
-      l.appendItem("CSV-Datei", CSV)
-      l.appendItem("DBF-Datei", DBF)
-      l.appendItem("Datenbank", DATABASE)
+      l.appendItem(I18n.t(:datasource_type_none, default: "keine Daten - statisches Layout"), NONE)
+      l.appendItem(I18n.t(:datasource_type_csv, default: "CSV-Datei"), CSV)
+      l.appendItem(I18n.t(:datasource_type_dbf, default: "DBF-Datei"), DBF)
+      l.appendItem(I18n.t(:datasource_type_database, default: "Datenbank"), DATABASE)
       l.connect(SEL_COMMAND) do
         value = @lf.combobox_datasource_typ.getItemData(@lf.combobox_datasource_typ.currentItem)
         attr_changed(S_DATASOURCETYP, value)
@@ -232,7 +237,7 @@ module Mcc2
       (0...CHIPPARAM_FIELD_COUNT).each do |i|
         FX::Label.new(matrix_chipparams) do |w|
           w.wdg_name = "label_chipparam_#{i}"
-          w.text = ["Parameter", i + 1].join(" ")
+          w.text = [I18n.t(:chipparam_label, default: "Parameter"), i].join(" ")
           w.font = FX::Font.new.from_s("Helvetica|80|40|5|0|0|0").to_FXFont
         end
         tf = FX::TextField.new(matrix_chipparams, LAYOUT_FILL_X) do |w|
@@ -369,7 +374,7 @@ module Mcc2
     # trägt diese in das Textfeld für die Farbangabe ein
     # zeichnet anschließend die Vorschau neu
     def text_color_dialog(textfield)
-      cdlg = FXColorDialog.new(@parent, "Textfarbe")
+      cdlg = FXColorDialog.new(@parent, I18n.t(:text_color_dialog_caption, default: "Textfarbe"))
       if cdlg.execute > 0 && textfield.text != cdlg.rgba
         s = cdlg.rgba.to_i.to_s(16)
         textfield.setText([s[6, 2], s[4, 2], s[2, 2], s[0, 2]].join, true)
@@ -595,7 +600,7 @@ module Mcc2
         bc = @lf.listbox_barcode_typ.getItemText(@lf.listbox_barcode_typ.currentItem)
         @layout_file.set_object_by_ids(@selected_object_ids, GOA_BARCODE_TYP, bc)
       else
-        raise "unbekannter Sender. Eingriff des Programmierers nötig. :-("
+        raise "unknown sender. Programmers fault. :-("
       end
       changed_attributes if changed
     end
@@ -615,7 +620,7 @@ module Mcc2
       # den gewählten Parameter in den entsprechenden Listen markieren
       bc_typ = obj[GOA_BARCODE_TYP]
       bc_id = @barcodes.index(bc_typ.to_sym)
-      FXFehlerAuswahlDialog.new(@parent.app, "Der Barcode-Typ #{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes. Der Wert wird auf 'NONE' gesetzt.", ["&OK"]) unless bc_id
+      FXFehlerAuswahlDialog.new(@parent.app, I18n.t(:barcode_is_not_avaliable, default: "Der Barcode-Typ %{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes. Der Wert wird auf 'NONE' gesetzt.", bc_typ: ), [I18n.t(:ok_button, default: "&OK")]) unless bc_id
       @lf.listbox_barcode_typ.currentItem = bc_id if bc_id
     end
 
@@ -625,8 +630,8 @@ module Mcc2
       rmfl = Magick.fonts.map { |mf| mf.name }
       rmfl.sort!
       @lf.listbox_fonts.clearItems
-      @lf.listbox_fonts.appendItem("Bitte auswählen")
-      idx = @lf.listbox_fonts.appendItem("aus Font-Datei") # humanreadable
+      @lf.listbox_fonts.appendItem(I18n.t(:font_selection_please_select_entry, default: "Bitte auswählen"))
+      idx = @lf.listbox_fonts.appendItem(I18n.t(:font_selection_from_file, default: "aus Font-Datei")) # humanreadable
       @lf.listbox_fonts.setItemData(idx, "from_file")      # font name or file
 
       rmfl.each do |rmf|
@@ -728,8 +733,8 @@ module Mcc2
           "'#{obj[GOA_NAME]}'"
         end
         nn = names.join(", ")
-        s = "Wollen Sie wirklich #{(names.size > 1) ? "die Objekte" : "das Objekt"} #{nn} löschen?\nDieser Vorgang lässt sich nicht rückgängig machen!"
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, s, ["&Löschen", "&Abbrechen"])
+        s = I18n.t(:delete_object_confirmation, default: "Wollen Sie wirklich %{count} %{nameslist} löschen?\nDieser Vorgang lässt sich nicht rückgängig machen!", count: names.size, nameslist: nn)
+        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, s, [I18n.t(:delete_button, default: "&Löschen"), I18n.t(:cancel_button, default: "&Abbrechen")])
         error_WahlMessage.execute
         if error_WahlMessage.selection == 0
           @layout_file.delete_objects(@selected_object_ids)
@@ -760,7 +765,7 @@ module Mcc2
     def fill_objectlist
       # Objekt-Liste leeren
       @lf.iconlist_objects.clearItems
-      @lf.iconlist_objects.appendItem(["", "Job-Einstellungen"].join("\t"), nil, nil, JobSetupObjID)
+      @lf.iconlist_objects.appendItem(["", I18n.t(:objectlist_job_settings, default: "Job-Einstellungen")].join("\t"), nil, nil, JobSetupObjID)
 
       if @layout_file
         # Array mit sortierten Objekt-ID's holen

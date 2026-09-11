@@ -14,8 +14,8 @@ class MainWindow
         @mainWindow = w_mainWindow
         w_mainWindow.wdg_name = "mainWindow"
         w_mainWindow.shown = true
-        w_mainWindow.x = 318
-        w_mainWindow.y = 909
+        w_mainWindow.x = 885
+        w_mainWindow.y = 1569
         w_mainWindow.width = 340
         w_mainWindow.height = 246
         FX::MenuBar.new(@mainWindow) { |w_menubar|
@@ -30,15 +30,17 @@ class MainWindow
             w_menutitle_datei.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
             w_menutitle_datei.x = 3
             w_menutitle_datei.y = 2
-            w_menutitle_datei.width = 39
+            w_menutitle_datei.width = 44
             w_menutitle_datei.height = 20
-            w_menutitle_datei.text = I18n.t("menutitle_datei_text", scope: "mainWindow", default: "Datei")
+            w_menutitle_datei.text = I18n.t("menutitle_datei_text", scope: "mainWindow", default: "_Datei")
             w_menutitle_datei.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
             FX::MenuPane.new(@menutitle_datei) { |w_menupane_datei|
               @menupane_datei = w_menupane_datei
               w_menupane_datei.wdg_name = "menupane_datei"
-              w_menupane_datei.x = 320
-              w_menupane_datei.y = 931
+              w_menupane_datei.x = 817
+              w_menupane_datei.y = 1262
+              w_menupane_datei.width = 193
+              w_menupane_datei.height = 132
               w_menupane_datei.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               FX::MenuCommand.new(@menupane_datei) { |w_mcmd_new|
                 @mcmd_new = w_mcmd_new
@@ -47,7 +49,7 @@ class MainWindow
                 w_mcmd_new.img = "mcc2/images/document-new.png"
                 w_mcmd_new.x = 2
                 w_mcmd_new.y = 2
-                w_mcmd_new.width = 0
+                w_mcmd_new.width = 189
                 w_mcmd_new.height = 21
                 w_mcmd_new.accelText = I18n.t("mcmd_new_accelText", scope: "mainWindow", default: "Ctrl+N")
                 w_mcmd_new.text = I18n.t("mcmd_new_text", scope: "mainWindow", default: "_Neu")
@@ -60,7 +62,7 @@ class MainWindow
                 w_mcmd_open.img = "mcc2/images/document-open.png"
                 w_mcmd_open.x = 2
                 w_mcmd_open.y = 23
-                w_mcmd_open.width = 0
+                w_mcmd_open.width = 189
                 w_mcmd_open.height = 21
                 w_mcmd_open.accelText = I18n.t("mcmd_open_accelText", scope: "mainWindow", default: "Ctrl+O")
                 w_mcmd_open.text = I18n.t("mcmd_open_text", scope: "mainWindow", default: "_Öffnen")
@@ -73,7 +75,7 @@ class MainWindow
                 w_mcmd_save.img = "mcc2/images/document-save.png"
                 w_mcmd_save.x = 2
                 w_mcmd_save.y = 44
-                w_mcmd_save.width = 0
+                w_mcmd_save.width = 189
                 w_mcmd_save.height = 21
                 w_mcmd_save.accelText = I18n.t("mcmd_save_accelText", scope: "mainWindow", default: "Ctrl+S")
                 w_mcmd_save.text = I18n.t("mcmd_save_text", scope: "mainWindow", default: "_Speichern")
@@ -86,7 +88,7 @@ class MainWindow
                 w_mcmd_save_as.img = "mcc2/images/document-save-as.png"
                 w_mcmd_save_as.x = 2
                 w_mcmd_save_as.y = 65
-                w_mcmd_save_as.width = 0
+                w_mcmd_save_as.width = 189
                 w_mcmd_save_as.height = 21
                 w_mcmd_save_as.accelText = I18n.t("mcmd_save_as_accelText", scope: "mainWindow", default: "Shift-Ctrl-S")
                 w_mcmd_save_as.text = I18n.t("mcmd_save_as_text", scope: "mainWindow", default: "Speichern _unter")
@@ -99,7 +101,7 @@ class MainWindow
                 w_mcmd_close.img = "mcc2/images/document-close.png"
                 w_mcmd_close.x = 2
                 w_mcmd_close.y = 86
-                w_mcmd_close.width = 0
+                w_mcmd_close.width = 189
                 w_mcmd_close.height = 21
                 w_mcmd_close.accelText = I18n.t("mcmd_close_accelText", scope: "mainWindow", default: "Ctrl+W")
                 w_mcmd_close.text = I18n.t("mcmd_close_text", scope: "mainWindow", default: "Schließ_en")
@@ -110,7 +112,7 @@ class MainWindow
                 w_menuseparator1.wdg_name = "menuseparator1"
                 w_menuseparator1.x = 2
                 w_menuseparator1.y = 107
-                w_menuseparator1.width = 0
+                w_menuseparator1.width = 189
                 w_menuseparator1.height = 2
                 w_menuseparator1.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               }
@@ -121,7 +123,7 @@ class MainWindow
                 w_mcmd_exit.img = "mcc2/images/application-exit.png"
                 w_mcmd_exit.x = 2
                 w_mcmd_exit.y = 109
-                w_mcmd_exit.width = 0
+                w_mcmd_exit.width = 189
                 w_mcmd_exit.height = 21
                 w_mcmd_exit.accelText = I18n.t("mcmd_exit_accelText", scope: "mainWindow", default: "Alt+F4")
                 w_mcmd_exit.text = I18n.t("mcmd_exit_text", scope: "mainWindow", default: "_Beenden")
@@ -133,7 +135,7 @@ class MainWindow
             @menutitle_edit = w_menutitle_edit
             w_menutitle_edit.wdg_name = "menutitle_edit"
             w_menutitle_edit.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-            w_menutitle_edit.x = 46
+            w_menutitle_edit.x = 51
             w_menutitle_edit.y = 2
             w_menutitle_edit.width = 74
             w_menutitle_edit.height = 20
@@ -142,8 +144,10 @@ class MainWindow
             FX::MenuPane.new(@menutitle_edit) { |w_menupane_edit|
               @menupane_edit = w_menupane_edit
               w_menupane_edit.wdg_name = "menupane_edit"
-              w_menupane_edit.x = 363
-              w_menupane_edit.y = 931
+              w_menupane_edit.x = 860
+              w_menupane_edit.y = 1262
+              w_menupane_edit.width = 156
+              w_menupane_edit.height = 67
               w_menupane_edit.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               FX::MenuCommand.new(@menupane_edit) { |w_mcmd_cut|
                 @mcmd_cut = w_mcmd_cut
@@ -152,7 +156,7 @@ class MainWindow
                 w_mcmd_cut.img = "mcc2/images/cut.png"
                 w_mcmd_cut.x = 2
                 w_mcmd_cut.y = 2
-                w_mcmd_cut.width = 0
+                w_mcmd_cut.width = 152
                 w_mcmd_cut.height = 21
                 w_mcmd_cut.accelText = I18n.t("mcmd_cut_accelText", scope: "mainWindow", default: "Ctrl+X")
                 w_mcmd_cut.text = I18n.t("mcmd_cut_text", scope: "mainWindow", default: "_Ausschneiden")
@@ -165,7 +169,7 @@ class MainWindow
                 w_mcmd_copy.img = "mcc2/images/copy.png"
                 w_mcmd_copy.x = 2
                 w_mcmd_copy.y = 23
-                w_mcmd_copy.width = 0
+                w_mcmd_copy.width = 152
                 w_mcmd_copy.height = 21
                 w_mcmd_copy.accelText = I18n.t("mcmd_copy_accelText", scope: "mainWindow", default: "Ctrl+C")
                 w_mcmd_copy.text = I18n.t("mcmd_copy_text", scope: "mainWindow", default: "_Kopieren")
@@ -178,7 +182,7 @@ class MainWindow
                 w_mcmd_paste.img = "mcc2/images/paste.png"
                 w_mcmd_paste.x = 2
                 w_mcmd_paste.y = 44
-                w_mcmd_paste.width = 0
+                w_mcmd_paste.width = 152
                 w_mcmd_paste.height = 21
                 w_mcmd_paste.accelText = I18n.t("mcmd_paste_accelText", scope: "mainWindow", default: "Ctrl+V")
                 w_mcmd_paste.text = I18n.t("mcmd_paste_text", scope: "mainWindow", default: "_Einfügen")
@@ -190,17 +194,19 @@ class MainWindow
             @menutitle_object = w_menutitle_object
             w_menutitle_object.wdg_name = "menutitle_object"
             w_menutitle_object.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-            w_menutitle_object.x = 124
+            w_menutitle_object.x = 129
             w_menutitle_object.y = 2
-            w_menutitle_object.width = 47
+            w_menutitle_object.width = 87
             w_menutitle_object.height = 20
-            w_menutitle_object.text = I18n.t("menutitle_object_text", scope: "mainWindow", default: "Objekt")
+            w_menutitle_object.text = I18n.t("menutitle_object_text", scope: "mainWindow", default: "Neues _Objekt")
             w_menutitle_object.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
             FX::MenuPane.new(@menutitle_object) { |w_menupane_object|
               @menupane_object = w_menupane_object
               w_menupane_object.wdg_name = "menupane_object"
-              w_menupane_object.x = 441
-              w_menupane_object.y = 931
+              w_menupane_object.x = 943
+              w_menupane_object.y = 1262
+              w_menupane_object.width = 127
+              w_menupane_object.height = 109
               w_menupane_object.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               FX::MenuCommand.new(@menupane_object) { |w_mcmd_text|
                 @mcmd_text = w_mcmd_text
@@ -209,7 +215,7 @@ class MainWindow
                 w_mcmd_text.img = "mcc2/images/insert-text.png"
                 w_mcmd_text.x = 2
                 w_mcmd_text.y = 2
-                w_mcmd_text.width = 0
+                w_mcmd_text.width = 123
                 w_mcmd_text.height = 21
                 w_mcmd_text.accelText = I18n.t("mcmd_text_accelText", scope: "mainWindow", default: "Ctrl+T")
                 w_mcmd_text.text = I18n.t("mcmd_text_text", scope: "mainWindow", default: "_Text")
@@ -222,7 +228,7 @@ class MainWindow
                 w_mcmd_barcode.img = "mcc2/images/measure.png"
                 w_mcmd_barcode.x = 2
                 w_mcmd_barcode.y = 23
-                w_mcmd_barcode.width = 0
+                w_mcmd_barcode.width = 123
                 w_mcmd_barcode.height = 21
                 w_mcmd_barcode.accelText = I18n.t("mcmd_barcode_accelText", scope: "mainWindow", default: "Ctrl+B")
                 w_mcmd_barcode.text = I18n.t("mcmd_barcode_text", scope: "mainWindow", default: "_Barcode")
@@ -235,7 +241,7 @@ class MainWindow
                 w_mcmd_picture.img = "mcc2/images/insert-image.png"
                 w_mcmd_picture.x = 2
                 w_mcmd_picture.y = 44
-                w_mcmd_picture.width = 0
+                w_mcmd_picture.width = 123
                 w_mcmd_picture.height = 21
                 w_mcmd_picture.accelText = I18n.t("mcmd_picture_accelText", scope: "mainWindow", default: "Ctrl+i")
                 w_mcmd_picture.text = I18n.t("mcmd_picture_text", scope: "mainWindow", default: "B_ild")
@@ -248,7 +254,7 @@ class MainWindow
                 w_mcmd_box.img = "mcc2/images/draw-rectangle.png"
                 w_mcmd_box.x = 2
                 w_mcmd_box.y = 65
-                w_mcmd_box.width = 0
+                w_mcmd_box.width = 123
                 w_mcmd_box.height = 21
                 w_mcmd_box.text = I18n.t("mcmd_box_text", scope: "mainWindow", default: "_Rahmen")
                 w_mcmd_box.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
@@ -260,7 +266,7 @@ class MainWindow
                 w_mcmd_embed.img = "mcc2/images/libreoffice-oasis-master-document.png"
                 w_mcmd_embed.x = 2
                 w_mcmd_embed.y = 86
-                w_mcmd_embed.width = 0
+                w_mcmd_embed.width = 123
                 w_mcmd_embed.height = 21
                 w_mcmd_embed.text = I18n.t("mcmd_embed_text", scope: "mainWindow", default: "_Layout-X-fach")
                 w_mcmd_embed.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
@@ -271,17 +277,19 @@ class MainWindow
             @menutitle_window = w_menutitle_window
             w_menutitle_window.wdg_name = "menutitle_window"
             w_menutitle_window.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-            w_menutitle_window.x = 175
+            w_menutitle_window.x = 220
             w_menutitle_window.y = 2
-            w_menutitle_window.width = 51
+            w_menutitle_window.width = 56
             w_menutitle_window.height = 20
-            w_menutitle_window.text = I18n.t("menutitle_window_text", scope: "mainWindow", default: "Fenster")
+            w_menutitle_window.text = I18n.t("menutitle_window_text", scope: "mainWindow", default: "_Fenster")
             w_menutitle_window.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
             FX::MenuPane.new(@menutitle_window) { |w_menupane_window|
               @menupane_window = w_menupane_window
               w_menupane_window.wdg_name = "menupane_window"
-              w_menupane_window.x = 492
-              w_menupane_window.y = 931
+              w_menupane_window.x = 1104
+              w_menupane_window.y = 1591
+              w_menupane_window.width = 102
+              w_menupane_window.height = 67
               w_menupane_window.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               FX::MenuCommand.new(@menupane_window) { |w_mcmd_horizontal|
                 @mcmd_horizontal = w_mcmd_horizontal
@@ -290,7 +298,7 @@ class MainWindow
                 w_mcmd_horizontal.img = "mcc2/images/distribute-vertical-baseline.png"
                 w_mcmd_horizontal.x = 2
                 w_mcmd_horizontal.y = 2
-                w_mcmd_horizontal.width = 0
+                w_mcmd_horizontal.width = 98
                 w_mcmd_horizontal.height = 21
                 w_mcmd_horizontal.text = I18n.t("mcmd_horizontal_text", scope: "mainWindow", default: "_Horizontal")
                 w_mcmd_horizontal.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
@@ -302,7 +310,7 @@ class MainWindow
                 w_mcmd_vertical.img = "mcc2/images/distribute-horizontal-baseline.png"
                 w_mcmd_vertical.x = 2
                 w_mcmd_vertical.y = 23
-                w_mcmd_vertical.width = 0
+                w_mcmd_vertical.width = 98
                 w_mcmd_vertical.height = 21
                 w_mcmd_vertical.text = I18n.t("mcmd_vertical_text", scope: "mainWindow", default: "_Vertikal")
                 w_mcmd_vertical.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
@@ -314,7 +322,7 @@ class MainWindow
                 w_mcmd_cascade.img = "mcc2/images/exchange-positions.png"
                 w_mcmd_cascade.x = 2
                 w_mcmd_cascade.y = 44
-                w_mcmd_cascade.width = 0
+                w_mcmd_cascade.width = 98
                 w_mcmd_cascade.height = 21
                 w_mcmd_cascade.text = I18n.t("mcmd_cascade_text", scope: "mainWindow", default: "_Kaskade")
                 w_mcmd_cascade.shadowColor = Fox::FXRGBA(128, 128, 128, 255)

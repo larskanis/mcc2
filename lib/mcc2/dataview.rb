@@ -118,7 +118,7 @@ module Mcc2
           end
 
           update_preview
-          @parent.app.show_on_statusline "#{@dataman.rows.length} Datensätze geladen"
+          @parent.app.show_on_statusline I18n.t(:dataman_loaded_records, default: "%{count} Datensätze geladen", count: @dataman.rows.length)
         end
       end
     end
@@ -181,10 +181,12 @@ module Mcc2
         end
       end
       if first_finding
-        @parent.app.show_on_statusline "kein #{"weiterer" if finding_count > 0} Datensatz gefunden"
+        @parent.app.show_on_statusline(finding_count > 0 ?
+            I18n.t(:dataman_no_further_record, default: "kein weiterer Datensatz gefunden") :
+            I18n.t(:dataman_no_record, default: "kein Datensatz gefunden"))
       else
-        curr_text = "aktueller Datensatz: #{@search_pos + 1}" if @search_pos >= 0
-        @parent.app.show_on_statusline "#{finding_count} Datensätze gefunden \n- #{curr_text}"
+        curr_text = I18n.t(:dataman_current_record, default: "aktueller Datensatz: %{recno}", recno: @search_pos + 1) if @search_pos >= 0
+        @parent.app.show_on_statusline I18n.t(:dataman_found_n_records, default: "%{finding_count} Datensätze gefunden \n- %{curr_text}", finding_count:, curr_text:)
       end
       enable_disable_print_select_button(finding_count > 0)
     end
@@ -192,7 +194,7 @@ module Mcc2
 
     def set_label_selected(count = nil)
       count ||= @iconlist_data.inject(0) { |s, i| (s + i.selected?) ? 1 : 0 }
-      @parent.app.show_on_statusline "#{count} Datensätze markiert"
+      @parent.app.show_on_statusline I18n.t(:dataman_n_records_marked, default: "%{count} Datensätze markiert", count: )
     end
 
     def print_list_selection_changed
@@ -278,7 +280,7 @@ module Mcc2
           erg = printer.print_card(layout_file, item, chip)
 
           @parent.runOnUiThread do
-            @parent.app.show_on_statusline "#{itemidx + 1} von #{marked_items.length} Datensätzen gedruckt"
+            @parent.app.show_on_statusline I18n.t(:dataman_records_printed, default: "%{recno} von %{of} Datensätzen gedruckt", recno: itemidx + 1, of: marked_items.length)
             # den aktuellen Datensatz deselektieren, wenn er erfolgreich gedruckt wurde
             begin
               @iconlist_data.deselectItem(itemidx) if erg
@@ -295,12 +297,12 @@ module Mcc2
         end
       rescue Printer::Base::PrintError => e
         @parent.runOnUiThread do
-          FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen eines Grafikobjekts", e.to_s)
+          FXMessageBox.error(@parent.app, MBOX_OK, *I18n.t(:dataman_error_printing_object, default: [["Fehler beim Erstellen eines Grafikobjekts", "%{e}"]], e: e.to_s))
         end
       rescue Exception => e
         DebugTools.write_exception("print_card_thread", e)
         @parent.runOnUiThread do
-          FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Erstellen des Druckbildes", DebugTools.unkown_error_message(e))
+          FXMessageBox.error(@parent.app, MBOX_OK, *I18n.t(:dataman_error_printing_exception, default: [["Fehler beim Erstellen des Druckbildes", "%{e}"]], e: DebugTools.unkown_error_message(e)))
         end
       ensure
         @printing = false

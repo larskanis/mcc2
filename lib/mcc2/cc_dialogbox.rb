@@ -6,7 +6,7 @@ module Mcc2
 
     def initialize(owner, message, buttonlist)
       # Invoke base class initialize function first
-      super(owner, "Modusauswahl (bitte unterstrichenen Buchstabe drücken)", DECOR_TITLE | DECOR_BORDER)
+      super(owner, I18n.t(:question_dialog_caption, default: "Modusauswahl (bitte unterstrichenen Buchstabe drücken)"), DECOR_TITLE | DECOR_BORDER)
 
       # Bottom buttons
       FXVerticalFrame.new(self,

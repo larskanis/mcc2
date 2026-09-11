@@ -7,8 +7,8 @@ module Mcc2
 
     PrinterDescription = Struct.new :human_name, :class_name, :tab_idx
     PrinterDescriptions = [
-      PrinterDescription.new("normaler Windows-Drucker", "GdiPrinter", 0),
-      PrinterDescription.new("als Bild speichern", "FilePrinter", 1),
+      PrinterDescription.new("Windows-Printer", "GdiPrinter", 0),
+      PrinterDescription.new("Save as Image", "FilePrinter", 1),
       PrinterDescription.new("Linux-CUPS", "LinuxCupsPrinter", 2),
       PrinterDescription.new("XID-440", "PrinterXID", 3),
       PrinterDescription.new("Zebra", "PrinterZebra", 4),
@@ -111,9 +111,9 @@ module Mcc2
       @spinner_cx320_printer_nr.connect(SEL_COMMAND) {
         changed_attributes if @layout_file.set_attr_value(S_CX320_PRINTER_NR, @spinner_cx320_printer_nr.value.to_s)
       }
-      @combobox_cx320_parallel_print.appendItem("Ein", "on")
-      @combobox_cx320_parallel_print.appendItem("Aus", "off")
-      @combobox_cx320_parallel_print.appendItem("ab zweiter Karte", "second_card")
+      @combobox_cx320_parallel_print.appendItem(I18n.t(:on, default: "Ein"), "on")
+      @combobox_cx320_parallel_print.appendItem(I18n.t(:off, default: "Aus"), "off")
+      @combobox_cx320_parallel_print.appendItem(I18n.t(:cx320_from_second_card, default: "ab zweiter Karte"), "second_card")
       @combobox_cx320_parallel_print.connect(SEL_COMMAND) { combobox_changed(@combobox_cx320_parallel_print, S_CX320_PARALLEL_PRINT) }
 
       @button_cx320_reset.connect(SEL_COMMAND) { cx320_run_command { |printer, dev| dev.rezero_unit } }
@@ -214,7 +214,7 @@ module Mcc2
     end
 
     def selected_GdiPrinter(combobox = @combobox_gdi_printer, attr = S_GDIPRINTER_NAME)
-      if_driver_loadable("win32api4ruby", "win32api4ruby", "die Windows-Druckerschnittstelle", verify_code: "Win32api4ruby::Winspool") do
+      if_driver_loadable("win32api4ruby", "win32api4ruby", I18n.t(:gdi_printer_driver_load_caption, default: "die Windows-Druckerschnittstelle"), verify_code: "Win32api4ruby::Winspool") do
         Win32api4ruby::Base.unicode = true
 
         combobox.clearItems
@@ -245,7 +245,7 @@ module Mcc2
         begin
           devmod = Win32api4ruby::Winspool.document_properties(nil, nil, prname.to_s_win32, initdata, flags)
         rescue => e
-          FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Einrichten des Druckers", e.to_s)
+          FXMessageBox.error(@parent.app, MBOX_OK, I18n.t(:gdi_printer_error_at_setup, default: "Fehler beim Einrichten des Druckers"), e.to_s)
         end
         if devmod
           changed_attributes if @layout_file.set_binary_attr(attr, devmod.pointer.read_bytes(devmod.pointer.size))
@@ -269,14 +269,14 @@ module Mcc2
         printer.close_handle
       end
     rescue => e
-      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Senden des Kommandos '#{command}' an den Drucker:", "#{e}\n\n#{e.backtrace.join("\n")}")
+      FXMessageBox.error(@parent.app, MBOX_OK, *I18n.t(:zebra_printer_error_send_cmd, default: [["Fehler beim Senden des Kommandos '%{command}' an den Drucker:", "%{e}\n\n%{backtrace}"]], command:, e:, backtrace: e.backtrace.join("\n")))
     end
 
     def selected_FilePrinter
     end
 
     def selected_LinuxCupsPrinter
-      if_driver_loadable("ffi-cups", "ffi-cups", "die Linux-Druckerschnittstelle (also libcups2)") do
+      if_driver_loadable("ffi-cups", "ffi-cups", I18n.t(:linux_cups_printer_driver_load_caption, default: "die Linux-Druckerschnittstelle (also libcups2)")) do
         combobox = @combobox_linux_printer
         combobox.clearItems
 
@@ -308,7 +308,7 @@ module Mcc2
     end
 
     def selected_PrinterZebra
-      if_driver_loadable("zebra_dll", "zebra_dll", "Zebra-Drucker") do
+      if_driver_loadable("zebra_dll", "zebra_dll", I18n.t(:zebra_printer_driver_load_caption, default: "Zebra-Drucker")) do
         selected_GdiPrinter(@combobox_zebra_printer, S_ZEBRAPRINTER_NAME)
       end
     end
@@ -323,13 +323,13 @@ module Mcc2
     end
 
     def selected_PrinterCx320Direct
-      if_driver_loadable("libcx320", "libcx320", "CX320-Drucker") do
+      if_driver_loadable("libcx320", "libcx320", I18n.t(:cx320_printer_driver_load_caption, default: "CX320-Drucker")) do
         cx320_update_config_widgets
       end
     end
 
     def selected_PrinterCx320Gdi
-      if_driver_loadable("libcx320", "libcx320", "CX320-Drucker") do
+      if_driver_loadable("libcx320", "libcx320", I18n.t(:cx320_printer_driver_load_caption, default: "CX320-Drucker")) do
         #       selected_GdiPrinter(@combobox_zebra_printer, S_ZEBRAPRINTER_NAME)
       end
     end
@@ -339,7 +339,7 @@ module Mcc2
       require require_name
       eval(verify_code) if verify_code
     rescue LoadError, RuntimeError => e
-      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Laden des Treibers für #{human_name}", "Der Treiber für #{human_name} konnte nicht geladen werden.\nBitte stellen Sie sicher, dass das Gem-Paket '#{gem_name}' installiert ist.\n\n#{e.to_s.force_encoding("UTF-8")}")
+      FXMessageBox.error(@parent.app, MBOX_OK, *I18n.t(:printer_driver_load_error, default: [["Fehler beim Laden des Treibers für %{human_name}", "Der Treiber für %{human_name} konnte nicht geladen werden.\nBitte stellen Sie sicher, dass das Gem-Paket '%{gem_name}' installiert ist.\n\n%{e}"]], human_name:, gem_name:, e: e.to_s.force_encoding("UTF-8")))
     else
       yield
     end
@@ -349,7 +349,7 @@ module Mcc2
       @text_cab_output.text = cab.send_command(@layout_file, data, &).to_s
     rescue => e
       DebugTools.write_exception("cab_send_command", e)
-      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Senden", "Das Kommando konnte nicht ausgeführt werden\nBitte stellen Sie sicher, dass die Verbindungsparameter korrekt sind.\n\n" + e.to_s)
+      FXMessageBox.error(@parent.app, MBOX_OK, *I18n.t(:cab_send_command_error, default: [["Fehler beim Senden", "Das Kommando konnte nicht ausgeführt werden\nBitte stellen Sie sicher, dass die Verbindungsparameter korrekt sind.\n\n%{e}"]], e: e.to_s))
     end
 
     def cx320_run_command(&block)
@@ -360,7 +360,7 @@ module Mcc2
       end
     rescue => e
       DebugTools.write_exception("cx320_run_command", e)
-      FXMessageBox.error(@parent.app, MBOX_OK, "Fehler beim Senden", "Das Kommando konnte nicht ausgeführt werden.\n\n#{e}")
+      FXMessageBox.error(@parent.app, MBOX_OK, *I18n.t(:cx320_send_command_error, default: [["Fehler beim Senden", "Das Kommando konnte nicht ausgeführt werden\n\n%{e}"]], e: e.to_s))
     end
 
     def cx320_move_to(pos)
