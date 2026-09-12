@@ -50,21 +50,21 @@ module Mcc2
             @dataview.dataview_tab_activated(event == 2)
           end
           FX::TabItem.new(tabbook) do |tabitem_layoutview|
-            tabitem_layoutview.text = "&Entwurf"
+            tabitem_layoutview.text = I18n.t(:tab_layout_header, default: "&Entwurf")
             tabitem_layoutview.img = "mcc2/images/document-edit.png"
           end
           FXVerticalFrame.new(tabbook) do |frame_layoutview|
             @layoutview = Layoutview.new frame_layoutview, self
           end
           FX::TabItem.new(tabbook) do |tabitem_printerview|
-            tabitem_printerview.text = "D&rucker"
+            tabitem_printerview.text = I18n.t(:tab_printer_header, default: "D&rucker")
             tabitem_printerview.img = "mcc2/images/document-print.png"
           end
           FXVerticalFrame.new(tabbook) do |frame_printerview|
             @printerview = Printerview.new frame_printerview, self
           end
           FX::TabItem.new(tabbook) do |tabitem_dataview|
-            tabitem_dataview.text = "Da&ten"
+            tabitem_dataview.text = I18n.t(:tab_data_header, default: "Da&ten")
             tabitem_dataview.img = "mcc2/images/documentation.png"
           end
           FXVerticalFrame.new(tabbook) do |frame_dataview|
@@ -245,7 +245,7 @@ module Mcc2
     end
 
     def add_tipText_to_filedialog_for_textfield(textfield)
-      textfield.tipText += <<~EOT
+      textfield.tipText += I18n.t(:filepath_textfield_tip, default: <<~EOT)
         Folgende Ersetzungszeichen können verwendet werden:
         %D  - Pfad der aktuellen Layoutdatei
         %F  - Name der aktuellen Layoutdatei ohne ".mcc2"

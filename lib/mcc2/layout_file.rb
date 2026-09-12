@@ -209,11 +209,11 @@ PRINT 1
       @xml_doc.root["version"] ||= "1"
       filever = @xml_doc.root["version"].to_i
       unless FILE_VERSION_RANGE.include?(filever)
-        raise InvalidFileVersion, "Die Datei #{filename.inspect} ist nach Version #{filever} aufgebaut, dieses Programm kann aber nur die Versionen #{FILE_VERSION_RANGE.inspect} verarbeiten"
+        raise InvalidFileVersion, I18n.t(:open_layout_version_error, default: "Die Datei %{filename} ist nach Version %{filever} aufgebaut, dieses Programm kann aber nur die Versionen %{supported} verarbeiten", filename: filename.inspect, filever: , supported: FILE_VERSION_RANGE.inspect)
       end
 
       if filever == 1 && have_barcode_objects?
-        @warnings << <<~EOT
+        @warnings << I18n.t(:open_layout_old_barby, default: <<~EOT)
           Diese Datei ist noch mit Barby-, statt den neueren Zint-Barcodes aufgebaut.
           Daher müssen alle Barcodes geprüft und ggf. neu justiert werden!
           Diese Warnung entfällt, sobald diese Datei einmal gespeichert wird.
@@ -498,12 +498,12 @@ PRINT 1
       unless DataMan.valid_datasourcetyp?(datasourcetyp)
         default = @attributes[S_DATASOURCETYP].attr_value
         set_attr_value(S_DATASOURCETYP, default)
-        raise WrongDataSourceType, <<~EOTXT
-          Der eingestellte Datenquellentyp '#{datasourcetyp}' ist ungültig.
+        raise WrongDataSourceType, I18n.t(:open_layout_invalid_datasource_type, default: <<~EOTXT, datasourcetyp:, valid_types: VALID_DATASOURCES.join("', '"), new: default )
+          Der eingestellte Datenquellentyp '%{datasourcetyp}' ist ungültig.
 
-          Gültige Werte sind '#{VALID_DATASOURCES.join("', '")}'.
+          Gültige Werte sind '%{valid_types}'.
 
-          Der Wert wird jetzt auf den Standardwert '#{default}'  gesetzt.
+          Der Wert wird jetzt auf den Standardwert '%{new}'  gesetzt.
 
           Bitte stellen Sie in den Layouteigenschaften den korrekten Datenquellentyp
           ein und speichern Sie die Einstellungen.
@@ -518,10 +518,10 @@ PRINT 1
       unless DataMan.valid_datasource_encoding?(datasource_encoding)
         default = "UTF-8"
         set_attr_value(S_DATASOURCEENCODING, default)
-        raise WrongDataSourceEncoding, <<-EOTXT
-        Das eingestellte Encoding der Datenquelle '#{datasource_encoding}' ist ungültig.
+        raise WrongDataSourceEncoding, I18n.t(:open_layout_invalid_datasource_encoding, default: <<-EOTXT, datasource_encoding:, valid_encodings: VALID_ENCODINGS.join("', '"))
+        Das eingestellte Encoding der Datenquelle '%{datasource_encoding}' ist ungültig.
 
-        Gültige Werte sind '#{VALID_ENCODINGS.join("', '")}'.
+        Gültige Werte sind '%{valid_encodings}'.
 
         Bitte stellen Sie in den Layouteigenschaften das korrekte Encoding
         ein und speichern Sie die Einstellungen.

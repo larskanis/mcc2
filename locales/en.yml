@@ -12,7 +12,7 @@ en:
     Please ensure that the connection parameters are correct.
 
     %{e}
-  cancel_button: Abbrechen-Button
+  cancel_button: Cancel
   chipparam_label: Parameter
   columns_object_list:
   - - Name
@@ -57,7 +57,7 @@ en:
   dialogbox_dataview:
     button_datasource_text: "..."
     button_datasource_tipText: Load CSV file via file selection dialog
-    button_deselect_all_text: nothing
+    button_deselect_all_text: none
     button_deselect_all_tipText: remove all record markers
     button_print_all_text: print all
     button_print_all_tipText: Print all records
@@ -70,7 +70,7 @@ en:
     dialogbox_dataview_title: Draft view
     label_datasource_text: Data source
     label_search_text: Search term
-    label_selected_text: Markierten Text beschriften
+    label_selected_text: ""
     textfield_datasource_tipText: |+
       The data file is specified here.
       For a static layout, the number of pages can be specified here.
@@ -86,7 +86,7 @@ en:
     button_copy_tipText: copies the selected object and adopts all properties except the name
     button_delete_text: delete
     button_delete_tipText: Deletes the selected object after confirming a security prompt.
-    button_down_text: down v
+    button_down_text: "down ↓"
     button_down_tipText: This button moves the object up one line.
     button_fontfile_select_text: "..."
     button_move_down_text: "↓"
@@ -118,7 +118,7 @@ en:
     button_spur3_text: "..."
     button_text_color_text: select
     button_text_color_tipText: Here, a color can be selected using a dialog.
-    button_up_text: high
+    button_up_text: "up ↑"
     button_up_tipText: This button moves the object up one line.
     checkbutton_barcode_optimized_text: Optimize for DPI
     checkbutton_barcode_optimized_tipText: |
@@ -126,19 +126,19 @@ en:
       adjust it to the printer resolution.
       In the preview, the adjustment is made
       to the DPI specification above the preview.
-    checkbutton_contact_text: Checkbutton contact text
+    checkbutton_contact_text: ""
     checkbutton_contact_tipText: Activate this check box if a contact chip is to be personalized on the card.
-    checkbutton_contactless_text: Checkbutton contactless text
+    checkbutton_contactless_text: ""
     checkbutton_contactless_tipText: 'Activate this box if a contactless chip is to be personalized for the card. '
-    checkbutton_duplex_text: Checkbutton duplex text
+    checkbutton_duplex_text: ""
     checkbutton_duplex_tipText: Activate this box if the card is to be personalized in duplex.
-    checkbutton_flip_back_text: Mirror X
+    checkbutton_flip_back_text: mirror X
     checkbutton_flip_front_text: mirror X
-    checkbutton_flop_back_text: Y mirror
-    checkbutton_flop_front_text: Y mirror
-    checkbutton_magstripe_text: Checkbutton magstripe text
+    checkbutton_flop_back_text: mirror Y
+    checkbutton_flop_front_text: mirror Y
+    checkbutton_magstripe_text: ""
     checkbutton_magstripe_tipText: Activate this box if the magnetic stripe on the card is to be personalized.
-    checkbutton_printlist_text: Checkbutton printlist text
+    checkbutton_printlist_text: ""
     checkbutton_printlist_tipText: This button currently has no function.
     dialogbox_layoutview_title: Draft view
     label_barcode_height_text: "     Height:"
@@ -158,10 +158,10 @@ en:
     label_box_fill_color_text: Fill color
     label_contact_text: Chip
     label_contactless_text: Contactless
-    label_datasource_encoding_text: Coding
+    label_datasource_encoding_text: Encoding
     label_datasource_typ_text: Data source
     label_duplex_text: Duplex printing
-    label_flip_back_text: Back side
+    label_flip_back_text: Rear
     label_flip_front_text: Front
     label_fonts_text: Font
     label_fontsize_text: Font size
@@ -169,7 +169,7 @@ en:
     label_justify_text: Alignment
     label_layer_text: Layer
     label_magstripe_text: Magnetic stripe
-    label_name_empty_text: Label name empty text
+    label_name_empty_text: ""
     label_name_text: Name
     label_offset_mm_text: " mm"
     label_offset_x_y_text: Offset X/Y
@@ -179,7 +179,7 @@ en:
     label_posit_x_y_text: Position X/Y
     label_printlist_text: Show in print list
     label_rotation_degree_text: "° "
-    label_rotation_empty_text: Label rotation empty text
+    label_rotation_empty_text: ""
     label_rotation_text: Rotation
     label_sample_data_text: Sample data
     label_seiten_nr_text: Page
@@ -208,16 +208,16 @@ en:
     menubutton_sample_data_tipText: |-
       Selecting a file
       (only for image objects)
-    radiobutton_just_l_text: Links
+    radiobutton_just_l_text: Left
     radiobutton_just_l_tipText: Align the text to the left.
-    radiobutton_just_m_text: Mitte
+    radiobutton_just_m_text: Middle
     radiobutton_just_m_tipText: Align the text centrally with the object width.
     radiobutton_just_r_text: Right
     radiobutton_just_r_tipText: Align the text flush right to the object width.
     spinner_barcode_height_tipText: Relationship between barcode height and text height.
     spinner_image_page_tipText: Selection of the page from the inserted image.
     spinner_layer_tipText: The ink ribbon with which the object is to be printed.
-    spinner_seiten_nr_tipText: This value specifies which side of the object is to be printed. For cards, no. 1 is the front and no. 2 is the back. Please note! If duplex printing is not set in the printer driver, 2 cards will be printed.
+    spinner_seiten_nr_tipText: This value specifies which side of the object is to be printed. For cards, no. 1 is the front and no. 2 is the rear. Please note! If duplex printing is not set in the printer driver, 2 cards will be printed.
     tabitem_allgemein_text: General
     tabitem_allgemein_tipText: All general settings that affect the entire layout are made here.
     tabitem_barcode_text: Barcode
@@ -333,11 +333,25 @@ en:
       %d - Record number
       %p - Page number
       %i - Number of the card in the print job
+  embedded_object_dpi_differs: |
+    The barcode DPI in the preview (%{document_dpi}) and %{obj} (%{embedded_obj_dpi}) are different.
+    Please adjust the DPI and recheck the barcodes!
+  embedded_object_not_found: |
+    The layout '%{path}' could not be found.
+  error_generating_barcode: 'Error generating barcode %{data}: %{e}'
   error_loading_layout_file: Error loading file
+  filepath_textfield_tip: |
+    The following replacement characters can be used:
+    %D - Path of the current layout file
+    %F - ​​Name of the current layout file without ".mcc2"
+    ~  - User directory
+    relative path - current directory in which MCC2 was started
+  font_not_found: The font '%{font}' in Object %{obj} could not be found.
   font_selection_from_file: from font file
   font_selection_please_select_entry: Please select
   gdi_printer_driver_load_caption: the Windows printer interface
   gdi_printer_error_at_setup: Error setting up the printer
+  image_not_found: The image '%{path}' could not be found.
   linux_cups_printer_driver_load_caption: the Linux printer interface (i.e. libcups2)
   mainWindow:
     mcmd_barcode_accelText: Ctrl+B
@@ -375,11 +389,50 @@ en:
     menutitle_window_text: _Windows
   new_layout_name: Layout
   objectlist_job_settings: Job Settings
-  'off': From
+  'off': 'Off'
   ok_button: "&OK"
-  'on': A
-  open_layout_file_dialog_caption: Shop
+  'on': 'On'
+  open_layout_file_dialog_caption: Open layout
   open_layout_file_warning: Warning while loading %{filename}
+  open_layout_invalid_datasource_encoding: |
+    The data source encoding set to '%{datasource_encoding}' is invalid.
+
+    Valid values ​​are '%{valid_encodings}'.
+
+    Please set the correct encoding in the layout properties
+    and save the settings.
+  open_layout_invalid_datasource_type: |
+    The data source type '%{datasourcetyp}' is invalid.
+
+    Valid values ​​are '%{valid_types}'.
+
+    The value is now set to the default value '%{new}'.
+
+    Please set the correct data source type in the layout properties
+    and save the settings.
+  open_layout_old_barby: |
+    This file still uses Barby barcodes instead of the newer Zint barcodes.
+
+    Therefore, all barcodes must be checked and, if necessary, readjusted!
+
+    This warning will disappear once the file is saved.
+  open_layout_version_error: The file %{filename} is structured according to version %{filever}, but this program can only process versions %{supported}.
+  preview_error_printing_exception:
+  - Error creating the preview of the layout
+  - "%{e}"
+  preview_error_printing_object:
+  - Error creating a graphic object
+  - "%{e}"
+  preview_keep_updated: Update preview
+  preview_keep_updated_tip: |-
+    If there are errors in the layout settings, the preview can be
+    turned off to avoid multiple warnings.
+  preview_label_zoom_tip: |-
+    Here you can enlarge or reduce the preview. If the
+    actual resolution of the connected screen is set,
+    the preview will appear in its original size.
+  preview_optimize_barcodes: Optimize barcodes to
+  preview_optimize_barcodes_tip: DPI of the printer
   printer_driver_load_error:
   - Error loading the driver for %{human_name}
   - |-
@@ -392,8 +445,11 @@ en:
   save_layout_file_dialog_question:
   - Save file
   - Save file %{filename}?
+  tab_data_header: Da&ta
+  tab_layout_header: "&Layout"
+  tab_printer_header: P&rinter
   text_color_dialog_caption: Text color
-  zebra_printer_driver_load_caption: Zebra printers
+  zebra_printer_driver_load_caption: Zebra printer
   zebra_printer_error_send_cmd:
   - 'Error sending command ''%{command}'' to the printer:'
   - |-

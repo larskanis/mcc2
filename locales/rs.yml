@@ -70,7 +70,7 @@ rs:
     dialogbox_dataview_title: Приказ у изради
     label_datasource_text: Извор података
     label_search_text: Појам за претрагу
-    label_selected_text: Означи изабрани текст
+    label_selected_text:
     textfield_datasource_tipText: |+
       Овде се наводи датотека са подацима.
       Код статичког распореда овде се може навести број страница.

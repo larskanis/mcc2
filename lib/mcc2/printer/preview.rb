@@ -19,7 +19,7 @@ module Mcc2
         FXHorizontalFrame.new(parent, opts: LAYOUT_FILL_X) do |frame1|
           @label_zoom = FXLabel.new(frame1, "") do |label_zoom|
             label_zoom.img = "mcc2/images/zoom-in.png"
-            label_zoom.tipText = "Hier kann die Vorschau vergrößert oder verkleinert werden. Wird die\ntatsächliche Auflösung des angeschlossenen Bildschirms eingestellt,\nerscheint die Vorschau in Originalgröße."
+            label_zoom.tipText = I18n.t(:preview_label_zoom_tip, default: "Hier kann die Vorschau vergrößert oder verkleinert werden. Wird die\ntatsächliche Auflösung des angeschlossenen Bildschirms eingestellt,\nerscheint die Vorschau in Originalgröße.")
           end
           @dial_zoom = FXDial.new(frame1, opts: DIAL_HORIZONTAL | LAYOUT_FIX_WIDTH, width: 100) do |dial_zoom|
             dial_zoom.tipText = @label_zoom.tipText
@@ -28,9 +28,9 @@ module Mcc2
             dial_zoom.value = @parent.app.reg.readRealEntry("settings", "preview_dpi", 90)
             dial_zoom.range = 1..1000
           end
-          FXLabel.new(frame1, "Barcodes optimieren auf")
+          FXLabel.new(frame1, I18n.t(:preview_optimize_barcodes, default: "Barcodes optimieren auf"))
           @textfield_barcode_dpi = FXTextField.new(frame1, 4) do |tf|
-            tf.tipText = "DPI des Druckers"
+            tf.tipText = I18n.t(:preview_optimize_barcodes_tip, default: "DPI des Druckers")
             tf.connect(SEL_COMMAND) do
               @layout_file.set_attr_value(S_BARCODE_DPI, @textfield_barcode_dpi.text.to_f)
               @layout.changed_attributes
@@ -38,8 +38,8 @@ module Mcc2
             end
           end
           FXLabel.new(frame1, "DPI")
-          @checkbutton_continous_update = FXCheckButton.new(frame1, "Vorschau aktuell halten") do |checkbutton|
-            checkbutton.tipText = "Bei Fehlern in den Layout-Einstellungen kann die Vorschau\nabgeschaltet werden, um mehrfache Hinweise zu vermeiden."
+          @checkbutton_continous_update = FXCheckButton.new(frame1, I18n.t(:preview_keep_updated, default: "Vorschau aktuell halten")) do |checkbutton|
+            checkbutton.tipText = I18n.t(:preview_keep_updated_tip, default: "Bei Fehlern in den Layout-Einstellungen kann die Vorschau\nabgeschaltet werden, um mehrfache Hinweise zu vermeiden.")
             checkbutton.connect(SEL_COMMAND) do
               draw_preview(true, @row) if checkbutton.checked?
               @parent.app.reg.writeBoolEntry("settings", "preview_continous_update", checkbutton.checked?)
@@ -234,13 +234,13 @@ module Mcc2
         end
       rescue Printer::Base::PrintError => e
         @parent.runOnUiThread do
-          enable_error_view("Fehler beim Erstellen eines Grafikobjekts", e.to_s)
+          enable_error_view(*I18n.t(:preview_error_printing_object, default: [["Fehler beim Erstellen eines Grafikobjekts", "%{e}"]], e: e.to_s))
         end
         @printing = false
       rescue => e
         DebugTools.write_exception("draw_preview_thread", e)
         @parent.runOnUiThread do
-          enable_error_view("Fehler beim Erstellen der Layoutvorschau", DebugTools.unkown_error_message(e))
+          enable_error_view(*I18n.t(:preview_error_printing_exception, default: [["Fehler beim Erstellen der Layoutvorschau", "%{e}"]], e: DebugTools.unkown_error_message(e)))
         end
       end
 

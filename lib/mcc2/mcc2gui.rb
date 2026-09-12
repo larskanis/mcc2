@@ -183,6 +183,7 @@ module Mcc2
         begin
           child.userData = Layout.new(child, @mdititle, filename: filename, xpath_changes: @xpath_changes, new_file: false)
         rescue LayoutFile::Error => e
+          child.close
           FXMessageBox.error(@topwin.app, MBOX_OK, I18n.t(:error_loading_layout_file, default: "Fehler beim Laden der Datei"), e.to_s)
         else
           if @topwin.created?
