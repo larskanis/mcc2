@@ -280,7 +280,7 @@ module Mcc2
       end.parse!(argv)
 
       begin
-        I18n.locale = language || app.reg.readStringEntry("settings", "language", "de")
+        I18n.locale = language || app.reg.readStringEntry("settings", "language", "en")
 
         w = Mcc2Gui.new(app, $gui_scale)
         options.each do |meth, arg|
