@@ -72,7 +72,7 @@ module Mcc2
       # die Menue-Einträge modifizieren
 
       # Add & accelText to menu captions
-      [@menutitle_datei, @menutitle_edit, @menutitle_object, @menutitle_window].each do |m|
+      [@menutitle_datei, @menutitle_edit, @menutitle_object, @menutitle_language, @menutitle_window].each do |m|
         m.text = m.text.tr("_", "&")
       end
 
