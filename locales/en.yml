@@ -70,7 +70,7 @@ en:
     dialogbox_dataview_title: Draft view
     label_datasource_text: Data source
     label_search_text: Search term
-    label_selected_text: ""
+    label_selected_text: ''
     textfield_datasource_tipText: |+
       The data file is specified here.
       For a static layout, the number of pages can be specified here.
@@ -86,7 +86,7 @@ en:
     button_copy_tipText: copies the selected object and adopts all properties except the name
     button_delete_text: delete
     button_delete_tipText: Deletes the selected object after confirming a security prompt.
-    button_down_text: "down ↓"
+    button_down_text: down v
     button_down_tipText: This button moves the object up one line.
     button_fontfile_select_text: "..."
     button_move_down_text: "↓"
@@ -118,7 +118,7 @@ en:
     button_spur3_text: "..."
     button_text_color_text: select
     button_text_color_tipText: Here, a color can be selected using a dialog.
-    button_up_text: "up ↑"
+    button_up_text: up ^
     button_up_tipText: This button moves the object up one line.
     checkbutton_barcode_optimized_text: Optimize for DPI
     checkbutton_barcode_optimized_tipText: |
@@ -126,19 +126,19 @@ en:
       adjust it to the printer resolution.
       In the preview, the adjustment is made
       to the DPI specification above the preview.
-    checkbutton_contact_text: ""
+    checkbutton_contact_text: ''
     checkbutton_contact_tipText: Activate this check box if a contact chip is to be personalized on the card.
-    checkbutton_contactless_text: ""
+    checkbutton_contactless_text: ''
     checkbutton_contactless_tipText: 'Activate this box if a contactless chip is to be personalized for the card. '
-    checkbutton_duplex_text: ""
+    checkbutton_duplex_text: ''
     checkbutton_duplex_tipText: Activate this box if the card is to be personalized in duplex.
     checkbutton_flip_back_text: mirror X
     checkbutton_flip_front_text: mirror X
     checkbutton_flop_back_text: mirror Y
     checkbutton_flop_front_text: mirror Y
-    checkbutton_magstripe_text: ""
+    checkbutton_magstripe_text: ''
     checkbutton_magstripe_tipText: Activate this box if the magnetic stripe on the card is to be personalized.
-    checkbutton_printlist_text: ""
+    checkbutton_printlist_text: ''
     checkbutton_printlist_tipText: This button currently has no function.
     dialogbox_layoutview_title: Draft view
     label_barcode_height_text: "     Height:"
@@ -156,6 +156,7 @@ en:
       Enable for better readability.
     label_box_corner_radius_text: Corner radius
     label_box_fill_color_text: Fill color
+    label_chip_description_text: All chip parameters are key-value pairs in the form "key=value"
     label_contact_text: Chip
     label_contactless_text: Contactless
     label_datasource_encoding_text: Encoding
@@ -169,7 +170,7 @@ en:
     label_justify_text: Alignment
     label_layer_text: Layer
     label_magstripe_text: Magnetic stripe
-    label_name_empty_text: ""
+    label_name_empty_text: ''
     label_name_text: Name
     label_offset_mm_text: " mm"
     label_offset_x_y_text: Offset X/Y
@@ -179,7 +180,7 @@ en:
     label_posit_x_y_text: Position X/Y
     label_printlist_text: Show in print list
     label_rotation_degree_text: "° "
-    label_rotation_empty_text: ""
+    label_rotation_empty_text: ''
     label_rotation_text: Rotation
     label_sample_data_text: Sample data
     label_seiten_nr_text: Page
@@ -196,15 +197,15 @@ en:
 
       For EAN13 please select "Eanx".
     listbox_fonts_tipText: Here the font can be selected.
-    menubutton_enhanced_data_edit_text: Menubutton enhanced data edit text
+    menubutton_enhanced_data_edit_text: ''
     menubutton_enhanced_data_edit_tipText: |-
       Inserts a data field
       from the selected data source at the cursor position
-    menubutton_enhanced_data_text_edit_text: Menu button enhanced data text edit text
+    menubutton_enhanced_data_text_edit_text: ''
     menubutton_enhanced_data_text_edit_tipText: |-
       Inserts a data field
       from the selected data source at the cursor position
-    menubutton_sample_data_text: Menubutton sample data text
+    menubutton_sample_data_text: ''
     menubutton_sample_data_tipText: |-
       Selecting a file
       (only for image objects)
@@ -221,7 +222,7 @@ en:
     tabitem_allgemein_text: General
     tabitem_allgemein_tipText: All general settings that affect the entire layout are made here.
     tabitem_barcode_text: Barcode
-    tabitem_box_text: Framework
+    tabitem_box_text: Box
     tabitem_chip_text: Chip
     tabitem_chip_tipText: All chip parameters are entered here, regardless of whether the chip encoding actually takes place or not.
     tabitem_font_text: Font
@@ -266,8 +267,8 @@ en:
     button_cab_info_text: Printer Status Query
     button_cab_self_test_text: Start Self Test
     button_cx320_move_to_0_text: to print station
-    button_cx320_move_to_2_text: too contact-free
-    button_cx320_move_to_4_text: Ejection
+    button_cx320_move_to_2_text: to contactless
+    button_cx320_move_to_4_text: Eject
     button_cx320_read_config_text: Read out config
     button_cx320_reset_text: Reset
     button_cx320_set_defaults_text: Default values
@@ -336,8 +337,9 @@ en:
   embedded_object_dpi_differs: |
     The barcode DPI in the preview (%{document_dpi}) and %{obj} (%{embedded_obj_dpi}) are different.
     Please adjust the DPI and recheck the barcodes!
-  embedded_object_not_found: |
-    The layout '%{path}' could not be found.
+  embedded_object_not_found: 'The layout ''%{path}'' could not be found.
+
+    '
   error_generating_barcode: 'Error generating barcode %{data}: %{e}'
   error_loading_layout_file: Error loading file
   filepath_textfield_tip: |
@@ -352,6 +354,16 @@ en:
   gdi_printer_driver_load_caption: the Windows printer interface
   gdi_printer_error_at_setup: Error setting up the printer
   image_not_found: The image '%{path}' could not be found.
+  language_change:
+  - Attention
+  - |
+    Please restart the app to activate
+    the change of the language.
+  language_forced:
+  - Attention
+  - |
+    The language cannot be changed, because it is forced by
+    option `--lang` on the command line!
   linux_cups_printer_driver_load_caption: the Linux printer interface (i.e. libcups2)
   mainWindow:
     mcmd_barcode_accelText: Ctrl+B
@@ -364,7 +376,9 @@ en:
     mcmd_copy_text: _Copy
     mcmd_cut_accelText: Ctrl+X
     mcmd_cut_text: _Cut
+    mcmd_de_text: _Deutsch
     mcmd_embed_text: _Layout-X-fold
+    mcmd_en_text: _English
     mcmd_exit_accelText: Alt+F4
     mcmd_exit_text: _Exit
     mcmd_horizontal_text: _Horizontal
@@ -376,6 +390,7 @@ en:
     mcmd_paste_text: _Insert
     mcmd_picture_accelText: Ctrl+i
     mcmd_picture_text: Image
+    mcmd_rs_text: _српски
     mcmd_save_accelText: Ctrl+S
     mcmd_save_as_accelText: Shift-Ctrl-S
     mcmd_save_as_text: Save _as
@@ -385,6 +400,7 @@ en:
     mcmd_vertical_text: _Vertical
     menutitle_datei_text: _File
     menutitle_edit_text: _Edit
+    menutitle_language_text: _Language
     menutitle_object_text: New _Object
     menutitle_window_text: _Windows
   new_layout_name: Layout
@@ -456,13 +472,3 @@ en:
     %{e}
 
     %{backtrace}
-  language_change:
-  - Attention
-  - |
-    Please restart the app to activate
-    the change of the language.
-  language_forced:
-  - Attention
-  - |
-    The language cannot be changed, because it is forced by
-    option `--lang` on the command line!
