@@ -10,11 +10,11 @@ module Mcc2
     end
 
     def self.unkown_error_message(e)
-      "Es ist leider ein Fehler aufgetreten:\n\n#{e} #{e.class}"
+      I18n.t(:unknwon_error_message, default: "Es ist leider ein Fehler aufgetreten:\n\n%{e} %{klass}", e:, klass: e.class)
     end
 
     def self.write_exception(source, e)
-      write_log_file(source, "Es ist leider ein Fehler aufgetreten:\n\n#{e} (#{e.class})\n#{e.backtrace.join("\n")}")
+      write_log_file(source, I18n.t(:unknwon_error_message_exc, default: "Es ist leider ein Fehler aufgetreten:\n\n%{e} (%{klass})\n%{backtrace}", e:, klass: e.class, backtrace: e.backtrace.join("\n"))
     end
   end
 end
