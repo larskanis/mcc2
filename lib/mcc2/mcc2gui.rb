@@ -156,8 +156,8 @@ module Mcc2
     end
 
     def change_language_to(lang)
-      app.reg.writeStringEntry("SETTINGS", "language", lang)
-      I18n.locale = app.reg.readStringEntry("SETTINGS", "language", "de")
+      app.reg.writeStringEntry("settings", "language", lang)
+      I18n.locale = app.reg.readStringEntry("settings", "language", "de")
       if language
         FXMessageBox.warning(app, MBOX_OK, *I18n.t(:language_forced, default: [["Achtung", "Die Sprache kann nicht geändert werden, denn sie ist über die\nOption `--lang` auf der Kommandozeile gesetzt!"]]))
       else
@@ -284,7 +284,7 @@ module Mcc2
       end.parse!(argv)
 
       begin
-        I18n.locale = language || app.reg.readStringEntry("SETTINGS", "language", "de")
+        I18n.locale = language || app.reg.readStringEntry("settings", "language", "de")
 
         w = Mcc2Gui.new(app, $gui_scale)
         options.each do |meth, arg|
