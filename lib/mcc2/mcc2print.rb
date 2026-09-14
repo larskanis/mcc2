@@ -19,16 +19,11 @@ module Mcc2
     def start!(layout_fname, xpath_changes = {})
       lf = Mcc2::LayoutFile.load_from_xml(layout_fname, @xpath_changes.merge(xpath_changes))
       printer = lf.build_printer_instance
-      chip = lf.build_chip_instance
       dataman = lf.build_dataman_instance
       rows = dataman.rows || [nil]
 
-      begin
-        rows.each do |row|
-          printer.print_card(lf, row, chip)
-        end
-      ensure
-        chip&.close_reader
+      rows.each do |row|
+        printer.print_card(lf, row)
       end
     end
 

@@ -451,7 +451,7 @@ module Mcc2
 
         barcode_dpi2 = layout_file.get_attr_value(S_BARCODE_DPI).to_f
         unless ((barcode_dpi - 0.01)..(barcode_dpi + 0.01)) === barcode_dpi2
-          raise Printer::Base::DpiDoesntMatch, I18n.t(:embedded_object_dpi_differs, default: "Barcode-DPI in der Vorschau (%{document_dpi}) und %{object} (%{embedded_object_dpi}) sind verschieden. Bitte DPI anpassen und Barcodes neu prüfen!", document_dpi: format("%0.1f", barcode_dpi), obj: go[GOA_NAME].inspect, embedded_obj_dpi: format("%0.1f", barcode_dpi2))
+          raise Printer::Base::DpiDoesntMatch, I18n.t(:embedded_object_dpi_differs, default: "Barcode-DPI in der Vorschau (%{document_dpi}) und %{obj} (%{embedded_obj_dpi}) sind verschieden. Bitte DPI anpassen und Barcodes neu prüfen!", document_dpi: format("%0.1f", barcode_dpi), obj: go[GOA_NAME].inspect, embedded_obj_dpi: format("%0.1f", barcode_dpi2))
         end
 
         obj_w = layout_file.get_attr_value(S_WIDTH).to_f
@@ -484,7 +484,7 @@ module Mcc2
 
     def check_font(font, obj)
       unless @magick_font_list.index(font) || File.exist?(font)
-        raise Printer::Base::ResourceNotFoundError, I18n.t(:font_not_found, default: "Die Schriftart '%{font}' in Object %{object} konnte nicht gefunden werden.", font:, obj: obj[GOA_NAME].inspect )
+        raise Printer::Base::ResourceNotFoundError, I18n.t(:font_not_found, default: "Die Schriftart '%{font}' in Object %{obj} konnte nicht gefunden werden.", font:, obj: obj[GOA_NAME].inspect )
       end
     end
 

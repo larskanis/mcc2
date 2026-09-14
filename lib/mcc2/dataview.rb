@@ -268,7 +268,6 @@ module Mcc2
 
       Thread.new do
         printer = @layout_file.build_printer_instance
-        chip = layout_file.build_chip_instance
 
         marked_items.each do |item, itemidx|
           @parent.runOnUiThread do
@@ -277,7 +276,7 @@ module Mcc2
             @iconlist_data.setCurrentItem(itemidx, true)
           end
 
-          erg = printer.print_card(layout_file, item, chip)
+          erg = printer.print_card(layout_file, item)
 
           @parent.runOnUiThread do
             @parent.app.show_on_statusline I18n.t(:dataman_records_printed, default: "%{recno} von %{of} Datensätzen gedruckt", recno: itemidx + 1, of: marked_items.length)
@@ -311,8 +310,6 @@ module Mcc2
           enable_disable_print_select_button
           @button_stop_printing.enabled = false
         end
-        chip&.close_reader
-        # rescue
       end
     end
     #---------------------------------------------------------------------------------------------------------

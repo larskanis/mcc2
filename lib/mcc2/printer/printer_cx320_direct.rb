@@ -39,7 +39,9 @@ module Mcc2
         @first_card = true
       end
 
-      def print_card(layout_file, row, chip)
+      def print_card(layout_file, row)
+        chip = layout_file.build_chip_instance
+
         self.dpi = 300
         duplex = layout_file.get_attr_value(S_DUPLEX) == S_TRUE
         x_offset = layout_file.get_attr_value(S_X_OFFSET).to_f
@@ -86,7 +88,7 @@ module Mcc2
               wait_for_card_position(dev, :contactless)
               begin
                 # Kartenpersonalisierung
-                chip.pers_card(layout_file, row)
+                chip.pers_chip(row)
               rescue Exception
                 ignore_all_errors do
                   while_busy do

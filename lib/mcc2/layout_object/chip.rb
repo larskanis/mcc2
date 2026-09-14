@@ -8,27 +8,28 @@ module Mcc2
       class InvalidScriptType < RuntimeError
       end
 
-      # der Kartenleser
-      attr_accessor :reader
-
       def initialize(xml_elem)
         @xml_elem = xml_elem
       end
 
-      # Array der Chip-Parameter
+      # Array of the chip parameters
       def params(row = nil)
-        (1..CHIPPARAM_FIELD_COUNT).inject([]) { |params, i|
-          attr_name = "#{S_PARAM}_#{i}"
-          param = self[attr_name]
+        (1..CHIPPARAM_FIELD_COUNT).map do |i|
+          param = self["#{S_PARAM}_#{i}"]
           param = DataMan.replace_variables(param, row) if row
-          params << param
-        }
+          param
+        end
       end
 
-      # Schließen des Chip-Objekts
-      def close_reader
-        @chip_obj&.close
-        @chip_obj = nil
+      def params_hash(row = nil)
+        params.map do |param|
+          key, value = param.split("=", 2)
+          if key && value
+            [key, value]
+          else
+            nil
+          end
+        end.compact.to_h
       end
 
       def [](attr)
@@ -39,29 +40,14 @@ module Mcc2
       # === Parameter
       # +xml_doc+::   die XML-Struktur mit den Definitionen des Kartenlayouts
       # +row+::       ein Datensatz im FasteCSV-Format
-      def pers_card(layout_file, row)
+      def pers_chip(row)
         require "chipcoding"
-        require "config_loader"
 
-        p "pers_card #{row.inspect}"
+        p "pers_chip #{row.inspect}"
         # die Chip-Parameter auslesen
-        # erst ein leeres Array anlegen
-        params = {}
-        # un dann die Parameter aus dem XML auslesen und entsprechend ihrer  ID in das Array schreiben
-        (1..CHIPPARAM_FIELD_COUNT).each { |i|
-          attr_name = "#{S_PARAM}_#{i}"
-          params[i - 1] = DataMan.replace_variables(self[attr_name], row)
-        }
+        params = self.params_hash(row)
 
-        # die Personalisierung durchführen
-        if params[7] =~ /^RUBY;(.*)/
-          @chip_obj ||= ConfigBase.load($1)
-        else
-          raise InvalidScriptType, "Ungültiges Perso-Script eingestellt"
-        end
-
-        params["OpenReader"] = params[22]
-        @chip_obj.personalize(params)
+        Chipcoding::Client.personalize_card( params )
       end
     end
   end

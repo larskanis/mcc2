@@ -237,7 +237,7 @@ module Mcc2
       (0...CHIPPARAM_FIELD_COUNT).each do |i|
         FX::Label.new(matrix_chipparams) do |w|
           w.wdg_name = "label_chipparam_#{i}"
-          w.text = [I18n.t(:chipparam_label, default: "Parameter"), i].join(" ")
+          w.text = I18n.t(:chipparam_label, default: "Parameter %{i}", i: i+1)
           w.font = FX::Font.new.from_s("Helvetica|80|40|5|0|0|0").to_FXFont
         end
         tf = FX::TextField.new(matrix_chipparams, LAYOUT_FILL_X) do |w|

@@ -26,7 +26,7 @@ module Mcc2
 
       #--------------------------------------------------------------------------------------------------------------
 
-      def print_card(layout_file, row, chip)
+      def print_card(layout_file, row)
         self.dpi = layout_file.get_attr_value(S_CABPRINTER_DPI).to_f
 
         page_commands = layout_file.get_attr_value(S_CABPRINTER_PAGE_COMMANDS)

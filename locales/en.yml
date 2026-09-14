@@ -13,7 +13,7 @@ en:
 
     %{e}
   cancel_button: Cancel
-  chipparam_label: Parameter
+  chipparam_label: Parameter %{i}
   columns_object_list:
   - - Name
     - 130
