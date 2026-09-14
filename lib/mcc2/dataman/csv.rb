@@ -15,9 +15,9 @@ module Mcc2
 
         return if fn.empty?
 
-        fail CanNotOpenFile, "Datei nicht gefunden: #{fn.inspect}" unless File.exist?(fn)
+        fail CanNotOpenFile, "CSV file not found: #{fn.inspect}" unless File.exist?(fn)
         @table = ::CSV.read(fn, col_sep: ";", encoding: "#{encoding}:UTF-8")
-        fail DataNotAvailable, "Keine Daten in CSV-Datei #{fn} vorhanden" unless @table
+        fail DataNotAvailable, "CSV file #{fn} contains no records" unless @table
 
         @header_row = @table.slice!(0) if @table && @table.size > 0
 
