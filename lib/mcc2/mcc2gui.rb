@@ -257,14 +257,9 @@ module Mcc2
       gui_scale
     end
 
-    def self.supported_language_files
-      Dir[File.expand_path("../../locales/*.yml", __dir__)]
-    end
-
     def self.run(argv)
       Thread.abort_on_exception = true
-      I18n.load_path = supported_language_files
-      I18n.enforce_available_locales = true
+      Mcc2Print.init_i18n
 
       app = FX::App.new("MCC2", "ComCard-Mcc2")
       Fox::FXToolTip.new(app, Fox::TOOLTIP_PERMANENT)
@@ -276,7 +271,7 @@ module Mcc2
       OptionParser.new do |opts|
         opts.banner = "Usage: #{$0} <layout.mcc2>* [options]"
 
-        langs = supported_language_files.map{|f| File.basename(f, ".*") }.join(", ")
+        langs = Mcc2Print.supported_language_files.map{|f| File.basename(f, ".*") }.join(", ")
         opts.on( '-l', '--lang ISO2', "Set language of the GUI (#{langs})"){|o| language = o;  options << [:language=, o] }
         opts.on("-x", "--xpath-value XPATH~VALUE", "Replace XML-value on the given xpath"){|o| options << [:add_xpath_value, o] }
         opts.separator "\tExamples:"
