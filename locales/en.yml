@@ -456,3 +456,13 @@ en:
     %{e}
 
     %{backtrace}
+  language_change:
+  - Attention
+  - |
+    Please restart the app to activate
+    the change of the language.
+  language_forced:
+  - Attention
+  - |
+    The language cannot be changed, because it is forced by
+    option `--lang` on the command line!

@@ -273,11 +273,65 @@ class MainWindow
               }
             }
           }
+          FX::MenuTitle.new(@menubar) { |w_menutitle_language|
+            @menutitle_language = w_menutitle_language
+            w_menutitle_language.wdg_name = "menutitle_language"
+            w_menutitle_language.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+            w_menutitle_language.x = 220
+            w_menutitle_language.y = 2
+            w_menutitle_language.width = 59
+            w_menutitle_language.height = 20
+            w_menutitle_language.text = I18n.t("menutitle_language_text", scope: "mainWindow", default: "_Sprache")
+            w_menutitle_language.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+            FX::MenuPane.new(@menutitle_language) { |w_menupane_language|
+              @menupane_language = w_menupane_language
+              w_menupane_language.wdg_name = "menupane_language"
+              w_menupane_language.x = 1104
+              w_menupane_language.y = 1591
+              w_menupane_language.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+              FX::MenuCommand.new(@menupane_language) { |w_mcmd_de|
+                @mcmd_de = w_mcmd_de
+                w_mcmd_de.wdg_name = "mcmd_de"
+                w_mcmd_de.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_mcmd_de.img = "mcc2/images/country_de.png"
+                w_mcmd_de.x = 2
+                w_mcmd_de.y = 2
+                w_mcmd_de.width = 0
+                w_mcmd_de.height = 21
+                w_mcmd_de.text = I18n.t("mcmd_de_text", scope: "mainWindow", default: "_Deutsch")
+                w_mcmd_de.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+              }
+              FX::MenuCommand.new(@menupane_language) { |w_mcmd_en|
+                @mcmd_en = w_mcmd_en
+                w_mcmd_en.wdg_name = "mcmd_en"
+                w_mcmd_en.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_mcmd_en.img = "mcc2/images/country_gb.png"
+                w_mcmd_en.x = 2
+                w_mcmd_en.y = 23
+                w_mcmd_en.width = 0
+                w_mcmd_en.height = 21
+                w_mcmd_en.text = I18n.t("mcmd_en_text", scope: "mainWindow", default: "_English")
+                w_mcmd_en.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+              }
+              FX::MenuCommand.new(@menupane_language) { |w_mcmd_rs|
+                @mcmd_rs = w_mcmd_rs
+                w_mcmd_rs.wdg_name = "mcmd_rs"
+                w_mcmd_rs.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                w_mcmd_rs.img = "mcc2/images/country_rs.png"
+                w_mcmd_rs.x = 2
+                w_mcmd_rs.y = 44
+                w_mcmd_rs.width = 0
+                w_mcmd_rs.height = 21
+                w_mcmd_rs.text = I18n.t("mcmd_rs_text", scope: "mainWindow", default: "_српски")
+                w_mcmd_rs.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+              }
+            }
+          }
           FX::MenuTitle.new(@menubar) { |w_menutitle_window|
             @menutitle_window = w_menutitle_window
             w_menutitle_window.wdg_name = "menutitle_window"
             w_menutitle_window.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-            w_menutitle_window.x = 220
+            w_menutitle_window.x = 283
             w_menutitle_window.y = 2
             w_menutitle_window.width = 56
             w_menutitle_window.height = 20
@@ -374,6 +428,11 @@ class MainWindow
   attr_reader :mcmd_picture
   attr_reader :mcmd_box
   attr_reader :mcmd_embed
+  attr_reader :menutitle_language
+  attr_reader :menupane_language
+  attr_reader :mcmd_de
+  attr_reader :mcmd_en
+  attr_reader :mcmd_rs
   attr_reader :menutitle_window
   attr_reader :menupane_window
   attr_reader :mcmd_horizontal

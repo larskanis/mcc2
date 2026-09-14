@@ -45,6 +45,9 @@ module Mcc2
   class Mcc2Gui < MainWindow
     include Fox
 
+    attr_accessor :language
+    attr_accessor :app
+
     def initialize(parent, gui_scale)
       @app = parent
       @gui_scale = gui_scale
@@ -89,6 +92,10 @@ module Mcc2
       connect_with_accel(@mcmd_picture) { new_object(PICTUREOBJECT) }
       connect_with_accel(@mcmd_box) { new_object(BOXOBJECT) }
       connect_with_accel(@mcmd_embed) { new_object(EMBEDOBJECT) }
+
+      connect_with_accel(@mcmd_de) { change_language_to("de") }
+      connect_with_accel(@mcmd_en) { change_language_to("en") }
+      connect_with_accel(@mcmd_rs) { change_language_to("rs") }
 
       connect_with_accel(@mcmd_horizontal) { @mdiclient.horizontal }
       connect_with_accel(@mcmd_vertical) { @mdiclient.vertical }
@@ -145,6 +152,16 @@ module Mcc2
       child = @mdiclient.activeChild
       if child
         child.userData.add_object(typ)
+      end
+    end
+
+    def change_language_to(lang)
+      app.reg.writeStringEntry("SETTINGS", "language", lang)
+      I18n.locale = app.reg.readStringEntry("SETTINGS", "language", "de")
+      if language
+        FXMessageBox.warning(app, MBOX_OK, *I18n.t(:language_forced, default: [["Achtung", "Die Sprache kann nicht geändert werden, denn sie ist über die\nOption `--lang` auf der Kommandozeile gesetzt!"]]))
+      else
+        FXMessageBox.warning(app, MBOX_OK, *I18n.t(:language_change, default: [["Achtung", "Bitte starten Sie das Programm neu,\ndamit die Sprachänderung übernommen wird!"]]))
       end
     end
 
@@ -259,7 +276,7 @@ module Mcc2
         opts.banner = "Usage: #{$0} <layout.mcc2>* [options]"
 
         langs = supported_language_files.map{|f| File.basename(f, ".*") }.join(", ")
-        opts.on( '-l', '--lang ISO2', "Set language of the GUI (#{langs})"){|o| language = o }
+        opts.on( '-l', '--lang ISO2', "Set language of the GUI (#{langs})"){|o| language = o;  options << [:language=, o] }
         opts.on("-x", "--xpath-value XPATH~VALUE", "Replace XML-value on the given xpath"){|o| options << [:add_xpath_value, o] }
         opts.separator "\tExamples:"
         opts.separator "\t -x //Layout/datasource~mydata.csv"
