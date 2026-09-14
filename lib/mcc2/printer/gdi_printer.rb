@@ -33,9 +33,9 @@ module Mcc2
       # === Parameter
       # +layout_file+::
       # +row+:: ein Hash-Objekt
-      def print_card(layout_file, row, chip)
+      def print_card(layout_file, row)
         @layout_file = layout_file
-        @chip = chip
+        @chip = layout_file.build_chip_instance
 
         devicename = device_name
 

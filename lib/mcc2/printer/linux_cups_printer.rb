@@ -28,7 +28,8 @@ module Mcc2
         layout_file.get_attr_value(S_LINUX_CUPS_PRINTER)
       end
 
-      def print_card(layout_file, row, chip)
+      def print_card(layout_file, row)
+        chip = layout_file.build_chip_instance
         @layout_file = layout_file
 
         printer = Cups::Printer.get_destination(printer_name)
@@ -53,7 +54,7 @@ module Mcc2
         end
         printer.print_file(file_pdf.path, "MCC2 - #{layout_file.filename}", options)
 
-        chip&.pers_card(layout_file, row)
+        chip&.pers_chip(row)
 
         true
       end

@@ -30,7 +30,8 @@ module Mcc2
 
       #--------------------------------------------------------------------------------------------------------------
 
-      def print_card(layout_file, row, chip)
+      def print_card(layout_file, row)
+        chip = layout_file.build_chip_instance
         @layout_file = layout_file
 
         print_page(row, 0)
@@ -39,11 +40,7 @@ module Mcc2
           print_page(row, 1)
         end
 
-        # ............................................................................................
-        # der Chip-Teil, er muss nach dem start_doc und den pages kommen, falls dort Fehler auftreten, wird dieser dan nicht ausgeführt,
-        # und keine Karte eingezogen, dann gibt es weniger Probleme mit dem Entfernen von Karten aus dem Drucker, wenn ein Fehler aufgetreten ist
-        # Kartenpersonalisierung
-        chip&.pers_card(layout_file, row)
+        chip&.pers_chip(row)
 
         @image_idx += 1
 

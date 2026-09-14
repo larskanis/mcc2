@@ -35,10 +35,10 @@ module Mcc2
         end
       end
 
-      def print_card(layout_file, row, chip)
+      def print_card(layout_file, row)
         # Wird für Chip-Perso benötigt
         @layout_file = layout_file
-        @chip = chip
+        @chip = layout_file.build_chip_instance
 
         # Warte, bis Durck der vorherigen Karte beendet ist.
         st = Time.now
@@ -54,7 +54,7 @@ module Mcc2
           send_command("MCL", "Karte zum Kontaktlos-Leser fahren")
           begin
             # Kartenpersonalisierung
-            chip.pers_card(layout_file, row)
+            chip.pers_chip(row)
           rescue => e
             puts "Fehler bei Chip-Personalisierung: #{e} #{e.class} #{e.backtrace.join("\n")}"
             begin

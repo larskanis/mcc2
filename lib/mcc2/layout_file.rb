@@ -44,7 +44,7 @@ module Mcc2
     class InvalidFileVersion < Error
     end
 
-    FILE_VERSION_RANGE = 1..2
+    FILE_VERSION_RANGE = 1..3
 
     attr_accessor :attributes
     attr_accessor :filename
@@ -219,6 +219,7 @@ PRINT 1
           Diese Warnung entfällt, sobald diese Datei einmal gespeichert wird.
         EOT
       end
+
       # ................................................................................................................................
       # die allgemeine Layout-Einstellungen auslesen
 
@@ -246,13 +247,37 @@ PRINT 1
       # ................................................................................................................................
       # die Chip-Einstellungen auslesen
 
-      # kontrollieren, ob alle Nodes des Chips existieren, ansonsten anlegen und als 'changed' markieren
+      # kontrollieren, ob alle Nodes des Chips existieren, ansonsten als 'changed' markieren, da sie angelegt werden
       chip_attrs = @xml_doc.at_xpath("//#{S_ROOT}/#{S_CHIP}")
       (1..CHIPPARAM_FIELD_COUNT).each do |i|
-        element = chip_attrs.at_xpath("#{S_PARAM}_#{i}")
+        attr_name = "#{S_PARAM}_#{i}"
+        element = chip_attrs.at_xpath(attr_name)
         unless element
-          # ~ chip_attrs << param = Nokogiri::XML::Node.new(attr_name , "")
           changed!
+        end
+
+        # Older files store chip params as array.
+        # Change them to hash form with the index as the key.
+        if filever < 3
+          param = element.content
+          if i == 8
+            if !param.to_s.empty?
+              if param =~ /^RUBY;(.*)/
+                param = "RubyJobFile=#{$1}"
+                set_attr_value(attr_name, param, S_CHIP)
+              else
+                raise InvalidScriptType, "Ungültiges Perso-Script eingestellt"
+              end
+            end
+          elsif i == 23
+            if !param.to_s.empty?
+              param = "OpenReader=#{param}"
+              set_attr_value(attr_name, param, S_CHIP)
+            end
+          elsif !param.to_s.empty?
+            param = "#{i}=#{param}"
+            set_attr_value(attr_name, param, S_CHIP)
+          end
         end
       end
 
