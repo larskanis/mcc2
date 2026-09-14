@@ -4,7 +4,7 @@ require "mcc2"
 require "fileutils"
 require "tempfile"
 require "optparse"
-
+require "i18n"
 require "ruby-zint"
 
 module Mcc2

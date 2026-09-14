@@ -18,6 +18,7 @@ require "fox16/colors"
 require "fox16/responder"
 require "libguib16"
 require "optparse"
+require "i18n"
 
 # convert relative image file path to absolute one
 # based on dir of this file.

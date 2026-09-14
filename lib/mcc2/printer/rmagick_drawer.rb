@@ -1,5 +1,6 @@
 require "mcc2/dataman/base"
 require "rmagick"           # für das Erzeugen der Druckbilder
+require "i18n"
 
 module Mcc2
   module RmagickDrawer
