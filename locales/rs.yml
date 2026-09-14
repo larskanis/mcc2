@@ -342,6 +342,7 @@ rs:
     '
   error_generating_barcode: 'Грешка при генерисању бар-кода %{data}: %{e}'
   error_loading_layout_file: Грешка при учитавању датотеке
+  error_printer_not_setup: Молимо вас да прво подесите изабрани штампач!
   filepath_textfield_tip: |
     Могу се користити следећи карактери за замену:
     %D - Путања тренутне датотеке распореда
