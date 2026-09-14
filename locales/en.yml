@@ -342,6 +342,7 @@ en:
     '
   error_generating_barcode: 'Error generating barcode %{data}: %{e}'
   error_loading_layout_file: Error loading file
+  error_printer_not_setup: Please configure the selected printer first!
   filepath_textfield_tip: |
     The following replacement characters can be used:
     %D - Path of the current layout file

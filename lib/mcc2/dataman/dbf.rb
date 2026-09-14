@@ -12,7 +12,7 @@ module Mcc2
 
         return if fn.empty?
 
-        raise CanNotOpenFile, "file not found: #{fn.inspect}" unless File.exist?(fn)
+        raise CanNotOpenFile, "DBF file not found: #{fn.inspect}" unless File.exist?(fn)
         table = ::DBF::Table.new(fn)
         @header_row = table.columns.map { |c| c.name }
 
