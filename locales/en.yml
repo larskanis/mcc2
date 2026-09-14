@@ -466,6 +466,15 @@ en:
   tab_layout_header: "&Layout"
   tab_printer_header: P&rinter
   text_color_dialog_caption: Text color
+  unknwon_error_message: |-
+    Unfortunately an error happend:
+
+    %{e} %{klass}
+  unknwon_error_message_exc: |-
+    Unfortunately an error happend:
+
+    %{e} (%{klass})
+    %{backtrace}
   zebra_printer_driver_load_caption: Zebra printer
   zebra_printer_error_send_cmd:
   - 'Error sending command ''%{command}'' to the printer:'

@@ -466,6 +466,15 @@ rs:
   tab_layout_header: "&Распоред"
   tab_printer_header: Штампач
   text_color_dialog_caption: Боја текста
+  unknwon_error_message: |-
+    Нажалост, дошло је до грешке:
+
+    %{e} %{klass}
+  unknwon_error_message_exc: |-
+    Нажалост, дошло је до грешке:
+
+    %{e} (%{klass})
+    %{backtrace}
   zebra_printer_driver_load_caption: Зебра штампач
   zebra_printer_error_send_cmd:
   - 'Грешка при слању команде „%{command}“ штампачу:'
