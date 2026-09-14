@@ -15,8 +15,8 @@ class Dialogbox_layoutview
         w_dialogbox_layoutview.wdg_name = "dialogbox_layoutview"
         w_dialogbox_layoutview.layoutHints = 768
         w_dialogbox_layoutview.shown = true
-        w_dialogbox_layoutview.x = 622
-        w_dialogbox_layoutview.y = 1004
+        w_dialogbox_layoutview.x = 280
+        w_dialogbox_layoutview.y = 1024
         w_dialogbox_layoutview.width = 580
         w_dialogbox_layoutview.height = 694
         w_dialogbox_layoutview.title = I18n.t("dialogbox_layoutview_title", scope: "dialogbox_layoutview", default: "Entwurfsansicht")
@@ -645,6 +645,15 @@ class Dialogbox_layoutview
                 w_verticalframe_chip.width = 568
                 w_verticalframe_chip.height = 502
                 w_verticalframe_chip.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                FX::Label.new(@verticalframe_chip) { |w_label_chip_description|
+                  @label_chip_description = w_label_chip_description
+                  w_label_chip_description.wdg_name = "label_chip_description"
+                  w_label_chip_description.x = 2
+                  w_label_chip_description.y = 2
+                  w_label_chip_description.width = 420
+                  w_label_chip_description.height = 22
+                  w_label_chip_description.text = I18n.t("label_chip_description_text", scope: "dialogbox_layoutview", default: "Alle Chip-Parameter sind Schlüssel-Wert-Paare in der Form \"key=value\"")
+                }
               }
               FX::TabItem.new(@tabbook_objectattributes) { |w_tabitem_magstripe|
                 @tabitem_magstripe = w_tabitem_magstripe
@@ -1852,6 +1861,7 @@ class Dialogbox_layoutview
   attr_reader :checkbutton_flop_back
   attr_reader :tabitem_chip
   attr_reader :verticalframe_chip
+  attr_reader :label_chip_description
   attr_reader :tabitem_magstripe
   attr_reader :verticalframe54
   attr_reader :horizontalframe112
