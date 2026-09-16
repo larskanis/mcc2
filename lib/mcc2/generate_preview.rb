@@ -51,16 +51,13 @@ module Mcc2
     end
 
     def self.run(argv)
-      Mcc2Print.init_i18n
-
       app = new
 
       OptionParser.new do |opts|
         opts.banner = "Usage: #{$0} <layout.mcc2>* [options]"
 
         opts.on("-v", "--[no-]verbose", "Run verbosely", &app.method(:verbose=))
-        langs = Mcc2Print.supported_language_files.map{|f| File.basename(f, ".*") }.join(", ")
-        opts.on( '-l', '--lang ISO2', "Set language of the UI (#{langs})"){|o| I18n.locale = o }
+        Locales.add_lang_option(opts)
         opts.on("--dpi INT", "Generate previews with INT DPI [#{app.dpi}]", &app.method(:dpi=))
         opts.on("--skip MODE", "Skip files when: uptodate|existing|none [#{app.skip_when}]", &app.method(:skip_when=))
       end.parse!

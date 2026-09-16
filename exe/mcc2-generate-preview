@@ -1,5 +1,6 @@
 require "mcc2"
 
+Mcc2::Locales.init
 Mcc2::GeneratePreview.run(ARGV)
 
 # require "stackprof"

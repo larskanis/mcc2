@@ -9,6 +9,7 @@ langbak ? (ENV["LANG"] = langbak) : ENV.delete("LANG")
 
 require "mcc2"
 
+Mcc2::Locales.init
 Mcc2::Mcc2Gui.run(ARGV)
 
 # require "stackprof"

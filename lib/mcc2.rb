@@ -1,5 +1,6 @@
 require "mcc2/constants"
 require "mcc2/layout_file"
+require "mcc2/locales"
 
 module Mcc2
   autoload :VERSION, "mcc2/version"

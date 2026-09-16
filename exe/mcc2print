@@ -2,4 +2,5 @@
 
 require "mcc2"
 
+Mcc2::Locales.init
 Mcc2::Mcc2Print.run(ARGV)
