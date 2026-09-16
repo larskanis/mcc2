@@ -266,7 +266,7 @@ PRINT 1
                 param = "RubyJobFile=#{$1}"
                 set_attr_value(attr_name, param, S_CHIP)
               else
-                raise InvalidScriptType, "Ungültiges Perso-Script eingestellt"
+                raise InvalidScriptType, "invalid perso script: #{param.inspect}"
               end
             end
           elsif i == 23
@@ -493,8 +493,8 @@ PRINT 1
 
     def change_first_xpath_value(xpath, value)
       attr = @xml_doc.at_xpath(xpath)
-      raise "Kein Element unter XPath #{xpath.inspect} in Datei #{@filename} gefunden" unless attr
-      puts "Setze Element unter XPath #{xpath.inspect} in Datei #{@filename} auf #{value.inspect}"
+      raise I18n.t(:set_xpath_no_element_error, default: "Kein Element unter XPath %{xpath} in Datei %{filename} gefunden", xpath: xpath.inspect, filename: @filename) unless attr
+      puts I18n.t(:set_xpath_element, default: "Setze Element unter XPath %{xpath} in Datei %{filename} auf %{value}", xpath: xpath.inspect, filename: @filename, value: value.inspect)
       if attr.content != value
         attr.content = value
         changed!
@@ -642,7 +642,7 @@ PRINT 1
       elsif datamantyp == NONE
         DataMan::None.new(datasource)
       else
-        raise "falscher datasourcetyp '#{datamantyp}' angegeben!"
+        raise "invalid type of datasource #{datamantyp.inspect}"
       end
     end
 

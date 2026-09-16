@@ -463,6 +463,8 @@ rs:
   save_layout_file_dialog_question:
   - Сачувај датотеку
   - Сачувај датотеку %{filename}?
+  set_xpath_element: Постави елемент испод XPath %{xpath} у датотеци %{filename} на %{value}
+  set_xpath_no_element_error: Није пронађен ниједан елемент под XPath %{xpath} у датотеци %{filename}
   tab_data_header: Подаци
   tab_layout_header: "&Распоред"
   tab_printer_header: Штампач

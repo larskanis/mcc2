@@ -463,6 +463,8 @@ en:
   save_layout_file_dialog_question:
   - Save file
   - Save file %{filename}?
+  set_xpath_element: Set element under XPath %{xpath} in file %{filename} to %{value}
+  set_xpath_no_element_error: No element found under XPath %{xpath} in file %{filename}
   tab_data_header: Da&ta
   tab_layout_header: "&Layout"
   tab_printer_header: P&rinter
