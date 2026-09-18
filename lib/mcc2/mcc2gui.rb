@@ -261,7 +261,6 @@ module Mcc2
       Thread.abort_on_exception = true
 
       app = FX::App.new("MCC2", "ComCard-Mcc2")
-      Fox::FXToolTip.new(app, Fox::TOOLTIP_PERMANENT)
       $gui_scale = enable_hidpi(app)
 
       language = nil
