@@ -9,6 +9,7 @@ gem "libusb"
 # vim: syntax=ruby
 source "https://ccgems" do
   gem "libcx320", "~> 0.1.2"
+  gem "win32api4ruby"
 end
 
 group :development do
