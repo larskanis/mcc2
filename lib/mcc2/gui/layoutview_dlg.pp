@@ -4272,7 +4272,8 @@
                          "Barcode nicht skalieren, sondern\n" +
                          "auf Druckerauflösung anpassen.\n" +
                          "In der Vorschau erfolgt die Anpassung\n" +
-                         "auf die DPI-Angabe über der Vorschau.\n",
+                         "auf die DPI-Angabe über der Vorschau.\n" +
+                         "Aktivieren für bessere Barcode-Qualität.\n",
                         "width="=>135,
                         "x="=>429,
                         "y="=>10},

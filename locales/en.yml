@@ -126,6 +126,7 @@ en:
       adjust it to the printer resolution.
       In the preview, the adjustment is made
       to the DPI specification above the preview.
+      Activate for better barcode quality.
     checkbutton_contact_text: ''
     checkbutton_contact_tipText: Activate this check box if a contact chip is to be personalized on the card.
     checkbutton_contactless_text: ''

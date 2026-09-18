@@ -1579,7 +1579,7 @@ class Dialogbox_layoutview
                     w_checkbutton_barcode_optimized.width = 135
                     w_checkbutton_barcode_optimized.height = 20
                     w_checkbutton_barcode_optimized.text = I18n.t("checkbutton_barcode_optimized_text", scope: "dialogbox_layoutview", default: "Auf DPI optimieren")
-                    w_checkbutton_barcode_optimized.tipText = I18n.t("checkbutton_barcode_optimized_tipText", scope: "dialogbox_layoutview", default: "Barcode nicht skalieren, sondern\nauf Druckerauflösung anpassen.\nIn der Vorschau erfolgt die Anpassung\nauf die DPI-Angabe über der Vorschau.\n")
+                    w_checkbutton_barcode_optimized.tipText = I18n.t("checkbutton_barcode_optimized_tipText", scope: "dialogbox_layoutview", default: "Barcode nicht skalieren, sondern\nauf Druckerauflösung anpassen.\nIn der Vorschau erfolgt die Anpassung\nauf die DPI-Angabe über der Vorschau.\nAktivieren für bessere Barcode-Qualität.\n")
                   }
                 }
                 FX::HorizontalFrame.new(@verticalframe_barcode) { |w_horizontalframe134|
