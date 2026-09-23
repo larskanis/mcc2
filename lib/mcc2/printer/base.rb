@@ -26,6 +26,7 @@ module Mcc2
             @a
         end
 
+        # rotate by 'a' degree
         def rotate(a)
           self.class.new @x, @y, @a + a
         end

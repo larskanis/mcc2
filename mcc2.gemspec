@@ -30,6 +30,10 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "ffi-cups", "~> 0.3"
   spec.add_runtime_dependency "win32api4ruby", "~> 0.2"
   spec.add_runtime_dependency "i18n", "~> 1.0"
+  spec.add_runtime_dependency 'rsvg2'
+  spec.add_runtime_dependency 'cairo'
+  spec.add_runtime_dependency 'pango'
+  spec.add_runtime_dependency 'ttfunk'
 
   spec.add_development_dependency "bundler", ">= 1.11"
   spec.add_development_dependency "rake", "~> 13.0"

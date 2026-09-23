@@ -1,6 +1,8 @@
 require "mcc2/printer/base"           # die Basisklasse für die Printer
 require "mcc2/printer/card_printer"
 require "mcc2/printer/rmagick_drawer"
+require "simple_logger"
+require 'nokogiri'
 
 module Mcc2
   module Printer
@@ -8,6 +10,7 @@ module Mcc2
       include RmagickDrawer
       include CardPrinting
       include Fox
+      include SimpleLogging
 
       def initialize(parent, layout)
         super()
@@ -159,7 +162,13 @@ module Mcc2
             if Time.now >= @draw_preview_at
               @draw_preview_at = nil
               @thread = Thread.new do
+                require 'ruby-prof'
+# result = RubyProf::Profile.profile do
                 draw_preview_now(@row)
+# end
+# printer = RubyProf::GraphPrinter.new(result)
+# printer.print(STDOUT)
+
 
                 @thread = nil
                 # requeue preview generation, when something was changed
@@ -176,7 +185,16 @@ module Mcc2
         end
       end
 
+      attr_reader :font_map
+
       def draw_preview_now(row = nil)
+        require 'rsvg2'
+        require 'cairo'
+        require 'pango'
+        require 'ttfunk'
+
+        @font_map = {}
+
         # allgemeine Einstellungen des Image vornehmen
         width = @layout_file.get_attr_value(S_WIDTH).to_f
         height = @layout_file.get_attr_value(S_HEIGHT).to_f
@@ -190,35 +208,69 @@ module Mcc2
         image_height = (duplex ? 2 : 1) * height_with_margins(height) + card_offset
 
         rect_list = nil
-        canvas = Magick::ImageList.new
-        canvas.new_image(mm(image_width), mm(image_height)) { |options| options.background_color = "white" }
-        drawing = Magick::Draw.new
-        drawing.text_antialias(true)
 
-        # Vorderseite
-        draw_pos_x = 0
-        draw_pos_y = 0
-        tra = Transformation.new
-        rect_list = draw(drawing, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 0, layers: :all)
+        log.info "rect_list = draw"
+        builder = Nokogiri::XML::Builder.new do |svg|
+          svg.svg(xmlns: 'http://www.w3.org/2000/svg', viewBox: "0 0 #{mm(image_width)} #{mm(image_height)}") do
 
-        # Rückseite
-        if duplex
-          draw_pos_y = height_with_margins(height) + card_offset
-          rect_list.add draw(drawing, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 1, layers: :all)
+            # svg.circle(cx: 400, cy: 300, r: 100, fill: 'blue', class: 'interactive')
+            # svg.text_('Click me', x: 400, y: 310, 'text-anchor': 'middle', fill: 'white', 'font-size': 20)
+
+            # Vorderseite
+            draw_pos_x = 0
+            draw_pos_y = 0
+            tra = Transformation.new
+            rect_list = draw(svg, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 0, layers: :all)
+
+            # Rückseite
+            if duplex
+              draw_pos_y = height_with_margins(height) + card_offset
+              rect_list.add draw(svg, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 1, layers: :all)
+            end
+          end
         end
 
-        drawing.draw(canvas)
-        # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
-        data = canvas.to_blob do |image|
-          image.format = "PNG"
-        end
+        log.info "built nokogiri"
+        svg_data = builder.to_xml
+        # puts svg_data
+        log.info "built svg text"
 
-        # das erzeugte Bild als Icon anzeigen
-        fx_image = Fox::FXPNGImage.new(@parent.app)
-        # in contrast to FXPNGImage.new, loadPixels releases the GVL
-        Fox::FXMemoryStream.open(Fox::FXStreamLoad, data) do |infile|
-          fx_image.loadPixels(infile)
-        end
+        # File.write("dummy-temp.svg", svg_data)
+        # # Render SVG to raster image
+        # canvas = Magick::Image.read('rsvg:dummy-temp.svg')
+        # p canvas
+        # log.info "rendered svg"
+        # # Write image to PNG blob
+        # data = canvas.first.to_blob do |i|
+        #   i.format = "PNG"
+        # end
+
+        # require "vips"
+        # image = Vips::Image.new_from_buffer(svg_data, "")
+        # data = image.write_to_buffer ".png", background: 255
+
+
+        svg_handle = RSVG::Handle.new_from_data(svg_data)
+
+        width = mm(image_width)
+        height = mm(image_height)
+
+        surface = Cairo::ImageSurface.new(Cairo::FORMAT_ARGB32, width, height)
+        context = Cairo::Context.new(surface)
+        context.render_rsvg_handle(svg_handle)
+
+        log.info "rendered to pixels"
+
+        fx_image = FXImage.new(@parent.app, nil, 0, width, height)
+        fx_image.pixels = surface.data
+
+        # # Read PNG into FXRuby image
+        # fx_image = Fox::FXPNGImage.new(@parent.app)
+        # # in contrast to FXPNGImage.new, loadPixels releases the GVL, so doesn't block the main thread
+        # Fox::FXMemoryStream.open(Fox::FXStreamLoad, data) do |infile|
+        #   fx_image.loadPixels(infile)
+        # end
+        log.info "update GUI"
 
         @parent.runOnUiThread do
           enable_error_view(false)
