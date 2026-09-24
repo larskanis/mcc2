@@ -196,24 +196,26 @@ module Mcc2
         @font_map = {}
 
         # allgemeine Einstellungen des Image vornehmen
-        width = @layout_file.get_attr_value(S_WIDTH).to_f
-        height = @layout_file.get_attr_value(S_HEIGHT).to_f
+        layout_width_mm = @layout_file.get_attr_value(S_WIDTH).to_f
+        layout_height_mm = @layout_file.get_attr_value(S_HEIGHT).to_f
         duplex = @layout_file.get_attr_value(S_DUPLEX) == S_TRUE
 
         preview = true
 
         card_offset = 0
 
-        image_width = width_with_margins(width)
-        image_height = (duplex ? 2 : 1) * height_with_margins(height) + card_offset
+        image_width_mm = width_with_margins(layout_width_mm)
+        image_height_mm = (duplex ? 2 : 1) * height_with_margins(layout_height_mm) + card_offset
+        image_width = mm(image_width_mm).round
+        image_height = mm(image_height_mm).round
 
         rect_list = nil
 
         log.info "rect_list = draw"
         builder = Nokogiri::XML::Builder.new do |svg|
 
-          svg.svg(xmlns: 'http://www.w3.org/2000/svg', viewBox: "0 0 #{mm(image_width)} #{mm(image_height)}") do
-            svg.g(transform: "scale(-1 -1) translate(-#{mm(image_width)} -#{mm(image_height)})") do
+          svg.svg(xmlns: 'http://www.w3.org/2000/svg', viewBox: "0.5 0.5 #{image_width} #{image_height}") do
+            svg.g(transform: "scale(-1 -1) translate(-#{image_width} -#{image_height})") do
 
               # Front
               draw_pos_x = 0
@@ -223,7 +225,7 @@ module Mcc2
 
               # Rear
               if duplex
-                draw_pos_y = height_with_margins(height) + card_offset
+                draw_pos_y = height_with_margins(layout_height_mm) + card_offset
                 rect_list.add draw(svg, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 1, layers: :all)
               end
             end
@@ -237,16 +239,13 @@ module Mcc2
 
         svg_handle = RSVG::Handle.new_from_data(svg_data)
 
-        width = mm(image_width)
-        height = mm(image_height)
-
-        surface = Cairo::ImageSurface.new(Cairo::FORMAT_RGB24, width, height)
+        surface = Cairo::ImageSurface.new(Cairo::FORMAT_RGB24, image_width, image_height)
         context = Cairo::Context.new(surface)
         context.render_rsvg_handle(svg_handle)
 
         log.info "rendered to pixels"
 
-        fx_image = FXImage.new(@parent.app, nil, 0, width, height)
+        fx_image = FXImage.new(@parent.app, nil, 0, image_width, image_height)
         argb = surface.data
         # Cairo uses BGRA pixel data memory layout, but FXRuby uses RGBA.
         argb.reverse! # make ARGB, works together with "rotate(180) translate(..)" above

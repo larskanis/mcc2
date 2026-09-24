@@ -89,20 +89,18 @@ module Mcc2
         # todo -0.5, damit die rechten und unteren Ränder zu sehen sind, jetzt sitzt die Karte aber unsymetrisch auf dem Rechteck
         # drawing.fill("none")
         # drawing.stroke("black")
-        cpos = transform.translate(mm(width_with_margins(width)).round, mm(height_with_margins(height)).round)
-        drawing.rect(x: transform.x, y: transform.y, width: cpos.x-transform.x, height: cpos.y-transform.y, fill: "white", stroke: "black", "stroke-width": 1)
+        drawing.rect(x: transform.x, y: transform.y, width: mm(width_with_margins(width)).round-1, height: mm(height_with_margins(height)).round-1, fill: "white", stroke: "black", "stroke-width": 1)
         # drawing.rectangle(transform.x, transform.y, cpos.x, cpos.y)
         # canvas.rect(mm(width_with_margins(width - 0.5)), mm(height_with_margins(height - 0.5))).styles(fill: "none", stroke: "black")
       end
 
       tra = transform.translate(mm(card_margin_left).round, mm(card_margin_top).round)
-      # Kartenhintergrund füllen (für Vorschau)
-      rx = mm(3)
+      # Fill card background for preview
+      rx = mm(3).round
       if preview
         # drawing.fill("lightgray")
         # drawing.stroke("none")
-        cpos = tra.translate(mm(width), mm(height))
-        drawing.rect(x: tra.x, y: tra.y, width: cpos.x-tra.x, height: cpos.y-tra.y, fill: "lightgray", rx: rx, ry: rx, stroke: "none")
+        drawing.rect(x: tra.x, y: tra.y, width: mm(width).round, height: mm(height).round, fill: "lightgray", rx: , stroke: "blue", "stroke-width": 1)
         # drawing = drawing.draw_rect([200,200,200], tra.x, tra.y, cpos.x-tra.x, cpos.y-tra.y, fill: true)
         # drawing.roundrectangle(tra.x, tra.y, cpos.x, cpos.y, rx, rx)
         # canvas1.rect(mm(width), mm(height)).round(rx).styles(fill: "lightgray", stroke: "none")
@@ -117,7 +115,6 @@ module Mcc2
         if go[GOA_PAGE_NR].to_i == page_nr && (layers == :all || layers.include?(go[GOA_LAYER].to_i))
 
           # die allgemeinen Attribute ermitteln
-          #           id = go[GOA_ID].to_i
           x = go[GOA_X].to_f
           y = go[GOA_Y].to_f
           go_width = go[GOA_WIDTH].to_f
@@ -154,12 +151,12 @@ module Mcc2
               if typ == TEXTOBJECT
                 draw_textobject(drawing, opos, go, go_width, go_height, data.empty? ? data_nosub : data)
               elsif typ == PICTUREOBJECT
-                # draw_pictureobject(drawing, opos, go, go_width, go_height, data)
+                draw_pictureobject(drawing, opos, go, go_width, go_height, data)
               elsif typ == BARCODEOBJECT
                 data = data.gsub(/\\x([0-9a-f][0-9a-f])/i) { [$1.hex].pack("C") }
                 draw_barcode(drawing, opos, go, go_width, go_height, data, barcode_dpi)
               elsif typ == BOXOBJECT
-                # draw_boxobject(drawing, opos, go, go_width, go_height)
+                draw_boxobject(drawing, opos, go, go_width, go_height)
               elsif typ == EMBEDOBJECT
                 draw_embedobject(drawing, opos, go, go_width, go_height, data, row ? row["row_number"] : "1", barcode_dpi)
               end
@@ -174,86 +171,49 @@ module Mcc2
               # drawing.stroke_width(1)
               # cpos = opos.translate(mm(go_width), mm(go_height))
               # drawing.rectangle(opos.x, opos.y, cpos.x, cpos.y)
-              drawing.rect(x: opos.x, y: opos.y, width: mm(go_width), height: mm(go_height), fill: "none", stroke: "red", "stroke-width": 1)
+              drawing.rect(x: opos.x, y: opos.y, width: [mm(go_width), 0.5].max, height: [mm(go_height), 0.5].max, fill: "none", stroke: "red", "stroke-width": 1)
               # body.rect(mm(go_width), mm(go_height)).styles(fill: "none", stroke: "red")
             end
           end
         end
       end
 
-      # Rand zeichnen (für Vorschau)
-      # if preview
-      #   drawing.push
-      #   drawing.fill("none")
-      #   drawing.stroke("blue")
-      #   cpos = tra.translate(mm(width), mm(height))
-      #   drawing.roundrectangle(tra.x, tra.y, cpos.x, cpos.y, rx, rx)
-      #   # canvas1.rect(mm(width), mm(height)).round(rx).styles(fill: "none", stroke: "blue")
-      #
-      #   if page_nr == 1 && layout_file.get_attr_value(S_MAGSTRIPE) == S_TRUE
-      #     rs_rect = tra.translate(mm(0), mm(4))
-      #     rs_rect2 = rs_rect.translate(mm(width), mm(12.5))
-      #     drawing.fill("black")
-      #     drawing.stroke("none")
-      #     drawing.opacity(0.5)
-      #     drawing.rectangle(rs_rect.x, rs_rect.y, rs_rect2.x, rs_rect2.y)
-      #     # canvas1.g.translate(mm(0), mm(4)) { |ms_rect|
-      #     #   ms_rect.rect(mm(width), mm(12.5)).styles(fill: "black", stroke: "none", opacity: 0.5)
-      #     ms_obj = layout_file.magstripe_object
-      #     (1..3).each do |spurnr|
-      #       spur_data = ms_obj["ms_spur" + spurnr.to_s]
-      #       spurpos = rs_rect.translate(mm(3), mm((3.5 * spurnr) + 0.5))
-      #       drawing.font("Courier-New-Bold")
-      #       drawing.font_size(pt(10))
-      #       drawing.fill("white")
-      #       drawing.text(spurpos.x, spurpos.y, "Spur #{spurnr}: #{spur_data}")
-      #
-      #       # ms_rect.text(mm(3), mm((3.5 * spurnr) + 0.5), "Spur #{spurnr}: #{spur_data}").styles(
-      #       #   font: "Courier-New-Bold",
-      #       #   font_size: pt(10),
-      #       #   fill: "white"
-      #       # )
-      #     end
-      #   end
-      #   if page_nr == 0 && layout_file.get_attr_value(S_CONTACTLESS) == S_TRUE
-      #     rx = mm(0.5)
-      #     clpa = tra.translate(mm(3), mm(3))
-      #     clpe = clpa.translate(mm(5), mm(5))
-      #     drawing.opacity(0.5)
-      #     drawing.fill("gray")
-      #     drawing.stroke("none")
-      #     drawing.roundrectangle(clpa.x, clpa.y, clpe.x, clpe.y, rx, rx)
-      #     # canvas1.g.translate(mm(3), mm(3)).rect(mm(5), mm(5)).round(rx).styles(fill: "gray", stroke: "none", opacity: 0.5)
-      #     rx = mm(3)
-      #     drawing.opacity(1)
-      #     drawing.fill("none")
-      #     drawing.stroke_opacity(0.5)
-      #     drawing.stroke("gray")
-      #     clpa = tra.translate(mm(4), mm(4))
-      #     clpe = clpa.translate(mm(75), mm(45))
-      #     drawing.roundrectangle(clpa.x, clpa.y, clpe.x, clpe.y, rx, rx)
-      #     # canvas1.g.translate(mm(4), mm(4)).rect(mm(75), mm(45)).round(rx).styles(fill: "none", stroke: "gray", stroke_opacity: 0.5)
-      #     clpa = tra.translate(mm(5), mm(5))
-      #     clpe = clpa.translate(mm(73), mm(43))
-      #     drawing.roundrectangle(clpa.x, clpa.y, clpe.x, clpe.y, rx, rx)
-      #     # canvas1.g.translate(mm(5), mm(5)).rect(mm(73), mm(43)).round(rx).styles(fill: "none", stroke: "gray", stroke_opacity: 0.5)
-      #     clpa = tra.translate(mm(6), mm(6))
-      #     clpe = clpa.translate(mm(71), mm(41))
-      #     drawing.roundrectangle(clpa.x, clpa.y, clpe.x, clpe.y, rx, rx)
-      #     # canvas1.g.translate(mm(6), mm(6)).rect(mm(71), mm(41)).round(rx).styles(fill: "none", stroke: "gray", stroke_opacity: 0.5)
-      #   end
-      #   if page_nr == 0 && layout_file.get_attr_value(S_CONTACT) == S_TRUE
-      #     rx = mm(2)
-      #     drawing.opacity(0.8)
-      #     drawing.fill("yellow")
-      #     drawing.stroke("gray")
-      #     clpa = tra.translate(mm(8), mm(18))
-      #     clpe = clpa.translate(mm(13), mm(12))
-      #     drawing.roundrectangle(clpa.x, clpa.y, clpe.x, clpe.y, rx, rx)
-      #     # canvas1.g.translate(mm(8), mm(18)).rect(mm(13), mm(12)).round(rx).styles(fill: "yellow", stroke: "gray")
-      #   end
-      #   drawing.pop
-      # end
+      if preview
+        # paint magstripe for preview
+        if page_nr == 1 && layout_file.get_attr_value(S_MAGSTRIPE) == S_TRUE
+          rs_rect = tra.translate(mm(0), mm(4))
+          drawing.rect(x: rs_rect.x, y: rs_rect.y, width: mm(width).round, height: mm(12.5).round, fill: "black", stroke: "none", opacity: 0.5)
+
+          ms_obj = layout_file.magstripe_object
+          (1..3).each do |spurnr|
+            spur_data = ms_obj["ms_spur" + spurnr.to_s]
+            spurpos = rs_rect.translate(mm(3), mm((3.5 * spurnr) + 0.5))
+            drawing.text_("Mag #{spurnr}: #{spur_data}",
+                          x: spurpos.x, y: spurpos.y,
+                          "font-family": "Courier-New Bold Mono",
+                          "font-size": pt(10),
+                          fill: "white")
+          end
+        end
+        # paint contactless chip for preview
+        if page_nr == 0 && layout_file.get_attr_value(S_CONTACTLESS) == S_TRUE
+          clpa = tra.translate(mm(3), mm(3))
+          drawing.rect(x: clpa.x, y: clpa.y, width: mm(5), height: mm(5), rx: mm(0.5), fill: "gray", stroke: "none", opacity: 0.5)
+          clpa = tra.translate(mm(4), mm(4))
+          drawing.rect(x: clpa.x, y: clpa.y, width: mm(75), height: mm(45), rx: mm(3), fill: "none", stroke: "gray", stroke_opacity: 0.5)
+
+          clpa = tra.translate(mm(5), mm(5))
+          drawing.rect(x: clpa.x, y: clpa.y, width: mm(73), height: mm(43), rx: mm(3), fill: "none", stroke: "gray", stroke_opacity: 0.5)
+
+          clpa = tra.translate(mm(6), mm(6))
+          drawing.rect(x: clpa.x, y: clpa.y, width: mm(71), height: mm(41), rx: mm(3), fill: "none", stroke: "gray", stroke_opacity: 0.5)
+        end
+        # paint contact chip for preview
+        if page_nr == 0 && layout_file.get_attr_value(S_CONTACT) == S_TRUE
+          clpa = tra.translate(mm(8), mm(18))
+          drawing.rect(x: clpa.x, y: clpa.y, width: mm(13), height: mm(12), rx: mm(2), fill: "yellow", stroke: "gray")
+        end
+      end
 
       rect_list
     end
@@ -294,7 +254,7 @@ module Mcc2
         #   fill: font_color,
         #   text_anchor: just
         # )
-        drawing.text_(data, x: apos.x, y: apos.y, 'text-anchor': just, fill: font_color, 'font-size': pt(fontsize), 'font-family': font_map[font] || font)
+        drawing.text_(data, x: apos.x, y: apos.y, 'text-anchor': just, fill: font_color, 'font-size': pt(fontsize), 'font-family': font_map[font] || font, 'xml:space': "preserve")
       end
     end
 
@@ -339,8 +299,12 @@ module Mcc2
         end
 
         cpos = apos.translate(mm(im_width), mm(im_height))
-        drawing.composite(apos.x.round, apos.y.round, (cpos.x - apos.x).round, (cpos.y - apos.y).round, go_image)
+        # drawing.composite(apos.x.round, apos.y.round, (cpos.x - apos.x).round, (cpos.y - apos.y).round, go_image)
         # body.image(go_image, mm(im_width), mm(im_height))
+        pngdata = go_image.to_blob do |i|
+          i.format = "PNG"
+        end
+        drawing.image(x: apos.x.round, y: apos.y.round, width: mm(im_width), height: mm(im_height), "href": "data:image/png;base64,#{[pngdata].pack("m")}")
       else
         raise Printer::Base::ResourceNotFoundError, I18n.t(:image_not_found, default: "Das Bild '%{path}' konnte nicht gefunden werden.", path: )
       end
@@ -445,7 +409,7 @@ module Mcc2
           # apos = tra.translate(xdim * str.x / xgran, )
           # drawing.text(tra.x + xdim * str.x, tra.y + ydim * str.y, str.text)
           # body.text(xdim * str.x / 2, ydim * str.y / 2, str.text).styles(text_anchor: HALIGNMENT[str.halign])
-          drawing.text_(str.text, x: tra.x + xdim * str.x, y: tra.y + ydim * str.y, 'text-anchor': HALIGNMENT[str.halign], 'font-size': pt(fontsize), 'font-family': font_map[fontname] || fontname)
+          drawing.text_(str.text, x: tra.x + xdim * str.x, y: tra.y + ydim * str.y, 'text-anchor': HALIGNMENT[str.halign], fill: font_color, 'font-size': pt(fontsize), 'font-family': font_map[fontname] || fontname)
         end
       end
     end
@@ -464,11 +428,12 @@ module Mcc2
       border_color = go[GOA_BORDER_COLOR]
       border_width = go[GOA_BORDER_WIDTH].to_f
 
-      drawing.fill "#" + fill_color
-      drawing.stroke "#" + border_color
-      drawing.stroke_width mm(border_width).round
-      drawing.roundrectangle(tra.x, tra.y, tra.x + mm(go_width).round, tra.y + mm(go_height).round, mm(corner_radius), mm(corner_radius))
-      # body.rect(mm(go_width).round, mm(go_height).round).round(mm(corner_radius)).styles(fill: "#" + fill_color, stroke: "#" + border_color, stroke_width: mm(border_width).round)
+      drawing.rect(
+        fill: "#" + fill_color,
+        stroke: "#" + border_color,
+        "stroke-width": mm(border_width).round,
+        x: tra.x, y: tra.y, width: mm(go_width).round, height: mm(go_height).round,
+        rx: mm(corner_radius), ry: mm(corner_radius))
     end
 
     def draw_embedobject(drawing, tra, go, go_width, go_height, data, row_number, barcode_dpi)
@@ -500,7 +465,6 @@ module Mcc2
               if row
                 elpos = tra.translate(mm(idx_w * obj_w).round, mm(idx_h * obj_h).round)
                 draw(drawing, elpos, layout_file, false, false, row, page_nr, layers: [0])
-                # draw(canvas1, layout_file, false, false, row, page_nr, layers: [0])
               end
             end
           end
