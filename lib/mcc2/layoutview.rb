@@ -127,12 +127,12 @@ module Mcc2
       @lf.checkbutton_contact.connect(SEL_COMMAND) { |sender, sel, event| change_chkbtn(sender, S_CONTACT) }
       @lf.checkbutton_magstripe.connect(SEL_COMMAND) { |sender, sel, event| change_chkbtn(sender, S_MAGSTRIPE) }
 
-      @lf.textfield_box_fill_color.connect(SEL_COMMAND) { |sender, sel, event| textfield_exit(sender, GOA_FILL_COLOR) }
+      @lf.textfield_box_fill_color.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, GOA_FILL_COLOR) }
       @lf.button_box_fill_color.connect(SEL_COMMAND) { text_color_dialog(@lf.textfield_box_fill_color) }
-      @lf.textfield_box_border_color.connect(SEL_COMMAND) { |sender, sel, event| textfield_exit(sender, GOA_BORDER_COLOR) }
+      @lf.textfield_box_border_color.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, GOA_BORDER_COLOR) }
       @lf.button_box_border_color.connect(SEL_COMMAND) { text_color_dialog(@lf.textfield_box_border_color) }
-      @lf.textfield_box_border_width.connect(SEL_COMMAND) { |sender, sel, event| textfield_exit(sender, GOA_BORDER_WIDTH) }
-      @lf.textfield_box_corner_radius.connect(SEL_COMMAND) { |sender, sel, event| textfield_exit(sender, GOA_CORNER_RADIUS) }
+      @lf.textfield_box_border_width.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, GOA_BORDER_WIDTH) }
+      @lf.textfield_box_corner_radius.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, GOA_CORNER_RADIUS) }
 
       # die Checkbuttons für das Löschen und Kopieren von Graphik-Objekten
       @lf.button_copy.enabled = false
