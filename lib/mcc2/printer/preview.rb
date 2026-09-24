@@ -211,21 +211,21 @@ module Mcc2
 
         log.info "rect_list = draw"
         builder = Nokogiri::XML::Builder.new do |svg|
+
           svg.svg(xmlns: 'http://www.w3.org/2000/svg', viewBox: "0 0 #{mm(image_width)} #{mm(image_height)}") do
+            svg.g(transform: "scale(-1 -1) translate(-#{mm(image_width)} -#{mm(image_height)})") do
 
-            # svg.circle(cx: 400, cy: 300, r: 100, fill: 'blue', class: 'interactive')
-            # svg.text_('Click me', x: 400, y: 310, 'text-anchor': 'middle', fill: 'white', 'font-size': 20)
+              # Front
+              draw_pos_x = 0
+              draw_pos_y = 0
+              tra = Transformation.new
+              rect_list = draw(svg, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 0, layers: :all)
 
-            # Vorderseite
-            draw_pos_x = 0
-            draw_pos_y = 0
-            tra = Transformation.new
-            rect_list = draw(svg, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 0, layers: :all)
-
-            # Rückseite
-            if duplex
-              draw_pos_y = height_with_margins(height) + card_offset
-              rect_list.add draw(svg, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 1, layers: :all)
+              # Rear
+              if duplex
+                draw_pos_y = height_with_margins(height) + card_offset
+                rect_list.add draw(svg, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 1, layers: :all)
+              end
             end
           end
         end
@@ -235,41 +235,25 @@ module Mcc2
         # puts svg_data
         log.info "built svg text"
 
-        # File.write("dummy-temp.svg", svg_data)
-        # # Render SVG to raster image
-        # canvas = Magick::Image.read('rsvg:dummy-temp.svg')
-        # p canvas
-        # log.info "rendered svg"
-        # # Write image to PNG blob
-        # data = canvas.first.to_blob do |i|
-        #   i.format = "PNG"
-        # end
-
-        # require "vips"
-        # image = Vips::Image.new_from_buffer(svg_data, "")
-        # data = image.write_to_buffer ".png", background: 255
-
-
         svg_handle = RSVG::Handle.new_from_data(svg_data)
 
         width = mm(image_width)
         height = mm(image_height)
 
-        surface = Cairo::ImageSurface.new(Cairo::FORMAT_ARGB32, width, height)
+        surface = Cairo::ImageSurface.new(Cairo::FORMAT_RGB24, width, height)
         context = Cairo::Context.new(surface)
         context.render_rsvg_handle(svg_handle)
 
         log.info "rendered to pixels"
 
         fx_image = FXImage.new(@parent.app, nil, 0, width, height)
-        fx_image.pixels = surface.data
+        argb = surface.data
+        # Cairo uses BGRA pixel data memory layout, but FXRuby uses RGBA.
+        argb.reverse! # make ARGB, works together with "rotate(180) translate(..)" above
+        argb.delete_prefix!(argb[0]) # drop first byte to make RGB
+        argb << "\0" # add the missing but ignored alpha byte to make RGBA
+        fx_image.pixels = argb
 
-        # # Read PNG into FXRuby image
-        # fx_image = Fox::FXPNGImage.new(@parent.app)
-        # # in contrast to FXPNGImage.new, loadPixels releases the GVL, so doesn't block the main thread
-        # Fox::FXMemoryStream.open(Fox::FXStreamLoad, data) do |infile|
-        #   fx_image.loadPixels(infile)
-        # end
         log.info "update GUI"
 
         @parent.runOnUiThread do
