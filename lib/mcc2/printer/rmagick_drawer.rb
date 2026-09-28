@@ -136,10 +136,12 @@ module Mcc2
       end
     end
 
-    def draw(drawing, transform, layout_file, preview, selected_object_ids, row, page_nr, layers: [0])
-      @font_map = RmagickDrawer.builtin_font_names.dup
+    @@font_map = RmagickDrawer.builtin_font_names.dup
+    @@pango_font_map = Pango::CairoFontMap.default
 
-      pango_font_map = Pango::CairoFontMap.default
+    def draw(drawing, transform, layout_file, preview, selected_object_ids, row, page_nr, layers: [0])
+      @font_map = @@font_map
+
       layout_file.sorted_id_list.each do |id|
         go = layout_file.find_graphic_object_by_id(id)
         font = go[GOA_FONT_TYP]
@@ -147,7 +149,7 @@ module Mcc2
           font_path = go.layout_file.expand_path(go[GOA_FONT_FILE])
 
           @font_map[font_path] ||= begin
-            pango_font_map.add_font_file(font_path)
+            @@pango_font_map.add_font_file(font_path)
             fontinfo_from_file(font_path)
           end
         end

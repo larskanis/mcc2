@@ -17,7 +17,9 @@ module Mcc2
         @parent = parent
         @layout = layout
         @selected_object_ids = []
-        @thread = nil
+        @render_queue = nil
+        @render_thread = nil
+        @render_running = false
 
         FXHorizontalFrame.new(parent, opts: LAYOUT_FILL_X) do |frame1|
           @label_zoom = FXLabel.new(frame1, "") do |label_zoom|
@@ -156,27 +158,34 @@ module Mcc2
       def start_preview_timer
         return unless @draw_preview_at
 
+        @render_queue ||= Queue.new
+        @render_thread ||= Thread.new do
+          loop do
+            @render_queue.pop
+
+            # require 'ruby-prof'
+            # result = RubyProf::Profile.profile do
+            draw_preview_now(@row)
+            # end
+            # printer = RubyProf::GraphPrinter.new(result)
+            # printer.print(STDOUT)
+
+            @render_running = false
+            # requeue preview generation, when something was changed
+            # while the thread was running.
+            @parent.runOnUiThread do
+              start_preview_timer
+            end
+          end
+        end
+
         delay = @draw_preview_at - Time.now
         @parent.app.addTimeout((delay > 0) ? delay * 1000 : 0) do
-          if @draw_preview_at && !@thread
+          if @draw_preview_at && !@render_running
             if Time.now >= @draw_preview_at
               @draw_preview_at = nil
-              @thread = Thread.new do
-                require 'ruby-prof'
-# result = RubyProf::Profile.profile do
-                draw_preview_now(@row)
-# end
-# printer = RubyProf::GraphPrinter.new(result)
-# printer.print(STDOUT)
-
-
-                @thread = nil
-                # requeue preview generation, when something was changed
-                # while the thread was running.
-                @parent.runOnUiThread do
-                  start_preview_timer
-                end
-              end
+              @render_running = true
+              @render_queue << true
             else
               # addTimeout didn't wait as long as expected per Time.now -> re-schedule
               start_preview_timer

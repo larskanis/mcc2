@@ -16,5 +16,5 @@ group :development do
   gem "foxguib"
   gem 'i18n-tasks', '~> 1.1'
   gem "ruby-prof"
-  gem "simple-logger"
+  gem "simple-logger", source: "https://ccgems"
 end
