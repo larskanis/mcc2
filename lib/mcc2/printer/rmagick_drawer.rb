@@ -1,6 +1,7 @@
 require "mcc2/dataman/base"
-require "rmagick"           # für das Erzeugen der Druckbilder
 require "i18n"
+require "ttfunk"
+require "pango"
 
 module Mcc2
   module RmagickDrawer
@@ -62,7 +63,81 @@ module Mcc2
       height + card_margin_bottom + card_margin_top
     end
 
+    FontInfo = Data.define :font_family, :font_weight, :font_style
+
+    private def fontinfo_from_file(font_path)
+      ttf = TTFunk::File.open(font_path)
+
+      # Extract names from the 'name' table
+      # ttfunk groups strings by name_id. We fetch the English (US) strings primarily.
+      names = ttf.name
+
+      # Helper to get the English string for a specific Name ID
+      get_name = lambda do |instances|
+        return nil if instances.empty?
+
+        # Try to find English (Language ID 1033 or 0)
+        raw_string = instances.find { |s| s.language_id == 1033 || s.language_id == 0 } || instances.first
+        # Determine Ruby-compatible encoding based on TTF Platform Specs
+        ruby_encoding = case raw_string.platform_id
+                        when 0, 3 # Unicode (0) or Microsoft (3) use UTF-16BE/UCS-2
+                          'UTF-16BE'
+                        when 1    # Macintosh (1) typically uses MacRoman
+                          'MacRoman'
+                        else
+                          'ASCII-8BIT' # Fallback for raw byte manipulation
+                        end
+        utf8_string = raw_string.encode('UTF-8', ruby_encoding, invalid: :replace, undef: :replace)
+        # Strip null bytes that occasionally bleed through from malformed sub-tables
+        utf8_string.gsub("\u0000", '').strip
+      end
+
+      # Fetch the specific Name IDs
+      font_family_id1       = get_name.call(names.font_family)  # Font Family Name (Legacy)
+      font_subfamily_id2    = get_name.call(names.font_subfamily)  # Font Subfamily Name (Legacy)
+      pref_family_id16      = get_name.call(names.preferred_family) # Typographic/Preferred Family
+      pref_subfamily_id17   = get_name.call(names.preferred_subfamily) # Typographic/Preferred Subfamily
+
+      # 1. Map font-family (Prefer ID 16, fallback to ID 1)
+      css_family = pref_family_id16 || font_family_id1
+
+      # 2. Map font-weight (Read directly from the numeric OS/2 table usWeightClass)
+      # Fallback to checking the Subfamily strings if OS/2 table is missing
+      css_weight = 400
+      if ttf.os2
+        css_weight = ttf.os2.weight_class
+      else
+        subfamily_str = (pref_subfamily_id17 || font_subfamily_id2 || '').downcase
+        css_weight = 700 if subfamily_str.include?('bold')
+        css_weight = 300 if subfamily_str.include?('light')
+      end
+
+      # 3. Map font-style (Check head table macStyle or parse Subfamily strings)
+      if ttf.header.mac_style
+        is_italic = (ttf.header.mac_style & 2) != 0 # Bit 1 represents Italic
+      else
+        subfamily_str = (pref_subfamily_id17 || font_subfamily_id2 || '').downcase
+        is_italic = subfamily_str.include?('italic') || subfamily_str.include?('oblique')
+      end
+      css_style = is_italic ? 'italic' : 'normal'
+
+      FontInfo.new(css_family, css_weight, css_style)
+    end
+
+    @@builtin_fonts = nil
+    def self.builtin_font_names
+      @@builtin_fonts ||= begin
+        fm = PangoCairo::FontMap.default
+        fm.families.flat_map do |f|
+          f.faces.map do |ff|
+            ["#{f.name} #{ff.face_name}", FontInfo.new(f.name, ff.describe.weight.to_i, ff.describe.style.name.delete_prefix("PANGO_STYLE_").downcase)]
+          end
+        end.to_h.freeze
+      end
+    end
+
     def draw(drawing, transform, layout_file, preview, selected_object_ids, row, page_nr, layers: [0])
+      @font_map = RmagickDrawer.builtin_font_names.dup
 
       pango_font_map = Pango::CairoFontMap.default
       layout_file.sorted_id_list.each do |id|
@@ -73,13 +148,11 @@ module Mcc2
 
           @font_map[font_path] ||= begin
             pango_font_map.add_font_file(font_path)
-            ttfile = TTFunk::File.open(font_path)
-            ttfile.name.font_name.first.encode("UTF-8", "UTF-16BE")
+            fontinfo_from_file(font_path)
           end
         end
       end
 
-      @magick_font_list ||= Magick.fonts.map { |mf| mf.name }
       barcode_dpi = layout_file.get_attr_value(S_BARCODE_DPI).to_f
       rect_list = ObjRectangeList.new
 
@@ -254,7 +327,15 @@ module Mcc2
         #   fill: font_color,
         #   text_anchor: just
         # )
-        drawing.text_(data, x: apos.x, y: apos.y, 'text-anchor': just, fill: font_color, 'font-size': pt(fontsize), 'font-family': font_map[font] || font, 'xml:space': "preserve")
+
+        drawing.text_(data, x: apos.x, y: apos.y,
+                      fill: font_color,
+                      'text-anchor': just,
+                      'font-size': pt(fontsize),
+                      'font-family': font_map[font]&.font_family || font,
+                      'font-weight': font_map[font]&.font_weight || font,
+                      'font-style': font_map[font]&.font_style || font,
+                      'xml:space': "preserve")
       end
     end
 
@@ -326,19 +407,14 @@ module Mcc2
 
       barcode_typ = go[GOA_BARCODE_TYP]
       go[GOA_BAR_RATIO].to_i
-      fontname = go[GOA_FONT_TYP]
-      if fontname == "from_file"
-        fontname = go.layout_file.expand_path(go[GOA_FONT_FILE])
+      font = go[GOA_FONT_TYP]
+      if font == "from_file"
+        font = go.layout_file.expand_path(go[GOA_FONT_FILE])
       end
       fontsize = go[GOA_FONT_HEIGHT].to_f
       font_color = ["#", go[GOA_FONT_COLOR]].join
 
-      check_font(fontname, go)
-
-      # drawing.fill(font_color)
-      # drawing.stroke("none")
-      # drawing.font(fontname)
-      # drawing.font_size(pt(fontsize))
+      check_font(font, go)
 
       begin
         barcode = Zint.const_get(BARCODE_ALIAS[barcode_typ.to_sym] || barcode_typ).new(value: data)
@@ -409,7 +485,14 @@ module Mcc2
           # apos = tra.translate(xdim * str.x / xgran, )
           # drawing.text(tra.x + xdim * str.x, tra.y + ydim * str.y, str.text)
           # body.text(xdim * str.x / 2, ydim * str.y / 2, str.text).styles(text_anchor: HALIGNMENT[str.halign])
-          drawing.text_(str.text, x: tra.x + xdim * str.x, y: tra.y + ydim * str.y, 'text-anchor': HALIGNMENT[str.halign], fill: font_color, 'font-size': pt(fontsize), 'font-family': font_map[fontname] || fontname)
+          drawing.text_(str.text, x: tra.x + xdim * str.x, y: tra.y + ydim * str.y,
+                        'text-anchor': HALIGNMENT[str.halign],
+                        fill: font_color,
+                        'font-size': pt(fontsize),
+                        'font-family': font_map[font]&.font_family || font,
+                        'font-weight': font_map[font]&.font_weight || font,
+                        'font-style': font_map[font]&.font_style || font,
+                        'xml:space': "preserve")
         end
       end
     end
@@ -475,7 +558,7 @@ module Mcc2
     end
 
     def check_font(font, obj)
-      unless @magick_font_list.index(font) || File.exist?(font)
+      unless @font_map[font]
         raise Printer::Base::ResourceNotFoundError, I18n.t(:font_not_found, default: "Die Schriftart '%{font}' in Object %{obj} konnte nicht gefunden werden.", font:, obj: obj[GOA_NAME].inspect )
       end
     end

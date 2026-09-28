@@ -278,15 +278,6 @@ module Mcc2
           enable_error_view(*I18n.t(:preview_error_printing_exception, default: [["Fehler beim Erstellen der Layoutvorschau", "%{e}"]], e: DebugTools.unkown_error_message(e)))
         end
       end
-
-      def check_if_font_exist(fontdesc)
-        rmfl = []
-        Magick.fonts.each do |mf|
-          rmfl << mf.name
-        end
-        return fontdesc if rmfl.index(fontdesc.face.tr(" ", "-").delete("@"))
-        fdlg.execute
-      end
     end
   end
 end
