@@ -9,6 +9,7 @@ module Mcc2
   module Printer
     class GdiPrinter < CardPrinter
       include RmagickDrawer
+      include SimpleLogging
 
       attr_accessor :chip
 
@@ -123,6 +124,10 @@ module Mcc2
         end
       end
 
+      private def bin_regexp(text)
+        Regexp.new(text.b, Regexp::MULTILINE | Regexp::FIXEDENCODING)
+      end
+
       def prepare_gdi_page(hPrinter, initdata, row, page_nr)
         raise "unterschiedliche X- und Y-Auflösung wird beim Druck nicht unterstützt (#{initdata[:dmPrintQuality].inspect}x#{initdata[:dmYResolution].inspect})" if initdata[:dmYResolution] != initdata[:dmPrintQuality] && initdata[:dmYResolution] != 0 && initdata[:dmPrintQuality] != 0
         self.dpi = [initdata[:dmYResolution], initdata[:dmPrintQuality]].max
@@ -136,36 +141,42 @@ module Mcc2
         selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
         preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
 
-        pic = Magick::ImageList.new
-        pic.new_image(mm(page_width), mm(page_height)) { |options| options.background_color = "white" }
-        drawing = Magick::Draw.new
-        drawing.text_antialias(false)
+        image_width = mm(page_width).round
+        image_height = mm(page_height).round
 
-        tra = Transformation.new
-        draw(drawing, tra, layout_file, preview, selected_object_id, row, page_nr)
-
-        drawing.draw(pic) # Draw ins Image zeichnen
-        pic = postprocess_image(pic, layout_file, page_nr)
-
-        # flip left to right and raster image
-        lpvBits = pic.flop.to_blob do |image|
-          image.format = "rgb"
-          image.depth = 8
+        builder = Nokogiri::XML::Builder.new do |svg|
+          svg.svg(xmlns: 'http://www.w3.org/2000/svg', viewBox: "0.5 0.5 #{image_width} #{image_height}") do
+            svg.g(transform: "scale(1 -1) translate(0 -#{image_height})") do
+              tra = Transformation.new
+              draw(svg, tra, layout_file, preview, selected_object_id, row, page_nr)
+            end
+          end
         end
-        # Reversion the image data means:
-        # - turning color order RGB to BGR (needed by win32api)
-        # - mirroring bottom to up
-        # - mirroring left to right
-        lpvBits.reverse!
+        log.info "built nokogiri"
+        svg_data = builder.to_xml
+        log.info "built svg text"
+
+        svg_handle = RSVG::Handle.new_from_data(svg_data)
+        surface = Cairo::ImageSurface.new(Cairo::FORMAT_RGB24, image_width, image_height)
+        context = Cairo::Context.new(surface)
+        context.set_source_rgb(1.0, 1.0, 1.0)
+        context.paint
+        context.render_rsvg_handle(svg_handle)
+        lpvBits = surface.data
+        log.info "rendered to pixels"
+        # Convert BGRA data of librsvg to BGR of Win32 print API
+        lpvBits.gsub!(bin_regexp("(...)."), '\1')
+        log.info "converted to BGR"
 
         block_size = 4 # each scanline has to be DWORD padded
         # split the image in single rows
-        lpvBits = lpvBits.unpack("a#{pic.columns * 3}" * pic.rows).map do |imgrow|
+        lpvBits = lpvBits.unpack("a#{image_width * 3}" * image_height).map do |imgrow|
           # align each row to DWORD
           imgrow << "\0" * (block_size - 1 - (imgrow.length - 1 & (block_size - 1)))
         end.join
+        log.info "converted to scan lines"
 
-        xDest, yDest, dwWidth, dwHeight, xSrc, ySrc = mm(draw_pos_x), mm(draw_pos_y), pic.columns, pic.rows, 0, 0
+        xDest, yDest, dwWidth, dwHeight, xSrc, ySrc = mm(draw_pos_x), mm(draw_pos_y), image_width, image_height, 0, 0
         uStartScan, cScanLines = 0, dwHeight
         fuColorUse = Win32api4ruby::Gdi::DIB_RGB_COLORS
 
