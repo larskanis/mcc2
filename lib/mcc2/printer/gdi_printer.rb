@@ -2,6 +2,7 @@ gem "win32api4ruby", ">= 0.2.1"
 require "win32api4ruby"
 require "mcc2/printer/card_printer"
 require "mcc2/printer/rmagick_drawer"
+require "mcc2_c_helper"
 
 Win32api4ruby::Base.unicode = true
 
@@ -165,7 +166,9 @@ module Mcc2
         lpvBits = surface.data
         log.info "rendered to pixels"
         # Convert BGRA data of librsvg to BGR of Win32 print API
-        lpvBits.gsub!(bin_regexp("(...)."), '\1')
+        # lpvBits = lpvBits.unpack("a3x"*(lpvBits.bytesize/4)).join
+        # The faster converter of BGRA to BGR image data
+        lpvBits = Mcc2CHelper.bgra_to_bgr(lpvBits)
         log.info "converted to BGR"
 
         block_size = 4 # each scanline has to be DWORD padded

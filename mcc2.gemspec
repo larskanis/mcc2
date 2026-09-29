@@ -34,6 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'cairo'
   spec.add_runtime_dependency 'pango'
   spec.add_runtime_dependency 'ttfunk'
+  spec.add_runtime_dependency "mcc2_c_helper", "~> 0.1"
 
   spec.add_development_dependency "bundler", ">= 1.11"
   spec.add_development_dependency "rake", "~> 13.0"
