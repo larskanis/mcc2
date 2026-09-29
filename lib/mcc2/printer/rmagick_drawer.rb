@@ -359,6 +359,8 @@ module Mcc2
       if data.nil? || data.empty? || (data.tr("\\", "/") =~ /\/$/)
         # kein Bildname angegeben -> dieses Objekt ignorieren
       elsif (path = go.layout_file.expand_path(data)) && FileTest.file?(path)
+        require "rmagick"
+
         self_dpi = dpi
         image_page = go[GOA_IMAGE_PAGE].to_i - 1
         go_image = Magick::ImageList.new(path) { |img|
