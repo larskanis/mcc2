@@ -63,7 +63,7 @@ module Mcc2
       height + card_margin_bottom + card_margin_top
     end
 
-    FontInfo = Data.define :font_family, :font_weight, :font_style
+    FontInfo = Data.define :font_family, :font_weight, :font_style, :font_stretch
 
     private def fontinfo_from_file(font_path)
       ttf = TTFunk::File.open(font_path)
@@ -106,6 +106,17 @@ module Mcc2
       css_weight = 400
       if ttf.os2
         css_weight = ttf.os2.weight_class
+        css_width = {
+            1 => 'ultra-condensed',
+            2 => 'extra-condensed',
+            3 => 'condensed',
+            4 => 'semi-condensed',
+            5 => 'normal',
+            6 => 'semi-expanded',
+            7 => 'expanded',
+            8 => 'extra-expanded',
+            9 => 'ultra-expanded',
+          }[ttf.os2.width_class]
       else
         subfamily_str = (pref_subfamily_id17 || font_subfamily_id2 || '').downcase
         css_weight = 700 if subfamily_str.include?('bold')
@@ -121,7 +132,7 @@ module Mcc2
       end
       css_style = is_italic ? 'italic' : 'normal'
 
-      FontInfo.new(css_family, css_weight, css_style)
+      FontInfo.new(css_family, css_weight, css_style, css_width || '')
     end
 
     @@builtin_fonts = nil
@@ -130,7 +141,7 @@ module Mcc2
         fm = PangoCairo::FontMap.default
         fm.families.flat_map do |f|
           f.faces.map do |ff|
-            ["#{f.name} #{ff.face_name}", FontInfo.new(f.name, ff.describe.weight.to_i, ff.describe.style.name.delete_prefix("PANGO_STYLE_").downcase)]
+            [ff.describe.to_s, FontInfo.new(f.name, ff.describe.weight.to_i, ff.describe.style.nick, ff.describe.stretch.nick)]
           end
         end.to_h.freeze
       end
@@ -139,21 +150,23 @@ module Mcc2
     @@font_map = RmagickDrawer.builtin_font_names.dup
     @@pango_font_map = Pango::CairoFontMap.default
 
-    def draw(drawing, transform, layout_file, preview, selected_object_ids, row, page_nr, layers: [0])
-      @font_map = @@font_map
-
+    def add_fonts_from_layout(layout_file)
       layout_file.sorted_id_list.each do |id|
         go = layout_file.find_graphic_object_by_id(id)
         font = go[GOA_FONT_TYP]
         if font == "from_file"
           font_path = go.layout_file.expand_path(go[GOA_FONT_FILE])
 
-          @font_map[font_path] ||= begin
+          @@font_map[font_path] ||= begin
             @@pango_font_map.add_font_file(font_path)
             fontinfo_from_file(font_path)
           end
         end
       end
+    end
+
+    def draw(drawing, transform, layout_file, preview, selected_object_ids, row, page_nr, layers: [0])
+      add_fonts_from_layout(layout_file)
 
       barcode_dpi = layout_file.get_attr_value(S_BARCODE_DPI).to_f
       rect_list = ObjRectangeList.new
@@ -314,7 +327,7 @@ module Mcc2
         just = :start # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
       end
 
-      check_font(font, go)
+      font_info = get_font_info(font, go)
 
       if data && !data.empty?
         # drawing.font font
@@ -334,9 +347,10 @@ module Mcc2
                       fill: font_color,
                       'text-anchor': just,
                       'font-size': pt(fontsize),
-                      'font-family': font_map[font]&.font_family || font,
-                      'font-weight': font_map[font]&.font_weight || font,
-                      'font-style': font_map[font]&.font_style || font,
+                      'font-family': font_info.font_family,
+                      'font-weight': font_info.font_weight,
+                      'font-style': font_info.font_style,
+                      'font-stretch': font_info.font_stretch,
                       'xml:space': "preserve")
       end
     end
@@ -416,7 +430,7 @@ module Mcc2
       fontsize = go[GOA_FONT_HEIGHT].to_f
       font_color = ["#", go[GOA_FONT_COLOR]].join
 
-      check_font(font, go)
+      font_info = get_font_info(font, go)
 
       begin
         barcode = Zint.const_get(BARCODE_ALIAS[barcode_typ.to_sym] || barcode_typ).new(value: data)
@@ -491,9 +505,10 @@ module Mcc2
                         'text-anchor': HALIGNMENT[str.halign],
                         fill: font_color,
                         'font-size': pt(fontsize),
-                        'font-family': font_map[font]&.font_family || font,
-                        'font-weight': font_map[font]&.font_weight || font,
-                        'font-style': font_map[font]&.font_style || font,
+                        'font-family': font_info.font_family,
+                        'font-weight': font_info.font_weight,
+                        'font-style': font_info.font_style,
+                        'font-stretch': font_info.font_stretch,
                         'xml:space': "preserve")
         end
       end
@@ -559,10 +574,12 @@ module Mcc2
       end
     end
 
-    def check_font(font, obj)
-      unless @font_map[font]
+    def get_font_info(font, obj)
+      font_info = @@font_map[font]
+      unless font_info
         raise Printer::Base::ResourceNotFoundError, I18n.t(:font_not_found, default: "Die Schriftart '%{font}' in Object %{obj} konnte nicht gefunden werden.", font:, obj: obj[GOA_NAME].inspect )
       end
+      font_info
     end
 
     def postprocess_image(pic, layout_file, page)
