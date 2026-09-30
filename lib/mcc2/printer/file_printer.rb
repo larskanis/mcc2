@@ -86,6 +86,8 @@ module Mcc2
             surface = Cairo::SVGSurface.new(documentName, image_width, image_height)
             surface.define_singleton_method(:finish_print){ finish }
           else
+            require "rmagick"
+
             surface = Cairo::ImageSurface.new(Cairo::FORMAT_ARGB32, image_width, image_height)
             dens = "#{dpi}x#{dpi}"
             surface.define_singleton_method(:finish_print) do
