@@ -89,6 +89,10 @@ module Mcc2
         @dpi / 72.0 * l
       end
 
+      def mm_to_pt(mm)
+        mm / 25.4 * 72.0
+      end
+
       def print_page(hPrinter, layout_file, row, page_nr, page_width = default_width, page_height = default_height)
         raise "not implemented"
       end
@@ -123,6 +127,9 @@ module Mcc2
 
       def set_duplex(hPrinter, state)
         raise "not implemented"
+      end
+
+      def close
       end
     end
   end
