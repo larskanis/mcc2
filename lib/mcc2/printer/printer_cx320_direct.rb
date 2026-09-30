@@ -2,6 +2,7 @@ require "json"
 require "libcx320"
 require "mcc2/printer/card_printer"
 require "mcc2/printer/rmagick_drawer"
+require "rmagick"
 
 module Mcc2
   module Printer
@@ -138,25 +139,40 @@ module Mcc2
       end
 
       def draw_rvg_image(layout_file, row, page, layers, x_offset, y_offset)
-        selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
-        preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
+        image_width, image_height = 1036, 664
+        Cairo::ImageSurface.new(Cairo::FORMAT_RGB24, image_width, image_height) do |surface|
+          surface.set_fallback_resolution(dpi, dpi)
+          Cairo::Context.new(surface) do |context|
+            context.set_source_rgb(1.0, 1.0, 1.0) # make white background
+            context.paint
 
-        pic = Magick::ImageList.new
-        pic.new_image(1036, 664) { |options| options.background_color = "white" }
-        drawing = Magick::Draw.new
-        drawing.text_antialias(false)
+            svg_data = Nokogiri::XML::Builder.new do |svg|
+              svg.svg(xmlns: 'http://www.w3.org/2000/svg', viewBox: "0 0 #{image_width} #{image_height}") do
+                tra = Transformation.new
+                draw(svg, tra.translate(mm(x_offset).round, mm(y_offset).round), layout_file, false, nil, row, page, layers: layers)
+              end
+            end.to_xml
+            svg_handle = RSVG::Handle.new_from_data(svg_data)
+            context.render_rsvg_handle(svg_handle)
+          end
 
-        tra = Transformation.new
-        draw(drawing, tra.translate(mm(x_offset).round, mm(y_offset).round), layout_file, preview, selected_object_id, row, page, layers: layers)
+          # Convert to ImageMagick image
+          # "BGRA" matches the byte ordering of Cairo's FORMAT_ARGB32
+          image = Magick::Image.from_blob(surface.data) do |options|
+            options.format = 'BGRA'
+            options.size = "#{image_width}x#{image_height}"
+            options.depth = 8 # Bits per pixel channel
+          end.first
 
-        # Draw in ein Image zeichnen
-        drawing.draw(pic)
-        postprocess_image(pic, layout_file, page)
+          return image
+        end
       end
 
       def generate_image_planes(layout_file, row, page, layers, x_offset, y_offset)
         if layers.include?(0)
           pic = draw_rvg_image(layout_file, row, page, [0], x_offset, y_offset)
+
+          # TODO: Convert this code to use mcc2_c_helper.gem instead of rmagick
 
           # Convert RGB to CMY image by inversion of color values
           gradient_pic = Magick::Image.new(256, 1)
