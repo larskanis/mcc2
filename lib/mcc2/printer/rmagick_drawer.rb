@@ -165,145 +165,165 @@ module Mcc2
       end
     end
 
-    def draw(drawing, transform, layout_file, preview, selected_object_ids, row, page_nr, layers: [0])
-      add_fonts_from_layout(layout_file)
+    def flip_flop_mirrors(svg, tra, layout_file, preview, page)
+      flip = true if page % 2 == 0 && layout_file.get_attr_value(S_FRONT_FLIP) == S_TRUE
+      flop = true if page % 2 == 0 && layout_file.get_attr_value(S_FRONT_FLOP) == S_TRUE
+      flip = true if page % 2 != 0 && layout_file.get_attr_value(S_BACK_FLIP) == S_TRUE
+      flop = true if page % 2 != 0 && layout_file.get_attr_value(S_BACK_FLOP) == S_TRUE
 
-      barcode_dpi = layout_file.get_attr_value(S_BARCODE_DPI).to_f
-      rect_list = ObjRectangeList.new
+      return yield if (!flip && !flop) || preview
 
       width = layout_file.get_attr_value(S_WIDTH).to_f
       height = layout_file.get_attr_value(S_HEIGHT).to_f
-      if preview
-        # todo -0.5, damit die rechten und unteren Ränder zu sehen sind, jetzt sitzt die Karte aber unsymetrisch auf dem Rechteck
-        # drawing.fill("none")
-        # drawing.stroke("black")
-        drawing.rect(x: transform.x, y: transform.y, width: mm(width_with_margins(width)).round-1, height: mm(height_with_margins(height)).round-1, fill: "white", stroke: "black", "stroke-width": 1)
-        # drawing.rectangle(transform.x, transform.y, cpos.x, cpos.y)
-        # canvas.rect(mm(width_with_margins(width - 0.5)), mm(height_with_margins(height - 0.5))).styles(fill: "none", stroke: "black")
+      image_width = mm(width_with_margins(width)).round-1
+      image_height = mm(height_with_margins(height)).round-1
+
+      svg.g(transform: "translate(#{tra.x}, #{tra.y}) scale(#{flip ? -1.0 : 1.0} #{flop ? -1.0 : 1.0}) translate(#{flip ? -image_width : 0} #{flop ? -image_height : 0}) translate(#{-tra.x}, #{-tra.y})") do
+        return yield
       end
+    end
 
-      tra = transform.translate(mm(card_margin_left).round, mm(card_margin_top).round)
-      # Fill card background for preview
-      rx = mm(3).round
-      if preview
-        # drawing.fill("lightgray")
-        # drawing.stroke("none")
-        drawing.rect(x: tra.x, y: tra.y, width: mm(width).round, height: mm(height).round, fill: "lightgray", rx: , stroke: "blue", "stroke-width": 1)
-        # drawing = drawing.draw_rect([200,200,200], tra.x, tra.y, cpos.x-tra.x, cpos.y-tra.y, fill: true)
-        # drawing.roundrectangle(tra.x, tra.y, cpos.x, cpos.y, rx, rx)
-        # canvas1.rect(mm(width), mm(height)).round(rx).styles(fill: "lightgray", stroke: "none")
-      end
-      # die graphischen Elemnte zeichnen
+    def draw(drawing, transform, layout_file, preview, selected_object_ids, row, page_nr, layers: [0])
+      add_fonts_from_layout(layout_file)
 
-      # Text-Objekte
-      sorted_id_list = layout_file.sorted_id_list
-      sorted_id_list.each do |id|
-        go = layout_file.find_graphic_object_by_id(id)
-        # nur die Objekte zeichnen, die auf diese Seite sollen
-        if go[GOA_PAGE_NR].to_i == page_nr && (layers == :all || layers.include?(go[GOA_LAYER].to_i))
+      flip_flop_mirrors(drawing, transform, layout_file, preview, page_nr) do
+        barcode_dpi = layout_file.get_attr_value(S_BARCODE_DPI).to_f
+        rect_list = ObjRectangeList.new
 
-          # die allgemeinen Attribute ermitteln
-          x = go[GOA_X].to_f
-          y = go[GOA_Y].to_f
-          go_width = go[GOA_WIDTH].to_f
-          go_height = go[GOA_HEIGHT].to_f
-          rotation = go[GOA_ROTATION].to_f
-          typ = go[GOA_TYP]
+        width = layout_file.get_attr_value(S_WIDTH).to_f
+        height = layout_file.get_attr_value(S_HEIGHT).to_f
+        if preview
+          # todo -0.5, damit die rechten und unteren Ränder zu sehen sind, jetzt sitzt die Karte aber unsymetrisch auf dem Rechteck
+          # drawing.fill("none")
+          # drawing.stroke("black")
+          drawing.rect(x: transform.x, y: transform.y, width: mm(width_with_margins(width)).round-1, height: mm(height_with_margins(height)).round-1, fill: "white", stroke: "black", "stroke-width": 1)
+          # drawing.rectangle(transform.x, transform.y, cpos.x, cpos.y)
+          # canvas.rect(mm(width_with_margins(width - 0.5)), mm(height_with_margins(height - 0.5))).styles(fill: "none", stroke: "black")
+        end
 
-          if !go[GOA_DATA]
-            data = nil
-          elsif row && (row.keys - DataMan.meta_headers).any?
-            data = DataMan.replace_variables(go[GOA_DATA], row)
-          elsif go[GOA_DATA]
-            data_nosub = go[GOA_DATA].to_s
-            data = go[GOA_SAMPLE_DATA].to_s
-          end
+        tra = transform.translate(mm(card_margin_left).round, mm(card_margin_top).round)
+        # Fill card background for preview
+        rx = mm(3).round
+        if preview
+          # drawing.fill("lightgray")
+          # drawing.stroke("none")
+          drawing.rect(x: tra.x, y: tra.y, width: mm(width).round, height: mm(height).round, fill: "lightgray", rx: , stroke: "blue", "stroke-width": 1)
+          # drawing = drawing.draw_rect([200,200,200], tra.x, tra.y, cpos.x-tra.x, cpos.y-tra.y, fill: true)
+          # drawing.roundrectangle(tra.x, tra.y, cpos.x, cpos.y, rx, rx)
+          # canvas1.rect(mm(width), mm(height)).round(rx).styles(fill: "lightgray", stroke: "none")
+        end
+        # die graphischen Elemnte zeichnen
 
-          if tra
-            rec = tra.translate(mm(x).round, mm(y).round).rotate(rotation)
-            # Text is written on top of the basis object point, so add the fontsize to the click box
-            text_y = (typ == TEXTOBJECT) ? pt(go[GOA_FONT_HEIGHT].to_f) : 0
-            rec1 = rec.translate(0, -text_y)
-            rec2 = rec1.translate(mm(go_width), 0)
-            rec3 = rec1.translate(mm(go_width), mm(go_height) + text_y)
-            rec4 = rec1.translate(0, mm(go_height) + text_y)
-            orec = ObjRectangle.new(rec1.vector2d, rec2.vector2d, rec3.vector2d, rec4.vector2d, id)
-            rect_list.add(orec)
-          end
+        # Text-Objekte
+        sorted_id_list = layout_file.sorted_id_list
+        sorted_id_list.each do |id|
+          go = layout_file.find_graphic_object_by_id(id)
+          # nur die Objekte zeichnen, die auf diese Seite sollen
+          if go[GOA_PAGE_NR].to_i == page_nr && (layers == :all || layers.include?(go[GOA_LAYER].to_i))
 
-          drawing.g transform: "rotate(#{rec.a})" do
-            opos = rec.inverse
+            # die allgemeinen Attribute ermitteln
+            x = go[GOA_X].to_f
+            y = go[GOA_Y].to_f
+            go_width = go[GOA_WIDTH].to_f
+            go_height = go[GOA_HEIGHT].to_f
+            rotation = go[GOA_ROTATION].to_f
+            typ = go[GOA_TYP]
 
-            begin
-              # die Objekt-spezifischen Attribute ermitteln
-              if typ == TEXTOBJECT
-                draw_textobject(drawing, opos, go, go_width, go_height, data.empty? ? data_nosub : data)
-              elsif typ == PICTUREOBJECT
-                draw_pictureobject(drawing, opos, go, go_width, go_height, data)
-              elsif typ == BARCODEOBJECT
-                data = data.gsub(/\\x([0-9a-f][0-9a-f])/i) { [$1.hex].pack("C") }
-                draw_barcode(drawing, opos, go, go_width, go_height, data, barcode_dpi)
-              elsif typ == BOXOBJECT
-                draw_boxobject(drawing, opos, go, go_width, go_height)
-              elsif typ == EMBEDOBJECT
-                draw_embedobject(drawing, opos, go, go_width, go_height, data, row ? row["row_number"] : "1", barcode_dpi)
+            if !go[GOA_DATA]
+              data = nil
+            elsif row && (row.keys - DataMan.meta_headers).any?
+              data = DataMan.replace_variables(go[GOA_DATA], row)
+            elsif go[GOA_DATA]
+              data_nosub = go[GOA_DATA].to_s
+              data = go[GOA_SAMPLE_DATA].to_s
+            end
+
+            if tra
+              rec = tra.translate(mm(x).round, mm(y).round).rotate(rotation)
+              # Text is written on top of the basis object point, so add the fontsize to the click box
+              text_y = (typ == TEXTOBJECT) ? pt(go[GOA_FONT_HEIGHT].to_f) : 0
+              rec1 = rec.translate(0, -text_y)
+              rec2 = rec1.translate(mm(go_width), 0)
+              rec3 = rec1.translate(mm(go_width), mm(go_height) + text_y)
+              rec4 = rec1.translate(0, mm(go_height) + text_y)
+              orec = ObjRectangle.new(rec1.vector2d, rec2.vector2d, rec3.vector2d, rec4.vector2d, id)
+              rect_list.add(orec)
+            end
+
+            drawing.g transform: "rotate(#{rec.a})" do
+              opos = rec.inverse
+
+              begin
+                # die Objekt-spezifischen Attribute ermitteln
+                if typ == TEXTOBJECT
+                  draw_textobject(drawing, opos, go, go_width, go_height, data.empty? ? data_nosub : data)
+                elsif typ == PICTUREOBJECT
+                  draw_pictureobject(drawing, opos, go, go_width, go_height, data)
+                elsif typ == BARCODEOBJECT
+                  data = data.gsub(/\\x([0-9a-f][0-9a-f])/i) { [$1.hex].pack("C") }
+                  draw_barcode(drawing, opos, go, go_width, go_height, data, barcode_dpi)
+                elsif typ == BOXOBJECT
+                  draw_boxobject(drawing, opos, go, go_width, go_height)
+                elsif typ == EMBEDOBJECT
+                  draw_embedobject(drawing, opos, go, go_width, go_height, data, row ? row["row_number"] : "1", barcode_dpi)
+                end
+              rescue => err
+                raise err, "#{go[GOA_NAME]}: #{err}"
               end
-            rescue => err
-              raise err, "#{go[GOA_NAME]}: #{err}"
-            end
 
-            # in Vorschau einen Rahmen um das selektierte Objekt zeichnen
-            if preview && selected_object_ids.include?(id)
-              # drawing.fill("none")
-              # drawing.stroke("red")
-              # drawing.stroke_width(1)
-              # cpos = opos.translate(mm(go_width), mm(go_height))
-              # drawing.rectangle(opos.x, opos.y, cpos.x, cpos.y)
-              drawing.rect(x: opos.x, y: opos.y, width: [mm(go_width), 0.5].max, height: [mm(go_height), 0.5].max, fill: "none", stroke: "red", "stroke-width": 1)
-              # body.rect(mm(go_width), mm(go_height)).styles(fill: "none", stroke: "red")
+              # in Vorschau einen Rahmen um das selektierte Objekt zeichnen
+              if preview && selected_object_ids.include?(id)
+                # drawing.fill("none")
+                # drawing.stroke("red")
+                # drawing.stroke_width(1)
+                # cpos = opos.translate(mm(go_width), mm(go_height))
+                # drawing.rectangle(opos.x, opos.y, cpos.x, cpos.y)
+                drawing.rect(x: opos.x, y: opos.y, width: [mm(go_width), 0.5].max, height: [mm(go_height), 0.5].max, fill: "none", stroke: "red", "stroke-width": 1)
+                # body.rect(mm(go_width), mm(go_height)).styles(fill: "none", stroke: "red")
+              end
             end
           end
         end
-      end
 
-      if preview
-        # paint magstripe for preview
-        if page_nr == 1 && layout_file.get_attr_value(S_MAGSTRIPE) == S_TRUE
-          rs_rect = tra.translate(mm(0), mm(4))
-          drawing.rect(x: rs_rect.x, y: rs_rect.y, width: mm(width).round, height: mm(12.5).round, fill: "black", stroke: "none", opacity: 0.5)
+        if preview
+          # paint magstripe for preview
+          if page_nr == 1 && layout_file.get_attr_value(S_MAGSTRIPE) == S_TRUE
+            rs_rect = tra.translate(mm(0), mm(4))
+            drawing.rect(x: rs_rect.x, y: rs_rect.y, width: mm(width).round, height: mm(12.5).round, fill: "black", stroke: "none", opacity: 0.5)
 
-          ms_obj = layout_file.magstripe_object
-          (1..3).each do |spurnr|
-            spur_data = ms_obj["ms_spur" + spurnr.to_s]
-            spurpos = rs_rect.translate(mm(3), mm((3.5 * spurnr) + 0.5))
-            drawing.text_("Mag #{spurnr}: #{spur_data}",
-                          x: spurpos.x, y: spurpos.y,
-                          "font-family": "Courier-New Bold Mono",
-                          "font-size": pt(10),
-                          fill: "white")
+            ms_obj = layout_file.magstripe_object
+            (1..3).each do |spurnr|
+              spur_data = ms_obj["ms_spur" + spurnr.to_s]
+              spurpos = rs_rect.translate(mm(3), mm((3.5 * spurnr) + 0.5))
+              drawing.text_("Mag #{spurnr}: #{spur_data}",
+                            x: spurpos.x, y: spurpos.y,
+                            "font-family": "Courier-New Bold Mono",
+                            "font-size": pt(10),
+                            fill: "white")
+            end
+          end
+          # paint contactless chip for preview
+          if page_nr == 0 && layout_file.get_attr_value(S_CONTACTLESS) == S_TRUE
+            clpa = tra.translate(mm(3), mm(3))
+            drawing.rect(x: clpa.x, y: clpa.y, width: mm(5), height: mm(5), rx: mm(0.5), fill: "gray", stroke: "none", opacity: 0.5)
+            clpa = tra.translate(mm(4), mm(4))
+            drawing.rect(x: clpa.x, y: clpa.y, width: mm(75), height: mm(45), rx: mm(3), fill: "none", stroke: "gray", stroke_opacity: 0.5)
+
+            clpa = tra.translate(mm(5), mm(5))
+            drawing.rect(x: clpa.x, y: clpa.y, width: mm(73), height: mm(43), rx: mm(3), fill: "none", stroke: "gray", stroke_opacity: 0.5)
+
+            clpa = tra.translate(mm(6), mm(6))
+            drawing.rect(x: clpa.x, y: clpa.y, width: mm(71), height: mm(41), rx: mm(3), fill: "none", stroke: "gray", stroke_opacity: 0.5)
+          end
+          # paint contact chip for preview
+          if page_nr == 0 && layout_file.get_attr_value(S_CONTACT) == S_TRUE
+            clpa = tra.translate(mm(8), mm(18))
+            drawing.rect(x: clpa.x, y: clpa.y, width: mm(13), height: mm(12), rx: mm(2), fill: "yellow", stroke: "gray")
           end
         end
-        # paint contactless chip for preview
-        if page_nr == 0 && layout_file.get_attr_value(S_CONTACTLESS) == S_TRUE
-          clpa = tra.translate(mm(3), mm(3))
-          drawing.rect(x: clpa.x, y: clpa.y, width: mm(5), height: mm(5), rx: mm(0.5), fill: "gray", stroke: "none", opacity: 0.5)
-          clpa = tra.translate(mm(4), mm(4))
-          drawing.rect(x: clpa.x, y: clpa.y, width: mm(75), height: mm(45), rx: mm(3), fill: "none", stroke: "gray", stroke_opacity: 0.5)
 
-          clpa = tra.translate(mm(5), mm(5))
-          drawing.rect(x: clpa.x, y: clpa.y, width: mm(73), height: mm(43), rx: mm(3), fill: "none", stroke: "gray", stroke_opacity: 0.5)
-
-          clpa = tra.translate(mm(6), mm(6))
-          drawing.rect(x: clpa.x, y: clpa.y, width: mm(71), height: mm(41), rx: mm(3), fill: "none", stroke: "gray", stroke_opacity: 0.5)
-        end
-        # paint contact chip for preview
-        if page_nr == 0 && layout_file.get_attr_value(S_CONTACT) == S_TRUE
-          clpa = tra.translate(mm(8), mm(18))
-          drawing.rect(x: clpa.x, y: clpa.y, width: mm(13), height: mm(12), rx: mm(2), fill: "yellow", stroke: "gray")
-        end
+        rect_list
       end
-
-      rect_list
     end
 
     def draw_textobject(drawing, tra, go, go_width, go_height, data)
@@ -582,14 +602,6 @@ module Mcc2
         raise Printer::Base::ResourceNotFoundError, I18n.t(:font_not_found, default: "Die Schriftart '%{font}' in Object %{obj} konnte nicht gefunden werden.", font:, obj: obj[GOA_NAME].inspect )
       end
       font_info
-    end
-
-    def postprocess_image(pic, layout_file, page)
-      pic.flip! if page % 2 == 0 && layout_file.get_attr_value(S_FRONT_FLIP) == S_TRUE
-      pic.flop! if page % 2 == 0 && layout_file.get_attr_value(S_FRONT_FLOP) == S_TRUE
-      pic.flip! if page % 2 != 0 && layout_file.get_attr_value(S_BACK_FLIP) == S_TRUE
-      pic.flop! if page % 2 != 0 && layout_file.get_attr_value(S_BACK_FLOP) == S_TRUE
-      pic
     end
   end
 end
