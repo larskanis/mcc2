@@ -26,6 +26,7 @@ module Mcc2
             @a
         end
 
+        # rotate by 'a' degree
         def rotate(a)
           self.class.new @x, @y, @a + a
         end
@@ -88,6 +89,10 @@ module Mcc2
         @dpi / 72.0 * l
       end
 
+      def mm_to_pt(mm)
+        mm / 25.4 * 72.0
+      end
+
       def print_page(hPrinter, layout_file, row, page_nr, page_width = default_width, page_height = default_height)
         raise "not implemented"
       end
@@ -122,6 +127,17 @@ module Mcc2
 
       def set_duplex(hPrinter, state)
         raise "not implemented"
+      end
+
+      def svg_builder(**kwargs)
+        Nokogiri::XML::Builder.new do |svg|
+          svg.svg(xmlns: 'http://www.w3.org/2000/svg', **kwargs ) do
+            yield svg
+          end
+        end.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::NO_DECLARATION)
+      end
+
+      def close
       end
     end
   end

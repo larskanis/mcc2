@@ -1,12 +1,5 @@
 #!/usr/bin/env ruby
 
-# RMagick mit englischen Schriftennamen laden, damit mehr Übereinstimmung zw. Windows und Linux
-langbak = ENV["LANG"]
-ENV["LANG"] = "C"
-require "rmagick"
-Magick.fonts { break }
-langbak ? (ENV["LANG"] = langbak) : ENV.delete("LANG")
-
 require "mcc2"
 
 Mcc2::Locales.init

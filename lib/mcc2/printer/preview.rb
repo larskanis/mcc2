@@ -1,20 +1,25 @@
 require "mcc2/printer/base"           # die Basisklasse für die Printer
 require "mcc2/printer/card_printer"
-require "mcc2/printer/rmagick_drawer"
+require "mcc2/printer/svg_drawer"
+require "simple_logger"
+require 'nokogiri'
 
 module Mcc2
   module Printer
     class Preview < Base
-      include RmagickDrawer
+      include SvgDrawer
       include CardPrinting
       include Fox
+      include SimpleLogging
 
       def initialize(parent, layout)
         super()
         @parent = parent
         @layout = layout
         @selected_object_ids = []
-        @thread = nil
+        @render_queue = nil
+        @render_thread = nil
+        @render_running = false
 
         FXHorizontalFrame.new(parent, opts: LAYOUT_FILL_X) do |frame1|
           @label_zoom = FXLabel.new(frame1, "") do |label_zoom|
@@ -153,21 +158,34 @@ module Mcc2
       def start_preview_timer
         return unless @draw_preview_at
 
+        @render_queue ||= Queue.new
+        @render_thread ||= Thread.new do
+          loop do
+            @render_queue.pop
+
+            # require 'ruby-prof'
+            # result = RubyProf::Profile.profile do
+            draw_preview_now(@row)
+            # end
+            # printer = RubyProf::GraphPrinter.new(result)
+            # printer.print(STDOUT)
+
+            @render_running = false
+            # requeue preview generation, when something was changed
+            # while the thread was running.
+            @parent.runOnUiThread do
+              start_preview_timer
+            end
+          end
+        end
+
         delay = @draw_preview_at - Time.now
         @parent.app.addTimeout((delay > 0) ? delay * 1000 : 0) do
-          if @draw_preview_at && !@thread
+          if @draw_preview_at && !@render_running
             if Time.now >= @draw_preview_at
               @draw_preview_at = nil
-              @thread = Thread.new do
-                draw_preview_now(@row)
-
-                @thread = nil
-                # requeue preview generation, when something was changed
-                # while the thread was running.
-                @parent.runOnUiThread do
-                  start_preview_timer
-                end
-              end
+              @render_running = true
+              @render_queue << true
             else
               # addTimeout didn't wait as long as expected per Time.now -> re-schedule
               start_preview_timer
@@ -176,49 +194,69 @@ module Mcc2
         end
       end
 
+      attr_reader :font_map
+
       def draw_preview_now(row = nil)
+        require 'rsvg2'
+        require 'cairo'
+        require 'pango'
+        require 'ttfunk'
+
+        @font_map = {}
+
         # allgemeine Einstellungen des Image vornehmen
-        width = @layout_file.get_attr_value(S_WIDTH).to_f
-        height = @layout_file.get_attr_value(S_HEIGHT).to_f
+        layout_width_mm = @layout_file.get_attr_value(S_WIDTH).to_f
+        layout_height_mm = @layout_file.get_attr_value(S_HEIGHT).to_f
         duplex = @layout_file.get_attr_value(S_DUPLEX) == S_TRUE
 
         preview = true
 
         card_offset = 0
 
-        image_width = width_with_margins(width)
-        image_height = (duplex ? 2 : 1) * height_with_margins(height) + card_offset
+        image_width_mm = width_with_margins(layout_width_mm)
+        image_height_mm = (duplex ? 2 : 1) * height_with_margins(layout_height_mm) + card_offset
+        image_width = mm(image_width_mm).round
+        image_height = mm(image_height_mm).round
 
         rect_list = nil
-        canvas = Magick::ImageList.new
-        canvas.new_image(mm(image_width), mm(image_height)) { |options| options.background_color = "white" }
-        drawing = Magick::Draw.new
-        drawing.text_antialias(true)
 
-        # Vorderseite
-        draw_pos_x = 0
-        draw_pos_y = 0
-        tra = Transformation.new
-        rect_list = draw(drawing, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 0, layers: :all)
+        log.info "rect_list = draw"
+        svg_data = svg_builder(viewBox: "0.5 0.5 #{image_width} #{image_height}") do |svg|
+          svg.g(transform: "scale(-1 -1) translate(-#{image_width} -#{image_height})") do
 
-        # Rückseite
-        if duplex
-          draw_pos_y = height_with_margins(height) + card_offset
-          rect_list.add draw(drawing, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 1, layers: :all)
+            # Front
+            draw_pos_x = 0
+            draw_pos_y = 0
+            tra = Transformation.new
+            rect_list = draw(svg, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 0, layers: :all)
+
+            # Rear
+            if duplex
+              draw_pos_y = height_with_margins(layout_height_mm) + card_offset
+              rect_list.add draw(svg, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 1, layers: :all)
+            end
+          end
         end
+        # puts svg_data
+        log.info "built svg text"
 
-        drawing.draw(canvas)
-        # Image in einen Blob schreiben, damit es dann aus diesem heraus angezeigt werden kann
-        data = canvas.to_blob do |image|
-          image.format = "PNG"
-        end
+        svg_handle = RSVG::Handle.new_from_data(svg_data)
 
-        # das erzeugte Bild als Icon anzeigen
-        fx_image = Fox::FXPNGImage.new(@parent.app)
-        # in contrast to FXPNGImage.new, loadPixels releases the GVL
-        Fox::FXMemoryStream.open(Fox::FXStreamLoad, data) do |infile|
-          fx_image.loadPixels(infile)
-        end
+        surface = Cairo::ImageSurface.new(Cairo::FORMAT_RGB24, image_width, image_height)
+        context = Cairo::Context.new(surface)
+        context.render_rsvg_handle(svg_handle)
+
+        log.info "rendered to pixels"
+
+        fx_image = FXImage.new(@parent.app, nil, 0, image_width, image_height)
+        argb = surface.data
+        # Cairo uses BGRA pixel data memory layout, but FXRuby uses RGBA.
+        argb.reverse! # make ARGB, works together with "rotate(180) translate(..)" above
+        argb.delete_prefix!(argb[0]) # drop first byte to make RGB
+        argb << "\0" # add the missing but ignored alpha byte to make RGBA
+        fx_image.pixels = argb
+
+        log.info "update GUI"
 
         @parent.runOnUiThread do
           enable_error_view(false)
@@ -242,15 +280,6 @@ module Mcc2
         @parent.runOnUiThread do
           enable_error_view(*I18n.t(:preview_error_printing_exception, default: [["Fehler beim Erstellen der Layoutvorschau", "%{e}"]], e: DebugTools.unkown_error_message(e)))
         end
-      end
-
-      def check_if_font_exist(fontdesc)
-        rmfl = []
-        Magick.fonts.each do |mf|
-          rmfl << mf.name
-        end
-        return fontdesc if rmfl.index(fontdesc.face.tr(" ", "-").delete("@"))
-        fdlg.execute
       end
     end
   end

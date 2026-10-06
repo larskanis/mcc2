@@ -58,7 +58,13 @@ module Mcc2
       # die Font-Attribute
       @lf.textfield_text_color.connect(SEL_COMMAND) { |sender, sel, event| textfield_exit(sender, GOA_FONT_COLOR) }
       @lf.button_text_color.connect(SEL_COMMAND) { text_color_dialog(@lf.textfield_text_color) }
-      @lf.radiomutex_justify.on_event_selected { |r| obj_attr_changed(GOA_JUSTIFICATION, r) }
+      @lf.radiomutex_justify.on_event_selected do |r|
+        v = if r==@lf.radiobutton_just_l then S_JUST_LEFT
+        elsif r==@lf.radiobutton_just_m then S_JUST_MID
+        elsif r==@lf.radiobutton_just_r then S_JUST_RIGHT
+        end
+        obj_attr_changed(GOA_JUSTIFICATION, v)
+      end
 
       # die Positions-Attribute
       @lf.textfield_x.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, GOA_X) }
@@ -131,8 +137,8 @@ module Mcc2
       @lf.button_box_fill_color.connect(SEL_COMMAND) { text_color_dialog(@lf.textfield_box_fill_color) }
       @lf.textfield_box_border_color.connect(SEL_COMMAND) { |sender, sel, event| textfield_exit(sender, GOA_BORDER_COLOR) }
       @lf.button_box_border_color.connect(SEL_COMMAND) { text_color_dialog(@lf.textfield_box_border_color) }
-      @lf.textfield_box_border_width.connect(SEL_COMMAND) { |sender, sel, event| textfield_exit(sender, GOA_BORDER_WIDTH) }
-      @lf.textfield_box_corner_radius.connect(SEL_COMMAND) { |sender, sel, event| textfield_exit(sender, GOA_CORNER_RADIUS) }
+      @lf.textfield_box_border_width.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, GOA_BORDER_WIDTH) }
+      @lf.textfield_box_corner_radius.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, GOA_CORNER_RADIUS) }
 
       # die Checkbuttons für das Löschen und Kopieren von Graphik-Objekten
       @lf.button_copy.enabled = false
@@ -627,7 +633,7 @@ module Mcc2
     # füllt die Font-Auswahlliste mit den möglichen Fonts
     def fill_font_list
       # Font-Name
-      rmfl = Magick.fonts.map { |mf| mf.name }
+      rmfl = SvgDrawer.builtin_font_names.keys
       rmfl.sort!
       @lf.listbox_fonts.clearItems
       @lf.listbox_fonts.appendItem(I18n.t(:font_selection_please_select_entry, default: "Bitte auswählen"))

@@ -1,11 +1,12 @@
 require "mcc2/printer/card_printer"
-require "mcc2/printer/rmagick_drawer"
+require "mcc2/printer/svg_drawer"
 require "socket"
+require "rmagick"
 
 module Mcc2
   module Printer
     class PrinterCab < CardPrinter
-      include RmagickDrawer
+      include SvgDrawer
 
       # die Ränder außerhalb der Karte, auf den maximal gedruckt werden darf (für vollflächige Bilder notwendig)
       def card_margin_left
@@ -34,22 +35,30 @@ module Mcc2
         page_height = layout_file.get_attr_value(S_HEIGHT).to_f
         draw_pos_x = layout_file.get_attr_value(S_X_OFFSET).to_f
         draw_pos_y = layout_file.get_attr_value(S_Y_OFFSET).to_f
+        image_width = mm(page_width).round
+        image_height = mm(page_height).round
 
-        # ein Bild als RVG (Vektorgraphik) erzeugen, auf dem alle Objekte plaziert sind
-        selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
-        preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
+        surface = Cairo::ImageSurface.new(Cairo::FORMAT_RGB24, image_width, image_height)
+        surface.set_fallback_resolution(dpi, dpi)
+        Cairo::Context.new(surface) do |context|
+          context.set_source_rgb(1.0, 1.0, 1.0) # make white background
+          context.paint
 
-        pic = Magick::ImageList.new
-        pic.new_image(mm(page_width), mm(page_height)) { |options| options.background_color = "white" }
-        drawing = Magick::Draw.new
-        drawing.text_antialias(false)
+          svg_data = svg_builder(viewBox: "0 0 #{image_width} #{image_height}") do |svg|
+            tra = Transformation.new
+            draw(svg, tra, layout_file, false, nil, row, 0)
+          end
+          svg_handle = RSVG::Handle.new_from_data(svg_data)
+          context.render_rsvg_handle(svg_handle)
+        end
 
-        tra = Transformation.new
-        draw(drawing, tra, layout_file, preview, selected_object_id, row, 0)
-
-        # Draw in ein Image zeichnen
-        drawing.draw(pic)
-        pic = postprocess_image(pic, layout_file, 0)
+        # Convert to ImageMagick image
+        # "BGRA" matches the byte ordering of Cairo's FORMAT_ARGB32
+        pic = Magick::Image.from_blob(surface.data) do |options|
+          options.format = 'BGRA'
+          options.size = "#{image_width}x#{image_height}"
+          options.depth = 8 # Bits per pixel channel
+        end.first
 
         page_commands.gsub!("\\e", "\e")
         page_commands.gsub!("\n", "\r\n")

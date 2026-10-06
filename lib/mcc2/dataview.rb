@@ -294,6 +294,9 @@ module Mcc2
             break
           end
         end
+
+        printer.close
+
       rescue Printer::Base::PrintError => e
         @parent.runOnUiThread do
           FXMessageBox.error(@parent.app, MBOX_OK, *I18n.t(:dataman_error_printing_object, default: [["Fehler beim Erstellen eines Grafikobjekts", "%{e}"]], e: e.to_s))
