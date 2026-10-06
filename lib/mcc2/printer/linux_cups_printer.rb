@@ -1,11 +1,11 @@
 require "mcc2/printer/card_printer"
-require "mcc2/printer/rmagick_drawer"
+require "mcc2/printer/svg_drawer"
 require "ffi-cups"
 
 module Mcc2
   module Printer
     class LinuxCupsPrinter < CardPrinter
-      include RmagickDrawer
+      include SvgDrawer
 
       # die Ränder außerhalb der Karte, auf den maximal gedruckt werden darf (für vollflächige Bilder notwendig)
       def card_margin_left

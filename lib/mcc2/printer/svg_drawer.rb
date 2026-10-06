@@ -4,7 +4,7 @@ require "ttfunk"
 require "pango"
 
 module Mcc2
-  module RmagickDrawer
+  module SvgDrawer
     class ObjRectangle
       def initialize(v1, v2, v3, v4, obj_id)
         @v1 = v1
@@ -147,7 +147,7 @@ module Mcc2
       end
     end
 
-    @@font_map = RmagickDrawer.builtin_font_names.dup
+    @@font_map = SvgDrawer.builtin_font_names.dup
     @@pango_font_map = Pango::CairoFontMap.default
 
     def add_fonts_from_layout(layout_file)

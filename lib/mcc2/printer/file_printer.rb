@@ -1,10 +1,10 @@
 require "mcc2/printer/card_printer"
-require "mcc2/printer/rmagick_drawer"
+require "mcc2/printer/svg_drawer"
 
 module Mcc2
   module Printer
     class FilePrinter < CardPrinter
-      include RmagickDrawer
+      include SvgDrawer
 
       def initialize
         super

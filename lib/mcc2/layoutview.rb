@@ -633,7 +633,7 @@ module Mcc2
     # füllt die Font-Auswahlliste mit den möglichen Fonts
     def fill_font_list
       # Font-Name
-      rmfl = RmagickDrawer.builtin_font_names.keys
+      rmfl = SvgDrawer.builtin_font_names.keys
       rmfl.sort!
       @lf.listbox_fonts.clearItems
       @lf.listbox_fonts.appendItem(I18n.t(:font_selection_please_select_entry, default: "Bitte auswählen"))

@@ -1,13 +1,13 @@
 require "mcc2/printer/base"           # die Basisklasse für die Printer
 require "mcc2/printer/card_printer"
-require "mcc2/printer/rmagick_drawer"
+require "mcc2/printer/svg_drawer"
 require "simple_logger"
 require 'nokogiri'
 
 module Mcc2
   module Printer
     class Preview < Base
-      include RmagickDrawer
+      include SvgDrawer
       include CardPrinting
       include Fox
       include SimpleLogging
