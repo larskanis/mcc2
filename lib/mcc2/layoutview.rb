@@ -58,7 +58,13 @@ module Mcc2
       # die Font-Attribute
       @lf.textfield_text_color.connect(SEL_COMMAND) { |sender, sel, event| textfield_exit(sender, GOA_FONT_COLOR) }
       @lf.button_text_color.connect(SEL_COMMAND) { text_color_dialog(@lf.textfield_text_color) }
-      @lf.radiomutex_justify.on_event_selected { |r| obj_attr_changed(GOA_JUSTIFICATION, r) }
+      @lf.radiomutex_justify.on_event_selected do |r|
+        v = if r==@lf.radiobutton_just_l then S_JUST_LEFT
+        elsif r==@lf.radiobutton_just_m then S_JUST_MID
+        elsif r==@lf.radiobutton_just_r then S_JUST_RIGHT
+        end
+        obj_attr_changed(GOA_JUSTIFICATION, v)
+      end
 
       # die Positions-Attribute
       @lf.textfield_x.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, GOA_X) }

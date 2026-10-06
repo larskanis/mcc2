@@ -333,18 +333,16 @@ module Mcc2
       end
       fontsize = go[GOA_FONT_HEIGHT].to_f
       font_color = ["#", go[GOA_FONT_COLOR]].join
-      just = go[GOA_JUSTIFICATION].downcase
-      if just == "links"
-        text_x = 0
-        just = :start
-      elsif just == "mitte"
-        text_x = go_width.to_f / 2
-        just = :middle
-      elsif just == "rechts"
+      just = go[GOA_JUSTIFICATION]
+      if just == S_JUST_RIGHT
         text_x = go_width
         just = :end
+      elsif just == S_JUST_MID
+        text_x = go_width.to_f / 2
+        just = :middle
       else
-        just = :start # falls eine fehlerhafte Ausrichtung eingegeben wurde, wird einfach links ausgerichtet
+        text_x = 0
+        just = :start
       end
 
       font_info = get_font_info(font, go)
