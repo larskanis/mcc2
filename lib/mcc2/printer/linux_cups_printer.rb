@@ -79,13 +79,11 @@ module Mcc2
         selected_object_id = nil # wird nur für Darstellung auf Bildschirm gebraucht
         preview = false          # wird nur für Darstellung auf Bildschirm gebraucht
 
-        svg_data = Nokogiri::XML::Builder.new do |svg|
-          # TODO where comes the factor 0.8 from?
-          svg.svg(xmlns: 'http://www.w3.org/2000/svg', width: "#{page_width*0.8}mm", height: "#{page_height*0.8}mm", viewBox: "0 0 #{image_width} #{image_height}") do
-            tra = Transformation.new
-            draw(svg, tra.translate(mm(draw_pos_x).round, mm(draw_pos_y).round), layout_file, preview, selected_object_id, row, page_nr)
-          end
-        end.to_xml
+        # TODO where comes the factor 0.8 from?
+        svg_data = svg_builder(width: "#{page_width*0.8}mm", height: "#{page_height*0.8}mm", viewBox: "0 0 #{image_width} #{image_height}") do |svg|
+          tra = Transformation.new
+          draw(svg, tra.translate(mm(draw_pos_x).round, mm(draw_pos_y).round), layout_file, preview, selected_object_id, row, page_nr)
+        end
         svg_handle = RSVG::Handle.new_from_data(svg_data)
         context.render_rsvg_handle(svg_handle)
       end

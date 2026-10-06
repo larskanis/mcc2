@@ -221,28 +221,22 @@ module Mcc2
         rect_list = nil
 
         log.info "rect_list = draw"
-        builder = Nokogiri::XML::Builder.new do |svg|
+        svg_data = svg_builder(viewBox: "0.5 0.5 #{image_width} #{image_height}") do |svg|
+          svg.g(transform: "scale(-1 -1) translate(-#{image_width} -#{image_height})") do
 
-          svg.svg(xmlns: 'http://www.w3.org/2000/svg', viewBox: "0.5 0.5 #{image_width} #{image_height}") do
-            svg.g(transform: "scale(-1 -1) translate(-#{image_width} -#{image_height})") do
+            # Front
+            draw_pos_x = 0
+            draw_pos_y = 0
+            tra = Transformation.new
+            rect_list = draw(svg, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 0, layers: :all)
 
-              # Front
-              draw_pos_x = 0
-              draw_pos_y = 0
-              tra = Transformation.new
-              rect_list = draw(svg, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 0, layers: :all)
-
-              # Rear
-              if duplex
-                draw_pos_y = height_with_margins(layout_height_mm) + card_offset
-                rect_list.add draw(svg, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 1, layers: :all)
-              end
+            # Rear
+            if duplex
+              draw_pos_y = height_with_margins(layout_height_mm) + card_offset
+              rect_list.add draw(svg, tra.translate(mm(draw_pos_x), mm(draw_pos_y)), @layout_file, preview, @selected_object_ids, row, 1, layers: :all)
             end
           end
         end
-
-        log.info "built nokogiri"
-        svg_data = builder.to_xml
         # puts svg_data
         log.info "built svg text"
 

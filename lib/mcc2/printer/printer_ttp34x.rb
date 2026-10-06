@@ -44,12 +44,10 @@ module Mcc2
           context.set_source_rgb(1.0, 1.0, 1.0) # make white background
           context.paint
 
-          svg_data = Nokogiri::XML::Builder.new do |svg|
-            svg.svg(xmlns: 'http://www.w3.org/2000/svg', viewBox: "0 0 #{image_width} #{image_height}") do
-              tra = Transformation.new
-              draw(svg, tra, layout_file, false, nil, row, 0)
-            end
-          end.to_xml
+          svg_data = svg_builder(viewBox: "0 0 #{image_width} #{image_height}") do |svg|
+            tra = Transformation.new
+            draw(svg, tra, layout_file, false, nil, row, 0)
+          end
           svg_handle = RSVG::Handle.new_from_data(svg_data)
           context.render_rsvg_handle(svg_handle)
         end

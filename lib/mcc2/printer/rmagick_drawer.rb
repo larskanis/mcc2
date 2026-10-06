@@ -361,7 +361,7 @@ module Mcc2
         #   text_anchor: just
         # )
 
-        drawing.text_(data, x: apos.x, y: apos.y,
+        drawing.text_(x: apos.x, y: apos.y,
                       fill: font_color,
                       'text-anchor': just,
                       'font-size': pt(fontsize),
@@ -369,7 +369,13 @@ module Mcc2
                       'font-weight': font_info.font_weight,
                       'font-style': font_info.font_style,
                       'font-stretch': font_info.font_stretch,
-                      'xml:space': "preserve")
+                      'xml:space': "preserve") do
+          data.each_line.with_index do |line, idx|
+            lt = line.chomp
+            lt = " " if lt.empty?
+            drawing.tspan(lt, x: apos.x, dy: idx == 0 ? "0" : "1.15em")
+          end
+        end
       end
     end
 

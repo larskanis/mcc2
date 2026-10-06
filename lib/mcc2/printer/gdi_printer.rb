@@ -145,16 +145,12 @@ module Mcc2
         image_width = mm(page_width).round
         image_height = mm(page_height).round
 
-        builder = Nokogiri::XML::Builder.new do |svg|
-          svg.svg(xmlns: 'http://www.w3.org/2000/svg', viewBox: "0.5 0.5 #{image_width} #{image_height}") do
-            svg.g(transform: "scale(1 -1) translate(0 -#{image_height})") do
-              tra = Transformation.new
-              draw(svg, tra, layout_file, preview, selected_object_id, row, page_nr)
-            end
+        svg_data = svg_builder(viewBox: "0 0 #{image_width} #{image_height}") do |svg|
+          svg.g(transform: "scale(1 -1) translate(0 -#{image_height})") do
+            tra = Transformation.new
+            draw(svg, tra, layout_file, preview, selected_object_id, row, page_nr)
           end
         end
-        log.info "built nokogiri"
-        svg_data = builder.to_xml
         log.info "built svg text"
 
         svg_handle = RSVG::Handle.new_from_data(svg_data)

@@ -129,6 +129,14 @@ module Mcc2
         raise "not implemented"
       end
 
+      def svg_builder(**kwargs)
+        Nokogiri::XML::Builder.new do |svg|
+          svg.svg(xmlns: 'http://www.w3.org/2000/svg', **kwargs ) do
+            yield svg
+          end
+        end.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::NO_DECLARATION)
+      end
+
       def close
       end
     end

@@ -113,16 +113,14 @@ module Mcc2
         end
 
         # Create an SVG document with all the objects on it
-        svg_data = Nokogiri::XML::Builder.new do |svg|
-          if @context.target.is_a?(Cairo::PDFSurface)
-            # TODO where comes the factor 0.8 from?
-            svg_attrs = {width: "#{page_width*0.8}mm", height: "#{page_height*0.8}mm"}
-          end
-          svg.svg(xmlns: 'http://www.w3.org/2000/svg', viewBox: "0 0 #{image_width} #{image_height}", **svg_attrs) do
-            tra = Transformation.new
-            draw(svg, tra.translate(mm(draw_pos_x).round, mm(draw_pos_y).round), layout_file, false, nil, row, page_nr)
-          end
-        end.to_xml
+        if @context.target.is_a?(Cairo::PDFSurface)
+          # TODO where comes the factor 0.8 from?
+          svg_attrs = {width: "#{page_width*0.8}mm", height: "#{page_height*0.8}mm"}
+        end
+        svg_data = svg_builder(viewBox: "0 0 #{image_width} #{image_height}", **svg_attrs) do |svg|
+          tra = Transformation.new
+          draw(svg, tra.translate(mm(draw_pos_x).round, mm(draw_pos_y).round), layout_file, false, nil, row, page_nr)
+        end
         svg_handle = RSVG::Handle.new_from_data(svg_data)
         @context.render_rsvg_handle(svg_handle)
 
