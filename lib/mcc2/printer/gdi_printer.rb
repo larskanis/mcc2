@@ -124,10 +124,6 @@ module Mcc2
         end
       end
 
-      private def bin_regexp(text)
-        Regexp.new(text.b, Regexp::MULTILINE | Regexp::FIXEDENCODING)
-      end
-
       def prepare_gdi_page(hPrinter, initdata, row, page_nr)
         raise "unterschiedliche X- und Y-Auflösung wird beim Druck nicht unterstützt (#{initdata[:dmPrintQuality].inspect}x#{initdata[:dmYResolution].inspect})" if initdata[:dmYResolution] != initdata[:dmPrintQuality] && initdata[:dmYResolution] != 0 && initdata[:dmPrintQuality] != 0
         self.dpi = [initdata[:dmYResolution], initdata[:dmPrintQuality]].max
