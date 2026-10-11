@@ -1,7 +1,6 @@
 require "mcc2/printer/base"           # die Basisklasse für die Printer
 require "mcc2/printer/card_printer"
 require "mcc2/printer/svg_drawer"
-require "simple_logger"
 require 'nokogiri'
 
 module Mcc2
@@ -10,7 +9,6 @@ module Mcc2
       include SvgDrawer
       include CardPrinting
       include Fox
-      include SimpleLogging
 
       def initialize(parent, layout)
         super()
@@ -220,7 +218,6 @@ module Mcc2
 
         rect_list = nil
 
-        log.info "rect_list = draw"
         svg_data = svg_builder(viewBox: "0.5 0.5 #{image_width} #{image_height}") do |svg|
           svg.g(transform: "scale(-1 -1) translate(-#{image_width} -#{image_height})") do
 
@@ -238,15 +235,11 @@ module Mcc2
           end
         end
         # puts svg_data
-        log.info "built svg text"
-
         svg_handle = RSVG::Handle.new_from_data(svg_data)
 
         surface = Cairo::ImageSurface.new(Cairo::FORMAT_RGB24, image_width, image_height)
         context = Cairo::Context.new(surface)
         context.render_rsvg_handle(svg_handle)
-
-        log.info "rendered to pixels"
 
         fx_image = FXImage.new(@parent.app, nil, 0, image_width, image_height)
         argb = surface.data
@@ -255,8 +248,6 @@ module Mcc2
         argb.delete_prefix!(argb[0]) # drop first byte to make RGB
         argb << "\0" # add the missing but ignored alpha byte to make RGBA
         fx_image.pixels = argb
-
-        log.info "update GUI"
 
         @parent.runOnUiThread do
           enable_error_view(false)

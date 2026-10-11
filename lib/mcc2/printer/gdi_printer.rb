@@ -10,7 +10,6 @@ module Mcc2
   module Printer
     class GdiPrinter < CardPrinter
       include SvgDrawer
-      include SimpleLogging
 
       attr_accessor :chip
 
@@ -125,10 +124,6 @@ module Mcc2
         end
       end
 
-      private def bin_regexp(text)
-        Regexp.new(text.b, Regexp::MULTILINE | Regexp::FIXEDENCODING)
-      end
-
       def prepare_gdi_page(hPrinter, initdata, row, page_nr)
         raise "unterschiedliche X- und Y-Auflösung wird beim Druck nicht unterstützt (#{initdata[:dmPrintQuality].inspect}x#{initdata[:dmYResolution].inspect})" if initdata[:dmYResolution] != initdata[:dmPrintQuality] && initdata[:dmYResolution] != 0 && initdata[:dmPrintQuality] != 0
         self.dpi = [initdata[:dmYResolution], initdata[:dmPrintQuality]].max
@@ -151,7 +146,6 @@ module Mcc2
             draw(svg, tra, layout_file, preview, selected_object_id, row, page_nr)
           end
         end
-        log.info "built svg text"
 
         svg_handle = RSVG::Handle.new_from_data(svg_data)
         surface = Cairo::ImageSurface.new(Cairo::FORMAT_RGB24, image_width, image_height)
@@ -160,12 +154,10 @@ module Mcc2
         context.paint
         context.render_rsvg_handle(svg_handle)
         lpvBits = surface.data
-        log.info "rendered to pixels"
         # Convert BGRA data of librsvg to BGR of Win32 print API
         # lpvBits = lpvBits.unpack("a3x"*(lpvBits.bytesize/4)).join
         # The faster converter of BGRA to BGR image data
         lpvBits = Mcc2CHelper.bgra_to_bgr(lpvBits)
-        log.info "converted to BGR"
 
         block_size = 4 # each scanline has to be DWORD padded
         # split the image in single rows
@@ -173,7 +165,6 @@ module Mcc2
           # align each row to DWORD
           imgrow << "\0" * (block_size - 1 - (imgrow.length - 1 & (block_size - 1)))
         end.join
-        log.info "converted to scan lines"
 
         xDest, yDest, dwWidth, dwHeight, xSrc, ySrc = mm(draw_pos_x), mm(draw_pos_y), image_width, image_height, 0, 0
         uStartScan, cScanLines = 0, dwHeight
