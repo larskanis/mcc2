@@ -292,6 +292,10 @@ module Mcc2
           w.open_layout(arg)
         end
 
+        if defined?(RubyVM::YJIT.enable)
+          RubyVM::YJIT.enable
+        end
+
         app.run
       rescue Exception => e
         DebugTools.write_exception("main", e)
