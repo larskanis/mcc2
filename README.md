@@ -1,14 +1,34 @@
 # Mcc2
 
-* https://comdb1/projektverwaltung/projects/mcc2
+* https://github.com/larskanis/mcc2
 
 Layout editor and card printer GUI
 
+## Features
+
+* Simple GUI to edit the layout
+* Variable data input from CSV and DBF file
+* Pure desktop GUI, no web server necessary
+* Supports magstripe encoding and contact+contactless chip encoding
+* Use of font files independent from system installed fonts
+* Vector output formats (SVG and searchable PDF)
+* Various raster image output formats (PNG, JPEG etc.)
+* Headless print per command line and Ruby API
+* Stores all printer settings in the layout file for headless print (Duplex, tray selection, DPI, etc.)
+
 ## Installation
 
-Or install the gem as:
+Install mcc2 on Debian/Ubuntu Linux as:
+
+    $ sudo apt install libcairo2-dev libgdk-pixbuf-2.0-dev libmagickwand-dev g++ libxrandr-dev libfox-1.6-dev
+    $ sudo apt install ruby-dev  # in case you want to use system ruby
+    $ gem install mcc2
+
+On Windows install the RubyInstaller including Devkit, then run:
 
     $ gem install mcc2
+
+This should
 
 ## Usage
 
@@ -18,13 +38,11 @@ Run the GUI
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install all necessary gems onto your local machine, run `bundle update`.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/mcc2.
+Bug reports and pull requests are welcome on GitHub at https://github.com/larskanis/mcc2 .
 
 
 ## License
