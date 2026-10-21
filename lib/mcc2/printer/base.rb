@@ -93,6 +93,10 @@ module Mcc2
         mm / 25.4 * 72.0
       end
 
+      def px_to_mm(px)
+        px * 25.4 / @dpi
+      end
+
       def print_page(hPrinter, layout_file, row, page_nr, page_width = default_width, page_height = default_height)
         raise "not implemented"
       end

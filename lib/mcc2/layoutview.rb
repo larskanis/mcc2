@@ -641,7 +641,7 @@ module Mcc2
       @lf.listbox_fonts.setItemData(idx, "from_file")      # font name or file
 
       rmfl.each do |rmf|
-        idx = @lf.listbox_fonts.appendItem(rmf.tr("-", " ")) # humanreadable
+        idx = @lf.listbox_fonts.appendItem(rmf) # humanreadable
         @lf.listbox_fonts.setItemData(idx, rmf)         # font name or file
       end
     end
@@ -653,7 +653,7 @@ module Mcc2
 
       font_typ = obj[GOA_FONT_TYP]
       # den gewählten Parameter in den entsprechenden Listen markieren
-      set_listbox_value("listbox_fonts", font_typ)
+      set_listbox_value(:listbox_fonts, font_typ)
       @lf.textfield_font_file.enabled = font_typ == "from_file"
       @lf.textfield_font_file.text = obj[GOA_FONT_FILE]
     end

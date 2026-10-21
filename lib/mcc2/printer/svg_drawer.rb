@@ -165,6 +165,13 @@ module Mcc2
       end
     end
 
+    def font_map
+      @@font_map
+    end
+    def pango_font_map
+      @@pango_font_map
+    end
+
     def flip_flop_mirrors(svg, tra, layout_file, preview, page)
       flip = true if page % 2 == 0 && layout_file.get_attr_value(S_FRONT_FLIP) == S_TRUE
       flop = true if page % 2 == 0 && layout_file.get_attr_value(S_FRONT_FLOP) == S_TRUE
@@ -240,13 +247,10 @@ module Mcc2
 
             if tra
               rec = tra.translate(mm(x).round, mm(y).round).rotate(rotation)
-              # Text is written on top of the basis object point, so add the fontsize to the click box
-              text_y = (typ == TEXTOBJECT) ? pt(go[GOA_FONT_HEIGHT].to_f) : 0
-              rec1 = rec.translate(0, -text_y)
-              rec2 = rec1.translate(mm(go_width), 0)
-              rec3 = rec1.translate(mm(go_width), mm(go_height) + text_y)
-              rec4 = rec1.translate(0, mm(go_height) + text_y)
-              orec = ObjRectangle.new(rec1.vector2d, rec2.vector2d, rec3.vector2d, rec4.vector2d, id)
+              rec2 = rec.translate(mm(go_width), 0)
+              rec3 = rec.translate(mm(go_width), mm(go_height))
+              rec4 = rec.translate(0, mm(go_height))
+              orec = ObjRectangle.new(rec.vector2d, rec2.vector2d, rec3.vector2d, rec4.vector2d, id)
               rect_list.add(orec)
             end
 
@@ -335,34 +339,16 @@ module Mcc2
       font_color = ["#", go[GOA_FONT_COLOR]].join
       just = go[GOA_JUSTIFICATION]
       if just == S_JUST_RIGHT
-        text_x = go_width
-        just = :end
+        pjust = Pango::Alignment::RIGHT
       elsif just == S_JUST_MID
-        text_x = go_width.to_f / 2
-        just = :middle
+        pjust = Pango::Alignment::CENTER
       else
-        text_x = 0
-        just = :start
+        pjust = Pango::Alignment::LEFT
       end
 
-      font_info = get_font_info(font, go)
-
       if data && !data.empty?
-        # drawing.font font
-        # drawing.font_size pt(fontsize)
-        # drawing.fill font_color
-        # drawing.text_anchor just
-        apos = tra.translate(mm(text_x), mm(0))
-        # drawing.text(apos.x, apos.y, data)
-        # body.text(mm(text_x), mm(0), data).styles(
-        #   font: font,
-        #   font_size: pt(fontsize),
-        #   fill: font_color,
-        #   text_anchor: just
-        # )
-
-        drawing.text_(x: apos.x, y: apos.y,
-                      fill: font_color,
+        font_info = get_font_info(font, go)
+        drawing.text_(fill: font_color,
                       'text-anchor': just,
                       'font-size': pt(fontsize),
                       'font-family': font_info.font_family,
@@ -370,10 +356,47 @@ module Mcc2
                       'font-style': font_info.font_style,
                       'font-stretch': font_info.font_stretch,
                       'xml:space': "preserve") do
-          data.each_line.with_index do |line, idx|
-            lt = line.chomp
-            lt = " " if lt.empty?
-            drawing.tspan(lt, x: apos.x, dy: idx == 0 ? "0" : "1.15em")
+
+          context  = pango_font_map.create_context
+          layout   = Pango::Layout.new(context)
+
+          pango_font = get_pango_font(font_info, pt(fontsize))
+          layout.font_description = pango_font
+          layout.alignment = pjust
+          layout.width = mm(go_width) * Pango::SCALE
+          layout.height = mm(go_height) * Pango::SCALE
+          layout.ellipsize = Pango::EllipsizeMode::END
+          layout.wrap = Pango::WrapMode::WORD_CHAR
+          layout.text = data # set the text to render
+
+          # iterate all lines of the text box
+          iter = layout.iter
+          layout_text = layout.text
+          last_line_x = nil
+          loop do
+            run = iter.run_readonly
+            if run # nil at each end-of-line
+              item = run.item
+
+              if last_line_x && (item.analysis.flags & Pango::ANALYSIS_FLAG_IS_ELLIPSIS != 0)
+                # We could ellipsize text when box is too small.
+                # But this could easily missed, so better write out of the box.
+                # line_text = "…"
+                line_text = layout_text.byteslice(item.offset, item.length)
+                line_x = last_line_x
+              else
+                line_text = layout_text.byteslice(item.offset, item.length)
+
+                # Pango layout coordinates are absolute from the top-left of the layout
+                _ink_rect, logical_rect = iter.run_extents
+                line_x = logical_rect.x.to_f / Pango::SCALE
+                last_line_x = (logical_rect.x + logical_rect.width).to_f / Pango::SCALE
+              end
+              # Use the logical rectangle for reliable SVG positioning coordinates
+              line_y_baseline = iter.baseline.to_f / Pango::SCALE
+              drawing.tspan(line_text, x: tra.x + line_x, y: tra.y + line_y_baseline)
+            end
+            break unless iter.next_run
           end
         end
       end
@@ -606,6 +629,52 @@ module Mcc2
         raise Printer::Base::ResourceNotFoundError, I18n.t(:font_not_found, default: "Die Schriftart '%{font}' in Object %{obj} konnte nicht gefunden werden.", font:, obj: obj[GOA_NAME].inspect )
       end
       font_info
+    end
+
+    def get_pango_font(font_info, font_size)
+      desc = Pango::FontDescription.new
+
+      # 1. Family
+      desc.family = font_info.font_family
+      # 2. Size (Convert pixels/raw user units to Pango absolute size units)
+      desc.absolute_size = font_size.to_f * Pango::SCALE
+      # 3. Weight
+      weight_str = font_info.font_weight.to_s.strip.downcase
+      desc.weight = case weight_str
+                    when '100', 'thin'          then Pango::Weight::THIN
+                    when '200', 'ultralight'    then Pango::Weight::ULTRALIGHT
+                    when '300', 'light'         then Pango::Weight::LIGHT
+                    when '400', 'normal'        then Pango::Weight::NORMAL
+                    when '500', 'medium'        then Pango::Weight::MEDIUM
+                    when '600', 'semibold'      then Pango::Weight::SEMIBOLD
+                    when '700', 'bold'          then Pango::Weight::BOLD
+                    when '800', 'ultrabold'     then Pango::Weight::ULTRABOLD
+                    when '900', 'heavy'         then Pango::Weight::HEAVY
+                    when /\A\d+\z/              then weight_str.to_i
+                    else                             Pango::Weight::NORMAL
+                    end
+      # 4. Style
+      style_str = font_info.font_style.to_s.strip.downcase
+      desc.style = case style_str
+                  when 'italic'  then Pango::Style::ITALIC
+                  when 'oblique' then Pango::Style::OBLIQUE
+                  else                Pango::Style::NORMAL
+                  end
+      # 5. Stretch
+      stretch_str = font_info.font_stretch.to_s.strip.downcase.gsub('-', '_')
+      desc.stretch = case stretch_str
+                    when 'ultra_condensed' then Pango::Stretch::ULTRA_CONDENSED
+                    when 'extra_condensed' then Pango::Stretch::EXTRA_CONDENSED
+                    when 'condensed'       then Pango::Stretch::CONDENSED
+                    when 'semi_condensed'  then Pango::Stretch::SEMI_CONDENSED
+                    when 'semi_expanded'   then Pango::Stretch::SEMI_EXPANDED
+                    when 'expanded'        then Pango::Stretch::EXPANDED
+                    when 'extra_expanded'  then Pango::Stretch::EXTRA_EXPANDED
+                    when 'ultra_expanded'  then Pango::Stretch::ULTRA_EXPANDED
+                    else                        Pango::Stretch::NORMAL
+                    end
+
+      desc
     end
   end
 end

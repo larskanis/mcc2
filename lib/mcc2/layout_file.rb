@@ -44,7 +44,7 @@ module Mcc2
     class InvalidFileVersion < Error
     end
 
-    FILE_VERSION_RANGE = 1..3
+    FILE_VERSION_RANGE = 1..4
 
     attr_accessor :attributes
     attr_accessor :filename
@@ -277,6 +277,102 @@ PRINT 1
           elsif !param.to_s.empty?
             param = "#{i}=#{param}"
             set_attr_value(attr_name, param, S_CHIP)
+          end
+        end
+      end
+
+      # Older files don't respect the bounding box of text objects
+      # and object's Y means the text baseline, not the bounding box.
+      if filever < 4
+        @warnings << I18n.t(:open_layout_old_text_box, default: <<~EOT)
+          Diese Datei ist noch mit Textobjekten ohne Beachtung der Rahmengröße gespeichert.
+          Die Rahmengröße der Textobjekte wurde nun automatisch auf den des Beispieltextes gesetzt.
+          Evtl. muss aber eine Anpassung für die variablen Daten erfolgen.
+
+          Bitte prüfen Sie, dass alle Texte an der richtigen Position stehen.
+        EOT
+
+        converter = Class.new(Printer::Base) do
+          include SvgDrawer
+
+          def pango_font_of(go)
+            font = go[GOA_FONT_TYP]
+            if font == "from_file"
+              font = go.layout_file.expand_path(go[GOA_FONT_FILE])
+            end
+            fontsize = go[GOA_FONT_HEIGHT].to_f
+            begin
+              font_info = get_font_info(font, go)
+            rescue Printer::Base::ResourceNotFoundError
+              # ignore font error in the migration because
+              # verification is requested from the user anyway
+              _key, font_info = font_map.first
+            end
+            get_pango_font(font_info, pt(fontsize))
+          end
+
+          def get_text_sizes(go)
+            data = go[GOA_SAMPLE_DATA].to_s
+            if !data.empty?
+              pango_font = pango_font_of(go)
+              context  = pango_font_map.create_context
+              layout   = Pango::Layout.new(context)
+              layout.font_description = pango_font
+              layout.text = data # set the text to render
+
+              layout.pixel_size.map{|px| px_to_mm(px) }
+            end
+          end
+
+          def get_new_coods(go)
+            x = go[GOA_X].to_f
+            y = go[GOA_Y].to_f
+            rotation = go[GOA_ROTATION].to_f
+
+            context  = pango_font_map.create_context
+            pango_font = pango_font_of(go)
+            metrics = context.get_metrics(pango_font, Pango::Language.default)
+
+            descent     = metrics.descent.to_f / Pango::SCALE
+            line_height = metrics.height.to_f / Pango::SCALE
+            rec = Printer::Base::Transformation.new(x, y).rotate(rotation).translate(0, -px_to_mm(line_height - descent))
+            return rec.x, rec.y
+          end
+        end.new
+
+        converter.add_fonts_from_layout(self)
+
+        # Remove "-" from font names, which was inserted by rmagick
+        sorted_id_list.each do |id|
+          go = find_graphic_object_by_id(id)
+          font = go[GOA_FONT_TYP]
+          if font && font != "from_file"
+            font = font.tr("-", " ")
+            set_object_by_ids([id], GOA_FONT_TYP, font)
+          end
+        end
+
+        # Set a valid size in all text objects to the boinding box of the sample text
+        # and adjust X,Y position to the corner of the box.
+        sorted_id_list.each do |id|
+          go = find_graphic_object_by_id(id)
+          typ = go[GOA_TYP]
+          if typ == TEXTOBJECT
+            just = go[GOA_JUSTIFICATION]
+
+            w, h = converter.get_text_sizes(go)
+            # set bounding box and keep a little bit of space for safty
+            if just == S_JUST_LEFT
+              # Don't change middle or right aligned, they should already be valid
+              set_object_by_ids([id], GOA_WIDTH, format("%0.2f", w * 1.01 + 0.2))
+            end
+            set_object_by_ids([id], GOA_HEIGHT, format("%0.2f", h * 1.01 + 0.2))
+
+            x, y = converter.get_new_coods(go)
+            # move text up, because old old Y means text baseline
+            # and new Y means upper left corner of the bounding box
+            set_object_by_ids([id], GOA_X, format("%0.2f", x))
+            set_object_by_ids([id], GOA_Y, format("%0.2f", y))
           end
         end
       end
