@@ -64,9 +64,9 @@ module Mcc2
   S_ROOT = "Root"
   S_X_OFFSET = "x_offset"
   S_Y_OFFSET = "y_offset"
-  S_JUST_LEFT = "Links"
-  S_JUST_MID = "Mitte"
-  S_JUST_RIGHT = "Rechts"
+  S_JUST_LEFT = "left"
+  S_JUST_MID = "mid"
+  S_JUST_RIGHT = "right"
   S_BARCODE_DPI = "barcode_dpi"
 
   S_DATASOURCE = "datasource"

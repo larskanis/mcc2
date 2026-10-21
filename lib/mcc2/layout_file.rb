@@ -359,6 +359,9 @@ PRINT 1
           typ = go[GOA_TYP]
           if typ == TEXTOBJECT
             just = go[GOA_JUSTIFICATION]
+            just = just.sub("Links", "left")
+              .sub("Mitte", "mid")
+              .sub("Rechts", "right")
 
             w, h = converter.get_text_sizes(go)
             # set bounding box and keep a little bit of space for safty
@@ -373,6 +376,8 @@ PRINT 1
             # and new Y means upper left corner of the bounding box
             set_object_by_ids([id], GOA_X, format("%0.2f", x))
             set_object_by_ids([id], GOA_Y, format("%0.2f", y))
+
+            set_object_by_ids([id], GOA_JUSTIFICATION, just)
           end
         end
       end
