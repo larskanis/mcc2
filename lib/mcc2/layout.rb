@@ -176,7 +176,10 @@ module Mcc2
       self.layout_file = lf
       unless layout_file.warnings.empty?
         wa = layout_file.warnings.join("\n\n")
-        FXMessageBox.warning(@parent.app, MBOX_OK, I18n.t(:open_layout_file_warning, default: "Warnung beim Laden von %{filename}", filename:), wa)
+
+        msg_box = FXMessageBox.new(@parent.app, I18n.t(:open_layout_file_warning, default: "Warnung beim Laden von %{filename}", filename:), wa, opts: MBOX_OK, ic: loadImage("mcc2/images/messagebox_warning.png"))
+        msg_box.create
+        msg_box.show(PLACEMENT_OWNER)
       end
     end
 
