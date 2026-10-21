@@ -434,6 +434,14 @@ en:
     Therefore, all barcodes must be checked and, if necessary, readjusted!
 
     This warning will disappear once the file is saved.
+  open_layout_old_text_box: |
+    This file still contains text objects without regard to their frame size.
+
+    The frame size of the text objects has now been automatically set to that of the sample text.
+
+    However, adjustments may be necessary for the variable data.
+
+    Please verify that all text is positioned correctly.
   open_layout_version_error: The file %{filename} is structured according to version %{filever}, but this program can only process versions %{supported}.
   preview_dpi_and_print_differ: The barcode DPI for the preview (%{preview_dpi}) and the print version (%{print_dpi}) differ. Please adjust the DPI and re-check the barcodes!
   preview_error_printing_exception:
