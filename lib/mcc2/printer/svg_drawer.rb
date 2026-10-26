@@ -372,31 +372,42 @@ module Mcc2
           # iterate all lines of the text box
           iter = layout.iter
           layout_text = layout.text
+          last_text_start = nil
           last_line_x = nil
+          last_line_y_baseline = nil
           loop do
             run = iter.run_readonly
             if run # nil at each end-of-line
               item = run.item
 
-              if last_line_x && (item.analysis.flags & Pango::ANALYSIS_FLAG_IS_ELLIPSIS != 0)
+              if item.analysis.flags & Pango::ANALYSIS_FLAG_IS_ELLIPSIS != 0
                 # We could ellipsize text when box is too small.
                 # But this could easily missed, so better write out of the box.
                 # line_text = "…"
-                line_text = layout_text.byteslice(item.offset, item.length)
-                line_x = last_line_x
               else
                 line_text = layout_text.byteslice(item.offset, item.length)
 
                 # Pango layout coordinates are absolute from the top-left of the layout
                 _ink_rect, logical_rect = iter.run_extents
                 line_x = logical_rect.x.to_f / Pango::SCALE
-                last_line_x = (logical_rect.x + logical_rect.width).to_f / Pango::SCALE
+                last_text_start = item.offset + item.length
               end
               # Use the logical rectangle for reliable SVG positioning coordinates
               line_y_baseline = iter.baseline.to_f / Pango::SCALE
               drawing.tspan(line_text, x: tra.x + line_x, y: tra.y + line_y_baseline)
+
+              last_line_x = (logical_rect.x + logical_rect.width).to_f / Pango::SCALE
+              last_line_y_baseline = line_y_baseline + logical_rect.height.to_f / Pango::SCALE
             end
-            break unless iter.next_run
+
+            unless iter.next_run
+              # any text left? -> print right down next to the box
+              if last_text_start && last_text_start < layout_text.bytesize
+                line_text = layout_text.byteslice(last_text_start .. -1)
+                drawing.tspan(line_text, x: tra.x + last_line_x, y: tra.y + last_line_y_baseline)
+              end
+              break
+            end
           end
         end
       end
