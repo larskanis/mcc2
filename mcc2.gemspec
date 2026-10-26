@@ -5,14 +5,13 @@ require "mcc2/version"
 Gem::Specification.new do |spec|
   spec.name = "mcc2"
   spec.version = Mcc2::VERSION
-  spec.authors = ["Lars Kanis", "Andreas Kosche"]
-  spec.email = ["kanis@comcard.de", "kosche@comcard.de"]
+  spec.authors = ["Lars Kanis"]
+  spec.email = ["kanis@sincnovation.com"]
 
   spec.summary = "Layout editor and card printer GUI"
   spec.description = "Layout editor and card printer GUI."
-  spec.homepage = "https://gitlab/produktion/mcc2"
+  spec.homepage = "https://github.com/larskanis/mcc2"
   spec.license = "MIT"
-  spec.metadata["allowed_push_host"] = "https://ccgems"
 
   spec.files = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(spec|features)/}) }
   spec.bindir = "exe"

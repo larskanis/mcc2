@@ -1,15 +1,4 @@
 #!/usr/bin/env ruby
-# *****************************************************************************
-
-# Projekt           : MCC2
-# Erstellungsdatum  : 2009-05-07
-# Autor             : Kosche/EDV
-# Copyright         : (C)2006 by ComCard/EDV
-#
-# Beschreibung      : Layout- und Druckprogramm
-#
-
-# *****************************************************************************
 
 require "rubygems"
 
@@ -260,7 +249,7 @@ module Mcc2
     def self.run(argv)
       Thread.abort_on_exception = true
 
-      app = FX::App.new("MCC2", "ComCard-Mcc2")
+      app = FX::App.new("MCC2", "larskanis")
       $gui_scale = enable_hidpi(app)
 
       language = nil
