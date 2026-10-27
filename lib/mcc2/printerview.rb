@@ -278,10 +278,13 @@ module Mcc2
       keys = cs.select { |c, _| cs[:"#{c}_SUPPORTED"] }.keys
       cvals = keys.map { |c| [c, Cups.const_get(c)] }
 
-      printer = Cups::Printer.get_destination(prname)
-      ppd = printer.ppd_options
-      ppd.each do |opt|
-        cvals << [opt[:keyword], opt[:text]]
+      begin
+        printer = Cups::Printer.get_destination(prname)
+        ppd = printer.ppd_options
+        ppd.each do |opt|
+          cvals << [opt[:keyword], opt[:text]]
+        end
+      rescue Cups::Error
       end
       @linux_cups_options.each do |combo_key, combo_val|
         combo_key.clearItems
@@ -292,7 +295,7 @@ module Mcc2
         combo_val.clearItems
       end
 
-      @label_linux_printer_state.text = "Status: #{printer.state}"
+      @label_linux_printer_state.text = "Status: #{printer&.state || "not reachable"}"
     end
 
     def linux_cups_combo_key_changed(combo_key, combo_val)
@@ -304,12 +307,15 @@ module Mcc2
         vals = vals.reject { |c| c.end_with?("_SUPPORTED") }
         cvals = vals.map { |c| [c, Cups.const_get(c)] }
 
-        prname = @layout_file.get_attr_value(S_LINUX_CUPS_PRINTER)
-        printer = Cups::Printer.get_destination(prname)
-        ppd = printer.ppd_options
-        ppd_opt = ppd.find{|opt| opt[:keyword] == key }
-        ppd_opt&.[](:choices)&.each do |choise|
-          cvals << [choise[:choice], choise[:choice]]
+        begin
+          prname = @layout_file.get_attr_value(S_LINUX_CUPS_PRINTER)
+          printer = Cups::Printer.get_destination(prname)
+          ppd = printer.ppd_options
+          ppd_opt = ppd.find{|opt| opt[:keyword] == key }
+          ppd_opt&.[](:choices)&.each do |choise|
+            cvals << [choise[:choice], choise[:choice]]
+          end
+        rescue Cups::Error
         end
 
         cvals.each do |name, name_val|

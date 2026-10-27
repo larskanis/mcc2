@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "rmagick", ">= 3.0"
   spec.add_runtime_dependency "ruby-zint", "~> 1.1"
   spec.add_runtime_dependency "fxruby", "~> 1.6.30"
-  spec.add_runtime_dependency "ffi-cups2", "~> 0.4"
+  spec.add_runtime_dependency "ffi-cups2", "~> 0.5"
   spec.add_runtime_dependency "win32api4ruby", "~> 0.2"
   spec.add_runtime_dependency "i18n", "~> 1.0"
   spec.add_runtime_dependency 'rsvg2'
