@@ -1,3 +1,11 @@
+# libGUIb is the foxGUIb library required by the foxGUIb editor and all pieces of generated code.
+# it includes the FX API which is a facade of the FXRuby API. foxGUIb is an interactive gui builder
+# for fxruby. fxruby is the ruby binding of the Fox Toolkit.
+#
+# libGUIb and foxGUIb are copyrighted by Meinrad Recheis aka Henon. (c) 2006
+#
+# LICENSE: LGPL
+#
 # libGUIb: Copyright (c) by Meinrad Recheis aka Henon, 2006
 # THIS SOFTWARE IS PROVIDED IN THE HOPE THAT IT WILL BE USEFUL
 # WITHOUT ANY IMPLIED WARRANTY OR FITNESS FOR ANY PURPOSE.
