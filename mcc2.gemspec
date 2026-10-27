@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name = "mcc2"
   spec.version = Mcc2::VERSION
   spec.authors = ["Lars Kanis"]
-  spec.email = ["kanis@sincnovation.com"]
+  spec.email = ["lars@greiz-reinsdorf.de"]
 
   spec.summary = "Layout editor and card printer GUI"
   spec.description = "Layout editor and card printer GUI."
