@@ -391,13 +391,13 @@ module Mcc2
                 _ink_rect, logical_rect = iter.run_extents
                 line_x = logical_rect.x.to_f / Pango::SCALE
                 last_text_start = item.offset + item.length
-              end
-              # Use the logical rectangle for reliable SVG positioning coordinates
-              line_y_baseline = iter.baseline.to_f / Pango::SCALE
-              drawing.tspan(line_text, x: tra.x + line_x, y: tra.y + line_y_baseline)
+                # Use the logical rectangle for reliable SVG positioning coordinates
+                line_y_baseline = iter.baseline.to_f / Pango::SCALE
+                drawing.tspan(line_text, x: tra.x + line_x, y: tra.y + line_y_baseline)
 
-              last_line_x = (logical_rect.x + logical_rect.width).to_f / Pango::SCALE
-              last_line_y_baseline = line_y_baseline + logical_rect.height.to_f / Pango::SCALE
+                last_line_x = (logical_rect.x + logical_rect.width).to_f / Pango::SCALE
+                last_line_y_baseline = (iter.baseline.to_f + logical_rect.height.to_f) / Pango::SCALE
+              end
             end
 
             unless iter.next_run
