@@ -41,7 +41,7 @@ module Mcc2
       }
       @combobox_linux_printer.connect(SEL_COMMAND) do
         prname = @combobox_linux_printer.getItemData(@combobox_linux_printer.currentItem)
-        @label_linux_printer_state.text = "Status: #{Cups::Printer.get_destination(prname).state}"
+        linux_cups_printer_changed(prname)
         changed_attributes if @layout_file.set_attr_value(S_LINUX_CUPS_PRINTER, prname)
       end
       @spinner_linux_cups_dpi.connect(SEL_COMMAND) {
@@ -140,18 +140,7 @@ module Mcc2
             # names = JSON.parse( app.reg.readStringEntry('login', 'usernames', '[]') )
             combo.numVisible = 10
             combo.connect(SEL_COMMAND) do
-              combo_val.clearItems
-              key = combo.getItemData(combo.currentItem)
-              if key
-                cs = Cups.constants
-                vals = cs.select { |c| c.to_s.start_with?("#{key}_") }
-                vals = vals.reject { |c| c.end_with?("_SUPPORTED") }
-                cvals = vals.map { |c| [c, Cups.const_get(c)] }
-                cvals.each do |name, name_val|
-                  combo_val.appendItem("#{name}=#{name_val}", name_val)
-                end
-              end
-              linux_cups_combobox_changed
+              linux_cups_combo_key_changed(combo, combo_val)
             end
           end
           combo_val = FXComboBox.new(mat, 0, nil, 0,
@@ -160,28 +149,11 @@ module Mcc2
             # names = JSON.parse( app.reg.readStringEntry('login', 'usernames', '[]') )
             combo.numVisible = 10
             combo.connect(SEL_COMMAND) do
-              linux_cups_combobox_changed
+              linux_cups_combo_val_changed(combo)
             end
           end
           @linux_cups_options << [combo_key, combo_val]
         end
-      end
-    end
-
-    def linux_cups_combobox_changed
-      opts = @linux_cups_options.each.with_object({}) do |(combo_key, combo_val), h|
-        text = combo_val.text
-        h[combo_key.text] = text unless text.empty?
-      end
-      changed_attributes if @layout_file.set_attr_value(S_LINUX_CUPS_OPTIONS, JSON.dump(opts))
-    end
-
-    def linux_cups_combobox_set
-      json_str = @layout_file.get_attr_value(S_LINUX_CUPS_OPTIONS)
-      hash = JSON.parse(json_str).to_a
-      @linux_cups_options.each_with_index do |(chk, chv), idx|
-        chk.text = hash[idx]&.[](0) || ""
-        chv.text = hash[idx]&.[](1) || ""
       end
     end
 
@@ -276,7 +248,7 @@ module Mcc2
     end
 
     def selected_LinuxCupsPrinter
-      if_driver_loadable("ffi-cups", "ffi-cups", I18n.t(:linux_cups_printer_driver_load_caption, default: "die Linux-Druckerschnittstelle (also libcups2)")) do
+      if_driver_loadable("ffi-cups2", "ffi-cups", I18n.t(:linux_cups_printer_driver_load_caption, default: "die Linux-Druckerschnittstelle (also libcups2)")) do
         combobox = @combobox_linux_printer
         combobox.clearItems
 
@@ -288,19 +260,75 @@ module Mcc2
         prname = @layout_file.get_attr_value(S_LINUX_CUPS_PRINTER)
         Layout.set_combobox_by_data(combobox, prname, false)
 
-        cs = Cups.constants.each.with_object({}) { |c, h| h[c] = true }
-        keys = cs.select { |c, _| cs[:"#{c}_SUPPORTED"] }.keys
-        cvals = keys.map { |c| [c, Cups.const_get(c)] }
-        @linux_cups_options.each do |combo_key, combo_val|
-          combo_key.clearItems
-          combo_key.appendItem("", nil)
-          cvals.each do |name, val|
-            combo_key.appendItem(val, name)
-          end
-        end
         @spinner_linux_cups_dpi.value = @layout_file.get_attr_value(S_LINUX_CUPS_DPI).to_i
-        linux_cups_combobox_set
+
+        linux_cups_printer_changed(prname)
+
+        json_str = @layout_file.get_attr_value(S_LINUX_CUPS_OPTIONS)
+        hash = JSON.parse(json_str).to_a
+        @linux_cups_options.each_with_index do |(chk, chv), idx|
+          chk.text = hash[idx]&.[](0) || ""
+          chv.text = hash[idx]&.[](1) || ""
+        end
       end
+    end
+
+    def linux_cups_printer_changed(prname)
+      cs = Cups.constants.each.with_object({}) { |c, h| h[c] = true }
+      keys = cs.select { |c, _| cs[:"#{c}_SUPPORTED"] }.keys
+      cvals = keys.map { |c| [c, Cups.const_get(c)] }
+
+      printer = Cups::Printer.get_destination(prname)
+      ppd = printer.ppd_options
+      ppd.each do |opt|
+        cvals << [opt[:keyword], opt[:text]]
+      end
+      @linux_cups_options.each do |combo_key, combo_val|
+        combo_key.clearItems
+        combo_key.appendItem("", nil)
+        cvals.each do |name, val|
+          combo_key.appendItem(val, name)
+        end
+        combo_val.clearItems
+      end
+
+      @label_linux_printer_state.text = "Status: #{printer.state}"
+    end
+
+    def linux_cups_combo_key_changed(combo_key, combo_val)
+      combo_val.clearItems
+      key = combo_key.getItemData(combo_key.currentItem)
+      if key
+        cs = Cups.constants
+        vals = cs.select { |c| c.to_s.start_with?("#{key}_") }
+        vals = vals.reject { |c| c.end_with?("_SUPPORTED") }
+        cvals = vals.map { |c| [c, Cups.const_get(c)] }
+
+        prname = @layout_file.get_attr_value(S_LINUX_CUPS_PRINTER)
+        printer = Cups::Printer.get_destination(prname)
+        ppd = printer.ppd_options
+        ppd_opt = ppd.find{|opt| opt[:keyword] == key }
+        ppd_opt&.[](:choices)&.each do |choise|
+          cvals << [choise[:choice], choise[:choice]]
+        end
+
+        cvals.each do |name, name_val|
+          combo_val.appendItem(name == name_val ? name : "#{name}=#{name_val}", name_val)
+        end
+      end
+      linux_cups_combo_key_or_val_changed
+    end
+
+    def linux_cups_combo_val_changed(combo_val)
+      linux_cups_combo_key_or_val_changed
+    end
+
+    def linux_cups_combo_key_or_val_changed
+      opts = @linux_cups_options.each.with_object({}) do |(combo_key, combo_val), h|
+        text = combo_val.text
+        h[combo_key.text] = text unless text.empty?
+      end
+      changed_attributes if @layout_file.set_attr_value(S_LINUX_CUPS_OPTIONS, JSON.dump(opts))
     end
 
     def selected_PrinterXID
