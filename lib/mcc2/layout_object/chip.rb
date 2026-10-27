@@ -52,27 +52,3 @@ module Mcc2
     end
   end
 end
-
-if __FILE__ == $0
-  # ~ system("ruby mcc2.rb #{ARGV}")
-  # ~ exit
-
-  chip = Chip.new
-
-  params = [nil] * chip.anz_params
-  params[0] = "ohne"
-  params[3] = "31382" # Batch
-  params[4] = "413" # Card
-  params[7] = "RUBY;i:/THERMO/golf/GOLF_MIF_PLATZREIFE.RB"
-  params[10] = "ffffffffffff"
-  params[22] = "feigusb"
-
-  if params[7] =~ /^RUBY;(.*)/
-    basename = File.basename($1)
-    chip_obj = Chip32n::ClassLoader.load(basename)
-  end
-
-  chip_obj.personalize(params)
-  chip_obj.close
-
-end
