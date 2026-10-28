@@ -367,9 +367,9 @@ PRINT 1
             # set bounding box and keep a little bit of space for safty
             if just == S_JUST_LEFT
               # Don't change middle or right aligned, they should already be valid
-              set_object_by_ids([id], GOA_WIDTH, format("%0.2f", w * 1.1 + 0.2))
+              set_object_by_ids([id], GOA_WIDTH, format("%0.2f", w * 1.1 + 5.0))
             end
-            set_object_by_ids([id], GOA_HEIGHT, format("%0.2f", h * 1.1 + 0.2))
+            set_object_by_ids([id], GOA_HEIGHT, format("%0.2f", h * 1.1 + 1))
 
             x, y = converter.get_new_coods(go)
             # move text up, because old old Y means text baseline
