@@ -10,12 +10,11 @@ module Mcc2
       PrinterDescription.new("Windows-Printer", "GdiPrinter", 0),
       PrinterDescription.new("Save as Image", "FilePrinter", 1),
       PrinterDescription.new("Linux-CUPS", "LinuxCupsPrinter", 2),
-      PrinterDescription.new("XID-440", "PrinterXID", 3),
-      PrinterDescription.new("Zebra", "PrinterZebra", 4),
-      PrinterDescription.new("cab Produktionstechnik GmbH", "PrinterCab", 5),
-      PrinterDescription.new("EPL-Drucker", "PrinterEpl", 6),
-      PrinterDescription.new("CX-320 Direct", "PrinterCx320Direct", 7),
-      PrinterDescription.new("TSC TTP 346M PRO", "PrinterTTP34x", 8),
+      PrinterDescription.new("Zebra", "PrinterZebra", 3),
+      PrinterDescription.new("cab Produktionstechnik GmbH", "PrinterCab", 4),
+      PrinterDescription.new("EPL-Drucker", "PrinterEpl", 5),
+      PrinterDescription.new("CX-320 Direct", "PrinterCx320Direct", 6),
+      PrinterDescription.new("TSC TTP 346M PRO", "PrinterTTP34x", 7),
       PrinterDescription.new("CX-320 Spooler", "PrinterCx320Gdi", 0)
     ]
 
@@ -49,8 +48,6 @@ module Mcc2
       }
       @combobox_gdi_printer.connect(SEL_COMMAND) { gdi_combobox_changed(@combobox_gdi_printer, S_GDIPRINTER_NAME, S_GDIPRINTER_INITDATA) }
       @button_gdi_printersetup.connect(SEL_COMMAND) { gdi_printersetup_pressed(@combobox_gdi_printer, S_GDIPRINTER_INITDATA) }
-      @combobox_xid_printer.connect(SEL_COMMAND) { gdi_combobox_changed(@combobox_xid_printer, S_XIDPRINTER_NAME, S_XIDPRINTER_INITDATA) }
-      @button_xid_printersetup.connect(SEL_COMMAND) { gdi_printersetup_pressed(@combobox_xid_printer, S_XIDPRINTER_INITDATA) }
       @combobox_zebra_printer.connect(SEL_COMMAND) { gdi_combobox_changed(@combobox_zebra_printer, S_ZEBRAPRINTER_NAME, S_ZEBRAPRINTER_INITDATA) }
       @button_zebra_printersetup.connect(SEL_COMMAND) { gdi_printersetup_pressed(@combobox_zebra_printer, S_ZEBRAPRINTER_INITDATA) }
 
@@ -335,10 +332,6 @@ module Mcc2
         h[combo_key.text] = text unless text.empty?
       end
       changed_attributes if @layout_file.set_attr_value(S_LINUX_CUPS_OPTIONS, JSON.dump(opts))
-    end
-
-    def selected_PrinterXID
-      selected_GdiPrinter(@combobox_xid_printer, S_XIDPRINTER_NAME)
     end
 
     def selected_PrinterZebra

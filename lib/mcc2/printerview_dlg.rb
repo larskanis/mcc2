@@ -14,8 +14,8 @@ class Dialogbox_printerview
         @dialogbox_printerview = w_dialogbox_printerview
         w_dialogbox_printerview.wdg_name = "dialogbox_printerview"
         w_dialogbox_printerview.shown = true
-        w_dialogbox_printerview.x = 1143
-        w_dialogbox_printerview.y = 909
+        w_dialogbox_printerview.x = 425
+        w_dialogbox_printerview.y = 1048
         w_dialogbox_printerview.width = 570
         w_dialogbox_printerview.height = 696
         FX::VerticalFrame.new(@dialogbox_printerview) { |w_verticalframe_printersetup|
@@ -271,67 +271,11 @@ class Dialogbox_printerview
                 }
               }
             }
-            FX::TabItem.new(@tabbook_printers) { |w_tabitem_xid_printer|
-              @tabitem_xid_printer = w_tabitem_xid_printer
-              w_tabitem_xid_printer.wdg_name = "tabitem_xid_printer"
-              w_tabitem_xid_printer.x = 208
-              w_tabitem_xid_printer.y = 6
-              w_tabitem_xid_printer.width = 49
-              w_tabitem_xid_printer.height = 26
-              w_tabitem_xid_printer.text = I18n.t("tabitem_xid_printer_text", scope: "dialogbox_printerview", default: "XID440")
-            }
-            FX::VerticalFrame.new(@tabbook_printers) { |w_verticalframe8|
-              @verticalframe8 = w_verticalframe8
-              w_verticalframe8.wdg_name = "verticalframe8"
-              w_verticalframe8.shown = false
-              w_verticalframe8.x = 4
-              w_verticalframe8.y = 28
-              w_verticalframe8.width = 562
-              w_verticalframe8.height = 640
-              FX::Matrix.new(@verticalframe8) { |w_matrix_xid|
-                @matrix_xid = w_matrix_xid
-                w_matrix_xid.wdg_name = "matrix_xid"
-                w_matrix_xid.matrixStyle = 131072
-                w_matrix_xid.width = 562
-                w_matrix_xid.height = 640
-                w_matrix_xid.numColumns = 3
-                FX::Label.new(@matrix_xid) { |w_label_xid_printer|
-                  @label_xid_printer = w_label_xid_printer
-                  w_label_xid_printer.wdg_name = "label_xid_printer"
-                  w_label_xid_printer.x = 4
-                  w_label_xid_printer.y = 4
-                  w_label_xid_printer.width = 51
-                  w_label_xid_printer.height = 22
-                  w_label_xid_printer.text = I18n.t("label_xid_printer_text", scope: "dialogbox_printerview", default: "Drucker")
-                }
-                FX::ComboBox.new(@matrix_xid) { |w_combobox_xid_printer|
-                  @combobox_xid_printer = w_combobox_xid_printer
-                  w_combobox_xid_printer.wdg_name = "combobox_xid_printer"
-                  w_combobox_xid_printer.comboStyle = 1048576
-                  w_combobox_xid_printer.layoutHints = 1025
-                  w_combobox_xid_printer.x = 59
-                  w_combobox_xid_printer.y = 4
-                  w_combobox_xid_printer.width = 427
-                  w_combobox_xid_printer.height = 24
-                }
-                FX::Button.new(@matrix_xid) { |w_button_xid_printersetup|
-                  @button_xid_printersetup = w_button_xid_printersetup
-                  w_button_xid_printersetup.wdg_name = "button_xid_printersetup"
-                  w_button_xid_printersetup.layoutHints = 1024
-                  w_button_xid_printersetup.x = 490
-                  w_button_xid_printersetup.y = 4
-                  w_button_xid_printersetup.width = 68
-                  w_button_xid_printersetup.height = 26
-                  w_button_xid_printersetup.text = I18n.t("button_xid_printersetup_text", scope: "dialogbox_printerview", default: "Einrichten")
-                  w_button_xid_printersetup.tipText = I18n.t("button_xid_printersetup_tipText", scope: "dialogbox_printerview", default: "Dateiauswahl")
-                }
-              }
-            }
             FX::TabItem.new(@tabbook_printers) { |w_tabitem_zebra_printer|
               @tabitem_zebra_printer = w_tabitem_zebra_printer
               w_tabitem_zebra_printer.wdg_name = "tabitem_zebra_printer"
               w_tabitem_zebra_printer.frameStyle = 28672
-              w_tabitem_zebra_printer.x = 257
+              w_tabitem_zebra_printer.x = 208
               w_tabitem_zebra_printer.y = 6
               w_tabitem_zebra_printer.width = 42
               w_tabitem_zebra_printer.height = 26
@@ -592,7 +536,7 @@ class Dialogbox_printerview
             FX::TabItem.new(@tabbook_printers) { |w_tabitem_cab_printer|
               @tabitem_cab_printer = w_tabitem_cab_printer
               w_tabitem_cab_printer.wdg_name = "tabitem_cab_printer"
-              w_tabitem_cab_printer.x = 299
+              w_tabitem_cab_printer.x = 250
               w_tabitem_cab_printer.y = 6
               w_tabitem_cab_printer.width = 29
               w_tabitem_cab_printer.height = 26
@@ -777,7 +721,7 @@ class Dialogbox_printerview
             FX::TabItem.new(@tabbook_printers) { |w_tabitem_epl|
               @tabitem_epl = w_tabitem_epl
               w_tabitem_epl.wdg_name = "tabitem_epl"
-              w_tabitem_epl.x = 328
+              w_tabitem_epl.x = 279
               w_tabitem_epl.y = 6
               w_tabitem_epl.width = 30
               w_tabitem_epl.height = 26
@@ -868,7 +812,7 @@ class Dialogbox_printerview
             FX::TabItem.new(@tabbook_printers) { |w_tabitem_cx320|
               @tabitem_cx320 = w_tabitem_cx320
               w_tabitem_cx320.wdg_name = "tabitem_cx320"
-              w_tabitem_cx320.x = 358
+              w_tabitem_cx320.x = 309
               w_tabitem_cx320.y = 6
               w_tabitem_cx320.width = 44
               w_tabitem_cx320.height = 26
@@ -1047,7 +991,7 @@ class Dialogbox_printerview
               @tabitem_ttp343 = w_tabitem_ttp343
               w_tabitem_ttp343.wdg_name = "tabitem_ttp343"
               w_tabitem_ttp343.font = FX::Font.new.from_s("Segoe UI|90|40|5|0|0|0").to_FXFont
-              w_tabitem_ttp343.x = 402
+              w_tabitem_ttp343.x = 353
               w_tabitem_ttp343.y = 7
               w_tabitem_ttp343.width = 105
               w_tabitem_ttp343.height = 25
@@ -1209,12 +1153,6 @@ class Dialogbox_printerview
   attr_reader :label_linux_cups_resolution
   attr_reader :spinner_linux_cups_dpi
   attr_reader :label_linux_cups_dpi
-  attr_reader :tabitem_xid_printer
-  attr_reader :verticalframe8
-  attr_reader :matrix_xid
-  attr_reader :label_xid_printer
-  attr_reader :combobox_xid_printer
-  attr_reader :button_xid_printersetup
   attr_reader :tabitem_zebra_printer
   attr_reader :verticalframe21
   attr_reader :matrix_zebra

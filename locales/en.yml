@@ -278,8 +278,6 @@ en:
     button_file_save_as_tipText: File selection
     button_gdi_printersetup_text: Setup
     button_gdi_printersetup_tipText: File selection
-    button_xid_printersetup_text: Setting up
-    button_xid_printersetup_tipText: File selection
     button_zebra_eject_card2_text: Eject card 2
     button_zebra_eject_card2_tipText: Ejects the card from the printer (e.g., if a card is stuck in the printer). Also ejects cards that are in the card feeder.
     button_zebra_eject_card_text: Eject card
@@ -316,7 +314,6 @@ en:
     label_ttp343_device_text: Device file
     label_ttp343_page_commands_text: Print commands per output page
     label_ttp343_resolution_text: Resolution
-    label_xid_printer_text: Printer
     label_zebra_answer_text: Answer
     label_zebra_command_text: Command
     label_zebra_commands_text: Printer commands
@@ -328,7 +325,6 @@ en:
     tabitem_gdi_printer_text: Windows GDI
     tabitem_linux_cups_text: Linux-CUPS
     tabitem_ttp343_text: TSC TTP 34X M
-    tabitem_xid_printer_text: XID440
     tabitem_zebra_printer_text: Zebra
     textfield_file_save_as_tipText: |-
       Storage location of the generated files

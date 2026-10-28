@@ -278,8 +278,6 @@ rs:
     button_file_save_as_tipText: Избор датотеке
     button_gdi_printersetup_text: Подешавање
     button_gdi_printersetup_tipText: Избор датотеке
-    button_xid_printersetup_text: Подешавање
-    button_xid_printersetup_tipText: Избор датотеке
     button_zebra_eject_card2_text: Избаци картицу 2
     button_zebra_eject_card2_tipText: Избацује картицу из штампача (нпр. ако је картица заглављена у штампачу). Такође избацује картице које се налазе у дозатору картица.
     button_zebra_eject_card_text: Избаци картицу
@@ -316,7 +314,6 @@ rs:
     label_ttp343_device_text: Датотека уређаја
     label_ttp343_page_commands_text: Број команда за штампање по излазној страници
     label_ttp343_resolution_text: Резолуција
-    label_xid_printer_text: Штампач
     label_zebra_answer_text: Одговор
     label_zebra_command_text: Команда
     label_zebra_commands_text: Команde за штампач
@@ -328,7 +325,6 @@ rs:
     tabitem_gdi_printer_text: Windows GDI
     tabitem_linux_cups_text: Линукс-ЦУПС
     tabitem_ttp343_text: ТСЦ ТТП 34X M
-    tabitem_xid_printer_text: XID440
     tabitem_zebra_printer_text: Зебра
     textfield_file_save_as_tipText: |-
       Место складишта генерисаних датотека

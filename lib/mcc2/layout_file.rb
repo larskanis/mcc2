@@ -12,7 +12,6 @@ require "mcc2/layout_object/embed"
 
 module Mcc2
   module Printer
-    autoload :PrinterXID, "mcc2/printer/printer_xid"
     autoload :GdiPrinter, "mcc2/printer/gdi_printer"
     autoload :FilePrinter, "mcc2/printer/file_printer"
     autoload :LinuxCupsPrinter, "mcc2/printer/linux_cups_printer"
@@ -93,8 +92,6 @@ module Mcc2
       add_attr(S_LINUX_CUPS_DPI, Integer, 200)
       add_attr(S_GDIPRINTER_NAME, String, "")
       add_attr(S_GDIPRINTER_INITDATA, String, "")
-      add_attr(S_XIDPRINTER_NAME, String, "")
-      add_attr(S_XIDPRINTER_INITDATA, String, "")
       add_attr(S_ZEBRAPRINTER_NAME, String, "")
       add_attr(S_ZEBRAPRINTER_INITDATA, String, "")
       add_attr(S_CABPRINTER_HOST, String, "localhost")
