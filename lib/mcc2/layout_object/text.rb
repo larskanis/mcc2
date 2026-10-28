@@ -7,15 +7,15 @@ module Mcc2
         super
         @go_attributes[GOA_TYP].attr_value = TEXTOBJECT
         add_attr(@go_attributes, GOA_WIDTH, Integer, 30)
-        add_attr(@go_attributes, GOA_HEIGHT, Integer, 0)
+        add_attr(@go_attributes, GOA_HEIGHT, Integer, 6)
         add_attr(@go_attributes, GOA_DATA, String, "")
-        add_attr(@go_attributes, GOA_SAMPLE_DATA, String, "Muster-Text")
+        add_attr(@go_attributes, GOA_SAMPLE_DATA, String, "Sample-Text")
         add_attr(@go_attributes, GOA_FONT_HEIGHT, Integer, 10)
         add_attr(@go_attributes, GOA_FONT_TYP, String, "Arial")
         add_attr(@go_attributes, GOA_FONT_COLOR, String, "000000FF")
         add_attr(@go_attributes, GOA_FONT_FILE, String, "")
         add_attr(@go_attributes, GOA_BACK_COLOR, String, "FFFFFFFF")
-        add_attr(@go_attributes, GOA_JUSTIFICATION, String, "Links")
+        add_attr(@go_attributes, GOA_JUSTIFICATION, String, S_JUST_LEFT)
       end
     end
   end
