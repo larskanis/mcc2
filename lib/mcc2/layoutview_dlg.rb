@@ -15,22 +15,22 @@ class Dialogbox_layoutview
         w_dialogbox_layoutview.wdg_name = "dialogbox_layoutview"
         w_dialogbox_layoutview.layoutHints = 768
         w_dialogbox_layoutview.shown = true
-        w_dialogbox_layoutview.x = 280
-        w_dialogbox_layoutview.y = 1024
-        w_dialogbox_layoutview.width = 580
-        w_dialogbox_layoutview.height = 694
+        w_dialogbox_layoutview.x = 970
+        w_dialogbox_layoutview.y = 1010
+        w_dialogbox_layoutview.width = 360
+        w_dialogbox_layoutview.height = 730
         w_dialogbox_layoutview.title = I18n.t("dialogbox_layoutview_title", scope: "dialogbox_layoutview", default: "Entwurfsansicht")
         FX::Splitter.new(@dialogbox_layoutview) { |w_splitter_layoutview|
           @splitter_layoutview = w_splitter_layoutview
           w_splitter_layoutview.wdg_name = "splitter_layoutview"
           w_splitter_layoutview.splitterStyle = 163840
-          w_splitter_layoutview.width = 580
-          w_splitter_layoutview.height = 694
+          w_splitter_layoutview.width = 360
+          w_splitter_layoutview.height = 730
           w_splitter_layoutview.barSize = 2
           FX::Splitter.new(@splitter_layoutview) { |w_splitter12|
             @splitter12 = w_splitter12
             w_splitter12.wdg_name = "splitter12"
-            w_splitter12.width = 580
+            w_splitter12.width = 360
             w_splitter12.height = 156
             FX::VerticalFrame.new(@splitter12) { |w_verticalframe_steuerung|
               @verticalframe_steuerung = w_verticalframe_steuerung
@@ -189,7 +189,7 @@ class Dialogbox_layoutview
               w_verticalframe_objectlist.wdg_name = "verticalframe_objectlist"
               w_verticalframe_objectlist.frameStyle = 16384
               w_verticalframe_objectlist.x = 75
-              w_verticalframe_objectlist.width = 505
+              w_verticalframe_objectlist.width = 285
               w_verticalframe_objectlist.height = 156
               w_verticalframe_objectlist.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               FX::IconList.new(@verticalframe_objectlist) { |w_iconlist_objects|
@@ -198,7 +198,7 @@ class Dialogbox_layoutview
                 w_iconlist_objects.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                 w_iconlist_objects.x = 2
                 w_iconlist_objects.y = 2
-                w_iconlist_objects.width = 501
+                w_iconlist_objects.width = 281
                 w_iconlist_objects.height = 152
               }
             }
@@ -208,23 +208,24 @@ class Dialogbox_layoutview
             w_horizontalframe_attributes.wdg_name = "horizontalframe_attributes"
             w_horizontalframe_attributes.frameStyle = 16384
             w_horizontalframe_attributes.y = 158
-            w_horizontalframe_attributes.width = 580
-            w_horizontalframe_attributes.height = 536
+            w_horizontalframe_attributes.width = 360
+            w_horizontalframe_attributes.height = 572
             w_horizontalframe_attributes.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
             FX::TabBook.new(@horizontalframe_attributes) { |w_tabbook_objectattributes|
               @tabbook_objectattributes = w_tabbook_objectattributes
               w_tabbook_objectattributes.wdg_name = "tabbook_objectattributes"
               w_tabbook_objectattributes.x = 2
               w_tabbook_objectattributes.y = 2
-              w_tabbook_objectattributes.width = 576
-              w_tabbook_objectattributes.height = 532
+              w_tabbook_objectattributes.width = 356
+              w_tabbook_objectattributes.height = 568
+              w_tabbook_objectattributes.current = 6
               w_tabbook_objectattributes.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               FX::TabItem.new(@tabbook_objectattributes) { |w_tabitem_allgemein|
                 @tabitem_allgemein = w_tabitem_allgemein
                 w_tabitem_allgemein.wdg_name = "tabitem_allgemein"
                 w_tabitem_allgemein.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_allgemein.x = 4
-                w_tabitem_allgemein.y = 4
+                w_tabitem_allgemein.x = 6
+                w_tabitem_allgemein.y = 6
                 w_tabitem_allgemein.width = 60
                 w_tabitem_allgemein.height = 24
                 w_tabitem_allgemein.text = I18n.t("tabitem_allgemein_text", scope: "dialogbox_layoutview", default: "Allgemein")
@@ -234,17 +235,18 @@ class Dialogbox_layoutview
               FX::VerticalFrame.new(@tabbook_objectattributes) { |w_verticalframe52|
                 @verticalframe52 = w_verticalframe52
                 w_verticalframe52.wdg_name = "verticalframe52"
+                w_verticalframe52.shown = false
                 w_verticalframe52.x = 4
                 w_verticalframe52.y = 26
-                w_verticalframe52.width = 568
-                w_verticalframe52.height = 502
+                w_verticalframe52.width = 348
+                w_verticalframe52.height = 538
                 w_verticalframe52.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                 FX::HorizontalFrame.new(@verticalframe52) { |w_horizontalframe74|
                   @horizontalframe74 = w_horizontalframe74
                   w_horizontalframe74.wdg_name = "horizontalframe74"
                   w_horizontalframe74.layoutHints = 1024
                   w_horizontalframe74.padTop = 10
-                  w_horizontalframe74.width = 568
+                  w_horizontalframe74.width = 348
                   w_horizontalframe74.height = 32
                   w_horizontalframe74.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe74) { |w_label_datasource_typ|
@@ -267,7 +269,7 @@ class Dialogbox_layoutview
                     w_combobox_datasource_typ.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_combobox_datasource_typ.x = 100
                     w_combobox_datasource_typ.y = 10
-                    w_combobox_datasource_typ.width = 468
+                    w_combobox_datasource_typ.width = 248
                     w_combobox_datasource_typ.height = 22
                   }
                 }
@@ -276,7 +278,7 @@ class Dialogbox_layoutview
                   w_horizontalframe75.wdg_name = "horizontalframe75"
                   w_horizontalframe75.layoutHints = 1024
                   w_horizontalframe75.y = 32
-                  w_horizontalframe75.width = 568
+                  w_horizontalframe75.width = 348
                   w_horizontalframe75.height = 22
                   w_horizontalframe75.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe75) { |w_label_datasource_encoding|
@@ -297,7 +299,7 @@ class Dialogbox_layoutview
                     w_combobox_datasource_encoding.layoutHints = 1024
                     w_combobox_datasource_encoding.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_combobox_datasource_encoding.x = 100
-                    w_combobox_datasource_encoding.width = 468
+                    w_combobox_datasource_encoding.width = 248
                     w_combobox_datasource_encoding.height = 22
                   }
                 }
@@ -307,7 +309,7 @@ class Dialogbox_layoutview
                   w_horizontalframe76.layoutHints = 1024
                   w_horizontalframe76.padTop = 15
                   w_horizontalframe76.y = 54
-                  w_horizontalframe76.width = 568
+                  w_horizontalframe76.width = 348
                   w_horizontalframe76.height = 35
                   w_horizontalframe76.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe76) { |w_label_contactless|
@@ -341,7 +343,7 @@ class Dialogbox_layoutview
                   w_horizontalframe77.wdg_name = "horizontalframe77"
                   w_horizontalframe77.layoutHints = 1024
                   w_horizontalframe77.y = 89
-                  w_horizontalframe77.width = 568
+                  w_horizontalframe77.width = 348
                   w_horizontalframe77.height = 20
                   w_horizontalframe77.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe77) { |w_label_contact|
@@ -373,7 +375,7 @@ class Dialogbox_layoutview
                   w_horizontalframe78.wdg_name = "horizontalframe78"
                   w_horizontalframe78.layoutHints = 1024
                   w_horizontalframe78.y = 109
-                  w_horizontalframe78.width = 568
+                  w_horizontalframe78.width = 348
                   w_horizontalframe78.height = 20
                   w_horizontalframe78.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe78) { |w_label_magstripe|
@@ -405,7 +407,7 @@ class Dialogbox_layoutview
                   w_horizontalframe81.wdg_name = "horizontalframe81"
                   w_horizontalframe81.layoutHints = 1024
                   w_horizontalframe81.y = 129
-                  w_horizontalframe81.width = 568
+                  w_horizontalframe81.width = 348
                   w_horizontalframe81.height = 22
                   w_horizontalframe81.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe81) { |w_label_page_size|
@@ -426,7 +428,7 @@ class Dialogbox_layoutview
                     w_textfield_page_width.textFieldTextStyle = 2097152
                     w_textfield_page_width.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_textfield_page_width.x = 100
-                    w_textfield_page_width.width = 220
+                    w_textfield_page_width.width = 110
                     w_textfield_page_width.height = 22
                     w_textfield_page_width.numColumns = 10
                     w_textfield_page_width.tipText = I18n.t("textfield_page_width_tipText", scope: "dialogbox_layoutview", default: "Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben.")
@@ -438,8 +440,8 @@ class Dialogbox_layoutview
                     w_textfield_page_height.layoutHints = 1024
                     w_textfield_page_height.textFieldTextStyle = 2097152
                     w_textfield_page_height.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_textfield_page_height.x = 320
-                    w_textfield_page_height.width = 221
+                    w_textfield_page_height.x = 210
+                    w_textfield_page_height.width = 111
                     w_textfield_page_height.height = 22
                     w_textfield_page_height.numColumns = 10
                     w_textfield_page_height.tipText = I18n.t("textfield_page_height_tipText", scope: "dialogbox_layoutview", default: "Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben.")
@@ -450,7 +452,7 @@ class Dialogbox_layoutview
                     w_label_page_size_mm.wdg_name = "label_page_size_mm"
                     w_label_page_size_mm.justify = 32768
                     w_label_page_size_mm.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_label_page_size_mm.x = 541
+                    w_label_page_size_mm.x = 321
                     w_label_page_size_mm.width = 27
                     w_label_page_size_mm.height = 20
                     w_label_page_size_mm.text = I18n.t("label_page_size_mm_text", scope: "dialogbox_layoutview", default: " mm")
@@ -462,7 +464,7 @@ class Dialogbox_layoutview
                   w_horizontalframe80.wdg_name = "horizontalframe80"
                   w_horizontalframe80.layoutHints = 1024
                   w_horizontalframe80.y = 151
-                  w_horizontalframe80.width = 568
+                  w_horizontalframe80.width = 348
                   w_horizontalframe80.height = 22
                   w_horizontalframe80.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe80) { |w_label_offset_x_y|
@@ -483,7 +485,7 @@ class Dialogbox_layoutview
                     w_textfield_x_offset.textFieldTextStyle = 2097152
                     w_textfield_x_offset.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_textfield_x_offset.x = 100
-                    w_textfield_x_offset.width = 220
+                    w_textfield_x_offset.width = 110
                     w_textfield_x_offset.height = 22
                     w_textfield_x_offset.numColumns = 10
                     w_textfield_x_offset.tipText = I18n.t("textfield_x_offset_tipText", scope: "dialogbox_layoutview", default: "Mit diesem Wert wird das gesamte Druckbild um die X-Achse verschoben.")
@@ -495,8 +497,8 @@ class Dialogbox_layoutview
                     w_textfield_y_offset.layoutHints = 1024
                     w_textfield_y_offset.textFieldTextStyle = 2097152
                     w_textfield_y_offset.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_textfield_y_offset.x = 320
-                    w_textfield_y_offset.width = 221
+                    w_textfield_y_offset.x = 210
+                    w_textfield_y_offset.width = 111
                     w_textfield_y_offset.height = 22
                     w_textfield_y_offset.numColumns = 10
                     w_textfield_y_offset.tipText = I18n.t("textfield_y_offset_tipText", scope: "dialogbox_layoutview", default: "Mit diesem Wert wird das gesamte Druckbild um die Y-Achse verschoben.")
@@ -507,7 +509,7 @@ class Dialogbox_layoutview
                     w_label_offset_mm.wdg_name = "label_offset_mm"
                     w_label_offset_mm.justify = 32768
                     w_label_offset_mm.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_label_offset_mm.x = 541
+                    w_label_offset_mm.x = 321
                     w_label_offset_mm.width = 27
                     w_label_offset_mm.height = 20
                     w_label_offset_mm.text = I18n.t("label_offset_mm_text", scope: "dialogbox_layoutview", default: " mm")
@@ -519,7 +521,7 @@ class Dialogbox_layoutview
                   w_horizontalframe79.wdg_name = "horizontalframe79"
                   w_horizontalframe79.layoutHints = 1024
                   w_horizontalframe79.y = 173
-                  w_horizontalframe79.width = 568
+                  w_horizontalframe79.width = 348
                   w_horizontalframe79.height = 20
                   w_horizontalframe79.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe79) { |w_label_duplex|
@@ -554,8 +556,8 @@ class Dialogbox_layoutview
                   w_matrix_flipflop.hSpacing = 0
                   w_matrix_flipflop.padLeft = 0
                   w_matrix_flipflop.y = 193
-                  w_matrix_flipflop.width = 568
-                  w_matrix_flipflop.height = 309
+                  w_matrix_flipflop.width = 348
+                  w_matrix_flipflop.height = 345
                   w_matrix_flipflop.numColumns = 3
                   w_matrix_flipflop.numRows = 2
                   FX::Label.new(@matrix_flipflop) { |w_label_flip_front|
@@ -627,7 +629,7 @@ class Dialogbox_layoutview
                 @tabitem_chip = w_tabitem_chip
                 w_tabitem_chip.wdg_name = "tabitem_chip"
                 w_tabitem_chip.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_chip.x = 63
+                w_tabitem_chip.x = 25
                 w_tabitem_chip.y = 6
                 w_tabitem_chip.width = 32
                 w_tabitem_chip.height = 24
@@ -642,8 +644,8 @@ class Dialogbox_layoutview
                 w_verticalframe_chip.shown = false
                 w_verticalframe_chip.x = 4
                 w_verticalframe_chip.y = 26
-                w_verticalframe_chip.width = 568
-                w_verticalframe_chip.height = 502
+                w_verticalframe_chip.width = 348
+                w_verticalframe_chip.height = 538
                 w_verticalframe_chip.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                 FX::Label.new(@verticalframe_chip) { |w_label_chip_description|
                   @label_chip_description = w_label_chip_description
@@ -659,7 +661,7 @@ class Dialogbox_layoutview
                 @tabitem_magstripe = w_tabitem_magstripe
                 w_tabitem_magstripe.wdg_name = "tabitem_magstripe"
                 w_tabitem_magstripe.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_magstripe.x = 95
+                w_tabitem_magstripe.x = 57
                 w_tabitem_magstripe.y = 6
                 w_tabitem_magstripe.width = 88
                 w_tabitem_magstripe.height = 24
@@ -677,8 +679,8 @@ class Dialogbox_layoutview
                 w_verticalframe54.padTop = 4
                 w_verticalframe54.x = 4
                 w_verticalframe54.y = 26
-                w_verticalframe54.width = 568
-                w_verticalframe54.height = 502
+                w_verticalframe54.width = 348
+                w_verticalframe54.height = 538
                 w_verticalframe54.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                 FX::HorizontalFrame.new(@verticalframe54) { |w_horizontalframe112|
                   @horizontalframe112 = w_horizontalframe112
@@ -686,7 +688,7 @@ class Dialogbox_layoutview
                   w_horizontalframe112.layoutHints = 1024
                   w_horizontalframe112.x = 2
                   w_horizontalframe112.y = 6
-                  w_horizontalframe112.width = 564
+                  w_horizontalframe112.width = 344
                   w_horizontalframe112.height = 24
                   w_horizontalframe112.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe112) { |w_label_spur1|
@@ -705,7 +707,7 @@ class Dialogbox_layoutview
                     w_textfield_spur1.layoutHints = 1024
                     w_textfield_spur1.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_textfield_spur1.x = 35
-                    w_textfield_spur1.width = 512
+                    w_textfield_spur1.width = 292
                     w_textfield_spur1.height = 22
                     w_textfield_spur1.numColumns = 10
                     w_textfield_spur1.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
@@ -714,7 +716,7 @@ class Dialogbox_layoutview
                     @button_spur1 = w_button_spur1
                     w_button_spur1.wdg_name = "button_spur1"
                     w_button_spur1.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_button_spur1.x = 547
+                    w_button_spur1.x = 327
                     w_button_spur1.width = 17
                     w_button_spur1.height = 24
                     w_button_spur1.text = I18n.t("button_spur1_text", scope: "dialogbox_layoutview", default: "...")
@@ -727,7 +729,7 @@ class Dialogbox_layoutview
                   w_horizontalframe113.layoutHints = 1024
                   w_horizontalframe113.x = 2
                   w_horizontalframe113.y = 34
-                  w_horizontalframe113.width = 564
+                  w_horizontalframe113.width = 344
                   w_horizontalframe113.height = 24
                   w_horizontalframe113.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe113) { |w_label_spur2|
@@ -746,7 +748,7 @@ class Dialogbox_layoutview
                     w_textfield_spur2.layoutHints = 1024
                     w_textfield_spur2.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_textfield_spur2.x = 35
-                    w_textfield_spur2.width = 512
+                    w_textfield_spur2.width = 292
                     w_textfield_spur2.height = 22
                     w_textfield_spur2.numColumns = 10
                     w_textfield_spur2.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
@@ -755,7 +757,7 @@ class Dialogbox_layoutview
                     @button_spur2 = w_button_spur2
                     w_button_spur2.wdg_name = "button_spur2"
                     w_button_spur2.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_button_spur2.x = 547
+                    w_button_spur2.x = 327
                     w_button_spur2.width = 17
                     w_button_spur2.height = 24
                     w_button_spur2.text = I18n.t("button_spur2_text", scope: "dialogbox_layoutview", default: "...")
@@ -768,7 +770,7 @@ class Dialogbox_layoutview
                   w_horizontalframe114.layoutHints = 1024
                   w_horizontalframe114.x = 2
                   w_horizontalframe114.y = 62
-                  w_horizontalframe114.width = 564
+                  w_horizontalframe114.width = 344
                   w_horizontalframe114.height = 24
                   w_horizontalframe114.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe114) { |w_label_spur3|
@@ -787,7 +789,7 @@ class Dialogbox_layoutview
                     w_textfield_spur3.layoutHints = 1024
                     w_textfield_spur3.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_textfield_spur3.x = 35
-                    w_textfield_spur3.width = 512
+                    w_textfield_spur3.width = 292
                     w_textfield_spur3.height = 22
                     w_textfield_spur3.numColumns = 10
                     w_textfield_spur3.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
@@ -796,7 +798,7 @@ class Dialogbox_layoutview
                     @button_spur3 = w_button_spur3
                     w_button_spur3.wdg_name = "button_spur3"
                     w_button_spur3.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_button_spur3.x = 547
+                    w_button_spur3.x = 327
                     w_button_spur3.width = 17
                     w_button_spur3.height = 24
                     w_button_spur3.text = I18n.t("button_spur3_text", scope: "dialogbox_layoutview", default: "...")
@@ -808,7 +810,7 @@ class Dialogbox_layoutview
                 @tabitem_object = w_tabitem_object
                 w_tabitem_object.wdg_name = "tabitem_object"
                 w_tabitem_object.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_object.x = 183
+                w_tabitem_object.x = 145
                 w_tabitem_object.y = 6
                 w_tabitem_object.width = 43
                 w_tabitem_object.height = 24
@@ -823,8 +825,8 @@ class Dialogbox_layoutview
                 w_verticalframe_object.shown = false
                 w_verticalframe_object.x = 4
                 w_verticalframe_object.y = 26
-                w_verticalframe_object.width = 568
-                w_verticalframe_object.height = 502
+                w_verticalframe_object.width = 348
+                w_verticalframe_object.height = 538
                 w_verticalframe_object.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                 FX::Matrix.new(@verticalframe_object) { |w_matrix1|
                   @matrix1 = w_matrix1
@@ -832,8 +834,8 @@ class Dialogbox_layoutview
                   w_matrix1.matrixStyle = 131072
                   w_matrix1.x = 2
                   w_matrix1.y = 2
-                  w_matrix1.width = 564
-                  w_matrix1.height = 498
+                  w_matrix1.width = 344
+                  w_matrix1.height = 534
                   w_matrix1.numColumns = 3
                   w_matrix1.numRows = 5
                   w_matrix1.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
@@ -855,7 +857,7 @@ class Dialogbox_layoutview
                     w_textfield_name.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_textfield_name.x = 127
                     w_textfield_name.y = 4
-                    w_textfield_name.width = 410
+                    w_textfield_name.width = 190
                     w_textfield_name.height = 22
                     w_textfield_name.numColumns = 10
                     w_textfield_name.tipText = I18n.t("textfield_name_tipText", scope: "dialogbox_layoutview", default: "Der Name ist nur für die Anzeige in der Objektliste und bei bestimmten Aktionen notwendig, sollte aber dennoch in einen aussagekräftigen Namen geändert werden.")
@@ -865,7 +867,7 @@ class Dialogbox_layoutview
                     @label_name_empty = w_label_name_empty
                     w_label_name_empty.wdg_name = "label_name_empty"
                     w_label_name_empty.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_label_name_empty.x = 541
+                    w_label_name_empty.x = 321
                     w_label_name_empty.y = 4
                     w_label_name_empty.width = 4
                     w_label_name_empty.height = 4
@@ -891,8 +893,8 @@ class Dialogbox_layoutview
                     w_verticalframe44.layoutHints = 3075
                     w_verticalframe44.x = 127
                     w_verticalframe44.y = 30
-                    w_verticalframe44.width = 410
-                    w_verticalframe44.height = 205
+                    w_verticalframe44.width = 190
+                    w_verticalframe44.height = 223
                     w_verticalframe44.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                     FX::Text.new(@verticalframe44) { |w_textfield_data|
                       @textfield_data = w_textfield_data
@@ -900,8 +902,8 @@ class Dialogbox_layoutview
                       w_textfield_data.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                       w_textfield_data.x = 1
                       w_textfield_data.y = 1
-                      w_textfield_data.width = 408
-                      w_textfield_data.height = 203
+                      w_textfield_data.width = 188
+                      w_textfield_data.height = 221
                       w_textfield_data.tipText = I18n.t("textfield_data_tipText", scope: "dialogbox_layoutview", default: "Enthält die Daten, welche später auf der Karte gedruckt werden sollen.\nIn diesem Feld können mehrerer Zeilen eingegeben werden.\nPlatzhalter aus einer Datenquelle werden nach der Syntax\n{feldname[anfang,laenge]} gebildet.")
                     }
                   }
@@ -909,7 +911,7 @@ class Dialogbox_layoutview
                     @menubutton_enhanced_data_text_edit = w_menubutton_enhanced_data_text_edit
                     w_menubutton_enhanced_data_text_edit.wdg_name = "menubutton_enhanced_data_text_edit"
                     w_menubutton_enhanced_data_text_edit.layoutHints = 2
-                    w_menubutton_enhanced_data_text_edit.x = 541
+                    w_menubutton_enhanced_data_text_edit.x = 321
                     w_menubutton_enhanced_data_text_edit.y = 30
                     w_menubutton_enhanced_data_text_edit.width = 19
                     w_menubutton_enhanced_data_text_edit.height = 13
@@ -927,7 +929,7 @@ class Dialogbox_layoutview
                     w_label_textfield.wdg_name = "label_textfield"
                     w_label_textfield.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_label_textfield.x = 4
-                    w_label_textfield.y = 239
+                    w_label_textfield.y = 257
                     w_label_textfield.width = 35
                     w_label_textfield.height = 20
                     w_label_textfield.text = I18n.t("label_textfield_text", scope: "dialogbox_layoutview", default: "Daten")
@@ -939,8 +941,8 @@ class Dialogbox_layoutview
                     w_textfield_data_non_text.layoutHints = 1025
                     w_textfield_data_non_text.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_textfield_data_non_text.x = 127
-                    w_textfield_data_non_text.y = 239
-                    w_textfield_data_non_text.width = 410
+                    w_textfield_data_non_text.y = 257
+                    w_textfield_data_non_text.width = 190
                     w_textfield_data_non_text.height = 22
                     w_textfield_data_non_text.numColumns = 10
                     w_textfield_data_non_text.tipText = I18n.t("textfield_data_non_text_tipText", scope: "dialogbox_layoutview", default: "Enthält die Daten, welche später auf der Karte gedruckt werden sollen.\nIn diesem Feld kann nur 1 Zeile eingegeben werden.\nPlatzhalter aus einer Datenquelle werden nach der Syntax\n{feldname[anfang,laenge]} gebildet.")
@@ -949,8 +951,8 @@ class Dialogbox_layoutview
                   FX::MenuButton.new(@matrix1) { |w_menubutton_enhanced_data_edit|
                     @menubutton_enhanced_data_edit = w_menubutton_enhanced_data_edit
                     w_menubutton_enhanced_data_edit.wdg_name = "menubutton_enhanced_data_edit"
-                    w_menubutton_enhanced_data_edit.x = 541
-                    w_menubutton_enhanced_data_edit.y = 239
+                    w_menubutton_enhanced_data_edit.x = 321
+                    w_menubutton_enhanced_data_edit.y = 257
                     w_menubutton_enhanced_data_edit.width = 19
                     w_menubutton_enhanced_data_edit.height = 13
                     w_menubutton_enhanced_data_edit.text = I18n.t("menubutton_enhanced_data_edit_text", scope: "dialogbox_layoutview", default: "")
@@ -968,7 +970,7 @@ class Dialogbox_layoutview
                     w_label_sample_data.layoutHints = 2
                     w_label_sample_data.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_label_sample_data.x = 4
-                    w_label_sample_data.y = 265
+                    w_label_sample_data.y = 283
                     w_label_sample_data.width = 74
                     w_label_sample_data.height = 20
                     w_label_sample_data.text = I18n.t("label_sample_data_text", scope: "dialogbox_layoutview", default: "Beispieldaten")
@@ -980,9 +982,9 @@ class Dialogbox_layoutview
                     w_verticalframe267.frameStyle = 4096
                     w_verticalframe267.layoutHints = 3075
                     w_verticalframe267.x = 127
-                    w_verticalframe267.y = 265
-                    w_verticalframe267.width = 410
-                    w_verticalframe267.height = 205
+                    w_verticalframe267.y = 283
+                    w_verticalframe267.width = 190
+                    w_verticalframe267.height = 223
                     w_verticalframe267.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                     FX::Text.new(@verticalframe267) { |w_textfield_sample_data|
                       @textfield_sample_data = w_textfield_sample_data
@@ -990,8 +992,8 @@ class Dialogbox_layoutview
                       w_textfield_sample_data.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                       w_textfield_sample_data.x = 1
                       w_textfield_sample_data.y = 1
-                      w_textfield_sample_data.width = 408
-                      w_textfield_sample_data.height = 203
+                      w_textfield_sample_data.width = 188
+                      w_textfield_sample_data.height = 221
                       w_textfield_sample_data.tipText = I18n.t("textfield_sample_data_tipText", scope: "dialogbox_layoutview", default: "Enthält die Daten, welche später auf der Karte gedruckt werden sollen.\nIn diesem Feld können mehrerer Zeilen eingegeben werden.\nPlatzhalter aus einer Datenquelle werden nach der Syntax\n{feldname[anfang,laenge]} gebildet.")
                     }
                   }
@@ -999,8 +1001,8 @@ class Dialogbox_layoutview
                     @menubutton_sample_data = w_menubutton_sample_data
                     w_menubutton_sample_data.wdg_name = "menubutton_sample_data"
                     w_menubutton_sample_data.layoutHints = 2
-                    w_menubutton_sample_data.x = 541
-                    w_menubutton_sample_data.y = 265
+                    w_menubutton_sample_data.x = 321
+                    w_menubutton_sample_data.y = 283
                     w_menubutton_sample_data.width = 19
                     w_menubutton_sample_data.height = 13
                     w_menubutton_sample_data.text = I18n.t("menubutton_sample_data_text", scope: "dialogbox_layoutview", default: "")
@@ -1017,7 +1019,7 @@ class Dialogbox_layoutview
                     w_label_printlist.wdg_name = "label_printlist"
                     w_label_printlist.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_label_printlist.x = 4
-                    w_label_printlist.y = 474
+                    w_label_printlist.y = 510
                     w_label_printlist.width = 119
                     w_label_printlist.height = 20
                     w_label_printlist.text = I18n.t("label_printlist_text", scope: "dialogbox_layoutview", default: "in Druckliste anzeigen")
@@ -1029,7 +1031,7 @@ class Dialogbox_layoutview
                     w_checkbutton_printlist.layoutHints = 1
                     w_checkbutton_printlist.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_checkbutton_printlist.x = 127
-                    w_checkbutton_printlist.y = 474
+                    w_checkbutton_printlist.y = 510
                     w_checkbutton_printlist.width = 17
                     w_checkbutton_printlist.height = 17
                     w_checkbutton_printlist.text = I18n.t("checkbutton_printlist_text", scope: "dialogbox_layoutview", default: "")
@@ -1042,7 +1044,7 @@ class Dialogbox_layoutview
                 @tabitem_posit = w_tabitem_posit
                 w_tabitem_posit.wdg_name = "tabitem_posit"
                 w_tabitem_posit.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_posit.x = 226
+                w_tabitem_posit.x = 188
                 w_tabitem_posit.y = 6
                 w_tabitem_posit.width = 51
                 w_tabitem_posit.height = 24
@@ -1057,8 +1059,8 @@ class Dialogbox_layoutview
                 w_verticalframe_posit.shown = false
                 w_verticalframe_posit.x = 4
                 w_verticalframe_posit.y = 26
-                w_verticalframe_posit.width = 568
-                w_verticalframe_posit.height = 502
+                w_verticalframe_posit.width = 348
+                w_verticalframe_posit.height = 538
                 w_verticalframe_posit.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                 FX::Matrix.new(@verticalframe_posit) { |w_matrix2|
                   @matrix2 = w_matrix2
@@ -1066,8 +1068,8 @@ class Dialogbox_layoutview
                   w_matrix2.matrixStyle = 131072
                   w_matrix2.x = 2
                   w_matrix2.y = 2
-                  w_matrix2.width = 564
-                  w_matrix2.height = 498
+                  w_matrix2.width = 344
+                  w_matrix2.height = 534
                   w_matrix2.numColumns = 4
                   w_matrix2.numRows = 5
                   w_matrix2.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
@@ -1292,7 +1294,7 @@ class Dialogbox_layoutview
                 @tabitem_font = w_tabitem_font
                 w_tabitem_font.wdg_name = "tabitem_font"
                 w_tabitem_font.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_font.x = 277
+                w_tabitem_font.x = 239
                 w_tabitem_font.y = 6
                 w_tabitem_font.width = 42
                 w_tabitem_font.height = 24
@@ -1309,8 +1311,8 @@ class Dialogbox_layoutview
                 w_verticalframe_font.padTop = 10
                 w_verticalframe_font.x = 4
                 w_verticalframe_font.y = 26
-                w_verticalframe_font.width = 568
-                w_verticalframe_font.height = 502
+                w_verticalframe_font.width = 348
+                w_verticalframe_font.height = 538
                 w_verticalframe_font.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                 FX::HorizontalFrame.new(@verticalframe_font) { |w_horizontalframe54|
                   @horizontalframe54 = w_horizontalframe54
@@ -1318,7 +1320,7 @@ class Dialogbox_layoutview
                   w_horizontalframe54.layoutHints = 1024
                   w_horizontalframe54.x = 2
                   w_horizontalframe54.y = 12
-                  w_horizontalframe54.width = 564
+                  w_horizontalframe54.width = 344
                   w_horizontalframe54.height = 22
                   w_horizontalframe54.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe54) { |w_label_fonts|
@@ -1352,19 +1354,19 @@ class Dialogbox_layoutview
                   w_horizontalframe175.layoutHints = 1024
                   w_horizontalframe175.x = 2
                   w_horizontalframe175.y = 38
-                  w_horizontalframe175.width = 564
+                  w_horizontalframe175.width = 344
                   w_horizontalframe175.height = 26
                   FX::TextField.new(@horizontalframe175) { |w_textfield_font_file|
                     @textfield_font_file = w_textfield_font_file
                     w_textfield_font_file.wdg_name = "textfield_font_file"
                     w_textfield_font_file.layoutHints = 1024
-                    w_textfield_font_file.width = 547
+                    w_textfield_font_file.width = 327
                     w_textfield_font_file.height = 24
                   }
                   FX::Button.new(@horizontalframe175) { |w_button_fontfile_select|
                     @button_fontfile_select = w_button_fontfile_select
                     w_button_fontfile_select.wdg_name = "button_fontfile_select"
-                    w_button_fontfile_select.x = 547
+                    w_button_fontfile_select.x = 327
                     w_button_fontfile_select.width = 17
                     w_button_fontfile_select.height = 26
                     w_button_fontfile_select.text = I18n.t("button_fontfile_select_text", scope: "dialogbox_layoutview", default: "...")
@@ -1376,7 +1378,7 @@ class Dialogbox_layoutview
                   w_horizontalframe61.layoutHints = 1024
                   w_horizontalframe61.x = 2
                   w_horizontalframe61.y = 68
-                  w_horizontalframe61.width = 564
+                  w_horizontalframe61.width = 344
                   w_horizontalframe61.height = 22
                   w_horizontalframe61.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe61) { |w_label_fontsize|
@@ -1410,7 +1412,7 @@ class Dialogbox_layoutview
                   w_horizontalframe63.layoutHints = 1024
                   w_horizontalframe63.x = 2
                   w_horizontalframe63.y = 94
-                  w_horizontalframe63.width = 564
+                  w_horizontalframe63.width = 344
                   w_horizontalframe63.height = 24
                   w_horizontalframe63.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe63) { |w_label_text_color|
@@ -1453,7 +1455,7 @@ class Dialogbox_layoutview
                   w_horizontalframe62.layoutHints = 1024
                   w_horizontalframe62.x = 2
                   w_horizontalframe62.y = 122
-                  w_horizontalframe62.width = 564
+                  w_horizontalframe62.width = 344
                   w_horizontalframe62.height = 60
                   w_horizontalframe62.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe62) { |w_label_justify|
@@ -1508,14 +1510,24 @@ class Dialogbox_layoutview
                       w_radiobutton_just_r.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                     }
                   }
+                  FX::CheckButton.new(@horizontalframe62) { |w_checkbutton_justify|
+                    @checkbutton_justify = w_checkbutton_justify
+                    w_checkbutton_justify.wdg_name = "checkbutton_justify"
+                    w_checkbutton_justify.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                    w_checkbutton_justify.state = true
+                    w_checkbutton_justify.x = 135
+                    w_checkbutton_justify.width = 69
+                    w_checkbutton_justify.height = 20
+                    w_checkbutton_justify.text = I18n.t("checkbutton_justify_text", scope: "dialogbox_layoutview", default: "Blocksatz")
+                  }
                 }
               }
               FX::TabItem.new(@tabbook_objectattributes) { |w_tabitem_barcode|
                 @tabitem_barcode = w_tabitem_barcode
                 w_tabitem_barcode.wdg_name = "tabitem_barcode"
                 w_tabitem_barcode.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_barcode.x = 319
-                w_tabitem_barcode.y = 6
+                w_tabitem_barcode.x = 279
+                w_tabitem_barcode.y = 4
                 w_tabitem_barcode.width = 51
                 w_tabitem_barcode.height = 24
                 w_tabitem_barcode.text = I18n.t("tabitem_barcode_text", scope: "dialogbox_layoutview", default: "Barcode")
@@ -1525,12 +1537,11 @@ class Dialogbox_layoutview
                 @verticalframe_barcode = w_verticalframe_barcode
                 w_verticalframe_barcode.wdg_name = "verticalframe_barcode"
                 w_verticalframe_barcode.frameStyle = 16384
-                w_verticalframe_barcode.shown = false
                 w_verticalframe_barcode.vSpacing = 4
                 w_verticalframe_barcode.x = 4
                 w_verticalframe_barcode.y = 26
-                w_verticalframe_barcode.width = 568
-                w_verticalframe_barcode.height = 502
+                w_verticalframe_barcode.width = 348
+                w_verticalframe_barcode.height = 538
                 w_verticalframe_barcode.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                 FX::HorizontalFrame.new(@verticalframe_barcode) { |w_horizontalframe133|
                   @horizontalframe133 = w_horizontalframe133
@@ -1540,7 +1551,7 @@ class Dialogbox_layoutview
                   w_horizontalframe133.padTop = 10
                   w_horizontalframe133.x = 2
                   w_horizontalframe133.y = 2
-                  w_horizontalframe133.width = 564
+                  w_horizontalframe133.width = 344
                   w_horizontalframe133.height = 32
                   w_horizontalframe133.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   FX::Label.new(@horizontalframe133) { |w_label_barcode_typ|
@@ -1562,7 +1573,7 @@ class Dialogbox_layoutview
                     w_listbox_barcode_typ.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_listbox_barcode_typ.x = 80
                     w_listbox_barcode_typ.y = 10
-                    w_listbox_barcode_typ.width = 349
+                    w_listbox_barcode_typ.width = 129
                     w_listbox_barcode_typ.height = 22
                     w_listbox_barcode_typ.numVisible = 15
                     w_listbox_barcode_typ.tipText = I18n.t("listbox_barcode_typ_tipText", scope: "dialogbox_layoutview", default: "Hier kann der Barcodetyp ausgewählt werden.\n\nFür EAN13 bitte \"Eanx\" wählen.\n")
@@ -1574,7 +1585,7 @@ class Dialogbox_layoutview
                     w_checkbutton_barcode_optimized.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_checkbutton_barcode_optimized.state = true
                     w_checkbutton_barcode_optimized.padLeft = 15
-                    w_checkbutton_barcode_optimized.x = 429
+                    w_checkbutton_barcode_optimized.x = 209
                     w_checkbutton_barcode_optimized.y = 10
                     w_checkbutton_barcode_optimized.width = 135
                     w_checkbutton_barcode_optimized.height = 20
@@ -1591,52 +1602,115 @@ class Dialogbox_layoutview
                   w_horizontalframe134.padTop = 10
                   w_horizontalframe134.x = 2
                   w_horizontalframe134.y = 38
-                  w_horizontalframe134.width = 564
+                  w_horizontalframe134.width = 344
                   w_horizontalframe134.height = 32
                   w_horizontalframe134.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                  FX::Label.new(@horizontalframe134) { |w_label_barcode_ratio|
-                    @label_barcode_ratio = w_label_barcode_ratio
-                    w_label_barcode_ratio.wdg_name = "label_barcode_ratio"
-                    w_label_barcode_ratio.layoutHints = 1056
-                    w_label_barcode_ratio.justify = 32768
-                    w_label_barcode_ratio.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_label_barcode_ratio.y = 11
-                    w_label_barcode_ratio.width = 225
-                    w_label_barcode_ratio.height = 20
-                    w_label_barcode_ratio.text = I18n.t("label_barcode_ratio_text", scope: "dialogbox_layoutview", default: "Ratio:")
-                    w_label_barcode_ratio.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                  FX::Label.new(@horizontalframe134) { |w_label_barcode_option_1|
+                    @label_barcode_option_1 = w_label_barcode_option_1
+                    w_label_barcode_option_1.wdg_name = "label_barcode_option_1"
+                    w_label_barcode_option_1.layoutHints = 1056
+                    w_label_barcode_option_1.justify = 32768
+                    w_label_barcode_option_1.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                    w_label_barcode_option_1.y = 11
+                    w_label_barcode_option_1.width = 61
+                    w_label_barcode_option_1.height = 20
+                    w_label_barcode_option_1.text = I18n.t("label_barcode_option_1_text", scope: "dialogbox_layoutview", default: "Option 1:")
+                    w_label_barcode_option_1.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   }
-                  FX::Spinner.new(@horizontalframe134) { |w_spinner_barcode_ratio|
-                    @spinner_barcode_ratio = w_spinner_barcode_ratio
-                    w_spinner_barcode_ratio.wdg_name = "spinner_barcode_ratio"
-                    w_spinner_barcode_ratio.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_spinner_barcode_ratio.range = -2147483648..2147483647
-                    w_spinner_barcode_ratio.x = 225
-                    w_spinner_barcode_ratio.y = 10
-                    w_spinner_barcode_ratio.width = 57
-                    w_spinner_barcode_ratio.height = 22
-                    w_spinner_barcode_ratio.numColumns = 3
-                    w_spinner_barcode_ratio.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                  FX::Spinner.new(@horizontalframe134) { |w_spinner_barcode_option_1|
+                    @spinner_barcode_option_1 = w_spinner_barcode_option_1
+                    w_spinner_barcode_option_1.wdg_name = "spinner_barcode_option_1"
+                    w_spinner_barcode_option_1.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                    w_spinner_barcode_option_1.range = -2147483648..2147483647
+                    w_spinner_barcode_option_1.x = 61
+                    w_spinner_barcode_option_1.y = 10
+                    w_spinner_barcode_option_1.width = 53
+                    w_spinner_barcode_option_1.height = 22
+                    w_spinner_barcode_option_1.numColumns = 3
+                    w_spinner_barcode_option_1.tipText = I18n.t("spinner_barcode_option_1_tipText", scope: "dialogbox_layoutview", default: "Symbolspezifische Optionen.\nBeispielsweise:\nQR-Code: ECC-Stufe 1 bis 4\n\nWeitere Informationen finden Sie unter: https://zint.org.uk/manual/chapter/6/\n")
+                    w_spinner_barcode_option_1.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   }
-                  FX::Label.new(@horizontalframe134) { |w_label_barcode_height|
+                  FX::Label.new(@horizontalframe134) { |w_label_barcode_option_2|
+                    @label_barcode_option_2 = w_label_barcode_option_2
+                    w_label_barcode_option_2.wdg_name = "label_barcode_option_2"
+                    w_label_barcode_option_2.layoutHints = 1056
+                    w_label_barcode_option_2.justify = 65536
+                    w_label_barcode_option_2.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                    w_label_barcode_option_2.x = 114
+                    w_label_barcode_option_2.y = 11
+                    w_label_barcode_option_2.width = 62
+                    w_label_barcode_option_2.height = 20
+                    w_label_barcode_option_2.text = I18n.t("label_barcode_option_2_text", scope: "dialogbox_layoutview", default: "Op.2:")
+                    w_label_barcode_option_2.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                  }
+                  FX::Spinner.new(@horizontalframe134) { |w_spinner_barcode_option_2|
+                    @spinner_barcode_option_2 = w_spinner_barcode_option_2
+                    w_spinner_barcode_option_2.wdg_name = "spinner_barcode_option_2"
+                    w_spinner_barcode_option_2.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                    w_spinner_barcode_option_2.range = -2147483648..2147483647
+                    w_spinner_barcode_option_2.x = 176
+                    w_spinner_barcode_option_2.y = 10
+                    w_spinner_barcode_option_2.width = 53
+                    w_spinner_barcode_option_2.height = 22
+                    w_spinner_barcode_option_2.numColumns = 3
+                    w_spinner_barcode_option_2.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                  }
+                  FX::Label.new(@horizontalframe134) { |w_label_barcode_option_3|
+                    @label_barcode_option_3 = w_label_barcode_option_3
+                    w_label_barcode_option_3.wdg_name = "label_barcode_option_3"
+                    w_label_barcode_option_3.layoutHints = 1056
+                    w_label_barcode_option_3.justify = 65536
+                    w_label_barcode_option_3.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                    w_label_barcode_option_3.x = 229
+                    w_label_barcode_option_3.y = 11
+                    w_label_barcode_option_3.width = 62
+                    w_label_barcode_option_3.height = 20
+                    w_label_barcode_option_3.text = I18n.t("label_barcode_option_3_text", scope: "dialogbox_layoutview", default: "Op.3:")
+                    w_label_barcode_option_3.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                  }
+                  FX::Spinner.new(@horizontalframe134) { |w_spinner_barcode_option_3|
+                    @spinner_barcode_option_3 = w_spinner_barcode_option_3
+                    w_spinner_barcode_option_3.wdg_name = "spinner_barcode_option_3"
+                    w_spinner_barcode_option_3.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                    w_spinner_barcode_option_3.range = -2147483648..2147483647
+                    w_spinner_barcode_option_3.x = 291
+                    w_spinner_barcode_option_3.y = 10
+                    w_spinner_barcode_option_3.width = 53
+                    w_spinner_barcode_option_3.height = 22
+                    w_spinner_barcode_option_3.numColumns = 3
+                    w_spinner_barcode_option_3.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                  }
+                }
+                FX::HorizontalFrame.new(@verticalframe_barcode) { |w_horizontalframe603|
+                  @horizontalframe603 = w_horizontalframe603
+                  w_horizontalframe603.wdg_name = "horizontalframe603"
+                  w_horizontalframe603.layoutHints = 1024
+                  w_horizontalframe603.packingHints = 65536
+                  w_horizontalframe603.vSpacing = 4
+                  w_horizontalframe603.padTop = 10
+                  w_horizontalframe603.x = 2
+                  w_horizontalframe603.y = 74
+                  w_horizontalframe603.width = 344
+                  w_horizontalframe603.height = 32
+                  w_horizontalframe603.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                  FX::Label.new(@horizontalframe603) { |w_label_barcode_height|
                     @label_barcode_height = w_label_barcode_height
                     w_label_barcode_height.wdg_name = "label_barcode_height"
-                    w_label_barcode_height.layoutHints = 1056
+                    w_label_barcode_height.layoutHints = 32
                     w_label_barcode_height.justify = 32768
                     w_label_barcode_height.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_label_barcode_height.x = 282
                     w_label_barcode_height.y = 11
-                    w_label_barcode_height.width = 225
+                    w_label_barcode_height.width = 57
                     w_label_barcode_height.height = 20
                     w_label_barcode_height.text = I18n.t("label_barcode_height_text", scope: "dialogbox_layoutview", default: "     Height:")
                     w_label_barcode_height.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   }
-                  FX::Spinner.new(@horizontalframe134) { |w_spinner_barcode_height|
+                  FX::Spinner.new(@horizontalframe603) { |w_spinner_barcode_height|
                     @spinner_barcode_height = w_spinner_barcode_height
                     w_spinner_barcode_height.wdg_name = "spinner_barcode_height"
                     w_spinner_barcode_height.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
                     w_spinner_barcode_height.range = -2147483648..2147483647
-                    w_spinner_barcode_height.x = 507
+                    w_spinner_barcode_height.x = 57
                     w_spinner_barcode_height.y = 10
                     w_spinner_barcode_height.width = 57
                     w_spinner_barcode_height.height = 22
@@ -1650,7 +1724,7 @@ class Dialogbox_layoutview
                 @tabitem_box = w_tabitem_box
                 w_tabitem_box.wdg_name = "tabitem_box"
                 w_tabitem_box.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_box.x = 370
+                w_tabitem_box.x = 299
                 w_tabitem_box.y = 6
                 w_tabitem_box.width = 51
                 w_tabitem_box.height = 24
@@ -1662,14 +1736,14 @@ class Dialogbox_layoutview
                 w_verticalframe_boxtab.shown = false
                 w_verticalframe_boxtab.x = 4
                 w_verticalframe_boxtab.y = 26
-                w_verticalframe_boxtab.width = 568
-                w_verticalframe_boxtab.height = 502
+                w_verticalframe_boxtab.width = 348
+                w_verticalframe_boxtab.height = 538
                 FX::Matrix.new(@verticalframe_boxtab) { |w_matrix_boxtab|
                   @matrix_boxtab = w_matrix_boxtab
                   w_matrix_boxtab.wdg_name = "matrix_boxtab"
                   w_matrix_boxtab.matrixStyle = 131072
-                  w_matrix_boxtab.width = 568
-                  w_matrix_boxtab.height = 502
+                  w_matrix_boxtab.width = 348
+                  w_matrix_boxtab.height = 538
                   w_matrix_boxtab.numColumns = 3
                   w_matrix_boxtab.numRows = 4
                   FX::Label.new(@matrix_boxtab) { |w_label_box_fill_color|
@@ -1940,6 +2014,7 @@ class Dialogbox_layoutview
   attr_reader :radiobutton_just_l
   attr_reader :radiobutton_just_m
   attr_reader :radiobutton_just_r
+  attr_reader :checkbutton_justify
   attr_reader :tabitem_barcode
   attr_reader :verticalframe_barcode
   attr_reader :horizontalframe133
@@ -1947,8 +2022,13 @@ class Dialogbox_layoutview
   attr_reader :listbox_barcode_typ
   attr_reader :checkbutton_barcode_optimized
   attr_reader :horizontalframe134
-  attr_reader :label_barcode_ratio
-  attr_reader :spinner_barcode_ratio
+  attr_reader :label_barcode_option_1
+  attr_reader :spinner_barcode_option_1
+  attr_reader :label_barcode_option_2
+  attr_reader :spinner_barcode_option_2
+  attr_reader :label_barcode_option_3
+  attr_reader :spinner_barcode_option_3
+  attr_reader :horizontalframe603
   attr_reader :label_barcode_height
   attr_reader :spinner_barcode_height
   attr_reader :tabitem_box

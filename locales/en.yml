@@ -137,12 +137,16 @@ en:
     checkbutton_flip_front_text: mirror X
     checkbutton_flop_back_text: mirror Y
     checkbutton_flop_front_text: mirror Y
+    checkbutton_justify_text: justify
     checkbutton_magstripe_text: ''
     checkbutton_magstripe_tipText: Activate this box if the magnetic stripe on the card is to be personalized.
     checkbutton_printlist_text: ''
     checkbutton_printlist_tipText: This button currently has no function.
     dialogbox_layoutview_title: Draft view
     label_barcode_height_text: "     Height:"
+    label_barcode_option_1_text: 'Option 1:'
+    label_barcode_option_2_text: 'Op.2:'
+    label_barcode_option_3_text: 'Op.3:'
     label_barcode_ratio_text: 'Ratio:'
     label_barcode_typ_text: 'Type:'
     label_box_border_color_text: Frame color
@@ -217,6 +221,12 @@ en:
     radiobutton_just_r_text: Right
     radiobutton_just_r_tipText: Align the text flush right to the object width.
     spinner_barcode_height_tipText: Relationship between barcode height and text height.
+    spinner_barcode_option_1_tipText: |
+      Symbol specific options.
+      This is for example:
+      QR code: ECC level 1 to 4
+
+      See further description at: https://zint.org.uk/manual/chapter/6/
     spinner_image_page_tipText: Selection of the page from the inserted image.
     spinner_layer_tipText: The ink ribbon with which the object is to be printed.
     spinner_seiten_nr_tipText: This value specifies which side of the object is to be printed. For cards, no. 1 is the front and no. 2 is the rear. Please note! If duplex printing is not set in the printer driver, 2 cards will be printed.

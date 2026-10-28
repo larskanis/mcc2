@@ -19,8 +19,9 @@ module Mcc2
         add_attr(@go_attributes, GOA_FONT_FILE, String, "")
         add_attr(@go_attributes, GOA_BACK_COLOR, String, "FFFFFFFF")
         add_attr(@go_attributes, GOA_FONT_WEIGHT, Integer, 0)
-        add_attr(@go_attributes, GOA_BAR_RATIO, Integer, 2)
-        add_attr(@go_attributes, GOA_JUSTIFICATION, Integer, 0)
+        add_attr(@go_attributes, GOA_BARCODE_OPTION_1, Integer, -1)
+        add_attr(@go_attributes, GOA_BARCODE_OPTION_2, Integer, 0)
+        add_attr(@go_attributes, GOA_BARCODE_OPTION_3, Integer, 0)
       end
     end
   end

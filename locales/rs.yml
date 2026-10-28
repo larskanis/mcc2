@@ -137,12 +137,16 @@ rs:
     checkbutton_flip_front_text: огледало X
     checkbutton_flop_back_text: огледало Y
     checkbutton_flop_front_text: огледало Y
+    checkbutton_justify_text: Обострано поравнат
     checkbutton_magstripe_text: ''
     checkbutton_magstripe_tipText: Активирајте ово поље ако се на картици персонализује магнетна трака.
     checkbutton_printlist_text: ''
     checkbutton_printlist_tipText: Оvo dugme trenutno nema funkciju.
     dialogbox_layoutview_title: Приказ нацрта
     label_barcode_height_text: "     Висина:"
+    label_barcode_option_1_text: 'Опција 1:'
+    label_barcode_option_2_text: 'Оп.2:'
+    label_barcode_option_3_text: 'Оп.3:'
     label_barcode_ratio_text: 'Однос:'
     label_barcode_typ_text: 'Тип:'
     label_box_border_color_text: Боја оквира
@@ -217,6 +221,12 @@ rs:
     radiobutton_just_r_text: Десно
     radiobutton_just_r_tipText: Поравнајте текст десно са ширином објекта.
     spinner_barcode_height_tipText: Однос између висине бар-кода и висине текста.
+    spinner_barcode_option_1_tipText: |
+      Опције специфичне за симбол.
+      На пример:
+      QR код: ECC ниво 1 до 4
+
+      Додатни опис потражите на: https://zint.org.uk/manual/chapter/6/
     spinner_image_page_tipText: Избор странице са уметnуте слике.
     spinner_layer_tipText: Трака са мастилом којом се објекат штампа.
     spinner_seiten_nr_tipText: Ova vrednost određuje koja strana objekta treba da se štampa. Za kartice, br. 1 je prednja, a br. 2 je zadnja strana. Imajte na umu! Ako dvostrana štampa nije podešena u drajveru štampača, odštampaće se 2 kartice.

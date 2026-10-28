@@ -197,8 +197,10 @@ module Mcc2
         []
       end
       @lf.listbox_barcode_typ.connect(SEL_COMMAND) { |sender, sel, event| sel_list_box_changed(sender) }
-      @lf.spinner_barcode_ratio.connect(SEL_COMMAND) do
-        changed_attributes if @layout_file.set_object_by_ids(@selected_object_ids, GOA_BAR_RATIO, @lf.spinner_barcode_ratio.value)
+      [1, 2, 3].each do |optx|
+        @lf.send("spinner_barcode_option_#{optx}").connect(SEL_COMMAND) do
+          changed_attributes if @layout_file.set_object_by_ids(@selected_object_ids, Mcc2.const_get("GOA_BARCODE_OPTION_#{optx}"), @lf.send("spinner_barcode_option_#{optx}").value)
+        end
       end
       @lf.spinner_barcode_height.connect(SEL_COMMAND) do
         changed_attributes if @layout_file.set_object_by_ids(@selected_object_ids, GOA_BARCODE_HEIGHT, @lf.spinner_barcode_height.value)
@@ -206,7 +208,9 @@ module Mcc2
       @lf.checkbutton_barcode_optimized.connect(SEL_COMMAND) do
         changed_attributes if @layout_file.set_object_by_ids(@selected_object_ids, GOA_BARCODE_OPTIMIZED, @lf.checkbutton_barcode_optimized.checked?)
       end
-      @lf.spinner_barcode_ratio.range = (1..100)
+      @lf.checkbutton_justify.connect(SEL_COMMAND) do
+        changed_attributes if @layout_file.set_object_by_ids(@selected_object_ids, GOA_JUSTIFICATION_BLOCK, @lf.checkbutton_justify.checked?)
+      end
 
       # Register the drag type for copy and paste by the clipboard
       @drag_type = @parent.app.registerDragType(DRAG_TYPE_NAME)
@@ -550,6 +554,7 @@ module Mcc2
           when S_JUST_RIGHT
             @lf.radiobutton_just_r.state = true
           end
+          @lf.checkbutton_justify.setCheck(obj[GOA_JUSTIFICATION_BLOCK] == "true")
 
           fill_font_list
           fill_font_fields(obj)
@@ -563,7 +568,9 @@ module Mcc2
         # Attribute, die nur Barcodes haben
         if obj[GOA_TYP] == BARCODEOBJECT
           @lf.tabitem_barcode.shown = true
-          @lf.spinner_barcode_ratio.value = obj[GOA_BAR_RATIO].to_i
+          [1, 2, 3].each do |optx|
+            @lf.send("spinner_barcode_option_#{optx}").value = obj[Mcc2.const_get("GOA_BARCODE_OPTION_#{optx}")].to_i
+          end
           @lf.spinner_barcode_height.value = obj[GOA_BARCODE_HEIGHT].to_f
           @lf.checkbutton_barcode_optimized.setCheck(obj[GOA_BARCODE_OPTIMIZED] == "true")
           fill_barcode_typ_list

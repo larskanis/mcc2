@@ -345,6 +345,7 @@ module Mcc2
       else
         pjust = Pango::Alignment::LEFT
       end
+      just_block = go[GOA_JUSTIFICATION_BLOCK] == "true"
 
       if data && !data.empty?
         font_info = get_font_info(font, go)
@@ -362,52 +363,44 @@ module Mcc2
 
           pango_font = get_pango_font(font_info, pt(fontsize))
           layout.font_description = pango_font
-          layout.alignment = pjust
           layout.width = mm(go_width) * Pango::SCALE
           layout.height = mm(go_height) * Pango::SCALE
-          layout.ellipsize = Pango::EllipsizeMode::END
           layout.wrap = Pango::WrapMode::WORD_CHAR
+          layout.justify = just_block
+          layout.alignment = pjust
+          layout.ellipsize = Pango::EllipsizeMode::END
           layout.text = data # set the text to render
 
           # iterate all lines of the text box
           iter = layout.iter
-          layout_text = layout.text
-          last_text_start = nil
-          last_line_x = nil
-          last_line_y_baseline = nil
           loop do
+
+            # Pango layout coordinates are absolute from the top-left of the layout
+            _ink_rect, logical_rect = iter.cluster_extents
+            line_x = logical_rect.x.to_f / Pango::SCALE
+            # Use the logical rectangle for reliable SVG positioning coordinates
+            line_y_baseline = iter.baseline.to_f / Pango::SCALE
+
             run = iter.run_readonly
-            if run # nil at each end-of-line
-              item = run.item
+            current_byte_index = iter.index
+            # for justified text the signle cluster positions matter
+            if just_block ? iter.next_cluster : iter.next_run
+              next_byte_index = iter.index
+              cluster_text = data.byteslice(current_byte_index...next_byte_index)
+            else
+              cluster_text = data.byteslice(current_byte_index .. -1)
+            end
 
-              if item.analysis.flags & Pango::ANALYSIS_FLAG_IS_ELLIPSIS != 0
-                # We could ellipsize text when box is too small.
-                # But this could easily missed, so better write out of the box.
-                # line_text = "…"
-              else
-                line_text = layout_text.byteslice(item.offset, item.length)
-
-                # Pango layout coordinates are absolute from the top-left of the layout
-                _ink_rect, logical_rect = iter.run_extents
-                line_x = logical_rect.x.to_f / Pango::SCALE
-                last_text_start = item.offset + item.length
-                # Use the logical rectangle for reliable SVG positioning coordinates
-                line_y_baseline = iter.baseline.to_f / Pango::SCALE
-                drawing.tspan(line_text, x: tra.x + line_x, y: tra.y + line_y_baseline)
-
-                last_line_x = (logical_rect.x + logical_rect.width).to_f / Pango::SCALE
-                last_line_y_baseline = (iter.baseline.to_f + logical_rect.height.to_f) / Pango::SCALE
+            if run
+              pango_item = run.item
+              if pango_item.analysis.flags & Pango::ANALYSIS_FLAG_IS_ELLIPSIS != 0
+                overflow = {fill: "red"}
               end
             end
 
-            unless iter.next_run
-              # any text left? -> print right down next to the box
-              if last_text_start && last_text_start < layout_text.bytesize
-                line_text = layout_text.byteslice(last_text_start .. -1)
-                drawing.tspan(line_text, x: tra.x + last_line_x, y: tra.y + last_line_y_baseline, fill: "red")
-              end
-              break
-            end
+            drawing.tspan(cluster_text, x: tra.x + line_x, y: tra.y + line_y_baseline, **overflow)
+
+            break unless next_byte_index
           end
         end
       end
@@ -482,7 +475,9 @@ module Mcc2
       return if data.nil? || data.empty?
 
       barcode_typ = go[GOA_BARCODE_TYP]
-      go[GOA_BAR_RATIO].to_i
+      option1 = go[GOA_BARCODE_OPTION_1].to_i
+      option2 = go[GOA_BARCODE_OPTION_2].to_i
+      option3 = go[GOA_BARCODE_OPTION_3].to_i
       font = go[GOA_FONT_TYP]
       if font == "from_file"
         font = go.layout_file.expand_path(go[GOA_FONT_FILE])
@@ -506,6 +501,9 @@ module Mcc2
         # 50 is the default x-dimension for most of the 1D barcodes:
         barcode.height = go[GOA_BARCODE_HEIGHT].to_f if go[GOA_BARCODE_HEIGHT].to_f.round(3) != 0
         barcode.show_hrt = 0 if fontsize == 0
+        barcode.option_1 = option1
+        barcode.option_2 = option2
+        barcode.option_3 = option3
         # barcode.fontsize = fontsize # not used in zint
         # p [go_height, go_width, barcode.height]
         barcode.whitespace_width = 0

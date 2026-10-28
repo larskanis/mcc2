@@ -16,6 +16,7 @@ module Mcc2
         add_attr(@go_attributes, GOA_FONT_FILE, String, "")
         add_attr(@go_attributes, GOA_BACK_COLOR, String, "FFFFFFFF")
         add_attr(@go_attributes, GOA_JUSTIFICATION, String, S_JUST_LEFT)
+        add_attr(@go_attributes, GOA_JUSTIFICATION_BLOCK, String, "false")
       end
     end
   end
