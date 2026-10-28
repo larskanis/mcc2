@@ -542,6 +542,13 @@ module Mcc2
           @lf.tabitem_font.shown = true
           @lf.textfield_text_color.text = obj[GOA_FONT_COLOR]
 
+          fill_font_list
+          fill_font_fields(obj)
+        end
+
+        # Attribute, die nur Texte haben
+        if obj[GOA_TYP] == TEXTOBJECT
+          @lf.horizontalframe_justify.shown = true
           # den Radiobutton der Ausrichtung setzen
           @lf.radiobutton_just_l.state = false
           @lf.radiobutton_just_m.state = false
@@ -556,18 +563,13 @@ module Mcc2
           end
           @lf.checkbutton_justify.setCheck(obj[GOA_JUSTIFICATION_BLOCK] == "true")
 
-          fill_font_list
-          fill_font_fields(obj)
-        end
-
-        # Attribute, die nur Texte haben
-        if obj[GOA_TYP] == TEXTOBJECT
           data_block_shown
         end
 
         # Attribute, die nur Barcodes haben
         if obj[GOA_TYP] == BARCODEOBJECT
           @lf.tabitem_barcode.shown = true
+          @lf.horizontalframe_justify.shown = false
           [1, 2, 3].each do |optx|
             @lf.send("spinner_barcode_option_#{optx}").value = obj[Mcc2.const_get("GOA_BARCODE_OPTION_#{optx}")].to_i
           end

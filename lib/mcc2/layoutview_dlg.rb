@@ -218,7 +218,7 @@ class Dialogbox_layoutview
               w_tabbook_objectattributes.y = 2
               w_tabbook_objectattributes.width = 356
               w_tabbook_objectattributes.height = 568
-              w_tabbook_objectattributes.current = 6
+              w_tabbook_objectattributes.current = 5
               w_tabbook_objectattributes.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               FX::TabItem.new(@tabbook_objectattributes) { |w_tabitem_allgemein|
                 @tabitem_allgemein = w_tabitem_allgemein
@@ -1294,8 +1294,8 @@ class Dialogbox_layoutview
                 @tabitem_font = w_tabitem_font
                 w_tabitem_font.wdg_name = "tabitem_font"
                 w_tabitem_font.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_font.x = 239
-                w_tabitem_font.y = 6
+                w_tabitem_font.x = 237
+                w_tabitem_font.y = 4
                 w_tabitem_font.width = 42
                 w_tabitem_font.height = 24
                 w_tabitem_font.text = I18n.t("tabitem_font_text", scope: "dialogbox_layoutview", default: "Schrift")
@@ -1306,7 +1306,6 @@ class Dialogbox_layoutview
                 @verticalframe_font = w_verticalframe_font
                 w_verticalframe_font.wdg_name = "verticalframe_font"
                 w_verticalframe_font.frameStyle = 16384
-                w_verticalframe_font.shown = false
                 w_verticalframe_font.vSpacing = 4
                 w_verticalframe_font.padTop = 10
                 w_verticalframe_font.x = 4
@@ -1449,16 +1448,16 @@ class Dialogbox_layoutview
                     w_button_text_color.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   }
                 }
-                FX::HorizontalFrame.new(@verticalframe_font) { |w_horizontalframe62|
-                  @horizontalframe62 = w_horizontalframe62
-                  w_horizontalframe62.wdg_name = "horizontalframe62"
-                  w_horizontalframe62.layoutHints = 1024
-                  w_horizontalframe62.x = 2
-                  w_horizontalframe62.y = 122
-                  w_horizontalframe62.width = 344
-                  w_horizontalframe62.height = 60
-                  w_horizontalframe62.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
-                  FX::Label.new(@horizontalframe62) { |w_label_justify|
+                FX::HorizontalFrame.new(@verticalframe_font) { |w_horizontalframe_justify|
+                  @horizontalframe_justify = w_horizontalframe_justify
+                  w_horizontalframe_justify.wdg_name = "horizontalframe_justify"
+                  w_horizontalframe_justify.layoutHints = 1024
+                  w_horizontalframe_justify.x = 2
+                  w_horizontalframe_justify.y = 122
+                  w_horizontalframe_justify.width = 344
+                  w_horizontalframe_justify.height = 60
+                  w_horizontalframe_justify.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                  FX::Label.new(@horizontalframe_justify) { |w_label_justify|
                     @label_justify = w_label_justify
                     w_label_justify.wdg_name = "label_justify"
                     w_label_justify.layoutHints = 256
@@ -1469,7 +1468,7 @@ class Dialogbox_layoutview
                     w_label_justify.text = I18n.t("label_justify_text", scope: "dialogbox_layoutview", default: "Ausrichtung")
                     w_label_justify.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                   }
-                  FX::RadioMutex.new(@horizontalframe62) { |w_radiomutex_justify|
+                  FX::RadioMutex.new(@horizontalframe_justify) { |w_radiomutex_justify|
                     @radiomutex_justify = w_radiomutex_justify
                     w_radiomutex_justify.wdg_name = "radiomutex_justify"
                     w_radiomutex_justify.x = 80
@@ -1510,11 +1509,10 @@ class Dialogbox_layoutview
                       w_radiobutton_just_r.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                     }
                   }
-                  FX::CheckButton.new(@horizontalframe62) { |w_checkbutton_justify|
+                  FX::CheckButton.new(@horizontalframe_justify) { |w_checkbutton_justify|
                     @checkbutton_justify = w_checkbutton_justify
                     w_checkbutton_justify.wdg_name = "checkbutton_justify"
                     w_checkbutton_justify.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                    w_checkbutton_justify.state = true
                     w_checkbutton_justify.x = 135
                     w_checkbutton_justify.width = 69
                     w_checkbutton_justify.height = 20
@@ -1526,8 +1524,8 @@ class Dialogbox_layoutview
                 @tabitem_barcode = w_tabitem_barcode
                 w_tabitem_barcode.wdg_name = "tabitem_barcode"
                 w_tabitem_barcode.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_barcode.x = 279
-                w_tabitem_barcode.y = 4
+                w_tabitem_barcode.x = 278
+                w_tabitem_barcode.y = 6
                 w_tabitem_barcode.width = 51
                 w_tabitem_barcode.height = 24
                 w_tabitem_barcode.text = I18n.t("tabitem_barcode_text", scope: "dialogbox_layoutview", default: "Barcode")
@@ -1537,6 +1535,7 @@ class Dialogbox_layoutview
                 @verticalframe_barcode = w_verticalframe_barcode
                 w_verticalframe_barcode.wdg_name = "verticalframe_barcode"
                 w_verticalframe_barcode.frameStyle = 16384
+                w_verticalframe_barcode.shown = false
                 w_verticalframe_barcode.vSpacing = 4
                 w_verticalframe_barcode.x = 4
                 w_verticalframe_barcode.y = 26
@@ -2008,7 +2007,7 @@ class Dialogbox_layoutview
   attr_reader :label_text_color
   attr_reader :textfield_text_color
   attr_reader :button_text_color
-  attr_reader :horizontalframe62
+  attr_reader :horizontalframe_justify
   attr_reader :label_justify
   attr_reader :radiomutex_justify
   attr_reader :radiobutton_just_l
