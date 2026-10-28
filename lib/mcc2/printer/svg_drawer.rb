@@ -404,7 +404,7 @@ module Mcc2
               # any text left? -> print right down next to the box
               if last_text_start && last_text_start < layout_text.bytesize
                 line_text = layout_text.byteslice(last_text_start .. -1)
-                drawing.tspan(line_text, x: tra.x + last_line_x, y: tra.y + last_line_y_baseline)
+                drawing.tspan(line_text, x: tra.x + last_line_x, y: tra.y + last_line_y_baseline, fill: "red")
               end
               break
             end
