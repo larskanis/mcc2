@@ -231,8 +231,8 @@ module Mcc2
             # die allgemeinen Attribute ermitteln
             x = go[GOA_X].to_f
             y = go[GOA_Y].to_f
-            go_width = go[GOA_WIDTH].to_f
-            go_height = go[GOA_HEIGHT].to_f
+            go_width = go[GOA_WIDTH].to_f unless go[GOA_WIDTH].to_s.empty?
+            go_height = go[GOA_HEIGHT].to_f unless go[GOA_HEIGHT].to_s.empty?
             rotation = go[GOA_ROTATION].to_f
             typ = go[GOA_TYP]
 
@@ -245,21 +245,14 @@ module Mcc2
               data = go[GOA_SAMPLE_DATA].to_s
             end
 
-            if tra
-              rec = tra.translate(mm(x).round, mm(y).round).rotate(rotation)
-              rec2 = rec.translate(mm(go_width), 0)
-              rec3 = rec.translate(mm(go_width), mm(go_height))
-              rec4 = rec.translate(0, mm(go_height))
-              orec = ObjRectangle.new(rec.vector2d, rec2.vector2d, rec3.vector2d, rec4.vector2d, id)
-              rect_list.add(orec)
-            end
+            rec = tra.translate(mm(x).round, mm(y).round).rotate(rotation)
 
             drawing.g transform: "rotate(#{rec.a})" do
               opos = rec.inverse
 
               begin
                 # die Objekt-spezifischen Attribute ermitteln
-                if typ == TEXTOBJECT
+                go_width, go_height = if typ == TEXTOBJECT
                   draw_textobject(drawing, opos, go, go_width, go_height, data.empty? ? data_nosub : data)
                 elsif typ == PICTUREOBJECT
                   draw_pictureobject(drawing, opos, go, go_width, go_height, data)
@@ -274,6 +267,12 @@ module Mcc2
               rescue => err
                 raise err, "#{go[GOA_NAME]}: #{err}"
               end
+
+              rec2 = rec.translate(mm(go_width), 0)
+              rec3 = rec.translate(mm(go_width), mm(go_height))
+              rec4 = rec.translate(0, mm(go_height))
+              orec = ObjRectangle.new(rec.vector2d, rec2.vector2d, rec3.vector2d, rec4.vector2d, id)
+              rect_list.add(orec)
 
               # in Vorschau einen Rahmen um das selektierte Objekt zeichnen
               if preview && selected_object_ids.include?(id)
@@ -349,6 +348,19 @@ module Mcc2
 
       if data && !data.empty?
         font_info = get_font_info(font, go)
+        context  = pango_font_map.create_context
+        layout   = Pango::Layout.new(context)
+
+        pango_font = get_pango_font(font_info, pt(fontsize))
+        layout.font_description = pango_font
+        layout.width = mm(go_width) * Pango::SCALE if go_width
+        layout.height = mm(go_height) * Pango::SCALE if go_height
+        layout.wrap = Pango::WrapMode::WORD_CHAR
+        layout.justify = just_block
+        layout.alignment = pjust
+        layout.ellipsize = Pango::EllipsizeMode::END
+        layout.text = data # set the text to render
+
         drawing.text_(fill: font_color,
                       'text-anchor': just,
                       'font-size': pt(fontsize),
@@ -358,20 +370,7 @@ module Mcc2
                       'font-stretch': font_info.font_stretch,
                       'xml:space': "preserve") do
 
-          context  = pango_font_map.create_context
-          layout   = Pango::Layout.new(context)
-
-          pango_font = get_pango_font(font_info, pt(fontsize))
-          layout.font_description = pango_font
-          layout.width = mm(go_width) * Pango::SCALE
-          layout.height = mm(go_height) * Pango::SCALE
-          layout.wrap = Pango::WrapMode::WORD_CHAR
-          layout.justify = just_block
-          layout.alignment = pjust
-          layout.ellipsize = Pango::EllipsizeMode::END
-          layout.text = data # set the text to render
-
-          # iterate all lines of the text box
+          # iterate all characters of the text box
           iter = layout.iter
           loop do
 
@@ -403,7 +402,11 @@ module Mcc2
             break unless next_byte_index
           end
         end
+        new_width, new_height = layout.pixel_size.map{|px| px_to_mm(px) }
+
+        return go_width || new_width, go_height || new_height
       end
+      return 1, 1
     end
 
     def draw_pictureobject(drawing, tra, go, go_width, go_height, data)
@@ -458,6 +461,8 @@ module Mcc2
       else
         raise Printer::Base::ResourceNotFoundError, I18n.t(:image_not_found, default: "Das Bild '%{path}' konnte nicht gefunden werden.", path: )
       end
+
+      return go_width, go_height
     end
 
     BARCODE_ALIAS = {
@@ -570,6 +575,7 @@ module Mcc2
                         'xml:space': "preserve")
         end
       end
+      return go_width, go_height
     end
 
     def barcode_mm_to_px(l, barcode_dpi)
@@ -592,6 +598,8 @@ module Mcc2
         "stroke-width": mm(border_width).round,
         x: tra.x, y: tra.y, width: mm(go_width).round, height: mm(go_height).round,
         rx: mm(corner_radius), ry: mm(corner_radius))
+
+      return go_width, go_height
     end
 
     def draw_embedobject(drawing, tra, go, go_width, go_height, data, row_number, barcode_dpi)
@@ -630,6 +638,7 @@ module Mcc2
       else
         raise Printer::Base::ResourceNotFoundError, I18n.t(:embedded_object_not_found, default: "Das Layout '%{path}' konnte nicht gefunden werden.", path: )
       end
+      return go_width, go_height
     end
 
     def get_font_info(font, obj)

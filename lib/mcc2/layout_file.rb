@@ -308,19 +308,6 @@ PRINT 1
             get_pango_font(font_info, pt(fontsize))
           end
 
-          def get_text_sizes(go)
-            data = go[GOA_SAMPLE_DATA].to_s
-            if !data.empty?
-              pango_font = pango_font_of(go)
-              context  = pango_font_map.create_context
-              layout   = Pango::Layout.new(context)
-              layout.font_description = pango_font
-              layout.text = data # set the text to render
-
-              layout.pixel_size.map{|px| px_to_mm(px) }
-            end
-          end
-
           def get_new_coods(go)
             x = go[GOA_X].to_f
             y = go[GOA_Y].to_f
@@ -360,13 +347,12 @@ PRINT 1
               .sub("Mitte", "mid")
               .sub("Rechts", "right")
 
-            w, h = converter.get_text_sizes(go)
             # set bounding box and keep a little bit of space for safty
             if just == S_JUST_LEFT
               # Don't change middle or right aligned, they should already be valid
-              set_object_by_ids([id], GOA_WIDTH, format("%0.2f", w * 1.1 + 5.0))
+              set_object_by_ids([id], GOA_WIDTH, "")
             end
-            set_object_by_ids([id], GOA_HEIGHT, format("%0.2f", h * 1.1 + 1))
+            set_object_by_ids([id], GOA_HEIGHT, "")
 
             x, y = converter.get_new_coods(go)
             # move text up, because old old Y means text baseline
