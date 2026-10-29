@@ -398,7 +398,7 @@ module Mcc2
               end
             end
 
-            drawing.tspan(cluster_text, x: tra.x + line_x, y: tra.y + line_y_baseline, **overflow)
+            drawing.tspan(cluster_text, x: tra.x + line_x, y: tra.y + line_y_baseline, **(overflow || {}))
 
             break unless next_byte_index
           end
