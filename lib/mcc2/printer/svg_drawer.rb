@@ -477,102 +477,103 @@ module Mcc2
     }
 
     def draw_barcode(drawing, tra, go, go_width, go_height, data, barcode_dpi)
-      return if data.nil? || data.empty?
+      unless data.nil? || data.empty?
 
-      barcode_typ = go[GOA_BARCODE_TYP]
-      option1 = go[GOA_BARCODE_OPTION_1].to_i
-      option2 = go[GOA_BARCODE_OPTION_2].to_i
-      option3 = go[GOA_BARCODE_OPTION_3].to_i
-      font = go[GOA_FONT_TYP]
-      if font == "from_file"
-        font = go.layout_file.expand_path(go[GOA_FONT_FILE])
-      end
-      fontsize = go[GOA_FONT_HEIGHT].to_f
-      font_color = ["#", go[GOA_FONT_COLOR]].join
+        barcode_typ = go[GOA_BARCODE_TYP]
+        option1 = go[GOA_BARCODE_OPTION_1].to_i
+        option2 = go[GOA_BARCODE_OPTION_2].to_i
+        option3 = go[GOA_BARCODE_OPTION_3].to_i
+        font = go[GOA_FONT_TYP]
+        if font == "from_file"
+          font = go.layout_file.expand_path(go[GOA_FONT_FILE])
+        end
+        fontsize = go[GOA_FONT_HEIGHT].to_f
+        font_color = ["#", go[GOA_FONT_COLOR]].join
 
-      font_info = get_font_info(font, go)
+        font_info = get_font_info(font, go)
 
-      begin
-        barcode = Zint.const_get(BARCODE_ALIAS[barcode_typ.to_sym] || barcode_typ).new(value: data)
-      rescue => e
-        raise Printer::Base::InvalidBarcodeData, I18n.t(:error_generating_barcode, default: "Fehler beim Generieren des Barcodes %{data}: %{e}", data: data.inspect, e: )
-      else
-        # TODO: bar_ratio wird nicht gesetzt
-        # barcode.narrow_width = 1
-        # barcode.wide_width = bar_ratio
-        barcode.input_mode = Zint::DATA_MODE #  Zint::UNICODE_MODE | Zint::ESCAPE_MODE
-        # barcode.output_options = Zint::SMALL_TEXT
-
-        # 50 is the default x-dimension for most of the 1D barcodes:
-        barcode.height = go[GOA_BARCODE_HEIGHT].to_f if go[GOA_BARCODE_HEIGHT].to_f.round(3) != 0
-        barcode.show_hrt = 0 if fontsize == 0
-        barcode.option_1 = option1
-        barcode.option_2 = option2
-        barcode.option_3 = option3
-        # barcode.fontsize = fontsize # not used in zint
-        # p [go_height, go_width, barcode.height]
-        barcode.whitespace_width = 0
         begin
-          bcvector = barcode.to_vector
-        rescue Zint::ErrorInvalidData => err
-          raise err, "#{err.message} Barcode text: #{data.inspect}"
-        end
+          barcode = Zint.const_get(BARCODE_ALIAS[barcode_typ.to_sym] || barcode_typ).new(value: data)
+        rescue => e
+          raise Printer::Base::InvalidBarcodeData, I18n.t(:error_generating_barcode, default: "Fehler beim Generieren des Barcodes %{data}: %{e}", data: data.inspect, e: )
+        else
+          # TODO: bar_ratio wird nicht gesetzt
+          # barcode.narrow_width = 1
+          # barcode.wide_width = bar_ratio
+          barcode.input_mode = Zint::DATA_MODE #  Zint::UNICODE_MODE | Zint::ESCAPE_MODE
+          # barcode.output_options = Zint::SMALL_TEXT
 
-        %w[EAN13 EAN8].include?(barcode_typ)
+          # 50 is the default x-dimension for most of the 1D barcodes:
+          barcode.height = go[GOA_BARCODE_HEIGHT].to_f if go[GOA_BARCODE_HEIGHT].to_f.round(3) != 0
+          barcode.show_hrt = 0 if fontsize == 0
+          barcode.option_1 = option1
+          barcode.option_2 = option2
+          barcode.option_3 = option3
+          # barcode.fontsize = fontsize # not used in zint
+          # p [go_height, go_width, barcode.height]
+          barcode.whitespace_width = 0
+          begin
+            bcvector = barcode.to_vector
+          rescue Zint::ErrorInvalidData => err
+            raise err, "#{err.message} Barcode text: #{data.inspect}"
+          end
 
-        # bcvector values are always a multiple of 2 or more, but we need a multiple of 1 for to_i below.
-        # So all bcvector measurements are divided by 2 or more.
-        xgran = bcvector.width.round / barcode.width
-        ygran = bcvector.height.round / barcode.rows
-        xbars, ybars = bcvector.width / xgran, bcvector.height / ygran
-        # p vector_width: bcvector.width, vector_height: bcvector.height
+          %w[EAN13 EAN8].include?(barcode_typ)
 
-        optimized = (go[GOA_BARCODE_OPTIMIZED] || true).to_s == "true"
-        px_width, px_height = barcode_mm_to_px(go_width, barcode_dpi), barcode_mm_to_px(go_height, barcode_dpi)
-        xdim, ydim = px_width / xbars, px_height / ybars
-        if optimized
-          xdim = xdim.to_i
-          ydim = ydim.to_i if barcode.rows > 1 # optimize y dimension only on 2D codes
-        end
-        go_width, go_height = barcode_px_to_mm(xdim * xbars, barcode_dpi), barcode_px_to_mm(ydim * ybars, barcode_dpi)
-        px_width, px_height = mm(go_width), mm(go_height)
-        xdim = px_width / xbars / xgran
-        ydim = px_height / ybars / ygran
+          # bcvector values are always a multiple of 2 or more, but we need a multiple of 1 for to_i below.
+          # So all bcvector measurements are divided by 2 or more.
+          xgran = bcvector.width.round / barcode.width
+          ygran = bcvector.height.round / barcode.rows
+          xbars, ybars = bcvector.width / xgran, bcvector.height / ygran
+          # p vector_width: bcvector.width, vector_height: bcvector.height
 
-        pathd = +""
-        bcvector.each_rectangle do |bar|
-          # p [bar.x, bar.y, bar.width, bar.height]
-          # p [xdim*bar.width, ydim*bar.height, xdim*bar.x, ydim*bar.y]
-          x = tra.x + xdim * bar.x
-          y = tra.y + ydim * bar.y
-          # drawing.rectangle(
-          #   x,
-          #   y,
-          #   x + [xdim * bar.width - 1, 0].max,
-          #   y + [ydim * bar.height - 1, 0].max
-          # )
-          # drawing.rect(x: x, y: y, width: xdim * bar.width, height: ydim * bar.height, fill: font_color, stroke: "none")
-          # body.rect([xdim * bar.width / 2 - 1, 0].max, [ydim * bar.height / 2 - 1, 0].max, xdim * bar.x / 2, ydim * bar.y / 2)
-          w = xdim * bar.width
-          h = ydim * bar.height
-          pathd << "M#{x} #{y}h#{w}v#{h}h-#{w}Z"
-        end
-        drawing.path(d: pathd, stroke: "none", fill: font_color)
-        bcvector.each_string do |str|
-          # p [str.x, str.y, str.text, str.halign, str.fsize]
-          # drawing.text_anchor(HALIGNMENT[str.halign])
-          # apos = tra.translate(xdim * str.x / xgran, )
-          # drawing.text(tra.x + xdim * str.x, tra.y + ydim * str.y, str.text)
-          # body.text(xdim * str.x / 2, ydim * str.y / 2, str.text).styles(text_anchor: HALIGNMENT[str.halign])
-          drawing.text_(str.text, x: tra.x + xdim * str.x, y: tra.y + ydim * str.y,
-                        'text-anchor': HALIGNMENT[str.halign],
-                        fill: font_color,
-                        'font-size': pt(fontsize),
-                        'font-family': font_info.font_family,
-                        'font-weight': font_info.font_weight,
-                        'font-style': font_info.font_style,
-                        'font-stretch': font_info.font_stretch,
-                        'xml:space': "preserve")
+          optimized = (go[GOA_BARCODE_OPTIMIZED] || true).to_s == "true"
+          px_width, px_height = barcode_mm_to_px(go_width, barcode_dpi), barcode_mm_to_px(go_height, barcode_dpi)
+          xdim, ydim = px_width / xbars, px_height / ybars
+          if optimized
+            xdim = xdim.to_i
+            ydim = ydim.to_i if barcode.rows > 1 # optimize y dimension only on 2D codes
+          end
+          go_width, go_height = barcode_px_to_mm(xdim * xbars, barcode_dpi), barcode_px_to_mm(ydim * ybars, barcode_dpi)
+          px_width, px_height = mm(go_width), mm(go_height)
+          xdim = px_width / xbars / xgran
+          ydim = px_height / ybars / ygran
+
+          pathd = +""
+          bcvector.each_rectangle do |bar|
+            # p [bar.x, bar.y, bar.width, bar.height]
+            # p [xdim*bar.width, ydim*bar.height, xdim*bar.x, ydim*bar.y]
+            x = tra.x + xdim * bar.x
+            y = tra.y + ydim * bar.y
+            # drawing.rectangle(
+            #   x,
+            #   y,
+            #   x + [xdim * bar.width - 1, 0].max,
+            #   y + [ydim * bar.height - 1, 0].max
+            # )
+            # drawing.rect(x: x, y: y, width: xdim * bar.width, height: ydim * bar.height, fill: font_color, stroke: "none")
+            # body.rect([xdim * bar.width / 2 - 1, 0].max, [ydim * bar.height / 2 - 1, 0].max, xdim * bar.x / 2, ydim * bar.y / 2)
+            w = xdim * bar.width
+            h = ydim * bar.height
+            pathd << "M#{x} #{y}h#{w}v#{h}h-#{w}Z"
+          end
+          drawing.path(d: pathd, stroke: "none", fill: font_color)
+          bcvector.each_string do |str|
+            # p [str.x, str.y, str.text, str.halign, str.fsize]
+            # drawing.text_anchor(HALIGNMENT[str.halign])
+            # apos = tra.translate(xdim * str.x / xgran, )
+            # drawing.text(tra.x + xdim * str.x, tra.y + ydim * str.y, str.text)
+            # body.text(xdim * str.x / 2, ydim * str.y / 2, str.text).styles(text_anchor: HALIGNMENT[str.halign])
+            drawing.text_(str.text, x: tra.x + xdim * str.x, y: tra.y + ydim * str.y,
+                          'text-anchor': HALIGNMENT[str.halign],
+                          fill: font_color,
+                          'font-size': pt(fontsize),
+                          'font-family': font_info.font_family,
+                          'font-weight': font_info.font_weight,
+                          'font-style': font_info.font_style,
+                          'font-stretch': font_info.font_stretch,
+                          'xml:space': "preserve")
+          end
         end
       end
       return go_width, go_height
