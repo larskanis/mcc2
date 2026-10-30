@@ -349,7 +349,9 @@ module Mcc2
       if data && !data.empty?
         font_info = get_font_info(font, go)
         context  = pango_font_map.create_context
-        layout   = Pango::Layout.new(context)
+        context.resolution = dpi
+        context.round_glyph_positions = false
+        layout = Pango::Layout.new(context)
 
         pango_font = get_pango_font(font_info, pt(fontsize))
         layout.font_description = pango_font
