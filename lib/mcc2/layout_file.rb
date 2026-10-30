@@ -282,9 +282,7 @@ PRINT 1
       # and object's Y means the text baseline, not the bounding box.
       if filever < 4
         @warnings << I18n.t(:open_layout_old_text_box, default: <<~EOT)
-          Diese Datei ist noch mit Textobjekten ohne Beachtung der Rahmengröße gespeichert.
-          Die Rahmengröße der Textobjekte wurde nun automatisch auf den des Beispieltextes gesetzt.
-          Evtl. muss aber eine Anpassung für die variablen Daten erfolgen.
+          Diese Datei wurde mit MCC2 version < 1.5.0 erstellt und wurde nun konvertiert.
 
           Bitte prüfen Sie, dass alle Texte an der richtigen Position stehen.
         EOT

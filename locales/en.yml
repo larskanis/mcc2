@@ -435,19 +435,15 @@ en:
     Please set the correct data source type in the layout properties
     and save the settings.
   open_layout_old_barby: |
-    This file still uses Barby barcodes instead of the newer Zint barcodes.
+    This file uses Barby barcodes instead of the newer Zint barcodes.
 
     Therefore, all barcodes must be checked and, if necessary, readjusted!
 
     This warning will disappear once the file is saved.
   open_layout_old_text_box: |
-    This file still contains text objects without regard to their frame size.
+    This file was created with an MCC2 version < 1.5.0 and has now been converted.
 
-    The frame size of the text objects has now been automatically set to that of the sample text.
-
-    However, adjustments may be necessary for the variable data.
-
-    Please verify that all text is positioned correctly.
+    Please verify that all text elements are in the correct position.
   open_layout_version_error: The file %{filename} is structured according to version %{filever}, but this program can only process versions %{supported}.
   preview_dpi_and_print_differ: The barcode DPI for the preview (%{preview_dpi}) and the print version (%{print_dpi}) differ. Please adjust the DPI and re-check the barcodes!
   preview_error_printing_exception:
