@@ -250,22 +250,18 @@ module Mcc2
             drawing.g transform: "rotate(#{rec.a})" do
               opos = rec.inverse
 
-              begin
-                # die Objekt-spezifischen Attribute ermitteln
-                go_width, go_height = if typ == TEXTOBJECT
-                  draw_textobject(drawing, opos, go, go_width, go_height, data.empty? ? data_nosub : data)
-                elsif typ == PICTUREOBJECT
-                  draw_pictureobject(drawing, opos, go, go_width, go_height, data)
-                elsif typ == BARCODEOBJECT
-                  data = data.gsub(/\\x([0-9a-f][0-9a-f])/i) { [$1.hex].pack("C") }
-                  draw_barcode(drawing, opos, go, go_width, go_height, data, barcode_dpi)
-                elsif typ == BOXOBJECT
-                  draw_boxobject(drawing, opos, go, go_width, go_height)
-                elsif typ == EMBEDOBJECT
-                  draw_embedobject(drawing, opos, go, go_width, go_height, data, row ? row["row_number"] : "1", barcode_dpi)
-                end
-              rescue => err
-                raise err, "#{go[GOA_NAME]}: #{err}"
+              # die Objekt-spezifischen Attribute ermitteln
+              go_width, go_height = if typ == TEXTOBJECT
+                draw_textobject(drawing, opos, go, go_width, go_height, data.empty? ? data_nosub : data)
+              elsif typ == PICTUREOBJECT
+                draw_pictureobject(drawing, opos, go, go_width, go_height, data)
+              elsif typ == BARCODEOBJECT
+                data = data.gsub(/\\x([0-9a-f][0-9a-f])/i) { [$1.hex].pack("C") }
+                draw_barcode(drawing, opos, go, go_width, go_height, data, barcode_dpi)
+              elsif typ == BOXOBJECT
+                draw_boxobject(drawing, opos, go, go_width, go_height)
+              elsif typ == EMBEDOBJECT
+                draw_embedobject(drawing, opos, go, go_width, go_height, data, row ? row["row_number"] : "1", barcode_dpi)
               end
 
               rec2 = rec.translate(mm(go_width), 0)
@@ -286,6 +282,8 @@ module Mcc2
               end
             end
           end
+        rescue => err
+          raise err, "#{go[GOA_NAME] if go}: #{err}"
         end
 
         if preview
