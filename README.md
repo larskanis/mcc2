@@ -13,6 +13,7 @@ Layout editor and card printer GUI
 * Use of font files independent from system installed fonts
 * Vector output formats (SVG and searchable PDF)
 * Various raster image output formats (PNG, JPEG etc.)
+* Vector output format SVG and searchable PDF
 * Headless print per command line and Ruby API
 * Stores all printer settings in the layout file for headless print (Duplex, tray selection, DPI, etc.)
 
@@ -24,17 +25,18 @@ Install mcc2 on Debian/Ubuntu Linux as:
     $ sudo apt install ruby-dev  # in case you want to use system ruby
     $ gem install mcc2
 
-On Windows install the RubyInstaller including Devkit, then run:
+On Windows install the [RubyInstaller including Devkit](https://rubyinstaller.org/) or use the Microsoft Store to install [Ruby-4.0](https://apps.microsoft.com/detail/xpfmdnmb4dq2wl?ocid=webpdpshare).
+Then run in `cmd` or `powershell`:
 
     $ gem install mcc2
 
-This should
+That should install all dependencies.
 
 ## Usage
 
 Run the GUI
 
-    $ mcc2
+    $ mcc2 my-layout.mcc2
 
 ## Development
 
