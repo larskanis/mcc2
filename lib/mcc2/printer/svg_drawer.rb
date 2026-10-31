@@ -358,7 +358,7 @@ module Mcc2
         layout.wrap = Pango::WrapMode::WORD_CHAR
         layout.justify = just_block
         layout.alignment = pjust
-        layout.ellipsize = Pango::EllipsizeMode::END
+        layout.ellipsize = Pango::EllipsizeMode::END if go_width && go_height
         layout.text = data # set the text to render
 
         drawing.text_(fill: font_color,
