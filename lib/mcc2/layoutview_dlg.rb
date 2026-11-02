@@ -15,8 +15,8 @@ class Dialogbox_layoutview
         w_dialogbox_layoutview.wdg_name = "dialogbox_layoutview"
         w_dialogbox_layoutview.layoutHints = 768
         w_dialogbox_layoutview.shown = true
-        w_dialogbox_layoutview.x = 934
-        w_dialogbox_layoutview.y = 521
+        w_dialogbox_layoutview.x = 1676
+        w_dialogbox_layoutview.y = 405
         w_dialogbox_layoutview.width = 480
         w_dialogbox_layoutview.height = 644
         w_dialogbox_layoutview.title = I18n.t("dialogbox_layoutview_title", scope: "dialogbox_layoutview", default: "Entwurfsansicht")
@@ -218,7 +218,7 @@ class Dialogbox_layoutview
               w_tabbook_objectattributes.y = 2
               w_tabbook_objectattributes.width = 476
               w_tabbook_objectattributes.height = 482
-              w_tabbook_objectattributes.current = 2
+              w_tabbook_objectattributes.current = 5
               w_tabbook_objectattributes.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
               FX::TabItem.new(@tabbook_objectattributes) { |w_tabitem_allgemein|
                 @tabitem_allgemein = w_tabitem_allgemein
@@ -620,8 +620,8 @@ class Dialogbox_layoutview
                 @tabitem_magstripe = w_tabitem_magstripe
                 w_tabitem_magstripe.wdg_name = "tabitem_magstripe"
                 w_tabitem_magstripe.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_magstripe.x = 96
-                w_tabitem_magstripe.y = 4
+                w_tabitem_magstripe.x = 98
+                w_tabitem_magstripe.y = 6
                 w_tabitem_magstripe.width = 88
                 w_tabitem_magstripe.height = 24
                 w_tabitem_magstripe.text = I18n.t("tabitem_magstripe_text", scope: "dialogbox_layoutview", default: "Magnetstreifen")
@@ -632,6 +632,7 @@ class Dialogbox_layoutview
                 @matrix180 = w_matrix180
                 w_matrix180.wdg_name = "matrix180"
                 w_matrix180.matrixStyle = 131072
+                w_matrix180.shown = false
                 w_matrix180.x = 4
                 w_matrix180.y = 26
                 w_matrix180.width = 468
@@ -763,7 +764,7 @@ class Dialogbox_layoutview
                 @tabitem_object = w_tabitem_object
                 w_tabitem_object.wdg_name = "tabitem_object"
                 w_tabitem_object.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_object.x = 183
+                w_tabitem_object.x = 186
                 w_tabitem_object.y = 6
                 w_tabitem_object.width = 43
                 w_tabitem_object.height = 24
@@ -997,7 +998,7 @@ class Dialogbox_layoutview
                 @tabitem_posit = w_tabitem_posit
                 w_tabitem_posit.wdg_name = "tabitem_posit"
                 w_tabitem_posit.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_posit.x = 226
+                w_tabitem_posit.x = 229
                 w_tabitem_posit.y = 6
                 w_tabitem_posit.width = 51
                 w_tabitem_posit.height = 24
@@ -1247,8 +1248,8 @@ class Dialogbox_layoutview
                 @tabitem_font = w_tabitem_font
                 w_tabitem_font.wdg_name = "tabitem_font"
                 w_tabitem_font.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                w_tabitem_font.x = 277
-                w_tabitem_font.y = 6
+                w_tabitem_font.x = 278
+                w_tabitem_font.y = 4
                 w_tabitem_font.width = 42
                 w_tabitem_font.height = 24
                 w_tabitem_font.text = I18n.t("tabitem_font_text", scope: "dialogbox_layoutview", default: "Schrift")
@@ -1259,13 +1260,12 @@ class Dialogbox_layoutview
                 @matrix133 = w_matrix133
                 w_matrix133.wdg_name = "matrix133"
                 w_matrix133.matrixStyle = 131072
-                w_matrix133.shown = false
                 w_matrix133.x = 4
                 w_matrix133.y = 26
                 w_matrix133.width = 468
                 w_matrix133.height = 452
                 w_matrix133.numColumns = 2
-                w_matrix133.numRows = 5
+                w_matrix133.numRows = 6
                 FX::Label.new(@matrix133) { |w_label_fonts|
                   @label_fonts = w_label_fonts
                   w_label_fonts.wdg_name = "label_fonts"
@@ -1283,9 +1283,9 @@ class Dialogbox_layoutview
                   w_listbox_fonts.wdg_name = "listbox_fonts"
                   w_listbox_fonts.layoutHints = 1059
                   w_listbox_fonts.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                  w_listbox_fonts.x = 78
+                  w_listbox_fonts.x = 85
                   w_listbox_fonts.y = 4
-                  w_listbox_fonts.width = 386
+                  w_listbox_fonts.width = 379
                   w_listbox_fonts.height = 22
                   w_listbox_fonts.numVisible = 30
                   w_listbox_fonts.tipText = I18n.t("listbox_fonts_tipText", scope: "dialogbox_layoutview", default: "Hier kann die Schriftart ausgewählt werden.")
@@ -1296,28 +1296,28 @@ class Dialogbox_layoutview
                   w_packer98.wdg_name = "packer98"
                   w_packer98.x = 4
                   w_packer98.y = 30
-                  w_packer98.width = 70
+                  w_packer98.width = 77
                   w_packer98.height = 26
                 }
                 FX::HorizontalFrame.new(@matrix133) { |w_horizontalframe624|
                   @horizontalframe624 = w_horizontalframe624
                   w_horizontalframe624.wdg_name = "horizontalframe624"
                   w_horizontalframe624.layoutHints = 3073
-                  w_horizontalframe624.x = 78
+                  w_horizontalframe624.x = 85
                   w_horizontalframe624.y = 30
-                  w_horizontalframe624.width = 386
+                  w_horizontalframe624.width = 379
                   w_horizontalframe624.height = 26
                   FX::TextField.new(@horizontalframe624) { |w_textfield_font_file|
                     @textfield_font_file = w_textfield_font_file
                     w_textfield_font_file.wdg_name = "textfield_font_file"
                     w_textfield_font_file.layoutHints = 1024
-                    w_textfield_font_file.width = 369
+                    w_textfield_font_file.width = 362
                     w_textfield_font_file.height = 24
                   }
                   FX::Button.new(@horizontalframe624) { |w_button_fontfile_select|
                     @button_fontfile_select = w_button_fontfile_select
                     w_button_fontfile_select.wdg_name = "button_fontfile_select"
-                    w_button_fontfile_select.x = 369
+                    w_button_fontfile_select.x = 362
                     w_button_fontfile_select.width = 17
                     w_button_fontfile_select.height = 26
                     w_button_fontfile_select.text = I18n.t("button_fontfile_select_text", scope: "dialogbox_layoutview", default: "...")
@@ -1341,7 +1341,7 @@ class Dialogbox_layoutview
                   w_textfield_fontsize.layoutHints = 1
                   w_textfield_fontsize.textFieldTextStyle = 2097152
                   w_textfield_fontsize.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
-                  w_textfield_fontsize.x = 78
+                  w_textfield_fontsize.x = 85
                   w_textfield_fontsize.y = 60
                   w_textfield_fontsize.width = 66
                   w_textfield_fontsize.height = 22
@@ -1365,9 +1365,9 @@ class Dialogbox_layoutview
                   @horizontalframe625 = w_horizontalframe625
                   w_horizontalframe625.wdg_name = "horizontalframe625"
                   w_horizontalframe625.layoutHints = 3073
-                  w_horizontalframe625.x = 78
+                  w_horizontalframe625.x = 85
                   w_horizontalframe625.y = 86
-                  w_horizontalframe625.width = 386
+                  w_horizontalframe625.width = 379
                   w_horizontalframe625.height = 24
                   FX::TextField.new(@horizontalframe625) { |w_textfield_text_color|
                     @textfield_text_color = w_textfield_text_color
@@ -1408,9 +1408,9 @@ class Dialogbox_layoutview
                   @horizontalframe_justify = w_horizontalframe_justify
                   w_horizontalframe_justify.wdg_name = "horizontalframe_justify"
                   w_horizontalframe_justify.layoutHints = 3073
-                  w_horizontalframe_justify.x = 78
+                  w_horizontalframe_justify.x = 85
                   w_horizontalframe_justify.y = 114
-                  w_horizontalframe_justify.width = 386
+                  w_horizontalframe_justify.width = 379
                   w_horizontalframe_justify.height = 60
                   FX::RadioMutex.new(@horizontalframe_justify) { |w_radiomutex_justify|
                     @radiomutex_justify = w_radiomutex_justify
@@ -1462,6 +1462,32 @@ class Dialogbox_layoutview
                     w_checkbutton_justify.height = 20
                     w_checkbutton_justify.text = I18n.t("checkbutton_justify_text", scope: "dialogbox_layoutview", default: "Blocksatz")
                   }
+                }
+                FX::Label.new(@matrix133) { |w_label_line_spacing|
+                  @label_line_spacing = w_label_line_spacing
+                  w_label_line_spacing.wdg_name = "label_line_spacing"
+                  w_label_line_spacing.justify = 32768
+                  w_label_line_spacing.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                  w_label_line_spacing.x = 4
+                  w_label_line_spacing.y = 178
+                  w_label_line_spacing.width = 77
+                  w_label_line_spacing.height = 20
+                  w_label_line_spacing.text = I18n.t("label_line_spacing_text", scope: "dialogbox_layoutview", default: "Zeilenabstand")
+                  w_label_line_spacing.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
+                }
+                FX::TextField.new(@matrix133) { |w_textfield_line_spacing|
+                  @textfield_line_spacing = w_textfield_line_spacing
+                  w_textfield_line_spacing.wdg_name = "textfield_line_spacing"
+                  w_textfield_line_spacing.layoutHints = 1
+                  w_textfield_line_spacing.textFieldTextStyle = 2097152
+                  w_textfield_line_spacing.font = FX::Font.new.from_s("Tahoma|80|40|5|0|0|0").to_FXFont
+                  w_textfield_line_spacing.x = 85
+                  w_textfield_line_spacing.y = 178
+                  w_textfield_line_spacing.width = 66
+                  w_textfield_line_spacing.height = 22
+                  w_textfield_line_spacing.numColumns = 10
+                  w_textfield_line_spacing.tipText = I18n.t("textfield_line_spacing_tipText", scope: "dialogbox_layoutview", default: "Hier wird der Zeilenabstand eingestellt.\nEs ist auch die Angabe von Realzahlen möglich (Punkt als Dezimaltrenner).\nNormaler Abstand ist \"1.0\"\n")
+                  w_textfield_line_spacing.shadowColor = Fox::FXRGBA(128, 128, 128, 255)
                 }
               }
               FX::TabItem.new(@tabbook_objectattributes) { |w_tabitem_barcode|
@@ -1952,6 +1978,8 @@ class Dialogbox_layoutview
   attr_reader :radiobutton_just_m
   attr_reader :radiobutton_just_r
   attr_reader :checkbutton_justify
+  attr_reader :label_line_spacing
+  attr_reader :textfield_line_spacing
   attr_reader :tabitem_barcode
   attr_reader :verticalframe_barcode
   attr_reader :horizontalframe133

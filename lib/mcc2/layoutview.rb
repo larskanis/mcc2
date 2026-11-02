@@ -127,6 +127,7 @@ module Mcc2
       @layout.connect_filebutton_to_textfield(@lf.button_fontfile_select, @lf.textfield_font_file,
         filepatterns: ["Truetype/Opentype font (*.ttf,*.otf)", "PS-type1 font (*.pfb)", "All Files (*)"])
       @lf.textfield_fontsize.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, GOA_FONT_HEIGHT) }
+      @lf.textfield_line_spacing.connect(@text_field_trigger) { |sender, sel, event| textfield_exit(sender, GOA_LINE_SPACING) }
 
       # der Checkbuttons für die Einstellung, ob Magnestreifen, Kontaktchip und Kontaktlos personalisiert werden sollen
       @lf.checkbutton_contactless.connect(SEL_COMMAND) { |sender, sel, event| change_chkbtn(sender, S_CONTACTLESS) }
@@ -659,6 +660,7 @@ module Mcc2
     def fill_font_fields(obj)
       # die Schriftgröße zurücklesen
       @lf.textfield_fontsize.text = obj[GOA_FONT_HEIGHT]
+      @lf.textfield_line_spacing.text = obj[GOA_LINE_SPACING]
 
       font_typ = obj[GOA_FONT_TYP]
       # den gewählten Parameter in den entsprechenden Listen markieren

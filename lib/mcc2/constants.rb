@@ -22,6 +22,7 @@ module Mcc2
   GOA_BACK_COLOR = "back_color"
   GOA_JUSTIFICATION = "justification"
   GOA_JUSTIFICATION_BLOCK = "justification_block"
+  GOA_LINE_SPACING = "line_spacing"
   GOA_X = "x"
   GOA_Y = "y"
   GOA_WIDTH = "width"

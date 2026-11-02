@@ -343,6 +343,7 @@ module Mcc2
         pjust = Pango::Alignment::LEFT
       end
       just_block = go[GOA_JUSTIFICATION_BLOCK] == "true"
+      line_spacing = go[GOA_LINE_SPACING]
 
       if data && !data.empty?
         font_info = get_font_info(font, go)
@@ -358,6 +359,7 @@ module Mcc2
         layout.wrap = Pango::WrapMode::WORD_CHAR
         layout.justify = just_block
         layout.alignment = pjust
+        layout.line_spacing = line_spacing.to_f unless line_spacing.to_s.empty?
         layout.ellipsize = Pango::EllipsizeMode::END if go_width && go_height
         layout.text = data # set the text to render
 

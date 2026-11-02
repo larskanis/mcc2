@@ -174,6 +174,7 @@ en:
     label_image_page_text: Image page
     label_justify_text: Alignment
     label_layer_text: Layer
+    label_line_spacing_text: Line spacing
     label_magstripe_text: Magnetic stripe
     label_name_empty_text: ''
     label_name_text: Name
@@ -256,6 +257,10 @@ en:
       {fieldname[start,length]}.
     textfield_fontsize_tipText: Here the font size is set in points. It is also possible to specify real numbers (using a period as the decimal separator).
     textfield_height_tipText: This value is the height of the object. Currently, it only has an effect on images.
+    textfield_line_spacing_tipText: |
+      This is where the line spacing is set.
+      You can also enter real numbers (using a decimal point).
+      The standard spacing is "1.0".
     textfield_name_tipText: The name is only necessary for the display in the object list and for certain actions, but should nevertheless be changed to a meaningful name.
     textfield_page_height_tipText: This value shifts the entire print image along the Y-axis.
     textfield_page_width_tipText: This value shifts the entire print image along the Y-axis.
