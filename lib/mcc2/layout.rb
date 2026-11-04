@@ -1,10 +1,3 @@
-require "mcc2/cc_dialogbox"
-require "mcc2/layout_file"
-require "mcc2/layoutview"
-require "mcc2/dataview"
-require "mcc2/printerview"
-require "mcc2/printer/preview"
-
 module Mcc2
   # definiert ein Clientfenster mit allen Einstellungen und Attributen, die für ein bestimmtes Kartenlayout benötigt werden
   class Layout

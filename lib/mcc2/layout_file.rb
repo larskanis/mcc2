@@ -1,35 +1,6 @@
 require "nokogiri"               # für die Layout-Datei
-require "mcc2/constants"
-require "mcc2/layout_object/go_attribut"
-require "mcc2/layout_object/graphic"    # die Basisklasse für die grafischen Objekte
-require "mcc2/layout_object/barcode"    # grafische Barcode-Objekte
-require "mcc2/layout_object/picture"    # grafische Bild-Objekte
-require "mcc2/layout_object/text"       # grafische Text-Objekte
-require "mcc2/layout_object/box"
-require "mcc2/layout_object/magstripe"
-require "mcc2/layout_object/chip"
-require "mcc2/layout_object/embed"
 
 module Mcc2
-  module Printer
-    autoload :GdiPrinter, "mcc2/printer/gdi_printer"
-    autoload :FilePrinter, "mcc2/printer/file_printer"
-    autoload :LinuxCupsPrinter, "mcc2/printer/linux_cups_printer"
-    autoload :PrinterZebra, "mcc2/printer/printer_zebra"
-    autoload :PrinterCab, "mcc2/printer/printer_cab"
-    autoload :PrinterEpl, "mcc2/printer/printer_epl"
-    autoload :PrinterCx320Direct, "mcc2/printer/printer_cx320_direct"
-    autoload :PrinterCx320Gdi, "mcc2/printer/printer_cx320_gdi"
-    autoload :PrinterTTP34x, "mcc2/printer/printer_ttp34x"
-  end
-
-  module DataMan
-    autoload :Database, "mcc2/dataman/database"
-    autoload :CSV, "mcc2/dataman/csv"
-    autoload :DBF, "mcc2/dataman/dbf"
-    autoload :None, "mcc2/dataman/none"
-  end
-
   class LayoutFile
     class Error < RuntimeError
     end
@@ -288,7 +259,7 @@ PRINT 1
         EOT
 
         converter = Class.new(Printer::Base) do
-          include SvgDrawer
+          include Printer::SvgDrawer
 
           def pango_font_of(go)
             font = go[GOA_FONT_TYP]

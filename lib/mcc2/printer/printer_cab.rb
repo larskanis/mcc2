@@ -1,7 +1,7 @@
-require "mcc2/printer/card_printer"
-require "mcc2/printer/svg_drawer"
 require "socket"
 require "rmagick"
+require 'rsvg2'
+require 'cairo'
 
 module Mcc2
   module Printer

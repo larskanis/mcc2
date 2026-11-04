@@ -1,6 +1,6 @@
 module Mcc2
   # FehlerAuswahlDialog mit variablen Buttons zur Eingabe der Batchnummer
-  class FXFehlerAuswahlDialog < Fox::FXDialogBox
+  class FXSelectionDialog < Fox::FXDialogBox
     include Fox
     attr_accessor :selection
 
@@ -48,5 +48,5 @@ module Mcc2
         }
       end
     end
-  end # Ende Klasse 'FXFehlerAuswahlDialog'
+  end
 end

@@ -1,9 +1,9 @@
-require "mcc2/dataman/base"
 require "i18n"
 require "ttfunk"
 require "pango"
 
 module Mcc2
+  module Printer
   module SvgDrawer
     class ObjRectangle
       def initialize(v1, v2, v3, v4, obj_id)
@@ -697,5 +697,6 @@ module Mcc2
 
       desc
     end
+  end
   end
 end

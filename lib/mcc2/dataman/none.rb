@@ -1,5 +1,3 @@
-require "mcc2/dataman/base"
-
 module Mcc2
   module DataMan
     class None < Base

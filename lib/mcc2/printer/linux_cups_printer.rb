@@ -1,6 +1,6 @@
-require "mcc2/printer/card_printer"
-require "mcc2/printer/svg_drawer"
 require "ffi-cups"
+require 'rsvg2'
+require 'cairo'
 
 module Mcc2
   module Printer

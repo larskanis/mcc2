@@ -1,5 +1,3 @@
-require "mcc2/printer/base"           # die Basisklasse für die Printer
-
 module Mcc2
   module Printer
     module CardPrinting

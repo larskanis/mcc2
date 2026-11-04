@@ -1,7 +1,5 @@
-require "mcc2/printer/base"           # die Basisklasse für die Printer
-require "mcc2/printer/card_printer"
-require "mcc2/printer/svg_drawer"
-require 'nokogiri'
+require 'rsvg2'
+require 'cairo'
 
 module Mcc2
   module Printer
@@ -195,11 +193,6 @@ module Mcc2
       attr_reader :font_map
 
       def draw_preview_now(row = nil)
-        require 'rsvg2'
-        require 'cairo'
-        require 'pango'
-        require 'ttfunk'
-
         @font_map = {}
 
         # allgemeine Einstellungen des Image vornehmen

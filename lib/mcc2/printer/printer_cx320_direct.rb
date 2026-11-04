@@ -1,7 +1,5 @@
 require "json"
 require "libcx320"
-require "mcc2/printer/card_printer"
-require "mcc2/printer/svg_drawer"
 require "rmagick"
 
 module Mcc2

@@ -1,6 +1,3 @@
-require "mcc2/constants"
-require "mcc2/dataman/base"
-
 module Mcc2
   module LayoutObject
     # diese Klasse ist für die Personalisierung der Chips verantwortlich

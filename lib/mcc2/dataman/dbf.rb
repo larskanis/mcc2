@@ -1,4 +1,3 @@
-require "mcc2/dataman/base"
 require "dbf"
 
 module Mcc2

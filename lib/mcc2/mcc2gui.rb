@@ -8,6 +8,7 @@ require "fox16/responder"
 require "libguib16"
 require "optparse"
 require "i18n"
+require "tempfile"
 
 # convert relative image file path to absolute one
 # based on dir of this file.
@@ -20,14 +21,7 @@ def loadImage(file)
   i
 end
 
-# die GUI's, alle mit FoxGUI-Builder erstellt
-require "mcc2/mcc2_mainwin"      # das Main-GUI
-require "mcc2/cc_dialogbox"
-
-require "mcc2/layout"            # das Kartenlayout
-require "mcc2/debug_tools"
-
-require "tempfile"
+require "mcc2/mcc2_mainwin"
 
 # *****************************************************************************
 module Mcc2

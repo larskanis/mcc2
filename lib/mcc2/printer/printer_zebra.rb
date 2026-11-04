@@ -1,6 +1,5 @@
 require "win32api4ruby"
 require "zebra_dll"
-require "mcc2/printer/gdi_card_printer"			# die Basisklasse für alle CardPrinter
 
 module Mcc2
   module Printer

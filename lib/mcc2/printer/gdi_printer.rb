@@ -1,7 +1,4 @@
-gem "win32api4ruby", ">= 0.2.1"
 require "win32api4ruby"
-require "mcc2/printer/card_printer"
-require "mcc2/printer/svg_drawer"
 require "mcc2_c_helper"
 
 Win32api4ruby::Base.unicode = true

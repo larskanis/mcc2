@@ -1,5 +1,3 @@
-require "mcc2/layout_object/graphic"
-
 module Mcc2
   module LayoutObject
     class Text < Graphic
@@ -24,7 +22,6 @@ module Mcc2
 end
 
 if __FILE__ == $PROGRAM_NAME
-  require "./../constants"
   to = Mcc2::LayoutObject::Text.new
   to.go_attributes.each { |e| p e }
 end

@@ -1,5 +1,3 @@
-require "mcc2/layout_object/go_attribut"       # die Attribut-Klasse für die grafischen Objekte
-
 module Mcc2
   module LayoutObject
     class Graphic

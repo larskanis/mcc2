@@ -1,4 +1,3 @@
-require "mcc2/dataman/base"
 require "csv"
 
 module Mcc2

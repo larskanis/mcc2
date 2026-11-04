@@ -1,5 +1,3 @@
-require "mcc2/layout_object/graphic"
-
 module Mcc2
   module LayoutObject
     class Barcode < Graphic

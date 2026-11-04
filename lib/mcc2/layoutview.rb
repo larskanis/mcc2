@@ -636,14 +636,14 @@ module Mcc2
       # den gewählten Parameter in den entsprechenden Listen markieren
       bc_typ = obj[GOA_BARCODE_TYP]
       bc_id = @barcodes.index(bc_typ.to_sym)
-      FXFehlerAuswahlDialog.new(@parent.app, I18n.t(:barcode_is_not_avaliable, default: "Der Barcode-Typ %{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes. Der Wert wird auf 'NONE' gesetzt.", bc_typ: ), [I18n.t(:ok_button, default: "&OK")]) unless bc_id
+      FXSelectionDialog.new(@parent.app, I18n.t(:barcode_is_not_avaliable, default: "Der Barcode-Typ %{bc_typ} existiert nicht in der Liste der verfügbaren Barcodes. Der Wert wird auf 'NONE' gesetzt.", bc_typ: ), [I18n.t(:ok_button, default: "&OK")]) unless bc_id
       @lf.listbox_barcode_typ.currentItem = bc_id if bc_id
     end
 
     # füllt die Font-Auswahlliste mit den möglichen Fonts
     def fill_font_list
       # Font-Name
-      rmfl = SvgDrawer.builtin_font_names.keys
+      rmfl = Printer::SvgDrawer.builtin_font_names.keys
       rmfl.sort!
       @lf.listbox_fonts.clearItems
       @lf.listbox_fonts.appendItem(I18n.t(:font_selection_please_select_entry, default: "Bitte auswählen"))
@@ -751,7 +751,7 @@ module Mcc2
         end
         nn = names.join(", ")
         s = I18n.t(:delete_object_confirmation, default: "Wollen Sie wirklich %{count} %{nameslist} löschen?\nDieser Vorgang lässt sich nicht rückgängig machen!", count: names.size, nameslist: nn)
-        error_WahlMessage = FXFehlerAuswahlDialog.new(@parent.app, s, [I18n.t(:delete_button, default: "&Löschen"), I18n.t(:cancel_button, default: "&Abbrechen")])
+        error_WahlMessage = FXSelectionDialog.new(@parent.app, s, [I18n.t(:delete_button, default: "&Löschen"), I18n.t(:cancel_button, default: "&Abbrechen")])
         error_WahlMessage.execute
         if error_WahlMessage.selection == 0
           @layout_file.delete_objects(@selected_object_ids)
