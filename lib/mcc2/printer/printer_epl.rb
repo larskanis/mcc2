@@ -1,4 +1,3 @@
-require "socket"
 require "rmagick"
 require 'rsvg2'
 require 'cairo'
