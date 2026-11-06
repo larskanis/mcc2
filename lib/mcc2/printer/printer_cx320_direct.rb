@@ -1,6 +1,8 @@
 require "json"
 require "libcx320"
 require "rmagick"
+require 'rsvg2'
+require 'cairo'
 
 module Mcc2
   module Printer

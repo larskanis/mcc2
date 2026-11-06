@@ -1,5 +1,7 @@
 require "win32api4ruby"
 require "mcc2_c_helper"
+require 'rsvg2'
+require 'cairo'
 
 Win32api4ruby::Base.unicode = true
 
