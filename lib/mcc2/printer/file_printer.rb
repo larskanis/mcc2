@@ -117,7 +117,7 @@ module Mcc2
           # TODO where comes the factor 0.8 from?
           svg_attrs = {width: "#{page_width*0.8}mm", height: "#{page_height*0.8}mm"}
         end
-        svg_data = svg_builder(viewBox: "0 0 #{image_width} #{image_height}", **svg_attrs) do |svg|
+        svg_data = svg_builder(viewBox: "0 0 #{image_width} #{image_height}", **(svg_attrs || {})) do |svg|
           tra = Transformation.new
           draw(svg, tra.translate(mm(draw_pos_x).round, mm(draw_pos_y).round), layout_file, false, nil, row, page_nr)
         end
