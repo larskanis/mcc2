@@ -512,24 +512,26 @@ module Mcc2
         obj = @layout_file.find_graphic_object_by_id(@selected_object_ids.last)
 
         # allgemeine Attribute auslesen
-        @lf.tabitem_object.shown = true
-        @lf.tabitem_posit.shown = true
+        if [BARCODEOBJECT, TEXTOBJECT, PICTUREOBJECT, EMBEDOBJECT, BOXOBJECT].include?(obj[GOA_TYP])
+          @lf.tabitem_object.shown = true
+          @lf.tabitem_posit.shown = true
 
-        # Daten-Attribute
-        @lf.textfield_name.text = obj[GOA_NAME]
+          # Daten-Attribute
+          @lf.textfield_name.text = obj[GOA_NAME]
 
-        # Positionsattribute
-        @lf.textfield_x.text = obj[GOA_X]
-        @lf.textfield_y.text = obj[GOA_Y]
-        @lf.textfield_width.text = obj[GOA_WIDTH]
-        @lf.textfield_height.text = obj[GOA_HEIGHT]
-        @lf.textfield_rotation.text = obj[GOA_ROTATION]
-        @lf.textfield_rotation.text = obj[GOA_ROTATION]
-        @lf.spinner_seiten_nr.value = obj[GOA_PAGE_NR].to_i + 1
-        @lf.spinner_layer.value = obj[GOA_LAYER].to_i
-        #      @lf.iconlist_justify.connect(SEL_CHANGED){iconlist_justify_exit } # todo
+          # Positionsattribute
+          @lf.textfield_x.text = obj[GOA_X]
+          @lf.textfield_y.text = obj[GOA_Y]
+          @lf.textfield_width.text = obj[GOA_WIDTH]
+          @lf.textfield_height.text = obj[GOA_HEIGHT]
+          @lf.textfield_rotation.text = obj[GOA_ROTATION]
+          @lf.textfield_rotation.text = obj[GOA_ROTATION]
+          @lf.spinner_seiten_nr.value = obj[GOA_PAGE_NR].to_i + 1
+          @lf.spinner_layer.value = obj[GOA_LAYER].to_i
+          #      @lf.iconlist_justify.connect(SEL_CHANGED){iconlist_justify_exit } # todo
 
-        @lf.checkbutton_printlist.state = !(obj[GOA_PRINTLIST] == "false" || obj[GOA_PRINTLIST] == "0")
+          @lf.checkbutton_printlist.state = !(obj[GOA_PRINTLIST] == "false" || obj[GOA_PRINTLIST] == "0")
+        end
 
         # Typ-spezifische Attribute auslesen
         if [BARCODEOBJECT, TEXTOBJECT, PICTUREOBJECT, EMBEDOBJECT].include?(obj[GOA_TYP])
@@ -539,7 +541,7 @@ module Mcc2
         end
 
         # Attribute, die Barcode und Texte haben
-        if obj[GOA_TYP] == TEXTOBJECT || obj[GOA_TYP] == BARCODEOBJECT
+        if [TEXTOBJECT, BARCODEOBJECT, TEXTSTYLE].include?(obj[GOA_TYP])
           @lf.tabitem_font.shown = true
           @lf.textfield_text_color.text = obj[GOA_FONT_COLOR]
 
@@ -565,6 +567,12 @@ module Mcc2
           @lf.checkbutton_justify.setCheck(obj[GOA_JUSTIFICATION_BLOCK] == "true")
 
           data_block_shown
+        end
+
+        if obj[GOA_TYP] == TEXTSTYLE
+          @lf.textfield_text_color.text = obj[GOA_FONT_COLOR]
+          @lf.tabitem_box.recalc
+          no_data_shown
         end
 
         # Attribute, die nur Barcodes haben

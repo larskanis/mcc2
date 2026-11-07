@@ -361,7 +361,9 @@ module Mcc2
         layout.alignment = pjust
         layout.line_spacing = line_spacing.to_f unless line_spacing.to_s.empty?
         layout.ellipsize = Pango::EllipsizeMode::END if go_width && go_height
-        layout.text = data # set the text to render
+        layout.text = data
+        # do layouting ...
+        new_width, new_height = layout.pixel_size.map{|px| px_to_mm(px) }
 
         drawing.text_(fill: font_color,
                       'text-anchor': just,
@@ -399,12 +401,25 @@ module Mcc2
               end
             end
 
-            drawing.tspan(cluster_text, x: tra.x + line_x, y: tra.y + line_y_baseline, **(overflow || {}))
+            jtx = 0.0
+            if !go_width
+              if just == S_JUST_RIGHT
+                jtx = -new_width
+                new_width = -new_width
+              elsif just == S_JUST_MID
+                jtx = -new_width / 2.0
+                new_width = new_width / 2.0
+              else
+                jtx = 0.0
+                new_width = new_width
+              end
+            end
+
+            drawing.tspan(cluster_text, x: tra.x + line_x + mm(jtx), y: tra.y + line_y_baseline, **(overflow || {}))
 
             break unless next_byte_index
           end
         end
-        new_width, new_height = layout.pixel_size.map{|px| px_to_mm(px) }
 
         return go_width || new_width, go_height || new_height
       end

@@ -4,6 +4,7 @@ module Mcc2
       def initialize(xml_elem: nil, layout_file: nil)
         super
         @go_attributes[GOA_TYP].attr_value = PICTUREOBJECT
+        add_position_fields
         add_attr(@go_attributes, GOA_WIDTH, Integer, 20)
         add_attr(@go_attributes, GOA_HEIGHT, Integer, 28)
         add_attr(@go_attributes, GOA_IMAGE_PAGE, Integer, 1)

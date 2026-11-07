@@ -4,8 +4,9 @@ module Mcc2
       def initialize(xml_elem: nil, layout_file: nil)
         super
         @go_attributes[GOA_TYP].attr_value = TEXTOBJECT
-        add_attr(@go_attributes, GOA_WIDTH, Integer, 30)
-        add_attr(@go_attributes, GOA_HEIGHT, Integer, 6)
+        add_position_fields
+        add_attr(@go_attributes, GOA_WIDTH, Integer, "")
+        add_attr(@go_attributes, GOA_HEIGHT, Integer, "")
         add_attr(@go_attributes, GOA_DATA, String, "")
         add_attr(@go_attributes, GOA_SAMPLE_DATA, String, "Sample-Text")
         add_attr(@go_attributes, GOA_FONT_HEIGHT, Integer, 10)

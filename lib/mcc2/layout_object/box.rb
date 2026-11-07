@@ -4,6 +4,7 @@ module Mcc2
       def initialize(xml_elem: nil, layout_file: nil)
         super
         @go_attributes[GOA_TYP].attr_value = BOXOBJECT
+        add_position_fields
         add_attr(@go_attributes, GOA_WIDTH, Float, 30)
         add_attr(@go_attributes, GOA_HEIGHT, Float, 20)
         add_attr(@go_attributes, GOA_FILL_COLOR, String, "ffff00ff")

@@ -76,6 +76,7 @@ module Mcc2
       connect_with_accel(@mcmd_picture) { new_object(PICTUREOBJECT) }
       connect_with_accel(@mcmd_box) { new_object(BOXOBJECT) }
       connect_with_accel(@mcmd_embed) { new_object(EMBEDOBJECT) }
+      connect_with_accel(@mcmd_textstyle) { new_object(TEXTSTYLE) }
 
       connect_with_accel(@mcmd_de) { change_language_to("de") }
       connect_with_accel(@mcmd_en) { change_language_to("en") }

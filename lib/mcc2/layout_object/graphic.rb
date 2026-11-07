@@ -9,15 +9,18 @@ module Mcc2
         add_attr(@go_attributes, GOA_ID, Integer, 0)
         add_attr(@go_attributes, GOA_NAME, String, GRAPHICOBJECT) # bekommen erst einmal alle den gleichen Namen, können später durch den Anwender geändert werden
         add_attr(@go_attributes, GOA_TYP, String, GRAPHICOBJECT)
+
+        @xml_elem = xml_elem
+        @layout_file = layout_file
+      end
+
+      def add_position_fields
         add_attr(@go_attributes, GOA_X, Integer, 10)
         add_attr(@go_attributes, GOA_Y, Integer, 10)
         add_attr(@go_attributes, GOA_ROTATION, Integer, 0)
         add_attr(@go_attributes, GOA_PAGE_NR, Integer, 0)
         add_attr(@go_attributes, GOA_LAYER, Integer, 0)
         add_attr(@go_attributes, GOA_PRINTLIST, String, "false")
-
-        @xml_elem = xml_elem
-        @layout_file = layout_file
       end
 
       def add_attr(dest, attr_name, attr_typ, attr_default_value)
@@ -50,6 +53,7 @@ module Mcc2
         elsif typ == PICTUREOBJECT then Picture.new xml_elem: xml_elem, layout_file: layout_file
         elsif typ == BOXOBJECT then Box.new xml_elem: xml_elem, layout_file: layout_file
         elsif typ == EMBEDOBJECT then Embed.new xml_elem: xml_elem, layout_file: layout_file
+        elsif typ == TEXTSTYLE then TextStyle.new xml_elem: xml_elem, layout_file: layout_file
         end
       end
     end
