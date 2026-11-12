@@ -485,6 +485,7 @@ module Mcc2
         option1 = go[GOA_BARCODE_OPTION_1].to_i
         option2 = go[GOA_BARCODE_OPTION_2].to_i
         option3 = go[GOA_BARCODE_OPTION_3].to_i
+        just = go[GOA_JUSTIFICATION]
         font = go[GOA_FONT_TYP]
         if font == "from_file"
           font = go.layout_file.expand_path(go[GOA_FONT_FILE])
@@ -536,37 +537,33 @@ module Mcc2
             xdim = xdim.to_i
             ydim = ydim.to_i if barcode.rows > 1 # optimize y dimension only on 2D codes
           end
-          go_width, go_height = barcode_px_to_mm(xdim * xbars, barcode_dpi), barcode_px_to_mm(ydim * ybars, barcode_dpi)
-          px_width, px_height = mm(go_width), mm(go_height)
+          go_width2, go_height2 = barcode_px_to_mm(xdim * xbars, barcode_dpi), barcode_px_to_mm(ydim * ybars, barcode_dpi)
+          px_width, px_height = mm(go_width2), mm(go_height2)
           xdim = px_width / xbars / xgran
           ydim = px_height / ybars / ygran
+
+          if just == S_JUST_RIGHT
+            apos = tra.translate(mm(go_width - go_width2), 0.0)
+          elsif just == S_JUST_MID
+            apos = tra.translate(mm(go_width - go_width2) / 2.0, 0.0)
+          else
+            apos = tra
+          end
 
           pathd = +""
           bcvector.each_rectangle do |bar|
             # p [bar.x, bar.y, bar.width, bar.height]
             # p [xdim*bar.width, ydim*bar.height, xdim*bar.x, ydim*bar.y]
-            x = tra.x + xdim * bar.x
-            y = tra.y + ydim * bar.y
-            # drawing.rectangle(
-            #   x,
-            #   y,
-            #   x + [xdim * bar.width - 1, 0].max,
-            #   y + [ydim * bar.height - 1, 0].max
-            # )
+            x = apos.x + xdim * bar.x
+            y = apos.y + ydim * bar.y
             # drawing.rect(x: x, y: y, width: xdim * bar.width, height: ydim * bar.height, fill: font_color, stroke: "none")
-            # body.rect([xdim * bar.width / 2 - 1, 0].max, [ydim * bar.height / 2 - 1, 0].max, xdim * bar.x / 2, ydim * bar.y / 2)
             w = xdim * bar.width
             h = ydim * bar.height
             pathd << "M#{x} #{y}h#{w}v#{h}h-#{w}Z"
           end
           drawing.path(d: pathd, stroke: "none", fill: font_color)
           bcvector.each_string do |str|
-            # p [str.x, str.y, str.text, str.halign, str.fsize]
-            # drawing.text_anchor(HALIGNMENT[str.halign])
-            # apos = tra.translate(xdim * str.x / xgran, )
-            # drawing.text(tra.x + xdim * str.x, tra.y + ydim * str.y, str.text)
-            # body.text(xdim * str.x / 2, ydim * str.y / 2, str.text).styles(text_anchor: HALIGNMENT[str.halign])
-            drawing.text_(str.text, x: tra.x + xdim * str.x, y: tra.y + ydim * str.y,
+            drawing.text_(str.text, x: apos.x + xdim * str.x, y: apos.y + ydim * str.y,
                           'text-anchor': HALIGNMENT[str.halign],
                           fill: font_color,
                           'font-size': pt(fontsize),
