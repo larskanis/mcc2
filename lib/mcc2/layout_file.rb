@@ -243,7 +243,7 @@ PRINT 1
               set_attr_value(attr_name, param, S_CHIP)
             end
           elsif !param.to_s.empty?
-            param = "#{i}=#{param}"
+            param = "#{i-1}=#{param}"
             set_attr_value(attr_name, param, S_CHIP)
           end
         end
