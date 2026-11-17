@@ -19,7 +19,7 @@ module Mcc2
       end
 
       def params_hash(row = nil)
-        params.map do |param|
+        params(row).map do |param|
           key, value = param.split("=", 2)
           if key && value
             [key, value]
