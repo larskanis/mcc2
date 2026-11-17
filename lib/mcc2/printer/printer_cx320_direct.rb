@@ -188,16 +188,19 @@ module Mcc2
 
         if layers.include?(1)
           pic = draw_rvg_image(layout_file, row, page, [1], x_offset, y_offset).negate
+          pic = pic.level2(Magick::QuantumRange / 2, Magick::QuantumRange / 2)
           data_k = pic.export_pixels_to_str(0, 0, pic.columns, pic.rows, "R", Magick::CharPixel)
         end
 
         if layers.include?(2)
           pic = draw_rvg_image(layout_file, row, page, [2], x_offset, y_offset).negate
+          pic = pic.level2(Magick::QuantumRange / 2, Magick::QuantumRange / 2)
           data_uv = pic.export_pixels_to_str(0, 0, pic.columns, pic.rows, "R", Magick::CharPixel)
         end
 
         if layers.include?(3)
           pic = draw_rvg_image(layout_file, row, page, [3], x_offset, y_offset).negate
+          pic = pic.level2(Magick::QuantumRange / 2, Magick::QuantumRange / 2)
           data_peeloff = pic.export_pixels_to_str(0, 0, pic.columns, pic.rows, "R", Magick::CharPixel)
         end
 
