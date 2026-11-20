@@ -148,7 +148,7 @@ module Mcc2
     end
 
     @@font_map = SvgDrawer.builtin_font_names.dup
-    @@pango_font_map = Pango::CairoFontMap.default
+    @@pango_font_map = PangoCairo::FontMap.default
 
     def add_fonts_from_layout(layout_file)
       layout_file.sorted_id_list.each do |id|
