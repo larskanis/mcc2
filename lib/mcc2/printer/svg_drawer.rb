@@ -192,6 +192,7 @@ module Mcc2
 
     def draw(drawing, transform, layout_file, preview, selected_object_ids, row, page_nr, layers: [0])
       add_fonts_from_layout(layout_file)
+      pango_font_map.set_default # for font rendering with libsvg2
 
       flip_flop_mirrors(drawing, transform, layout_file, preview, page_nr) do
         barcode_dpi = layout_file.get_attr_value(S_BARCODE_DPI).to_f
